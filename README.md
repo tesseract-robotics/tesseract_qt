@@ -34,7 +34,8 @@ Below are screenshots to highlight some of the widgets within this repository an
 ![Joint Trajectory Widget](docs/images/tesseract_qt_joint_trajectory_widget.png)
 
 ### Manipulation Widget
-![Manipulation Widget](docs/images/tesseract_qt_manipulation_widget.png)
+![Manipulation Widget](docs/images/tesseract_qt_manipulation_widget_1.png)
+![Manipulation Widget](docs/images/tesseract_qt_manipulation_widget_2.png)
 
 
 ## Themes
