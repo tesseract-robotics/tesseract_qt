@@ -38,10 +38,8 @@ target_include_directories(
   ${PROJECT_NAME}_kinematic_groups PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                           "$<INSTALL_INTERFACE:include>")
 
-qt5_wrap_cpp(KINEMATIC_GROUP_EDITOR_headers_MOC
-             include/tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h)
-qt5_wrap_ui(KINEMATIC_GROUP_EDITOR_headers_UI
-            include/tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.ui)
+qt5_wrap_cpp(KINEMATIC_GROUP_EDITOR_headers_MOC include/tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h)
+qt5_wrap_ui(KINEMATIC_GROUP_EDITOR_headers_UI include/tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.ui)
 
 add_library(
   ${PROJECT_NAME}_kinematic_groups_editor_widget SHARED

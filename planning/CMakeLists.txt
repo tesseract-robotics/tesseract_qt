@@ -7,9 +7,8 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 tesseract_variables()
 
 # qt5_wrap_cpp( COLLISION_headers_MOC include/tesseract_qt/collision/contact_results_model.h
-# include/tesseract_qt/collision/contact_results_tree_view.h
-# include/tesseract_qt/collision/contact_results_widget.h) qt5_wrap_ui(COLLISION_headers_UI
-# include/tesseract_qt/collision/contact_results_widget.ui)
+# include/tesseract_qt/collision/contact_results_tree_view.h include/tesseract_qt/collision/contact_results_widget.h)
+# qt5_wrap_ui(COLLISION_headers_UI include/tesseract_qt/collision/contact_results_widget.ui)
 
 add_library(
   ${PROJECT_NAME}_planning SHARED
