@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   viewBox="0,0,1024,1024"
+   id="svg924"
+   sodipodi:docname="fullscreen.svg"
+   inkscape:version="1.0 (6e3e5246a0, 2020-05-07)">
+  <metadata
+     id="metadata930">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs928" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2493"
+     inkscape:window-height="1385"
+     id="namedview926"
+     showgrid="false"
+     inkscape:zoom="0.83007812"
+     inkscape:cx="512"
+     inkscape:cy="512"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg924" />
+  <desc
+     id="desc918">settings_overscan icon - Licensed under Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0) - Created with Iconfu.com - Derivative work of Material icons (Copyright Google Inc.)</desc>
+  <g
+     transform="matrix(1.0785977,0,0,1.1575898,-39.79472,-91.458598)"
+     fill="#03b8e5"
+     fill-rule="nonzero"
+     style="mix-blend-mode:normal;fill:#000000;fill-opacity:1"
+     id="g922">
+    <path
+       d="M 981.33,213.33 V 810.67 C 981.33,857.6 942.93,896 896,896 H 128 C 81.07,896 42.67,857.6 42.67,810.67 V 213.33 C 42.67,166.4 81.07,128 128,128 h 768 c 46.93,0 85.33,38.4 85.33,85.33 z M 896,212.91 H 128 V 811.09 H 896 Z M 256,597.33 149.33,512.43 256,426.67 Z m 341.33,-256 H 426.67 L 512.43,234.67 Z M 874.67,512.43 768,597.33 V 426.67 Z M 512.43,789.33 426.67,682.67 h 170.66 z"
+       id="path920"
+       style="fill:#000000;fill-opacity:1" />
+  </g>
+</svg>
