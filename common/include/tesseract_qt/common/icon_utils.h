@@ -133,5 +133,10 @@ QIcon getRestoreIcon();
 
 QIcon getDateTimeIcon();
 
+QIcon getGreenCircleIcon();
+QIcon getRedCircleIcon();
+
+QIcon getClearIcon();
+
 }  // namespace tesseract_gui::icons
 #endif  // TESSERACT_QT_COMMON_ICON_UTILS_H

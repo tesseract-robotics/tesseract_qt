@@ -14,7 +14,7 @@
    <string>Joint Trajectory Plot</string>
   </property>
   <property name="windowIcon">
-   <iconset theme=":/tesseract_widgets/svg/plot_image.svg"/>
+   <iconset theme=":/tesseract_qt/svg/plot_image.svg"/>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>

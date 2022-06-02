@@ -92,5 +92,8 @@
         <file>png/tesseract_logo.png</file>
         <file>png/log.png</file>
         <file>svg/datetime.svg</file>
+        <file>svg/red_circle.svg</file>
+        <file>svg/green_circle.svg</file>
+        <file>svg/clear.svg</file>
     </qresource>
 </RCC>
