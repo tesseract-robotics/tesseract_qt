@@ -115,6 +115,21 @@ const std::unordered_map<std::string, LinkVisibilityProperties>& ManipulationWid
   return data_->link_visibility_properties;
 }
 
+const tesseract_kinematics::KinematicGroup& ManipulationWidget::kinematicGroup() const { return *data_->kin_group; }
+
+int ManipulationWidget::getMode() const { return ui->mode_combo_box->currentIndex(); }
+
+QString ManipulationWidget::getGroupName() const { return ui->group_combo_box->currentText(); }
+
+QString ManipulationWidget::getTCPName() const { return ui->tcp_combo_box->currentText(); }
+
+int ManipulationWidget::getStateIndex() const { return ui->state_combo_box->currentIndex(); }
+
+tesseract_scene_graph::SceneState ManipulationWidget::getState() const
+{
+  return data_->state_solvers[getStateIndex()]->getState(data_->states[getStateIndex()]);
+}
+
 std::unordered_map<std::string, LinkVisibilityProperties>& ManipulationWidget::getLinkVisibilityProperties()
 {
   return data_->link_visibility_properties;
@@ -328,9 +343,11 @@ void ManipulationWidget::onModeChanged()
     ui->joint_tab->setEnabled(false);
     ui->cartesian_tab->setEnabled(true);
   }
+
+  Q_EMIT modeChanged(ui->mode_combo_box->currentIndex());
 }
 
-void ManipulationWidget::onTCPNameChanged() {}
+void ManipulationWidget::onTCPNameChanged() { Q_EMIT tcpNameChanged(ui->tcp_combo_box->currentText()); }
 
 void ManipulationWidget::onManipulatorTypeChanged()
 {

@@ -212,18 +212,18 @@ void PlotWidget::canvasContextMenuTriggered(const QPoint& pos)
   QSettings settings;
   QString theme = settings.value("StyleSheet::theme", "light").toString();
 
-  _action_removeAllCurves->setIcon(LoadSvg(":/tesseract_widgets/svg/trash.svg", theme));
-  _action_edit->setIcon(LoadSvg(":/tesseract_widgets/svg/pencil-edit.svg", theme));
-  _action_formula->setIcon(LoadSvg(":/tesseract_widgets/svg/Fx.svg", theme));
-  _action_split_horizontal->setIcon(LoadSvg(":/tesseract_widgets/svg/add_column.svg", theme));
-  _action_split_vertical->setIcon(LoadSvg(":/tesseract_widgets/svg/add_row.svg", theme));
-  _action_zoomOutMaximum->setIcon(LoadSvg(":/tesseract_widgets/svg/zoom_max.svg", theme));
-  _action_zoomOutHorizontally->setIcon(LoadSvg(":/tesseract_widgets/svg/zoom_horizontal.svg", theme));
-  _action_zoomOutVertically->setIcon(LoadSvg(":/tesseract_widgets/svg/zoom_vertical.svg", theme));
-  _action_copy->setIcon(LoadSvg(":/tesseract_widgets/svg/copy.svg", theme));
-  _action_paste->setIcon(LoadSvg(":/tesseract_widgets/svg/paste.svg", theme));
-  _action_saveToFile->setIcon(LoadSvg(":/tesseract_widgets/svg/save.svg", theme));
-  _action_image_to_clipboard->setIcon(LoadSvg(":/tesseract_widgets/svg/plot_image.svg", theme));
+  _action_removeAllCurves->setIcon(LoadSvg(":/tesseract_qt/svg/trash.svg", theme));
+  _action_edit->setIcon(LoadSvg(":/tesseract_qt/svg/pencil-edit.svg", theme));
+  _action_formula->setIcon(LoadSvg(":/tesseract_qt/svg/Fx.svg", theme));
+  _action_split_horizontal->setIcon(LoadSvg(":/tesseract_qt/svg/add_column.svg", theme));
+  _action_split_vertical->setIcon(LoadSvg(":/tesseract_qt/svg/add_row.svg", theme));
+  _action_zoomOutMaximum->setIcon(LoadSvg(":/tesseract_qt/svg/zoom_max.svg", theme));
+  _action_zoomOutHorizontally->setIcon(LoadSvg(":/tesseract_qt/svg/zoom_horizontal.svg", theme));
+  _action_zoomOutVertically->setIcon(LoadSvg(":/tesseract_qt/svg/zoom_vertical.svg", theme));
+  _action_copy->setIcon(LoadSvg(":/tesseract_qt/svg/copy.svg", theme));
+  _action_paste->setIcon(LoadSvg(":/tesseract_qt/svg/paste.svg", theme));
+  _action_saveToFile->setIcon(LoadSvg(":/tesseract_qt/svg/save.svg", theme));
+  _action_image_to_clipboard->setIcon(LoadSvg(":/tesseract_qt/svg/plot_image.svg", theme));
 
   QMenu menu(qwtPlot());
 
@@ -1245,7 +1245,7 @@ void PlotWidget::overrideCursonMove()
 {
   QSettings settings;
   QString theme = settings.value("Preferences::theme", "light").toString();
-  auto pixmap = LoadSvg(":/tesseract_widgets/svg/move_view.svg", theme);
+  auto pixmap = LoadSvg(":/tesseract_qt/svg/move_view.svg", theme);
   QApplication::setOverrideCursor(QCursor(pixmap.scaled(24, 24)));
 }
 
@@ -1253,7 +1253,7 @@ bool PlotWidget::isZoomLinkEnabled() const
 {
   for (const auto& it : curveList())
   {
-    auto series = dynamic_cast<QwtSeriesWrapper*>(it.curve->data());
+    auto* series = dynamic_cast<QwtSeriesWrapper*>(it.curve->data());
     if (series->plotData()->attribute(PlotAttribute::DISABLE_LINKED_ZOOM).toBool())
     {
       return false;
@@ -1402,7 +1402,7 @@ QwtSeriesWrapper* PlotWidget::createCurveXY(const PlotData* data_x, const PlotDa
 
 QwtSeriesWrapper* PlotWidget::createTimeSeries(const QString& transform_ID, const PlotData* data)
 {
-  TransformedTimeseries* output = new TransformedTimeseries(data);
+  auto* output = new TransformedTimeseries(data);
   output->setTransform(transform_ID);
   output->setTimeOffset(_time_offset);
   output->updateCache(true);

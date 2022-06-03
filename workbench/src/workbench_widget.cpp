@@ -112,6 +112,10 @@ const JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() const
   return *data_->joint_trajectory_widget;
 }
 
+ManipulationWidget& WorkbenchWidget::getManipulationWidget() { return *data_->manipulation_widget; }
+
+const ManipulationWidget& WorkbenchWidget::getManipulationWidget() const { return *data_->manipulation_widget; }
+
 void WorkbenchWidget::onRender()
 {
   data_->environment_widget->onRender();

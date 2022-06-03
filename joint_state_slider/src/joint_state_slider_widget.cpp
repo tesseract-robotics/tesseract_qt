@@ -105,9 +105,9 @@ void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::
     spin->setMinimum(joint->limits->lower);
     spin->setMaximum(joint->limits->upper);
     spin->setValue(value);
-    spin->setDecimals(3);
+    spin->setDecimals(6);
     spin->setSingleStep(SLIDER_RESOLUTION);
-    spin->setFixedWidth(75);
+    spin->setFixedWidth(100);
     data_->layout->addWidget(spin, row, 4);
     data_->spinboxes[joint->getName()] = spin;
 

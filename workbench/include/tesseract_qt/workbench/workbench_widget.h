@@ -67,6 +67,9 @@ public:
   JointTrajectoryWidget& getJointTrajectoryWidget();
   const JointTrajectoryWidget& getJointTrajectoryWidget() const;
 
+  ManipulationWidget& getManipulationWidget();
+  const ManipulationWidget& getManipulationWidget() const;
+
 public Q_SLOTS:
   virtual void onRender();
   virtual void onEnable();

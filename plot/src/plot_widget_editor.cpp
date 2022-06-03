@@ -340,7 +340,7 @@ EditorRowWidget::EditorRowWidget(QString text, QColor color) : QWidget()
   _delete_button = new QPushButton(this);
   _delete_button->setFlat(true);
   _delete_button->setFixedSize(button_size);
-  auto icon = QIcon(":/tesseract_widgets/svg/trash.svg");
+  auto icon = QIcon(":/tesseract_qt/svg/trash.svg");
   _delete_button->setStyleSheet("QPushButton:hover{ border: 0px;}");
 
   _delete_button->setIcon(icon);

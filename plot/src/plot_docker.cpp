@@ -338,12 +338,12 @@ bool DraggableToolbar::eventFilter(QObject* object, QEvent* event)
 
 void DraggableToolbar::on_stylesheetChanged(QString theme)
 {
-  _expand_icon = LoadSvg(":/tesseract_widgets/svg/expand.svg", theme);
-  _collapse_icon = LoadSvg(":/tesseract_widgets/svg/collapse.svg", theme);
+  _expand_icon = LoadSvg(":/tesseract_qt/svg/expand.svg", theme);
+  _collapse_icon = LoadSvg(":/tesseract_qt/svg/collapse.svg", theme);
   setButtonIcon(ui->buttonFullscreen, _fullscreen_mode ? _collapse_icon : _expand_icon);
-  setButtonIcon(ui->buttonClose, LoadSvg(":/tesseract_widgets/svg/close-button.svg", theme));
-  setButtonIcon(ui->buttonSplitHorizontal, LoadSvg(":/tesseract_widgets/svg/add_column.svg", theme));
-  setButtonIcon(ui->buttonSplitVertical, LoadSvg(":/tesseract_widgets/svg/add_row.svg", theme));
+  setButtonIcon(ui->buttonClose, LoadSvg(":/tesseract_qt/svg/close-button.svg", theme));
+  setButtonIcon(ui->buttonSplitHorizontal, LoadSvg(":/tesseract_qt/svg/add_column.svg", theme));
+  setButtonIcon(ui->buttonSplitVertical, LoadSvg(":/tesseract_qt/svg/add_row.svg", theme));
 }
 
 void DraggableToolbar::leaveEvent(QEvent* ev)

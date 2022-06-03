@@ -42,6 +42,11 @@ namespace tesseract_scene_graph
 class SceneState;
 }
 
+namespace tesseract_kinematics
+{
+class KinematicGroup;
+}
+
 namespace tesseract_gui
 {
 enum class ManipulationStateType : int
@@ -80,6 +85,45 @@ public:
   std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const;
   const tesseract_environment::Environment& environment() const;
 
+  /**
+   * @brief Get the kinematic group
+   * @return The kinematic group
+   */
+  const tesseract_kinematics::KinematicGroup& kinematicGroup() const;
+
+  /**
+   * @brief Get the current mode
+   * @details
+   *   0 - Joint
+   *   1 - Cartesian
+   * @return The mode
+   */
+  int getMode() const;
+
+  /**
+   * @brief Get the group name
+   * @return Then name of the group
+   */
+  QString getGroupName() const;
+
+  /**
+   * @brief Get the TCP name
+   * @return The TCP name
+   */
+  QString getTCPName() const;
+
+  /**
+   * @brief Get the current state index
+   * @return The state index
+   */
+  int getStateIndex() const;
+
+  /**
+   * @brief Get active state
+   * @return The state
+   */
+  tesseract_scene_graph::SceneState getState() const;
+
   /** @brief Get the link visibility properties */
   const std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties() const;
   std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties();
@@ -89,6 +133,8 @@ Q_SIGNALS:
   void linkVisibilityChanged(const std::vector<std::string>& links);
   void manipulationStateChanged(const tesseract_scene_graph::SceneState& state, int state_index);
   void groupNameChanged(const QString& group_name);
+  void modeChanged(int mode);
+  void tcpNameChanged(const QString& tcp_name);
 
 public Q_SLOTS:
   virtual void onRender();

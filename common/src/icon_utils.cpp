@@ -401,4 +401,23 @@ QIcon getDateTimeIcon()
   static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/datetime.svg"));
   return icon;
 }
+
+QIcon getGreenCircleIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_qt/svg/green_circle.svg");
+  return icon;
+}
+
+QIcon getRedCircleIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_qt/svg/red_circle.svg");
+  return icon;
+}
+
+QIcon getClearIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/clear.svg"));
+  return icon;
+}
+
 }  // namespace tesseract_gui::icons
