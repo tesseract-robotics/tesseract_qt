@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix minor issues (`#2 <https://github.com/tesseract-robotics/tesseract_qt/issues/2>`_)
+* Contributors: Levi Armstrong
+
 0.1.0 (2022-05-17)
 ------------------
 * Update CI yaml files to reference main branch
