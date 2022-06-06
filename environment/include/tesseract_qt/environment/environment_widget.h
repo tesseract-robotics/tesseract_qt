@@ -88,7 +88,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
   virtual void onModelsUpdated();
-  virtual void onRender();
+  virtual void onRender(float dt);
   virtual void onShowAllLinks();
   virtual void onHideAllLinks();
   virtual void onShowVisualAllLinks();

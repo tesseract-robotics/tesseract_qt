@@ -66,6 +66,12 @@ public:
   ~ManipulationWidget();
 
   /**
+   * @brief Check if widget is in a valid state
+   * @return True if in a valid state, otherwise false
+   */
+  bool isValid() const;
+
+  /**
    * @brief Get the number of state
    * @brief Currently only support 1 or 2 state
    * @return The number of state
@@ -107,22 +113,79 @@ public:
   QString getGroupName() const;
 
   /**
+   * @brief Get the working frame
+   * @return The working frame
+   */
+  QString getWorkingFrame() const;
+
+  /**
    * @brief Get the TCP name
    * @return The TCP name
    */
   QString getTCPName() const;
 
   /**
-   * @brief Get the current state index
-   * @return The state index
+   * @brief Get the TCP offset name
+   * @return The TCP offset name
    */
-  int getStateIndex() const;
+  QString getTCPOffsetName() const;
+
+  /**
+   * @brief Get the tcp offset
+   * @return The tcp offset
+   */
+  Eigen::Isometry3d getTCPOffset() const;
+
+  /**
+   * @brief Get the current state index
+   * @return The active state index
+   */
+  int getActiveStateIndex() const;
 
   /**
    * @brief Get active state
+   * @return The active state
+   */
+  tesseract_scene_graph::SceneState getActiveState() const;
+
+  /**
+   * @brief Get state for the given index
+   * @param index The index to retrieve state under
    * @return The state
    */
-  tesseract_scene_graph::SceneState getState() const;
+  tesseract_scene_graph::SceneState getState(int index) const;
+
+  /**
+   * @brief Set the active state
+   * @param state The state
+   */
+  void setActiveState(const std::unordered_map<std::string, double>& state);
+
+  /**
+   * @brief Set the active cartesian transform
+   * @details It expects the transform to be in the work frame
+   * @param transform The transform
+   */
+  void setActiveCartesianTransform(const Eigen::Isometry3d& transform);
+
+  /**
+   * @brief Get active cartesian transform base on the current working_frame, tcp_name and tcp_offset_name
+   * @param in_world Indicate if the transform should be relative to world, otherwise it is relative to working frame
+   * @return The active cartesian transform
+   */
+  Eigen::Isometry3d getActiveCartesianTransform(bool in_world = false) const;
+
+  /**
+   * @brief Get the joint names of the active state
+   * @return The joint names
+   */
+  std::vector<std::string> getActiveJointNames() const;
+
+  /**
+   * @brief Get the joint values of the active state
+   * @return The joint values in the order of what getActiveJointNames() returns
+   */
+  Eigen::VectorXd getActiveJointValues() const;
 
   /** @brief Get the link visibility properties */
   const std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties() const;
@@ -134,10 +197,12 @@ Q_SIGNALS:
   void manipulationStateChanged(const tesseract_scene_graph::SceneState& state, int state_index);
   void groupNameChanged(const QString& group_name);
   void modeChanged(int mode);
+  void workingFrameChanged(const QString& working_frame_name);
   void tcpNameChanged(const QString& tcp_name);
+  void tcpOffsetNameChanged(const QString& tcp_offset_name);
 
 public Q_SLOTS:
-  virtual void onRender();
+  virtual void onRender(float dt);
   virtual void onShowAllLinks();
   virtual void onHideAllLinks();
   virtual void onShowVisualAllLinks();
@@ -153,7 +218,9 @@ public Q_SLOTS:
 private Q_SLOTS:
   void onGroupNameChanged();
   void onModeChanged();
+  void onWorkingFrameChanged();
   void onTCPNameChanged();
+  void onTCPOffsetNameChanged();
   void onManipulatorTypeChanged();
   void onJointStateSliderChanged(std::unordered_map<std::string, double> state);
   void onCartesianTransformChanged(const Eigen::Isometry3d& transform);
