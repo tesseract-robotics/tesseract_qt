@@ -449,7 +449,7 @@ void JointTrajectoryWidget::onDisablePlayer() { ui_->trajectoryPlayerFrame->setE
 
 void JointTrajectoryWidget::onEnable() {}
 
-void JointTrajectoryWidget::onRender() {}
+void JointTrajectoryWidget::onRender(float /*dt*/) {}
 
 const QString& JointTrajectoryWidget::getDefaultDirectory() const { return data_->default_directory; }
 void JointTrajectoryWidget::setDefaultDirectory(const QString& default_directory)

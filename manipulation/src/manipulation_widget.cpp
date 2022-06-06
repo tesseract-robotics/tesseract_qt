@@ -20,14 +20,17 @@ struct ManipulationWidgetImpl
   bool single_state;
   tesseract_environment::Environment::ConstPtr env;
   tesseract_kinematics::KinematicGroup::UPtr kin_group;
-  std::array<tesseract_scene_graph::StateSolver::UPtr, 2> state_solvers;
-  std::array<std::unordered_map<std::string, double>, 2> states;
+  std::vector<tesseract_scene_graph::StateSolver::UPtr> state_solvers;
+  std::vector<std::unordered_map<std::string, double>> states;
 
   QTreeView* end_state_tree_view;
 
   QStringListModel group_names_model;
+  QStringListModel working_frames_model;
   QStringListModel tcp_names_model;
-  std::array<SceneStateModel, 2> state_models;
+  QStringListModel tcp_offset_names_model;
+  tesseract_common::TransformMap tcp_offsets;
+  std::vector<SceneStateModel> state_models;
 
   LinkVisibilityPropertiesMap link_visibility_properties;
 
@@ -58,8 +61,14 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
 {
   ui->setupUi(this);
 
+  data_->state_solvers.resize((single_state) ? 1 : 2);
+  data_->state_models.resize((single_state) ? 1 : 2);
+  data_->states.resize((single_state) ? 1 : 2);
+
   ui->group_combo_box->setModel(&data_->group_names_model);
+  ui->working_frame_combo_box->setModel(&data_->working_frames_model);
   ui->tcp_combo_box->setModel(&data_->tcp_names_model);
+  ui->tcp_offset_combo_box->setModel(&data_->tcp_offset_names_model);
   ui->state_tree_view->setModel(&data_->state_models[0]);
 
   addToolBar();
@@ -67,7 +76,9 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
   connect(ui->state_tree_view, &QTreeView::expanded, [this]() { ui->state_tree_view->resizeColumnToContents(0); });
 
   connect(ui->group_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
+  connect(ui->working_frame_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onWorkingFrameChanged()));
   connect(ui->tcp_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onTCPNameChanged()));
+  connect(ui->tcp_offset_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onTCPOffsetNameChanged()));
   connect(ui->state_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onManipulatorTypeChanged()));
   connect(ui->mode_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onModeChanged()));
 
@@ -94,11 +105,34 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
 
 ManipulationWidget::~ManipulationWidget() = default;
 
+bool ManipulationWidget::isValid() const
+{
+  if (data_->env == nullptr)
+    return false;
+
+  if (!data_->env->isInitialized())
+    return false;
+
+  for (const auto& state_solver : data_->state_solvers)
+  {
+    if (state_solver == nullptr)
+      return false;
+  }
+
+  for (const auto& state : data_->states)
+  {
+    if (state.empty())
+      return false;
+  }
+
+  return true;
+}
+
 int ManipulationWidget::getStateCount() const { return (data_->single_state) ? 1 : 2; }
 
 void ManipulationWidget::setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env)
 {
-  data_->env = env;
+  data_->env = std::move(env);
   onReset();
   Q_EMIT environmentSet(data_->env);
 }
@@ -121,13 +155,45 @@ int ManipulationWidget::getMode() const { return ui->mode_combo_box->currentInde
 
 QString ManipulationWidget::getGroupName() const { return ui->group_combo_box->currentText(); }
 
+QString ManipulationWidget::getWorkingFrame() const { return ui->working_frame_combo_box->currentText(); }
+
 QString ManipulationWidget::getTCPName() const { return ui->tcp_combo_box->currentText(); }
 
-int ManipulationWidget::getStateIndex() const { return ui->state_combo_box->currentIndex(); }
+QString ManipulationWidget::getTCPOffsetName() const { return ui->tcp_offset_combo_box->currentText(); }
 
-tesseract_scene_graph::SceneState ManipulationWidget::getState() const
+Eigen::Isometry3d ManipulationWidget::getTCPOffset() const
 {
-  return data_->state_solvers[getStateIndex()]->getState(data_->states[getStateIndex()]);
+  auto it = data_->tcp_offsets.find(getTCPOffsetName().toStdString());
+  if (it == data_->tcp_offsets.end())
+    return Eigen::Isometry3d::Identity();
+
+  return it->second;
+}
+
+int ManipulationWidget::getActiveStateIndex() const { return ui->state_combo_box->currentIndex(); }
+
+tesseract_scene_graph::SceneState ManipulationWidget::getActiveState() const { return getState(getActiveStateIndex()); }
+
+void ManipulationWidget::setActiveState(const std::unordered_map<std::string, double>& state)
+{
+  ui->joint_state_slider->setJointState(state);
+}
+
+void ManipulationWidget::setActiveCartesianTransform(const Eigen::Isometry3d& transform)
+{
+  onCartesianTransformChanged(transform);
+  // Update the cartesian transform details
+  if (ui->mode_combo_box->currentIndex() == 1)
+  {
+    ui->cartesian_widget->blockSignals(true);
+    ui->cartesian_widget->setTransform(getActiveCartesianTransform());
+    ui->cartesian_widget->blockSignals(false);
+  }
+}
+
+tesseract_scene_graph::SceneState ManipulationWidget::getState(int index) const
+{
+  return data_->state_solvers.at(index)->getState(data_->states.at(index));
 }
 
 std::unordered_map<std::string, LinkVisibilityProperties>& ManipulationWidget::getLinkVisibilityProperties()
@@ -135,7 +201,7 @@ std::unordered_map<std::string, LinkVisibilityProperties>& ManipulationWidget::g
   return data_->link_visibility_properties;
 }
 
-void ManipulationWidget::onRender() {}
+void ManipulationWidget::onRender(float dt) {}
 void ManipulationWidget::onShowAllLinks()
 {
   std::vector<std::string> link_names;
@@ -291,10 +357,16 @@ void ManipulationWidget::onGroupNameChanged()
   {
     auto lock = data_->env->lockRead();
     auto group_names = data_->env->getGroupNames();
-    auto it = group_names.find(ui->group_combo_box->currentText().toStdString());
+    auto group_name = ui->group_combo_box->currentText().toStdString();
+    auto it = group_names.find(group_name);
     if (it != group_names.end())
     {
-      data_->kin_group = data_->env->getKinematicGroup(ui->group_combo_box->currentText().toStdString());
+      ui->group_combo_box->blockSignals(true);
+      ui->working_frame_combo_box->blockSignals(true);
+      ui->tcp_combo_box->blockSignals(true);
+      ui->tcp_offset_combo_box->blockSignals(true);
+
+      data_->kin_group = data_->env->getKinematicGroup(group_name);
       for (std::size_t i = 0; i < getStateCount(); ++i)
       {
         data_->state_solvers[i] = data_->env->getStateSolver();
@@ -302,6 +374,17 @@ void ManipulationWidget::onGroupNameChanged()
         data_->states[i].clear();
       }
 
+      // Update working frames
+      std::vector<std::string> working_frames = data_->kin_group->getAllValidWorkingFrames();
+      QStringList wf_sl;
+      for (const auto& working_frame : working_frames)
+        wf_sl.append(working_frame.c_str());
+      data_->working_frames_model.setStringList(wf_sl);
+
+      if (!working_frames.empty())
+        ui->working_frame_combo_box->setCurrentIndex(0);
+
+      // Update TCP Names
       std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
       QStringList tcp_sl;
       for (const auto& tcp_name : tcp_names)
@@ -311,6 +394,27 @@ void ManipulationWidget::onGroupNameChanged()
       if (!tcp_names.empty())
         ui->tcp_combo_box->setCurrentIndex(0);
 
+      // Update TCP Offset Names
+      QStringList tcp_offset_sl;
+      tcp_offset_sl.append("None");
+      data_->tcp_offsets.clear();
+      auto group_tcp_offsets = data_->env->getKinematicsInformation().group_tcps;
+      auto it = group_tcp_offsets.find(group_name);
+      if (it != group_tcp_offsets.end())
+      {
+        data_->tcp_offsets = it->second;
+        for (const auto& tcp_offset : data_->tcp_offsets)
+          tcp_offset_sl.append(tcp_offset.first.c_str());
+      }
+      data_->tcp_offset_names_model.setStringList(tcp_offset_sl);
+      ui->tcp_offset_combo_box->setCurrentIndex(0);
+
+      ui->group_combo_box->blockSignals(false);
+      ui->working_frame_combo_box->blockSignals(false);
+      ui->tcp_combo_box->blockSignals(false);
+      ui->tcp_offset_combo_box->blockSignals(false);
+
+      // Update joint sliders
       std::vector<std::string> joint_names = data_->kin_group->getJointNames();
       std::vector<tesseract_scene_graph::Joint::ConstPtr> joints;
       joints.reserve(joint_names.size());
@@ -321,14 +425,18 @@ void ManipulationWidget::onGroupNameChanged()
 
       for (std::size_t i = 0; i < getStateCount(); ++i)
         data_->states[i] = ui->joint_state_slider->getJointState();
+
+      ui->cartesian_widget->setTransform(getActiveCartesianTransform());
     }
     else
     {
       ui->joint_state_slider->setJoints(std::vector<tesseract_scene_graph::Joint::ConstPtr>());
     }
+
+    onJointStateSliderChanged(ui->joint_state_slider->getJointState());
   }
+
   Q_EMIT groupNameChanged(ui->group_combo_box->currentText());
-  onJointStateSliderChanged(ui->joint_state_slider->getJointState());
 }
 
 void ManipulationWidget::onModeChanged()
@@ -347,7 +455,23 @@ void ManipulationWidget::onModeChanged()
   Q_EMIT modeChanged(ui->mode_combo_box->currentIndex());
 }
 
-void ManipulationWidget::onTCPNameChanged() { Q_EMIT tcpNameChanged(ui->tcp_combo_box->currentText()); }
+void ManipulationWidget::onWorkingFrameChanged()
+{
+  ui->cartesian_widget->setTransform(getActiveCartesianTransform());
+  Q_EMIT workingFrameChanged(ui->working_frame_combo_box->currentText());
+}
+
+void ManipulationWidget::onTCPNameChanged()
+{
+  ui->cartesian_widget->setTransform(getActiveCartesianTransform());
+  Q_EMIT tcpNameChanged(ui->tcp_combo_box->currentText());
+}
+
+void ManipulationWidget::onTCPOffsetNameChanged()
+{
+  ui->cartesian_widget->setTransform(getActiveCartesianTransform());
+  Q_EMIT tcpOffsetNameChanged(ui->tcp_offset_combo_box->currentText());
+}
 
 void ManipulationWidget::onManipulatorTypeChanged()
 {
@@ -356,21 +480,21 @@ void ManipulationWidget::onManipulatorTypeChanged()
 
 void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::string, double> state)
 {
-  data_->state_solvers[ui->state_combo_box->currentIndex()]->setState(state);
-  data_->states[ui->state_combo_box->currentIndex()] = state;
-  tesseract_scene_graph::SceneState scene_state = data_->state_solvers[ui->state_combo_box->currentIndex()]->getState();
-  tesseract_scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
-  data_->state_models[ui->state_combo_box->currentIndex()].setState(reduced_scene_state);
-
-  // Update the cartesian transform details
-  if (ui->mode_combo_box->currentIndex() == 0)
+  if (isValid())
   {
-    auto it = scene_state.link_transforms.find(ui->tcp_combo_box->currentText().toStdString());
-    if (it != scene_state.link_transforms.end())
-      ui->cartesian_widget->setTransform(it->second);
-  }
+    data_->state_solvers[ui->state_combo_box->currentIndex()]->setState(state);
+    data_->states[ui->state_combo_box->currentIndex()] = state;
+    tesseract_scene_graph::SceneState scene_state =
+        data_->state_solvers[ui->state_combo_box->currentIndex()]->getState();
+    tesseract_scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
+    data_->state_models[ui->state_combo_box->currentIndex()].setState(reduced_scene_state);
 
-  Q_EMIT manipulationStateChanged(reduced_scene_state, ui->state_combo_box->currentIndex());
+    // Update the cartesian transform details
+    if (ui->mode_combo_box->currentIndex() == 0)
+      ui->cartesian_widget->setTransform(getActiveCartesianTransform());
+
+    Q_EMIT manipulationStateChanged(reduced_scene_state, ui->state_combo_box->currentIndex());
+  }
 }
 
 tesseract_scene_graph::SceneState
@@ -388,33 +512,75 @@ ManipulationWidget::getReducedSceneState(const tesseract_scene_graph::SceneState
   return reduced_scene_state;
 }
 
+Eigen::Isometry3d ManipulationWidget::getActiveCartesianTransform(bool in_world) const
+{
+  std::string working_frame = getWorkingFrame().toStdString();
+  std::string tcp_name = getTCPName().toStdString();
+  Eigen::Isometry3d tcp_offset = getTCPOffset();
+  Eigen::VectorXd jv = getActiveJointValues();
+  tesseract_common::TransformMap tf = data_->kin_group->calcFwdKin(jv);
+  if (in_world)
+    return tf.at(tcp_name) * tcp_offset;
+
+  return tf.at(working_frame).inverse() * tf.at(tcp_name) * tcp_offset;
+}
+
+std::vector<std::string> ManipulationWidget::getActiveJointNames() const { return data_->kin_group->getJointNames(); }
+
+Eigen::VectorXd ManipulationWidget::getActiveJointValues() const
+{
+  Eigen::VectorXd jv{ Eigen::VectorXd::Zero(data_->kin_group->numJoints()) };
+  std::vector<std::string> joint_names = data_->kin_group->getJointNames();
+  Eigen::Index idx{ 0 };
+  for (const auto& jn : joint_names)
+  {
+    auto j_it = data_->states[getActiveStateIndex()].find(jn);
+    if (j_it != data_->states[getActiveStateIndex()].end())
+      jv(idx) = j_it->second;
+
+    ++idx;
+  }
+  return jv;
+}
+
 void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& transform)
 {
   if (data_->kin_group != nullptr && ui->mode_combo_box->currentIndex() == 1)
   {
+    std::string working_frame = getWorkingFrame().toStdString();
+    std::string tcp_name = getTCPName().toStdString();
+    Eigen::Isometry3d tcp_offset = getTCPOffset();
+    Eigen::Isometry3d target = transform * tcp_offset.inverse();
+    std::vector<std::string> joint_names = data_->kin_group->getJointNames();
+
     std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
-    auto it = std::find(tcp_names.begin(), tcp_names.end(), ui->tcp_combo_box->currentText().toStdString());
+    auto it = std::find(tcp_names.begin(), tcp_names.end(), tcp_name);
     if (it != tcp_names.end())
     {
-      tesseract_kinematics::KinGroupIKInput inputs(transform, data_->kin_group->getBaseLinkName(), *it);
-      Eigen::VectorXd seed{ Eigen::VectorXd::Zero(data_->kin_group->numJoints()) };
-      std::vector<std::string> joint_names = data_->kin_group->getJointNames();
-      Eigen::Index idx{ 0 };
-      for (const auto& jn : joint_names)
-      {
-        auto j_it = data_->states[0].find(jn);
-        if (j_it != data_->states[0].end())
-          seed(idx) = j_it->second;
-
-        ++idx;
-      }
+      tesseract_kinematics::KinGroupIKInput inputs(target, working_frame, tcp_name);
+      Eigen::VectorXd seed = getActiveJointValues();
       tesseract_kinematics::IKSolutions solutions = data_->kin_group->calcInvKin(inputs, seed);
       if (!solutions.empty())
       {
-        /** @todo Should sort solutions closest to the seed state */
+        // get the closest solution to the seed
+        double dist = std::numeric_limits<double>::max();
+        Eigen::VectorXd temp_seed = seed;
+        for (const auto& solution : solutions)
+        {
+          double d = (solution - seed).norm();
+          if (d < dist)
+          {
+            temp_seed = solution;
+            dist = d;
+          }
+        }
+
+        if (!tesseract_common::satisfiesPositionLimits(temp_seed, data_->kin_group->getLimits().joint_limits))
+          temp_seed = seed;
+
         std::unordered_map<std::string, double> state;
         for (int i = 0; i < joint_names.size(); ++i)
-          state[joint_names[i]] = solutions[ui->state_combo_box->currentIndex()][i];
+          state[joint_names[i]] = temp_seed[i];
 
         ui->joint_state_slider->setJointState(state);
       }
@@ -441,7 +607,20 @@ void ManipulationWidget::onReset()
 
     QStringList group_names;
     for (const auto& group_name : data_->env->getGroupNames())
-      group_names.append(group_name.c_str());
+    {
+      tesseract_kinematics::KinematicGroup::UPtr kin_group;
+      try
+      {
+        kin_group = data_->env->getKinematicGroup(group_name);
+      }
+      catch (...)
+      {
+        CONSOLE_BRIDGE_logDebug("ManipulationWidget, Group '%s' is not supported!", group_name.c_str());
+      }
+
+      if (kin_group != nullptr)
+        group_names.append(group_name.c_str());
+    }
 
     ui->group_combo_box->blockSignals(true);
     data_->group_names_model.setStringList(group_names);
@@ -452,6 +631,8 @@ void ManipulationWidget::onReset()
       ui->group_combo_box->setCurrentText(current_group_name);
     else
       ui->group_combo_box->setCurrentText("");
+
+    onGroupNameChanged();
   }
   else
   {

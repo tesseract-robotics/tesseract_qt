@@ -236,7 +236,7 @@ void EnvironmentWidget::onModelsUpdated()
   ui->cmd_history_tree_view->resizeColumnToContents(0);
 }
 
-void EnvironmentWidget::onRender() {}
+void EnvironmentWidget::onRender(float /*dt*/) {}
 
 void EnvironmentWidget::onShowAllLinks()
 {

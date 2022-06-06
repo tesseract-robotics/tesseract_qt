@@ -116,11 +116,11 @@ ManipulationWidget& WorkbenchWidget::getManipulationWidget() { return *data_->ma
 
 const ManipulationWidget& WorkbenchWidget::getManipulationWidget() const { return *data_->manipulation_widget; }
 
-void WorkbenchWidget::onRender()
+void WorkbenchWidget::onRender(float dt)
 {
-  data_->environment_widget->onRender();
-  data_->joint_trajectory_environment_widget->onRender();
-  data_->manipulation_widget->onRender();
+  data_->environment_widget->onRender(dt);
+  data_->joint_trajectory_environment_widget->onRender(dt);
+  data_->manipulation_widget->onRender(dt);
 }
 
 void WorkbenchWidget::onEnable()

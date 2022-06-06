@@ -71,7 +71,7 @@ public:
   const ManipulationWidget& getManipulationWidget() const;
 
 public Q_SLOTS:
-  virtual void onRender();
+  virtual void onRender(float dt);
   virtual void onEnable();
 
 private Q_SLOTS:
