@@ -10,16 +10,26 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Joint Trajectory Plot</string>
   </property>
   <property name="windowIcon">
-   <iconset theme=":/tesseract_qt/svg/plot_image.svg"/>
+   <iconset theme=":/tesseract_qt/svg/plot_image.svg">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetNoConstraint</enum>
+   </property>
    <item>
     <widget class="QTabWidget" name="jtpTabWidget">
      <property name="currentIndex">

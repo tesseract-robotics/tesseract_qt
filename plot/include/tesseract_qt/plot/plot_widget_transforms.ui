@@ -14,6 +14,9 @@
    <string>Transform Editor</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,0">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetNoConstraint</enum>
+   </property>
    <item>
     <widget class="QFrame" name="framePlotPreview">
      <property name="minimumSize">
