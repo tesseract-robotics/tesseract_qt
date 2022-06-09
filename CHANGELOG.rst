@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.2 (2022-06-08)
+------------------
 * Make widgets layouts not constrained
 * Improve manipulation support
 * Contributors: Levi Armstrong
