@@ -5,7 +5,7 @@
  * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
- * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * GNU Lesser General Public License Version 3, 29 June 2007
  * @par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
