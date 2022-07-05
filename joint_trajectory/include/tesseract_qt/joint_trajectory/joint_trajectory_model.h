@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
-#define TESSERACT_QT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
+#ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
+#define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
@@ -74,53 +74,6 @@ private:
   std::map<QString, QStandardItem*> trajectory_sets_;
 };
 
-class JointStateItem : public QStandardItem
-{
-public:
-  JointStateItem(tesseract_common::JointState& state);
-  explicit JointStateItem(const QString& text, tesseract_common::JointState& state);
-  JointStateItem(const QIcon& icon, const QString& text, tesseract_common::JointState& state);
-  int type() const override;
-
-  tesseract_common::JointState& state;
-
-private:
-  void ctor();
-};
-
-class JointTrajectoryItem : public QStandardItem
-{
-public:
-  JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& trajectory_info);
-  explicit JointTrajectoryItem(const QString& text, tesseract_common::JointTrajectoryInfo& trajectory_info);
-  JointTrajectoryItem(const QIcon& icon, const QString& text, tesseract_common::JointTrajectoryInfo& trajectory_info);
-  int type() const override;
-
-  tesseract_common::JointTrajectoryInfo& trajectory_info;
-
-private:
-  void ctor();
-};
-
-class JointTrajectorySetItem : public QStandardItem
-{
-public:
-  JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set);
-  explicit JointTrajectorySetItem(const QString& text,
-                                  QString uuid,
-                                  const tesseract_common::JointTrajectorySet& trajectory_set);
-  JointTrajectorySetItem(const QIcon& icon,
-                         const QString& text,
-                         QString uuid,
-                         const tesseract_common::JointTrajectorySet& trajectory_set);
-  int type() const override;
-
-  QString uuid;
-  tesseract_common::JointTrajectorySet trajectory_set;
-
-private:
-  void ctor();
-};
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
+#endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H

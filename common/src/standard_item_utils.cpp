@@ -21,7 +21,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/utils.h>
+#include <tesseract_qt/common/namespace_standard_item.h>
 
 namespace tesseract_gui
 {
@@ -96,5 +99,42 @@ QList<QStandardItem*> createStandardItemDateTime(const QIcon& icon, const std::s
   auto* value = new QStandardItem();  // NOLINT
   value->setData(data, Qt::DisplayRole);
   return { name, value };
+}
+
+NamespaceStandardItem* createNamespaceItem(QStandardItem& root_item, const std::string& namespace_str)
+{
+  std::vector<std::string> namespaces = getNamespaces(namespace_str);
+
+  QStandardItem* parent_item = &root_item;
+  NamespaceStandardItem* item{ nullptr };
+  for (const auto& ns : namespaces)
+  {
+    item = nullptr;
+    QString qns = QString::fromStdString(ns);
+    for (int i = 0; i < parent_item->rowCount(); ++i)
+    {
+      QStandardItem* child = parent_item->child(i);
+      // The child's parent is nullptr if the parent is the invisible root
+      if ((child->parent() != nullptr && child->parent() != parent_item) ||
+          child->type() != static_cast<int>(StandardItemType::COMMON_NAMESPACE))
+        continue;
+
+      if (child->text() == qns)
+      {
+        item = dynamic_cast<NamespaceStandardItem*>(child);
+        break;
+      }
+    }
+
+    if (item == nullptr)
+    {
+      item = new NamespaceStandardItem(QString::fromStdString(ns));  // NOLINT
+      parent_item->appendRow(item);
+    }
+
+    parent_item = item;
+  }
+
+  return item;
 }
 }  // namespace tesseract_gui

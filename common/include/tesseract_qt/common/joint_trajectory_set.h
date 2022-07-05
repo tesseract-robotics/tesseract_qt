@@ -129,6 +129,8 @@ public:
 
   /**
    * @brief Set a namespace for the trajectory set
+   * @details This can be multiple namespace by separating by '::' for example 'main::left::place'
+   * which will have it show up in the widget as a teared item in the tree view.
    * @param ns A namespace the trajectory is associated with
    */
   void setNamespace(std::string ns);

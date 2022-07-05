@@ -30,6 +30,8 @@
 
 namespace tesseract_gui
 {
+class NamespaceStandardItem;
+
 QList<QStandardItem*> createStandardItemFloat(const std::string& text, double data);
 QList<QStandardItem*> createStandardItemFloat(const QIcon& icon, const std::string& text, double data);
 QList<QStandardItem*> createStandardItemInt(const std::string& text, int data);
@@ -41,6 +43,15 @@ QList<QStandardItem*> createStandardItemBool(const std::string& text, bool data)
 QList<QStandardItem*> createStandardItemBool(const QIcon& icon, const std::string& text, bool data);
 QList<QStandardItem*> createStandardItemDateTime(const std::string& text, const QDateTime& data);
 QList<QStandardItem*> createStandardItemDateTime(const QIcon& icon, const std::string& text, const QDateTime& data);
+
+/**
+ * @brief Create namespace item if it does not already exist
+ * @details If it does not exist it will be created
+ * @param root_item The item to begin search from
+ * @param ns The namespace string
+ * @return The NamespaceStandardItem
+ */
+NamespaceStandardItem* createNamespaceItem(QStandardItem& root_item, const std::string& namespace_str);
 }  // namespace tesseract_gui
 
 #endif  // TESSERACT_QT_COMMON_STANDARD_ITEM_UTILS_H
