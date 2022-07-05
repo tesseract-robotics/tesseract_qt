@@ -31,6 +31,10 @@
   <depend>libqwt-qt5-dev</depend>
   <depend>qt_advanced_docking</depend>
 
+  <build_depend>libboost-dev</build_depend>
+  <build_export_depend>libboost-dev</build_export_depend>
+  <exec_depend>libboost-dev</exec_depend>
+
   <export>
     <build_type>cmake</build_type>
   </export>

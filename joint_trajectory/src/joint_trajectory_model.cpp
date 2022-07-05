@@ -21,10 +21,14 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/joint_trajectory/joint_trajectory_model.h>
+#include <tesseract_qt/joint_trajectory/joint_trajectory_set_item.h>
+#include <tesseract_qt/joint_trajectory/joint_trajectory_info_item.h>
+#include <tesseract_qt/joint_trajectory/joint_trajectory_state_item.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/utils.h>
 
 #include <QUuid>
 
@@ -42,22 +46,8 @@ void JointTrajectoryModel::clear()
 QString JointTrajectoryModel::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
 {
   QString key = QUuid::createUuid().toString();
-  QString name_space =
-      (trajectory_set.getNamespace().empty()) ? "general" : QString::fromStdString(trajectory_set.getNamespace());
-
-  QList<QStandardItem*> ns_item = findItems(name_space);
-  assert(ns_item.size() <= 1);
-
-  NamespaceStandardItem* item;
-  if (ns_item.size() > 0)
-  {
-    item = dynamic_cast<NamespaceStandardItem*>(ns_item[0]);
-  }
-  else
-  {
-    item = new NamespaceStandardItem(name_space);  // NOLINT
-    appendRow(item);
-  }
+  std::string ns = (trajectory_set.getNamespace().empty()) ? "general" : trajectory_set.getNamespace();
+  NamespaceStandardItem* item = createNamespaceItem(*invisibleRootItem(), ns);
 
   auto* trajectory_container_item = new JointTrajectorySetItem(key, trajectory_set);
   auto* trajectory_description_item = new QStandardItem(QString::fromStdString(trajectory_set.getDescription()));
@@ -82,10 +72,10 @@ bool JointTrajectoryModel::hasJointTrajectorySet(const QString& key)
   return (trajectory_sets_.find(key) != trajectory_sets_.end());
 }
 
-JointStateItem* findJointStateItem(QStandardItem* item)
+JointTrajectoryStateItem* findJointStateItem(QStandardItem* item)
 {
   if (item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_STATE))
-    return dynamic_cast<JointStateItem*>(item);
+    return dynamic_cast<JointTrajectoryStateItem*>(item);
 
   return findJointStateItem(item->parent());
 }
@@ -103,12 +93,12 @@ const tesseract_common::JointState& JointTrajectoryModel::getJointState(const QM
   return findJointStateItem(item)->state;
 }
 
-JointTrajectoryItem* findJointTrajectoryItem(QStandardItem* item)
+JointTrajectoryInfoItem* findJointTrajectoryInfoItem(QStandardItem* item)
 {
   if (item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY))
-    return dynamic_cast<JointTrajectoryItem*>(item);
+    return dynamic_cast<JointTrajectoryInfoItem*>(item);
 
-  return findJointTrajectoryItem(item->parent());
+  return findJointTrajectoryInfoItem(item->parent());
 }
 
 const tesseract_common::JointTrajectoryInfo& JointTrajectoryModel::getJointTrajectory(const QModelIndex& row) const
@@ -118,7 +108,7 @@ const tesseract_common::JointTrajectoryInfo& JointTrajectoryModel::getJointTraje
   if (item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
     throw std::runtime_error("Cannot get joint trajectory from selected trajectory set standard item");
 
-  return findJointTrajectoryItem(item)->trajectory_info;
+  return findJointTrajectoryInfoItem(item)->trajectory_info;
 }
 
 JointTrajectorySetItem* findJointTrajectorySetItem(QStandardItem* item)
@@ -144,122 +134,4 @@ JointTrajectoryModel::getJointTrajectorySetDetails(const QModelIndex& row) const
                                                                                 jts_item->trajectory_set);
 }
 
-JointStateItem::JointStateItem(tesseract_common::JointState& state) : state(state) { ctor(); }
-
-JointStateItem::JointStateItem(const QString& text, tesseract_common::JointState& state)
-  : QStandardItem(icons::getRobotArmIcon(), text), state(state)
-{
-  ctor();
-}
-
-JointStateItem::JointStateItem(const QIcon& icon, const QString& text, tesseract_common::JointState& state)
-  : QStandardItem(icon, text), state(state)
-{
-  ctor();
-}
-
-int JointStateItem::type() const { return static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_STATE); }
-
-void JointStateItem::ctor()
-{
-  // Add State Joint Names
-  auto* state_joint_names = new QStandardItem("joint_names");
-  state_joint_names->setColumnCount(2);
-  for (std::size_t k = 0; k < state.joint_names.size(); ++k)
-    state_joint_names->appendRow(createStandardItemString(QString("[%1]").arg(k).toStdString(), state.joint_names[k]));
-
-  appendRow(state_joint_names);
-
-  // Add State Position
-  auto* state_position = new QStandardItem("position");
-  state_position->setColumnCount(2);
-  for (Eigen::Index k = 0; k < state.position.rows(); ++k)
-    state_position->appendRow(createStandardItemFloat(QString("[%1]").arg(k).toStdString(), state.position[k]));
-
-  appendRow(state_position);
-
-  // Add State Velocity
-  auto* state_velocity = new QStandardItem("velocity");
-  state_velocity->setColumnCount(2);
-  for (int k = 0; k < state.velocity.rows(); ++k)
-    state_velocity->appendRow(createStandardItemFloat(QString("[%1]").arg(k).toStdString(), state.velocity[k]));
-
-  appendRow(state_velocity);
-
-  // Add State Velocity
-  auto* state_acceleration = new QStandardItem("acceleration");
-  state_acceleration->setColumnCount(2);
-  for (int k = 0; k < state.acceleration.rows(); ++k)
-    state_acceleration->appendRow(createStandardItemFloat(QString("[%1]").arg(k).toStdString(), state.acceleration[k]));
-
-  appendRow(state_acceleration);
-
-  // Add time from start
-  appendRow(createStandardItemFloat("time", state.time));
-}
-
-JointTrajectoryItem::JointTrajectoryItem(tesseract_common::JointTrajectoryInfo& trajectory_info)
-  : trajectory_info(trajectory_info)
-{
-  ctor();
-}
-
-JointTrajectoryItem::JointTrajectoryItem(const QString& text, tesseract_common::JointTrajectoryInfo& trajectory_info)
-  : QStandardItem(icons::getTrajectoryIcon(), text), trajectory_info(trajectory_info)
-{
-  ctor();
-}
-
-JointTrajectoryItem::JointTrajectoryItem(const QIcon& icon,
-                                         const QString& text,
-                                         tesseract_common::JointTrajectoryInfo& trajectory_info)
-  : QStandardItem(icon, text), trajectory_info(trajectory_info)
-{
-  ctor();
-}
-
-int JointTrajectoryItem::type() const { return static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY); }
-
-void JointTrajectoryItem::ctor()
-{
-  for (std::size_t j = 0; j < trajectory_info.second.size(); ++j)
-  {
-    QStandardItem* trajectory_state = new JointStateItem(QString("state[%1]").arg(j), trajectory_info.second[j]);
-    appendRow(trajectory_state);
-  }
-}
-
-JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getSetIcon(), "Trajectory Set"), uuid(std::move(uuid)), trajectory_set(trajectory_set)
-{
-  ctor();
-}
-
-JointTrajectorySetItem::JointTrajectorySetItem(const QString& text,
-                                               QString uuid,
-                                               const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getSetIcon(), text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
-{
-  ctor();
-}
-JointTrajectorySetItem::JointTrajectorySetItem(const QIcon& icon,
-                                               const QString& text,
-                                               QString uuid,
-                                               const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icon, text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
-{
-  ctor();
-}
-
-int JointTrajectorySetItem::type() const { return static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET); }
-
-void JointTrajectorySetItem::ctor()
-{
-  for (std::size_t i = 0; i < trajectory_set.size(); ++i)
-  {
-    tesseract_common::JointTrajectoryInfo& traj_info = trajectory_set[i];
-    QStandardItem* trajectory_item = new JointTrajectoryItem(QString("trajectory[%1]").arg(i), traj_info);
-    appendRow(trajectory_item);
-  }
-}
 }  // namespace tesseract_gui

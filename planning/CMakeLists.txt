@@ -6,16 +6,16 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-# qt5_wrap_cpp( COLLISION_headers_MOC include/tesseract_qt/collision/contact_results_model.h
-# include/tesseract_qt/collision/contact_results_tree_view.h include/tesseract_qt/collision/contact_results_widget.h)
+qt5_wrap_cpp(PLANNING_headers_MOC include/tesseract_qt/planning/process_planning_problem_model.h)
 # qt5_wrap_ui(COLLISION_headers_UI include/tesseract_qt/collision/contact_results_widget.ui)
 
 add_library(
   ${PROJECT_NAME}_planning SHARED
-  # ${COLLISION_headers_MOC}
+  ${PLANNING_headers_MOC}
   # ${COLLISION_headers_UI}
   src/planning_profile_remapping_standard_item.cpp
   src/process_planning_request_standard_item.cpp
+  src/process_planning_problem_model.cpp
   src/process_planning_problem_standard_item.cpp
   src/process_planning_future_standard_item.cpp
   src/task_info_map_standard_item.cpp

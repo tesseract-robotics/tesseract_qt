@@ -22,6 +22,7 @@
  */
 #include "ui_joint_trajectory_widget.h"
 #include <tesseract_qt/joint_trajectory/joint_trajectory_plot_dialog.h>
+#include <tesseract_qt/joint_trajectory/joint_trajectory_set_item.h>
 #include <tesseract_qt/joint_trajectory/joint_trajectory_widget.h>
 #include <tesseract_qt/joint_trajectory/joint_trajectory_model.h>
 
@@ -335,11 +336,11 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 {
   QModelIndex current_index = current;  // This appears to be changing so copy
   data_->selected_item = data_->model->itemFromIndex(current_index);
+  onDisablePlayer();
   switch (data_->selected_item->type())
   {
     case static_cast<int>(StandardItemType::COMMON_NAMESPACE):
     {
-      onDisablePlayer();
       data_->save_action->setDisabled(true);
       data_->remove_action->setDisabled(true);
       data_->plot_action->setDisabled(true);
@@ -358,7 +359,8 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       data_->player->setTrajectory(data_->current_trajectory.second);
 
-      onEnablePlayer();
+      if (!data_->current_trajectory.second.empty())
+        onEnablePlayer();
 
       break;
     }
@@ -380,7 +382,10 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
             data_->current_trajectory.second.end(), t.second.begin(), t.second.end());
 
       data_->player->setTrajectory(data_->current_trajectory.second);
-      onEnablePlayer();
+
+      if (!data_->current_trajectory.second.empty())
+        onEnablePlayer();
+
       break;
     }
     default:
@@ -389,7 +394,6 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       data_->remove_action->setDisabled(true);
       data_->plot_action->setDisabled(true);
 
-      onDisablePlayer();
       const tesseract_common::JointState& state = data_->model->getJointState(current_index);
       auto details = data_->model->getJointTrajectorySetDetails(current_index);
       emit configureJointTrajectorySet(details.first, details.second);

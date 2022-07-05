@@ -8,7 +8,13 @@ tesseract_variables()
 
 qt5_wrap_cpp(TRAJ_MODEL_headers_MOC include/tesseract_qt/joint_trajectory/joint_trajectory_model.h)
 
-add_library(${PROJECT_NAME}_joint_trajectory_model SHARED ${TRAJ_MODEL_headers_MOC} src/joint_trajectory_model.cpp)
+add_library(
+  ${PROJECT_NAME}_joint_trajectory_model SHARED
+  ${TRAJ_MODEL_headers_MOC}
+  src/joint_trajectory_info_item.cpp
+  src/joint_trajectory_set_item.cpp
+  src/joint_trajectory_state_item.cpp
+  src/joint_trajectory_model.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_joint_trajectory_model
   PUBLIC tesseract::tesseract_common
