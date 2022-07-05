@@ -1,5 +1,6 @@
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_environment REQUIRED)
+find_package(Boost REQUIRED)
 find_package(
   Qt5
   COMPONENTS Core
@@ -51,11 +52,13 @@ add_library(
   src/vector_string_standard_item.cpp
   src/joint_state_standard_item.cpp
   src/joint_trajectory_standard_item.cpp
-  src/manipulator_info_standard_item.cpp)
+  src/manipulator_info_standard_item.cpp
+  src/utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common
   PUBLIC tesseract::tesseract_common
          tesseract::tesseract_environment
+         Boost::boost
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets

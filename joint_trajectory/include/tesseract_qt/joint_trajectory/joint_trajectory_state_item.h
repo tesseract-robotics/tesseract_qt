@@ -20,49 +20,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_PLOT_DIALOG_H
-#define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_PLOT_DIALOG_H
+#ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H
+#define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-//#include <tesseract_common/joint_trajectory_set.h>
-#include <tesseract_qt/common/joint_trajectory_set.h>
-#include <memory>
+#include <tesseract_common/joint_state.h>
+#include <QStandardItem>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <QDialog>
-#include <tesseract_qt/plot/plot_data.h>
-
-namespace Ui
-{
-class JointTrajectoryPlotDialog;
-}
-
 namespace tesseract_gui
 {
-class PlotSubplots;
-
-class JointTrajectoryPlotDialog : public QDialog
+class JointTrajectoryStateItem : public QStandardItem
 {
-  Q_OBJECT
-
 public:
-  explicit JointTrajectoryPlotDialog(tesseract_common::JointTrajectoryInfo current_trajectory,
-                                     QWidget* parent = nullptr);
-  ~JointTrajectoryPlotDialog();
+  JointTrajectoryStateItem(tesseract_common::JointState& state);
+  explicit JointTrajectoryStateItem(const QString& text, tesseract_common::JointState& state);
+  JointTrajectoryStateItem(const QIcon& icon, const QString& text, tesseract_common::JointState& state);
+  int type() const override;
 
-private Q_SLOTS:
-  void onSliderMoved(int value);
-  void onTabIndexChanged(int value);
+  tesseract_common::JointState& state;
 
 private:
-  std::unique_ptr<Ui::JointTrajectoryPlotDialog> ui_;
-  tesseract_gui::PlotDataMapRef plot_data_map_;
-  tesseract_gui::PlotSubplots* position_subplots_;
-  tesseract_gui::PlotSubplots* velocity_subplots_;
-  tesseract_gui::PlotSubplots* acceleration_subplots_;
+  void ctor();
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_PLOT_DIALOG_H
+#endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H

@@ -75,6 +75,8 @@ int ProcessPlanningProblemStandardItem::type() const
 
 void ProcessPlanningProblemStandardItem::ctor(const tesseract_planning::ProcessPlanningProblem& problem)
 {
+  appendRow(createStandardItemString("name", problem.name));
+
   auto* environment = new QStandardItem(icons::getModelIcon(), "environment");
   environment->appendRow(new EnvironmentCommandsStandardItem("commands", problem.env->getCommandHistory()));
   environment->appendRow(new SceneStateStandardItem("state", problem.env->getState()));

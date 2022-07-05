@@ -20,60 +20,72 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
-#define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
+#ifndef TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_MODEL_H
+#define TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_MODEL_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_common/joint_state.h>
-//#include <tesseract_common/joint_trajectory_set.h>
-#include <tesseract_qt/common/joint_trajectory_set.h>
+#include <tesseract_process_managers/core/process_planning_problem.h>
 #include <QStandardItemModel>
+#include <memory>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-class JointTrajectoryModel : public QStandardItemModel
+struct ProcessPlanningProblemModelPrivate;
+class ProcessPlanningProblemModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit JointTrajectoryModel(QObject* parent = nullptr);
+  explicit ProcessPlanningProblemModel(QObject* parent = nullptr);
+  ~ProcessPlanningProblemModel() override;
 
   /**
-   * @brief Add joint trajectory set
-   * @param trajectory_set The trajectory set associated with the key
-   * @return The key associated with added trajectory for removal
+   * @brief Add process planning problem
+   * @param problem The problem associated with the key
+   * @param ns The namespace to store the problem under
+   * @return The key associated with added problem for removal
    */
-  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set);
+  QString addProcessPlanningProblem(const tesseract_planning::ProcessPlanningProblem& problem,
+                                    std::string ns = "general");
 
   /**
-   * @brief Remove the joint trajectory set
+   * @brief Remove the problem
    * @param key The key associated with the joint trajectory set to be removed
    */
-  void removeJointTrajectorySet(const QString& key);
+  void removeProcessPlanningProblem(const QString& key);
 
   /**
    * @brief Check a trajectory set with the provided key exists
    * @param key The key associated with the joint trajectory set to find
    * @return True if a trajectory exists under the provided key, otherwise false
    */
-  bool hasJointTrajectorySet(const QString& key);
+  bool hasProcessPlanningProblem(const QString& key);
 
-  const tesseract_common::JointState& getJointState(const QModelIndex& row) const;
-  const tesseract_common::JointTrajectoryInfo& getJointTrajectory(const QModelIndex& row) const;
-  const tesseract_common::JointTrajectorySet& getJointTrajectorySet(const QModelIndex& row) const;
-  std::pair<const QString&, const tesseract_common::JointTrajectorySet&>
-  getJointTrajectorySetDetails(const QModelIndex& row) const;
+  /**
+   * @brief Get the problem associated with the row
+   * @param row The row to get associated problem
+   * @return The problem
+   */
+  const tesseract_planning::ProcessPlanningProblem& getProcessPlanningProblem(const QModelIndex& row) const;
 
+  /**
+   * @brief Get the problem namespace associated with the row
+   * @param row The row to get associated problem
+   * @return The namespace
+   */
+  const QString& getProcessPlanningProblemNamespace(const QModelIndex& row) const;
+
+  /** @brief Clear the model */
   void clear();
 
 private:
-  std::map<QString, QStandardItem*> trajectory_sets_;
+  std::unique_ptr<ProcessPlanningProblemModelPrivate> data_;
 };
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
+#endif  // TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_MODEL_H
