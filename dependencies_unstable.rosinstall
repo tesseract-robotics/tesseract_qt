@@ -13,4 +13,4 @@
 - git:
     local-name: descartes_light
     uri: https://github.com/swri-robotics/descartes_light.git
-    version: 0.3.0
+    version: 0.3.1
