@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2022-07-07)
+------------------
 * Update depends tags
 * Support multi-level namespaces and process planning problem model
 * Fix license header in files
