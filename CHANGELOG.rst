@@ -2,6 +2,13 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update depends tags
+* Support multi-level namespaces and process planning problem model
+* Fix license header in files
+* Contributors: Levi Armstrong
+
 0.1.2 (2022-06-08)
 ------------------
 * Make widgets layouts not constrained
