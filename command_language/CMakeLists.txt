@@ -19,7 +19,6 @@ add_library(
   src/state_waypoint_standard_item.cpp
   src/null_instruction_standard_item.cpp
   src/move_instruction_standard_item.cpp
-  src/plan_instruction_standard_item.cpp
   src/set_analog_instruction_standard_item.cpp
   src/set_tool_instruction_standard_item.cpp
   src/timer_instruction_standard_item.cpp
