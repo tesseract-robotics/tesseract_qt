@@ -24,7 +24,6 @@
 #include <tesseract_qt/command_language/composite_instruction_standard_item.h>
 #include <tesseract_qt/command_language/move_instruction_standard_item.h>
 #include <tesseract_qt/command_language/null_instruction_standard_item.h>
-#include <tesseract_qt/command_language/plan_instruction_standard_item.h>
 #include <tesseract_qt/command_language/set_analog_instruction_standard_item.h>
 #include <tesseract_qt/command_language/set_tool_instruction_standard_item.h>
 #include <tesseract_qt/command_language/timer_instruction_standard_item.h>
@@ -73,10 +72,6 @@ void VectorInstructionStandardItem::ctor(const std::vector<tesseract_planning::I
     else if (tesseract_planning::isMoveInstruction(instruction))
     {
       appendRow(new MoveInstructionStandardItem(instruction.as<tesseract_planning::MoveInstruction>()));
-    }
-    else if (tesseract_planning::isPlanInstruction(instruction))
-    {
-      appendRow(new PlanInstructionStandardItem(instruction.as<tesseract_planning::PlanInstruction>()));
     }
     else if (tesseract_planning::isNullInstruction(instruction))
     {

@@ -24,7 +24,6 @@
 #include <tesseract_qt/command_language/vector_instruction_standard_item.h>
 #include <tesseract_qt/command_language/move_instruction_standard_item.h>
 #include <tesseract_qt/command_language/null_instruction_standard_item.h>
-#include <tesseract_qt/command_language/plan_instruction_standard_item.h>
 #include <tesseract_qt/command_language/instruction_standard_item.h>
 #include <tesseract_qt/common/manipulator_info_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
@@ -33,7 +32,6 @@
 
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/move_instruction.h>
-#include <tesseract_command_language/plan_instruction.h>
 #include <tesseract_command_language/null_instruction.h>
 #include <tesseract_command_language/core/instruction.h>
 
@@ -91,13 +89,6 @@ void CompositeInstructionStandardItem::ctor(const tesseract_planning::CompositeI
     auto* item = new MoveInstructionStandardItem("start instruction",
                                                  ci.getStartInstruction().as<tesseract_planning::MoveInstruction>());
     auto* desc = new QStandardItem("Move Instruction");
-    appendRow({ item, desc });
-  }
-  else if (tesseract_planning::isPlanInstruction(ci.getStartInstruction()))
-  {
-    auto* item = new PlanInstructionStandardItem("start instruction",
-                                                 ci.getStartInstruction().as<tesseract_planning::PlanInstruction>());
-    auto* desc = new QStandardItem("Plan Instruction");
     appendRow({ item, desc });
   }
   else if (tesseract_planning::isNullInstruction(ci.getStartInstruction()))
