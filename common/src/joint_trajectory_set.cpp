@@ -130,7 +130,6 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
 
   std::set<std::string> prune_joint_names;
   double last_time = traj_info.first.time;
-  double total_time = last_time;
   double current_time = 0;
   for (const auto& joint_state : joint_trajectory)
   {
@@ -144,8 +143,7 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
       last_time = 0;
 
     double dt = current_time - last_time;
-    total_time += dt;
-    adj_state.time = total_time;
+    adj_state.time = dt;
     last_time = current_time;
     appendJointState(traj_info, adj_state);
   }
