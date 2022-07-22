@@ -28,7 +28,7 @@
 
 namespace tesseract_planning
 {
-class Instruction;
+class InstructionPoly;
 }
 
 namespace tesseract_gui
@@ -36,15 +36,15 @@ namespace tesseract_gui
 class VectorInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit VectorInstructionStandardItem(const std::vector<tesseract_planning::Instruction>& vi);
-  VectorInstructionStandardItem(const QString& text, const std::vector<tesseract_planning::Instruction>& vi);
+  explicit VectorInstructionStandardItem(const std::vector<tesseract_planning::InstructionPoly>& vi);
+  VectorInstructionStandardItem(const QString& text, const std::vector<tesseract_planning::InstructionPoly>& vi);
   VectorInstructionStandardItem(const QIcon& icon,
                                 const QString& text,
-                                const std::vector<tesseract_planning::Instruction>& vi);
+                                const std::vector<tesseract_planning::InstructionPoly>& vi);
   int type() const override;
 
 private:
-  void ctor(const std::vector<tesseract_planning::Instruction>& vi);
+  void ctor(const std::vector<tesseract_planning::InstructionPoly>& vi);
 };
 }  // namespace tesseract_gui
 

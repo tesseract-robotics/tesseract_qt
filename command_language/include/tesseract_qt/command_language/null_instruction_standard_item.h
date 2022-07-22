@@ -34,13 +34,10 @@ namespace tesseract_gui
 class NullInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit NullInstructionStandardItem(const tesseract_planning::NullInstruction& ni);
-  NullInstructionStandardItem(const QString& text, const tesseract_planning::NullInstruction& ni);
-  NullInstructionStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::NullInstruction& ni);
+  explicit NullInstructionStandardItem();
+  NullInstructionStandardItem(const QString& text);
+  NullInstructionStandardItem(const QIcon& icon, const QString& text);
   int type() const override;
-
-private:
-  void ctor(const tesseract_planning::NullInstruction& ni);
 };
 }  // namespace tesseract_gui
 

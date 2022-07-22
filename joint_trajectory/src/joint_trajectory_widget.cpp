@@ -39,9 +39,9 @@
 #include <tesseract_common/joint_state.h>
 #include <tesseract_common/serialization.h>
 #include <tesseract_visualization/trajectory_player.h>
+#include <tesseract_command_language/poly/instruction_poly.h>
 #include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/core/instruction.h>
-#include <tesseract_command_language/utils/utils.h>
+#include <tesseract_command_language/utils.h>
 #include <QTimer>
 #include <QToolBar>
 #include <QFileDialog>
@@ -238,7 +238,7 @@ bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, cons
   if (suffix == "cpix" && file_info.suffix() == "cpix")
   {
     auto cpi =
-        tesseract_common::Serialization::fromArchiveFileXML<tesseract_planning::Instruction>(filename.toStdString())
+        tesseract_common::Serialization::fromArchiveFileXML<tesseract_planning::InstructionPoly>(filename.toStdString())
             .as<tesseract_planning::CompositeInstruction>();
     tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
     if (jt.empty())
@@ -256,9 +256,9 @@ bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, cons
 
   if (suffix == "cpib" && file_info.suffix() == "cpib")
   {
-    auto cpi =
-        tesseract_common::Serialization::fromArchiveFileBinary<tesseract_planning::Instruction>(filename.toStdString())
-            .as<tesseract_planning::CompositeInstruction>();
+    auto cpi = tesseract_common::Serialization::fromArchiveFileBinary<tesseract_planning::InstructionPoly>(
+                   filename.toStdString())
+                   .as<tesseract_planning::CompositeInstruction>();
     tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
     if (jt.empty())
       return false;

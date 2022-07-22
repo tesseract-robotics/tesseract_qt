@@ -27,22 +27,22 @@
 
 namespace tesseract_planning
 {
-class CartesianWaypoint;
+class CartesianWaypointPoly;
 }
 namespace tesseract_gui
 {
 class CartesianWaypointStandardItem : public QStandardItem
 {
 public:
-  explicit CartesianWaypointStandardItem(const tesseract_planning::CartesianWaypoint& cwp);
-  CartesianWaypointStandardItem(const QString& text, const tesseract_planning::CartesianWaypoint& cwp);
+  explicit CartesianWaypointStandardItem(const tesseract_planning::CartesianWaypointPoly& cwp);
+  CartesianWaypointStandardItem(const QString& text, const tesseract_planning::CartesianWaypointPoly& cwp);
   CartesianWaypointStandardItem(const QIcon& icon,
                                 const QString& text,
-                                const tesseract_planning::CartesianWaypoint& cwp);
+                                const tesseract_planning::CartesianWaypointPoly& cwp);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::CartesianWaypoint& cwp);
+  void ctor(const tesseract_planning::CartesianWaypointPoly& cwp);
 };
 }  // namespace tesseract_gui
 

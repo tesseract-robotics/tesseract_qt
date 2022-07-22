@@ -36,9 +36,7 @@
 
 #include <tesseract_process_managers/core/task_info.h>
 #include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/null_instruction.h>
-#include <tesseract_command_language/core/instruction.h>
-#include <tesseract_command_language/instruction_type.h>
+#include <tesseract_command_language/poly/instruction_poly.h>
 
 namespace tesseract_gui
 {
@@ -72,37 +70,33 @@ void TaskInfoStandardItem::ctor(const tesseract_planning::TaskInfo& task_info)
   appendRow(createStandardItemString("message", task_info.message));
   appendRow(createStandardItemFloat("elapsed_time", task_info.elapsed_time));
 
-  if (tesseract_planning::isNullInstruction(task_info.instructions_input))
-    appendRow(new NullInstructionStandardItem("instructions_input",
-                                              task_info.instructions_input.as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(task_info.instructions_input))
+  if (task_info.instructions_input.isNull())
+    appendRow(new NullInstructionStandardItem("instructions_input"));
+  else if (task_info.instructions_input.isCompositeInstruction())
     appendRow(new CompositeInstructionStandardItem(
         "instructions_input", task_info.instructions_input.as<tesseract_planning::CompositeInstruction>()));
   else
     appendRow(new InstructionStandardItem("instructions_input", task_info.instructions_input));
 
-  if (tesseract_planning::isNullInstruction(task_info.instructions_output))
-    appendRow(new NullInstructionStandardItem("instructions_output",
-                                              task_info.instructions_output.as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(task_info.instructions_output))
+  if (task_info.instructions_output.isNull())
+    appendRow(new NullInstructionStandardItem("instructions_output"));
+  else if (task_info.instructions_output.isCompositeInstruction())
     appendRow(new CompositeInstructionStandardItem(
         "instructions_output", task_info.instructions_output.as<tesseract_planning::CompositeInstruction>()));
   else
     appendRow(new InstructionStandardItem("instructions_output", task_info.instructions_output));
 
-  if (tesseract_planning::isNullInstruction(task_info.results_input))
-    appendRow(new NullInstructionStandardItem("results_input",
-                                              task_info.results_input.as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(task_info.results_input))
+  if (task_info.results_input.isNull())
+    appendRow(new NullInstructionStandardItem("results_input"));
+  else if (task_info.results_input.isCompositeInstruction())
     appendRow(new CompositeInstructionStandardItem(
         "results_input", task_info.results_input.as<tesseract_planning::CompositeInstruction>()));
   else
     appendRow(new InstructionStandardItem("results_input", task_info.results_input));
 
-  if (tesseract_planning::isNullInstruction(task_info.results_output))
-    appendRow(new NullInstructionStandardItem("results_output",
-                                              task_info.results_output.as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(task_info.results_output))
+  if (task_info.results_output.isNull())
+    appendRow(new NullInstructionStandardItem("results_output"));
+  else if (task_info.results_output.isCompositeInstruction())
     appendRow(new CompositeInstructionStandardItem(
         "results_output", task_info.results_output.as<tesseract_planning::CompositeInstruction>()));
   else

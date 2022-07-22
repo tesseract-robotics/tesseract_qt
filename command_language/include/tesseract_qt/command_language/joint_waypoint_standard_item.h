@@ -27,20 +27,20 @@
 
 namespace tesseract_planning
 {
-class JointWaypoint;
+class JointWaypointPoly;
 }
 namespace tesseract_gui
 {
 class JointWaypointStandardItem : public QStandardItem
 {
 public:
-  explicit JointWaypointStandardItem(const tesseract_planning::JointWaypoint& jwp);
-  JointWaypointStandardItem(const QString& text, const tesseract_planning::JointWaypoint& jwp);
-  JointWaypointStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::JointWaypoint& jwp);
+  explicit JointWaypointStandardItem(const tesseract_planning::JointWaypointPoly& jwp);
+  JointWaypointStandardItem(const QString& text, const tesseract_planning::JointWaypointPoly& jwp);
+  JointWaypointStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::JointWaypointPoly& jwp);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::JointWaypoint& jwp);
+  void ctor(const tesseract_planning::JointWaypointPoly& jwp);
 };
 }  // namespace tesseract_gui
 

@@ -25,35 +25,22 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/null_instruction.h>
-
 namespace tesseract_gui
 {
-NullInstructionStandardItem::NullInstructionStandardItem(const tesseract_planning::NullInstruction& ni)
-  : QStandardItem(icons::getUnknownIcon(), "Null Instruction")
+NullInstructionStandardItem::NullInstructionStandardItem() : QStandardItem(icons::getUnknownIcon(), "Null Instruction")
 {
-  ctor(ni);
 }
 
-NullInstructionStandardItem::NullInstructionStandardItem(const QString& text,
-                                                         const tesseract_planning::NullInstruction& ni)
+NullInstructionStandardItem::NullInstructionStandardItem(const QString& text)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
-  ctor(ni);
 }
 
-NullInstructionStandardItem::NullInstructionStandardItem(const QIcon& icon,
-                                                         const QString& text,
-                                                         const tesseract_planning::NullInstruction& ni)
+NullInstructionStandardItem::NullInstructionStandardItem(const QIcon& icon, const QString& text)
   : QStandardItem(icon, text)
 {
-  ctor(ni);
 }
 
 int NullInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_NULL_INSTRUCTION); }
 
-void NullInstructionStandardItem::ctor(const tesseract_planning::NullInstruction& ni)
-{
-  appendRow(createStandardItemString("description", ni.getDescription()));
-}
 }  // namespace tesseract_gui

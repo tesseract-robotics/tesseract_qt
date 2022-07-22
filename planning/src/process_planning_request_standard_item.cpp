@@ -37,9 +37,7 @@
 
 #include <tesseract_process_managers/core/process_planning_request.h>
 #include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/null_instruction.h>
-#include <tesseract_command_language/core/instruction.h>
-#include <tesseract_command_language/instruction_type.h>
+#include <tesseract_command_language/poly/instruction_poly.h>
 
 namespace tesseract_gui
 {
@@ -75,18 +73,17 @@ int ProcessPlanningRequestStandardItem::type() const
 void ProcessPlanningRequestStandardItem::ctor(const tesseract_planning::ProcessPlanningRequest& request)
 {
   appendRow(createStandardItemString("name", request.name));
-  if (tesseract_planning::isNullInstruction(request.instructions))
-    appendRow(new NullInstructionStandardItem("instructions",
-                                              request.instructions.as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(request.instructions))
+  if (request.instructions.isNull())
+    appendRow(new NullInstructionStandardItem("instructions"));
+  else if (request.instructions.isCompositeInstruction())
     appendRow(new CompositeInstructionStandardItem(
         "instructions", request.instructions.as<tesseract_planning::CompositeInstruction>()));
   else
     appendRow(new InstructionStandardItem("instructions", request.instructions));
 
-  if (tesseract_planning::isNullInstruction(request.seed))
-    appendRow(new NullInstructionStandardItem("seed", request.instructions.as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(request.seed))
+  if (request.seed.isNull())
+    appendRow(new NullInstructionStandardItem("seed"));
+  else if (request.seed.isCompositeInstruction())
     appendRow(new CompositeInstructionStandardItem(
         "seed", request.instructions.as<tesseract_planning::CompositeInstruction>()));
   else

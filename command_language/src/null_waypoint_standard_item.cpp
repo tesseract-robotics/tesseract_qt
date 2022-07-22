@@ -25,24 +25,15 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/null_waypoint.h>
-
 namespace tesseract_gui
 {
-NullWaypointStandardItem::NullWaypointStandardItem(const tesseract_planning::NullWaypoint& /*nwp*/)
-  : QStandardItem(icons::getUnknownIcon(), "Null Waypoint")
+NullWaypointStandardItem::NullWaypointStandardItem() : QStandardItem(icons::getUnknownIcon(), "Null Waypoint") {}
+
+NullWaypointStandardItem::NullWaypointStandardItem(const QString& text) : QStandardItem(icons::getUnknownIcon(), text)
 {
 }
 
-NullWaypointStandardItem::NullWaypointStandardItem(const QString& text, const tesseract_planning::NullWaypoint& /*nwp*/)
-  : QStandardItem(icons::getUnknownIcon(), text)
-{
-}
-
-NullWaypointStandardItem::NullWaypointStandardItem(const QIcon& icon,
-                                                   const QString& text,
-                                                   const tesseract_planning::NullWaypoint& /*nwp*/)
-  : QStandardItem(icon, text)
+NullWaypointStandardItem::NullWaypointStandardItem(const QIcon& icon, const QString& text) : QStandardItem(icon, text)
 {
 }
 

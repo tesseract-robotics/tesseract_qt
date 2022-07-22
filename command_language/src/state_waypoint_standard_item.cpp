@@ -21,31 +21,46 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/command_language/state_waypoint_standard_item.h>
+#include <tesseract_qt/common/vector_double_standard_item.h>
+#include <tesseract_qt/common/vector_string_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/state_waypoint.h>
+#include <tesseract_command_language/poly/state_waypoint_poly.h>
 
 namespace tesseract_gui
 {
-StateWaypointStandardItem::StateWaypointStandardItem(const tesseract_planning::StateWaypoint& swp)
-  : JointStateStandardItem(icons::getRobotArmIcon(), "State Waypoint", swp)
+StateWaypointStandardItem::StateWaypointStandardItem(const tesseract_planning::StateWaypointPoly& swp)
+  : QStandardItem(icons::getRobotArmIcon(), "State Waypoint")
 {
+  ctor(swp);
 }
 
-StateWaypointStandardItem::StateWaypointStandardItem(const QString& text, const tesseract_planning::StateWaypoint& swp)
-  : JointStateStandardItem(icons::getRobotArmIcon(), text, swp)
+StateWaypointStandardItem::StateWaypointStandardItem(const QString& text,
+                                                     const tesseract_planning::StateWaypointPoly& swp)
+  : QStandardItem(icons::getRobotArmIcon(), text)
 {
+  ctor(swp);
 }
 
 StateWaypointStandardItem::StateWaypointStandardItem(const QIcon& icon,
                                                      const QString& text,
-                                                     const tesseract_planning::StateWaypoint& swp)
-  : JointStateStandardItem(icon, text, swp)
+                                                     const tesseract_planning::StateWaypointPoly& swp)
+  : QStandardItem(icon, text)
 {
+  ctor(swp);
 }
 
 int StateWaypointStandardItem::type() const { return static_cast<int>(StandardItemType::CL_STATE_WAYPOINT); }
 
+void StateWaypointStandardItem::ctor(const tesseract_planning::StateWaypointPoly& swp)
+{
+  // Add State Joint Names
+  appendRow(new VectorStringStandardItem("joint_names", swp.getNames()));
+  appendRow(new VectorDoubleStandardItem("position", swp.getPosition()));
+  appendRow(new VectorDoubleStandardItem("velocity", swp.getVelocity()));
+  appendRow(new VectorDoubleStandardItem("acceleration", swp.getAcceleration()));
+  appendRow(createStandardItemFloat("time", swp.getTime()));
+}
 }  // namespace tesseract_gui

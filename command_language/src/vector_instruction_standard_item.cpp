@@ -33,19 +33,25 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/core/instruction.h>
-#include <tesseract_command_language/command_language.h>
+#include <tesseract_command_language/poly/instruction_poly.h>
+#include <tesseract_command_language/composite_instruction.h>
+#include <tesseract_command_language/move_instruction.h>
+#include <tesseract_command_language/set_analog_instruction.h>
+#include <tesseract_command_language/set_tool_instruction.h>
+#include <tesseract_command_language/timer_instruction.h>
+#include <tesseract_command_language/wait_instruction.h>
+#include <tesseract_command_language/instruction_type.h>
 
 namespace tesseract_gui
 {
-VectorInstructionStandardItem::VectorInstructionStandardItem(const std::vector<tesseract_planning::Instruction>& vi)
+VectorInstructionStandardItem::VectorInstructionStandardItem(const std::vector<tesseract_planning::InstructionPoly>& vi)
   : QStandardItem(icons::getSetIcon(), "Instructions")
 {
   ctor(vi);
 }
 
 VectorInstructionStandardItem::VectorInstructionStandardItem(const QString& text,
-                                                             const std::vector<tesseract_planning::Instruction>& vi)
+                                                             const std::vector<tesseract_planning::InstructionPoly>& vi)
   : QStandardItem(icons::getSetIcon(), text)
 {
   ctor(vi);
@@ -53,7 +59,7 @@ VectorInstructionStandardItem::VectorInstructionStandardItem(const QString& text
 
 VectorInstructionStandardItem::VectorInstructionStandardItem(const QIcon& icon,
                                                              const QString& text,
-                                                             const std::vector<tesseract_planning::Instruction>& vi)
+                                                             const std::vector<tesseract_planning::InstructionPoly>& vi)
   : QStandardItem(icon, text)
 {
   ctor(vi);
@@ -61,21 +67,21 @@ VectorInstructionStandardItem::VectorInstructionStandardItem(const QIcon& icon,
 
 int VectorInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_VECTOR_INSTRUCTION); }
 
-void VectorInstructionStandardItem::ctor(const std::vector<tesseract_planning::Instruction>& vi)
+void VectorInstructionStandardItem::ctor(const std::vector<tesseract_planning::InstructionPoly>& vi)
 {
   for (const auto& instruction : vi)
   {
-    if (tesseract_planning::isCompositeInstruction(instruction))
+    if (instruction.isCompositeInstruction())
     {
       appendRow(new CompositeInstructionStandardItem(instruction.as<tesseract_planning::CompositeInstruction>()));
     }
-    else if (tesseract_planning::isMoveInstruction(instruction))
+    else if (instruction.isMoveInstruction())
     {
       appendRow(new MoveInstructionStandardItem(instruction.as<tesseract_planning::MoveInstruction>()));
     }
-    else if (tesseract_planning::isNullInstruction(instruction))
+    else if (instruction.isNull())
     {
-      appendRow(new NullInstructionStandardItem(instruction.as<tesseract_planning::NullInstruction>()));
+      appendRow(new NullInstructionStandardItem());
     }
     else if (tesseract_planning::isSetAnalogInstruction(instruction))
     {
