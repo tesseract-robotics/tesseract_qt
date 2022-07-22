@@ -31,13 +31,14 @@
 
 namespace tesseract_gui
 {
-JointWaypointStandardItem::JointWaypointStandardItem(const tesseract_planning::JointWaypoint& jwp)
+JointWaypointStandardItem::JointWaypointStandardItem(const tesseract_planning::JointWaypointPoly& jwp)
   : QStandardItem(icons::getJointIcon(), "Joint Waypoint")
 {
   ctor(jwp);
 }
 
-JointWaypointStandardItem::JointWaypointStandardItem(const QString& text, const tesseract_planning::JointWaypoint& jwp)
+JointWaypointStandardItem::JointWaypointStandardItem(const QString& text,
+                                                     const tesseract_planning::JointWaypointPoly& jwp)
   : QStandardItem(icons::getJointIcon(), text)
 {
   ctor(jwp);
@@ -45,7 +46,7 @@ JointWaypointStandardItem::JointWaypointStandardItem(const QString& text, const 
 
 JointWaypointStandardItem::JointWaypointStandardItem(const QIcon& icon,
                                                      const QString& text,
-                                                     const tesseract_planning::JointWaypoint& jwp)
+                                                     const tesseract_planning::JointWaypointPoly& jwp)
   : QStandardItem(icon, text)
 {
   ctor(jwp);
@@ -53,11 +54,11 @@ JointWaypointStandardItem::JointWaypointStandardItem(const QIcon& icon,
 
 int JointWaypointStandardItem::type() const { return static_cast<int>(StandardItemType::CL_JOINT_WAYPOINT); }
 
-void JointWaypointStandardItem::ctor(const tesseract_planning::JointWaypoint& jwp)
+void JointWaypointStandardItem::ctor(const tesseract_planning::JointWaypointPoly& jwp)
 {
-  appendRow(new VectorStringStandardItem("joint_names", jwp.joint_names));
-  appendRow(new VectorDoubleStandardItem("waypoint", jwp.waypoint));
-  appendRow(new VectorDoubleStandardItem("lower_tolerance", jwp.lower_tolerance));
-  appendRow(new VectorDoubleStandardItem("upper_tolerance", jwp.upper_tolerance));
+  appendRow(new VectorStringStandardItem("joint_names", jwp.getNames()));
+  appendRow(new VectorDoubleStandardItem("waypoint", jwp.getPosition()));
+  appendRow(new VectorDoubleStandardItem("lower_tolerance", jwp.getLowerTolerance()));
+  appendRow(new VectorDoubleStandardItem("upper_tolerance", jwp.getUpperTolerance()));
 }
 }  // namespace tesseract_gui

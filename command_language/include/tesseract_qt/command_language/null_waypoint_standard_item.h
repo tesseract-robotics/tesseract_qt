@@ -34,9 +34,9 @@ namespace tesseract_gui
 class NullWaypointStandardItem : public QStandardItem
 {
 public:
-  explicit NullWaypointStandardItem(const tesseract_planning::NullWaypoint& nwp);
-  NullWaypointStandardItem(const QString& text, const tesseract_planning::NullWaypoint& nwp);
-  NullWaypointStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::NullWaypoint& nwp);
+  explicit NullWaypointStandardItem();
+  NullWaypointStandardItem(const QString& text);
+  NullWaypointStandardItem(const QIcon& icon, const QString& text);
   int type() const override;
 };
 }  // namespace tesseract_gui

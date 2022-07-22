@@ -30,12 +30,10 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/waypoint_type.h>
 #include <tesseract_command_language/move_instruction.h>
 #include <tesseract_command_language/cartesian_waypoint.h>
 #include <tesseract_command_language/state_waypoint.h>
 #include <tesseract_command_language/joint_waypoint.h>
-#include <tesseract_command_language/null_waypoint.h>
 
 namespace tesseract_gui
 {
@@ -87,28 +85,28 @@ void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstruction
   appendRow(createStandardItemString("type", toString(mi.getMoveType())));
   appendRow(new ManipulatorInfoStandardItem(mi.getManipulatorInfo()));  // NOLINT
 
-  if (tesseract_planning::isCartesianWaypoint(mi.getWaypoint()))
+  if (mi.getWaypoint().isCartesianWaypoint())
   {
     auto* wp =
         new CartesianWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::CartesianWaypoint>());
     auto* desc = new QStandardItem("Cartesian Waypoint");
     appendRow({ wp, desc });
   }
-  else if (tesseract_planning::isJointWaypoint(mi.getWaypoint()))
+  else if (mi.getWaypoint().isJointWaypoint())
   {
     auto* wp = new JointWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::JointWaypoint>());
     auto* desc = new QStandardItem("Joint Waypoint");
     appendRow({ wp, desc });
   }
-  else if (tesseract_planning::isStateWaypoint(mi.getWaypoint()))
+  else if (mi.getWaypoint().isStateWaypoint())
   {
     auto* wp = new StateWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::StateWaypoint>());
     auto* desc = new QStandardItem("State Waypoint");
     appendRow({ wp, desc });
   }
-  else if (tesseract_planning::isNullWaypoint(mi.getWaypoint()))
+  else if (mi.getWaypoint().isNull())
   {
-    auto* wp = new NullWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::NullWaypoint>());
+    auto* wp = new NullWaypointStandardItem("waypoint");
     auto* desc = new QStandardItem("Null Waypoint");
     appendRow({ wp, desc });
   }

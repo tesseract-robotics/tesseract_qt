@@ -38,9 +38,7 @@
 
 #include <tesseract_process_managers/core/process_planning_problem.h>
 #include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/null_instruction.h>
-#include <tesseract_command_language/core/instruction.h>
-#include <tesseract_command_language/instruction_type.h>
+#include <tesseract_command_language/poly/instruction_poly.h>
 
 namespace tesseract_gui
 {
@@ -88,17 +86,17 @@ void ProcessPlanningProblemStandardItem::ctor(const tesseract_planning::ProcessP
   appendRow(
       new PlannerProfileRemappingStandardItem("composite_profile_remapping", *problem.composite_profile_remapping));
 
-  if (tesseract_planning::isNullInstruction(*problem.input))
-    appendRow(new NullInstructionStandardItem("input", problem.input->as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(*problem.input))
+  if (problem.input == nullptr || (problem.input != nullptr && problem.input->isNull()))
+    appendRow(new NullInstructionStandardItem("input"));
+  else if (problem.input->isCompositeInstruction())
     appendRow(
         new CompositeInstructionStandardItem("input", problem.input->as<tesseract_planning::CompositeInstruction>()));
   else
     appendRow(new InstructionStandardItem("input", *problem.input));
 
-  if (tesseract_planning::isNullInstruction(*problem.results))
-    appendRow(new NullInstructionStandardItem("results", problem.results->as<tesseract_planning::NullInstruction>()));
-  else if (tesseract_planning::isCompositeInstruction(*problem.results))
+  if (problem.results == nullptr || (problem.results != nullptr && problem.results->isNull()))
+    appendRow(new NullInstructionStandardItem("results"));
+  else if (problem.results->isCompositeInstruction())
     appendRow(new CompositeInstructionStandardItem("results",
                                                    problem.results->as<tesseract_planning::CompositeInstruction>()));
   else

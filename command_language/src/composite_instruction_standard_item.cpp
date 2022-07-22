@@ -32,8 +32,7 @@
 
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/move_instruction.h>
-#include <tesseract_command_language/null_instruction.h>
-#include <tesseract_command_language/core/instruction.h>
+#include <tesseract_command_language/poly/instruction_poly.h>
 
 namespace tesseract_gui
 {
@@ -84,24 +83,17 @@ void CompositeInstructionStandardItem::ctor(const tesseract_planning::CompositeI
   appendRow(createStandardItemString("order", toString(ci.getOrder())));
   appendRow(createStandardItemString("profile", ci.getProfile()));
   appendRow(new ManipulatorInfoStandardItem("manip info", ci.getManipulatorInfo()));
-  if (tesseract_planning::isMoveInstruction(ci.getStartInstruction()))
+  if (ci.hasStartInstruction())
   {
     auto* item = new MoveInstructionStandardItem("start instruction",
                                                  ci.getStartInstruction().as<tesseract_planning::MoveInstruction>());
     auto* desc = new QStandardItem("Move Instruction");
     appendRow({ item, desc });
   }
-  else if (tesseract_planning::isNullInstruction(ci.getStartInstruction()))
-  {
-    auto* item = new NullInstructionStandardItem("start instruction",
-                                                 ci.getStartInstruction().as<tesseract_planning::NullInstruction>());
-    auto* desc = new QStandardItem("Null Instruction");
-    appendRow({ item, desc });
-  }
   else
   {
-    auto* item = new InstructionStandardItem("start instruction", ci.getStartInstruction());
-    auto* desc = new QStandardItem("Unknown Instruction");
+    auto* item = new NullInstructionStandardItem("start instruction");
+    auto* desc = new QStandardItem("Null Instruction");
     appendRow({ item, desc });
   }
 

@@ -35,6 +35,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_command_language/state_waypoint.h>
 
 using namespace tesseract_planning;
+using tesseract_common::ManipulatorInfo;
 
 int main(int argc, char** argv)
 {
@@ -64,16 +65,16 @@ int main(int argc, char** argv)
   joint_pos(6) = 0.0;
 
   // Start Joint Position for the program
-  Waypoint wp0 = StateWaypoint(joint_names, joint_pos);
+  StateWaypointPoly wp0{ StateWaypoint(joint_names, joint_pos) };
   MoveInstruction start_instruction(wp0, MoveInstructionType::START);
   program.setStartInstruction(start_instruction);
 
   // Create cartesian waypoint
-  Waypoint wp1 = CartesianWaypoint(Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, -0.2, 0.62) *
-                                   Eigen::Quaterniond(0, 0, 1.0, 0));
+  CartesianWaypointPoly wp1{ CartesianWaypoint(Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, -0.2, 0.62) *
+                                               Eigen::Quaterniond(0, 0, 1.0, 0)) };
 
-  Waypoint wp2 = CartesianWaypoint(Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, 0.3, 0.62) *
-                                   Eigen::Quaterniond(0, 0, 1.0, 0));
+  CartesianWaypointPoly wp2{ CartesianWaypoint(Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, 0.3, 0.62) *
+                                               Eigen::Quaterniond(0, 0, 1.0, 0)) };
 
   // Plan freespace from start
   MoveInstruction plan_f0(wp1, MoveInstructionType::FREESPACE, "freespace_profile");
@@ -87,9 +88,9 @@ int main(int argc, char** argv)
   plan_f1.setDescription("to_end_plan");
 
   // Add Instructions to program
-  program.push_back(plan_f0);
-  program.push_back(plan_c0);
-  program.push_back(plan_f1);
+  program.appendMoveInstruction(plan_f0);
+  program.appendMoveInstruction(plan_c0);
+  program.appendMoveInstruction(plan_f1);
 
   tesseract_gui::CompositeInstructionModel model;
   model.setCompositeInstruction("general", program);
@@ -98,5 +99,5 @@ int main(int argc, char** argv)
   widget.setModel(&model);
   widget.show();
 
-  return app.exec();
+  return QApplication::exec();
 }

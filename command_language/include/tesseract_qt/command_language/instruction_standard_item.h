@@ -27,20 +27,22 @@
 
 namespace tesseract_planning
 {
-class Instruction;
+class InstructionPoly;
 }
 namespace tesseract_gui
 {
 class InstructionStandardItem : public QStandardItem
 {
 public:
-  explicit InstructionStandardItem(const tesseract_planning::Instruction& instruction);
-  InstructionStandardItem(const QString& text, const tesseract_planning::Instruction& instruction);
-  InstructionStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::Instruction& instruction);
+  explicit InstructionStandardItem(const tesseract_planning::InstructionPoly& instruction);
+  InstructionStandardItem(const QString& text, const tesseract_planning::InstructionPoly& instruction);
+  InstructionStandardItem(const QIcon& icon,
+                          const QString& text,
+                          const tesseract_planning::InstructionPoly& instruction);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::Instruction& instruction);
+  void ctor(const tesseract_planning::InstructionPoly& instruction);
 };
 }  // namespace tesseract_gui
 
