@@ -1,5 +1,6 @@
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_environment REQUIRED)
+find_package(tesseract_command_language REQUIRED)
 find_package(Boost REQUIRED)
 find_package(
   Qt5
@@ -58,6 +59,7 @@ target_link_libraries(
   ${PROJECT_NAME}_common
   PUBLIC tesseract::tesseract_common
          tesseract::tesseract_environment
+         tesseract::tesseract_command_language
          Boost::boost
          Qt5::Core
          Qt5::Gui
