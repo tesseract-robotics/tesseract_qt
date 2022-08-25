@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.13.0 (2022-08-25)
+-------------------
 * Add find package and link library to tesseract_command_language
 * Update to use new Poly types in tesseract_planning
 * Fix use of appendJointState
