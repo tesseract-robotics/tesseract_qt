@@ -99,6 +99,9 @@ bool ProcessPlanningProblemModel::hasProcessPlanningProblem(const QString& key)
 
 ProcessPlanningProblemStandardItem* findProcessPlanningProblemItem(QStandardItem* item)
 {
+  if (item == nullptr)
+    return nullptr;
+
   if (item->type() == static_cast<int>(StandardItemType::MP_PROCESS_PLANNING_PROBLEM))
     return dynamic_cast<ProcessPlanningProblemStandardItem*>(item);
 
@@ -109,8 +112,7 @@ const tesseract_planning::ProcessPlanningProblem&
 ProcessPlanningProblemModel::getProcessPlanningProblem(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
-
-  return data_->problems[findProcessPlanningProblemItem(item)];
+  return data_->problems.at(findProcessPlanningProblemItem(item));
 }
 
 const QString& ProcessPlanningProblemModel::getProcessPlanningProblemNamespace(const QModelIndex& row) const
