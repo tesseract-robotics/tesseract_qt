@@ -25,6 +25,7 @@
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+#include <string>
 #ifndef Q_MOC_RUN
 #include <tesseract_environment/commands/change_joint_acceleration_limits_command.h>
 #endif
