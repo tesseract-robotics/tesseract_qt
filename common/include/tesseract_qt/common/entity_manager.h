@@ -26,6 +26,7 @@
 
 #include <tesseract_qt/common/entity.h>
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 
 namespace tesseract_gui
