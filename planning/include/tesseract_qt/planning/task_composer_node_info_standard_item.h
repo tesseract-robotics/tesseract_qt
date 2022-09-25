@@ -20,31 +20,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
 
 #include <QStandardItem>
 
 namespace tesseract_planning
 {
-class ProcessPlanningProblem;
+class TaskComposerNodeInfo;
 }
 
 namespace tesseract_gui
 {
-class ProcessPlanningProblemStandardItem : public QStandardItem
+class TaskComposerNodeInfoStandardItem : public QStandardItem
 {
 public:
-  explicit ProcessPlanningProblemStandardItem(const tesseract_planning::ProcessPlanningProblem& problem);
-  ProcessPlanningProblemStandardItem(const QString& text, const tesseract_planning::ProcessPlanningProblem& problem);
-  ProcessPlanningProblemStandardItem(const QIcon& icon,
-                                     const QString& text,
-                                     const tesseract_planning::ProcessPlanningProblem& problem);
+  explicit TaskComposerNodeInfoStandardItem(const tesseract_planning::TaskComposerNodeInfo& info);
+  TaskComposerNodeInfoStandardItem(const QString& text, const tesseract_planning::TaskComposerNodeInfo& info);
+  TaskComposerNodeInfoStandardItem(const QIcon& icon,
+                                   const QString& text,
+                                   const tesseract_planning::TaskComposerNodeInfo& info);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::ProcessPlanningProblem& problem);
+  void ctor(const tesseract_planning::TaskComposerNodeInfo& info);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H

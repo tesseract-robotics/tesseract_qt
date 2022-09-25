@@ -20,31 +20,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASKFLOW_INTERFACE_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASKFLOW_INTERFACE_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_STANDARD_ITEM_H
 
 #include <QStandardItem>
 
 namespace tesseract_planning
 {
-class TaskflowInterface;
+class TaskComposerProblem;
 }
 
 namespace tesseract_gui
 {
-class TaskflowInterfaceStandardItem : public QStandardItem
+class TaskComposerProblemStandardItem : public QStandardItem
 {
 public:
-  explicit TaskflowInterfaceStandardItem(const tesseract_planning::TaskflowInterface& taskflow_interface);
-  TaskflowInterfaceStandardItem(const QString& text, const tesseract_planning::TaskflowInterface& taskflow_interface);
-  TaskflowInterfaceStandardItem(const QIcon& icon,
-                                const QString& text,
-                                const tesseract_planning::TaskflowInterface& taskflow_interface);
+  explicit TaskComposerProblemStandardItem(const tesseract_planning::TaskComposerProblem& problem);
+  TaskComposerProblemStandardItem(const QString& text, const tesseract_planning::TaskComposerProblem& problem);
+  TaskComposerProblemStandardItem(const QIcon& icon,
+                                  const QString& text,
+                                  const tesseract_planning::TaskComposerProblem& problem);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::TaskflowInterface& taskflow_interface);
+  void ctor(const tesseract_planning::TaskComposerProblem& problem);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_TASKFLOW_INTERFACE_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_STANDARD_ITEM_H
