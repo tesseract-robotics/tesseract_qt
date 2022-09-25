@@ -20,35 +20,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_INFO_MAP_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASK_INFO_MAP_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_INPUT_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_INPUT_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <memory>
-#include <map>
 
 namespace tesseract_planning
 {
-class TaskInfo;
+class TaskComposerInput;
 }
 
 namespace tesseract_gui
 {
-class TaskInfoMapStandardItem : public QStandardItem
+class TaskComposerInputStandardItem : public QStandardItem
 {
 public:
-  explicit TaskInfoMapStandardItem(
-      const std::map<std::size_t, std::unique_ptr<tesseract_planning::TaskInfo>>& task_info_map);
-  TaskInfoMapStandardItem(const QString& text,
-                          const std::map<std::size_t, std::unique_ptr<tesseract_planning::TaskInfo>>& task_info_map);
-  TaskInfoMapStandardItem(const QIcon& icon,
-                          const QString& text,
-                          const std::map<std::size_t, std::unique_ptr<tesseract_planning::TaskInfo>>& task_info_map);
+  explicit TaskComposerInputStandardItem(const tesseract_planning::TaskComposerInput& input);
+  TaskComposerInputStandardItem(const QString& text, const tesseract_planning::TaskComposerInput& input);
+  TaskComposerInputStandardItem(const QIcon& icon,
+                                const QString& text,
+                                const tesseract_planning::TaskComposerInput& input);
   int type() const override;
 
 private:
-  void ctor(const std::map<std::size_t, std::unique_ptr<tesseract_planning::TaskInfo>>& task_info_map);
+  void ctor(const tesseract_planning::TaskComposerInput& input);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_TASK_INFO_MAP_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_INPUT_STANDARD_ITEM_H

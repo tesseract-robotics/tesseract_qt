@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/planning/process_planning_problem_model.h>
-#include <tesseract_qt/planning/process_planning_problem_standard_item.h>
+#include <tesseract_qt/planning/task_composer_problem_model.h>
+#include <tesseract_qt/planning/task_composer_problem_standard_item.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
@@ -32,10 +32,10 @@
 
 namespace tesseract_gui
 {
-struct ProcessPlanningProblemModelPrivate
+struct TaskComposerProblemModelPrivate
 {
   std::map<QString, QStandardItem*> items;
-  std::map<QStandardItem*, tesseract_planning::ProcessPlanningProblem> problems;
+  std::map<QStandardItem*, tesseract_planning::TaskComposerProblem> problems;
   std::map<QStandardItem*, QString> problems_ns;
   void clear()
   {
@@ -45,15 +45,15 @@ struct ProcessPlanningProblemModelPrivate
   }
 };
 
-ProcessPlanningProblemModel::ProcessPlanningProblemModel(QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<ProcessPlanningProblemModelPrivate>())
+TaskComposerProblemModel::TaskComposerProblemModel(QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<TaskComposerProblemModelPrivate>())
 {
   clear();
 }
 
-ProcessPlanningProblemModel::~ProcessPlanningProblemModel() = default;
+TaskComposerProblemModel::~TaskComposerProblemModel() = default;
 
-void ProcessPlanningProblemModel::clear()
+void TaskComposerProblemModel::clear()
 {
   QStandardItemModel::clear();
   setColumnCount(2);
@@ -61,15 +61,13 @@ void ProcessPlanningProblemModel::clear()
   data_->clear();
 }
 
-QString
-ProcessPlanningProblemModel::addProcessPlanningProblem(const tesseract_planning::ProcessPlanningProblem& problem,
-                                                       std::string ns)
+QString TaskComposerProblemModel::addProblem(const tesseract_planning::TaskComposerProblem& problem, std::string ns)
 {
   QString key = QUuid::createUuid().toString();
   ns = (ns.empty()) ? "general" : ns;
   NamespaceStandardItem* item = createNamespaceItem(*invisibleRootItem(), ns);
 
-  auto* problem_item = new ProcessPlanningProblemStandardItem(key, problem);
+  auto* problem_item = new TaskComposerProblemStandardItem(key, problem);
   auto* problem_description_item = new QStandardItem(QString::fromStdString(problem.name));
   item->appendRow({ problem_item, problem_description_item });
   data_->items[key] = problem_item;
@@ -78,12 +76,11 @@ ProcessPlanningProblemModel::addProcessPlanningProblem(const tesseract_planning:
   return key;
 }
 
-void ProcessPlanningProblemModel::removeProcessPlanningProblem(const QString& key)
+void TaskComposerProblemModel::removeProblem(const QString& key)
 {
   auto it = data_->items.find(key);
   if (it == data_->items.end())
-    throw std::runtime_error("Tried to remove process planning problem '" + key.toStdString() +
-                             "' which does not exist!");
+    throw std::runtime_error("Tried to remove problem '" + key.toStdString() + "' which does not exist!");
 
   data_->problems.erase(it->second);
   data_->problems_ns.erase(it->second);
@@ -92,34 +89,30 @@ void ProcessPlanningProblemModel::removeProcessPlanningProblem(const QString& ke
   removeRow(idx.row());
 }
 
-bool ProcessPlanningProblemModel::hasProcessPlanningProblem(const QString& key)
-{
-  return (data_->items.find(key) != data_->items.end());
-}
+bool TaskComposerProblemModel::hasProblem(const QString& key) { return (data_->items.find(key) != data_->items.end()); }
 
-ProcessPlanningProblemStandardItem* findProcessPlanningProblemItem(QStandardItem* item)
+TaskComposerProblemStandardItem* findTaskComposerProblemItem(QStandardItem* item)
 {
   if (item == nullptr)
     return nullptr;
 
-  if (item->type() == static_cast<int>(StandardItemType::MP_PROCESS_PLANNING_PROBLEM))
-    return dynamic_cast<ProcessPlanningProblemStandardItem*>(item);
+  if (item->type() == static_cast<int>(StandardItemType::MP_TASK_COMPOSER_PROBLEM))
+    return dynamic_cast<TaskComposerProblemStandardItem*>(item);
 
-  return findProcessPlanningProblemItem(item->parent());
+  return findTaskComposerProblemItem(item->parent());
 }
 
-const tesseract_planning::ProcessPlanningProblem&
-ProcessPlanningProblemModel::getProcessPlanningProblem(const QModelIndex& row) const
+const tesseract_planning::TaskComposerProblem& TaskComposerProblemModel::getProblem(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
-  return data_->problems.at(findProcessPlanningProblemItem(item));
+  return data_->problems[findTaskComposerProblemItem(item)];
 }
 
-const QString& ProcessPlanningProblemModel::getProcessPlanningProblemNamespace(const QModelIndex& row) const
+const QString& TaskComposerProblemModel::getProblemNamespace(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
 
-  return data_->problems_ns[findProcessPlanningProblemItem(item)];
+  return data_->problems_ns[findTaskComposerProblemItem(item)];
 }
 
 }  // namespace tesseract_gui

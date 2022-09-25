@@ -20,32 +20,44 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_PROCESS_PLANNING_FUTURE_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_PROCESS_PLANNING_FUTURE_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_MAP_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_MAP_STANDARD_ITEM_H
 
 #include <QStandardItem>
+#include <memory>
+#include <map>
 
 namespace tesseract_planning
 {
-class ProcessPlanningFuture;
+class TaskComposerNodeInfo;
 }
+namespace boost
+{
+namespace uuids
+{
+class uuid;
+}
+}  // namespace boost
 
 namespace tesseract_gui
 {
-class ProcessPlanningFutureStandardItem : public QStandardItem
+class TaskComposerNodeInfoMapStandardItem : public QStandardItem
 {
 public:
-  explicit ProcessPlanningFutureStandardItem(const tesseract_planning::ProcessPlanningFuture& process_future);
-  ProcessPlanningFutureStandardItem(const QString& text,
-                                    const tesseract_planning::ProcessPlanningFuture& process_future);
-  ProcessPlanningFutureStandardItem(const QIcon& icon,
-                                    const QString& text,
-                                    const tesseract_planning::ProcessPlanningFuture& process_future);
+  explicit TaskComposerNodeInfoMapStandardItem(
+      const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map);
+  TaskComposerNodeInfoMapStandardItem(
+      const QString& text,
+      const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map);
+  TaskComposerNodeInfoMapStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::ProcessPlanningFuture& process_future);
+  void ctor(const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_PROCESS_PLANNING_FUTURE_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_MAP_STANDARD_ITEM_H

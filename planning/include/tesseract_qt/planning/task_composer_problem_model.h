@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_MODEL_H
-#define TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_MODEL_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_MODEL_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_MODEL_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_process_managers/core/process_planning_problem.h>
+#include <tesseract_task_composer/task_composer_problem.h>
 #include <QStandardItemModel>
 #include <memory>
 #endif
@@ -34,58 +34,57 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-struct ProcessPlanningProblemModelPrivate;
-class ProcessPlanningProblemModel : public QStandardItemModel
+struct TaskComposerProblemModelPrivate;
+class TaskComposerProblemModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit ProcessPlanningProblemModel(QObject* parent = nullptr);
-  ~ProcessPlanningProblemModel() override;
+  explicit TaskComposerProblemModel(QObject* parent = nullptr);
+  ~TaskComposerProblemModel() override;
 
   /**
-   * @brief Add process planning problem
+   * @brief Add problem
    * @param problem The problem associated with the key
    * @param ns The namespace to store the problem under
    * @return The key associated with added problem for removal
    */
-  QString addProcessPlanningProblem(const tesseract_planning::ProcessPlanningProblem& problem,
-                                    std::string ns = "general");
+  QString addProblem(const tesseract_planning::TaskComposerProblem& problem, std::string ns = "general");
 
   /**
    * @brief Remove the problem
-   * @param key The key associated with the joint trajectory set to be removed
+   * @param key The key associated with the problem to be removed
    */
-  void removeProcessPlanningProblem(const QString& key);
+  void removeProblem(const QString& key);
 
   /**
-   * @brief Check a trajectory set with the provided key exists
-   * @param key The key associated with the joint trajectory set to find
-   * @return True if a trajectory exists under the provided key, otherwise false
+   * @brief Check if a problem with the provided key exists
+   * @param key The key associated with the problem to find
+   * @return True if a problem exists under the provided key, otherwise false
    */
-  bool hasProcessPlanningProblem(const QString& key);
+  bool hasProblem(const QString& key);
 
   /**
    * @brief Get the problem associated with the row
    * @param row The row to get associated problem
    * @return The problem
    */
-  const tesseract_planning::ProcessPlanningProblem& getProcessPlanningProblem(const QModelIndex& row) const;
+  const tesseract_planning::TaskComposerProblem& getProblem(const QModelIndex& row) const;
 
   /**
    * @brief Get the problem namespace associated with the row
    * @param row The row to get associated problem
    * @return The namespace
    */
-  const QString& getProcessPlanningProblemNamespace(const QModelIndex& row) const;
+  const QString& getProblemNamespace(const QModelIndex& row) const;
 
   /** @brief Clear the model */
   void clear();
 
 private:
-  std::unique_ptr<ProcessPlanningProblemModelPrivate> data_;
+  std::unique_ptr<TaskComposerProblemModelPrivate> data_;
 };
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_PROCESS_PLANNING_PROBLEM_MODEL_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_MODEL_H
