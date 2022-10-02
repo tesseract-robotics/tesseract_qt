@@ -420,4 +420,28 @@ QIcon getClearIcon()
   return icon;
 }
 
+QIcon getZoomInIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/zoom_in.svg"));
+  return icon;
+}
+
+QIcon getZoomOutIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/zoom_out.svg"));
+  return icon;
+}
+
+QIcon getRatioIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/ratio.svg"));
+  return icon;
+}
+
+QIcon getFullscreenIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/fullscreen.svg"));
+  return icon;
+}
+
 }  // namespace tesseract_gui::icons

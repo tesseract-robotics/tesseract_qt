@@ -22,7 +22,9 @@
  */
 
 #include <tesseract_qt/common/utils.h>
+#include <tesseract_common/utils.h>
 #include <boost/algorithm/string.hpp>
+#include <graphviz/gvc.h>
 
 namespace tesseract_gui
 {
@@ -31,6 +33,34 @@ std::vector<std::string> getNamespaces(const std::string& namespace_str, const s
   std::vector<std::string> namespaces;
   boost::split(namespaces, namespace_str, boost::is_any_of(separator), boost::token_compress_on);
   return namespaces;
+}
+
+// https://www.graphviz.org/pdf/libguide.pdf
+// 2.3 Rendering the graph
+bool saveDotImage(const std::string& dot_string, const tesseract_common::fs::path& save_path, std::string format)
+{
+  tesseract_common::fs::path dot_filepath = tesseract_common::getTempPath() + "save_dot_image_" + tesseract_common::getTimestampString() + ".dot";
+  std::ofstream out(dot_filepath);
+  out << dot_string;
+  out.close();
+  return saveDotImage(dot_filepath, save_path, format);
+}
+
+bool saveDotImage(const tesseract_common::fs::path& dot_path, const tesseract_common::fs::path& save_path, std::string format)
+{
+  GVC_t *gvc;
+  Agraph_t *g;
+  FILE *fp;
+
+  gvc = gvContext();
+  fp = fopen(dot_path.c_str(), "r");
+  g = agread(fp, 0);
+  agsafeset(g, const_cast<char*>("dpi"), const_cast<char*>("300"), const_cast<char*>("300"));
+  gvLayout(gvc, g, "dot");
+  gvRender(gvc, g, format.c_str(), fopen(save_path.c_str(), "w"));
+  gvFreeLayout(gvc, g);
+  agclose(g);
+  return (gvFreeContext(gvc));
 }
 
 }  // namespace tesseract_gui

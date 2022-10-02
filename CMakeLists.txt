@@ -25,7 +25,12 @@ add_subdirectory(scene_graph)
 add_subdirectory(planning)
 add_subdirectory(workbench)
 
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" DESTINATION lib/cmake/${PROJECT_NAME})
+install(
+  FILES
+    "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake"
+    "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGraphviz.cmake"
+  DESTINATION lib/cmake/${PROJECT_NAME})
+
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/tesseract_qt-extras.cmake" DESTINATION lib/cmake/${PROJECT_NAME})
 
 configure_package(
