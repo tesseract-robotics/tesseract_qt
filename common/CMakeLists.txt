@@ -1,6 +1,7 @@
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_environment REQUIRED)
 find_package(tesseract_command_language REQUIRED)
+find_package(Graphviz REQUIRED)
 find_package(Boost REQUIRED)
 find_package(
   Qt5
@@ -13,9 +14,13 @@ find_package(
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(COMMON_WIDGETS_headers_MOC include/tesseract_qt/common/cartesian_editor_widget.h)
+qt5_wrap_cpp(COMMON_WIDGETS_headers_MOC
+    include/tesseract_qt/common/cartesian_editor_widget.h
+    include/tesseract_qt/common/image_viewer_widget.h)
 
-qt5_wrap_ui(COMMON_WIDGETS_headers_UI include/tesseract_qt/common/cartesian_editor_widget.ui)
+qt5_wrap_ui(COMMON_WIDGETS_headers_UI
+    include/tesseract_qt/common/cartesian_editor_widget.ui
+    include/tesseract_qt/common/image_viewer_widget.ui)
 
 qt5_add_resources(
   COMMON_WIDGETS_resources_RCC
@@ -48,6 +53,7 @@ add_library(
   src/svg_util.cpp
   src/theme_utils.cpp
   src/icon_utils.cpp
+  src/image_viewer_widget.cpp
   src/type_standard_item.cpp
   src/vector_double_standard_item.cpp
   src/vector_string_standard_item.cpp
@@ -60,6 +66,7 @@ target_link_libraries(
   PUBLIC tesseract::tesseract_common
          tesseract::tesseract_environment
          tesseract::tesseract_command_language
+         PkgConfig::graphviz_gvc
          Boost::boost
          Qt5::Core
          Qt5::Gui

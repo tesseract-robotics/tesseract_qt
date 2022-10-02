@@ -95,5 +95,9 @@
         <file>svg/red_circle.svg</file>
         <file>svg/green_circle.svg</file>
         <file>svg/clear.svg</file>
+        <file>svg/zoom_in.svg</file>
+        <file>svg/zoom_out.svg</file>
+        <file>svg/ratio.svg</file>
+        <file>svg/fullscreen.svg</file>
     </qresource>
 </RCC>

@@ -35,6 +35,8 @@
 #include <tesseract_qt/collision/contact_results_widget.h>
 #include <tesseract_qt/collision/contact_results_model.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/utils.h>
+#include <tesseract_qt/common/image_viewer_widget.h>
 
 #include <tesseract_collision/core/types.h>
 
@@ -67,6 +69,8 @@ struct EnvironmentWidgetImpl
 
   QAction* show_axis_all_links_action{ nullptr };
   QAction* hide_axis_all_links_action{ nullptr };
+
+  QAction* plot_scene_graph_action{nullptr};
 };
 
 EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
@@ -397,6 +401,18 @@ void EnvironmentWidget::onDeselectAllLinks()
   emit linkVisibilityChanged(link_names);
 }
 
+void EnvironmentWidget::onPlotSceneGraph()
+{
+  tesseract_common::fs::path dot_path("/tmp/environment_widget_scene_graph.dot");
+  tesseract_common::fs::path image_path("/tmp/environment_widget_scene_graph.png");
+  data_->config->getEnvironment()->getSceneGraph()->saveDOT(dot_path.c_str());
+  saveDotImage(dot_path, image_path, "png");
+
+  auto* image_viewer = new ImageViewerWidget();
+  image_viewer->loadImage(image_path.c_str());
+  image_viewer->show();
+}
+
 void EnvironmentWidget::onEnable()
 {
   LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
@@ -545,5 +561,8 @@ void EnvironmentWidget::createToolBar()
       icons::getShowAxisAllLinksIcon(), "Show Axis All Links", this, SLOT(onShowAxisAllLinks()));
   data_->hide_axis_all_links_action = data_->toolbar->addAction(
       icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", this, SLOT(onHideAxisAllLinks()));
+  data_->toolbar->addSeparator();
+  data_->plot_scene_graph_action = data_->toolbar->addAction(
+      icons::getPlotIcon(), "Plot Scene Graph", this, SLOT(onPlotSceneGraph()));
 }
 }  // namespace tesseract_gui

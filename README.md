@@ -123,4 +123,7 @@ search: https://fonts.google.com/icons
 <div> Icons made by <a href="https://www.flaticon.com/authors/trinh-ho" title="Trinh Ho"> Trinh Ho </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
 - surface.png
 
+<div>Icon made from <a href="http://www.onlinewebfonts.com/icon">Icon Fonts</a> is licensed by CC BY 3.0</div>
+- zoom_in.svg
+- zoom_out.svg
 

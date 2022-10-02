@@ -26,6 +26,7 @@
 #include <vector>
 #include <string>
 
+#include <tesseract_common/types.h>
 namespace tesseract_gui
 {
 /**
@@ -35,6 +36,22 @@ namespace tesseract_gui
  * @return A vector of namespaces
  */
 std::vector<std::string> getNamespaces(const std::string& namespace_str, const std::string& separator = "::");
+
+/**
+ * @brief Convert a dot string to image and save
+ * @param dot_string The dot string to convert
+ * @param save_path The location to save
+ * @return True if successful, otherwise false
+ */
+bool saveDotImage(const std::string& dot_string, const tesseract_common::fs::path& save_path, std::string format = "ps");
+
+/**
+ * @brief Convert a dot file to image and save
+ * @param dot_path The location of the dot file
+ * @param save_path The location to save
+ * @return True if successful, otherwise false
+ */
+bool saveDotImage(const tesseract_common::fs::path& dot_path, const tesseract_common::fs::path& save_path, std::string format = "ps");
 }  // namespace tesseract_gui
 
 #endif  // TESSERACT_QT_COMMON_UTILS_H

@@ -37,7 +37,7 @@ class QStandardItem;
 namespace tesseract_gui
 {
 class EnvironmentWidgetConfig;
-class EnvironmentWidgetImpl;
+struct EnvironmentWidgetImpl;
 struct LinkVisibilityProperties;
 
 class EnvironmentWidget : public QWidget
@@ -99,6 +99,7 @@ public Q_SLOTS:
   virtual void onHideAxisAllLinks();
   virtual void onSelectAllLinks();
   virtual void onDeselectAllLinks();
+  virtual void onPlotSceneGraph();
   virtual void onEnable();
 
   void onACMSelectedLinks(const std::vector<std::string>& link_names);
