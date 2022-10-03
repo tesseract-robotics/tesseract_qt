@@ -20,49 +20,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H
-#define TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H
 
-#include <QWidget>
-#include <memory>
+#include <QStandardItem>
+#include <QList>
 
-class QScrollBar;
-class QImage;
-
-namespace Ui
+namespace tesseract_common
 {
-class ImageViewerWidget;
+class AnyPoly;
 }
 
 namespace tesseract_gui
 {
-struct ImageViewerWidgetImpl;
+/**
+ * @brief This will return a standard item anything stored in the AnyPoly.
+ * @param any_poly The any poly to create a standard item
+ * @return A standard item representation of the AnyPoly
+ */
+QList<QStandardItem*> createStandardItemAnyPoly(const QString& key, const tesseract_common::AnyPoly& any_poly);
 
-class ImageViewerWidget : public QWidget
-{
-  Q_OBJECT
-
-public:
-  explicit ImageViewerWidget(QWidget* parent = nullptr);
-  ~ImageViewerWidget();
-
-  bool loadImage(const QString& filepath);
-  void loadImage(const QImage& image);
-  void scaleImage(double factor);
-
-public Q_SLOTS:
-  virtual void onOpen();
-  virtual void onSave();
-  virtual void onZoomIn();
-  virtual void onZoomOut();
-  virtual void onNormalSize();
-  virtual void onFitToWindow();
-
-private:
-  std::unique_ptr<Ui::ImageViewerWidget> ui;
-  std::unique_ptr<ImageViewerWidgetImpl> data_;
-
-  void createToolBar();
-};
 }  // namespace tesseract_gui
-#endif  // TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H
+
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H

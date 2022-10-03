@@ -41,7 +41,7 @@ struct ImageViewerWidgetImpl
 {
   QImage image;
   QLabel* image_area;
-  double scale_factor{1};
+  double scale_factor{ 1 };
   QString default_directory;
 
   // Toolbar
@@ -52,13 +52,10 @@ struct ImageViewerWidgetImpl
   QAction* zoom_out_action{ nullptr };
   QAction* normal_size_action{ nullptr };
   QAction* fit_to_window_action{ nullptr };
-
 };
 
-ImageViewerWidget::ImageViewerWidget(QWidget *parent) \
-  : QWidget(parent)
-  , ui(std::make_unique<Ui::ImageViewerWidget>())
-  , data_(std::make_unique<ImageViewerWidgetImpl>())
+ImageViewerWidget::ImageViewerWidget(QWidget* parent)
+  : QWidget(parent), ui(std::make_unique<Ui::ImageViewerWidget>()), data_(std::make_unique<ImageViewerWidgetImpl>())
 {
   ui->setupUi(this);
 
@@ -96,14 +93,15 @@ bool ImageViewerWidget::loadImage(const QString& filepath)
   const QImage image = reader.read();
   if (image.isNull())
   {
-    QMessageBox::information(this, "ImageViewer", QString("Failed to load file %1: %2").arg(filepath, reader.errorString()));
+    QMessageBox::information(
+        this, "ImageViewer", QString("Failed to load file %1: %2").arg(filepath, reader.errorString()));
     return false;
   }
   loadImage(image);
   return true;
 }
 
-void ImageViewerWidget::loadImage(const QImage &image)
+void ImageViewerWidget::loadImage(const QImage& image)
 {
   data_->image = image;
   data_->image_area->setPixmap(QPixmap::fromImage(data_->image));
@@ -126,11 +124,11 @@ void ImageViewerWidget::scaleImage(double factor)
   QSize current_size = data_->image_area->pixmap()->size();
   data_->image_area->resize(data_->scale_factor * current_size);
 
-  QScrollBar *hsb = ui->scroll_area->horizontalScrollBar();
-  hsb->setValue(int(data_->scale_factor * hsb->value() + ((data_->scale_factor - 1) * hsb->pageStep()/2)));
+  QScrollBar* hsb = ui->scroll_area->horizontalScrollBar();
+  hsb->setValue(int(data_->scale_factor * hsb->value() + ((data_->scale_factor - 1) * hsb->pageStep() / 2)));
 
-  QScrollBar *vsb = ui->scroll_area->verticalScrollBar();
-  vsb->setValue(int(data_->scale_factor * vsb->value() + ((data_->scale_factor - 1) * vsb->pageStep()/2)));
+  QScrollBar* vsb = ui->scroll_area->verticalScrollBar();
+  vsb->setValue(int(data_->scale_factor * vsb->value() + ((data_->scale_factor - 1) * vsb->pageStep() / 2)));
 
   data_->zoom_in_action->setEnabled(data_->scale_factor < 3.0);
   data_->zoom_out_action->setEnabled(data_->scale_factor > 0.333);
@@ -139,8 +137,8 @@ void ImageViewerWidget::scaleImage(double factor)
 void ImageViewerWidget::onOpen()
 {
   QStringList filters;
-  for (const QByteArray &mimeTypeName : QImageReader::supportedMimeTypes())
-      filters.append(mimeTypeName);
+  for (const QByteArray& mimeTypeName : QImageReader::supportedMimeTypes())
+    filters.append(mimeTypeName);
   filters.sort();
 
   QFileDialog dialog(this, "Open Image", data_->default_directory);
@@ -156,8 +154,8 @@ void ImageViewerWidget::onOpen()
 void ImageViewerWidget::onSave()
 {
   QStringList filters;
-  for (const QByteArray &mimeTypeName : QImageReader::supportedMimeTypes())
-      filters.append(mimeTypeName);
+  for (const QByteArray& mimeTypeName : QImageReader::supportedMimeTypes())
+    filters.append(mimeTypeName);
   filters.sort();
 
   QFileDialog dialog(this, "Save Image", data_->default_directory);
@@ -170,19 +168,14 @@ void ImageViewerWidget::onSave()
     QImageWriter writer(save_path);
 
     if (!writer.write(data_->image))
-      QMessageBox::information(this, "ImageViewer", QString("Failed to save image %1: %2").arg(save_path, writer.errorString()));
+      QMessageBox::information(
+          this, "ImageViewer", QString("Failed to save image %1: %2").arg(save_path, writer.errorString()));
   }
 }
 
-void ImageViewerWidget::onZoomIn()
-{
-  scaleImage(1.25);
-}
+void ImageViewerWidget::onZoomIn() { scaleImage(1.25); }
 
-void ImageViewerWidget::onZoomOut()
-{
-  scaleImage(0.8);
-}
+void ImageViewerWidget::onZoomOut() { scaleImage(0.8); }
 
 void ImageViewerWidget::onNormalSize()
 {
@@ -211,8 +204,9 @@ void ImageViewerWidget::createToolBar()
   data_->toolbar->addSeparator();
   data_->zoom_in_action = data_->toolbar->addAction(icons::getZoomInIcon(), "Zoom In", this, SLOT(onZoomIn()));
   data_->zoom_out_action = data_->toolbar->addAction(icons::getZoomOutIcon(), "Zoom Out", this, SLOT(onZoomOut()));
-  data_->normal_size_action = data_->toolbar->addAction(icons::getRatioIcon(), "Normal Size", this, SLOT(onNormalSize()));
-  data_->fit_to_window_action = data_->toolbar->addAction(icons::getFullscreenIcon(), "Fit To Window", this, SLOT(onFitToWindow()));
+  data_->normal_size_action =
+      data_->toolbar->addAction(icons::getRatioIcon(), "Normal Size", this, SLOT(onNormalSize()));
+  data_->fit_to_window_action =
+      data_->toolbar->addAction(icons::getFullscreenIcon(), "Fit To Window", this, SLOT(onFitToWindow()));
 }
-}
-
+}  // namespace tesseract_gui

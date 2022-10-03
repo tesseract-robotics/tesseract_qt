@@ -142,6 +142,7 @@ QIcon getZoomInIcon();
 QIcon getZoomOutIcon();
 QIcon getRatioIcon();
 QIcon getFullscreenIcon();
+QIcon getDataIcon();
 
 }  // namespace tesseract_gui::icons
 #endif  // TESSERACT_QT_COMMON_ICON_UTILS_H

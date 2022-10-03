@@ -14,13 +14,11 @@ find_package(
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(COMMON_WIDGETS_headers_MOC
-    include/tesseract_qt/common/cartesian_editor_widget.h
-    include/tesseract_qt/common/image_viewer_widget.h)
+qt5_wrap_cpp(COMMON_WIDGETS_headers_MOC include/tesseract_qt/common/cartesian_editor_widget.h
+             include/tesseract_qt/common/image_viewer_widget.h)
 
-qt5_wrap_ui(COMMON_WIDGETS_headers_UI
-    include/tesseract_qt/common/cartesian_editor_widget.ui
-    include/tesseract_qt/common/image_viewer_widget.ui)
+qt5_wrap_ui(COMMON_WIDGETS_headers_UI include/tesseract_qt/common/cartesian_editor_widget.ui
+            include/tesseract_qt/common/image_viewer_widget.ui)
 
 qt5_add_resources(
   COMMON_WIDGETS_resources_RCC

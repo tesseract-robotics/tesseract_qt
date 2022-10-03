@@ -126,4 +126,5 @@ search: https://fonts.google.com/icons
 <div>Icon made from <a href="http://www.onlinewebfonts.com/icon">Icon Fonts</a> is licensed by CC BY 3.0</div>
 - zoom_in.svg
 - zoom_out.svg
+- data.svg
 

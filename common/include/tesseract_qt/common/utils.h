@@ -43,7 +43,9 @@ std::vector<std::string> getNamespaces(const std::string& namespace_str, const s
  * @param save_path The location to save
  * @return True if successful, otherwise false
  */
-bool saveDotImage(const std::string& dot_string, const tesseract_common::fs::path& save_path, std::string format = "ps");
+bool saveDotImage(const std::string& dot_string,
+                  const tesseract_common::fs::path& save_path,
+                  std::string format = "ps");
 
 /**
  * @brief Convert a dot file to image and save
@@ -51,7 +53,9 @@ bool saveDotImage(const std::string& dot_string, const tesseract_common::fs::pat
  * @param save_path The location to save
  * @return True if successful, otherwise false
  */
-bool saveDotImage(const tesseract_common::fs::path& dot_path, const tesseract_common::fs::path& save_path, std::string format = "ps");
+bool saveDotImage(const tesseract_common::fs::path& dot_path,
+                  const tesseract_common::fs::path& save_path,
+                  std::string format = "ps");
 }  // namespace tesseract_gui
 
 #endif  // TESSERACT_QT_COMMON_UTILS_H

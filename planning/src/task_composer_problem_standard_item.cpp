@@ -22,10 +22,7 @@
  */
 #include <tesseract_qt/planning/task_composer_problem_standard_item.h>
 #include <tesseract_qt/planning/planning_profile_remapping_standard_item.h>
-
-#include <tesseract_qt/command_language/composite_instruction_standard_item.h>
-#include <tesseract_qt/command_language/null_instruction_standard_item.h>
-#include <tesseract_qt/command_language/instruction_standard_item.h>
+#include <tesseract_qt/planning/task_composer_data_storage_standard_item.h>
 
 #include <tesseract_qt/scene_graph/scene_state_standard_item.h>
 
@@ -72,32 +69,17 @@ void TaskComposerProblemStandardItem::ctor(const tesseract_planning::TaskCompose
 {
   appendRow(createStandardItemString("name", problem.name));
 
-  //  auto* environment = new QStandardItem(icons::getModelIcon(), "environment");
-  //  environment->appendRow(new EnvironmentCommandsStandardItem("commands", problem.env->getCommandHistory()));
-  //  environment->appendRow(new SceneStateStandardItem("state", problem.env->getState()));
-  //  appendRow(environment);
+  auto* environment = new QStandardItem(icons::getModelIcon(), "environment");
+  environment->appendRow(new EnvironmentCommandsStandardItem("commands", problem.env->getCommandHistory()));
+  environment->appendRow(new SceneStateStandardItem("state", problem.env->getState()));
+  appendRow(environment);
 
-  //  appendRow(new ManipulatorInfoStandardItem("global_manip_info", *problem.global_manip_info));
+  appendRow(new ManipulatorInfoStandardItem("global_manip_info", problem.manip_info));
 
-  //  appendRow(new PlannerProfileRemappingStandardItem("plan_profile_remapping", *problem.plan_profile_remapping));
-  //  appendRow(
-  //      new PlannerProfileRemappingStandardItem("composite_profile_remapping", *problem.composite_profile_remapping));
+  appendRow(new PlannerProfileRemappingStandardItem("move_profile_remapping", problem.move_profile_remapping));
+  appendRow(
+      new PlannerProfileRemappingStandardItem("composite_profile_remapping", problem.composite_profile_remapping));
 
-  //  if (problem.input == nullptr || (problem.input != nullptr && problem.input->isNull()))
-  //    appendRow(new NullInstructionStandardItem("input"));
-  //  else if (problem.input->isCompositeInstruction())
-  //    appendRow(
-  //        new CompositeInstructionStandardItem("input",
-  //        problem.input->as<tesseract_planning::CompositeInstruction>()));
-  //  else
-  //    appendRow(new InstructionStandardItem("input", *problem.input));
-
-  //  if (problem.results == nullptr || (problem.results != nullptr && problem.results->isNull()))
-  //    appendRow(new NullInstructionStandardItem("results"));
-  //  else if (problem.results->isCompositeInstruction())
-  //    appendRow(new CompositeInstructionStandardItem("results",
-  //                                                   problem.results->as<tesseract_planning::CompositeInstruction>()));
-  //  else
-  //    appendRow(new InstructionStandardItem("results", *problem.results));
+  appendRow(new TaskComposerDataStorageStandardItem("input_data", problem.input_data));
 }
 }  // namespace tesseract_gui
