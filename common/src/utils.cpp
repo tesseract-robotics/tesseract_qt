@@ -39,18 +39,21 @@ std::vector<std::string> getNamespaces(const std::string& namespace_str, const s
 // 2.3 Rendering the graph
 bool saveDotImage(const std::string& dot_string, const tesseract_common::fs::path& save_path, std::string format)
 {
-  tesseract_common::fs::path dot_filepath = tesseract_common::getTempPath() + "save_dot_image_" + tesseract_common::getTimestampString() + ".dot";
+  tesseract_common::fs::path dot_filepath =
+      tesseract_common::getTempPath() + "save_dot_image_" + tesseract_common::getTimestampString() + ".dot";
   std::ofstream out(dot_filepath);
   out << dot_string;
   out.close();
   return saveDotImage(dot_filepath, save_path, format);
 }
 
-bool saveDotImage(const tesseract_common::fs::path& dot_path, const tesseract_common::fs::path& save_path, std::string format)
+bool saveDotImage(const tesseract_common::fs::path& dot_path,
+                  const tesseract_common::fs::path& save_path,
+                  std::string format)
 {
-  GVC_t *gvc;
-  Agraph_t *g;
-  FILE *fp;
+  GVC_t* gvc;
+  Agraph_t* g;
+  FILE* fp;
 
   gvc = gvContext();
   fp = fopen(dot_path.c_str(), "r");

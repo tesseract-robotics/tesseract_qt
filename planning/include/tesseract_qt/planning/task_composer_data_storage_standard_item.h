@@ -20,49 +20,30 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H
-#define TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_DATA_STORAGE_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_DATA_STORAGE_STANDARD_ITEM_H
 
-#include <QWidget>
-#include <memory>
+#include <QStandardItem>
 
-class QScrollBar;
-class QImage;
-
-namespace Ui
+namespace tesseract_planning
 {
-class ImageViewerWidget;
+class TaskComposerDataStorage;
 }
 
 namespace tesseract_gui
 {
-struct ImageViewerWidgetImpl;
-
-class ImageViewerWidget : public QWidget
+class TaskComposerDataStorageStandardItem : public QStandardItem
 {
-  Q_OBJECT
-
 public:
-  explicit ImageViewerWidget(QWidget* parent = nullptr);
-  ~ImageViewerWidget();
-
-  bool loadImage(const QString& filepath);
-  void loadImage(const QImage& image);
-  void scaleImage(double factor);
-
-public Q_SLOTS:
-  virtual void onOpen();
-  virtual void onSave();
-  virtual void onZoomIn();
-  virtual void onZoomOut();
-  virtual void onNormalSize();
-  virtual void onFitToWindow();
+  explicit TaskComposerDataStorageStandardItem(const tesseract_planning::TaskComposerDataStorage& data);
+  TaskComposerDataStorageStandardItem(const QString& text, const tesseract_planning::TaskComposerDataStorage& data);
+  TaskComposerDataStorageStandardItem(const QIcon& icon,
+                                      const QString& text,
+                                      const tesseract_planning::TaskComposerDataStorage& data);
+  int type() const override;
 
 private:
-  std::unique_ptr<Ui::ImageViewerWidget> ui;
-  std::unique_ptr<ImageViewerWidgetImpl> data_;
-
-  void createToolBar();
+  void ctor(const tesseract_planning::TaskComposerDataStorage& data);
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_DATA_STORAGE_STANDARD_ITEM_H

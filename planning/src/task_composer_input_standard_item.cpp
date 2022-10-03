@@ -23,6 +23,7 @@
 #include <tesseract_qt/planning/task_composer_input_standard_item.h>
 #include <tesseract_qt/planning/task_composer_problem_standard_item.h>
 #include <tesseract_qt/planning/task_composer_node_info_map_standard_item.h>
+#include <tesseract_qt/planning/task_composer_data_storage_standard_item.h>
 
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
@@ -57,16 +58,9 @@ int TaskComposerInputStandardItem::type() const { return static_cast<int>(Standa
 
 void TaskComposerInputStandardItem::ctor(const tesseract_planning::TaskComposerInput& input)
 {
-  //  if (process_future.interface != nullptr)
-  //    appendRow(new TaskflowInterfaceStandardItem("interface", *process_future.interface));
-  //  else
-  //    appendRow({ new QStandardItem("interface"), new QStandardItem("NULL") });
-
-  //  if (process_future.problem != nullptr && process_future.problem->input != nullptr)
-  //    appendRow(new ProcessPlanningProblemStandardItem("problem", *process_future.problem));
-  //  else
-  //    appendRow({ new QStandardItem("problem"), new QStandardItem("NULL") });
-
+  appendRow(new TaskComposerProblemStandardItem("problem", input.problem));
+  appendRow(new TaskComposerDataStorageStandardItem("data_storage", input.data_storage));
+  /** @todo Add profiles */
   appendRow(createStandardItemBool("successful", input.isSuccessful()));
   appendRow(createStandardItemBool("aborted", input.isAborted()));
   appendRow(new TaskComposerNodeInfoMapStandardItem("node_infos", input.task_infos.getInfoMap()));

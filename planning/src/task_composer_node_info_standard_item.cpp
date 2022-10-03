@@ -21,6 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/planning/task_composer_node_info_standard_item.h>
+#include <tesseract_qt/planning/task_composer_standard_item_utils.h>
 
 #include <tesseract_qt/command_language/composite_instruction_standard_item.h>
 #include <tesseract_qt/command_language/null_instruction_standard_item.h>
@@ -76,51 +77,54 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
   appendRow(createStandardItemString("message", info.message));
   appendRow(createStandardItemFloat("elapsed_time", info.elapsed_time));
 
-  //  if (task_info.instructions_input.isNull())
-  //    appendRow(new NullInstructionStandardItem("instructions_input"));
-  //  else if (task_info.instructions_input.isCompositeInstruction())
-  //    appendRow(new CompositeInstructionStandardItem(
-  //        "instructions_input", task_info.instructions_input.as<tesseract_planning::CompositeInstruction>()));
-  //  else
-  //    appendRow(new InstructionStandardItem("instructions_input", task_info.instructions_input));
+  if (info.inbound_edges.empty())
+  {
+    appendRow(createStandardItemString("inbound_edges", "Empty"));
+  }
+  else
+  {
+    auto* inbound_edges = new QStandardItem(icons::getSetIcon(), "inbound_edges");
+    for (const auto& key : info.inbound_edges)
+      inbound_edges->appendRow(createStandardItemString("uuid", boost::uuids::to_string(key)));
+    appendRow(inbound_edges);
+  }
 
-  //  if (task_info.instructions_output.isNull())
-  //    appendRow(new NullInstructionStandardItem("instructions_output"));
-  //  else if (task_info.instructions_output.isCompositeInstruction())
-  //    appendRow(new CompositeInstructionStandardItem(
-  //        "instructions_output", task_info.instructions_output.as<tesseract_planning::CompositeInstruction>()));
-  //  else
-  //    appendRow(new InstructionStandardItem("instructions_output", task_info.instructions_output));
+  if (info.outbound_edges.empty())
+  {
+    appendRow(createStandardItemString("outbound_edges", "Empty"));
+  }
+  else
+  {
+    auto* outbound_edges = new QStandardItem(icons::getSetIcon(), "outbound_edges");
+    for (const auto& key : info.outbound_edges)
+      outbound_edges->appendRow(createStandardItemString("uuid", boost::uuids::to_string(key)));
+    appendRow(outbound_edges);
+  }
 
-  //  if (task_info.results_input.isNull())
-  //    appendRow(new NullInstructionStandardItem("results_input"));
-  //  else if (task_info.results_input.isCompositeInstruction())
-  //    appendRow(new CompositeInstructionStandardItem(
-  //        "results_input", task_info.results_input.as<tesseract_planning::CompositeInstruction>()));
-  //  else
-  //    appendRow(new InstructionStandardItem("results_input", task_info.results_input));
+  if (info.input_keys.empty())
+  {
+    appendRow(createStandardItemString("input_keys", "Empty"));
+  }
+  else
+  {
+    auto* input_keys = new QStandardItem(icons::getSetIcon(), "input_keys");
+    for (const auto& key : info.input_keys)
+      input_keys->appendRow(createStandardItemString("key", key));
+    appendRow(input_keys);
+  }
 
-  //  if (task_info.results_output.isNull())
-  //    appendRow(new NullInstructionStandardItem("results_output"));
-  //  else if (task_info.results_output.isCompositeInstruction())
-  //    appendRow(new CompositeInstructionStandardItem(
-  //        "results_output", task_info.results_output.as<tesseract_planning::CompositeInstruction>()));
-  //  else
-  //    appendRow(new InstructionStandardItem("results_output", task_info.results_output));
+  if (info.output_keys.empty())
+  {
+    appendRow(createStandardItemString("output_keys", "Empty"));
+  }
+  else
+  {
+    auto* output_keys = new QStandardItem(icons::getSetIcon(), "output_keys");
+    for (const auto& key : info.output_keys)
+      output_keys->appendRow(createStandardItemString("key", key));
+    appendRow(output_keys);
+  }
 
-  //  auto* environment = new QStandardItem(icons::getModelIcon(), "environment");
-  //  QStandardItem* environment_desc;
-  //  if (task_info.environment != nullptr)
-  //  {
-  //    environment_desc = new QStandardItem(task_info.environment->getName().c_str());
-  //    environment->appendRow(new EnvironmentCommandsStandardItem("commands",
-  //    task_info.environment->getCommandHistory())); environment->appendRow(new SceneStateStandardItem("state",
-  //    task_info.environment->getState()));
-  //  }
-  //  else
-  //  {
-  //    environment_desc = new QStandardItem("NULL");
-  //  }
-  //  appendRow({ environment, environment_desc });
+  appendRow(createStandardItemAnyPoly("results", info.results));
 }
 }  // namespace tesseract_gui

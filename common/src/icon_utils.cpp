@@ -444,4 +444,10 @@ QIcon getFullscreenIcon()
   return icon;
 }
 
+QIcon getDataIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/data.svg"));
+  return icon;
+}
+
 }  // namespace tesseract_gui::icons

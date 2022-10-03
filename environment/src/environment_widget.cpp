@@ -70,7 +70,7 @@ struct EnvironmentWidgetImpl
   QAction* show_axis_all_links_action{ nullptr };
   QAction* hide_axis_all_links_action{ nullptr };
 
-  QAction* plot_scene_graph_action{nullptr};
+  QAction* plot_scene_graph_action{ nullptr };
 };
 
 EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
@@ -562,7 +562,7 @@ void EnvironmentWidget::createToolBar()
   data_->hide_axis_all_links_action = data_->toolbar->addAction(
       icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", this, SLOT(onHideAxisAllLinks()));
   data_->toolbar->addSeparator();
-  data_->plot_scene_graph_action = data_->toolbar->addAction(
-      icons::getPlotIcon(), "Plot Scene Graph", this, SLOT(onPlotSceneGraph()));
+  data_->plot_scene_graph_action =
+      data_->toolbar->addAction(icons::getPlotIcon(), "Plot Scene Graph", this, SLOT(onPlotSceneGraph()));
 }
 }  // namespace tesseract_gui
