@@ -72,6 +72,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="generatePushButton">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Generate</string>
         </property>
@@ -123,6 +129,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="addPushButton">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Add</string>
         </property>
@@ -130,6 +142,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="removePushButton">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Remove</string>
         </property>

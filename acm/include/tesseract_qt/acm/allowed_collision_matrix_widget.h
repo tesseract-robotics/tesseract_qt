@@ -58,7 +58,7 @@ public Q_SLOTS:
   void onGenerateButtonClicked();
 
 Q_SIGNALS:
-  void generateClicked(int resolution);
+  void generateClicked(long resolution);
   void entrySelected(tesseract_common::AllowedCollisionEntries selection);
   void selectedLinksChanged(const std::vector<std::string>& selected_links);
 

@@ -14,8 +14,11 @@ find_package(
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(COMMON_WIDGETS_headers_MOC include/tesseract_qt/common/cartesian_editor_widget.h
-             include/tesseract_qt/common/image_viewer_widget.h)
+qt5_wrap_cpp(
+  COMMON_WIDGETS_headers_MOC
+  include/tesseract_qt/common/cartesian_editor_widget.h
+  include/tesseract_qt/common/image_viewer_widget.h
+  include/tesseract_qt/common/json_model.h)
 
 qt5_wrap_ui(COMMON_WIDGETS_headers_UI include/tesseract_qt/common/cartesian_editor_widget.ui
             include/tesseract_qt/common/image_viewer_widget.ui)
@@ -57,6 +60,7 @@ add_library(
   src/vector_string_standard_item.cpp
   src/joint_state_standard_item.cpp
   src/joint_trajectory_standard_item.cpp
+  src/json_model.cpp
   src/manipulator_info_standard_item.cpp
   src/utils.cpp)
 target_link_libraries(

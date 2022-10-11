@@ -24,11 +24,16 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QStandardItemModel>
+#include <QDebug>
+#include <QTreeView>
+#include <QMainWindow>
+#include <QStatusBar>
+#include <memory>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h>
-#include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
-#include <QStringListModel>
+#include <tesseract_qt/srdf/srdf_editor_widget.h>
+#include <tesseract_qt/common/theme_utils.h>
+#include <tesseract_common/resource_locator.h>
 
 int main(int argc, char** argv)
 {
@@ -36,17 +41,32 @@ int main(int argc, char** argv)
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
-  QStringList joint_names{ "joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6" };
-  QStringList link_names{ "link_1", "link_2", "link_3", "link_4", "link_5", "link_6" };
+  // setup stylesheet
+  app.setStyleSheet(tesseract_gui::themes::getDarkTheme());
+  app.setApplicationName("Tesseract SRDF Editor");
 
-  tesseract_gui::KinematicGroupsModel kin_groups_model;
-  QStringListModel link_names_model;
-  link_names_model.setStringList(link_names);
-  QStringListModel joint_names_model;
-  joint_names_model.setStringList(joint_names);
-  tesseract_gui::KinematicGroupsEditorWidget widget;
-  widget.setModels(&kin_groups_model, &link_names_model, &joint_names_model);
-  widget.show();
+  auto locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
+  auto* widget = new tesseract_gui::SRDFEditorWidget(locator);
 
-  return app.exec();
+  QMainWindow window;
+  window.setWindowTitle("Tesseract SRDF Editor");
+  window.setCentralWidget(widget);
+  window.statusBar()->showMessage("Ready!");
+
+  QApplication::connect(
+      widget, &tesseract_gui::SRDFEditorWidget::showStatusMessage, [&window](const QString& message, int timeout) {
+        window.statusBar()->showMessage(message, timeout);
+        window.repaint();
+      });
+
+  QApplication::connect(window.statusBar(), &QStatusBar::messageChanged, [&window](const QString& message) {
+    if (message.isEmpty())
+      window.statusBar()->showMessage("Ready!");
+
+    window.repaint();
+  });
+
+  window.show();
+
+  return QApplication::exec();
 }

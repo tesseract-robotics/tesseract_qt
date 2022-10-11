@@ -27,6 +27,9 @@
 #include <string>
 
 #include <tesseract_common/types.h>
+#include <tesseract_common/allowed_collision_matrix.h>
+#include <tesseract_collision/core/discrete_contact_manager.h>
+
 namespace tesseract_gui
 {
 /**
@@ -56,6 +59,7 @@ bool saveDotImage(const std::string& dot_string,
 bool saveDotImage(const tesseract_common::fs::path& dot_path,
                   const tesseract_common::fs::path& save_path,
                   std::string format = "ps");
+
 }  // namespace tesseract_gui
 
 #endif  // TESSERACT_QT_COMMON_UTILS_H

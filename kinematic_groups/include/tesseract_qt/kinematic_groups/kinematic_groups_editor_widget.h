@@ -31,10 +31,10 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
 #include <QWidget>
 #include <QStandardItemModel>
-#include <QStringListModel>
+
+class QStringListModel;
 
 namespace Ui
 {
@@ -43,24 +43,28 @@ class KinematicGroupsEditorWidget;
 
 namespace tesseract_gui
 {
+class KinematicGroupsModel;
+
 using ChainGroupValidator = std::function<bool(QString, QString)>;
 using JointGroupValidator = std::function<bool(QStringList)>;
 using LinkGroupValidator = std::function<bool(QStringList)>;
 
+struct KinematicGroupsEditorWidgetImpl;
 class KinematicGroupsEditorWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit KinematicGroupsEditorWidget(QStringList joint_names,
-                                       QStringList link_names,
-                                       ChainGroupValidator chain_group_validator = nullptr,
-                                       JointGroupValidator joint_group_validator = nullptr,
-                                       LinkGroupValidator link_group_validator = nullptr,
-                                       QWidget* parent = nullptr);
+  explicit KinematicGroupsEditorWidget(QWidget* parent = nullptr);
   ~KinematicGroupsEditorWidget();
 
-  void setModel(KinematicGroupsModel* model);
+  void setValidators(ChainGroupValidator chain_group_validator,
+                     JointGroupValidator joint_group_validator,
+                     LinkGroupValidator link_group_validator);
+
+  void setModels(KinematicGroupsModel* kin_groups_model,
+                 QStringListModel* link_names_model,
+                 QStringListModel* joint_names_model);
 
 public Q_SLOTS:
   void onAddGroup();
@@ -72,12 +76,7 @@ public Q_SLOTS:
 
 private:
   std::unique_ptr<Ui::KinematicGroupsEditorWidget> ui_;
-  QStringListModel link_names_model_;
-  QStringListModel joint_names_model_;
-  KinematicGroupsModel* group_model_;
-  ChainGroupValidator chain_group_validator_;
-  JointGroupValidator joint_group_validator_;
-  LinkGroupValidator link_group_validator_;
+  std::unique_ptr<KinematicGroupsEditorWidgetImpl> data_;
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_EDITOR_WIDGET_H

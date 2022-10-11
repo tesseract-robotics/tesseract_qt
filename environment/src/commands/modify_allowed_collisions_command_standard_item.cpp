@@ -20,45 +20,46 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/environment/commands/remove_allowed_collision_command_standard_item.h>
+#include <tesseract_qt/environment/commands/modify_allowed_collisions_command_standard_item.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui
 {
-RemoveAllowedCollisionCommandStandardItem::RemoveAllowedCollisionCommandStandardItem(
-    tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command)
-  : QStandardItem(icons::getCommandEntryIcon(), "Remove Allowed Collision"), command(std::move(command))
+ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStandardItem(
+    tesseract_environment::ModifyAllowedCollisionsCommand::ConstPtr command)
+  : QStandardItem(icons::getCommandEntryIcon(), "Modify Allowed Collisions"), command(std::move(command))
 {
   ctor();
 }
 
-RemoveAllowedCollisionCommandStandardItem::RemoveAllowedCollisionCommandStandardItem(
+ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStandardItem(
     const QString& text,
-    tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command)
+    tesseract_environment::ModifyAllowedCollisionsCommand::ConstPtr command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-RemoveAllowedCollisionCommandStandardItem::RemoveAllowedCollisionCommandStandardItem(
+ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command)
+    tesseract_environment::ModifyAllowedCollisionsCommand::ConstPtr command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
 }
 
-int RemoveAllowedCollisionCommandStandardItem::type() const
+int ModifyAllowedCollisionsCommandStandardItem::type() const
 {
-  return static_cast<int>(StandardItemType::ENV_COMMAND_REMOVE_ALLOWED_COLLISION);
+  return static_cast<int>(StandardItemType::ENV_COMMAND_MODIFY_ALLOWED_COLLISIONS);
 }
 
-void RemoveAllowedCollisionCommandStandardItem::ctor()
+void ModifyAllowedCollisionsCommandStandardItem::ctor()
 {
-  appendRow(createStandardItemString("Link Name 1", command->getLinkName1()));
-  appendRow(createStandardItemString("Link Name 2", command->getLinkName2()));
+  //  appendRow(createStandardItemString("link_name1", command->getLinkName1()));
+  //  appendRow(createStandardItemString("link_name2", command->getLinkName2()));
+  //  appendRow(createStandardItemString("reason", command->getReason()));
 }
 }  // namespace tesseract_gui

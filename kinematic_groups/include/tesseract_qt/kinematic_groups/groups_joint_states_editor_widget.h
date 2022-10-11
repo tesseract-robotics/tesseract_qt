@@ -33,7 +33,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QWidget>
-#include <QStringListModel>
+
+class QStringListModel;
 
 namespace Ui
 {
@@ -51,11 +52,11 @@ class GroupsJointStatesEditorWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit GroupsJointStatesEditorWidget(GroupJointsRetriever group_joints_retriever, QWidget* parent = nullptr);
+  explicit GroupsJointStatesEditorWidget(QWidget* parent = nullptr);
   ~GroupsJointStatesEditorWidget();
 
-  void setModel(GroupJointStatesModel* model);
-  void setGroupNamesModel(QStringListModel* model);
+  void config(GroupJointsRetriever group_joints_retriever);
+  void setModels(GroupJointStatesModel* group_states_model, QStringListModel* group_names_model);
 
 Q_SIGNALS:
   void jointStateChanged(std::unordered_map<std::string, double> state);
