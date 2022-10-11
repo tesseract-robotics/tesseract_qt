@@ -20,7 +20,6 @@ add_library(
   src/environment_widget_config.cpp
   src/environment_commands_standard_item.cpp
   src/environment_commands_model.cpp
-  src/commands/add_allowed_collision_command_standard_item.cpp
   src/commands/add_contact_managers_plugin_info_command_standard_item.cpp
   src/commands/add_kinematics_information_command_standard_item.cpp
   src/commands/add_link_command_standard_item.cpp
@@ -33,9 +32,9 @@ add_library(
   src/commands/change_link_collision_enabled_command_standard_item.cpp
   src/commands/change_link_origin_command_standard_item.cpp
   src/commands/change_link_visibility_command_standard_item.cpp
+  src/commands/modify_allowed_collisions_command_standard_item.cpp
   src/commands/move_joint_command_standard_item.cpp
   src/commands/move_link_command_standard_item.cpp
-  src/commands/remove_allowed_collision_command_standard_item.cpp
   src/commands/remove_allowed_collision_link_command_standard_item.cpp
   src/commands/remove_joint_command_standard_item.cpp
   src/commands/remove_link_command_standard_item.cpp

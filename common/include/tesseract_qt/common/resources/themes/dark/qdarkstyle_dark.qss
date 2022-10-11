@@ -2075,11 +2075,12 @@ QToolBox::tab:hover {
   border-bottom: 2px solid #1A72BB;
 }
 
-QToolBox QScrollArea QWidget QWidget {
+ToolBox QScrollArea QWidget QWidget {
   padding: 0px;
   border: 0px;
   background-color: #19232D;
 }
+
 
 /* QFrame -----------------------------------------------------------------
 

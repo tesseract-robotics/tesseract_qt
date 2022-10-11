@@ -72,10 +72,9 @@ int main(int argc, char** argv)
   QStringList list{ "group1", "group2" };
   QStringListModel group_names;
   group_names.setStringList(list);
-  tesseract_gui::GroupJointsRetriever func = getGroupJoints;
-  tesseract_gui::GroupsJointStatesEditorWidget widget(func);
-  widget.setModel(&model);
-  widget.setGroupNamesModel(&group_names);
+  tesseract_gui::GroupsJointStatesEditorWidget widget;
+  widget.config(getGroupJoints);
+  widget.setModels(&model, &group_names);
   widget.show();
 
   return app.exec();

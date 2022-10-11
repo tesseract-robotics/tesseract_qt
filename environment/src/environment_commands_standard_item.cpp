@@ -21,7 +21,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/environment/environment_commands_standard_item.h>
-#include <tesseract_qt/environment/commands/add_allowed_collision_command_standard_item.h>
 #include <tesseract_qt/environment/commands/add_contact_managers_plugin_info_command_standard_item.h>
 #include <tesseract_qt/environment/commands/add_kinematics_information_command_standard_item.h>
 #include <tesseract_qt/environment/commands/add_link_command_standard_item.h>
@@ -34,9 +33,9 @@
 #include <tesseract_qt/environment/commands/change_link_collision_enabled_command_standard_item.h>
 #include <tesseract_qt/environment/commands/change_link_origin_command_standard_item.h>
 #include <tesseract_qt/environment/commands/change_link_visibility_command_standard_item.h>
+#include <tesseract_qt/environment/commands/modify_allowed_collisions_command_standard_item.h>
 #include <tesseract_qt/environment/commands/move_joint_command_standard_item.h>
 #include <tesseract_qt/environment/commands/move_link_command_standard_item.h>
-#include <tesseract_qt/environment/commands/remove_allowed_collision_command_standard_item.h>
 #include <tesseract_qt/environment/commands/remove_allowed_collision_link_command_standard_item.h>
 #include <tesseract_qt/environment/commands/remove_joint_command_standard_item.h>
 #include <tesseract_qt/environment/commands/remove_link_command_standard_item.h>
@@ -157,17 +156,11 @@ void EnvironmentCommandsStandardItem::addCommand(const QString& text,
           { new ChangeLinkVisibilityCommandStandardItem(text, cmd), new QStandardItem("Change Link Visibility") });
       break;
     }
-    case tesseract_environment::CommandType::ADD_ALLOWED_COLLISION:
+    case tesseract_environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::AddAllowedCollisionCommand>(command);
-      appendRow({ new AddAllowedCollisionCommandStandardItem(text, cmd), new QStandardItem("Add Allowed Collision") });
-      break;
-    }
-    case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION:
-    {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::RemoveAllowedCollisionCommand>(command);
-      appendRow(
-          { new RemoveAllowedCollisionCommandStandardItem(text, cmd), new QStandardItem("Remove Allowed Collision") });
+      auto cmd = std::static_pointer_cast<const tesseract_environment::ModifyAllowedCollisionsCommand>(command);
+      appendRow({ new ModifyAllowedCollisionsCommandStandardItem(text, cmd),
+                  new QStandardItem("Modify Allowed Collisions") });
       break;
     }
     case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:

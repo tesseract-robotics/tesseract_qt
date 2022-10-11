@@ -25,25 +25,22 @@
 #include <tesseract_qt/common/standard_item_type.h>
 #include "ui_groups_joint_states_editor_widget.h"
 
-#include <QtQuickWidgets/QQuickWidget>
+#include <QStringListModel>
+
 namespace tesseract_gui
 {
 struct GroupsJointStatesEditorWidgetImpl
 {
   GroupJointsRetriever group_joints_retriever;
-  GroupJointStatesModel* model;
+  GroupJointStatesModel* group_states_model;
+  QStringListModel* group_names_model;
 };
 
-GroupsJointStatesEditorWidget::GroupsJointStatesEditorWidget(GroupJointsRetriever group_joints_retriever,
-                                                             QWidget* parent)
+GroupsJointStatesEditorWidget::GroupsJointStatesEditorWidget(QWidget* parent)
   : QWidget(parent)
   , ui_(std::make_unique<Ui::GroupsJointStatesEditorWidget>())
   , data_(std::make_unique<GroupsJointStatesEditorWidgetImpl>())
 {
-  data_->group_joints_retriever = group_joints_retriever;
-  if (group_joints_retriever == nullptr)
-    throw std::runtime_error("GroupsJointStatesEditorWidget, group joints retriever cannot be a nullptr!");
-
   ui_->setupUi(this);
 
   connect(ui_->groupNamesComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
@@ -59,20 +56,26 @@ GroupsJointStatesEditorWidget::GroupsJointStatesEditorWidget(GroupJointsRetrieve
 
 GroupsJointStatesEditorWidget::~GroupsJointStatesEditorWidget() = default;
 
-void GroupsJointStatesEditorWidget::setModel(tesseract_gui::GroupJointStatesModel* model)
+void GroupsJointStatesEditorWidget::config(GroupJointsRetriever group_joints_retriever)
 {
-  data_->model = model;
-  ui_->treeView->setModel(data_->model);
+  data_->group_joints_retriever = group_joints_retriever;
+  if (group_joints_retriever == nullptr)
+    throw std::runtime_error("GroupsJointStatesEditorWidget, group joints retriever cannot be a nullptr!");
 }
 
-void GroupsJointStatesEditorWidget::setGroupNamesModel(QStringListModel* model)
+void GroupsJointStatesEditorWidget::setModels(tesseract_gui::GroupJointStatesModel* group_states_model,
+                                              QStringListModel* group_names_model)
 {
-  ui_->groupNamesComboBox->setModel(model);
+  data_->group_states_model = group_states_model;
+  data_->group_names_model = group_names_model;
+  ui_->treeView->setModel(data_->group_states_model);
+  ui_->groupNamesComboBox->setModel(data_->group_names_model);
 }
 
 void GroupsJointStatesEditorWidget::onGroupNameChanged()
 {
-  ui_->jointSliderWidget->setJoints(data_->group_joints_retriever(ui_->groupNamesComboBox->currentText()));
+  if (data_->group_joints_retriever != nullptr)
+    ui_->jointSliderWidget->setJoints(data_->group_joints_retriever(ui_->groupNamesComboBox->currentText()));
 }
 
 void GroupsJointStatesEditorWidget::onAddJointState()
@@ -82,7 +85,7 @@ void GroupsJointStatesEditorWidget::onAddJointState()
   if (state_name.isEmpty())
     return;
 
-  data_->model->addGroupJointState(group_name, state_name, ui_->jointSliderWidget->getJointState());
+  data_->group_states_model->addGroupJointState(group_name, state_name, ui_->jointSliderWidget->getJointState());
   ui_->jointStateNameLineEdit->clear();
 }
 
@@ -92,9 +95,9 @@ void GroupsJointStatesEditorWidget::onRemoveJointState()
   int row_cnt = selection.count();
   for (int i = row_cnt; i > 0; i--)
   {
-    QStandardItem* item = data_->model->itemFromIndex(selection.at(i - 1));
+    QStandardItem* item = data_->group_states_model->itemFromIndex(selection.at(i - 1));
     if (item->type() == static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE))
-      data_->model->removeGroupJointState(item->parent()->text(), item->text());
+      data_->group_states_model->removeGroupJointState(item->parent()->text(), item->text());
   }
 }
 

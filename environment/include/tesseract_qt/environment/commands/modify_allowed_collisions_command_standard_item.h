@@ -20,14 +20,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_COMMAND_STANDARD_ITEM_H
-#define TESSERACT_QT_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_COMMAND_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_ENVIRONMENT_MODIFY_ALLOWED_COLLISIONS_COMMAND_STANDARD_ITEM_H
+#define TESSERACT_QT_ENVIRONMENT_MODIFY_ALLOWED_COLLISIONS_COMMAND_STANDARD_ITEM_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#include <string>
 #ifndef Q_MOC_RUN
-#include <tesseract_environment/commands/remove_allowed_collision_command.h>
+#include <tesseract_environment/commands/modify_allowed_collisions_command.h>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
@@ -35,25 +34,25 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-class RemoveAllowedCollisionCommandStandardItem : public QStandardItem
+class ModifyAllowedCollisionsCommandStandardItem : public QStandardItem
 {
 public:
-  explicit RemoveAllowedCollisionCommandStandardItem(
-      tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
-  explicit RemoveAllowedCollisionCommandStandardItem(
+  explicit ModifyAllowedCollisionsCommandStandardItem(
+      tesseract_environment::ModifyAllowedCollisionsCommand::ConstPtr command);
+  explicit ModifyAllowedCollisionsCommandStandardItem(
       const QString& text,
-      tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
-  explicit RemoveAllowedCollisionCommandStandardItem(
+      tesseract_environment::ModifyAllowedCollisionsCommand::ConstPtr command);
+  explicit ModifyAllowedCollisionsCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command);
+      tesseract_environment::ModifyAllowedCollisionsCommand::ConstPtr command);
   int type() const override;
 
-  tesseract_environment::RemoveAllowedCollisionCommand::ConstPtr command;
+  tesseract_environment::ModifyAllowedCollisionsCommand::ConstPtr command;
 
 private:
   void ctor();
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_COMMAND_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_ENVIRONMENT_MODIFY_ALLOWED_COLLISIONS_COMMAND_STANDARD_ITEM_H
