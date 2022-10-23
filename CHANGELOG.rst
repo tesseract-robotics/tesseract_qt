@@ -2,6 +2,18 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix QToolbox theme
+* Add SRDF Editor Widget
+* Add task composer data storage standard item
+* Add image viewer widget and converting dot to image utility
+* Replace tesseract_process_managers with tesseract_task_composer
+* Some include fixes for Ubuntu 22.04
+* Fix planning problem model when tree item is selected that is not a planning problem
+* Update rosinstall tags
+* Contributors: Levi Armstrong, Roelof Oomen
+
 0.13.0 (2022-08-25)
 -------------------
 * Add find package and link library to tesseract_command_language
