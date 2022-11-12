@@ -31,6 +31,9 @@
   <depend>libqwt-qt5-dev</depend>
   <depend>qt_advanced_docking</depend>
   <depend>graphviz-dev</depend>
+  <depend>ignition-rendering6</depend>
+  <depend>ignition-common4</depend>
+  <depend>ignition-math6</depend>
 
   <build_depend>libboost-dev</build_depend>
   <build_export_depend>libboost-dev</build_export_depend>

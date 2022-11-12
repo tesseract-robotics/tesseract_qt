@@ -7,12 +7,10 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 tesseract_variables()
 
 qt5_wrap_cpp(PLANNING_headers_MOC include/tesseract_qt/planning/task_composer_problem_model.h)
-# qt5_wrap_ui(COLLISION_headers_UI include/tesseract_qt/collision/contact_results_widget.ui)
 
 add_library(
   ${PROJECT_NAME}_planning SHARED
   ${PLANNING_headers_MOC}
-  # ${COLLISION_headers_UI}
   src/planning_profile_remapping_standard_item.cpp
   src/task_composer_data_storage_standard_item.cpp
   src/task_composer_problem_model.cpp
