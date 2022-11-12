@@ -21,6 +21,7 @@ add_subdirectory(joint_trajectory)
 add_subdirectory(kinematic_groups)
 add_subdirectory(manipulation)
 add_subdirectory(plot)
+add_subdirectory(rendering)
 add_subdirectory(scene_graph)
 add_subdirectory(planning)
 add_subdirectory(srdf)
@@ -47,5 +48,8 @@ configure_package(
             tesseract_motion_planners
             tesseract_task_composer
             qtadvanceddocking
+            ignition-rendering6
+            ignition-math6-eigen3
+            "ignition-common4 COMPONENTS profiler events av"
             CFG_EXTRAS
             tesseract_qt-extras.cmake)
