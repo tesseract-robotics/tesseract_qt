@@ -186,13 +186,13 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     data_->group_names_model.sort(0);
 
     // Build ACM Model
-    this->data_->acm_model.setAllowedCollisionMatrix(*(this->data_->env->getAllowedCollisionMatrix()));
+    data_->acm_model.setAllowedCollisionMatrix(*(data_->env->getAllowedCollisionMatrix()));
 
     // Build Kinematic Groups Model
-    this->data_->kin_groups_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
+    data_->kin_groups_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
 
     // Build Groups Joint States Model
-    this->data_->group_joint_states_model.set(kin_info.group_states);
+    data_->group_joint_states_model.set(kin_info.group_states);
 
     //    // Build Groups TCPs Model
     //    this->data_->user_tcp_model.setEnvironment(this->data_->render_util.getEnvironment());
@@ -201,6 +201,8 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     //    this->data_->opw_kinematics_model.setEnvironment(this->data_->render_util.getEnvironment());
 
     ui_->toolBox->setCurrentIndex(1);
+
+    Q_EMIT environmentSet(data_->env);
   }
 
   Q_EMIT showStatusMessage("Successfully parsed URDF/SRDF!", 2000);

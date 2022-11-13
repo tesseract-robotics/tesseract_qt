@@ -60,13 +60,15 @@ int main(int argc, char** argv)
 
   QWidget widget;
   auto layout = new QHBoxLayout();
+  layout->setMargin(0);
+  layout->setSpacing(0);
   layout->addWidget(env_widget);
   layout->addWidget(render_widget, 1);
   widget.setLayout(layout);
 
   QObject::connect(env_widget, SIGNAL(triggerRender()), render_widget, SLOT(update()));
 
-  widget.resize(1000, 800);
+  widget.resize(800, 1200);
   widget.show();
 
   return app.exec();

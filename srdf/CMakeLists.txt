@@ -24,9 +24,12 @@ target_include_directories(
                               "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/srdf>" "$<INSTALL_INTERFACE:include>")
 
 add_executable(${PROJECT_NAME}_srdf_app src/srdf_editor_app.cpp)
-target_link_libraries(${PROJECT_NAME}_srdf_app PRIVATE ${PROJECT_NAME}_srdf tesseract::tesseract_common)
-
-# add_subdirectory(demo)
+target_link_libraries(
+  ${PROJECT_NAME}_srdf_app
+  PRIVATE ${PROJECT_NAME}_srdf
+          ${PROJECT_NAME}_rendering
+          ${PROJECT_NAME}_environment
+          tesseract::tesseract_common)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
