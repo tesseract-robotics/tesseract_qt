@@ -34,6 +34,13 @@ class RenderEnvironmentWidget : public EnvironmentWidget
 {
   Q_OBJECT
 public:
+  /**
+   * @brief Constructor
+   * @details The namespace allows you to have multiple render widget for the same scene
+   * @param scene_name The namespace the event filter respondes to
+   * @param entity_manager The entity manager
+   * @param parent The parent widget
+   */
   explicit RenderEnvironmentWidget(std::string scene_name, EntityManager& entity_manager, QWidget* parent = nullptr);
   ~RenderEnvironmentWidget() override;
 

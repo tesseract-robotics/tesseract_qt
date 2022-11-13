@@ -36,6 +36,11 @@ namespace tesseract_scene_graph
 class Joint;
 }
 
+namespace tesseract_environment
+{
+class Environment;
+}
+
 namespace Ui
 {
 class SRDFEditorWidget;
@@ -54,6 +59,7 @@ public:
 
 Q_SIGNALS:
   void showStatusMessage(const QString& message, int timeout);
+  void environmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
 
 public Q_SLOTS:
   /**
