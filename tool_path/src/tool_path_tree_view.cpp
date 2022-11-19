@@ -20,34 +20,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_POSITION_STANDARD_ITEM_H
-#define TESSERACT_QT_COMMON_POSITION_STANDARD_ITEM_H
-
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <Eigen/Geometry>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
-#include <QStandardItem>
+#include <tesseract_qt/tool_path/tool_path_tree_view.h>
+#include <tesseract_qt/tool_path/tool_path_model.h>
+#include <tesseract_qt/common/tool_path_standard_item.h>
+#include <tesseract_qt/common/standard_item_type.h>
+#include <QMouseEvent>
 
 namespace tesseract_gui
 {
-class PositionStandardItem : public QStandardItem
+struct ToolPathTreeViewImpl
 {
-public:
-  explicit PositionStandardItem(const Eigen::Vector3d& position);
-  explicit PositionStandardItem(const QString& text, const Eigen::Vector3d& position);
-  explicit PositionStandardItem(const QIcon& icon, const QString& text, const Eigen::Vector3d& position);
-  int type() const override;
+  ToolPathModel* model;
 
-  Eigen::Vector3d getPosition() const;
-  void setPosition(const Eigen::Vector3d& position);
-
-private:
-  void ctor(const Eigen::Vector3d& position);
+  // Store the selected item
+  QStandardItem* selected_item;
 };
-}  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COMMON_POSITION_STANDARD_ITEM_H
+ToolPathTreeView::ToolPathTreeView(QWidget* parent) : QTreeView(parent), data_(std::make_unique<ToolPathTreeViewImpl>())
+{
+  connect(this, &QTreeView::collapsed, [this]() { resizeColumnToContents(0); });
+  connect(this, &QTreeView::expanded, [this]() { resizeColumnToContents(0); });
+}
+
+ToolPathTreeView::~ToolPathTreeView() = default;
+
+void ToolPathTreeView::setModel(QAbstractItemModel* model)
+{
+  data_->model = qobject_cast<ToolPathModel*>(model);
+  QTreeView::setModel(model);
+}
+
+}  // namespace tesseract_gui

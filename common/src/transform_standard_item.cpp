@@ -49,6 +49,13 @@ TransformStandardItem::TransformStandardItem(const QIcon& icon, const QString& t
 
 int TransformStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM); }
 
+Eigen::Isometry3d TransformStandardItem::getTransfrom() const
+{
+  Eigen::Isometry3d tf(orientation_->getQuaternion());
+  tf.translation() = position_->getPosition();
+  return tf;
+}
+
 void TransformStandardItem::setTransform(const Eigen::Isometry3d& transform)
 {
   position_->setPosition(transform.translation());

@@ -47,6 +47,13 @@ PositionStandardItem::PositionStandardItem(const QIcon& icon, const QString& tex
 
 int PositionStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM_POSITION); }
 
+Eigen::Vector3d PositionStandardItem::getPosition() const
+{
+  return Eigen::Vector3d(child(0, 1)->data(Qt::DisplayRole).toDouble(),
+                         child(1, 1)->data(Qt::DisplayRole).toDouble(),
+                         child(2, 1)->data(Qt::DisplayRole).toDouble());
+}
+
 void PositionStandardItem::setPosition(const Eigen::Vector3d& position)
 {
   child(0, 1)->setData(position.x(), Qt::DisplayRole);
