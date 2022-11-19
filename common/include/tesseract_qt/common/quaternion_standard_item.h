@@ -42,6 +42,7 @@ public:
   explicit QuaternionStandardItem(const QIcon& icon, const QString& text, const Eigen::Quaterniond& q);
   int type() const override;
 
+  Eigen::Quaterniond getQuaternion() const;
   void setQuaternion(const Eigen::Quaterniond& q);
 
 private:

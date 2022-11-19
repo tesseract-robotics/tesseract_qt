@@ -20,38 +20,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_TRANSFORM_STANDARD_ITEM_H
-#define TESSERACT_QT_COMMON_TRANSFORM_STANDARD_ITEM_H
-
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <Eigen/Geometry>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#ifndef TESSERACT_QT_COMMON_TOOL_PATH_SEGMENT_STANDARD_ITEM_H
+#define TESSERACT_QT_COMMON_TOOL_PATH_SEGMENT_STANDARD_ITEM_H
 
 #include <QStandardItem>
+#include <tesseract_common/tool_path_segment.h>
 
 namespace tesseract_gui
 {
-class PositionStandardItem;
-class QuaternionStandardItem;
-class TransformStandardItem : public QStandardItem
+class ToolPathSegmentStandardItem : public QStandardItem
 {
 public:
-  explicit TransformStandardItem(const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform);
-  explicit TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform);
+  explicit ToolPathSegmentStandardItem(const tesseract_common::ToolPathSegment& segment);
+  ToolPathSegmentStandardItem(const QString& text, const tesseract_common::ToolPathSegment& segment);
+  ToolPathSegmentStandardItem(const QIcon& icon, const QString& text, const tesseract_common::ToolPathSegment& segment);
   int type() const override;
 
-  Eigen::Isometry3d getTransfrom() const;
-  void setTransform(const Eigen::Isometry3d& transform);
+  tesseract_common::ToolPathSegment getToolPathSegment() const;
 
 private:
-  void ctor(const Eigen::Isometry3d& transform);
-  PositionStandardItem* position_;
-  QuaternionStandardItem* orientation_;
+  void ctor(const tesseract_common::ToolPathSegment& segment);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COMMON_TRANSFORM_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_COMMON_TOOL_PATH_SEGMENT_STANDARD_ITEM_H

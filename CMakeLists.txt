@@ -25,6 +25,7 @@ add_subdirectory(rendering)
 add_subdirectory(scene_graph)
 add_subdirectory(planning)
 add_subdirectory(srdf)
+add_subdirectory(tool_path)
 add_subdirectory(workbench)
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGraphviz.cmake"

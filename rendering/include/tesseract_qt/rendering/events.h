@@ -26,6 +26,7 @@
 #include <vector>
 #include <memory>
 #include <tesseract_qt/common/entity.h>
+#include <tesseract_qt/common/event_type.h>
 
 #include <ignition/common/KeyEvent.hh>
 #include <ignition/common/MouseEvent.hh>
@@ -37,9 +38,6 @@ namespace tesseract_gui
 /** @brief Namespace for all events. Refer to the EventManager class for more information about events. */
 namespace events
 {
-/// User defined events should start from QEvent::MaxUser and
-/// count down to avoid collision with ign-gazebo events
-
 /**
  * @brief Event called in the render thread of a 3D scene after the user camera has rendered.
  * It's safe to make rendering calls in this event's callback.
@@ -53,7 +51,7 @@ public:
   const std::string& getSceneName() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser);
+  static const QEvent::Type kType = QEvent::Type(EventType::RENDER);
 
 private:
   /** @brief Private data pointer */
@@ -104,7 +102,7 @@ public:
   ignition::math::Vector3d getScale() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 1);
+  static const QEvent::Type kType = QEvent::Type(EventType::SNAP_INTERVALS);
 
 private:
   /** @brief Private data pointer */
@@ -137,7 +135,7 @@ public:
   const std::string& getDescription() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 2);
+  static const QEvent::Type kType = QEvent::Type(EventType::SPAWN_FROM_DESCRIPTION);
 
 private:
   /** @brief Private data pointer */
@@ -170,7 +168,7 @@ public:
   const std::string& getFilePath() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 3);
+  static const QEvent::Type kType = QEvent::Type(EventType::SPAWN_FROM_PATH);
 
 private:
   /** @brief Private data pointer */
@@ -203,7 +201,7 @@ public:
   ignition::math::Vector3d getPoint() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 4);
+  static const QEvent::Type kType = QEvent::Type(EventType::HOVER_TO_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -237,7 +235,7 @@ public:
   ignition::math::Vector3d getPoint() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 5);
+  static const QEvent::Type kType = QEvent::Type(EventType::LEFT_CLICK_TO_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -270,7 +268,7 @@ public:
   ignition::math::Vector3d getPoint() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 6);
+  static const QEvent::Type kType = QEvent::Type(EventType::RIGHT_CLICK_TO_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -307,7 +305,7 @@ public:
   bool getMenuEnabled() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 7);
+  static const QEvent::Type kType = QEvent::Type(EventType::DROPDOWN_MENU_ENABLED);
 
 private:
   /** @brief Private data pointer */
@@ -340,7 +338,7 @@ public:
   ignition::common::KeyEvent getKey() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 8);
+  static const QEvent::Type kType = QEvent::Type(EventType::KEY_RELEASE_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -373,7 +371,7 @@ public:
   ignition::common::KeyEvent getKey() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 9);
+  static const QEvent::Type kType = QEvent::Type(EventType::KEY_PRESS_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -407,7 +405,7 @@ public:
   const ignition::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 10);
+  static const QEvent::Type kType = QEvent::Type(EventType::LEFT_CLICK_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -441,7 +439,7 @@ public:
   const ignition::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 11);
+  static const QEvent::Type kType = QEvent::Type(EventType::RIGHT_CLICK_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -477,7 +475,7 @@ public:
   bool getBlock() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 12);
+  static const QEvent::Type kType = QEvent::Type(EventType::BLOCK_ORBIT);
 
 private:
   /** @brief Private data pointer */
@@ -507,7 +505,7 @@ public:
   ignition::common::MouseEvent getMouse() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 13);
+  static const QEvent::Type kType = QEvent::Type(EventType::HOVER_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -540,7 +538,7 @@ public:
   const std::string& getName() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 14);
+  static const QEvent::Type kType = QEvent::Type(EventType::SPAWN_CLONE_FROM_NAME);
 
 private:
   /** @brief Private data pointer */
@@ -582,7 +580,7 @@ public:
   const ignition::math::Vector2i& getMouse() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 15);
+  static const QEvent::Type kType = QEvent::Type(EventType::DROP_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -612,7 +610,7 @@ public:
   const ignition::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 16);
+  static const QEvent::Type kType = QEvent::Type(EventType::SCROLL_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -642,7 +640,7 @@ public:
   ignition::common::MouseEvent getMouse() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 17);
+  static const QEvent::Type kType = QEvent::Type(EventType::DRAG_ON_SCENE);
 
 public:
   /** @brief Private data pointer */
@@ -673,7 +671,7 @@ public:
   const ignition::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 18);
+  static const QEvent::Type kType = QEvent::Type(EventType::MOUSE_PRESS_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -702,7 +700,7 @@ public:
   const std::string& getSceneName() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 20);
+  static const QEvent::Type kType = QEvent::Type(EventType::PRE_RENDER);
 
 private:
   /** @brief Private data pointer */

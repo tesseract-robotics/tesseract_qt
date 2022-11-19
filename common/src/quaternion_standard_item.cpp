@@ -47,6 +47,14 @@ QuaternionStandardItem::QuaternionStandardItem(const QIcon& icon, const QString&
 
 int QuaternionStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM_QUATERNION); }
 
+Eigen::Quaterniond QuaternionStandardItem::getQuaternion() const
+{
+  return Eigen::Quaterniond(child(3, 1)->data(Qt::DisplayRole).toDouble(),
+                            child(0, 1)->data(Qt::DisplayRole).toDouble(),
+                            child(1, 1)->data(Qt::DisplayRole).toDouble(),
+                            child(2, 1)->data(Qt::DisplayRole).toDouble());
+}
+
 void QuaternionStandardItem::setQuaternion(const Eigen::Quaterniond& q)
 {
   child(0, 1)->setData(q.x(), Qt::DisplayRole);
