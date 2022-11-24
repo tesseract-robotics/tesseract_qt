@@ -71,7 +71,7 @@ void CompositeInstructionModel::removeNamespace(const QString& ns)
   if (it != data_->composite_instructions.end())
   {
     QModelIndex idx = indexFromItem(it->second.first);
-    removeRow(idx.row());
+    removeRow(idx.row(), idx.parent());
   }
 }
 
