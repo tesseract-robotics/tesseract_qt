@@ -64,7 +64,7 @@ void JointTrajectoryModel::removeJointTrajectorySet(const QString& key)
 
   QModelIndex idx = indexFromItem(it->second);
   trajectory_sets_.erase(it);
-  removeRow(idx.row());
+  removeRow(idx.row(), idx.parent());
 }
 
 bool JointTrajectoryModel::hasJointTrajectorySet(const QString& key)

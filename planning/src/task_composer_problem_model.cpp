@@ -86,7 +86,7 @@ void TaskComposerProblemModel::removeProblem(const QString& key)
   data_->problems_ns.erase(it->second);
   QModelIndex idx = indexFromItem(it->second);
   data_->items.erase(it);
-  removeRow(idx.row());
+  removeRow(idx.row(), idx.parent());
 }
 
 bool TaskComposerProblemModel::hasProblem(const QString& key) { return (data_->items.find(key) != data_->items.end()); }

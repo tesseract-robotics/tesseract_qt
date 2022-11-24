@@ -96,13 +96,13 @@ void ContactResultsModel::removeNamespace(const QString& ns)
   if (it_vector != data_->contact_result_vectors.end())
   {
     QModelIndex idx = indexFromItem(it_vector->second.first);
-    removeRow(idx.row());
+    removeRow(idx.row(), idx.parent());
     data_->contact_result_vectors.erase(ns.toStdString());
   }
   else if (it_map != data_->contact_result_maps.end())
   {
     QModelIndex idx = indexFromItem(it_map->second.first);
-    removeRow(idx.row());
+    removeRow(idx.row(), idx.parent());
     data_->contact_result_maps.erase(ns.toStdString());
   }
 }

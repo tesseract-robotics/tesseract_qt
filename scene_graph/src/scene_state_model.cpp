@@ -146,7 +146,7 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
       if (it != data_->links.end())
       {
         QModelIndex idx = indexFromItem(data_->links[link_name]);
-        removeRow(idx.row());
+        removeRow(idx.row(), idx.parent());
         data_->links.erase(link_name);
         sort_required = true;
       }
@@ -163,7 +163,7 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
       if (it != data_->joints.end())
       {
         QModelIndex joint_idx = indexFromItem(it->second);
-        removeRow(joint_idx.row());
+        removeRow(joint_idx.row(), joint_idx.parent());
         data_->joints.erase(joint_name);
         sort_required = true;
       }
@@ -180,7 +180,7 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
       if (it != data_->values.end())
       {
         QModelIndex joint_idx = indexFromItem(it->second);
-        removeRow(joint_idx.row());
+        removeRow(joint_idx.row(), joint_idx.parent());
         data_->values.erase(joint_name);
         sort_required = true;
       }
