@@ -25,10 +25,12 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QDebug>
+#include <QVBoxLayout>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/tool_path/tool_path_model.h>
 #include <tesseract_qt/tool_path/tool_path_tree_view.h>
+#include <tesseract_qt/tool_path/tool_path_tool_bar.h>
 #include <tesseract_qt/tool_path/tool_path_events.h>
 
 int main(int argc, char** argv)
@@ -86,8 +88,17 @@ int main(int argc, char** argv)
     QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(scene_name, tool_path3.getUUID()));
   }
 
-  tesseract_gui::ToolPathTreeView widget;
-  widget.setModel(model);
+  auto* tool_path_widget = new tesseract_gui::ToolPathTreeView();
+  tool_path_widget->setModel(model);
+
+  QWidget widget;
+  auto layout = new QVBoxLayout();
+  layout->setMargin(0);
+  layout->setSpacing(0);
+  layout->addWidget(new tesseract_gui::ToolPathToolBar(scene_name));
+  layout->addWidget(tool_path_widget, 1);
+  widget.setLayout(layout);
+
   widget.show();
 
   return QApplication::exec();

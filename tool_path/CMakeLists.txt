@@ -20,9 +20,11 @@ target_include_directories(
          "$<INSTALL_INTERFACE:include>")
 add_dependencies(${PROJECT_NAME}_tool_path_model ${PROJECT_NAME}_common)
 
-qt5_wrap_cpp(TOOL_PATH_WIDGET_headers_MOC include/tesseract_qt/tool_path/tool_path_tree_view.h)
+qt5_wrap_cpp(TOOL_PATH_WIDGET_headers_MOC
+    include/tesseract_qt/tool_path/tool_path_tool_bar.h
+    include/tesseract_qt/tool_path/tool_path_tree_view.h)
 
-add_library(${PROJECT_NAME}_tool_path_widget SHARED ${TOOL_PATH_WIDGET_headers_MOC} src/tool_path_tree_view.cpp)
+add_library(${PROJECT_NAME}_tool_path_widget SHARED ${TOOL_PATH_WIDGET_headers_MOC} src/tool_path_tool_bar.cpp src/tool_path_tree_view.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_tool_path_widget

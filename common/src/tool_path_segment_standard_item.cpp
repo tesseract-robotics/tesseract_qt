@@ -66,6 +66,8 @@ tesseract_common::ToolPathSegment ToolPathSegmentStandardItem::getToolPathSegmen
 
 void ToolPathSegmentStandardItem::ctor(const tesseract_common::ToolPathSegment& segment)
 {
+  setCheckable(true);
+  setCheckState(Qt::CheckState::Checked);
   for (std::size_t i = 0; i < segment.size(); ++i)
     appendRow(new TransformStandardItem(QString("pose[%1]").arg(i), segment[i]));
 }
