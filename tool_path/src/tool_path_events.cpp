@@ -27,47 +27,56 @@
 
 namespace tesseract_gui::events
 {
-class AddToolPath::Implementation
+class ToolPathAdd::Implementation
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  /// The scene the event is associated with
-  std::string scene_name;
-
   tesseract_common::ToolPath tool_path;
 };
 
-AddToolPath::AddToolPath(const std::string& scene_name, const tesseract_common::ToolPath& tool_path)
-  : QEvent(kType), data_(std::make_unique<Implementation>())
+ToolPathAdd::ToolPathAdd(const std::string& scene_name, const tesseract_common::ToolPath& tool_path)
+  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = scene_name;
   data_->tool_path = tool_path;
 }
-AddToolPath::~AddToolPath() = default;
+ToolPathAdd::~ToolPathAdd() = default;
 
-const std::string& AddToolPath::getSceneName() const { return data_->scene_name; }
-const tesseract_common::ToolPath& AddToolPath::getToolPath() const { return data_->tool_path; }
+const tesseract_common::ToolPath& ToolPathAdd::getToolPath() const { return data_->tool_path; }
 
 //////////////////////////////////////////
 
-class RemoveToolPath::Implementation
+class ToolPathRemove::Implementation
 {
 public:
-  /// The scene the event is associated with
-  std::string scene_name;
-
   boost::uuids::uuid uuid;
 };
 
-RemoveToolPath::RemoveToolPath(const std::string& scene_name, const boost::uuids::uuid& uuid)
-  : QEvent(kType), data_(std::make_unique<Implementation>())
+ToolPathRemove::ToolPathRemove(const std::string& scene_name, const boost::uuids::uuid& uuid)
+  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = scene_name;
   data_->uuid = uuid;
 }
-RemoveToolPath::~RemoveToolPath() = default;
+ToolPathRemove::~ToolPathRemove() = default;
 
-const std::string& RemoveToolPath::getSceneName() const { return data_->scene_name; }
-const boost::uuids::uuid& RemoveToolPath::getUUID() const { return data_->uuid; }
+const boost::uuids::uuid& ToolPathRemove::getUUID() const { return data_->uuid; }
+
+ToolPathRemoveAll::ToolPathRemoveAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathRemoveAll::~ToolPathRemoveAll() = default;
+
+ToolPathRemoveSelected::ToolPathRemoveSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathRemoveSelected::~ToolPathRemoveSelected() = default;
+
+ToolPathHideAll::ToolPathHideAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathHideAll::~ToolPathHideAll() = default;
+
+ToolPathHideSelected::ToolPathHideSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathHideSelected::~ToolPathHideSelected() = default;
+
+ToolPathShowAll::ToolPathShowAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathShowAll::~ToolPathShowAll() = default;
+
+ToolPathShowSelected::ToolPathShowSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathShowSelected::~ToolPathShowSelected() = default;
+
 }  // namespace tesseract_gui::events

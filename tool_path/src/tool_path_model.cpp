@@ -71,7 +71,7 @@ void ToolPathModel::removeToolPath(const boost::uuids::uuid& uuid)
 
   QModelIndex idx = indexFromItem(it->second);
   tool_paths_.erase(it);
-  removeRow(idx.row());
+  removeRow(idx.row(), idx.parent());
 }
 
 bool ToolPathModel::hasToolPath(const boost::uuids::uuid& uuid)
@@ -134,17 +134,17 @@ tesseract_common::ToolPath ToolPathModel::getToolPath(const QModelIndex& row) co
 
 bool ToolPathModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::AddToolPath::kType)
+  if (event->type() == events::ToolPathAdd::kType)
   {
-    assert(dynamic_cast<events::AddToolPath*>(event) != nullptr);
-    auto* e = static_cast<events::AddToolPath*>(event);
+    assert(dynamic_cast<events::ToolPathAdd*>(event) != nullptr);
+    auto* e = static_cast<events::ToolPathAdd*>(event);
     if (e->getSceneName() == scene_name_)
       addToolPath(e->getToolPath());
   }
-  else if (event->type() == events::RemoveToolPath::kType)
+  else if (event->type() == events::ToolPathRemove::kType)
   {
-    assert(dynamic_cast<events::RemoveToolPath*>(event) != nullptr);
-    auto* e = static_cast<events::RemoveToolPath*>(event);
+    assert(dynamic_cast<events::ToolPathRemove*>(event) != nullptr);
+    auto* e = static_cast<events::ToolPathRemove*>(event);
     if (e->getSceneName() == scene_name_)
       removeToolPath(e->getUUID());
   }

@@ -29,6 +29,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/tool_path/tool_path_model.h>
 #include <tesseract_qt/tool_path/tool_path_tree_view.h>
+#include <tesseract_qt/tool_path/tool_path_events.h>
 
 int main(int argc, char** argv)
 {
@@ -53,17 +54,37 @@ int main(int argc, char** argv)
   }
 
   tesseract_common::ToolPath tool_path1{ tool_path };
+  tool_path1.setDescription("Demo Tool Path 1");
   tool_path1.regenerateUUID();
 
   tesseract_common::ToolPath tool_path2{ tool_path };
+  tool_path2.setDescription("Demo Tool Path 2");
   tool_path2.regenerateUUID();
 
-  auto* model = new tesseract_gui::ToolPathModel();  // NOLINT
+  std::string scene_name{ "scene_name" };
+  auto* model = new tesseract_gui::ToolPathModel(scene_name);  // NOLINT
   model->addToolPath(tool_path);
   model->addToolPath(tool_path1);
   model->addToolPath(tool_path2);
 
   model->removeToolPath(tool_path1.getUUID());
+
+  // Use event method
+
+  tesseract_common::ToolPath tool_path3{ tool_path };
+  tool_path3.setDescription("Demo Tool Path 3");
+  tool_path3.regenerateUUID();
+
+  tesseract_common::ToolPath tool_path4{ tool_path };
+  tool_path4.setDescription("Demo Tool Path 4");
+  tool_path4.regenerateUUID();
+
+  if (qApp != nullptr)
+  {
+    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path3));
+    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path4));
+    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(scene_name, tool_path3.getUUID()));
+  }
 
   tesseract_gui::ToolPathTreeView widget;
   widget.setModel(model);
