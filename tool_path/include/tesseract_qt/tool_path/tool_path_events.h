@@ -40,18 +40,16 @@ struct uuid;
 namespace tesseract_gui::events
 {
 /** @brief Event called to add a tool path */
-class AddToolPath : public QEvent
+class ToolPathAdd : public SceneEvent
 {
 public:
-  AddToolPath(const std::string& scene_name, const tesseract_common::ToolPath& tool_path);
-  ~AddToolPath() override;
-
-  const std::string& getSceneName() const;
+  ToolPathAdd(const std::string& scene_name, const tesseract_common::ToolPath& tool_path);
+  ~ToolPathAdd() override;
 
   const tesseract_common::ToolPath& getToolPath() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::ADD_TOOL_PATH);
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_ADD);
 
 private:
   /** @brief Private data pointer */
@@ -60,24 +58,89 @@ private:
 };
 
 /** @brief Event called to remove a tool path */
-class RemoveToolPath : public QEvent
+class ToolPathRemove : public SceneEvent
 {
 public:
-  RemoveToolPath(const std::string& scene_name, const boost::uuids::uuid& uuid);
-  ~RemoveToolPath() override;
-
-  const std::string& getSceneName() const;
+  ToolPathRemove(const std::string& scene_name, const boost::uuids::uuid& uuid);
+  ~ToolPathRemove() override;
 
   const boost::uuids::uuid& getUUID() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::REMOVE_TOOL_PATH);
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_REMOVE);
 
 private:
   /** @brief Private data pointer */
   class Implementation;
   std::unique_ptr<Implementation> data_;
 };
+
+/** @brief Event called to remove all a tool paths for a given scene */
+class ToolPathRemoveAll : public SceneEvent
+{
+public:
+  ToolPathRemoveAll(const std::string& scene_name);
+  ~ToolPathRemoveAll() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_REMOVE_ALL);
+};
+
+/** @brief Event called to remove selected a tool paths for a given scene */
+class ToolPathRemoveSelected : public SceneEvent
+{
+public:
+  ToolPathRemoveSelected(const std::string& scene_name);
+  ~ToolPathRemoveSelected() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_REMOVE_SELECTED);
+};
+
+/** @brief Event called to hide all a tool paths for a given scene */
+class ToolPathHideAll : public SceneEvent
+{
+public:
+  ToolPathHideAll(const std::string& scene_name);
+  ~ToolPathHideAll() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_HIDE_ALL);
+};
+
+/** @brief Event called to hide selected a tool paths for a given scene */
+class ToolPathHideSelected : public SceneEvent
+{
+public:
+  ToolPathHideSelected(const std::string& scene_name);
+  ~ToolPathHideSelected() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_HIDE_SELECTED);
+};
+
+/** @brief Event called to show all a tool paths for a given scene */
+class ToolPathShowAll : public SceneEvent
+{
+public:
+  ToolPathShowAll(const std::string& scene_name);
+  ~ToolPathShowAll() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SHOW_ALL);
+};
+
+/** @brief Event called to show selected a tool paths for a given scene */
+class ToolPathShowSelected : public SceneEvent
+{
+public:
+  ToolPathShowSelected(const std::string& scene_name);
+  ~ToolPathShowSelected() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SHOW_SELECTED);
+};
+
 }  // namespace tesseract_gui::events
 
 #endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_EVENTS_H
