@@ -26,6 +26,22 @@
 #include <QEvent>
 namespace tesseract_gui
 {
+/** @brief Event called  */
+class SceneEvent : public QEvent
+{
+public:
+  SceneEvent(std::string scene_name, QEvent::Type type) : QEvent(type), scene_name_(std::move(scene_name)) {}
+
+  /**
+   * @brief Get the scene name the event is associated with
+   * @return The scene name
+   */
+  const std::string& getSceneName() const { return scene_name_; }
+
+private:
+  std::string scene_name_;
+};
+
 // clang-format off
 enum class EventType : int
 {
@@ -55,9 +71,15 @@ enum class EventType : int
   RENDER_TYPES_END                    = EVENT_TYPE + 21,
 
   // Tool Path
-  ADD_TOOL_PATH                       = RENDER_TYPES_END + 1,
-  REMOVE_TOOL_PATH                    = RENDER_TYPES_END + 2,
-
+  TOOL_PATH_ADD             = RENDER_TYPES_END + 1,
+  TOOL_PATH_REMOVE          = RENDER_TYPES_END + 2,
+  TOOL_PATH_REMOVE_ALL      = RENDER_TYPES_END + 3,
+  TOOL_PATH_REMOVE_SELECTED = RENDER_TYPES_END + 4,
+  TOOL_PATH_HIDE_ALL        = RENDER_TYPES_END + 5,
+  TOOL_PATH_HIDE_SELECTED   = RENDER_TYPES_END + 6,
+  TOOL_PATH_SHOW_ALL        = RENDER_TYPES_END + 7,
+  TOOL_PATH_SHOW_SELECTED   = RENDER_TYPES_END + 8,
+  TOOL_PATH_TYPES_END       = RENDER_TYPES_END + 9,
 };
 }
 
