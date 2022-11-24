@@ -42,28 +42,21 @@ namespace events
  * @brief Event called in the render thread of a 3D scene after the user camera has rendered.
  * It's safe to make rendering calls in this event's callback.
  */
-class Render : public QEvent
+class Render : public SceneEvent
 {
 public:
   Render(const std::string& scene_name);
   ~Render() override;
 
-  const std::string& getSceneName() const;
-
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::RENDER);
-
-private:
-  /** @brief Private data pointer */
-  class Implementation;
-  std::unique_ptr<Implementation> data_;
 };
 
 /**
  * @brief The class for sending and receiving custom snap value events.
  * This event is used in the Transform Control plugin tool when the user manually alters their snapping values.
  */
-class SnapIntervals : public QEvent
+class SnapIntervals : public SceneEvent
 {
 public:
   /// \brief Constructor
@@ -76,12 +69,6 @@ public:
                 const std::string& scene_name);
 
   ~SnapIntervals() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the XYZ snapping values.
@@ -111,7 +98,7 @@ private:
 };
 
 /** @brief Event called to spawn a resource, given its description as a string.*/
-class SpawnFromDescription : public QEvent
+class SpawnFromDescription : public SceneEvent
 {
 public:
   /**
@@ -121,12 +108,6 @@ public:
    */
   explicit SpawnFromDescription(const std::string& description, const std::string& scene_name);
   ~SpawnFromDescription() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the string description of the resource.
@@ -144,7 +125,7 @@ private:
 };
 
 /** @brief Event called to spawn a resource, which takes the path to its file. */
-class SpawnFromPath : public QEvent
+class SpawnFromPath : public SceneEvent
 {
 public:
   /**
@@ -154,12 +135,6 @@ public:
    */
   explicit SpawnFromPath(const std::string& file_path, const std::string& scene_name);
   ~SpawnFromPath() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the path of the file.
@@ -177,7 +152,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the 3D coordinates of a user's mouse hover within the scene. */
-class HoverToScene : public QEvent
+class HoverToScene : public SceneEvent
 {
 public:
   /**
@@ -187,12 +162,6 @@ public:
    */
   explicit HoverToScene(const ignition::math::Vector3d& point, const std::string& scene_name);
   ~HoverToScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the point within the scene over which the user is hovering.
@@ -211,7 +180,7 @@ private:
 
 /** @brief Event which is called to broadcast the 3D coordinates of a user's releasing the left button within the scene.
  */
-class LeftClickToScene : public QEvent
+class LeftClickToScene : public SceneEvent
 {
 public:
   /**
@@ -221,12 +190,6 @@ public:
    */
   explicit LeftClickToScene(const ignition::math::Vector3d& point, const std::string& scene_name);
   ~LeftClickToScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the point within the scene that the user clicked.
@@ -245,7 +208,7 @@ private:
 
 /** @brief Event which is called to broadcast the 3D coordinates of a user's releasing the right button within the
  * scene. */
-class RightClickToScene : public QEvent
+class RightClickToScene : public SceneEvent
 {
 public:
   /**
@@ -254,12 +217,6 @@ public:
    */
   explicit RightClickToScene(const ignition::math::Vector3d& point, const std::string& scene_name);
   ~RightClickToScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the point within the scene that the user clicked.
@@ -281,7 +238,7 @@ private:
  * @details This is primarily used by plugins which also use the right click mouse event to cancel any actions currently
  * in progress.
  */
-class DropdownMenuEnabled : public QEvent
+class DropdownMenuEnabled : public SceneEvent
 {
 public:
   /**
@@ -291,12 +248,6 @@ public:
    */
   explicit DropdownMenuEnabled(bool menu_enabled, const std::string& scene_name);
   ~DropdownMenuEnabled() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Gets whether the menu is enabled or not for this event.
@@ -314,7 +265,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the key release within the scene. */
-class KeyReleaseOnScene : public QEvent
+class KeyReleaseOnScene : public SceneEvent
 {
 public:
   /**
@@ -324,12 +275,6 @@ public:
    */
   explicit KeyReleaseOnScene(const ignition::common::KeyEvent& key, const std::string& scene_name);
   ~KeyReleaseOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the released key within the scene that the user released.
@@ -347,7 +292,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the key press within the scene. */
-class KeyPressOnScene : public QEvent
+class KeyPressOnScene : public SceneEvent
 {
 public:
   /**
@@ -357,12 +302,6 @@ public:
    */
   explicit KeyPressOnScene(const ignition::common::KeyEvent& key, const std::string& scene_name);
   ~KeyPressOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the key within the scene that the user pressed
@@ -384,7 +323,7 @@ private:
  * @details For the 3D coordinates of that point on the scene, see `LeftClickToScene`.
  * @sa LeftClickToScene
  */
-class LeftClickOnScene : public QEvent
+class LeftClickOnScene : public SceneEvent
 {
 public:
   /**
@@ -394,12 +333,6 @@ public:
    */
   explicit LeftClickOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
   ~LeftClickOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /** @brief Return the left mouse event */
   const ignition::common::MouseEvent& getMouse() const;
@@ -418,7 +351,7 @@ private:
  * @details For the 3D coordinates of that point on the scene, see `RightClickToScene`.
  * @sa RightClickToScene
  */
-class RightClickOnScene : public QEvent
+class RightClickOnScene : public SceneEvent
 {
 public:
   /**
@@ -428,12 +361,6 @@ public:
    */
   RightClickOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
   ~RightClickOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /** @brief Return the right mouse event */
   const ignition::common::MouseEvent& getMouse() const;
@@ -451,7 +378,7 @@ private:
  * @brief Event that block the Interactive View control when some of the other plugins require it.
  * @details For example: When the transform control is active we should block the movements of the camera.
  */
-class BlockOrbit : public QEvent
+class BlockOrbit : public SceneEvent
 {
 public:
   /**
@@ -461,12 +388,6 @@ public:
    */
   explicit BlockOrbit(bool block, const std::string& scene_name);
   ~BlockOrbit() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the if the event should block the Interactive view controller
@@ -484,7 +405,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the 2D coordinates of a user's mouse hover within the scene. */
-class HoverOnScene : public QEvent
+class HoverOnScene : public SceneEvent
 {
 public:
   /**
@@ -494,12 +415,6 @@ public:
    */
   explicit HoverOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
   ~HoverOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /** @brief Get the point within the scene over which the user is hovering. */
   ignition::common::MouseEvent getMouse() const;
@@ -514,7 +429,7 @@ private:
 };
 
 /** @brief Event called to clone a resource, given its name as a string. */
-class SpawnCloneFromName : public QEvent
+class SpawnCloneFromName : public SceneEvent
 {
 public:
   /**
@@ -524,12 +439,6 @@ public:
    */
   explicit SpawnCloneFromName(const std::string& name, const std::string& scene_name);
   ~SpawnCloneFromName() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the name of the resource to be cloned
@@ -547,7 +456,7 @@ private:
 };
 
 /** @brief Event called to clone a resource, given its name as a string. */
-class DropOnScene : public QEvent
+class DropOnScene : public SceneEvent
 {
 public:
   /**
@@ -560,12 +469,6 @@ public:
                        const ignition::math::Vector2i& drop_mouse,
                        const std::string& scene_name);
   ~DropOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /**
    * @brief Get the text of the dropped thing on the scene
@@ -589,7 +492,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast information about mouse scrolls on the scene. */
-class ScrollOnScene : public QEvent
+class ScrollOnScene : public SceneEvent
 {
 public:
   /**
@@ -599,12 +502,6 @@ public:
    */
   explicit ScrollOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
   ~ScrollOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /** @brief Return the scroll mouse event */
   const ignition::common::MouseEvent& getMouse() const;
@@ -619,7 +516,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast information about mouse drags on the scene. */
-class DragOnScene : public QEvent
+class DragOnScene : public SceneEvent
 {
 public:
   /**
@@ -629,12 +526,6 @@ public:
    */
   explicit DragOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
   ~DragOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /** @brief Return the drag on mouse event */
   ignition::common::MouseEvent getMouse() const;
@@ -650,7 +541,7 @@ public:
 
 /** @brief Event which is called to broadcast information about mouse presses on the scene, with right, left or middle
  * buttons. */
-class MousePressOnScene : public QEvent
+class MousePressOnScene : public SceneEvent
 {
 public:
   /**
@@ -660,12 +551,6 @@ public:
    */
   MousePressOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
   ~MousePressOnScene() override;
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
 
   /** @brief Return the button press mouse event */
   const ignition::common::MouseEvent& getMouse() const;
@@ -683,7 +568,7 @@ private:
  * @brief Event called in the render thread of a 3D scene, before the user camera is rendered.
  * @details It's safe to make rendering calls in this event's callback.
  */
-class PreRender : public QEvent
+class PreRender : public SceneEvent
 {
 public:
   /**
@@ -693,19 +578,8 @@ public:
   PreRender(const std::string& scene_name);
   ~PreRender() override;
 
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const;
-
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::PRE_RENDER);
-
-private:
-  /** @brief Private data pointer */
-  class Implementation;
-  std::unique_ptr<Implementation> data_;
 };
 
 //  /// \brief Event which is called to share WorldControl information.
