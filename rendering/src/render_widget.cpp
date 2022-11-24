@@ -68,8 +68,21 @@ public:
   /** @brief Mouse event */
   ignition::common::MouseEvent mouse_event;
 
+  /** @brief A list of mouse events */
+  std::list<ignition::common::MouseEvent> mouse_events;
+
   /** @brief Key event */
   ignition::common::KeyEvent key_event;
+
+  /**
+   * @brief Max number of mouse events to store in the queue.
+   * These events are then propagated to other gui plugins. A queue is used
+   * instead of just keeping the latest mouse event so that we can capture
+   * important events like mouse presses. However we keep the queue size
+   * small on purpose so that we do not flood other gui plugins with events
+   * that may be outdated.
+   */
+  const unsigned int kMaxMouseEventSize = 5u;
 
   /** @brief Mutex to protect mouse events */
   std::mutex mutex;
@@ -88,9 +101,6 @@ public:
 
   /** @brief Ray query for mouse clicks */
   ignition::rendering::RayQueryPtr ray_query{ nullptr };
-
-  /** @brief View control focus target */
-  ignition::math::Vector3d target;
 };
 
 /////////////////////////////////////////////////
@@ -148,14 +158,21 @@ void Renderer::resize(int width, int height)
 void Renderer::handleMouseEvent()
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
+  for (const auto& e : data_->mouse_events)
+  {
+    data_->mouse_event = e;
+
+    broadcastDrag();
+    broadcastMousePress();
+    broadcastLeftClick();
+    broadcastRightClick();
+    broadcastScroll();
+    broadcastKeyPress();
+    broadcastKeyRelease();
+  }
+  data_->mouse_events.clear();
+
   broadcastHoverPos();
-  broadcastDrag();
-  broadcastMousePress();
-  broadcastLeftClick();
-  broadcastRightClick();
-  broadcastScroll();
-  broadcastKeyPress();
-  broadcastKeyRelease();
   broadcastDrop();
   data_->mouse_dirty = false;
 }
@@ -227,8 +244,6 @@ void Renderer::broadcastDrag()
 
   events::DragOnScene dragEvent(data_->mouse_event, scene_name);
   QApplication::sendEvent(qApp, &dragEvent);
-
-  data_->mouse_dirty = false;
 }
 
 /////////////////////////////////////////////////
@@ -248,8 +263,6 @@ void Renderer::broadcastLeftClick()
 
   events::LeftClickOnScene leftClickOnSceneEvent(data_->mouse_event, scene_name);
   QApplication::sendEvent(qApp, &leftClickOnSceneEvent);
-
-  data_->mouse_dirty = false;
 }
 
 /////////////////////////////////////////////////
@@ -269,8 +282,6 @@ void Renderer::broadcastRightClick()
 
   events::RightClickOnScene rightClickOnSceneEvent(data_->mouse_event, scene_name);
   QApplication::sendEvent(qApp, &rightClickOnSceneEvent);
-
-  data_->mouse_dirty = false;
 }
 
 /////////////////////////////////////////////////
@@ -284,8 +295,6 @@ void Renderer::broadcastMousePress()
 
   events::MousePressOnScene event(data_->mouse_event, scene_name);
   QApplication::sendEvent(qApp, &event);
-
-  data_->mouse_dirty = false;
 }
 
 /////////////////////////////////////////////////
@@ -299,8 +308,6 @@ void Renderer::broadcastScroll()
 
   events::ScrollOnScene scrollOnSceneEvent(data_->mouse_event, scene_name);
   QApplication::sendEvent(qApp, &scrollOnSceneEvent);
-
-  data_->mouse_dirty = false;
 }
 
 /////////////////////////////////////////////////
@@ -470,7 +477,10 @@ void Renderer::newDropEvent(const std::string& drop_text, const ignition::math::
 void Renderer::newMouseEvent(const ignition::common::MouseEvent& event)
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
-  data_->mouse_event = event;
+  if (data_->mouse_events.size() >= data_->kMaxMouseEventSize)
+    data_->mouse_events.pop_front();
+
+  data_->mouse_events.push_back(event);
   data_->mouse_dirty = true;
 }
 

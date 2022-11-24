@@ -40,11 +40,21 @@ public:
   /** @brief Perform rendering calls in the rendering thread */
   void onRender();
 
+  /** @brief Update the reference visual. Adjust scale based on distance from camera to target point so it remains the
+   * same size on screen. */
+  void updateReferenceVisual();
+
   /** @brief The scene key the control is associated with */
   std::string scene_name;
 
   /** @brief Flag to indicate if mouse event is dirty */
   bool mouse_dirty = false;
+
+  /** @brief Flag to indicate if hover event is dirty */
+  bool hover_dirty = false;
+
+  /** @brief Flag to indicate if mouse press event is dirty */
+  bool mouse_press_dirty = false;
 
   /** @brief True to block orbiting with the mouse */
   bool block_orbit = false;
@@ -72,6 +82,12 @@ public:
 
   /** @brief View controller */
   ViewControlType view_control_type{ ViewControlType::ORBIT };
+
+  /** @brief Enable / disable reference visual */
+  bool enable_ref_visual{ true };
+
+  /** @brief Reference visual for visualizing the target point */
+  ignition::rendering::VisualPtr ref_visual{ nullptr };
 
   /** @brief Ray query for mouse clicks */
   ignition::rendering::RayQueryPtr ray_query{ nullptr };
@@ -131,10 +147,18 @@ void InteractiveViewControlPrivate::onRender()
     return;
   }
 
-  if (!mouse_dirty)
+  if (!camera)
     return;
 
-  if (!camera)
+  // hover
+  if (hover_dirty)
+  {
+    if (ref_visual)
+      ref_visual->SetVisible(false);
+    hover_dirty = false;
+  }
+
+  if (!mouse_dirty)
     return;
 
   std::lock_guard<std::mutex> lock(mutex);
@@ -146,19 +170,48 @@ void InteractiveViewControlPrivate::onRender()
 
   view_control->SetCamera(camera);
 
+  if (enable_ref_visual)
+  {
+    if (!ref_visual)
+    {
+      // create ref visual
+      ref_visual = scene->CreateVisual();
+      ignition::rendering::GeometryPtr sphere = scene->CreateSphere();
+      ref_visual->AddGeometry(sphere);
+      ref_visual->SetLocalScale(ignition::math::Vector3d(0.2, 0.2, 0.1));
+      ref_visual->SetVisibilityFlags(IGN_VISIBILITY_GUI & ~IGN_VISIBILITY_SELECTABLE);
+
+      // create material
+      ignition::math::Color diffuse(1.0f, 1.0f, 0.0f, 1.0f);
+      ignition::math::Color specular(1.0f, 1.0f, 0.0f, 1.0f);
+      double transparency = 0.3;
+      ignition::rendering::MaterialPtr material = scene->CreateMaterial();
+      material->SetDiffuse(diffuse);
+      material->SetSpecular(specular);
+      material->SetTransparency(transparency);
+      material->SetCastShadows(false);
+      ref_visual->SetMaterial(material);
+      scene->DestroyMaterial(material);
+    }
+    ref_visual->SetVisible(true);
+  }
+
   if (mouse_event.Type() == ignition::common::MouseEvent::SCROLL)
   {
     target = ignition::rendering::screenToScene(mouse_event.Pos(), camera, ray_query);
 
     view_control->SetTarget(target);
-    double distance = camera->WorldPosition().Distance(target);
-    double amount = -drag.Y() * distance / 20.0;
+    const double distance = camera->WorldPosition().Distance(target);
+    const double amount = -drag.Y() * distance / 20.0;
     view_control->Zoom(amount);
+    updateReferenceVisual();
   }
   else if (mouse_event.Type() == ignition::common::MouseEvent::PRESS)
   {
     target = ignition::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);
     view_control->SetTarget(target);
+    updateReferenceVisual();
+    mouse_press_dirty = false;
   }
   else
   {
@@ -169,11 +222,14 @@ void InteractiveViewControlPrivate::onRender()
         view_control->Orbit(drag);
       else
         view_control->Pan(drag);
+
+      updateReferenceVisual();
     }
     // Orbit with middle button
     else if (mouse_event.Buttons() & ignition::common::MouseEvent::MIDDLE)
     {
       view_control->Orbit(drag);
+      updateReferenceVisual();
     }
     // Zoom with right button
     else if (mouse_event.Buttons() & ignition::common::MouseEvent::RIGHT)
@@ -183,10 +239,23 @@ void InteractiveViewControlPrivate::onRender()
       double distance = camera->WorldPosition().Distance(target);
       double amount = ((-drag.Y() / static_cast<double>(camera->ImageHeight())) * distance * tan(vfov / 2.0) * 6.0);
       view_control->Zoom(amount);
+      updateReferenceVisual();
     }
   }
   drag = 0;
   mouse_dirty = false;
+}
+
+/////////////////////////////////////////////////
+void InteractiveViewControlPrivate::updateReferenceVisual()
+{
+  if (!ref_visual || !enable_ref_visual)
+    return;
+  ref_visual->SetWorldPosition(this->target);
+  // Update the size of the reference visual based on the distance to the target point.
+  double distance = camera->WorldPosition().Distance(this->target);
+  double scale = distance * atan(IGN_DTOR(1.0));
+  ref_visual->SetLocalScale(ignition::math::Vector3d(scale, scale, scale * 0.5));
 }
 
 /////////////////////////////////////////////////
@@ -240,12 +309,16 @@ bool InteractiveViewControl::eventFilter(QObject* obj, QEvent* event)
     if (e->getSceneName() == data_->scene_name)
     {
       data_->mouse_dirty = true;
+      data_->mouse_press_dirty = true;
       data_->drag = ignition::math::Vector2d::Zero;
       data_->mouse_event = e->getMouse();
     }
   }
   else if (event->type() == events::DragOnScene::kType)
   {
+    if (data_->mouse_press_dirty)
+      return QObject::eventFilter(obj, event);
+
     assert(dynamic_cast<events::DragOnScene*>(event) != nullptr);
     auto* e = reinterpret_cast<events::DragOnScene*>(event);
     if (e->getSceneName() == data_->scene_name)
@@ -280,6 +353,10 @@ bool InteractiveViewControl::eventFilter(QObject* obj, QEvent* event)
     {
       data_->block_orbit = e->getBlock();
     }
+  }
+  else if (event->type() == events::HoverOnScene::kType)
+  {
+    data_->hover_dirty = true;
   }
 
   // Standard event processing
