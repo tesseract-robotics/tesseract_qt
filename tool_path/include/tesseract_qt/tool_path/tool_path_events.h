@@ -97,6 +97,24 @@ public:
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_REMOVE_SELECTED);
 };
 
+/** @brief Event called to hide a tool path */
+class ToolPathHide : public SceneEvent
+{
+public:
+  ToolPathHide(const std::string& scene_name, const boost::uuids::uuid& uuid);
+  ~ToolPathHide() override;
+
+  const boost::uuids::uuid& getUUID() const;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_HIDE);
+
+private:
+  /** @brief Private data pointer */
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
+};
+
 /** @brief Event called to hide all a tool paths for a given scene */
 class ToolPathHideAll : public SceneEvent
 {
@@ -117,6 +135,24 @@ public:
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_HIDE_SELECTED);
+};
+
+/** @brief Event called to show a tool path */
+class ToolPathShow : public SceneEvent
+{
+public:
+  ToolPathShow(const std::string& scene_name, const boost::uuids::uuid& uuid);
+  ~ToolPathShow() override;
+
+  const boost::uuids::uuid& getUUID() const;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SHOW);
+
+private:
+  /** @brief Private data pointer */
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
 };
 
 /** @brief Event called to show all a tool paths for a given scene */
