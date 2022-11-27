@@ -67,11 +67,41 @@ ToolPathRemoveAll::~ToolPathRemoveAll() = default;
 ToolPathRemoveSelected::ToolPathRemoveSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
 ToolPathRemoveSelected::~ToolPathRemoveSelected() = default;
 
+class ToolPathHide::Implementation
+{
+public:
+  boost::uuids::uuid uuid;
+};
+
+ToolPathHide::ToolPathHide(const std::string& scene_name, const boost::uuids::uuid& uuid)
+  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+{
+  data_->uuid = uuid;
+}
+ToolPathHide::~ToolPathHide() = default;
+
+const boost::uuids::uuid& ToolPathHide::getUUID() const { return data_->uuid; }
+
 ToolPathHideAll::ToolPathHideAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
 ToolPathHideAll::~ToolPathHideAll() = default;
 
 ToolPathHideSelected::ToolPathHideSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
 ToolPathHideSelected::~ToolPathHideSelected() = default;
+
+class ToolPathShow::Implementation
+{
+public:
+  boost::uuids::uuid uuid;
+};
+
+ToolPathShow::ToolPathShow(const std::string& scene_name, const boost::uuids::uuid& uuid)
+  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+{
+  data_->uuid = uuid;
+}
+ToolPathShow::~ToolPathShow() = default;
+
+const boost::uuids::uuid& ToolPathShow::getUUID() const { return data_->uuid; }
 
 ToolPathShowAll::ToolPathShowAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
 ToolPathShowAll::~ToolPathShowAll() = default;

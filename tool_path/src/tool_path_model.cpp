@@ -22,6 +22,7 @@
  */
 #include <tesseract_qt/tool_path/tool_path_model.h>
 #include <tesseract_qt/tool_path/tool_path_events.h>
+#include <tesseract_qt/tool_path/tool_path_utils.h>
 #include <tesseract_qt/common/transform_standard_item.h>
 #include <tesseract_qt/common/tool_path_standard_item.h>
 #include <tesseract_qt/common/tool_path_segment_standard_item.h>
@@ -50,6 +51,7 @@ void ToolPathModel::clear()
   QStandardItemModel::clear();
   setColumnCount(2);
   setHorizontalHeaderLabels({ "Name", "Values" });
+  tool_paths_.clear();
 }
 
 void ToolPathModel::addToolPath(const tesseract_common::ToolPath& tool_path)
@@ -79,14 +81,6 @@ bool ToolPathModel::hasToolPath(const boost::uuids::uuid& uuid)
   return (tool_paths_.find(uuid) != tool_paths_.end());
 }
 
-TransformStandardItem* findTransformItem(QStandardItem* item)
-{
-  if (item->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
-    return dynamic_cast<TransformStandardItem*>(item);
-
-  return findTransformItem(item->parent());
-}
-
 Eigen::Isometry3d ToolPathModel::getTransform(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
@@ -100,14 +94,6 @@ Eigen::Isometry3d ToolPathModel::getTransform(const QModelIndex& row) const
   return findTransformItem(item)->getTransfrom();
 }
 
-ToolPathSegmentStandardItem* findToolPathSegmentItem(QStandardItem* item)
-{
-  if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
-    return dynamic_cast<ToolPathSegmentStandardItem*>(item);
-
-  return findToolPathSegmentItem(item->parent());
-}
-
 tesseract_common::ToolPathSegment ToolPathModel::getToolPathSegment(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
@@ -116,14 +102,6 @@ tesseract_common::ToolPathSegment ToolPathModel::getToolPathSegment(const QModel
     throw std::runtime_error("Cannot get transfrom from selected tool path standard item");
 
   return findToolPathSegmentItem(item)->getToolPathSegment();
-}
-
-ToolPathStandardItem* findToolPathItem(QStandardItem* item)
-{
-  if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH))
-    return dynamic_cast<ToolPathStandardItem*>(item);
-
-  return findToolPathItem(item->parent());
 }
 
 tesseract_common::ToolPath ToolPathModel::getToolPath(const QModelIndex& row) const
@@ -147,6 +125,27 @@ bool ToolPathModel::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::ToolPathRemove*>(event);
     if (e->getSceneName() == scene_name_)
       removeToolPath(e->getUUID());
+  }
+  else if (event->type() == events::ToolPathRemoveAll::kType)
+  {
+    assert(dynamic_cast<events::ToolPathRemoveAll*>(event) != nullptr);
+    auto* e = static_cast<events::ToolPathRemoveAll*>(event);
+    if (e->getSceneName() == scene_name_)
+      clear();
+  }
+  else if (event->type() == events::ToolPathHideAll::kType)
+  {
+    assert(dynamic_cast<events::ToolPathHideAll*>(event) != nullptr);
+    auto* e = static_cast<events::ToolPathHideAll*>(event);
+    if (e->getSceneName() == scene_name_)
+      setCheckedStateRecursive(invisibleRootItem(), Qt::CheckState::Unchecked);
+  }
+  else if (event->type() == events::ToolPathShowAll::kType)
+  {
+    assert(dynamic_cast<events::ToolPathShowAll*>(event) != nullptr);
+    auto* e = static_cast<events::ToolPathShowAll*>(event);
+    if (e->getSceneName() == scene_name_)
+      setCheckedStateRecursive(invisibleRootItem(), Qt::CheckState::Checked);
   }
 
   // Standard event processing
