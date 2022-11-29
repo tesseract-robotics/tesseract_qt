@@ -33,7 +33,7 @@
 #include <tesseract_qt/common/utils.h>
 #include <boost/uuid/uuid_io.hpp>
 
-#include <QGuiApplication>
+#include <QApplication>
 
 namespace tesseract_gui
 {
@@ -54,7 +54,7 @@ void ToolPathModel::clear()
   tool_paths_.clear();
 }
 
-void ToolPathModel::addToolPath(const tesseract_common::ToolPath& tool_path)
+void ToolPathModel::addToolPath(const ToolPath& tool_path)
 {
   std::string ns = (tool_path.getNamespace().empty()) ? "general" : tool_path.getNamespace();
   NamespaceStandardItem* item = createNamespaceItem(*invisibleRootItem(), ns);
@@ -74,6 +74,9 @@ void ToolPathModel::removeToolPath(const boost::uuids::uuid& uuid)
   QModelIndex idx = indexFromItem(it->second);
   tool_paths_.erase(it);
   removeRow(idx.row(), idx.parent());
+
+  if (tool_paths_.empty())
+    clear();
 }
 
 bool ToolPathModel::hasToolPath(const boost::uuids::uuid& uuid)
@@ -94,7 +97,7 @@ Eigen::Isometry3d ToolPathModel::getTransform(const QModelIndex& row) const
   return findTransformItem(item)->getTransfrom();
 }
 
-tesseract_common::ToolPathSegment ToolPathModel::getToolPathSegment(const QModelIndex& row) const
+ToolPathSegment ToolPathModel::getToolPathSegment(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
 
@@ -104,10 +107,33 @@ tesseract_common::ToolPathSegment ToolPathModel::getToolPathSegment(const QModel
   return findToolPathSegmentItem(item)->getToolPathSegment();
 }
 
-tesseract_common::ToolPath ToolPathModel::getToolPath(const QModelIndex& row) const
+ToolPath ToolPathModel::getToolPath(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
   return findToolPathItem(item)->getToolPath();
+}
+
+bool ToolPathModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+  // Need emit application event to change visible
+  if (role == Qt::CheckStateRole)
+  {
+    QStandardItem* item = itemFromIndex(index);
+    if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH))
+    {
+      assert(dynamic_cast<ToolPathStandardItem*>(item) != nullptr);
+      auto* derived_item = static_cast<ToolPathStandardItem*>(item);
+      if (value.value<Qt::CheckState>() == Qt::Checked)
+        QApplication::sendEvent(qApp, new events::ToolPathShow(scene_name_, derived_item->getToolPath().getUUID()));
+      else
+        QApplication::sendEvent(qApp, new events::ToolPathHide(scene_name_, derived_item->getToolPath().getUUID()));
+    }
+    else if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
+    {
+      /** @todo Levi, update to support segments */
+    }
+  }
+  return QStandardItemModel::setData(index, value, role);
 }
 
 bool ToolPathModel::eventFilter(QObject* obj, QEvent* event)

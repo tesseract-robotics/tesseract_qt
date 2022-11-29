@@ -26,12 +26,13 @@
 
 #include <tesseract_qt/tool_path/tool_path_events.h>
 
-#include <tesseract_common/tool_path.h>
+#include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 
 #include <ignition/rendering/Scene.hh>
 #include <ignition/rendering/AxisVisual.hh>
+#include <ignition/rendering/ArrowVisual.hh>
 #include <ignition/math/eigen3/Conversions.hh>
 
 #include <boost/uuid/uuid.hpp>
@@ -52,7 +53,7 @@ struct ToolPathRenderManagerPrivate
   bool render_show_all{ true };
   bool render_hide_all{ false };
 
-  std::vector<tesseract_common::ToolPath> added;
+  std::vector<tesseract_gui::ToolPath> added;
   std::vector<boost::uuids::uuid> removed;
   std::vector<boost::uuids::uuid> show;
   std::vector<boost::uuids::uuid> hide;
@@ -93,6 +94,24 @@ struct ToolPathRenderManagerPrivate
     }
   }
 
+  /**
+   * @brief Currently there is a bug in ignition which does not correctly handle set visibility. This is a workaround to
+   * solve the issue until a long term fix is introduced.
+   * @details https://github.com/gazebosim/gz-rendering/issues/771
+   */
+  void showAxis(const ignition::rendering::NodePtr& node)
+  {
+    for (std::size_t i = 0; i < node->ChildCount(); ++i)
+    {
+      auto child_node = node->ChildByIndex(i);
+      auto axis = std::dynamic_pointer_cast<ignition::rendering::AxisVisual>(child_node);
+      if (axis != nullptr)
+        axis->SetVisible(true);
+      else
+        showAxis(child_node);
+    }
+  }
+
   void setVisibility(ignition::rendering::Scene& scene, const boost::uuids::uuid& uuid, bool visible)
   {
     auto it = entity_containers.find(uuid);
@@ -104,7 +123,12 @@ struct ToolPathRenderManagerPrivate
         auto entity = it->second->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key);
         auto visual_node = scene.VisualById(entity.id);
         if (visual_node != nullptr)
+        {
           visual_node->SetVisible(visible);
+          // There is a bug in the axis visual object which shows the rings so must hide
+          if (visible == true)
+            showAxis(visual_node);
+        }
       }
     }
   }
@@ -237,8 +261,8 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
                     scene->CreateAxisVisual(pose_entity.id, pose_entity.unique_name);
                 axis->SetLocalPose(ignition::math::eigen3::convert(pose));
                 axis->SetInheritScale(false);
-                axis->Scale(0.05, 0.05, 0.05);
-                axis->SetVisible(true);
+                axis->SetLocalScale(0.05, 0.05, 0.05);
+                //                axis->SetVisible(true);
 
                 ign_segment->AddChild(axis);
               }
@@ -281,6 +305,8 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
         {
           for (const auto& e : data_->entity_containers)
             data_->setVisibility(*scene, e.first, false);
+
+          data_->render_hide_all = false;
         }
 
         // Check Show All
@@ -288,6 +314,8 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
         {
           for (const auto& e : data_->entity_containers)
             data_->setVisibility(*scene, e.first, true);
+
+          data_->render_show_all = false;
         }
 
         data_->render_dirty = false;

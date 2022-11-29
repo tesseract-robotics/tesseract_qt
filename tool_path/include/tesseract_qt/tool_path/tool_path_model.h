@@ -44,7 +44,7 @@ public:
    * @brief Add tool path
    * @param trajectory_set The tool path associated with the key
    */
-  void addToolPath(const tesseract_common::ToolPath& tool_path);
+  void addToolPath(const ToolPath& tool_path);
 
   /**
    * @brief Remove the tool path
@@ -60,8 +60,10 @@ public:
   bool hasToolPath(const boost::uuids::uuid& uuid);
 
   Eigen::Isometry3d getTransform(const QModelIndex& row) const;
-  tesseract_common::ToolPathSegment getToolPathSegment(const QModelIndex& row) const;
-  tesseract_common::ToolPath getToolPath(const QModelIndex& row) const;
+  ToolPathSegment getToolPathSegment(const QModelIndex& row) const;
+  ToolPath getToolPath(const QModelIndex& row) const;
+
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
   void clear();
 

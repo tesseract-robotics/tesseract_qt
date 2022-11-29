@@ -24,6 +24,7 @@
 #include <tesseract_qt/tool_path/tool_path_model.h>
 #include <tesseract_qt/tool_path/tool_path_events.h>
 #include <tesseract_qt/tool_path/tool_path_utils.h>
+#include <tesseract_qt/common/standard_item_type.h>
 
 #include <QGuiApplication>
 
@@ -55,27 +56,20 @@ bool ToolPathSelectionModel::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::ToolPathRemoveSelected*>(event);
     if (e->getSceneName() == scene_name_)
     {
-      /** @todo Need to implement */
-    }
-  }
-  else if (event->type() == events::ToolPathHideSelected::kType)
-  {
-    assert(dynamic_cast<events::ToolPathHideSelected*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathHideSelected*>(event);
-    if (e->getSceneName() == scene_name_)
-    {
-      for (const auto& i : selected_rows)
-        setCheckedStateRecursive(tool_path_model->itemFromIndex(i), Qt::CheckState::Unchecked);
-    }
-  }
-  else if (event->type() == events::ToolPathShowSelected::kType)
-  {
-    assert(dynamic_cast<events::ToolPathShowSelected*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathShowSelected*>(event);
-    if (e->getSceneName() == scene_name_)
-    {
-      for (const auto& i : selected_rows)
-        setCheckedStateRecursive(tool_path_model->itemFromIndex(i), Qt::CheckState::Checked);
+      if (selected_rows.size() == 1)
+      {
+        QStandardItem* item = tool_path_model->itemFromIndex(selected_rows.front());
+        if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH))
+        {
+          assert(dynamic_cast<ToolPathStandardItem*>(item) != nullptr);
+          auto* derived_item = static_cast<ToolPathStandardItem*>(item);
+          QGuiApplication::sendEvent(qApp, new events::ToolPathRemove(scene_name_, derived_item->getUUID()));
+        }
+        else if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
+        {
+          /** @todo Levi, update to support segments */
+        }
+      }
     }
   }
 

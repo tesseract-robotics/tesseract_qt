@@ -29,22 +29,21 @@
 
 namespace tesseract_gui
 {
-ToolPathSegmentStandardItem::ToolPathSegmentStandardItem(const tesseract_common::ToolPathSegment& segment)
-  : QStandardItem(icons::getTrajectoryIcon(), "Tool Path Segment")
+ToolPathSegmentStandardItem::ToolPathSegmentStandardItem(const ToolPathSegment& segment)
+  : QStandardItem(icons::getToolPathIcon(), "Tool Path Segment")
 {
   ctor(segment);
 }
 
-ToolPathSegmentStandardItem::ToolPathSegmentStandardItem(const QString& text,
-                                                         const tesseract_common::ToolPathSegment& segment)
-  : QStandardItem(icons::getTrajectoryIcon(), text)
+ToolPathSegmentStandardItem::ToolPathSegmentStandardItem(const QString& text, const ToolPathSegment& segment)
+  : QStandardItem(icons::getToolPathIcon(), text)
 {
   ctor(segment);
 }
 
 ToolPathSegmentStandardItem::ToolPathSegmentStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         const tesseract_common::ToolPathSegment& segment)
+                                                         const ToolPathSegment& segment)
   : QStandardItem(icon, text)
 {
   ctor(segment);
@@ -52,9 +51,15 @@ ToolPathSegmentStandardItem::ToolPathSegmentStandardItem(const QIcon& icon,
 
 int ToolPathSegmentStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT); }
 
-tesseract_common::ToolPathSegment ToolPathSegmentStandardItem::getToolPathSegment() const
+const boost::uuids::uuid& ToolPathSegmentStandardItem::getUUID() const { return uuid_; }
+const boost::uuids::uuid& ToolPathSegmentStandardItem::getParentUUID() const { return parent_uuid_; }
+
+ToolPathSegment ToolPathSegmentStandardItem::getToolPathSegment() const
 {
-  tesseract_common::ToolPathSegment segment;
+  ToolPathSegment segment(uuid_, description_);
+  if (!parent_uuid_.is_nil())
+    segment.setParentUUID(parent_uuid_);
+
   segment.reserve(rowCount());
   for (std::size_t i = 0; i < rowCount(); ++i)
   {
@@ -64,11 +69,15 @@ tesseract_common::ToolPathSegment ToolPathSegmentStandardItem::getToolPathSegmen
   return segment;
 }
 
-void ToolPathSegmentStandardItem::ctor(const tesseract_common::ToolPathSegment& segment)
+void ToolPathSegmentStandardItem::ctor(const ToolPathSegment& segment)
 {
   setCheckable(true);
   setCheckState(Qt::CheckState::Checked);
   for (std::size_t i = 0; i < segment.size(); ++i)
     appendRow(new TransformStandardItem(QString("pose[%1]").arg(i), segment[i]));
+
+  uuid_ = segment.getUUID();
+  parent_uuid_ = segment.getParentUUID();
+  description_ = segment.getDescription();
 }
 }  // namespace tesseract_gui
