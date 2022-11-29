@@ -16,4 +16,19 @@ target_link_libraries(
           Qt5::Core
           Qt5::Widgets)
 
-install_targets(TARGETS ${PROJECT_NAME}_render_widget_demo ${PROJECT_NAME}_render_environment_widget_demo)
+add_executable(${PROJECT_NAME}_render_tool_path_widget_demo render_tool_path_widget_demo.cpp)
+target_link_libraries(
+  ${PROJECT_NAME}_render_tool_path_widget_demo
+  PRIVATE ${PROJECT_NAME}_rendering
+          ${PROJECT_NAME}_tool_path_model
+          ${PROJECT_NAME}_tool_path_widget
+          tesseract::tesseract_common
+          tesseract::tesseract_support
+          Qt5::Core
+          Qt5::Widgets)
+
+install_targets(
+  TARGETS
+  ${PROJECT_NAME}_render_widget_demo
+  ${PROJECT_NAME}_render_environment_widget_demo
+  ${PROJECT_NAME}_render_tool_path_widget_demo)

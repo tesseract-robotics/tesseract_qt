@@ -27,7 +27,7 @@
 #include <memory>
 #include <tesseract_qt/common/event_type.h>
 
-namespace tesseract_common
+namespace tesseract_gui
 {
 class ToolPath;
 }
@@ -43,10 +43,10 @@ namespace tesseract_gui::events
 class ToolPathAdd : public SceneEvent
 {
 public:
-  ToolPathAdd(const std::string& scene_name, const tesseract_common::ToolPath& tool_path);
+  ToolPathAdd(const std::string& scene_name, const tesseract_gui::ToolPath& tool_path);
   ~ToolPathAdd() override;
 
-  const tesseract_common::ToolPath& getToolPath() const;
+  const tesseract_gui::ToolPath& getToolPath() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_ADD);
@@ -126,17 +126,6 @@ public:
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_HIDE_ALL);
 };
 
-/** @brief Event called to hide selected a tool paths for a given scene */
-class ToolPathHideSelected : public SceneEvent
-{
-public:
-  ToolPathHideSelected(const std::string& scene_name);
-  ~ToolPathHideSelected() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_HIDE_SELECTED);
-};
-
 /** @brief Event called to show a tool path */
 class ToolPathShow : public SceneEvent
 {
@@ -164,17 +153,6 @@ public:
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SHOW_ALL);
-};
-
-/** @brief Event called to show selected a tool paths for a given scene */
-class ToolPathShowSelected : public SceneEvent
-{
-public:
-  ToolPathShowSelected(const std::string& scene_name);
-  ~ToolPathShowSelected() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SHOW_SELECTED);
 };
 
 }  // namespace tesseract_gui::events

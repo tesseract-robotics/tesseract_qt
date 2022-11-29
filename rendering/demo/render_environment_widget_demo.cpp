@@ -30,9 +30,33 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/rendering/render_widget.h>
 #include <tesseract_qt/rendering/render_environment_widget.h>
+#include <tesseract_qt/rendering/tool_path_render_manager.h>
 #include <tesseract_qt/environment/environment_widget_config.h>
+#include <tesseract_qt/tool_path/tool_path_events.h>
+#include <tesseract_qt/common/tool_path.h>
+
 #include <tesseract_support/tesseract_support_resource_locator.h>
 #include <tesseract_environment/environment.h>
+
+tesseract_gui::ToolPath getToolPath()
+{
+  tesseract_gui::ToolPath tool_path("Demo Tool Path");
+  for (int i = 0; i < 5; ++i)
+  {
+    tesseract_gui::ToolPathSegment segment("Segment [" + std::to_string(i) + "]");
+
+    Eigen::Isometry3d pose{ Eigen::Isometry3d::Identity() };
+    for (Eigen::Index k = 0; k < 10; ++k)
+    {
+      pose.translation() = Eigen::Vector3d(-0.5 + k * 0.1, 0.5 - i * 0.05, 0.5);
+      segment.push_back(pose);
+    }
+
+    tool_path.push_back(segment);
+  }
+
+  return tool_path;
+}
 
 int main(int argc, char** argv)
 {
@@ -58,6 +82,8 @@ int main(int argc, char** argv)
   auto* env_widget = new tesseract_gui::RenderEnvironmentWidget(scene_name, *entity_manager);
   env_widget->setConfiguration(std::move(config));
 
+  tesseract_gui::ToolPathRenderManager tool_path_manager(scene_name, entity_manager);
+
   QWidget widget;
   auto layout = new QHBoxLayout();
   layout->setMargin(0);
@@ -66,9 +92,12 @@ int main(int argc, char** argv)
   layout->addWidget(render_widget, 1);
   widget.setLayout(layout);
 
-  QObject::connect(env_widget, SIGNAL(triggerRender()), render_widget, SLOT(update()));
+  //  QObject::connect(env_widget, SIGNAL(triggerRender()), render_widget, SLOT(update()));
 
-  widget.resize(800, 1200);
+  tesseract_gui::ToolPath tool_path = getToolPath();
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path));
+
+  widget.resize(1200, 800);
   widget.show();
 
   return app.exec();

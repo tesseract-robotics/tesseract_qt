@@ -24,22 +24,27 @@
 #define TESSERACT_QT_COMMON_TOOL_PATH_SEGMENT_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <tesseract_common/tool_path_segment.h>
+#include <tesseract_qt/common/tool_path_segment.h>
 
 namespace tesseract_gui
 {
 class ToolPathSegmentStandardItem : public QStandardItem
 {
 public:
-  explicit ToolPathSegmentStandardItem(const tesseract_common::ToolPathSegment& segment);
-  ToolPathSegmentStandardItem(const QString& text, const tesseract_common::ToolPathSegment& segment);
-  ToolPathSegmentStandardItem(const QIcon& icon, const QString& text, const tesseract_common::ToolPathSegment& segment);
+  explicit ToolPathSegmentStandardItem(const ToolPathSegment& segment);
+  ToolPathSegmentStandardItem(const QString& text, const ToolPathSegment& segment);
+  ToolPathSegmentStandardItem(const QIcon& icon, const QString& text, const ToolPathSegment& segment);
   int type() const override;
 
-  tesseract_common::ToolPathSegment getToolPathSegment() const;
+  const boost::uuids::uuid& getUUID() const;
+  const boost::uuids::uuid& getParentUUID() const;
+  ToolPathSegment getToolPathSegment() const;
 
 private:
-  void ctor(const tesseract_common::ToolPathSegment& segment);
+  void ctor(const ToolPathSegment& segment);
+  boost::uuids::uuid uuid_{};
+  boost::uuids::uuid parent_uuid_{};
+  std::string description_;
 };
 }  // namespace tesseract_gui
 

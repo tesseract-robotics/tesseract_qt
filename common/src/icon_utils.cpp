@@ -450,4 +450,34 @@ QIcon getDataIcon()
   return icon;
 }
 
+QIcon getShowIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/show.svg"));
+  return icon;
+}
+
+QIcon getHideIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/hide.svg"));
+  return icon;
+}
+
+QIcon getToolPathIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/tool_path.svg"));
+  return icon;
+}
+
+QIcon getToolPathShowIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/tool_path_show.svg"));
+  return icon;
+}
+
+QIcon getToolPathHideIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/tool_path_hide.svg"));
+  return icon;
+}
+
 }  // namespace tesseract_gui::icons

@@ -35,9 +35,7 @@ struct ToolPathToolBarImpl
   QAction* remove_all;
   QAction* remove_selected;
   QAction* hide_all;
-  QAction* hide_selected;
   QAction* show_all;
-  QAction* show_selected;
 };
 
 ToolPathToolBar::ToolPathToolBar(const std::string& scene_name, QWidget* parent)
@@ -47,22 +45,15 @@ ToolPathToolBar::ToolPathToolBar(const std::string& scene_name, QWidget* parent)
   data_->remove_all = addAction(icons::getClearIcon(), "Remove All", [scene_name]() {
     QApplication::sendEvent(qApp, new events::ToolPathRemoveAll(scene_name));
   });
-  data_->remove_selected = addAction(icons::getClearIcon(), "Remove Selected", [scene_name]() {
+  data_->remove_selected = addAction(icons::getTrashIcon(), "Remove Selected", [scene_name]() {
     QApplication::sendEvent(qApp, new events::ToolPathRemoveSelected(scene_name));
   });
   addSeparator();
-  data_->hide_all = addAction(icons::getPlotIcon(), "Hide All", [scene_name]() {
+  data_->hide_all = addAction(icons::getToolPathHideIcon(), "Hide All", [scene_name]() {
     QApplication::sendEvent(qApp, new events::ToolPathHideAll(scene_name));
   });
-  data_->hide_selected = addAction(icons::getPlotIcon(), "Hide Selected", [scene_name]() {
-    QApplication::sendEvent(qApp, new events::ToolPathHideSelected(scene_name));
-  });
-  addSeparator();
-  data_->show_all = addAction(icons::getPlotIcon(), "Show All", [scene_name]() {
+  data_->show_all = addAction(icons::getToolPathShowIcon(), "Show All", [scene_name]() {
     QApplication::sendEvent(qApp, new events::ToolPathShowAll(scene_name));
-  });
-  data_->show_selected = addAction(icons::getPlotIcon(), "Show Selected", [scene_name]() {
-    QApplication::sendEvent(qApp, new events::ToolPathShowSelected(scene_name));
   });
 }
 

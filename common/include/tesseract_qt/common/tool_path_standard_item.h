@@ -24,22 +24,27 @@
 #define TESSERACT_QT_COMMON_TOOL_PATH_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <tesseract_common/tool_path.h>
+#include <tesseract_qt/common/tool_path.h>
 
 namespace tesseract_gui
 {
 class ToolPathStandardItem : public QStandardItem
 {
 public:
-  explicit ToolPathStandardItem(const tesseract_common::ToolPath& tool_path);
-  ToolPathStandardItem(const QString& text, const tesseract_common::ToolPath& tool_path);
-  ToolPathStandardItem(const QIcon& icon, const QString& text, const tesseract_common::ToolPath& tool_path);
+  explicit ToolPathStandardItem(const ToolPath& tool_path);
+  ToolPathStandardItem(const QString& text, const ToolPath& tool_path);
+  ToolPathStandardItem(const QIcon& icon, const QString& text, const ToolPath& tool_path);
   int type() const override;
 
-  tesseract_common::ToolPath getToolPath() const;
+  const boost::uuids::uuid& getUUID() const;
+  const boost::uuids::uuid& getParentUUID() const;
+  ToolPath getToolPath() const;
 
 private:
-  void ctor(const tesseract_common::ToolPath& tool_path);
+  void ctor(const ToolPath& tool_path);
+  boost::uuids::uuid uuid_{};
+  boost::uuids::uuid parent_uuid_{};
+  std::string description_;
 };
 }  // namespace tesseract_gui
 

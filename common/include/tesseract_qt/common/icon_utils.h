@@ -144,5 +144,12 @@ QIcon getRatioIcon();
 QIcon getFullscreenIcon();
 QIcon getDataIcon();
 
+QIcon getShowIcon();
+QIcon getHideIcon();
+
+QIcon getToolPathIcon();
+QIcon getToolPathShowIcon();
+QIcon getToolPathHideIcon();
+
 }  // namespace tesseract_gui::icons
 #endif  // TESSERACT_QT_COMMON_ICON_UTILS_H

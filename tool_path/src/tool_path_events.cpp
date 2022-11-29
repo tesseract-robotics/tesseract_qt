@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/tool_path/tool_path_events.h>
-#include <tesseract_common/tool_path.h>
+#include <tesseract_qt/common/tool_path.h>
 #include <string>
 #include <boost/uuid/uuid.hpp>
 
@@ -32,17 +32,17 @@ class ToolPathAdd::Implementation
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  tesseract_common::ToolPath tool_path;
+  tesseract_gui::ToolPath tool_path;
 };
 
-ToolPathAdd::ToolPathAdd(const std::string& scene_name, const tesseract_common::ToolPath& tool_path)
+ToolPathAdd::ToolPathAdd(const std::string& scene_name, const ToolPath& tool_path)
   : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
 {
   data_->tool_path = tool_path;
 }
 ToolPathAdd::~ToolPathAdd() = default;
 
-const tesseract_common::ToolPath& ToolPathAdd::getToolPath() const { return data_->tool_path; }
+const ToolPath& ToolPathAdd::getToolPath() const { return data_->tool_path; }
 
 //////////////////////////////////////////
 
@@ -85,9 +85,6 @@ const boost::uuids::uuid& ToolPathHide::getUUID() const { return data_->uuid; }
 ToolPathHideAll::ToolPathHideAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
 ToolPathHideAll::~ToolPathHideAll() = default;
 
-ToolPathHideSelected::ToolPathHideSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
-ToolPathHideSelected::~ToolPathHideSelected() = default;
-
 class ToolPathShow::Implementation
 {
 public:
@@ -105,8 +102,5 @@ const boost::uuids::uuid& ToolPathShow::getUUID() const { return data_->uuid; }
 
 ToolPathShowAll::ToolPathShowAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
 ToolPathShowAll::~ToolPathShowAll() = default;
-
-ToolPathShowSelected::ToolPathShowSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
-ToolPathShowSelected::~ToolPathShowSelected() = default;
 
 }  // namespace tesseract_gui::events

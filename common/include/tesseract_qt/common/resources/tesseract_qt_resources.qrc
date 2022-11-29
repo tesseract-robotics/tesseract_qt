@@ -99,5 +99,10 @@
         <file>svg/zoom_out.svg</file>
         <file>svg/ratio.svg</file>
         <file>svg/fullscreen.svg</file>
+        <file>svg/show.svg</file>
+        <file>svg/hide.svg</file>
+        <file>svg/tool_path.svg</file>
+        <file>svg/tool_path_show.svg</file>
+        <file>svg/tool_path_hide.svg</file>
     </qresource>
 </RCC>
