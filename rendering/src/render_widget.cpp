@@ -545,6 +545,9 @@ RenderWidget::RenderWidget(const std::string& scene_name, QWidget* parent)
 {
   data_->renderer.scene_name = scene_name;
   data_->view_controller = std::make_shared<InteractiveViewControl>(scene_name);
+
+  // This is critical to sync the monitor refresh with rendering of the widget
+  connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
 }
 
 /////////////////////////////////////////////////
@@ -781,17 +784,12 @@ void RenderWidget::setGridEnabled(bool enabled) { data_->renderer.grid_enable = 
 //}
 
 /////////////////////////////////////////////////
-void RenderWidget::onHovered(int mouse_x, int mouse_y)
-{
-  data_->renderer.newHoverEvent({ mouse_x, mouse_y });
-  update();
-}
+void RenderWidget::onHovered(int mouse_x, int mouse_y) { data_->renderer.newHoverEvent({ mouse_x, mouse_y }); }
 
 /////////////////////////////////////////////////
 void RenderWidget::onDropped(const QString& drop, int mouse_x, int mouse_y)
 {
   data_->renderer.newDropEvent(drop.toStdString(), { mouse_x, mouse_y });
-  update();
 }
 
 /////////////////////////////////////////////////
@@ -801,7 +799,6 @@ void RenderWidget::mousePressEvent(QMouseEvent* event)
   data_->mouseEvent.SetPressPos(data_->mouseEvent.Pos());
 
   data_->renderer.newMouseEvent(data_->mouseEvent);
-  update();
 }
 
 ////////////////////////////////////////////////
@@ -812,7 +809,6 @@ void RenderWidget::keyPressEvent(QKeyEvent* event)
 
   auto e = convert(*event);
   handleKeyPress(e);
-  update();
 }
 
 ////////////////////////////////////////////////
@@ -823,7 +819,6 @@ void RenderWidget::keyReleaseEvent(QKeyEvent* event)
 
   auto e = convert(*event);
   handleKeyPress(e);
-  update();
 }
 
 ////////////////////////////////////////////////
@@ -838,7 +833,6 @@ void RenderWidget::mouseReleaseEvent(QMouseEvent* event)
   data_->mouseEvent.SetDragging(dragging);
 
   data_->renderer.newMouseEvent(data_->mouseEvent);
-  update();
 }
 
 ////////////////////////////////////////////////
@@ -853,7 +847,6 @@ void RenderWidget::mouseMoveEvent(QMouseEvent* event)
     data_->mouseEvent.SetPressPos(pressPos);
 
   data_->renderer.newMouseEvent(data_->mouseEvent);
-  update();
 }
 
 ////////////////////////////////////////////////
@@ -863,21 +856,15 @@ void RenderWidget::wheelEvent(QWheelEvent* event)
 
   data_->mouseEvent = convert(*event);
   data_->renderer.newMouseEvent(data_->mouseEvent);
-  update();
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::handleKeyPress(const ignition::common::KeyEvent& event)
-{
-  data_->renderer.handleKeyPress(event);
-  update();
-}
+void RenderWidget::handleKeyPress(const ignition::common::KeyEvent& event) { data_->renderer.handleKeyPress(event); }
 
 ////////////////////////////////////////////////
 void RenderWidget::handleKeyRelease(const ignition::common::KeyEvent& event)
 {
   data_->renderer.handleKeyRelease(event);
-  update();
 }
 
 }  // namespace tesseract_gui
