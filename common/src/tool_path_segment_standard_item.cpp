@@ -26,6 +26,7 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/tool_path_pose.h>
 
 namespace tesseract_gui
 {
@@ -64,7 +65,14 @@ ToolPathSegment ToolPathSegmentStandardItem::getToolPathSegment() const
   for (std::size_t i = 0; i < rowCount(); ++i)
   {
     if (child(i, 0)->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
-      segment.push_back(dynamic_cast<TransformStandardItem*>(child(i, 0))->getTransfrom());
+    {
+      auto* pose_item = dynamic_cast<TransformStandardItem*>(child(i, 0));
+      ToolPathPose pose(pose_item->getTransfrom(), pose_item->getUUID(), pose_item->getDescription());
+      if (!pose_item->getParentUUID().is_nil())
+        pose.setParentUUID(pose_item->getParentUUID());
+
+      segment.push_back(pose);
+    }
   }
   return segment;
 }
@@ -74,7 +82,12 @@ void ToolPathSegmentStandardItem::ctor(const ToolPathSegment& segment)
   setCheckable(true);
   setCheckState(Qt::CheckState::Checked);
   for (std::size_t i = 0; i < segment.size(); ++i)
-    appendRow(new TransformStandardItem(QString("pose[%1]").arg(i), segment[i]));
+  {
+    auto& pose = segment[i];
+    auto* pose_item = new TransformStandardItem(QString("pose[%1]").arg(i), pose);
+    auto* pose_description_item = new QStandardItem(QString::fromStdString(pose.getDescription()));
+    appendRow({ pose_item, pose_description_item });
+  }
 
   uuid_ = segment.getUUID();
   parent_uuid_ = segment.getParentUUID();

@@ -33,6 +33,7 @@
 
 namespace tesseract_gui
 {
+class ToolPathPose;
 class ToolPathSegment
 {
 public:
@@ -78,25 +79,25 @@ public:
   // C++ container support //
   ///////////////////////////
   /** pointer */
-  using pointer = typename tesseract_common::VectorIsometry3d::pointer;
+  using pointer = typename tesseract_common::AlignedVector<ToolPathPose>::pointer;
   /** const_pointer */
-  using const_pointer = typename tesseract_common::VectorIsometry3d::const_pointer;
+  using const_pointer = typename tesseract_common::AlignedVector<ToolPathPose>::const_pointer;
   /** reference */
-  using reference = typename tesseract_common::VectorIsometry3d::reference;
+  using reference = typename tesseract_common::AlignedVector<ToolPathPose>::reference;
   /** const_reference */
-  using const_reference = typename tesseract_common::VectorIsometry3d::const_reference;
+  using const_reference = typename tesseract_common::AlignedVector<ToolPathPose>::const_reference;
   /** size_type */
-  using size_type = typename tesseract_common::VectorIsometry3d::size_type;
+  using size_type = typename tesseract_common::AlignedVector<ToolPathPose>::size_type;
   /** difference_type */
-  using difference_type = typename tesseract_common::VectorIsometry3d::difference_type;
+  using difference_type = typename tesseract_common::AlignedVector<ToolPathPose>::difference_type;
   /** iterator */
-  using iterator = typename tesseract_common::VectorIsometry3d::iterator;
+  using iterator = typename tesseract_common::AlignedVector<ToolPathPose>::iterator;
   /** const_iterator */
-  using const_iterator = typename tesseract_common::VectorIsometry3d::const_iterator;
+  using const_iterator = typename tesseract_common::AlignedVector<ToolPathPose>::const_iterator;
   /** reverse_iterator */
-  using reverse_iterator = typename tesseract_common::VectorIsometry3d::reverse_iterator;
+  using reverse_iterator = typename tesseract_common::AlignedVector<ToolPathPose>::reverse_iterator;
   /** const_reverse_iterator */
-  using const_reverse_iterator = typename tesseract_common::VectorIsometry3d::const_reverse_iterator;
+  using const_reverse_iterator = typename tesseract_common::AlignedVector<ToolPathPose>::const_reverse_iterator;
 
   ///////////////
   // Iterators //
@@ -173,9 +174,9 @@ public:
   void clear();
 
   /** @brief inserts element */
-  iterator insert(const_iterator p, const Eigen::Isometry3d& x);
-  iterator insert(const_iterator p, Eigen::Isometry3d&& x);
-  iterator insert(const_iterator p, std::initializer_list<Eigen::Isometry3d> l);
+  iterator insert(const_iterator p, const ToolPathPose& x);
+  iterator insert(const_iterator p, ToolPathPose&& x);
+  iterator insert(const_iterator p, std::initializer_list<ToolPathPose> l);
   template <class InputIt>
   void insert(const_iterator pos, InputIt first, InputIt last)
   {
@@ -191,8 +192,8 @@ public:
   iterator erase(const_iterator first, const_iterator last);
 
   /** Append element to container */
-  void push_back(const Eigen::Isometry3d& x);
-  void push_back(const Eigen::Isometry3d&& x);
+  void push_back(const ToolPathPose& x);
+  void push_back(const ToolPathPose&& x);
 
   /** @brief constructs an element in-place at the end  */
   template <typename... Args>
@@ -206,7 +207,7 @@ public:
   void pop_back();
 
   /** @brief swaps the contents  */
-  void swap(tesseract_common::VectorIsometry3d& other);
+  void swap(tesseract_common::AlignedVector<ToolPathPose>& other);
 
   // LCOV_EXCL_STOP
 
@@ -221,7 +222,7 @@ protected:
   std::string description_;
 
   /** @brief The container */
-  tesseract_common::VectorIsometry3d container_;
+  tesseract_common::AlignedVector<ToolPathPose> container_;
 
   friend struct tesseract_common::Serialization;
   friend class boost::serialization::access;

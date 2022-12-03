@@ -81,6 +81,7 @@ void ToolPath::serialize(Archive& ar, const unsigned int /*version*/)
   ar& BOOST_SERIALIZATION_NVP(parent_uuid_);
   ar& BOOST_SERIALIZATION_NVP(description_);
   ar& BOOST_SERIALIZATION_NVP(container_);
+  ar& BOOST_SERIALIZATION_NVP(ns_);
 }
 
 // LCOV_EXCL_START

@@ -54,6 +54,7 @@ add_library(
   src/svg_util.cpp
   src/theme_utils.cpp
   src/tool_path.cpp
+  src/tool_path_pose.cpp
   src/tool_path_segment.cpp
   src/tool_path_segment_standard_item.cpp
   src/tool_path_standard_item.cpp

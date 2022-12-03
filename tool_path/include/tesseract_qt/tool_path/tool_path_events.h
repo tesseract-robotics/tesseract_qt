@@ -102,9 +102,11 @@ class ToolPathHide : public SceneEvent
 {
 public:
   ToolPathHide(const std::string& scene_name, const boost::uuids::uuid& uuid);
+  ToolPathHide(const std::string& scene_name, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
   ~ToolPathHide() override;
 
   const boost::uuids::uuid& getUUID() const;
+  const boost::uuids::uuid& getChildUUID() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_HIDE);
@@ -131,9 +133,11 @@ class ToolPathShow : public SceneEvent
 {
 public:
   ToolPathShow(const std::string& scene_name, const boost::uuids::uuid& uuid);
+  ToolPathShow(const std::string& scene_name, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
   ~ToolPathShow() override;
 
   const boost::uuids::uuid& getUUID() const;
+  const boost::uuids::uuid& getChildUUID() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SHOW);
