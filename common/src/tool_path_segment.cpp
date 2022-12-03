@@ -35,7 +35,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/tool_path_segment.h>
-#include <tesseract_common/eigen_serialization.h>
+#include <tesseract_qt/common/tool_path_pose.h>
 
 namespace tesseract_gui
 {
@@ -71,7 +71,7 @@ bool ToolPathSegment::operator==(const ToolPathSegment& rhs) const
   {
     for (std::size_t i = 0; i < container_.size(); ++i)
     {
-      equal &= (container_[i].isApprox(rhs.container_[i], std::numeric_limits<float>::epsilon()));
+      equal &= (container_[i] == rhs.container_[i]);
 
       if (!equal)
         break;
@@ -142,15 +142,15 @@ ToolPathSegment::const_reference ToolPathSegment::operator[](size_type pos) cons
 ///////////////
 void ToolPathSegment::clear() { container_.clear(); }
 
-ToolPathSegment::iterator ToolPathSegment::insert(const_iterator p, const Eigen::Isometry3d& x)
+ToolPathSegment::iterator ToolPathSegment::insert(const_iterator p, const ToolPathPose& x)
 {
   return container_.insert(p, x);
 }
-ToolPathSegment::iterator ToolPathSegment::insert(const_iterator p, Eigen::Isometry3d&& x)
+ToolPathSegment::iterator ToolPathSegment::insert(const_iterator p, ToolPathPose&& x)
 {
   return container_.insert(p, x);
 }
-ToolPathSegment::iterator ToolPathSegment::insert(const_iterator p, std::initializer_list<Eigen::Isometry3d> l)
+ToolPathSegment::iterator ToolPathSegment::insert(const_iterator p, std::initializer_list<ToolPathPose> l)
 {
   return container_.insert(p, l);
 }
@@ -166,8 +166,8 @@ ToolPathSegment::iterator ToolPathSegment::erase(const_iterator first, const_ite
 {
   return container_.erase(first, last);
 }
-void ToolPathSegment::push_back(const Eigen::Isometry3d& x) { container_.push_back(x); }
-void ToolPathSegment::push_back(const Eigen::Isometry3d&& x) { container_.push_back(x); }
+void ToolPathSegment::push_back(const ToolPathPose& x) { container_.push_back(x); }
+void ToolPathSegment::push_back(const ToolPathPose&& x) { container_.push_back(x); }
 
 template <typename... Args>
 #if __cplusplus > 201402L
@@ -183,7 +183,7 @@ void ToolPathSegment::emplace_back(Args&&... args)
 #endif
 
 void ToolPathSegment::pop_back() { container_.pop_back(); }
-void ToolPathSegment::swap(tesseract_common::VectorIsometry3d& other) { container_.swap(other); }
+void ToolPathSegment::swap(tesseract_common::AlignedVector<ToolPathPose>& other) { container_.swap(other); }
 
 // LCOV_EXCL_STOP
 }  // namespace tesseract_gui

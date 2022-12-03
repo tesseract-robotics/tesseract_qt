@@ -79,10 +79,15 @@ int main(int argc, char** argv)
   tool_path_widget->setSelectionModel(selection_model);
 
   QWidget widget;
+  auto tp_layout = new QVBoxLayout();
+  tp_layout->setMargin(0);
+  tp_layout->setSpacing(0);
+  tp_layout->addWidget(new tesseract_gui::ToolPathToolBar(scene_name));
+  tp_layout->addWidget(tool_path_widget);
   auto layout = new QHBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
-  layout->addWidget(tool_path_widget);
+  layout->addLayout(tp_layout);
   layout->addWidget(render_widget, 1);
   widget.setLayout(layout);
 

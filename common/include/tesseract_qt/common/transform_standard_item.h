@@ -27,6 +27,7 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <Eigen/Geometry>
+#include <boost/uuid/uuid.hpp>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
@@ -34,6 +35,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
+class ToolPathPose;
 class PositionStandardItem;
 class QuaternionStandardItem;
 class TransformStandardItem : public QStandardItem
@@ -42,13 +44,43 @@ public:
   explicit TransformStandardItem(const Eigen::Isometry3d& transform);
   explicit TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform);
   explicit TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform);
+  explicit TransformStandardItem(const ToolPathPose& transform);
+  explicit TransformStandardItem(const QString& text, const ToolPathPose& transform);
+  explicit TransformStandardItem(const QIcon& icon, const QString& text, const ToolPathPose& transform);
   int type() const override;
 
+  /**
+   * @brief Get the transform
+   * @return The Eigen Transform
+   */
   Eigen::Isometry3d getTransfrom() const;
+
+  /**
+   * @brief Set the transform
+   * @param transform The transform to assign
+   */
   void setTransform(const Eigen::Isometry3d& transform);
+
+  /** @brief Get the uuid */
+  boost::uuids::uuid getUUID() const;
+
+  /**
+   * @brief Get the parent uuid
+   * @details This can be null
+   */
+  const boost::uuids::uuid& getParentUUID() const;
+
+  /** @brief Set the segment description */
+  void setDescription(const std::string& desc);
+
+  /** @brief Get the segment description */
+  const std::string& getDescription() const;
 
 private:
   void ctor(const Eigen::Isometry3d& transform);
+  boost::uuids::uuid uuid_{};
+  boost::uuids::uuid parent_uuid_{};
+  std::string description_;
   PositionStandardItem* position_;
   QuaternionStandardItem* orientation_;
 };

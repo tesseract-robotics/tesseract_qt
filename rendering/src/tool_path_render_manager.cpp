@@ -41,6 +41,9 @@
 #include <QApplication>
 #include <QUuid>
 
+const std::string USER_VISIBILITY = "user_visibility";
+const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
+
 namespace tesseract_gui
 {
 struct ToolPathRenderManagerPrivate
@@ -55,8 +58,8 @@ struct ToolPathRenderManagerPrivate
 
   std::vector<tesseract_gui::ToolPath> added;
   std::vector<boost::uuids::uuid> removed;
-  std::vector<boost::uuids::uuid> show;
-  std::vector<boost::uuids::uuid> hide;
+  std::vector<std::pair<boost::uuids::uuid, boost::uuids::uuid>> show;
+  std::vector<std::pair<boost::uuids::uuid, boost::uuids::uuid>> hide;
 
   void clear(ignition::rendering::Scene& scene, EntityContainer& container)
   {
@@ -99,35 +102,81 @@ struct ToolPathRenderManagerPrivate
    * solve the issue until a long term fix is introduced.
    * @details https://github.com/gazebosim/gz-rendering/issues/771
    */
-  void showAxis(const ignition::rendering::NodePtr& node)
+  void updateVisibility(const ignition::rendering::NodePtr& node, bool parent_visibility, bool recursive)
   {
     for (std::size_t i = 0; i < node->ChildCount(); ++i)
     {
       auto child_node = node->ChildByIndex(i);
       auto axis = std::dynamic_pointer_cast<ignition::rendering::AxisVisual>(child_node);
       if (axis != nullptr)
-        axis->SetVisible(true);
+      {
+        if (recursive)
+        {
+          axis->SetVisible(parent_visibility);
+          axis->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
+          axis->SetUserData(USER_VISIBILITY, parent_visibility);
+        }
+        else
+        {
+          bool local_visibility = std::get<bool>(axis->UserData(USER_VISIBILITY));
+          axis->SetVisible(parent_visibility & local_visibility);
+          axis->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
+        }
+      }
       else
-        showAxis(child_node);
+      {
+        auto visual = std::dynamic_pointer_cast<ignition::rendering::Visual>(child_node);
+        if (visual != nullptr)
+        {
+          if (recursive)
+          {
+            visual->SetVisible(parent_visibility);
+            visual->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
+            visual->SetUserData(USER_VISIBILITY, parent_visibility);
+            updateVisibility(child_node, parent_visibility, recursive);
+          }
+          else
+          {
+            bool local_visibility = std::get<bool>(visual->UserData(USER_VISIBILITY));
+            visual->SetVisible(parent_visibility & local_visibility);
+            visual->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
+            updateVisibility(child_node, parent_visibility & local_visibility, recursive);
+          }
+        }
+        else
+        {
+          updateVisibility(child_node, parent_visibility, recursive);
+        }
+      }
     }
   }
 
-  void setVisibility(ignition::rendering::Scene& scene, const boost::uuids::uuid& uuid, bool visible)
+  void setVisibility(ignition::rendering::Scene& scene,
+                     const boost::uuids::uuid& uuid,
+                     const boost::uuids::uuid& child_uuid,
+                     bool visible,
+                     bool recursive)
   {
     auto it = entity_containers.find(uuid);
     if (it != entity_containers.end())
     {
       std::string visual_key = boost::uuids::to_string(uuid);
+      if (!child_uuid.is_nil())
+        visual_key = boost::uuids::to_string(child_uuid);
+
       if (it->second->hasTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key))
       {
         auto entity = it->second->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key);
         auto visual_node = scene.VisualById(entity.id);
         if (visual_node != nullptr)
         {
-          visual_node->SetVisible(visible);
+          bool parent_visibility = std::get<bool>(visual_node->UserData(USER_PARENT_VISIBILITY));
+          visual_node->SetVisible(parent_visibility & visible);
+          visual_node->SetUserData(USER_VISIBILITY, visible);
+          auto axis = std::dynamic_pointer_cast<ignition::rendering::AxisVisual>(visual_node);
           // There is a bug in the axis visual object which shows the rings so must hide
-          if (visible == true)
-            showAxis(visual_node);
+          if (axis == nullptr)
+            updateVisibility(visual_node, visible, recursive);
         }
       }
     }
@@ -203,7 +252,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::ToolPathHide*>(event);
     if (e->getSceneName() == data_->scene_name)
     {
-      data_->hide.push_back(e->getUUID());
+      data_->hide.push_back(std::make_pair(e->getUUID(), e->getChildUUID()));
       data_->render_dirty = true;
     }
   }
@@ -213,12 +262,14 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::ToolPathShow*>(event);
     if (e->getSceneName() == data_->scene_name)
     {
-      data_->show.push_back(e->getUUID());
+      data_->show.push_back(std::make_pair(e->getUUID(), e->getChildUUID()));
       data_->render_dirty = true;
     }
   }
   else if (event->type() == events::PreRender::kType)
   {
+    static const boost::uuids::uuid nil_uuid{};
+
     assert(dynamic_cast<events::PreRender*>(event) != nullptr);
     if (static_cast<events::PreRender*>(event)->getSceneName() == data_->scene_name && data_->render_dirty)
     {
@@ -247,22 +298,29 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
                 tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, tool_path_name);
             ignition::rendering::VisualPtr ign_tool_path =
                 scene->CreateVisual(tool_path_entity.id, tool_path_entity.unique_name);
+            ign_tool_path->SetUserData(USER_VISIBILITY, true);
+            ign_tool_path->SetUserData(USER_PARENT_VISIBILITY, true);
             for (const auto& segment : tool_path)
             {
-              std::string segment_name = tool_path_name + "::" + boost::uuids::to_string(segment.getUUID());
+              std::string segment_name = boost::uuids::to_string(segment.getUUID());
               auto segment_entity =
                   tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, segment_name);
               ignition::rendering::VisualPtr ign_segment =
                   scene->CreateVisual(segment_entity.id, segment_entity.unique_name);
+              ign_segment->SetUserData(USER_VISIBILITY, true);
+              ign_segment->SetUserData(USER_PARENT_VISIBILITY, true);
               for (const auto& pose : segment)
               {
-                auto pose_entity = tool_path_container->addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+                std::string pose_name = boost::uuids::to_string(pose.getUUID());
+                auto pose_entity =
+                    tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pose_name);
                 ignition::rendering::AxisVisualPtr axis =
                     scene->CreateAxisVisual(pose_entity.id, pose_entity.unique_name);
-                axis->SetLocalPose(ignition::math::eigen3::convert(pose));
+                axis->SetLocalPose(ignition::math::eigen3::convert(pose.getTransform()));
                 axis->SetInheritScale(false);
                 axis->SetLocalScale(0.05, 0.05, 0.05);
-                //                axis->SetVisible(true);
+                axis->SetUserData(USER_VISIBILITY, true);
+                axis->SetUserData(USER_PARENT_VISIBILITY, true);
 
                 ign_segment->AddChild(axis);
               }
@@ -286,7 +344,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
         if (!data_->hide.empty())
         {
           for (const auto& h : data_->hide)
-            data_->setVisibility(*scene, h, false);
+            data_->setVisibility(*scene, h.first, h.second, false, false);
 
           data_->hide.clear();
         }
@@ -295,7 +353,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
         if (!data_->show.empty())
         {
           for (const auto& s : data_->show)
-            data_->setVisibility(*scene, s, true);
+            data_->setVisibility(*scene, s.first, s.second, true, false);
 
           data_->show.clear();
         }
@@ -304,7 +362,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
         if (data_->render_hide_all)
         {
           for (const auto& e : data_->entity_containers)
-            data_->setVisibility(*scene, e.first, false);
+            data_->setVisibility(*scene, e.first, nil_uuid, false, true);
 
           data_->render_hide_all = false;
         }
@@ -313,7 +371,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
         if (data_->render_show_all)
         {
           for (const auto& e : data_->entity_containers)
-            data_->setVisibility(*scene, e.first, true);
+            data_->setVisibility(*scene, e.first, nil_uuid, true, true);
 
           data_->render_show_all = false;
         }

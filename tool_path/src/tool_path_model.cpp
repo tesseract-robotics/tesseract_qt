@@ -124,13 +124,31 @@ bool ToolPathModel::setData(const QModelIndex& index, const QVariant& value, int
       assert(dynamic_cast<ToolPathStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<ToolPathStandardItem*>(item);
       if (value.value<Qt::CheckState>() == Qt::Checked)
-        QApplication::sendEvent(qApp, new events::ToolPathShow(scene_name_, derived_item->getToolPath().getUUID()));
+        QApplication::sendEvent(qApp, new events::ToolPathShow(scene_name_, derived_item->getUUID()));
       else
-        QApplication::sendEvent(qApp, new events::ToolPathHide(scene_name_, derived_item->getToolPath().getUUID()));
+        QApplication::sendEvent(qApp, new events::ToolPathHide(scene_name_, derived_item->getUUID()));
     }
     else if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
     {
-      /** @todo Levi, update to support segments */
+      assert(dynamic_cast<ToolPathSegmentStandardItem*>(item) != nullptr);
+      auto* derived_item = static_cast<ToolPathSegmentStandardItem*>(item);
+      if (value.value<Qt::CheckState>() == Qt::Checked)
+        QApplication::sendEvent(
+            qApp, new events::ToolPathShow(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+      else
+        QApplication::sendEvent(
+            qApp, new events::ToolPathHide(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+    }
+    else if (item->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
+    {
+      assert(dynamic_cast<TransformStandardItem*>(item) != nullptr);
+      auto* derived_item = static_cast<TransformStandardItem*>(item);
+      if (value.value<Qt::CheckState>() == Qt::Checked)
+        QApplication::sendEvent(
+            qApp, new events::ToolPathShow(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+      else
+        QApplication::sendEvent(
+            qApp, new events::ToolPathHide(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
     }
   }
   return QStandardItemModel::setData(index, value, role);

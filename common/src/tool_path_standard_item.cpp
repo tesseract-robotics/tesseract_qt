@@ -73,7 +73,12 @@ void ToolPathStandardItem::ctor(const ToolPath& tool_path)
   setCheckable(true);
   setCheckState(Qt::CheckState::Checked);
   for (std::size_t j = 0; j < tool_path.size(); ++j)
-    appendRow(new ToolPathSegmentStandardItem(QString("segment[%1]").arg(j), tool_path[j]));
+  {
+    auto& segment = tool_path[j];
+    auto* segment_item = new ToolPathSegmentStandardItem(QString("segment[%1]").arg(j), segment);
+    auto* segment_description_item = new QStandardItem(QString::fromStdString(segment.getDescription()));
+    appendRow({ segment_item, segment_description_item });
+  }
 
   uuid_ = tool_path.getUUID();
   parent_uuid_ = tool_path.getParentUUID();

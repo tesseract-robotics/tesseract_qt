@@ -26,25 +26,60 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/tool_path_pose.h>
+#include <boost/uuid/uuid_generators.hpp>
 
 namespace tesseract_gui
 {
 TransformStandardItem::TransformStandardItem(const Eigen::Isometry3d& transform)
-  : QStandardItem(icons::getOriginIcon(), "Transform")
+  : QStandardItem(icons::getOriginIcon(), "Transform"), uuid_(boost::uuids::random_generator()())
 {
   ctor(transform);
 }
 
 TransformStandardItem::TransformStandardItem(const QString& text, const Eigen::Isometry3d& transform)
-  : QStandardItem(icons::getOriginIcon(), text)
+  : QStandardItem(icons::getOriginIcon(), text), uuid_(boost::uuids::random_generator()())
 {
   ctor(transform);
 }
 
 TransformStandardItem::TransformStandardItem(const QIcon& icon, const QString& text, const Eigen::Isometry3d& transform)
-  : QStandardItem(icon, text)
+  : QStandardItem(icon, text), uuid_(boost::uuids::random_generator()())
 {
   ctor(transform);
+}
+
+TransformStandardItem::TransformStandardItem(const ToolPathPose& transform)
+  : QStandardItem(icons::getOriginIcon(), "Transform")
+  , uuid_(transform.getUUID())
+  , parent_uuid_(transform.getParentUUID())
+  , description_(transform.getDescription())
+{
+  setCheckable(true);
+  setCheckState(Qt::CheckState::Checked);
+  ctor(transform.getTransform());
+}
+
+TransformStandardItem::TransformStandardItem(const QString& text, const ToolPathPose& transform)
+  : QStandardItem(icons::getOriginIcon(), text)
+  , uuid_(transform.getUUID())
+  , parent_uuid_(transform.getParentUUID())
+  , description_(transform.getDescription())
+{
+  setCheckable(true);
+  setCheckState(Qt::CheckState::Checked);
+  ctor(transform.getTransform());
+}
+
+TransformStandardItem::TransformStandardItem(const QIcon& icon, const QString& text, const ToolPathPose& transform)
+  : QStandardItem(icon, text)
+  , uuid_(transform.getUUID())
+  , parent_uuid_(transform.getParentUUID())
+  , description_(transform.getDescription())
+{
+  setCheckable(true);
+  setCheckState(Qt::CheckState::Checked);
+  ctor(transform.getTransform());
 }
 
 int TransformStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM); }
@@ -63,6 +98,11 @@ void TransformStandardItem::setTransform(const Eigen::Isometry3d& transform)
   Eigen::Quaterniond q(transform.rotation());
   orientation_->setQuaternion(q);
 }
+
+boost::uuids::uuid TransformStandardItem::getUUID() const { return uuid_; }
+const boost::uuids::uuid& TransformStandardItem::getParentUUID() const { return parent_uuid_; }
+void TransformStandardItem::setDescription(const std::string& desc) { description_ = desc; }
+const std::string& TransformStandardItem::getDescription() const { return description_; }
 
 void TransformStandardItem::ctor(const Eigen::Isometry3d& transform)
 {
