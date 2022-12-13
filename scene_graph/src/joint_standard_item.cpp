@@ -33,22 +33,36 @@
 
 namespace tesseract_gui
 {
+class JointStandardItem::Implementation
+{
+public:
+  QList<QStandardItem*> child_link_name;
+  QList<QStandardItem*> parent_link_name;
+};
+
 JointStandardItem::JointStandardItem(tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(icons::getJointIcon(), "Joint"), joint(std::move(joint))
+  : QStandardItem(icons::getJointIcon(), "Joint"), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
 }
 
 JointStandardItem::JointStandardItem(const QString& text, tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(icons::getJointIcon(), text), joint(std::move(joint))
+  : QStandardItem(icons::getJointIcon(), text), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
 }
 
 JointStandardItem::JointStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Joint::Ptr joint)
-  : QStandardItem(icon, text), joint(std::move(joint))
+  : QStandardItem(icon, text), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
+}
+
+void JointStandardItem::setChildLink(const QString& name) { data_->child_link_name[1]->setData(name, Qt::DisplayRole); }
+
+void JointStandardItem::setParentLink(const QString& name)
+{
+  data_->parent_link_name[1]->setData(name, Qt::DisplayRole);
 }
 
 int JointStandardItem::type() const { return static_cast<int>(StandardItemType::SG_JOINT); }
@@ -105,8 +119,12 @@ void JointStandardItem::ctor()
     appendRow(item);
   }
 
-  appendRow(createStandardItemString("child_link_name", joint->child_link_name));
-  appendRow(createStandardItemString("parent_link_name", joint->parent_link_name));
+  data_->child_link_name = createStandardItemString("child_link_name", joint->child_link_name);
+  appendRow(data_->child_link_name);
+
+  data_->parent_link_name = createStandardItemString("parent_link_name", joint->parent_link_name);
+  appendRow(data_->parent_link_name);
+
   appendRow(new TransformStandardItem(joint->parent_to_joint_origin_transform));
 
   if (joint->dynamics != nullptr)

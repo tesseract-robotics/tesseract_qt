@@ -5,8 +5,11 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(SCENE_GRAPH_WIDGET_headers_MOC include/tesseract_qt/scene_graph/scene_state_model.h
-             include/tesseract_qt/scene_graph/scene_graph_model.h)
+qt5_wrap_cpp(
+  SCENE_GRAPH_WIDGET_headers_MOC
+  include/tesseract_qt/scene_graph/scene_state_model.h
+  include/tesseract_qt/scene_graph/scene_graph_model.h
+  include/tesseract_qt/scene_graph/scene_graph_tool_bar.h)
 
 add_library(
   ${PROJECT_NAME}_scene_graph SHARED
@@ -21,7 +24,6 @@ add_library(
   src/material_standard_item.cpp
   src/mimic_standard_item.cpp
   src/safety_standard_item.cpp
-  src/scene_graph_standard_item.cpp
   src/visual_standard_item.cpp
   src/box_standard_item.cpp
   src/capsule_standard_item.cpp
@@ -31,6 +33,9 @@ add_library(
   src/sphere_standard_item.cpp
   src/polygon_mesh_standard_item.cpp
   src/octree_standard_item.cpp
+  src/scene_graph_events.cpp
+  src/scene_graph_standard_item.cpp
+  src/scene_graph_tool_bar.cpp
   src/scene_state_standard_item.cpp
   src/scene_state_model.cpp
   src/scene_graph_model.cpp)

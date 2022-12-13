@@ -20,44 +20,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_MODEL_H
-#define TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_MODEL_H
-
-#include <memory>
-#include <QStandardItemModel>
-
-namespace tesseract_scene_graph
-{
-class SceneState;
-}
+#ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_LINK_VISIBILITY_H
+#define TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_LINK_VISIBILITY_H
 
 namespace tesseract_gui
 {
-class SceneStateModelPrivate;
-class SceneStateModel : public QStandardItemModel
+enum class LinkVisibilityFlags : int
 {
-  Q_OBJECT
-
-public:
-  explicit SceneStateModel(std::string scene_name = "", QObject* parent = nullptr);
-  ~SceneStateModel() override;
-  SceneStateModel(const SceneStateModel& other);
-  SceneStateModel& operator=(const SceneStateModel& other);
-
-  void setState(const tesseract_scene_graph::SceneState& scene_state);
-
-  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-
-  void clear();
-
-private:
-  std::string scene_name_;
-  std::unique_ptr<SceneStateModelPrivate> data_;
-
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
+  LINK = 1,
+  COLLISION = 2,
+  VISUAL = 4,
+  AXIS = 8,
+  WIREBOX = 16,
+  ALL = LINK | COLLISION | VISUAL | AXIS | WIREBOX,
 };
+
+inline LinkVisibilityFlags operator|(LinkVisibilityFlags a, LinkVisibilityFlags b)
+{
+  return static_cast<LinkVisibilityFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+inline bool operator&(LinkVisibilityFlags a, LinkVisibilityFlags b)
+{
+  return (static_cast<int>(a) & static_cast<int>(b));
+}
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_MODEL_H
+#endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_LINK_VISIBILITY_H

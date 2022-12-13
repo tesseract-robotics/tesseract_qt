@@ -23,35 +23,46 @@
 #ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_STANDARD_ITEM_H
 #define TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_STANDARD_ITEM_H
 
+#include <memory>
 #include <QStandardItem>
 
 namespace tesseract_scene_graph
 {
 class SceneGraph;
-}
+class Link;
+class Joint;
+}  // namespace tesseract_scene_graph
 
 namespace tesseract_gui
 {
+class LinkStandardItem;
+class JointStandardItem;
 class SceneGraphStandardItem : public QStandardItem
 {
 public:
-  SceneGraphStandardItem();
-  explicit SceneGraphStandardItem(const QString& text);
-  SceneGraphStandardItem(const QIcon& icon, const QString& text);
+  explicit SceneGraphStandardItem(bool checkable = true);
+  SceneGraphStandardItem(const QString& text, bool checkable = true);
+  SceneGraphStandardItem(const QIcon& icon, const QString& text, bool checkable = true);
 
-  explicit SceneGraphStandardItem(const tesseract_scene_graph::SceneGraph& scene_graph, bool checkable = true);
-  SceneGraphStandardItem(const QString& text,
-                         const tesseract_scene_graph::SceneGraph& scene_graph,
-                         bool checkable = true);
-  SceneGraphStandardItem(const QIcon& icon,
-                         const QString& text,
-                         const tesseract_scene_graph::SceneGraph& scene_graph,
-                         bool checkable = true);
+  void setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph);
+  void setName(const std::string& name);
+  void addLink(const tesseract_scene_graph::Link& link);
+  void addJoint(const tesseract_scene_graph::Joint& joint);
+  void removeLink(const std::string& link_name);
+  void removeJoint(const std::string& joint_name);
+
+  const std::unordered_map<std::string, LinkStandardItem*>& getLinks() const;
+  const std::unordered_map<std::string, JointStandardItem*>& getJoints() const;
 
   int type() const override;
 
+  void clear();
+
 protected:
-  void ctor(const tesseract_scene_graph::SceneGraph& scene_graph, bool checkable);
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
+
+  void ctor(bool checkable);
 };
 }  // namespace tesseract_gui
 

@@ -67,6 +67,8 @@ void AddSceneGraphCommandStandardItem::ctor()
   else
     appendRow(createStandardItemString(icons::getJointIcon(), "Joint", "NULL"));
 
-  appendRow(new SceneGraphStandardItem(*command->getSceneGraph(), false));
+  auto* sg = new SceneGraphStandardItem(false);
+  sg->setSceneGraph(*command->getSceneGraph());
+  appendRow(sg);
 }
 }  // namespace tesseract_gui

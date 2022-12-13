@@ -42,9 +42,15 @@ public:
   JointStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Joint::Ptr joint);
   int type() const override;
 
+  void setChildLink(const QString& name);
+  void setParentLink(const QString& name);
+
   tesseract_scene_graph::Joint::Ptr joint;
 
 private:
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
+
   void ctor();
 };
 

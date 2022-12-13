@@ -41,7 +41,6 @@
 #include <tesseract_collision/core/types.h>
 
 #include <QStandardItemModel>
-#include <QToolBar>
 
 namespace tesseract_gui
 {
@@ -52,39 +51,14 @@ struct EnvironmentWidgetImpl
   EnvironmentWidgetConfig::Ptr config{ nullptr };
 
   ContactResultsModel* contact_results_model;
-
-  // Toolbar
-  QToolBar* toolbar{ nullptr };
-  QAction* show_all_links_action{ nullptr };
-  QAction* hide_all_links_action{ nullptr };
-
-  QAction* show_visual_all_links_action{ nullptr };
-  QAction* hide_visual_all_links_action{ nullptr };
-
-  QAction* show_collision_all_links_action{ nullptr };
-  QAction* hide_collision_all_links_action{ nullptr };
-
-  QAction* select_all_links_action{ nullptr };
-  QAction* deselect_all_links_action{ nullptr };
-
-  QAction* show_axis_all_links_action{ nullptr };
-  QAction* hide_axis_all_links_action{ nullptr };
-
-  QAction* plot_scene_graph_action{ nullptr };
 };
 
-EnvironmentWidget::EnvironmentWidget(QWidget* parent, bool add_toolbar)
+EnvironmentWidget::EnvironmentWidget(QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::EnvironmentWidget>()), data_(std::make_unique<EnvironmentWidgetImpl>())
 {
   ui->setupUi(this);
 
   ui->tab_widget->setCurrentIndex(0);
-
-  if (add_toolbar)
-  {
-    createToolBar();
-    ui->verticalLayout->insertWidget(0, data_->toolbar);
-  }
 
   // Setup Contacts tab
   data_->contact_results_model = new ContactResultsModel();
@@ -213,7 +187,7 @@ const std::unordered_map<std::string, LinkVisibilityProperties>& EnvironmentWidg
 
 EnvironmentWidget* EnvironmentWidget::clone() const
 {
-  return new EnvironmentWidget(nullptr, data_->toolbar != nullptr);  // NOLINT
+  return new EnvironmentWidget(nullptr);  // NOLINT
 }
 
 void EnvironmentWidget::onModelsUpdated()
@@ -241,165 +215,6 @@ void EnvironmentWidget::onModelsUpdated()
 }
 
 void EnvironmentWidget::onRender(float /*dt*/) {}
-
-void EnvironmentWidget::onShowAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.link = true;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onHideAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.link = false;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onShowVisualAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.visual = true;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onHideVisualAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.visual = false;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onShowCollisionAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.collision = true;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-void EnvironmentWidget::onHideCollisionAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.collision = false;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onShowAxisAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.axis = true;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onHideAxisAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.axis = false;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onSelectAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.wirebox = true;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
-
-void EnvironmentWidget::onDeselectAllLinks()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.wirebox = false;
-    link_names.push_back(link.first);
-  }
-
-  emit linkVisibilityChanged(link_names);
-}
 
 void EnvironmentWidget::onPlotSceneGraph()
 {
@@ -454,115 +269,4 @@ void EnvironmentWidget::onShowGroupsJointState(const std::unordered_map<std::str
   data_->config->environment().setState(groups_joint_state);
 }
 
-QStandardItem* findLinkStandardItem(QStandardItem* item)
-{
-  if (item->type() == static_cast<int>(StandardItemType::SG_LINK))
-    return item;
-
-  return findLinkStandardItem(item->parent());
-}
-
-void EnvironmentWidget::onSceneGraphModelItemChanged(QStandardItem* item)
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  if (item->type() == static_cast<int>(StandardItemType::SG_LINK))
-  {
-    auto it = link_visibility_properties.find(item->text().toStdString());
-    if (it != link_visibility_properties.end())
-    {
-      it->second.link = (item->checkState() == Qt::CheckState::Checked);
-      emit linkVisibilityChanged({ it->first });
-    }
-  }
-  else if (item->type() == static_cast<int>(StandardItemType::SG_VISUALS))
-  {
-    QStandardItem* link_item = findLinkStandardItem(item);
-    auto it = link_visibility_properties.find(link_item->text().toStdString());
-    if (it != link_visibility_properties.end())
-    {
-      it->second.visual = (item->checkState() == Qt::CheckState::Checked);
-      emit linkVisibilityChanged({ it->first });
-    }
-  }
-  else if (item->type() == static_cast<int>(StandardItemType::SG_COLLISIONS))
-  {
-    QStandardItem* link_item = findLinkStandardItem(item);
-    auto it = link_visibility_properties.find(link_item->text().toStdString());
-    if (it != link_visibility_properties.end())
-    {
-      it->second.collision = (item->checkState() == Qt::CheckState::Checked);
-      emit linkVisibilityChanged({ it->first });
-    }
-  }
-}
-
-void EnvironmentWidget::onSceneStateModelItemChanged(QStandardItem* item)
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  if (item->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
-  {
-    auto it = link_visibility_properties.find(item->text().toStdString());
-    if (it != link_visibility_properties.end())
-    {
-      it->second.axis = (item->checkState() == Qt::CheckState::Checked);
-      emit linkVisibilityChanged({ it->first });
-    }
-  }
-}
-
-void EnvironmentWidget::updateVisibilityCheckedStates(const std::vector<std::string>& links)
-{
-  const LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-  data_->config->getSceneGraphModel().blockSignals(true);
-  data_->config->getSceneStateModel().blockSignals(true);
-  for (const auto& link : links)
-  {
-    QString link_name = QString::fromStdString(link);
-    auto it = link_visibility_properties.find(link);
-    if (it != link_visibility_properties.end())
-    {
-      data_->config->getSceneGraphModel().onLinkCheckedStateChanged(link_name, it->second.link);
-      data_->config->getSceneGraphModel().onLinkVisualsCheckedStateChanged(link_name, it->second.visual);
-      data_->config->getSceneGraphModel().onLinkCollisionsCheckedStateChanged(link_name, it->second.collision);
-
-      data_->config->getSceneStateModel().onLinkAxisCheckedStateChanged(link_name, it->second.axis);
-    }
-  }
-  data_->config->getSceneGraphModel().blockSignals(false);
-  data_->config->getSceneStateModel().blockSignals(false);
-}
-
-void EnvironmentWidget::createToolBar()
-{
-  data_->toolbar = new QToolBar;  // NOLINT
-  data_->show_all_links_action =
-      data_->toolbar->addAction(icons::getShowAllLinksIcon(), "Show All Links", this, SLOT(onShowAllLinks()));
-  data_->hide_all_links_action =
-      data_->toolbar->addAction(icons::getHideAllLinksIcon(), "Hide All Links", this, SLOT(onHideAllLinks()));
-  data_->toolbar->addSeparator();
-  data_->show_visual_all_links_action = data_->toolbar->addAction(
-      icons::getShowVisualAllLinksIcon(), "Show Visual All Links", this, SLOT(onShowVisualAllLinks()));
-  data_->hide_visual_all_links_action = data_->toolbar->addAction(
-      icons::getHideVisualAllLinksIcon(), "Hide Visual All Links", this, SLOT(onHideVisualAllLinks()));
-  data_->toolbar->addSeparator();
-  data_->show_collision_all_links_action = data_->toolbar->addAction(
-      icons::getShowCollisionAllLinksIcon(), "Show Collision All Links", this, SLOT(onShowCollisionAllLinks()));
-  data_->hide_collision_all_links_action = data_->toolbar->addAction(
-      icons::getHideCollisionAllLinksIcon(), "Hide Collision All Links", this, SLOT(onHideCollisionAllLinks()));
-  data_->toolbar->addSeparator();
-  data_->select_all_links_action =
-      data_->toolbar->addAction(icons::getSelectAllLinksIcon(), "Select All Links", this, SLOT(onSelectAllLinks()));
-  data_->deselect_all_links_action = data_->toolbar->addAction(
-      icons::getDeselectAllLinksIcon(), "Deselect All Links", this, SLOT(onDeselectAllLinks()));
-  data_->toolbar->addSeparator();
-  data_->show_axis_all_links_action = data_->toolbar->addAction(
-      icons::getShowAxisAllLinksIcon(), "Show Axis All Links", this, SLOT(onShowAxisAllLinks()));
-  data_->hide_axis_all_links_action = data_->toolbar->addAction(
-      icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", this, SLOT(onHideAxisAllLinks()));
-  data_->toolbar->addSeparator();
-  data_->plot_scene_graph_action =
-      data_->toolbar->addAction(icons::getPlotIcon(), "Plot Scene Graph", this, SLOT(onPlotSceneGraph()));
-}
 }  // namespace tesseract_gui

@@ -23,7 +23,6 @@
 #ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_EVENTS_H
 #define TESSERACT_QT_TOOL_PATH_TOOL_PATH_EVENTS_H
 
-#include <QEvent>
 #include <memory>
 #include <tesseract_qt/common/event_type.h>
 

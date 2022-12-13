@@ -30,7 +30,9 @@
 namespace tesseract_scene_graph
 {
 class SceneGraph;
-}
+class Link;
+class Joint;
+}  // namespace tesseract_scene_graph
 
 class QModelIndex;
 
@@ -42,22 +44,29 @@ class SceneGraphModel : public QStandardItemModel
   Q_OBJECT
 
 public:
-  explicit SceneGraphModel(QObject* parent = nullptr);
+  explicit SceneGraphModel(std::string scene_name = "", QObject* parent = nullptr);
   ~SceneGraphModel() override;
   SceneGraphModel(const SceneGraphModel& other);
   SceneGraphModel& operator=(const SceneGraphModel& other);
 
-  void setSceneGraph(std::unique_ptr<tesseract_scene_graph::SceneGraph> scene_graph);
+  void setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph);
+  void setName(const std::string& name);
+  const std::string& getName() const;
+  void addLink(const tesseract_scene_graph::Link& link);
+  void addJoint(const tesseract_scene_graph::Joint& joint);
+  void removeLink(const std::string& link_name);
+  void removeJoint(const std::string& joint_name);
+
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
   void clear();
 
-public Q_SLOTS:
-  virtual void onLinkCheckedStateChanged(const QString& link_name, bool checked);
-  virtual void onLinkVisualsCheckedStateChanged(const QString& link_name, bool checked);
-  virtual void onLinkCollisionsCheckedStateChanged(const QString& link_name, bool checked);
-
 private:
+  std::string scene_name_;
   std::unique_ptr<SceneGraphModelImpl> data_;
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui

@@ -20,44 +20,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_MODEL_H
-#define TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_MODEL_H
+#ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_SCENE_GRAPH_TOOL_BAR_H
+#define TESSERACT_QT_SCENE_GRAPH_SCENE_SCENE_GRAPH_TOOL_BAR_H
 
+#include <QToolBar>
 #include <memory>
-#include <QStandardItemModel>
-
-namespace tesseract_scene_graph
-{
-class SceneState;
-}
 
 namespace tesseract_gui
 {
-class SceneStateModelPrivate;
-class SceneStateModel : public QStandardItemModel
+class SceneGraphToolBar : public QToolBar
 {
   Q_OBJECT
-
 public:
-  explicit SceneStateModel(std::string scene_name = "", QObject* parent = nullptr);
-  ~SceneStateModel() override;
-  SceneStateModel(const SceneStateModel& other);
-  SceneStateModel& operator=(const SceneStateModel& other);
-
-  void setState(const tesseract_scene_graph::SceneState& scene_state);
-
-  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-
-  void clear();
+  explicit SceneGraphToolBar(const std::string& scene_name, QWidget* parent = nullptr);
+  ~SceneGraphToolBar();
 
 private:
-  std::string scene_name_;
-  std::unique_ptr<SceneStateModelPrivate> data_;
-
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
 };
-
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_MODEL_H
+#endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_SCENE_GRAPH_TOOL_BAR_H

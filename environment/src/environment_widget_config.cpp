@@ -145,7 +145,7 @@ void EnvironmentWidgetConfig::onUpdateSceneGraphModel()
   if (!data_->environment->isInitialized())
     return;
 
-  data_->scene_model.setSceneGraph(data_->environment->getSceneGraph()->clone());
+  data_->scene_model.setSceneGraph(*data_->environment->getSceneGraph());
 
   // Update link visibility properties
   std::vector<std::string> link_names = data_->environment->getLinkNames();

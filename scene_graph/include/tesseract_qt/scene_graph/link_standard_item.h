@@ -45,9 +45,14 @@ public:
                    bool checkable = true);
   int type() const override;
 
+  QStandardItem* getCollisionsItem();
+  QStandardItem* getVisualsItem();
+
   tesseract_scene_graph::Link::Ptr link;
 
 private:
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
   void ctor(bool checkable);
 };
 }  // namespace tesseract_gui

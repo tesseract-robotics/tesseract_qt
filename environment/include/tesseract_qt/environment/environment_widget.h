@@ -45,7 +45,7 @@ class EnvironmentWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit EnvironmentWidget(QWidget* parent = nullptr, bool add_toolbar = true);
+  explicit EnvironmentWidget(QWidget* parent = nullptr);
   ~EnvironmentWidget() override;
 
   /**
@@ -89,34 +89,17 @@ Q_SIGNALS:
 public Q_SLOTS:
   virtual void onModelsUpdated();
   virtual void onRender(float dt);
-  virtual void onShowAllLinks();
-  virtual void onHideAllLinks();
-  virtual void onShowVisualAllLinks();
-  virtual void onHideVisualAllLinks();
-  virtual void onShowCollisionAllLinks();
-  virtual void onHideCollisionAllLinks();
-  virtual void onShowAxisAllLinks();
-  virtual void onHideAxisAllLinks();
-  virtual void onSelectAllLinks();
-  virtual void onDeselectAllLinks();
   virtual void onPlotSceneGraph();
   virtual void onEnable();
 
   void onACMSelectedLinks(const std::vector<std::string>& link_names);
   void onShowGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state);
 
-private Q_SLOTS:
-  void onSceneGraphModelItemChanged(QStandardItem* item);
-  void onSceneStateModelItemChanged(QStandardItem* item);
-  void updateVisibilityCheckedStates(const std::vector<std::string>& links);
-
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;
   std::unique_ptr<EnvironmentWidgetImpl> data_;
 
   void updateModels();
-
-  void createToolBar();
 };
 }  // namespace tesseract_gui
 

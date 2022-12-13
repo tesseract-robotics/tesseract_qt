@@ -22,121 +22,227 @@
  */
 #include <tesseract_qt/scene_graph/scene_graph_model.h>
 #include <tesseract_qt/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_qt/scene_graph/scene_graph_link_visibility.h>
 #include <tesseract_qt/scene_graph/link_standard_item.h>
 #include <tesseract_qt/scene_graph/joint_standard_item.h>
+#include <tesseract_qt/scene_graph/scene_graph_events.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_scene_graph/graph.h>
 
+#include <QApplication>
+
 namespace tesseract_gui
 {
 struct SceneGraphModelImpl
 {
-  tesseract_scene_graph::SceneGraph::UPtr scene_graph;
   SceneGraphStandardItem* scene_graph_item;
-  std::unordered_map<std::string, LinkStandardItem*> links;
 
-  void clear()
-  {
-    scene_graph = nullptr;
-    scene_graph_item = nullptr;
-    links.clear();
-  }
+  void clear() { scene_graph_item->clear(); }
 };
 
-SceneGraphModel::SceneGraphModel(QObject* parent)
+SceneGraphModel::SceneGraphModel(std::string scene_name, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<SceneGraphModelImpl>())
 {
-  clear();
+  setColumnCount(2);
+  setHorizontalHeaderLabels({ "Name", "Values" });
+
+  scene_name_ = std::move(scene_name);
+  data_->scene_graph_item = new SceneGraphStandardItem();  // NOLINT
+  appendRow(data_->scene_graph_item);
+
+  // Install event filter
+  qGuiApp->installEventFilter(this);
 }
 
 SceneGraphModel::~SceneGraphModel() = default;
 
-SceneGraphModel::SceneGraphModel(const SceneGraphModel& other) : SceneGraphModel(other.d_ptr->parent) {}
+SceneGraphModel::SceneGraphModel(const SceneGraphModel& other) : SceneGraphModel(scene_name_, other.d_ptr->parent)
+{
+  // Install event filter
+  qGuiApp->installEventFilter(this);
+}
 
 SceneGraphModel& SceneGraphModel::operator=(const SceneGraphModel& other) { return *this; }
 
-void SceneGraphModel::setSceneGraph(std::unique_ptr<tesseract_scene_graph::SceneGraph> scene_graph)
+void SceneGraphModel::setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph)
 {
   clear();
-  data_->scene_graph = std::move(scene_graph);
 
-  data_->scene_graph_item = new SceneGraphStandardItem();  // NOLINT
-  data_->scene_graph_item->appendRow(createStandardItemString("name", data_->scene_graph->getName()));
-  data_->scene_graph_item->appendRow(createStandardItemString("root_link", data_->scene_graph->getRoot()));
-
-  auto* links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
-  for (const auto& link : data_->scene_graph->getLinks())
-  {
-    auto* item = new LinkStandardItem(
-        QString::fromStdString(link->getName()), std::make_shared<tesseract_scene_graph::Link>(link->clone()), true);
-
-    item->setCheckable(true);
-    item->setCheckState(Qt::CheckState::Checked);
-    links_item->appendRow(item);
-
-    data_->links[link->getName()] = item;
-  }
-  links_item->sortChildren(0);
-  data_->scene_graph_item->appendRow(links_item);
-
-  auto* joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
-  for (const auto& joint : data_->scene_graph->getJoints())
-  {
-    auto* item = new JointStandardItem(QString::fromStdString(joint->getName()),
-                                       std::make_shared<tesseract_scene_graph::Joint>(joint->clone()));
-    joints_item->appendRow(item);
-  }
-  joints_item->sortChildren(0);
-  data_->scene_graph_item->appendRow(joints_item);
-
-  appendRow(data_->scene_graph_item);
+  data_->scene_graph_item->setSceneGraph(scene_graph);
 }
 
-void SceneGraphModel::clear()
-{
-  QStandardItemModel::clear();
-  data_->clear();
+void SceneGraphModel::setName(const std::string& name) { data_->scene_graph_item->setName(name); }
 
-  setColumnCount(2);
-  setHorizontalHeaderLabels({ "Name", "Values" });
-}
+void SceneGraphModel::addLink(const tesseract_scene_graph::Link& link) { data_->scene_graph_item->addLink(link); }
 
-void SceneGraphModel::onLinkCheckedStateChanged(const QString& link_name, bool checked)
-{
-  auto it = data_->links.find(link_name.toStdString());
-  if (it != data_->links.end())
-    it->second->setCheckState((checked) ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
-}
+void SceneGraphModel::addJoint(const tesseract_scene_graph::Joint& joint) { data_->scene_graph_item->addJoint(joint); }
 
-void SceneGraphModel::onLinkVisualsCheckedStateChanged(const QString& link_name, bool checked)
+void SceneGraphModel::removeLink(const std::string& link_name) { data_->scene_graph_item->removeLink(link_name); }
+
+void SceneGraphModel::removeJoint(const std::string& joint_name) { data_->scene_graph_item->removeJoint(joint_name); }
+
+bool SceneGraphModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-  auto it = data_->links.find(link_name.toStdString());
-  if (it != data_->links.end())
+  // Need emit application event to change visible
+  if (role == Qt::CheckStateRole)
   {
-    for (int i = 0; i < it->second->rowCount(); ++i)
+    QStandardItem* item = itemFromIndex(index);
+    if (item->type() == static_cast<int>(StandardItemType::SG_LINK))
     {
-      QStandardItem* child = it->second->child(i);
-      if (child->type() == static_cast<int>(StandardItemType::SG_VISUALS))
-        child->setCheckState((checked) ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+      assert(dynamic_cast<LinkStandardItem*>(item) != nullptr);
+      auto* derived_item = static_cast<LinkStandardItem*>(item);
+      QApplication::sendEvent(qApp,
+                              new events::SceneGraphModifyLinkVisibility(scene_name_,
+                                                                         derived_item->link->getName(),
+                                                                         LinkVisibilityFlags::LINK,
+                                                                         value.value<Qt::CheckState>() == Qt::Checked));
+    }
+    else if (item->type() == static_cast<int>(StandardItemType::SG_VISUALS))
+    {
+      assert(dynamic_cast<LinkStandardItem*>(item->parent()) != nullptr);
+      auto* derived_item = static_cast<LinkStandardItem*>(item->parent());
+      QApplication::sendEvent(qApp,
+                              new events::SceneGraphModifyLinkVisibility(scene_name_,
+                                                                         derived_item->link->getName(),
+                                                                         LinkVisibilityFlags::VISUAL,
+                                                                         value.value<Qt::CheckState>() == Qt::Checked));
+    }
+    else if (item->type() == static_cast<int>(StandardItemType::SG_COLLISIONS))
+    {
+      assert(dynamic_cast<LinkStandardItem*>(item->parent()) != nullptr);
+      auto* derived_item = static_cast<LinkStandardItem*>(item->parent());
+      QApplication::sendEvent(qApp,
+                              new events::SceneGraphModifyLinkVisibility(scene_name_,
+                                                                         derived_item->link->getName(),
+                                                                         LinkVisibilityFlags::COLLISION,
+                                                                         value.value<Qt::CheckState>() == Qt::Checked));
     }
   }
+  return QStandardItemModel::setData(index, value, role);
 }
 
-void SceneGraphModel::onLinkCollisionsCheckedStateChanged(const QString& link_name, bool checked)
+void SceneGraphModel::clear() { data_->clear(); }
+
+bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
 {
-  auto it = data_->links.find(link_name.toStdString());
-  if (it != data_->links.end())
+  if (event->type() == events::SceneGraphSet::kType)
   {
-    for (int i = 0; i < it->second->rowCount(); ++i)
+    assert(dynamic_cast<events::SceneGraphSet*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphSet*>(event);
+    if (e->getSceneName() == scene_name_)
+      setSceneGraph(*e->getSceneGraph());
+  }
+  else if (event->type() == events::SceneGraphAddLink::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphAddLink*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphAddLink*>(event);
+    if (e->getSceneName() == scene_name_)
+      addLink(*e->getLink());
+  }
+  else if (event->type() == events::SceneGraphAddJoint::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphAddJoint*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphAddJoint*>(event);
+    if (e->getSceneName() == scene_name_)
+      addJoint(*e->getJoint());
+  }
+  else if (event->type() == events::SceneGraphMoveLink::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphMoveLink*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphMoveLink*>(event);
+    if (e->getSceneName() == scene_name_)
     {
-      QStandardItem* child = it->second->child(i);
-      if (child->type() == static_cast<int>(StandardItemType::SG_COLLISIONS))
-        child->setCheckState((checked) ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+      auto joint = e->getJoint();
+      std::string child_link_name = joint->child_link_name;
+      for (const auto& joint : data_->scene_graph_item->getJoints())
+      {
+        if (joint.second->joint->child_link_name == child_link_name)
+        {
+          removeJoint(joint.first);
+          break;
+        }
+      }
+      addJoint(*joint);
     }
   }
+  else if (event->type() == events::SceneGraphMoveJoint::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphMoveJoint*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphMoveJoint*>(event);
+    if (e->getSceneName() == scene_name_)
+      data_->scene_graph_item->getJoints().at(e->getJointName())->setParentLink(e->getParentLink().c_str());
+  }
+  else if (event->type() == events::SceneGraphRemoveLink::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphRemoveLink*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphRemoveLink*>(event);
+    if (e->getSceneName() == scene_name_)
+      removeLink(e->getLinkName());
+  }
+  else if (event->type() == events::SceneGraphRemoveJoint::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphRemoveJoint*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphRemoveJoint*>(event);
+    if (e->getSceneName() == scene_name_)
+      removeJoint(e->getJointName());
+  }
+  else if (event->type() == events::SceneGraphReplaceJoint::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphReplaceJoint*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphReplaceJoint*>(event);
+    if (e->getSceneName() == scene_name_)
+    {
+      removeJoint(e->getJoint()->getName());
+      addJoint(*e->getJoint());
+    }
+  }
+  else if (event->type() == events::SceneGraphModifyLinkVisibility::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphModifyLinkVisibility*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphModifyLinkVisibility*>(event);
+    auto flags = e->getVisibilityFlags();
+    if (e->getSceneName() == scene_name_)
+    {
+      const auto& link_items = data_->scene_graph_item->getLinks();
+      auto it = link_items.find(e->getLinkName());
+      if (it != link_items.end())
+      {
+        Qt::CheckState checked_state = (e->visible()) ? Qt::Checked : Qt::Unchecked;
+        if (flags & LinkVisibilityFlags::LINK)
+          it->second->setCheckState(checked_state);
+        else if (flags & LinkVisibilityFlags::COLLISION)
+          it->second->getCollisionsItem()->setCheckState(checked_state);
+        else if (flags & LinkVisibilityFlags::VISUAL)
+          it->second->getVisualsItem()->setCheckState(checked_state);
+      }
+    }
+  }
+  else if (event->type() == events::SceneGraphModifyLinkVisibilityALL::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphModifyLinkVisibilityALL*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphModifyLinkVisibilityALL*>(event);
+    auto flags = e->getVisibilityFlags();
+    if (e->getSceneName() == scene_name_)
+    {
+      const auto& link_items = data_->scene_graph_item->getLinks();
+      Qt::CheckState checked_state = (e->visible()) ? Qt::Checked : Qt::Unchecked;
+      for (const auto& link_item : link_items)
+      {
+        if (flags & LinkVisibilityFlags::LINK)
+          link_item.second->setCheckState(checked_state);
+        else if (flags & LinkVisibilityFlags::COLLISION && link_item.second->getCollisionsItem() != nullptr)
+          link_item.second->getCollisionsItem()->setCheckState(checked_state);
+        else if (flags & LinkVisibilityFlags::VISUAL && link_item.second->getVisualsItem() != nullptr)
+          link_item.second->getVisualsItem()->setCheckState(checked_state);
+      }
+    }
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 
 }  // namespace tesseract_gui

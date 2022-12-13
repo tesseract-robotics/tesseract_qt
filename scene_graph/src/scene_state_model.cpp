@@ -21,12 +21,16 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/scene_graph/scene_state_model.h>
+#include <tesseract_qt/scene_graph/scene_graph_events.h>
+#include <tesseract_qt/scene_graph/scene_graph_link_visibility.h>
 #include <tesseract_qt/common/transform_standard_item.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_scene_graph/scene_state.h>
+
+#include <QApplication>
 
 namespace tesseract_gui
 {
@@ -58,15 +62,15 @@ struct SceneStateModelPrivate
   }
 };
 
-SceneStateModel::SceneStateModel(QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<SceneStateModelPrivate>())
+SceneStateModel::SceneStateModel(std::string scene_name, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<SceneStateModelPrivate>()), scene_name_(std::move(scene_name))
 {
   clear();
 }
 
 SceneStateModel::~SceneStateModel() = default;
 
-SceneStateModel::SceneStateModel(const SceneStateModel& other) : QStandardItemModel(other.d_ptr->parent) {}
+SceneStateModel::SceneStateModel(const SceneStateModel& other) : SceneStateModel(scene_name_, other.d_ptr->parent) {}
 
 SceneStateModel& SceneStateModel::operator=(const SceneStateModel& other) { return *this; }
 
@@ -196,6 +200,26 @@ void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_st
   }
 }
 
+bool SceneStateModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+  // Need emit application event to change visible
+  if (role == Qt::CheckStateRole)
+  {
+    QStandardItem* item = itemFromIndex(index);
+    if (item->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
+    {
+      assert(dynamic_cast<TransformStandardItem*>(item) != nullptr);
+      auto* derived_item = static_cast<TransformStandardItem*>(item);
+      QApplication::sendEvent(qApp,
+                              new events::SceneGraphModifyLinkVisibility(scene_name_,
+                                                                         derived_item->text().toStdString(),
+                                                                         LinkVisibilityFlags::AXIS,
+                                                                         value.value<Qt::CheckState>() == Qt::Checked));
+    }
+  }
+  return QStandardItemModel::setData(index, value, role);
+}
+
 void SceneStateModel::clear()
 {
   QStandardItemModel::clear();
@@ -213,10 +237,17 @@ void SceneStateModel::clear()
   appendRow(data_->joints_item);
 }
 
-void SceneStateModel::onLinkAxisCheckedStateChanged(const QString& link_name, bool checked)
+bool SceneStateModel::eventFilter(QObject* obj, QEvent* event)
 {
-  auto it = data_->links.find(link_name.toStdString());
-  if (it != data_->links.end())
-    it->second->setCheckState((checked) ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
+  if (event->type() == events::SceneStateChanged::kType)
+  {
+    assert(dynamic_cast<events::SceneStateChanged*>(event) != nullptr);
+    auto* e = static_cast<events::SceneStateChanged*>(event);
+    if (e->getSceneName() == scene_name_)
+      setState(e->getState());
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 }  // namespace tesseract_gui

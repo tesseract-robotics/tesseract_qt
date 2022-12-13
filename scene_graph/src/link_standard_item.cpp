@@ -31,14 +31,21 @@
 
 namespace tesseract_gui
 {
+class LinkStandardItem::Implementation
+{
+public:
+  QStandardItem* collisions_item{ nullptr };
+  QStandardItem* visuals_item{ nullptr };
+};
+
 LinkStandardItem::LinkStandardItem(tesseract_scene_graph::Link::Ptr link, bool checkable)
-  : QStandardItem(icons::getLinkIcon(), "Link"), link(std::move(link))
+  : QStandardItem(icons::getLinkIcon(), "Link"), link(std::move(link)), data_(std::make_unique<Implementation>())
 {
   ctor(checkable);
 }
 
 LinkStandardItem::LinkStandardItem(const QString& text, tesseract_scene_graph::Link::Ptr link, bool checkable)
-  : QStandardItem(icons::getLinkIcon(), text), link(std::move(link))
+  : QStandardItem(icons::getLinkIcon(), text), link(std::move(link)), data_(std::make_unique<Implementation>())
 {
   ctor(checkable);
 }
@@ -47,12 +54,16 @@ LinkStandardItem::LinkStandardItem(const QIcon& icon,
                                    const QString& text,
                                    tesseract_scene_graph::Link::Ptr link,
                                    bool checkable)
-  : QStandardItem(icon, text), link(std::move(link))
+  : QStandardItem(icon, text), link(std::move(link)), data_(std::make_unique<Implementation>())
 {
   ctor(checkable);
 }
 
 int LinkStandardItem::type() const { return static_cast<int>(StandardItemType::SG_LINK); }
+
+QStandardItem* LinkStandardItem::getCollisionsItem() { return data_->collisions_item; }
+
+QStandardItem* LinkStandardItem::getVisualsItem() { return data_->visuals_item; }
 
 void LinkStandardItem::ctor(bool checkable)
 {
@@ -69,34 +80,34 @@ void LinkStandardItem::ctor(bool checkable)
 
   if (!link->visual.empty())
   {
-    auto* visuals_item =
+    data_->visuals_item =
         new TypeStandardItem(icons::getVisualVectorIcon(), "Visual", static_cast<int>(StandardItemType::SG_VISUALS));
     for (std::size_t i = 0; i < link->visual.size(); ++i)
-      visuals_item->appendRow(new VisualStandardItem(QString("[%1]").arg(i), link->visual.at(i)));
+      data_->visuals_item->appendRow(new VisualStandardItem(QString("[%1]").arg(i), link->visual.at(i)));
 
     if (checkable)
     {
-      visuals_item->setCheckable(true);
-      visuals_item->setCheckState(Qt::CheckState::Checked);
+      data_->visuals_item->setCheckable(true);
+      data_->visuals_item->setCheckState(Qt::CheckState::Checked);
     }
 
-    appendRow(visuals_item);
+    appendRow(data_->visuals_item);
   }
 
   if (!link->collision.empty())
   {
-    auto* collisions_item = new TypeStandardItem(
+    data_->collisions_item = new TypeStandardItem(
         icons::getCollisionVectorIcon(), "Collision", static_cast<int>(StandardItemType::SG_COLLISIONS));
     for (std::size_t i = 0; i < link->collision.size(); ++i)
-      collisions_item->appendRow(new CollisionStandardItem(QString("[%1]").arg(i), link->collision.at(i)));
+      data_->collisions_item->appendRow(new CollisionStandardItem(QString("[%1]").arg(i), link->collision.at(i)));
 
     if (checkable)
     {
-      collisions_item->setCheckable(true);
-      collisions_item->setCheckState(Qt::CheckState::Unchecked);
+      data_->collisions_item->setCheckable(true);
+      data_->collisions_item->setCheckState(Qt::CheckState::Unchecked);
     }
 
-    appendRow(collisions_item);
+    appendRow(data_->collisions_item);
   }
 }
 }  // namespace tesseract_gui
