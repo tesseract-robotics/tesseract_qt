@@ -40,8 +40,6 @@ class Environment;
 namespace tesseract_gui
 {
 class ContactResultsModel;
-struct ContactResultsWidgetImpl;
-
 class ContactResultsWidget : public QWidget
 {
   Q_OBJECT
@@ -58,15 +56,13 @@ public:
    */
   void setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
 
-Q_SIGNALS:
-  void showContactResults(const tesseract_collision::ContactResultVector& contact_results);
-
 protected Q_SLOTS:
   void onComputeClicked();
 
 private:
+  struct Implementation;
   std::unique_ptr<Ui::ContactResultsWidget> ui;
-  std::unique_ptr<ContactResultsWidgetImpl> data_;
+  std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
 

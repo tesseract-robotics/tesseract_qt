@@ -170,7 +170,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tesseract_gui::ContactResultsTreeView" name="tree_view">
+    <widget class="QTreeView" name="tree_view">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -178,13 +178,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>tesseract_gui::ContactResultsTreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/collision/contact_results_tree_view.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

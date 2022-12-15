@@ -20,33 +20,42 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULT_STANDARD_ITEM_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULT_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULT_VECTOR_STANDARD_ITEM_H
+#define TESSERACT_QT_COLLISION_CONTACT_RESULT_VECTOR_STANDARD_ITEM_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_qt/collision/contact_results_types.h>
+#include <tesseract_qt/collision/contact_results_utils.h>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
+#include <memory>
 #include <QStandardItem>
+
+namespace boost::uuids
+{
+struct uuid;
+}
 
 namespace tesseract_gui
 {
-class ContactResultStandardItem : public QStandardItem
+class ContactResultVectorStandardItem : public QStandardItem
 {
 public:
-  ContactResultStandardItem(const ContactResult& contact_result);
-  explicit ContactResultStandardItem(const QString& text, const ContactResult& contact_result);
-  ContactResultStandardItem(const QIcon& icon, const QString& text, const ContactResult& contact_result);
+  ContactResultVectorStandardItem(const ContactResultVector& contact_results);
+  explicit ContactResultVectorStandardItem(const QString& text, const ContactResultVector& contact_results);
+  ContactResultVectorStandardItem(const QIcon& icon, const QString& text, const ContactResultVector& contact_resultss);
   int type() const override;
 
-  ContactResult contact_result;
+  const boost::uuids::uuid& getUUID() const;
 
 private:
-  void ctor();
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
+
+  void ctor(const ContactResultVector& contact_results);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_VECTOR_STANDARD_ITEM_H

@@ -1,28 +1,28 @@
 #include <tesseract_qt/collision/contact_results_widget.h>
 #include <tesseract_qt/collision/contact_results_model.h>
+#include <tesseract_qt/collision/contact_results_events.h>
 #include <tesseract_environment/environment.h>
 #include "ui_contact_results_widget.h"
 
+#include <QTreeView>
+
 namespace tesseract_gui
 {
-struct ContactResultsWidgetImpl
+struct ContactResultsWidget::Implementation
 {
   std::shared_ptr<const tesseract_environment::Environment> env;
   ContactResultsModel* model;
 };
 
 ContactResultsWidget::ContactResultsWidget(QWidget* parent)
-  : QWidget(parent)
-  , ui(std::make_unique<Ui::ContactResultsWidget>())
-  , data_(std::make_unique<ContactResultsWidgetImpl>())
+  : QWidget(parent), ui(std::make_unique<Ui::ContactResultsWidget>()), data_(std::make_unique<Implementation>())
 {
   ui->setupUi(this);
 
+  connect(ui->tree_view, &QTreeView::collapsed, [this]() { ui->tree_view->resizeColumnToContents(0); });
+  connect(ui->tree_view, &QTreeView::expanded, [this]() { ui->tree_view->resizeColumnToContents(0); });
+
   connect(ui->compute_push_button, SIGNAL(clicked()), this, SLOT(onComputeClicked()));
-  connect(ui->tree_view,
-          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)),
-          this,
-          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)));
 }
 
 ContactResultsWidget::~ContactResultsWidget() = default;
@@ -55,7 +55,19 @@ void ContactResultsWidget::onComputeClicked()
   contact_manager->applyContactManagerConfig(config);
   contact_manager->contactTest(contacts, request);
 
-  data_->model->setContactResults("Computed", contacts);
+  // Convert to tracked objects
+  ContactResultMap tracked_object;
+  for (const auto& contact : contacts)
+  {
+    ContactResultVector crv;
+    for (const auto& result : contact.second)
+      crv().push_back(ContactResult(result));
+
+    tracked_object[contact.first] = crv;
+  }
+
+  QApplication::sendEvent(qApp, new events::ContactResultsAdd(data_->model->getSceneName(), tracked_object));
+
   ui->tree_view->expandToDepth(1);
 }
 

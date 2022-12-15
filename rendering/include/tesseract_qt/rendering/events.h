@@ -27,6 +27,7 @@
 #include <memory>
 #include <tesseract_qt/common/entity.h>
 #include <tesseract_qt/common/event_type.h>
+#include <tesseract_qt/common/scene_events.h>
 
 #include <ignition/common/KeyEvent.hh>
 #include <ignition/common/MouseEvent.hh>

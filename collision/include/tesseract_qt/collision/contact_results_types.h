@@ -20,36 +20,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
+#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
+#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
 
-#include <QTreeView>
-#include <memory>
+#include <tesseract_qt/common/tracked_object.h>
 #include <tesseract_collision/core/types.h>
 
 namespace tesseract_gui
 {
-struct ContactResultsTreeViewImpl;
-class ContactResultsTreeView : public QTreeView
-{
-  Q_OBJECT
-public:
-  explicit ContactResultsTreeView(QWidget* parent = nullptr);
-  ~ContactResultsTreeView();
-
-  void setModel(QAbstractItemModel* model) override;
-
-Q_SIGNALS:
-  void showContactResults(const tesseract_collision::ContactResultVector& contact_results);
-
-public Q_SLOTS:
-  void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
-  void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-  void mousePressEvent(QMouseEvent* event) override;
-
-private:
-  std::unique_ptr<ContactResultsTreeViewImpl> data_;
-};
+using ContactResult = TrackedObject<tesseract_collision::ContactResult>;
+using ContactResultVector = TrackedObject<tesseract_common::AlignedVector<ContactResult>>;
+using ContactResultMap = tesseract_common::AlignedMap<std::pair<std::string, std::string>, ContactResultVector>;
 }  // namespace tesseract_gui
-
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_TREE_VIEW_H
+#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H

@@ -24,24 +24,8 @@
 #define TESSERACT_GUI_COMMON_EVENT_TYPE_H
 
 #include <QEvent>
-namespace tesseract_gui
+namespace tesseract_gui::events
 {
-/** @brief Event called  */
-class SceneEvent : public QEvent
-{
-public:
-  SceneEvent(std::string scene_name, QEvent::Type type) : QEvent(type), scene_name_(std::move(scene_name)) {}
-
-  /**
-   * @brief Get the scene name the event is associated with
-   * @return The scene name
-   */
-  const std::string& getSceneName() const { return scene_name_; }
-
-private:
-  std::string scene_name_;
-};
-
 // clang-format off
 enum class EventType : int
 {
@@ -95,6 +79,14 @@ enum class EventType : int
   SCENE_GRAPH_STATE_CHANGED              = TOOL_PATH_TYPES_END + 11,
   SCENE_GRAPH_PLOT                       = TOOL_PATH_TYPES_END + 12,
   SCENE_GRAPH_TYPES_END                  = TOOL_PATH_TYPES_END + 13,
+
+  // Contact Results
+  CONTACT_RESULTS_TYPES_START = SCENE_GRAPH_TYPES_END,
+  CONTACT_RESULTS_CLEAR       = CONTACT_RESULTS_TYPES_START + 1,
+  CONTACT_RESULTS_ADD         = CONTACT_RESULTS_TYPES_START + 2,
+  CONTACT_RESULTS_REMOVE      = CONTACT_RESULTS_TYPES_START + 3,
+  CONTACT_RESULTS_VISIBILITY  = CONTACT_RESULTS_TYPES_START + 4,
+  CONTACT_RESULTS_TYPES_END   = CONTACT_RESULTS_TYPES_START + 5,
 
 };
 }

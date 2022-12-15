@@ -29,14 +29,13 @@
 
 namespace tesseract_gui
 {
-ContactResultStandardItem::ContactResultStandardItem(const tesseract_collision::ContactResult& contact_result)
+ContactResultStandardItem::ContactResultStandardItem(const ContactResult& contact_result)
   : QStandardItem(icons::getCollisionIcon(), "Contact Result"), contact_result(contact_result)
 {
   ctor();
 }
 
-ContactResultStandardItem::ContactResultStandardItem(const QString& text,
-                                                     const tesseract_collision::ContactResult& contact_result)
+ContactResultStandardItem::ContactResultStandardItem(const QString& text, const ContactResult& contact_result)
   : QStandardItem(icons::getCollisionIcon(), text), contact_result(contact_result)
 {
   ctor();
@@ -44,7 +43,7 @@ ContactResultStandardItem::ContactResultStandardItem(const QString& text,
 
 ContactResultStandardItem::ContactResultStandardItem(const QIcon& icon,
                                                      const QString& text,
-                                                     const tesseract_collision::ContactResult& contact_result)
+                                                     const ContactResult& contact_result)
   : QStandardItem(icon, text), contact_result(contact_result)
 {
   ctor();
@@ -70,77 +69,78 @@ std::string toString(tesseract_collision::ContinuousCollisionType cc_type)
 }
 void ContactResultStandardItem::ctor()
 {
-  appendRow(createStandardItemFloat("distance", contact_result.distance));
-  appendRow(new PositionStandardItem("normal", contact_result.normal));
-  appendRow(createStandardItemBool("single_contact_point", contact_result.single_contact_point));
+  setCheckable(true);
+  appendRow(createStandardItemFloat("distance", contact_result().distance));
+  appendRow(new PositionStandardItem("normal", contact_result().normal));
+  appendRow(createStandardItemBool("single_contact_point", contact_result().single_contact_point));
 
   {
     auto* item = new QStandardItem(icons::getNumericIcon(), "type_id");
-    item->appendRow(createStandardItemInt("[0]", contact_result.type_id[0]));
-    item->appendRow(createStandardItemInt("[1]", contact_result.type_id[1]));
+    item->appendRow(createStandardItemInt("[0]", contact_result().type_id[0]));
+    item->appendRow(createStandardItemInt("[1]", contact_result().type_id[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getTextIcon(), "link_names");
-    item->appendRow(createStandardItemString("[0]", contact_result.link_names[0]));
-    item->appendRow(createStandardItemString("[1]", contact_result.link_names[1]));
+    item->appendRow(createStandardItemString("[0]", contact_result().link_names[0]));
+    item->appendRow(createStandardItemString("[1]", contact_result().link_names[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getNumericIcon(), "shape_id");
-    item->appendRow(createStandardItemInt("[0]", contact_result.shape_id[0]));
-    item->appendRow(createStandardItemInt("[1]", contact_result.shape_id[1]));
+    item->appendRow(createStandardItemInt("[0]", contact_result().shape_id[0]));
+    item->appendRow(createStandardItemInt("[1]", contact_result().shape_id[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getNumericIcon(), "subshape_id");
-    item->appendRow(createStandardItemInt("[0]", contact_result.subshape_id[0]));
-    item->appendRow(createStandardItemInt("[1]", contact_result.subshape_id[1]));
+    item->appendRow(createStandardItemInt("[0]", contact_result().subshape_id[0]));
+    item->appendRow(createStandardItemInt("[1]", contact_result().subshape_id[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getPositionIcon(), "nearest_points");
-    item->appendRow(new PositionStandardItem("[0]", contact_result.nearest_points[0]));
-    item->appendRow(new PositionStandardItem("[1]", contact_result.nearest_points[1]));
+    item->appendRow(new PositionStandardItem("[0]", contact_result().nearest_points[0]));
+    item->appendRow(new PositionStandardItem("[1]", contact_result().nearest_points[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getPositionIcon(), "nearest_points_local");
-    item->appendRow(new PositionStandardItem("[0]", contact_result.nearest_points_local[0]));
-    item->appendRow(new PositionStandardItem("[1]", contact_result.nearest_points_local[1]));
+    item->appendRow(new PositionStandardItem("[0]", contact_result().nearest_points_local[0]));
+    item->appendRow(new PositionStandardItem("[1]", contact_result().nearest_points_local[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getOriginIcon(), "transform");
-    item->appendRow(new TransformStandardItem("[0]", contact_result.transform[0]));
-    item->appendRow(new TransformStandardItem("[1]", contact_result.transform[1]));
+    item->appendRow(new TransformStandardItem("[0]", contact_result().transform[0]));
+    item->appendRow(new TransformStandardItem("[1]", contact_result().transform[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getNumericIcon(), "cc_time");
-    item->appendRow(createStandardItemFloat("[0]", contact_result.cc_time[0]));
-    item->appendRow(createStandardItemFloat("[1]", contact_result.cc_time[1]));
+    item->appendRow(createStandardItemFloat("[0]", contact_result().cc_time[0]));
+    item->appendRow(createStandardItemFloat("[1]", contact_result().cc_time[1]));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getTextIcon(), "cc_type");
-    item->appendRow(createStandardItemString("[0]", toString(contact_result.cc_type[0])));
-    item->appendRow(createStandardItemString("[1]", toString(contact_result.cc_type[1])));
+    item->appendRow(createStandardItemString("[0]", toString(contact_result().cc_type[0])));
+    item->appendRow(createStandardItemString("[1]", toString(contact_result().cc_type[1])));
     appendRow(item);
   }
 
   {
     auto* item = new QStandardItem(icons::getOriginIcon(), "cc_transform");
-    item->appendRow(new TransformStandardItem("[0]", contact_result.cc_transform[0]));
-    item->appendRow(new TransformStandardItem("[1]", contact_result.cc_transform[1]));
+    item->appendRow(new TransformStandardItem("[0]", contact_result().cc_transform[0]));
+    item->appendRow(new TransformStandardItem("[1]", contact_result().cc_transform[1]));
     appendRow(item);
   }
 }

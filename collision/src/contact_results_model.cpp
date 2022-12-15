@@ -23,61 +23,94 @@
 
 #include <tesseract_qt/collision/contact_results_model.h>
 #include <tesseract_qt/collision/contact_result_standard_item.h>
+#include <tesseract_qt/collision/contact_result_vector_standard_item.h>
+#include <tesseract_qt/collision/contact_results_events.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 
+#include <QApplication>
+
 namespace tesseract_gui
 {
-struct ContactResultsModelImpl
+struct ContactResultsModel::Implementation
 {
-  std::unordered_map<std::string, std::pair<QStandardItem*, tesseract_collision::ContactResultVector>>
-      contact_result_vectors;
-  std::unordered_map<std::string, std::pair<QStandardItem*, tesseract_collision::ContactResultMap>> contact_result_maps;
+  std::string scene_name;
+  std::unordered_map<std::string, QStandardItem*> namespace_map;
 };
 
-ContactResultsModel::ContactResultsModel(QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<ContactResultsModelImpl>())
+ContactResultsModel::ContactResultsModel(std::string scene_name, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
+
+  data_->scene_name = std::move(scene_name);
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
 }
 
 ContactResultsModel::~ContactResultsModel() = default;
 
-void ContactResultsModel::setContactResults(const QString& ns,
-                                            const tesseract_collision::ContactResultVector& contact_results)
+const std::string& ContactResultsModel::getSceneName() const { return data_->scene_name; }
+
+bool ContactResultsModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+  // Need emit application event to change visible
+  if (role == Qt::CheckStateRole)
+  {
+    QStandardItem* item = itemFromIndex(index);
+    if (item->type() == static_cast<int>(StandardItemType::COLLISION_CONTACT_RESULT))
+    {
+      assert(dynamic_cast<ContactResultStandardItem*>(item) != nullptr);
+      assert(dynamic_cast<ContactResultVectorStandardItem*>(item->parent()) != nullptr);
+      auto* derived_item = static_cast<ContactResultStandardItem*>(item);
+      auto* parent_item = static_cast<ContactResultVectorStandardItem*>(item->parent());
+
+      QApplication::sendEvent(qApp,
+                              new events::ContactResultsVisbility(data_->scene_name,
+                                                                  parent_item->getUUID(),
+                                                                  derived_item->contact_result.getUUID(),
+                                                                  value.value<Qt::CheckState>() == Qt::Checked));
+    }
+    else if (item->type() == static_cast<int>(StandardItemType::COLLISION_CONTACT_RESULT_VECTOR))
+    {
+      assert(dynamic_cast<ContactResultVectorStandardItem*>(item) != nullptr);
+      auto* derived_item = static_cast<ContactResultVectorStandardItem*>(item);
+
+      QApplication::sendEvent(qApp,
+                              new events::ContactResultsVisbility(data_->scene_name,
+                                                                  derived_item->getUUID(),
+                                                                  value.value<Qt::CheckState>() == Qt::Checked));
+    }
+  }
+  return QStandardItemModel::setData(index, value, role);
+}
+
+void ContactResultsModel::setContactResults(const QString& ns, const ContactResultVector& contact_results)
 {
   removeNamespace(ns);
 
-  QStandardItem* ns_item = new NamespaceStandardItem(ns);
-  for (std::size_t i = 0; i < contact_results.size(); ++i)
-    ns_item->appendRow(new ContactResultStandardItem(QString("[%1]").arg(i), contact_results[i]));
+  auto* crv_item = new ContactResultVectorStandardItem(ns, contact_results);
+  appendRow(crv_item);
 
-  appendRow(ns_item);
-  data_->contact_result_vectors[ns.toStdString()] = std::make_pair(ns_item, contact_results);
+  data_->namespace_map[ns.toStdString()] = crv_item;
 }
 
-void ContactResultsModel::setContactResults(const QString& ns,
-                                            const tesseract_collision::ContactResultMap& contact_results)
+void ContactResultsModel::setContactResults(const QString& ns, const ContactResultMap& contact_results)
 {
   removeNamespace(ns);
 
   QStandardItem* ns_item = new NamespaceStandardItem(ns);
   for (const auto& pair : contact_results)
   {
-    QStandardItem* link_pair_item = new NamespaceStandardItem(
-        QString("%1::%2").arg(QString::fromStdString(pair.first.first), QString::fromStdString(pair.first.second)));
-    for (std::size_t i = 0; i < pair.second.size(); ++i)
-    {
-      auto* cr_item = new ContactResultStandardItem(QString("[%1]").arg(i), pair.second[i]);
-      auto* cr_value_item = new QStandardItem(QString("{ distance: %1 }").arg(pair.second[i].distance));
-      link_pair_item->appendRow({ cr_item, cr_value_item });
-    }
-
+    auto text =
+        QString("%1::%2").arg(QString::fromStdString(pair.first.first), QString::fromStdString(pair.first.second));
+    auto* link_pair_item = new ContactResultVectorStandardItem(text, pair.second);
     ns_item->appendRow(link_pair_item);
   }
   appendRow(ns_item);
-  data_->contact_result_maps[ns.toStdString()] = std::make_pair(ns_item, contact_results);
+  data_->namespace_map[ns.toStdString()] = ns_item;
 }
 
 void ContactResultsModel::clear()
@@ -85,75 +118,61 @@ void ContactResultsModel::clear()
   QStandardItemModel::clear();
   setColumnCount(2);
   setHorizontalHeaderLabels({ "Name", "Values" });
-  data_->contact_result_vectors.clear();
-  data_->contact_result_maps.clear();
+  data_->namespace_map.clear();
 }
 
 void ContactResultsModel::removeNamespace(const QString& ns)
 {
-  auto it_vector = data_->contact_result_vectors.find(ns.toStdString());
-  auto it_map = data_->contact_result_maps.find(ns.toStdString());
-  if (it_vector != data_->contact_result_vectors.end())
+  auto it_vector = data_->namespace_map.find(ns.toStdString());
+  if (it_vector != data_->namespace_map.end())
   {
-    QModelIndex idx = indexFromItem(it_vector->second.first);
+    QModelIndex idx = indexFromItem(it_vector->second);
     removeRow(idx.row(), idx.parent());
-    data_->contact_result_vectors.erase(ns.toStdString());
-  }
-  else if (it_map != data_->contact_result_maps.end())
-  {
-    QModelIndex idx = indexFromItem(it_map->second.first);
-    removeRow(idx.row(), idx.parent());
-    data_->contact_result_maps.erase(ns.toStdString());
+    data_->namespace_map.erase(ns.toStdString());
   }
 }
 
-NamespaceStandardItem* findContactResultsItem(QStandardItem* item)
+ContactResultVectorStandardItem* findContactResultsItem(QStandardItem* item)
 {
-  if (item->type() == static_cast<int>(StandardItemType::COMMON_NAMESPACE))
-    return dynamic_cast<NamespaceStandardItem*>(item);
+  if (item->type() == static_cast<int>(StandardItemType::COLLISION_CONTACT_RESULT_VECTOR))
+    return dynamic_cast<ContactResultVectorStandardItem*>(item);
 
   return findContactResultsItem(item->parent());
 }
 
-tesseract_collision::ContactResultVector ContactResultsModel::getContactResults(const QModelIndex& row) const
+bool ContactResultsModel::eventFilter(QObject* obj, QEvent* event)
 {
-  NamespaceStandardItem* ns_item = findContactResultsItem(itemFromIndex(row));
-  std::string key = ns_item->text().toStdString();
-  {  // Check vector results
-    auto it = data_->contact_result_vectors.find(key);
-    if (it != data_->contact_result_vectors.end())
-      return it->second.second;
-  }
-
-  {  // Check map results
-    auto it = data_->contact_result_maps.find(key);
-    if (it != data_->contact_result_maps.end())
-    {
-      tesseract_collision::ContactResultVector results;
-      tesseract_collision::flattenCopyResults(it->second.second, results);
-      return results;
-    }
-  }
-
-  if (ns_item->parent() != nullptr && ns_item->parent()->type() == static_cast<int>(StandardItemType::COMMON_NAMESPACE))
+  if (event->type() == events::ContactResultsAdd::kType)
   {
-    std::string ns = ns_item->parent()->text().toStdString();
-
-    auto it = data_->contact_result_maps.find(ns);
-    if (it != data_->contact_result_maps.end())
+    assert(dynamic_cast<events::ContactResultsAdd*>(event) != nullptr);
+    auto* e = static_cast<events::ContactResultsAdd*>(event);
+    if (e->getSceneName() == data_->scene_name)
     {
-      QStringList links = ns_item->text().split("::");
-      if (links.size() == 2 && !links[0].isEmpty() && !links[1].isEmpty())
-      {
-        std::pair<std::string, std::string> sub_key(links[0].toStdString(), links[1].toStdString());
-        auto sub_it = it->second.second.find(sub_key);
-        if (sub_it != it->second.second.end())
-          return sub_it->second;
-      }
+      if (e->getContactResults().index() == 0)
+        setContactResults(e->getNamespace().c_str(), std::get<ContactResultVector>(e->getContactResults()));
+      else
+        setContactResults(e->getNamespace().c_str(), std::get<ContactResultMap>(e->getContactResults()));
+    }
+  }
+  else if (event->type() == events::ContactResultsClear::kType)
+  {
+    assert(dynamic_cast<events::ContactResultsClear*>(event) != nullptr);
+    auto* e = static_cast<events::ContactResultsClear*>(event);
+    if (e->getSceneName() == data_->scene_name)
+      clear();
+  }
+  else if (event->type() == events::ContactResultsRemove::kType)
+  {
+    assert(dynamic_cast<events::ContactResultsRemove*>(event) != nullptr);
+    auto* e = static_cast<events::ContactResultsRemove*>(event);
+    if (e->getSceneName() == data_->scene_name)
+    {
+      throw std::runtime_error("ContactResultsModel, events::ContactResultsRemove not implemented yet!");
     }
   }
 
-  return tesseract_collision::ContactResultVector();
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 
 }  // namespace tesseract_gui

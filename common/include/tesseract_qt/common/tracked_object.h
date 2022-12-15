@@ -20,33 +20,38 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULT_STANDARD_ITEM_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULT_STANDARD_ITEM_H
+#ifndef TESSERACT_GUI_COMMON_TRACKED_OBJECT_H
+#define TESSERACT_GUI_COMMON_TRACKED_OBJECT_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_qt/collision/contact_results_types.h>
-#endif
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
+#include <Eigen/Eigen>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
-#include <QStandardItem>
 
 namespace tesseract_gui
 {
-class ContactResultStandardItem : public QStandardItem
+template <typename T>
+class TrackedObject
 {
 public:
-  ContactResultStandardItem(const ContactResult& contact_result);
-  explicit ContactResultStandardItem(const QString& text, const ContactResult& contact_result);
-  ContactResultStandardItem(const QIcon& icon, const QString& text, const ContactResult& contact_result);
-  int type() const override;
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  ContactResult contact_result;
+  TrackedObject() = default;
+  TrackedObject(T tracked_object) : object_(tracked_object), uuid_(boost::uuids::random_generator()()) {}
+  TrackedObject(T tracked_object, boost::uuids::uuid uuid) : object_(tracked_object), uuid_(uuid) {}
+
+  const boost::uuids::uuid& getUUID() const { return uuid_; }
+
+  const T& operator()() const { return object_; }
+  T& operator()() { return object_; }
 
 private:
-  void ctor();
+  T object_;
+  boost::uuids::uuid uuid_{};
 };
+
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_STANDARD_ITEM_H
+#endif  // TESSERACT_GUI_COMMON_TRACKED_OBJECT_H

@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <tesseract_qt/common/event_type.h>
+#include <tesseract_qt/common/scene_events.h>
 
 namespace tesseract_gui
 {

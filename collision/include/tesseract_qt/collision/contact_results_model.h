@@ -30,30 +30,34 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QMetaType>
 #include <memory>
 
-#include <tesseract_collision/core/types.h>
+#include <tesseract_qt/collision/contact_results_types.h>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-struct ContactResultsModelImpl;
 class ContactResultsModel : public QStandardItemModel
 {
   Q_OBJECT
 public:
-  ContactResultsModel(QObject* parent = nullptr);
+  ContactResultsModel(std::string scene_name = "", QObject* parent = nullptr);
   ~ContactResultsModel() override;
 
-  void setContactResults(const QString& ns, const tesseract_collision::ContactResultVector& contact_results);
-  void setContactResults(const QString& ns, const tesseract_collision::ContactResultMap& contact_results);
-  void removeNamespace(const QString& ns);
-
-  tesseract_collision::ContactResultVector getContactResults(const QModelIndex& row) const;
+  const std::string& getSceneName() const;
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
   void clear();
 
 protected:
-  std::unique_ptr<ContactResultsModelImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
+
+  void setContactResults(const QString& ns, const ContactResultVector& contact_results);
+  void setContactResults(const QString& ns, const ContactResultMap& contact_results);
+  void removeNamespace(const QString& ns);
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 }  // namespace tesseract_gui
 
