@@ -82,12 +82,9 @@ int main(int argc, char** argv)
   tool_path4.setDescription("Demo Tool Path 4");
   tool_path4.regenerateUUID();
 
-  if (qApp != nullptr)
-  {
-    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path3));
-    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path4));
-    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(scene_name, tool_path3.getUUID()));
-  }
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path3));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path4));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(scene_name, tool_path3.getUUID()));
 
   auto* selection_model = new tesseract_gui::ToolPathSelectionModel(model, scene_name);
   auto* tool_path_widget = new tesseract_gui::ToolPathTreeView();

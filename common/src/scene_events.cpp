@@ -81,4 +81,15 @@ SceneEventVisibility::SceneEventVisibility(std::string scene_name,
 SceneEventVisibility::~SceneEventVisibility() = default;
 
 bool SceneEventVisibility::getVisibility() const { return visible_; }
+
+//////////////////////////////////////////
+
+SceneEventVisibilityAll::SceneEventVisibilityAll(std::string scene_name, bool visible, QEvent::Type type)
+  : SceneEvent(std::move(scene_name), type), visible_(visible)
+{
+}
+
+SceneEventVisibilityAll::~SceneEventVisibilityAll() = default;
+
+bool SceneEventVisibilityAll::getVisibility() const { return visible_; }
 }  // namespace tesseract_gui::events

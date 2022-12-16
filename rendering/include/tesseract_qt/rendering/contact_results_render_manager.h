@@ -20,40 +20,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_TREE_VIEW_H
-#define TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_TREE_VIEW_H
+#ifndef TESSERACT_QT_RENDERING_CONTACT_RESULTS_RENDER_MANAGER_H
+#define TESSERACT_QT_RENDERING_CONTACT_RESULTS_RENDER_MANAGER_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_common/allowed_collision_matrix.h>
 #include <memory>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
-#include <QTreeView>
+#include <QObject>
 
 namespace tesseract_gui
 {
-class AllowedCollisionMatrixTreeView : public QTreeView
+class EntityManager;
+
+class ContactResultsRenderManager : public QObject
 {
-  Q_OBJECT
-
 public:
-  explicit AllowedCollisionMatrixTreeView(QWidget* parent = nullptr);
-  ~AllowedCollisionMatrixTreeView() override;
+  ContactResultsRenderManager(std::string scene_name, std::shared_ptr<EntityManager> entity_manager);
+  ~ContactResultsRenderManager();
 
-  void setModel(QAbstractItemModel* model) override;
+private:
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
-public Q_SLOTS:
-  void onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-  void mousePressEvent(QMouseEvent* event) override;
-
-Q_SIGNALS:
-  void entrySelected(tesseract_common::AllowedCollisionEntries selection);
-  void selectedLinksChanged(const std::vector<std::string>& selected_links);
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
-
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_TREE_VIEW_H
+#endif  // TESSERACT_QT_RENDERING_CONTACT_RESULTS_RENDER_MANAGER_H

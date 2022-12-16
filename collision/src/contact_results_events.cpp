@@ -25,7 +25,7 @@
 namespace tesseract_gui::events
 {
 ContactResultsClear::ContactResultsClear(const std::string& scene_name, const std::string& ns)
-  : SceneEvent(scene_name, kType)
+  : SceneEvent(scene_name, kType), ns_(ns)
 {
 }
 
@@ -78,5 +78,14 @@ ContactResultsVisbility::ContactResultsVisbility(const std::string& scene_name,
 {
 }
 ContactResultsVisbility::~ContactResultsVisbility() = default;
+
+//////////////////////////////////////////
+
+ContactResultsVisbilityAll::ContactResultsVisbilityAll(const std::string& scene_name, bool visible)
+  : SceneEventVisibilityAll(scene_name, visible, kType)
+{
+}
+
+ContactResultsVisbilityAll::~ContactResultsVisbilityAll() = default;
 
 }  // namespace tesseract_gui::events

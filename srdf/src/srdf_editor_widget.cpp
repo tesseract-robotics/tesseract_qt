@@ -35,8 +35,11 @@
 #include <QStatusBar>
 
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
+#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
+
+static const std::string SCENE_NAME{ "srdf_scene" };
 
 namespace tesseract_gui
 {
@@ -60,7 +63,7 @@ struct SRDFEditorWidgetImpl
 
   QStringListModel joint_model;
 
-  AllowedCollisionMatrixModel acm_model;
+  AllowedCollisionMatrixModel acm_model{ SCENE_NAME };
 
   QStringListModel group_names_model;
 
@@ -145,7 +148,9 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     this->data_->joint_model.setStringList(QStringList());
     this->data_->link_model.setStringList(QStringList());
     this->data_->group_names_model.setStringList(QStringList());
-    this->data_->acm_model.clear();
+
+    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(SCENE_NAME));
+
     this->data_->kin_groups_model.clear();
     this->data_->group_link_list_model.setStringList(QStringList());
     this->data_->group_joint_list_model.setStringList(QStringList());
@@ -186,7 +191,8 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     data_->group_names_model.sort(0);
 
     // Build ACM Model
-    data_->acm_model.setAllowedCollisionMatrix(*(data_->env->getAllowedCollisionMatrix()));
+    QApplication::sendEvent(
+        qApp, new events::AllowedCollisionMatrixSet(SCENE_NAME, *(data_->env->getAllowedCollisionMatrix())));
 
     // Build Kinematic Groups Model
     data_->kin_groups_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
@@ -403,7 +409,7 @@ void SRDFEditorWidget::onGenerateACM(long resolution)
     contact_manager->contactTest(results, request);
   }
 
-  this->data_->acm_model.clear();
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(SCENE_NAME));
   tesseract_common::AllowedCollisionMatrix acm;
   for (const auto& pair : results)
   {
@@ -443,7 +449,8 @@ void SRDFEditorWidget::onGenerateACM(long resolution)
       acm, tesseract_environment::ModifyAllowedCollisionsType::REPLACE);
   this->data_->env->applyCommand(cmd);
 
-  this->data_->acm_model.setAllowedCollisionMatrix(acm);
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixSet(SCENE_NAME, acm));
+
   Q_EMIT showStatusMessage("Finished generating allowed collision matrix!", 2000);
 }
 

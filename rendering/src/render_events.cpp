@@ -15,7 +15,7 @@
  *
  */
 
-#include <tesseract_qt/rendering/events.h>
+#include <tesseract_qt/rendering/render_events.h>
 #include <string>
 
 namespace tesseract_gui::events

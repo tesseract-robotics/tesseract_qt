@@ -23,8 +23,10 @@
 
 #include <tesseract_qt/acm/allowed_collision_matrix_widget.h>
 #include <tesseract_qt/acm/add_allowed_collision_entry_dialog.h>
+#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
 #include "ui_allowed_collision_matrix_widget.h"
 #include <QDialog>
+#include <QApplication>
 
 namespace tesseract_gui
 {
@@ -35,14 +37,8 @@ AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(QWidget* parent)
   connect(ui_->generatePushButton, SIGNAL(clicked()), this, SLOT(onGenerateButtonClicked()));
   connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveButtonClicked()));
   connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddButtonClicked()));
-  connect(ui_->acmTreeView,
-          SIGNAL(entrySelected(tesseract_common::AllowedCollisionEntries)),
-          this,
-          SIGNAL(entrySelected(tesseract_common::AllowedCollisionEntries)));
-  connect(ui_->acmTreeView,
-          SIGNAL(selectedLinksChanged(std::vector<std::string>)),
-          this,
-          SIGNAL(selectedLinksChanged(std::vector<std::string>)));
+  connect(ui_->acmTreeView, &QTreeView::collapsed, [this]() { ui_->acmTreeView->resizeColumnToContents(0); });
+  connect(ui_->acmTreeView, &QTreeView::expanded, [this]() { ui_->acmTreeView->resizeColumnToContents(0); });
 }
 
 AllowedCollisionMatrixWidget::~AllowedCollisionMatrixWidget() = default;
@@ -50,25 +46,30 @@ AllowedCollisionMatrixWidget::~AllowedCollisionMatrixWidget() = default;
 void AllowedCollisionMatrixWidget::setModel(tesseract_gui::AllowedCollisionMatrixModel* model)
 {
   ui_->acmTreeView->setModel(model);
+  dialog_ = std::make_unique<AddAllowedCollisionEntryDialog>(model->getSceneName());
 }
 
 void AllowedCollisionMatrixWidget::onRemoveButtonClicked()
 {
   QItemSelectionModel* selection = ui_->acmTreeView->selectionModel();
   QModelIndexList indices = selection->selectedRows();
-  int row_cnt = indices.count();
-  for (int i = row_cnt; i > 0; i--)
-    ui_->acmTreeView->model()->removeRow(indices.at(i - 1).row(), QModelIndex());
+  if (indices.count() == 1)
+  {
+    std::vector<std::array<std::string, 2>> remove;
+    auto* m = ui_->acmTreeView->model();
+    QModelIndex idx = indices.at(0);
+    if (idx.isValid() && idx.parent().isValid())
+      remove.push_back({ m->data(idx.parent()).toString().toStdString(), m->data(idx).toString().toStdString() });
+
+    std::string scene_name = qobject_cast<AllowedCollisionMatrixModel*>(ui_->acmTreeView->model())->getSceneName();
+    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixRemove(scene_name, remove));
+  }
 }
 
 void AllowedCollisionMatrixWidget::onAddButtonClicked()
 {
-  AddAllowedCollisionEntryDialog dialog;
-  if (dialog.exec())
-  {
-    auto* model = qobject_cast<tesseract_gui::AllowedCollisionMatrixModel*>(ui_->acmTreeView->model());
-    model->add(dialog.getLinkName1(), dialog.getLinkName2(), dialog.getReason());
-  }
+  if (dialog_ != nullptr)
+    dialog_->show();
 }
 
 void AllowedCollisionMatrixWidget::onGenerateButtonClicked() { emit generateClicked(ui_->resolutionSlider->value()); }

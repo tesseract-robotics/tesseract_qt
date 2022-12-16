@@ -30,7 +30,6 @@ namespace tesseract_gui
 {
 class EntityManager;
 
-struct ToolPathRenderManagerPrivate;
 class ToolPathRenderManager : public QObject
 {
 public:
@@ -38,7 +37,8 @@ public:
   ~ToolPathRenderManager();
 
 private:
-  std::unique_ptr<ToolPathRenderManagerPrivate> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

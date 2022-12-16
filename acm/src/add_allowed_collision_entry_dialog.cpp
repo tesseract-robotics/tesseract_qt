@@ -21,12 +21,14 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/acm/add_allowed_collision_entry_dialog.h>
+#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
 #include "ui_add_allowed_collision_entry_dialog.h"
 #include <QRegExpValidator>
+#include <QApplication>
 namespace tesseract_gui
 {
-AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget* parent)
-  : QDialog(parent), ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
+AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(std::string scene_name, QWidget* parent)
+  : QDialog(parent), ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>()), scene_name_(std::move(scene_name))
 {
   ui_->setupUi(this);
   ui_->linkName1LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
@@ -42,5 +44,17 @@ QString AddAllowedCollisionEntryDialog::getLinkName1() const { return ui_->linkN
 QString AddAllowedCollisionEntryDialog::getLinkName2() const { return ui_->linkName2LineEdit->text(); }
 
 QString AddAllowedCollisionEntryDialog::getReason() const { return ui_->reasonLineEdit->text(); }
+
+void AddAllowedCollisionEntryDialog::accept()
+{
+  std::vector<std::array<std::string, 3>> data;
+  std::array<std::string, 3> entry;
+  entry[0] = ui_->linkName1LineEdit->text().toStdString();
+  entry[1] = ui_->linkName2LineEdit->text().toStdString();
+  entry[2] = ui_->reasonLineEdit->text().toStdString();
+  data.push_back(entry);
+
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixAdd(scene_name_, data));
+}
 
 }  // namespace tesseract_gui

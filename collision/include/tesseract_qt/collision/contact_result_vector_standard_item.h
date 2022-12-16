@@ -26,7 +26,7 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_qt/collision/contact_results_utils.h>
+#include <tesseract_qt/collision/contact_results_types.h>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 

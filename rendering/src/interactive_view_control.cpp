@@ -29,7 +29,7 @@
 #include <ignition/rendering/RayQuery.hh>
 #include <ignition/rendering/Utils.hh>
 
-#include <tesseract_qt/rendering/events.h>
+#include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/utils.h>
 #include <tesseract_qt/rendering/interactive_view_control.h>
 

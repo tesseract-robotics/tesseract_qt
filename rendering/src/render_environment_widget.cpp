@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/rendering/render_environment_widget.h>
 #include <tesseract_qt/rendering/conversions.h>
-#include <tesseract_qt/rendering/events.h>
+#include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/utils.h>
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/link_visibility_properties.h>

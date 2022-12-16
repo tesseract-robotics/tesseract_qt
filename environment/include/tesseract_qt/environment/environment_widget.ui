@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>EnvironmentWidget</class>
  <widget class="QWidget" name="EnvironmentWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>266</width>
+    <height>228</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
     <horstretch>0</horstretch>
@@ -30,7 +38,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>7</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -102,7 +110,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::AllowedCollisionMatrixTreeView" name="acm_tree_view">
+        <widget class="QTreeView" name="acm_tree_view">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -241,11 +249,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>tesseract_gui::AllowedCollisionMatrixTreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/acm/allowed_collision_matrix_tree_view.h</header>
-  </customwidget>
   <customwidget>
    <class>tesseract_gui::GroupJointStatesTreeView</class>
    <extends>QTreeView</extends>

@@ -9,7 +9,6 @@ qt5_wrap_cpp(
   ACM_headers_MOC
   include/tesseract_qt/acm/allowed_collision_matrix_model.h
   include/tesseract_qt/acm/allowed_collision_matrix_widget.h
-  include/tesseract_qt/acm/allowed_collision_matrix_tree_view.h
   include/tesseract_qt/acm/add_allowed_collision_entry_dialog.h)
 qt5_wrap_ui(ACM_WIDGET_headers_UI include/tesseract_qt/acm/allowed_collision_matrix_widget.ui
             include/tesseract_qt/acm/add_allowed_collision_entry_dialog.ui)
@@ -18,9 +17,9 @@ add_library(
   ${PROJECT_NAME}_acm SHARED
   ${ACM_headers_MOC}
   ${ACM_WIDGET_headers_UI}
+  src/allowed_collision_matrix_events.cpp
   src/allowed_collision_matrix_model.cpp
   src/allowed_collision_matrix_widget.cpp
-  src/allowed_collision_matrix_tree_view.cpp
   src/add_allowed_collision_entry_dialog.cpp)
 
 target_link_libraries(

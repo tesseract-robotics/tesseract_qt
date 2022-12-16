@@ -44,15 +44,18 @@ class AddAllowedCollisionEntryDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit AddAllowedCollisionEntryDialog(QWidget* parent = nullptr);
+  explicit AddAllowedCollisionEntryDialog(std::string scene_name = "", QWidget* parent = nullptr);
   ~AddAllowedCollisionEntryDialog();
 
   QString getLinkName1() const;
   QString getLinkName2() const;
   QString getReason() const;
 
+  void accept() override;
+
 private:
   std::unique_ptr<Ui::AddAllowedCollisionEntryDialog> ui_;
+  std::string scene_name_;
 };
 }  // namespace tesseract_gui
 

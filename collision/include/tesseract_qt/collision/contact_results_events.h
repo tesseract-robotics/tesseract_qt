@@ -89,6 +89,16 @@ public:
   static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_VISIBILITY);
 };
 
+class ContactResultsVisbilityAll : public SceneEventVisibilityAll
+{
+public:
+  ContactResultsVisbilityAll(const std::string& scene_name, bool visible);
+  ~ContactResultsVisbilityAll() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_VISIBILITY_ALL);
+};
+
 }  // namespace tesseract_gui::events
 
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_EVENTS_H

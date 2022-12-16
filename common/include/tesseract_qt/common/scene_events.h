@@ -83,5 +83,18 @@ public:
 private:
   bool visible_;
 };
+
+class SceneEventVisibilityAll : public SceneEvent
+{
+public:
+  SceneEventVisibilityAll(std::string scene_name, bool visible, QEvent::Type type);
+  ~SceneEventVisibilityAll() override;
+
+  /** @brief Get the visibility */
+  bool getVisibility() const;
+
+private:
+  bool visible_;
+};
 }  // namespace tesseract_gui::events
 #endif  // TESSERACT_GUI_COMMON_SCENE_EVENTS_H

@@ -117,7 +117,7 @@ void EnvironmentWidgetConfig::clear()
   data_->link_visibility_properties.clear();
   data_->scene_model.clear();
   data_->scene_state_model.clear();
-  data_->acm_model.clear();
+  //  data_->acm_model.clear();
   data_->group_model.clear();
   data_->group_states_model.clear();
   data_->group_tcps_model.clear();
@@ -174,7 +174,7 @@ void EnvironmentWidgetConfig::onUpdateAllowedCollisionMatrixModel()
   if (!data_->environment->isInitialized())
     return;
 
-  data_->acm_model.setAllowedCollisionMatrix(*data_->environment->getAllowedCollisionMatrix());
+  //  data_->acm_model.setAllowedCollisionMatrix(*data_->environment->getAllowedCollisionMatrix());
 }
 
 void EnvironmentWidgetConfig::onUpdateKinematicsInformationModels()

@@ -16,21 +16,23 @@ tesseract_variables()
 
 qt5_wrap_cpp(
   RENDERING_WIDGET_headers_MOC
-  include/tesseract_qt/rendering/events.h
+  include/tesseract_qt/rendering/render_events.h
   include/tesseract_qt/rendering/interactive_view_control.h
   include/tesseract_qt/rendering/render_environment_widget.h
   include/tesseract_qt/rendering/render_widget.h
-  include/tesseract_qt/rendering/tool_path_render_manager.h)
+  include/tesseract_qt/rendering/tool_path_render_manager.h
+  include/tesseract_qt/rendering/contact_results_render_manager.h)
 
 add_library(
   ${PROJECT_NAME}_rendering SHARED
   ${RENDERING_WIDGET_headers_MOC}
   src/conversions.cpp
-  src/events.cpp
   src/interactive_view_control.cpp
   src/render_environment_widget.cpp
+  src/render_events.cpp
   src/render_widget.cpp
   src/tool_path_render_manager.cpp
+  src/contact_results_render_manager.cpp
   src/utils.cpp)
 
 target_link_libraries(

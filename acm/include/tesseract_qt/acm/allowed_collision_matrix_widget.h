@@ -42,6 +42,7 @@ class AllowedCollisionMatrixWidget;
 
 namespace tesseract_gui
 {
+class AddAllowedCollisionEntryDialog;
 class AllowedCollisionMatrixWidget : public QWidget
 {
   Q_OBJECT
@@ -59,11 +60,10 @@ public Q_SLOTS:
 
 Q_SIGNALS:
   void generateClicked(long resolution);
-  void entrySelected(tesseract_common::AllowedCollisionEntries selection);
-  void selectedLinksChanged(const std::vector<std::string>& selected_links);
 
 private:
   std::unique_ptr<Ui::AllowedCollisionMatrixWidget> ui_;
+  std::unique_ptr<AddAllowedCollisionEntryDialog> dialog_;
 };
 
 }  // namespace tesseract_gui

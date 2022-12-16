@@ -14,8 +14,8 @@
  * limitations under the License.
  *
  */
-#ifndef TESSERACT_QT_RENDERING_EVENTS_H
-#define TESSERACT_QT_RENDERING_EVENTS_H
+#ifndef TESSERACT_QT_RENDERING_RENDER_EVENTS_H
+#define TESSERACT_QT_RENDERING_RENDER_EVENTS_H
 #include <QEvent>
 #include <QMap>
 #include <QString>
@@ -777,4 +777,4 @@ public:
 
 }  // namespace events
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_RENDERING_EVENTS_H
+#endif  // TESSERACT_QT_RENDERING_RENDER_EVENTS_H
