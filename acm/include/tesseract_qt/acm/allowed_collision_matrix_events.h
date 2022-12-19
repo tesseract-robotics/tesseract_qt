@@ -91,6 +91,21 @@ private:
   std::vector<std::array<std::string, 2>> entries_;
 };
 
+class AllowedCollisionMatrixRemoveLink : public SceneEvent
+{
+public:
+  AllowedCollisionMatrixRemoveLink(const std::string& scene_name, const std::vector<std::string>& link_names);
+  ~AllowedCollisionMatrixRemoveLink() override;
+
+  const std::vector<std::string>& getLinkNames() const;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::ACM_REMOVE_LINK);
+
+private:
+  std::vector<std::string> link_names_;
+};
+
 class AllowedCollisionMatrixShow : public SceneEvent
 {
 public:

@@ -42,22 +42,29 @@ class GroupJointStatesModel : public QStandardItemModel
   Q_OBJECT
 
 public:
-  explicit GroupJointStatesModel(QObject* parent = nullptr);
+  explicit GroupJointStatesModel(std::string scene_name = "", QObject* parent = nullptr);
   GroupJointStatesModel(const GroupJointStatesModel& other);
   GroupJointStatesModel& operator=(const GroupJointStatesModel& other);
 
-  void set(const tesseract_srdf::GroupJointStates& group_joint_states);
-  void addGroupJointState(QString group_name, QString state_name, tesseract_srdf::GroupsJointState state);
-  void removeGroupJointState(QString group_name, QString state_name);
-  void clear();
+  const std::string& getSceneName() const;
 
   const tesseract_srdf::GroupJointStates& getGroupsJointStates() const;
 
   const tesseract_srdf::GroupsJointState& getGroupsJointState(const QModelIndex& row) const;
 
 private:
+  std::string scene_name_;
   GroupJointStatesStandardItem* getRoot();
   const GroupJointStatesStandardItem* getRoot() const;
+
+  void set(const tesseract_srdf::GroupJointStates& group_joint_states);
+  void add(const std::string& group_name, const std::string& state_name, const tesseract_srdf::GroupsJointState& state);
+  void remove(const std::string& group_name, const std::string& state_name);
+  void remove(const std::string& group_name);
+  void clear();
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui

@@ -48,6 +48,7 @@ public:
                           const QString& state_name,
                           const tesseract_srdf::GroupsJointState& state);
   void removeGroupJointState(const QString& group_name, const QString& state_name);
+  void removeGroup(const QString& group_name);
 
   const tesseract_srdf::GroupJointStates& getGroupJointStates() const;
 

@@ -1,5 +1,6 @@
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_kinematics REQUIRED)
+find_package(tesseract_srdf REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -23,6 +24,7 @@ add_library(
   src/kinematics_info_standard_item.cpp
   src/group_joint_state_standard_item.cpp
   src/group_joint_states_standard_item.cpp
+  src/group_joint_states_events.cpp
   src/group_joint_states_model.cpp
   src/group_joint_states_tree_view.cpp
   src/group_tcps_standard_item.cpp
@@ -31,6 +33,7 @@ target_link_libraries(
   ${PROJECT_NAME}_kinematic_groups
   PUBLIC tesseract::tesseract_common
          tesseract::tesseract_kinematics_opw
+         tesseract::tesseract_srdf
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)

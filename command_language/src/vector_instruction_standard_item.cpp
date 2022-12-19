@@ -34,8 +34,8 @@
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_command_language/poly/instruction_poly.h>
+#include <tesseract_command_language/poly/move_instruction_poly.h>
 #include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/move_instruction.h>
 #include <tesseract_command_language/set_analog_instruction.h>
 #include <tesseract_command_language/set_tool_instruction.h>
 #include <tesseract_command_language/timer_instruction.h>
@@ -77,7 +77,7 @@ void VectorInstructionStandardItem::ctor(const std::vector<tesseract_planning::I
     }
     else if (instruction.isMoveInstruction())
     {
-      appendRow(new MoveInstructionStandardItem(instruction.as<tesseract_planning::MoveInstruction>()));
+      appendRow(new MoveInstructionStandardItem(instruction.as<tesseract_planning::MoveInstructionPoly>()));
     }
     else if (instruction.isNull())
     {

@@ -22,6 +22,7 @@
  */
 #include <tesseract_qt/kinematic_groups/groups_joint_states_editor_widget.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
+#include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include "ui_groups_joint_states_editor_widget.h"
 
@@ -80,12 +81,16 @@ void GroupsJointStatesEditorWidget::onGroupNameChanged()
 
 void GroupsJointStatesEditorWidget::onAddJointState()
 {
-  QString group_name = ui_->groupNamesComboBox->currentText();
-  QString state_name = ui_->jointStateNameLineEdit->text();
-  if (state_name.isEmpty())
+  std::string group_name = ui_->groupNamesComboBox->currentText().toStdString();
+  std::string state_name = ui_->jointStateNameLineEdit->text().toStdString();
+  if (state_name.empty())
     return;
 
-  data_->group_states_model->addGroupJointState(group_name, state_name, ui_->jointSliderWidget->getJointState());
+  QApplication::sendEvent(
+      qApp,
+      new tesseract_gui::events::GroupJointStatesAdd(
+          data_->group_states_model->getSceneName(), group_name, state_name, ui_->jointSliderWidget->getJointState()));
+
   ui_->jointStateNameLineEdit->clear();
 }
 
@@ -93,12 +98,20 @@ void GroupsJointStatesEditorWidget::onRemoveJointState()
 {
   QModelIndexList selection = ui_->treeView->selectionModel()->selectedIndexes();
   int row_cnt = selection.count();
+
+  std::vector<std::array<std::string, 2>> remove_items;
+  remove_items.reserve(row_cnt);
   for (int i = row_cnt; i > 0; i--)
   {
     QStandardItem* item = data_->group_states_model->itemFromIndex(selection.at(i - 1));
     if (item->type() == static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE))
-      data_->group_states_model->removeGroupJointState(item->parent()->text(), item->text());
+      remove_items.push_back({ item->parent()->text().toStdString(), item->text().toStdString() });
   }
+
+  if (!remove_items.empty())
+    QApplication::sendEvent(
+        qApp,
+        new tesseract_gui::events::GroupJointStatesRemove(data_->group_states_model->getSceneName(), remove_items));
 }
 
 }  // namespace tesseract_gui

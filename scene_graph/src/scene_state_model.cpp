@@ -239,7 +239,14 @@ void SceneStateModel::clear()
 
 bool SceneStateModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::SceneStateChanged::kType)
+  if (event->type() == events::SceneGraphClear::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphClear*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphClear*>(event);
+    if (e->getSceneName() == scene_name_)
+      clear();
+  }
+  else if (event->type() == events::SceneStateChanged::kType)
   {
     assert(dynamic_cast<events::SceneStateChanged*>(event) != nullptr);
     auto* e = static_cast<events::SceneStateChanged*>(event);

@@ -14,6 +14,7 @@ add_library(
   ${COMMAND_LANGUAGE_headers_MOC}
   # ${COMMAND_LANGUAGE_WIDGET_headers_UI}
   src/cartesian_waypoint_standard_item.cpp
+  src/command_language_events.cpp
   src/joint_waypoint_standard_item.cpp
   src/null_waypoint_standard_item.cpp
   src/state_waypoint_standard_item.cpp

@@ -44,10 +44,10 @@ public:
   SceneStateModel(const SceneStateModel& other);
   SceneStateModel& operator=(const SceneStateModel& other);
 
-  void setState(const tesseract_scene_graph::SceneState& scene_state);
-
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
+  // Caution when using methods below. In most cases you should use application events.
+  void setState(const tesseract_scene_graph::SceneState& scene_state);
   void clear();
 
 private:

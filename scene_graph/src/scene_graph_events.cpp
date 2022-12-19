@@ -51,6 +51,11 @@ const tesseract_scene_graph::SceneState& SceneStateChanged::getState() const { r
 
 //////////////////////////////////////////
 
+SceneGraphClear::SceneGraphClear(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+SceneGraphClear::~SceneGraphClear() = default;
+
+//////////////////////////////////////////
+
 class SceneGraphSet::Implementation
 {
 public:

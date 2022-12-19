@@ -41,7 +41,6 @@ class GroupJointStatesModel;
 class AllowedCollisionMatrixModel;
 class EnvironmentCommandsModel;
 
-struct EnvironmentWidgetConfigImpl;
 class EnvironmentWidgetConfig : public QObject
 {
   Q_OBJECT
@@ -51,7 +50,7 @@ public:
   using UPtr = std::unique_ptr<EnvironmentWidgetConfig>;
   using ConstUPtr = std::unique_ptr<const EnvironmentWidgetConfig>;
 
-  EnvironmentWidgetConfig();
+  EnvironmentWidgetConfig(std::string scene_name = "scene_name");
   ~EnvironmentWidgetConfig() override;
 
   /**
@@ -112,7 +111,8 @@ public Q_SLOTS:
   void onUpdateCommandHistoryModel();
 
 protected:
-  std::unique_ptr<EnvironmentWidgetConfigImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   void tesseractEventFilter(const tesseract_environment::Event& event);
 };

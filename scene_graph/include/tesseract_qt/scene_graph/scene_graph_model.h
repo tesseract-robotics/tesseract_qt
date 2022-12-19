@@ -49,6 +49,12 @@ public:
   SceneGraphModel(const SceneGraphModel& other);
   SceneGraphModel& operator=(const SceneGraphModel& other);
 
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+
+private:
+  std::string scene_name_;
+  std::unique_ptr<SceneGraphModelImpl> data_;
+
   void setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph);
   void setName(const std::string& name);
   const std::string& getName() const;
@@ -56,14 +62,7 @@ public:
   void addJoint(const tesseract_scene_graph::Joint& joint);
   void removeLink(const std::string& link_name);
   void removeJoint(const std::string& joint_name);
-
-  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-
   void clear();
-
-private:
-  std::string scene_name_;
-  std::unique_ptr<SceneGraphModelImpl> data_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

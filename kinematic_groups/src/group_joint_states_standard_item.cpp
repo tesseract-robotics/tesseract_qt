@@ -110,6 +110,14 @@ void GroupJointStatesStandardItem::removeGroupJointState(const QString& group_na
   }
 }
 
+void GroupJointStatesStandardItem::removeGroup(const QString& group_name)
+{
+  group_joint_states_.erase(group_name.toStdString());
+
+  QStandardItem* item = group_items_.at(group_name.toStdString());
+  removeRow(item->index().row());
+}
+
 const tesseract_srdf::GroupJointStates& GroupJointStatesStandardItem::getGroupJointStates() const
 {
   return group_joint_states_;

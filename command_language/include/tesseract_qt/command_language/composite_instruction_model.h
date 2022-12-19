@@ -1,4 +1,3 @@
-
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
@@ -34,23 +33,30 @@ class CompositeInstruction;
 
 namespace tesseract_gui
 {
-struct CompositeInstructionModelImpl;
 class CompositeInstructionModel : public QStandardItemModel
 {
   Q_OBJECT
 public:
-  CompositeInstructionModel(QObject* parent = nullptr);
+  CompositeInstructionModel(std::string scene_name = "", QObject* parent = nullptr);
   ~CompositeInstructionModel() override;
 
-  void setCompositeInstruction(const QString& ns, const tesseract_planning::CompositeInstruction& ci);
-  void removeNamespace(const QString& ns);
+  const std::string& getSceneName() const;
+
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
   tesseract_planning::CompositeInstruction getCompositeInstruction(const QModelIndex& row) const;
 
   void clear();
 
 protected:
-  std::unique_ptr<CompositeInstructionModelImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
+
+  void setCompositeInstruction(const std::string& ns, const tesseract_planning::CompositeInstruction& ci);
+  void removeNamespace(const std::string& ns);
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 }  // namespace tesseract_gui
 

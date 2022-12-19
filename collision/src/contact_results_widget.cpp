@@ -66,7 +66,7 @@ void ContactResultsWidget::onComputeClicked()
     tracked_object[contact.first] = crv;
   }
 
-  QApplication::sendEvent(qApp, new events::ContactResultsAdd(data_->model->getSceneName(), tracked_object));
+  QApplication::sendEvent(qApp, new events::ContactResultsSet(data_->model->getSceneName(), tracked_object));
 
   ui->tree_view->expandToDepth(1);
 }

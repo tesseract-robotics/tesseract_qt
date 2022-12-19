@@ -26,7 +26,7 @@
 #include <QStandardItem>
 namespace tesseract_planning
 {
-class MoveInstruction;
+class MoveInstructionPoly;
 }
 
 namespace tesseract_gui
@@ -34,13 +34,15 @@ namespace tesseract_gui
 class MoveInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit MoveInstructionStandardItem(const tesseract_planning::MoveInstruction& mi);
-  MoveInstructionStandardItem(const QString& text, const tesseract_planning::MoveInstruction& mi);
-  MoveInstructionStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::MoveInstruction& mi);
+  explicit MoveInstructionStandardItem(const tesseract_planning::MoveInstructionPoly& mi);
+  MoveInstructionStandardItem(const QString& text, const tesseract_planning::MoveInstructionPoly& mi);
+  MoveInstructionStandardItem(const QIcon& icon,
+                              const QString& text,
+                              const tesseract_planning::MoveInstructionPoly& mi);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::MoveInstruction& mi);
+  void ctor(const tesseract_planning::MoveInstructionPoly& mi);
 };
 }  // namespace tesseract_gui
 

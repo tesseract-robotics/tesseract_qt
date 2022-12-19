@@ -23,38 +23,54 @@
 
 #include <tesseract_qt/command_language/composite_instruction_model.h>
 #include <tesseract_qt/command_language/composite_instruction_standard_item.h>
+#include <tesseract_qt/command_language/command_language_events.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 
 #include <tesseract_command_language/composite_instruction.h>
 
+#include <QApplication>
+
 namespace tesseract_gui
 {
-struct CompositeInstructionModelImpl
+struct CompositeInstructionModel::Implementation
 {
+  std::string scene_name;
   std::unordered_map<std::string, std::pair<QStandardItem*, tesseract_planning::CompositeInstruction>>
       composite_instructions;
 };
 
-CompositeInstructionModel::CompositeInstructionModel(QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<CompositeInstructionModelImpl>())
+CompositeInstructionModel::CompositeInstructionModel(std::string scene_name, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
+
+  data_->scene_name = std::move(scene_name);
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
 }
 
 CompositeInstructionModel::~CompositeInstructionModel() = default;
 
-void CompositeInstructionModel::setCompositeInstruction(const QString& ns,
+const std::string& CompositeInstructionModel::getSceneName() const { return data_->scene_name; }
+
+bool CompositeInstructionModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+  return QStandardItemModel::setData(index, value, role);
+}
+
+void CompositeInstructionModel::setCompositeInstruction(const std::string& ns,
                                                         const tesseract_planning::CompositeInstruction& ci)
 {
   removeNamespace(ns);
 
-  QStandardItem* ns_item = new NamespaceStandardItem(ns);
+  QStandardItem* ns_item = new NamespaceStandardItem(QString::fromStdString(ns));
   ns_item->appendRow(new CompositeInstructionStandardItem(ci));
 
   appendRow(ns_item);
-  data_->composite_instructions[ns.toStdString()] = std::make_pair(ns_item, ci);
+  data_->composite_instructions[ns] = std::make_pair(ns_item, ci);
 }
 
 void CompositeInstructionModel::clear()
@@ -65,9 +81,9 @@ void CompositeInstructionModel::clear()
   data_->composite_instructions.clear();
 }
 
-void CompositeInstructionModel::removeNamespace(const QString& ns)
+void CompositeInstructionModel::removeNamespace(const std::string& ns)
 {
-  auto it = data_->composite_instructions.find(ns.toStdString());
+  auto it = data_->composite_instructions.find(ns);
   if (it != data_->composite_instructions.end())
   {
     QModelIndex idx = indexFromItem(it->second.first);
@@ -94,6 +110,43 @@ CompositeInstructionModel::getCompositeInstruction(const QModelIndex& row) const
     return it->second.second;
 
   return tesseract_planning::CompositeInstruction();
+}
+
+bool CompositeInstructionModel::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() == events::CompositeInstructionSet::kType)
+  {
+    assert(dynamic_cast<events::CompositeInstructionSet*>(event) != nullptr);
+    auto* e = static_cast<events::CompositeInstructionSet*>(event);
+    if (e->getSceneName() == data_->scene_name)
+      setCompositeInstruction(e->getNamespace(), e->getCompositeInstruction());
+  }
+  else if (event->type() == events::CompositeInstructionClear::kType)
+  {
+    assert(dynamic_cast<events::CompositeInstructionClear*>(event) != nullptr);
+    auto* e = static_cast<events::CompositeInstructionClear*>(event);
+    if (e->getSceneName() == data_->scene_name)
+      clear();
+  }
+  else if (event->type() == events::CompositeInstructionRemove::kType)
+  {
+    assert(dynamic_cast<events::CompositeInstructionRemove*>(event) != nullptr);
+    auto* e = static_cast<events::CompositeInstructionRemove*>(event);
+    if (e->getSceneName() == data_->scene_name)
+    {
+      for (const auto& entry : data_->composite_instructions)
+      {
+        if (entry.second.second.getUUID() == e->getUUID())
+        {
+          removeNamespace(entry.first);
+          break;
+        }
+      }
+    }
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 
 }  // namespace tesseract_gui

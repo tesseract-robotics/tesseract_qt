@@ -48,10 +48,6 @@ public:
   ~AllowedCollisionMatrixModel() override;
 
   const std::string& getSceneName() const;
-  void set(const tesseract_common::AllowedCollisionMatrix& acm);
-  void add(const std::string& link1_name, const std::string& link2_name, const std::string& reason);
-  void remove(const std::string& link1_name, const std::string& link2_name);
-  void clear();
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
@@ -60,6 +56,12 @@ public:
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
+
+  void set(const tesseract_common::AllowedCollisionMatrix& acm);
+  void add(const std::string& link1_name, const std::string& link2_name, const std::string& reason);
+  void remove(const std::string& link1_name, const std::string& link2_name);
+  void remove(const std::string& link_name);
+  void clear();
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

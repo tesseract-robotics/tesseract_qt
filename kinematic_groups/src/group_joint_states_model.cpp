@@ -22,14 +22,24 @@
  */
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_qt/kinematic_groups/group_joint_state_standard_item.h>
+#include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 
 #include <tesseract_common/joint_state.h>
 
+#include <QApplication>
+
 namespace tesseract_gui
 {
-GroupJointStatesModel::GroupJointStatesModel(QObject* parent) : QStandardItemModel(parent) { clear(); }
+GroupJointStatesModel::GroupJointStatesModel(std::string scene_name, QObject* parent)
+  : QStandardItemModel(parent), scene_name_(std::move(scene_name))
+{
+  clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
 
 GroupJointStatesModel::GroupJointStatesModel(const GroupJointStatesModel& other)
   : QStandardItemModel(other.d_ptr->parent)
@@ -37,6 +47,8 @@ GroupJointStatesModel::GroupJointStatesModel(const GroupJointStatesModel& other)
 }
 
 GroupJointStatesModel& GroupJointStatesModel::operator=(const GroupJointStatesModel& other) { return *this; }
+
+const std::string& GroupJointStatesModel::getSceneName() const { return scene_name_; }
 
 void GroupJointStatesModel::clear()
 {
@@ -48,22 +60,25 @@ void GroupJointStatesModel::clear()
 
 void GroupJointStatesModel::set(const tesseract_srdf::GroupJointStates& group_joint_states)
 {
-  QStandardItemModel::clear();
-  setColumnCount(2);
-  setHorizontalHeaderLabels({ "Name", "Values" });
+  clear();
   appendRow(new GroupJointStatesStandardItem(group_joint_states));
 }
 
-void GroupJointStatesModel::addGroupJointState(QString group_name,
-                                               QString state_name,
-                                               tesseract_srdf::GroupsJointState state)
+void GroupJointStatesModel::add(const std::string& group_name,
+                                const std::string& state_name,
+                                const tesseract_srdf::GroupsJointState& state)
 {
-  getRoot()->addGroupJointState(group_name, state_name, state);
+  getRoot()->addGroupJointState(QString::fromStdString(group_name), QString::fromStdString(state_name), state);
 }
 
-void GroupJointStatesModel::removeGroupJointState(QString group_name, QString state_name)
+void GroupJointStatesModel::remove(const std::string& group_name, const std::string& state_name)
 {
-  getRoot()->removeGroupJointState(group_name, state_name);
+  getRoot()->removeGroupJointState(QString::fromStdString(group_name), QString::fromStdString(state_name));
+}
+
+void GroupJointStatesModel::remove(const std::string& group_name)
+{
+  getRoot()->removeGroup(QString::fromStdString(group_name));
 }
 
 const tesseract_srdf::GroupJointStates& GroupJointStatesModel::getGroupsJointStates() const
@@ -110,5 +125,53 @@ GroupJointStatesStandardItem* GroupJointStatesModel::getRoot()
 const GroupJointStatesStandardItem* GroupJointStatesModel::getRoot() const
 {
   return dynamic_cast<const GroupJointStatesStandardItem*>(item(0));
+}
+
+bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() == events::GroupJointStatesSet::kType)
+  {
+    assert(dynamic_cast<events::GroupJointStatesSet*>(event) != nullptr);
+    auto* e = static_cast<events::GroupJointStatesSet*>(event);
+    if (e->getSceneName() == scene_name_)
+      set(e->getGroupsJointStates());
+  }
+  else if (event->type() == events::GroupJointStatesAdd::kType)
+  {
+    assert(dynamic_cast<events::GroupJointStatesAdd*>(event) != nullptr);
+    auto* e = static_cast<events::GroupJointStatesAdd*>(event);
+    if (e->getSceneName() == scene_name_)
+      add(e->getGroupName(), e->getStateName(), e->getJointState());
+  }
+  else if (event->type() == events::GroupJointStatesClear::kType)
+  {
+    assert(dynamic_cast<events::GroupJointStatesClear*>(event) != nullptr);
+    auto* e = static_cast<events::GroupJointStatesClear*>(event);
+    if (e->getSceneName() == scene_name_)
+      clear();
+  }
+  else if (event->type() == events::GroupJointStatesRemove::kType)
+  {
+    assert(dynamic_cast<events::GroupJointStatesRemove*>(event) != nullptr);
+    auto* e = static_cast<events::GroupJointStatesRemove*>(event);
+    if (e->getSceneName() == scene_name_)
+    {
+      for (const auto& entry : e->getEntries())
+        remove(entry[0], entry[1]);
+    }
+  }
+  else if (event->type() == events::GroupJointStatesRemoveGroup::kType)
+  {
+    assert(dynamic_cast<events::GroupJointStatesRemoveGroup*>(event) != nullptr);
+    auto* e = static_cast<events::GroupJointStatesRemoveGroup*>(event);
+    if (e->getSceneName() == scene_name_)
+    {
+      for (const auto& link_name : e->getGroupNames())
+        remove(link_name);
+    }
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 }  // namespace tesseract_gui

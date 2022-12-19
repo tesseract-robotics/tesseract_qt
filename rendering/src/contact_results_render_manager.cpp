@@ -197,10 +197,10 @@ ContactResultsRenderManager::~ContactResultsRenderManager() { data_->clearAll();
 
 bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::ContactResultsAdd::kType)
+  if (event->type() == events::ContactResultsSet::kType)
   {
-    assert(dynamic_cast<events::ContactResultsAdd*>(event) != nullptr);
-    auto* e = static_cast<events::ContactResultsAdd*>(event);
+    assert(dynamic_cast<events::ContactResultsSet*>(event) != nullptr);
+    auto* e = static_cast<events::ContactResultsSet*>(event);
     if (e->getSceneName() == data_->scene_name)
     {
       data_->added.push_back(e->getContactResults());

@@ -168,6 +168,20 @@ void AllowedCollisionMatrixModel::remove(const std::string& link1_name, const st
   }
 }
 
+void AllowedCollisionMatrixModel::remove(const std::string& link_name)
+{
+  auto it1 = data_->items.find(link_name);
+  if (it1 != data_->items.end())
+  {
+    std::vector<std::array<std::string, 2>> link_pairs;
+    for (int row = 0; row < it1->second->rowCount(); ++row)
+      link_pairs.push_back({ link_name, it1->second->child(row)->text().toStdString() });
+
+    for (const auto& link_pair : link_pairs)
+      remove(link_pair[0], link_pair[1]);
+  }
+}
+
 void AllowedCollisionMatrixModel::clear()
 {
   QStandardItemModel::clear();
@@ -227,27 +241,6 @@ bool AllowedCollisionMatrixModel::setData(const QModelIndex& index, const QVaria
   return QStandardItemModel::setData(index, value, role);
 }
 
-// bool AllowedCollisionMatrixModel::removeRows(int row, int count, const QModelIndex &parent)
-//{
-//  if (QStandardItemModel::removeRows(row, count, parent))
-//  {
-//    if (invisibleRootItem()->hasChildren())
-//    {
-//      for (int parent_rows = invisibleRootItem()->rowCount(); parent_rows > 0; parent_rows--)
-//      {
-//        QStandardItem* parent = invisibleRootItem()->child(parent_rows - 1);
-//        if (parent->rowCount() == 0)
-//        {
-//          data_->items.erase(parent->text().toStdString());
-//          QStandardItemModel::removeRow(parent_rows);
-//        }
-//      }
-//    }
-//    return true;
-//  }
-//  return false;
-//}
-
 bool AllowedCollisionMatrixModel::eventFilter(QObject* obj, QEvent* event)
 {
   if (event->type() == events::AllowedCollisionMatrixSet::kType)
@@ -282,6 +275,16 @@ bool AllowedCollisionMatrixModel::eventFilter(QObject* obj, QEvent* event)
     {
       for (const auto& entry : e->getEntries())
         remove(entry[0], entry[1]);
+    }
+  }
+  else if (event->type() == events::AllowedCollisionMatrixRemoveLink::kType)
+  {
+    assert(dynamic_cast<events::AllowedCollisionMatrixRemoveLink*>(event) != nullptr);
+    auto* e = static_cast<events::AllowedCollisionMatrixRemoveLink*>(event);
+    if (e->getSceneName() == data_->scene_name)
+    {
+      for (const auto& link_name : e->getLinkNames())
+        remove(link_name);
     }
   }
 

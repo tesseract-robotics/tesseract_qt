@@ -38,6 +38,7 @@
 #include <tesseract_qt/acm/allowed_collision_matrix_events.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
+#include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 
 static const std::string SCENE_NAME{ "srdf_scene" };
 
@@ -154,7 +155,8 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     this->data_->kin_groups_model.clear();
     this->data_->group_link_list_model.setStringList(QStringList());
     this->data_->group_joint_list_model.setStringList(QStringList());
-    this->data_->group_joint_states_model.clear();
+
+    QApplication::sendEvent(qApp, new events::GroupJointStatesClear(SCENE_NAME));
     //    this->data_->user_tcp_model.clear();
     //    this->data_->opw_kinematics_model.clear();
 
@@ -198,7 +200,7 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     data_->kin_groups_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
 
     // Build Groups Joint States Model
-    data_->group_joint_states_model.set(kin_info.group_states);
+    QApplication::sendEvent(qApp, new events::GroupJointStatesSet(SCENE_NAME, kin_info.group_states));
 
     //    // Build Groups TCPs Model
     //    this->data_->user_tcp_model.setEnvironment(this->data_->render_util.getEnvironment());

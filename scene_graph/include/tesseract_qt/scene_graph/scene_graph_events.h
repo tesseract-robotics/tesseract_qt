@@ -60,6 +60,17 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
+/** @brief Event called when scene graph is clear */
+class SceneGraphClear : public SceneEvent
+{
+public:
+  SceneGraphClear(const std::string& scene_name);
+  ~SceneGraphClear() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::SCENE_GRAPH_CLEAR);
+};
+
 /** @brief Event called when scene graph is set */
 class SceneGraphSet : public SceneEvent
 {

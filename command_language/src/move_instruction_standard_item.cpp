@@ -31,20 +31,20 @@
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_command_language/move_instruction.h>
-#include <tesseract_command_language/cartesian_waypoint.h>
-#include <tesseract_command_language/state_waypoint.h>
-#include <tesseract_command_language/joint_waypoint.h>
+#include <tesseract_command_language/poly/cartesian_waypoint_poly.h>
+#include <tesseract_command_language/poly/joint_waypoint_poly.h>
+#include <tesseract_command_language/poly/state_waypoint_poly.h>
 
 namespace tesseract_gui
 {
-MoveInstructionStandardItem::MoveInstructionStandardItem(const tesseract_planning::MoveInstruction& mi)
+MoveInstructionStandardItem::MoveInstructionStandardItem(const tesseract_planning::MoveInstructionPoly& mi)
   : QStandardItem(icons::getUnknownIcon(), "Move Instruction")
 {
   ctor(mi);
 }
 
 MoveInstructionStandardItem::MoveInstructionStandardItem(const QString& text,
-                                                         const tesseract_planning::MoveInstruction& mi)
+                                                         const tesseract_planning::MoveInstructionPoly& mi)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(mi);
@@ -52,7 +52,7 @@ MoveInstructionStandardItem::MoveInstructionStandardItem(const QString& text,
 
 MoveInstructionStandardItem::MoveInstructionStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         const tesseract_planning::MoveInstruction& mi)
+                                                         const tesseract_planning::MoveInstructionPoly& mi)
   : QStandardItem(icon, text)
 {
   ctor(mi);
@@ -75,7 +75,7 @@ std::string toString(tesseract_planning::MoveInstructionType m_type)
   }
 }
 
-void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstruction& mi)
+void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstructionPoly& mi)
 {
   appendRow(createStandardItemString("description", mi.getDescription()));
   appendRow(createStandardItemString("profile", mi.getProfile()));
@@ -86,19 +86,19 @@ void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstruction
   if (mi.getWaypoint().isCartesianWaypoint())
   {
     auto* wp =
-        new CartesianWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::CartesianWaypoint>());
+        new CartesianWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::CartesianWaypointPoly>());
     auto* desc = new QStandardItem("Cartesian Waypoint");
     appendRow({ wp, desc });
   }
   else if (mi.getWaypoint().isJointWaypoint())
   {
-    auto* wp = new JointWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::JointWaypoint>());
+    auto* wp = new JointWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::JointWaypointPoly>());
     auto* desc = new QStandardItem("Joint Waypoint");
     appendRow({ wp, desc });
   }
   else if (mi.getWaypoint().isStateWaypoint())
   {
-    auto* wp = new StateWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::StateWaypoint>());
+    auto* wp = new StateWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::StateWaypointPoly>());
     auto* desc = new QStandardItem("State Waypoint");
     appendRow({ wp, desc });
   }

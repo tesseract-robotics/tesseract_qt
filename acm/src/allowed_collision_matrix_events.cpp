@@ -75,6 +75,18 @@ const std::vector<std::array<std::string, 2>>& AllowedCollisionMatrixRemove::get
 
 //////////////////////////////////////////
 
+AllowedCollisionMatrixRemoveLink::AllowedCollisionMatrixRemoveLink(const std::string& scene_name,
+                                                                   const std::vector<std::string>& link_names)
+  : SceneEvent(scene_name, kType), link_names_(link_names)
+{
+}
+
+AllowedCollisionMatrixRemoveLink::~AllowedCollisionMatrixRemoveLink() = default;
+
+const std::vector<std::string>& AllowedCollisionMatrixRemoveLink::getLinkNames() const { return link_names_; }
+
+//////////////////////////////////////////
+
 AllowedCollisionMatrixShow::AllowedCollisionMatrixShow(const std::string& scene_name,
                                                        const std::vector<std::string>& links)
   : SceneEvent(scene_name, kType), links_(links)

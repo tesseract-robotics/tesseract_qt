@@ -35,17 +35,17 @@ const std::string& ContactResultsClear::getNamespace() const { return ns_; }
 
 //////////////////////////////////////////
 
-ContactResultsAdd::ContactResultsAdd(const std::string& scene_name,
+ContactResultsSet::ContactResultsSet(const std::string& scene_name,
                                      const std::variant<ContactResultVector, ContactResultMap>& contact_results,
                                      const std::string& ns)
   : SceneEvent(scene_name, kType), ns_(ns), contact_results_(contact_results)
 {
 }
 
-ContactResultsAdd::~ContactResultsAdd() = default;
+ContactResultsSet::~ContactResultsSet() = default;
 
-const std::string& ContactResultsAdd::getNamespace() const { return ns_; }
-const std::variant<ContactResultVector, ContactResultMap>& ContactResultsAdd::getContactResults() const
+const std::string& ContactResultsSet::getNamespace() const { return ns_; }
+const std::variant<ContactResultVector, ContactResultMap>& ContactResultsSet::getContactResults() const
 {
   return contact_results_;
 }

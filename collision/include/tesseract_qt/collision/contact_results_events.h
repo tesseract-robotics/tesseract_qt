@@ -45,19 +45,19 @@ private:
   std::string ns_;
 };
 
-class ContactResultsAdd : public SceneEvent
+class ContactResultsSet : public SceneEvent
 {
 public:
-  ContactResultsAdd(const std::string& scene_name,
+  ContactResultsSet(const std::string& scene_name,
                     const std::variant<ContactResultVector, ContactResultMap>& contact_results,
                     const std::string& ns = "");
-  ~ContactResultsAdd() override;
+  ~ContactResultsSet() override;
 
   const std::string& getNamespace() const;
   const std::variant<ContactResultVector, ContactResultMap>& getContactResults() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_ADD);
+  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_SET);
 
 private:
   std::string ns_;
