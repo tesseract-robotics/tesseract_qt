@@ -21,10 +21,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
+#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
 #include <tesseract_qt/kinematic_groups/chain_group_standard_item.h>
 #include <tesseract_qt/kinematic_groups/joint_group_standard_item.h>
 #include <tesseract_qt/kinematic_groups/link_group_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
+
+#include <QApplication>
 
 static const QString CHAIN_GROUPS_KEY = "Chain Groups";
 static const QString JOINT_GROUPS_KEY = "Joint Groups";
@@ -32,7 +35,14 @@ static const QString LINK_GROUPS_KEY = "Link Groups";
 
 namespace tesseract_gui
 {
-KinematicGroupsModel::KinematicGroupsModel(QObject* parent) : QStandardItemModel(parent) { clear(); }
+KinematicGroupsModel::KinematicGroupsModel(std::string scene_name, QObject* parent)
+  : QStandardItemModel(parent), scene_name_(std::move(scene_name))
+{
+  clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
 KinematicGroupsModel::KinematicGroupsModel(const KinematicGroupsModel& other) : QStandardItemModel(other.d_ptr->parent)
 {
   this->group_names_ = other.group_names_;
@@ -48,6 +58,8 @@ KinematicGroupsModel& KinematicGroupsModel::operator=(const KinematicGroupsModel
   this->link_groups_ = other.link_groups_;
   return *this;
 }
+
+const std::string& KinematicGroupsModel::getSceneName() const { return scene_name_; }
 
 void KinematicGroupsModel::clear()
 {
@@ -68,71 +80,71 @@ void KinematicGroupsModel::set(const tesseract_srdf::ChainGroups& chain_groups,
 {
   clear();
   for (const auto& group : chain_groups)
-    addChainGroup(QString::fromStdString(group.first), group.second);
+    addChainGroup(group.first, group.second);
 
   for (const auto& group : joint_groups)
-    addJointGroup(QString::fromStdString(group.first), group.second);
+    addJointGroup(group.first, group.second);
 
   for (const auto& group : link_groups)
-    addLinkGroup(QString::fromStdString(group.first), group.second);
+    addLinkGroup(group.first, group.second);
 }
 
-void KinematicGroupsModel::addChainGroup(QString group_name, tesseract_srdf::ChainGroup group)
+void KinematicGroupsModel::addChainGroup(const std::string& group_name, const tesseract_srdf::ChainGroup& group)
 {
-  if (group_names_.find(group_name.toStdString()) != group_names_.end())
+  if (group_names_.find(group_name) != group_names_.end())
     removeGroup(group_name);
 
   QStandardItem* item = findItems(CHAIN_GROUPS_KEY).at(0);
-  item->appendRow(new ChainGroupStandardItem(group_name, group));
+  item->appendRow(new ChainGroupStandardItem(group_name.c_str(), group));
 
-  chain_groups_[group_name.toStdString()] = group;
-  group_names_.insert(group_name.toStdString());
+  chain_groups_[group_name] = group;
+  group_names_.insert(group_name);
 
-  Q_EMIT groupAdded(group_name);
+  Q_EMIT groupAdded(group_name.c_str());
 }
 
-void KinematicGroupsModel::addJointGroup(QString group_name, tesseract_srdf::JointGroup group)
+void KinematicGroupsModel::addJointGroup(const std::string& group_name, const tesseract_srdf::JointGroup& group)
 {
-  if (group_names_.find(group_name.toStdString()) != group_names_.end())
+  if (group_names_.find(group_name) != group_names_.end())
     removeGroup(group_name);
 
   QStandardItem* item = findItems(JOINT_GROUPS_KEY).at(0);
-  item->appendRow(new JointGroupStandardItem(group_name, group));
+  item->appendRow(new JointGroupStandardItem(group_name.c_str(), group));
 
-  joint_groups_[group_name.toStdString()] = group;
-  group_names_.insert(group_name.toStdString());
+  joint_groups_[group_name] = group;
+  group_names_.insert(group_name);
 
-  Q_EMIT groupAdded(group_name);
+  Q_EMIT groupAdded(group_name.c_str());
 }
 
-void KinematicGroupsModel::addLinkGroup(QString group_name, tesseract_srdf::LinkGroup group)
+void KinematicGroupsModel::addLinkGroup(const std::string& group_name, const tesseract_srdf::LinkGroup& group)
 {
-  if (group_names_.find(group_name.toStdString()) != group_names_.end())
+  if (group_names_.find(group_name) != group_names_.end())
     removeGroup(group_name);
 
   QStandardItem* item = findItems(LINK_GROUPS_KEY).at(0);
-  item->appendRow(new LinkGroupStandardItem(group_name, group));
+  item->appendRow(new LinkGroupStandardItem(group_name.c_str(), group));
 
-  link_groups_[group_name.toStdString()] = group;
-  group_names_.insert(group_name.toStdString());
+  link_groups_[group_name] = group;
+  group_names_.insert(group_name);
 
-  Q_EMIT groupAdded(group_name);
+  Q_EMIT groupAdded(group_name.c_str());
 }
 
-void KinematicGroupsModel::removeGroup(QString group_name)
+void KinematicGroupsModel::removeGroup(const std::string& group_name)
 {
-  group_names_.erase(group_name.toStdString());
+  group_names_.erase(group_name);
 
   {
     QStandardItem* item = findItems(CHAIN_GROUPS_KEY).at(0);
     for (int i = item->rowCount(); i > 0; i--)
     {
       QStandardItem* child_item = item->child(i - 1);
-      if (child_item->text() == group_name)
+      if (child_item->text().toStdString() == group_name)
         item->removeRow(i - 1);
     }
 
-    auto it = chain_groups_.find(group_name.toStdString());
+    auto it = chain_groups_.find(group_name);
     if (it != chain_groups_.end())
       chain_groups_.erase(it);
   }
@@ -142,11 +154,11 @@ void KinematicGroupsModel::removeGroup(QString group_name)
     for (int i = item->rowCount(); i > 0; i--)
     {
       QStandardItem* child_item = item->child(i - 1);
-      if (child_item->text() == group_name)
+      if (child_item->text().toStdString() == group_name)
         item->removeRow(i - 1);
     }
 
-    auto it = joint_groups_.find(group_name.toStdString());
+    auto it = joint_groups_.find(group_name);
     if (it != joint_groups_.end())
       joint_groups_.erase(it);
   }
@@ -156,16 +168,16 @@ void KinematicGroupsModel::removeGroup(QString group_name)
     for (int i = item->rowCount(); i > 0; i--)
     {
       QStandardItem* child_item = item->child(i - 1);
-      if (child_item->text() == group_name)
+      if (child_item->text().toStdString() == group_name)
         item->removeRow(i - 1);
     }
 
-    auto it = link_groups_.find(group_name.toStdString());
+    auto it = link_groups_.find(group_name);
     if (it != link_groups_.end())
       link_groups_.erase(it);
   }
 
-  Q_EMIT groupRemoved(group_name);
+  Q_EMIT groupRemoved(group_name.c_str());
 }
 
 const tesseract_srdf::GroupNames& KinematicGroupsModel::getGroupNames() const { return group_names_; }
@@ -175,5 +187,57 @@ const tesseract_srdf::ChainGroups& KinematicGroupsModel::getChainGroups() const 
 const tesseract_srdf::JointGroups& KinematicGroupsModel::getJointGroups() const { return joint_groups_; }
 
 const tesseract_srdf::LinkGroups& KinematicGroupsModel::getLinkGroups() const { return link_groups_; }
+
+bool KinematicGroupsModel::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() == events::KinematicGroupsSet::kType)
+  {
+    assert(dynamic_cast<events::KinematicGroupsSet*>(event) != nullptr);
+    auto* e = static_cast<events::KinematicGroupsSet*>(event);
+    if (e->getSceneName() == scene_name_)
+      set(e->getChainGroups(), e->getJointGroups(), e->getLinkGroups());
+  }
+  else if (event->type() == events::KinematicGroupsAddChain::kType)
+  {
+    assert(dynamic_cast<events::KinematicGroupsAddChain*>(event) != nullptr);
+    auto* e = static_cast<events::KinematicGroupsAddChain*>(event);
+    if (e->getSceneName() == scene_name_)
+      addChainGroup(e->getGroupName(), e->getGroup());
+  }
+  else if (event->type() == events::KinematicGroupsAddJoint::kType)
+  {
+    assert(dynamic_cast<events::KinematicGroupsAddJoint*>(event) != nullptr);
+    auto* e = static_cast<events::KinematicGroupsAddJoint*>(event);
+    if (e->getSceneName() == scene_name_)
+      addJointGroup(e->getGroupName(), e->getGroup());
+  }
+  else if (event->type() == events::KinematicGroupsAddLink::kType)
+  {
+    assert(dynamic_cast<events::KinematicGroupsAddLink*>(event) != nullptr);
+    auto* e = static_cast<events::KinematicGroupsAddLink*>(event);
+    if (e->getSceneName() == scene_name_)
+      addLinkGroup(e->getGroupName(), e->getGroup());
+  }
+  else if (event->type() == events::KinematicGroupsClear::kType)
+  {
+    assert(dynamic_cast<events::KinematicGroupsClear*>(event) != nullptr);
+    auto* e = static_cast<events::KinematicGroupsClear*>(event);
+    if (e->getSceneName() == scene_name_)
+      clear();
+  }
+  else if (event->type() == events::KinematicGroupsRemove::kType)
+  {
+    assert(dynamic_cast<events::KinematicGroupsRemove*>(event) != nullptr);
+    auto* e = static_cast<events::KinematicGroupsRemove*>(event);
+    if (e->getSceneName() == scene_name_)
+    {
+      for (const auto& link_name : e->getGroupNames())
+        removeGroup(link_name);
+    }
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
+}
 
 }  // namespace tesseract_gui

@@ -27,6 +27,7 @@
 #include <tesseract_qt/scene_graph/scene_state_model.h>
 #include <tesseract_qt/scene_graph/scene_graph_events.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
+#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_events.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
@@ -137,7 +138,7 @@ void EnvironmentWidgetConfig::clear()
   data_->link_visibility_properties.clear();
   QApplication::sendEvent(qApp, new events::SceneGraphClear(data_->scene_name));
   QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(data_->scene_name));
-  data_->group_model.clear();
+  QApplication::sendEvent(qApp, new events::KinematicGroupsClear(data_->scene_name));
   QApplication::sendEvent(qApp, new events::GroupJointStatesClear(data_->scene_name));
   QApplication::sendEvent(qApp, new events::GroupTCPsClear(data_->scene_name));
   data_->commands_model.clear();
@@ -206,7 +207,9 @@ void EnvironmentWidgetConfig::onUpdateKinematicsInformationModels()
   auto kin_info = data_->environment->getKinematicsInformation();
 
   // Kinematic Groups
-  data_->group_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
+  QApplication::sendEvent(qApp,
+                          new events::KinematicGroupsSet(
+                              data_->scene_name, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
 
   // Groups States
   QApplication::sendEvent(qApp, new events::GroupJointStatesSet(data_->scene_name, kin_info.group_states));

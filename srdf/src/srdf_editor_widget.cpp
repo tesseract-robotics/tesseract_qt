@@ -37,8 +37,11 @@
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_events.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
+#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
+#include <tesseract_qt/kinematic_groups/group_tcps_model.h>
+#include <tesseract_qt/kinematic_groups/group_tcps_events.h>
 
 static const std::string SCENE_NAME{ "srdf_scene" };
 
@@ -152,7 +155,7 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
 
     QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(SCENE_NAME));
 
-    this->data_->kin_groups_model.clear();
+    QApplication::sendEvent(qApp, new events::KinematicGroupsClear(SCENE_NAME));
     this->data_->group_link_list_model.setStringList(QStringList());
     this->data_->group_joint_list_model.setStringList(QStringList());
 
@@ -197,7 +200,9 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
         qApp, new events::AllowedCollisionMatrixSet(SCENE_NAME, *(data_->env->getAllowedCollisionMatrix())));
 
     // Build Kinematic Groups Model
-    data_->kin_groups_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
+    QApplication::sendEvent(
+        qApp,
+        new events::KinematicGroupsSet(SCENE_NAME, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
 
     // Build Groups Joint States Model
     QApplication::sendEvent(qApp, new events::GroupJointStatesSet(SCENE_NAME, kin_info.group_states));
@@ -286,15 +291,17 @@ void SRDFEditorWidget::onAddChainGroup(const QString& group_name, const QString&
 
   tesseract_srdf::ChainGroup list = { std::make_pair(base_link.toStdString(), tip_link.toStdString()) };
   std::set<std::string> groups = this->data_->env->getKinematicsInformation().group_names;
-  this->data_->kin_groups_model.addChainGroup(group_name, list);
+
+  QApplication::sendEvent(qApp, new events::KinematicGroupsAddChain(SCENE_NAME, group_name.toStdString(), list));
+
   if (!group_name.isEmpty())
   {
     if (std::find(groups.begin(), groups.end(), group_name.toStdString()) != groups.end())
     {
       // Remove Group States, TCPs and OPW Kinematics associated with the group
-      removeGroupStates(group_name);
-      removeGroupTCPs(group_name);
-      removeGroupOPWKinematics(group_name);
+      QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      //    removeGroupOPWKinematics({group_name.toStdString()});
     }
   }
 }
@@ -312,15 +319,16 @@ void SRDFEditorWidget::onAddJointGroup(const QString& group_name)
   for (const auto& j : qjoints)
     joints.push_back(j.toStdString());
 
-  this->data_->kin_groups_model.addJointGroup(group_name, joints);
+  QApplication::sendEvent(qApp, new events::KinematicGroupsAddJoint(SCENE_NAME, group_name.toStdString(), joints));
+
   if (!group_name.isEmpty())
   {
     if (std::find(groups.begin(), groups.end(), group_name.toStdString()) != groups.end())
     {
       // Remove Group States, TCPs and OPW Kinematics associated with the group
-      removeGroupStates(group_name);
-      removeGroupTCPs(group_name);
-      removeGroupOPWKinematics(group_name);
+      QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      //      removeGroupOPWKinematics(group_name);
     }
   }
 }
@@ -339,15 +347,16 @@ void SRDFEditorWidget::onAddLinkGroup(const QString& group_name)
   for (const auto& l : qlinks)
     links.push_back(l.toStdString());
 
-  this->data_->kin_groups_model.addLinkGroup(group_name, links);
+  QApplication::sendEvent(qApp, new events::KinematicGroupsAddLink(SCENE_NAME, group_name.toStdString(), links));
+
   if (!group_name.isEmpty())
   {
     if (std::find(groups.begin(), groups.end(), group_name.toStdString()) != groups.end())
     {
       // Remove Group States, TCPs and OPW Kinematics associated with the group
-      removeGroupStates(group_name);
-      removeGroupTCPs(group_name);
-      removeGroupOPWKinematics(group_name);
+      QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      //    removeGroupOPWKinematics(group_name);
     }
   }
 }
@@ -380,14 +389,14 @@ void SRDFEditorWidget::onRemoveKinematicGroup(int index)
 {
   if (index >= 0)
   {
-    QString group_name = this->data_->kin_groups_model.item(index, 0)->data(Qt::DisplayRole).toString();
-    if (this->data_->kin_groups_model.removeRow(index))
-    {
-      // Remove Group States, TCPs and OPW Kinematics associated with the group
-      removeGroupStates(group_name);
-      removeGroupTCPs(group_name);
-      removeGroupOPWKinematics(group_name);
-    }
+    std::vector<std::string> remove_groups;
+    remove_groups.push_back(
+        this->data_->kin_groups_model.item(index, 0)->data(Qt::DisplayRole).toString().toStdString());
+
+    QApplication::sendEvent(qApp, new events::KinematicGroupsRemove(SCENE_NAME, remove_groups));
+    QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, remove_groups));
+    QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, remove_groups));
+    //    removeGroupOPWKinematics(group_name);
   }
 }
 
@@ -553,28 +562,6 @@ void SRDFEditorWidget::onAddGroupOPWKinematics(const QString& group_name,
 void SRDFEditorWidget::onRemoveGroupOPWKinematics(int index)
 {
   //  this->data_->opw_kinematics_model.removeRow(index);
-}
-
-void SRDFEditorWidget::removeGroupStates(const QString& group_name)
-{
-  auto matches = this->data_->group_joint_states_model.match(
-      this->data_->group_joint_states_model.index(0, 0), Qt::DisplayRole, group_name, 1, Qt::MatchExactly);
-  if (!matches.empty())
-    this->data_->group_joint_states_model.removeRows(matches[0].row(), 1);
-}
-
-void SRDFEditorWidget::removeGroupTCPs(const QString& group_name)
-{
-  //  auto matches = this->data_->user_tcp_model.match(this->data_->user_tcp_model.index(0, 0),
-  //  this->data_->user_tcp_model.GroupNameRole, group_name, 1, Qt::MatchExactly); if (!matches.empty())
-  //    this->data_->user_tcp_model.removeRows(matches[0].row(), 1);
-}
-
-void SRDFEditorWidget::removeGroupOPWKinematics(const QString& group_name)
-{
-  //  auto matches = this->data_->opw_kinematics_model.match(this->data_->opw_kinematics_model.index(0, 0),
-  //  this->data_->opw_kinematics_model.GroupNameRole, group_name, 1, Qt::MatchExactly); if (!matches.empty())
-  //    this->data_->opw_kinematics_model.removeRows(matches[0].row(), 1);
 }
 
 void SRDFEditorWidget::enablePages(bool enable)

@@ -22,14 +22,16 @@
  */
 #include <tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
+#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include "ui_kinematic_groups_editor_widget.h"
 
 #include <QStringListModel>
+#include <QApplication>
 
 namespace tesseract_gui
 {
-struct KinematicGroupsEditorWidgetImpl
+struct KinematicGroupsEditorWidget::Implementation
 {
   QStringListModel* link_names_model;
   QStringListModel* joint_names_model;
@@ -40,9 +42,7 @@ struct KinematicGroupsEditorWidgetImpl
 };
 
 KinematicGroupsEditorWidget::KinematicGroupsEditorWidget(QWidget* parent)
-  : QWidget(parent)
-  , ui_(std::make_unique<Ui::KinematicGroupsEditorWidget>())
-  , data_(std::make_unique<KinematicGroupsEditorWidgetImpl>())
+  : QWidget(parent), ui_(std::make_unique<Ui::KinematicGroupsEditorWidget>()), data_(std::make_unique<Implementation>())
 
 {
   ui_->setupUi(this);
@@ -84,8 +84,8 @@ void KinematicGroupsEditorWidget::setModels(KinematicGroupsModel* kin_groups_mod
 
 void KinematicGroupsEditorWidget::onAddGroup()
 {
-  QString group_name = ui_->groupNameLineEdit->text();
-  if (group_name.isEmpty())
+  std::string group_name = ui_->groupNameLineEdit->text().toStdString();
+  if (group_name.empty())
     return;
 
   if (ui_->kinGroupTabWidget->currentIndex() == 0)
@@ -99,7 +99,9 @@ void KinematicGroupsEditorWidget::onAddGroup()
       return;
 
     tesseract_srdf::ChainGroup group{ { base_link.toStdString(), tip_link.toStdString() } };
-    data_->kin_groups_model->addChainGroup(group_name, group);
+
+    QApplication::sendEvent(
+        qApp, new events::KinematicGroupsAddChain(data_->kin_groups_model->getSceneName(), group_name, group));
 
     ui_->groupNameLineEdit->clear();
     return;
@@ -117,7 +119,8 @@ void KinematicGroupsEditorWidget::onAddGroup()
     for (auto& joint : joints)
       group.push_back(joint.toStdString());
 
-    data_->kin_groups_model->addJointGroup(group_name, group);
+    QApplication::sendEvent(
+        qApp, new events::KinematicGroupsAddJoint(data_->kin_groups_model->getSceneName(), group_name, group));
 
     ui_->groupNameLineEdit->clear();
     ui_->jointListWidget->clear();
@@ -136,7 +139,8 @@ void KinematicGroupsEditorWidget::onAddGroup()
     for (auto& link : links)
       group.push_back(link.toStdString());
 
-    data_->kin_groups_model->addLinkGroup(group_name, group);
+    QApplication::sendEvent(
+        qApp, new events::KinematicGroupsAddLink(data_->kin_groups_model->getSceneName(), group_name, group));
 
     ui_->groupNameLineEdit->clear();
     ui_->linkListWidget->clear();
@@ -148,6 +152,8 @@ void KinematicGroupsEditorWidget::onRemoveGroup()
 {
   QModelIndexList selection = ui_->kinGroupTreeView->selectionModel()->selectedIndexes();
   int row_cnt = selection.count();
+  std::vector<std::string> remove_groups;
+  remove_groups.reserve(row_cnt);
   for (int i = row_cnt; i > 0; i--)
   {
     QStandardItem* item = data_->kin_groups_model->itemFromIndex(selection.at(i - 1));
@@ -155,9 +161,12 @@ void KinematicGroupsEditorWidget::onRemoveGroup()
         item->type() == static_cast<int>(StandardItemType::SRDF_JOINT_GROUP) ||
         item->type() == static_cast<int>(StandardItemType::SRDF_LINK_GROUP))
     {
-      data_->kin_groups_model->removeGroup(item->text());
+      remove_groups.push_back(item->text().toStdString());
     }
   }
+
+  QApplication::sendEvent(qApp,
+                          new events::KinematicGroupsRemove(data_->kin_groups_model->getSceneName(), remove_groups));
 }
 
 void KinematicGroupsEditorWidget::onAddJoint() { ui_->jointListWidget->addItem(ui_->jointComboBox->currentText()); }

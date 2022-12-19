@@ -132,10 +132,6 @@ private:
   std::unique_ptr<Ui::SRDFEditorWidget> ui_;
   std::unique_ptr<SRDFEditorWidgetImpl> data_;
 
-  void removeGroupStates(const QString& group_name);
-  void removeGroupTCPs(const QString& group_name);
-  void removeGroupOPWKinematics(const QString& group_name);
-
   void enablePages(bool enable);
 
   std::vector<std::shared_ptr<const tesseract_scene_graph::Joint>> groupJointsRetrevier(QString group_name);

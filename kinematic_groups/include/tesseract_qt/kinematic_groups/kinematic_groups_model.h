@@ -39,19 +39,11 @@ class KinematicGroupsModel : public QStandardItemModel
   Q_OBJECT
 
 public:
-  explicit KinematicGroupsModel(QObject* parent = nullptr);
+  explicit KinematicGroupsModel(std::string scene_name = "", QObject* parent = nullptr);
   KinematicGroupsModel(const KinematicGroupsModel& other);
   KinematicGroupsModel& operator=(const KinematicGroupsModel& other);
 
-  void set(const tesseract_srdf::ChainGroups& chain_groups,
-           const tesseract_srdf::JointGroups& joint_groups,
-           const tesseract_srdf::LinkGroups& link_groups);
-  void addChainGroup(QString group_name, tesseract_srdf::ChainGroup group);
-  void addJointGroup(QString group_name, tesseract_srdf::JointGroup group);
-  void addLinkGroup(QString group_name, tesseract_srdf::LinkGroup group);
-
-  void removeGroup(QString group_name);
-  void clear();
+  const std::string& getSceneName() const;
 
   const tesseract_srdf::GroupNames& getGroupNames() const;
   const tesseract_srdf::ChainGroups& getChainGroups() const;
@@ -64,10 +56,24 @@ Q_SIGNALS:
   void cleared();
 
 private:
+  std::string scene_name_;
   tesseract_srdf::GroupNames group_names_;
   tesseract_srdf::ChainGroups chain_groups_;
   tesseract_srdf::JointGroups joint_groups_;
   tesseract_srdf::LinkGroups link_groups_;
+
+  void set(const tesseract_srdf::ChainGroups& chain_groups,
+           const tesseract_srdf::JointGroups& joint_groups,
+           const tesseract_srdf::LinkGroups& link_groups);
+  void addChainGroup(const std::string& group_name, const tesseract_srdf::ChainGroup& group);
+  void addJointGroup(const std::string& group_name, const tesseract_srdf::JointGroup& group);
+  void addLinkGroup(const std::string& group_name, const tesseract_srdf::LinkGroup& group);
+
+  void removeGroup(const std::string& group_name);
+  void clear();
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui

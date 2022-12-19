@@ -21,6 +21,7 @@ add_library(
   src/opw_params_standard_item.cpp
   src/joint_group_standard_item.cpp
   src/kinematic_groups_model.cpp
+  src/kinematic_groups_events.cpp
   src/kinematics_info_standard_item.cpp
   src/group_joint_state_standard_item.cpp
   src/group_joint_states_standard_item.cpp

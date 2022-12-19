@@ -49,7 +49,6 @@ using ChainGroupValidator = std::function<bool(QString, QString)>;
 using JointGroupValidator = std::function<bool(QStringList)>;
 using LinkGroupValidator = std::function<bool(QStringList)>;
 
-struct KinematicGroupsEditorWidgetImpl;
 class KinematicGroupsEditorWidget : public QWidget
 {
   Q_OBJECT
@@ -75,8 +74,9 @@ public Q_SLOTS:
   void onRemoveLink();
 
 private:
+  struct Implementation;
   std::unique_ptr<Ui::KinematicGroupsEditorWidget> ui_;
-  std::unique_ptr<KinematicGroupsEditorWidgetImpl> data_;
+  std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_EDITOR_WIDGET_H
