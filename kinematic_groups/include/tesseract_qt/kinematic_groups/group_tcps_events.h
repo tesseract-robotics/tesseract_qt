@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_EVENTS_H
-#define TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_EVENTS_H
+#ifndef TESSERACT_QT_KINEMATIC_GROUPS_GROUP_TCPS_EVENTS_H
+#define TESSERACT_QT_KINEMATIC_GROUPS_GROUP_TCPS_EVENTS_H
 
 #include <tesseract_qt/common/event_type.h>
 #include <tesseract_qt/common/scene_events.h>
@@ -29,78 +29,82 @@
 
 namespace tesseract_gui::events
 {
-class GroupJointStatesClear : public SceneEvent
+class GroupTCPsClear : public SceneEvent
 {
 public:
-  GroupJointStatesClear(const std::string& scene_name);
-  ~GroupJointStatesClear() override;
+  GroupTCPsClear(const std::string& scene_name);
+  ~GroupTCPsClear() override;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_CLEAR);
+  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_CLEAR);
 };
 
-class GroupJointStatesSet : public SceneEvent
+class GroupTCPsSet : public SceneEvent
 {
 public:
-  GroupJointStatesSet(const std::string& scene_name, const tesseract_srdf::GroupJointStates& group_joint_states);
-  ~GroupJointStatesSet() override;
+  GroupTCPsSet(const std::string& scene_name, const tesseract_srdf::GroupTCPs& group_tcps);
+  ~GroupTCPsSet() override;
 
-  const tesseract_srdf::GroupJointStates& getGroupJointStates() const;
+  const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_SET);
+  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_SET);
 
 private:
-  tesseract_srdf::GroupJointStates group_joint_states_;
+  tesseract_srdf::GroupTCPs group_tcps_;
 };
 
-class GroupJointStatesAdd : public SceneEvent
+class GroupTCPsAdd : public SceneEvent
 {
 public:
-  GroupJointStatesAdd(const std::string& scene_name,
-                      std::string group_name,
-                      std::string state_name,
-                      tesseract_srdf::GroupsJointState state);
-  ~GroupJointStatesAdd() override;
+  // LCOV_EXCL_START
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  // LCOV_EXCL_STOP
+
+  GroupTCPsAdd(const std::string& scene_name,
+               std::string group_name,
+               std::string tcp_name,
+               const Eigen::Isometry3d& tcp);
+  ~GroupTCPsAdd() override;
 
   const std::string& getGroupName() const;
-  const std::string& getStateName() const;
-  const tesseract_srdf::GroupsJointState& getJointState() const;
+  const std::string& getTCPName() const;
+  const Eigen::Isometry3d& getTCP() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_ADD);
+  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_ADD);
 
 private:
   std::string group_name_;
-  std::string state_name_;
-  tesseract_srdf::GroupsJointState state_;
+  std::string tcp_name_;
+  Eigen::Isometry3d tcp_;
 };
 
-class GroupJointStatesRemove : public SceneEvent
+class GroupTCPsRemove : public SceneEvent
 {
 public:
-  GroupJointStatesRemove(const std::string& scene_name, const std::vector<std::array<std::string, 2>>& entries);
-  ~GroupJointStatesRemove() override;
+  GroupTCPsRemove(const std::string& scene_name, const std::vector<std::array<std::string, 2>>& entries);
+  ~GroupTCPsRemove() override;
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_REMOVE);
+  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_REMOVE);
 
 private:
   std::vector<std::array<std::string, 2>> entries_;
 };
 
-class GroupJointStatesRemoveGroup : public SceneEvent
+class GroupTCPsRemoveGroup : public SceneEvent
 {
 public:
-  GroupJointStatesRemoveGroup(const std::string& scene_name, const std::vector<std::string>& group_names);
-  ~GroupJointStatesRemoveGroup() override;
+  GroupTCPsRemoveGroup(const std::string& scene_name, const std::vector<std::string>& group_names);
+  ~GroupTCPsRemoveGroup() override;
 
   const std::vector<std::string>& getGroupNames() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_REMOVE_GROUP);
+  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_REMOVE_GROUP);
 
 private:
   std::vector<std::string> group_names_;
@@ -125,4 +129,4 @@ private:
 //};
 
 }  // namespace tesseract_gui::events
-#endif  // TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_EVENTS_H
+#endif  // TESSERACT_QT_KINEMATIC_GROUPS_GROUP_TCPS_EVENTS_H

@@ -28,7 +28,8 @@ add_library(
   src/group_joint_states_model.cpp
   src/group_joint_states_tree_view.cpp
   src/group_tcps_standard_item.cpp
-  src/group_tcps_model.cpp)
+  src/group_tcps_model.cpp
+  src/group_tcps_events.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_kinematic_groups
   PUBLIC tesseract::tesseract_common

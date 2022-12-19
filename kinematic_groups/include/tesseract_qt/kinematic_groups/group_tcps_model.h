@@ -40,20 +40,25 @@ class GroupTCPsModel : public QStandardItemModel
   Q_OBJECT
 
 public:
-  explicit GroupTCPsModel(QObject* parent = nullptr);
+  explicit GroupTCPsModel(std::string scene_name = "", QObject* parent = nullptr);
   GroupTCPsModel(const GroupTCPsModel& other);
   GroupTCPsModel& operator=(const GroupTCPsModel& other);
-
-  void set(const tesseract_srdf::GroupTCPs& group_tcps);
-  void addGroupTCP(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp);
-  void removeGroupTCP(const QString& group_name, const QString& tcp_name);
-  void clear();
 
   const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
 
 private:
+  std::string scene_name_;
   GroupTCPsStandardItem* getRoot();
   const GroupTCPsStandardItem* getRoot() const;
+
+  void set(const tesseract_srdf::GroupTCPs& group_tcps);
+  void add(const std::string& group_name, const std::string& tcp_name, const Eigen::Isometry3d& tcp);
+  void remove(const std::string& group_name, const std::string& tcp_name);
+  void remove(const std::string& group_name);
+  void clear();
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui

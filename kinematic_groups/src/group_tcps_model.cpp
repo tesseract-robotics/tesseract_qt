@@ -21,11 +21,21 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
+#include <tesseract_qt/kinematic_groups/group_tcps_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
+
+#include <QApplication>
 
 namespace tesseract_gui
 {
-GroupTCPsModel::GroupTCPsModel(QObject* parent) : QStandardItemModel(parent) { clear(); }
+GroupTCPsModel::GroupTCPsModel(std::string scene_name, QObject* parent)
+  : QStandardItemModel(parent), scene_name_(std::move(scene_name))
+{
+  clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
 GroupTCPsModel::GroupTCPsModel(const GroupTCPsModel& other) : QStandardItemModel(other.d_ptr->parent) {}
 
 GroupTCPsModel& GroupTCPsModel::operator=(const GroupTCPsModel& /*other*/) { return *this; }
@@ -46,14 +56,19 @@ void GroupTCPsModel::set(const tesseract_srdf::GroupTCPs& group_tcps)
   appendRow(new GroupTCPsStandardItem(group_tcps));
 }
 
-void GroupTCPsModel::addGroupTCP(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp)
+void GroupTCPsModel::add(const std::string& group_name, const std::string& tcp_name, const Eigen::Isometry3d& tcp)
 {
-  getRoot()->addGroupTCP(group_name, tcp_name, tcp);
+  getRoot()->addGroupTCP(QString::fromStdString(group_name), QString::fromStdString(tcp_name), tcp);
 }
 
-void GroupTCPsModel::removeGroupTCP(const QString& group_name, const QString& tcp_name)
+void GroupTCPsModel::remove(const std::string& group_name, const std::string& tcp_name)
 {
-  getRoot()->removeGroupTCP(group_name, tcp_name);
+  getRoot()->removeGroupTCP(QString::fromStdString(group_name), QString::fromStdString(tcp_name));
+}
+
+void GroupTCPsModel::remove(const std::string& group_name)
+{
+  getRoot()->removeGroup(QString::fromStdString(group_name));
 }
 
 const tesseract_srdf::GroupTCPs& GroupTCPsModel::getGroupTCPs() const { return getRoot()->getGroupTCPs(); }
@@ -63,6 +78,54 @@ GroupTCPsStandardItem* GroupTCPsModel::getRoot() { return dynamic_cast<GroupTCPs
 const GroupTCPsStandardItem* GroupTCPsModel::getRoot() const
 {
   return dynamic_cast<const GroupTCPsStandardItem*>(item(0));
+}
+
+bool GroupTCPsModel::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() == events::GroupTCPsSet::kType)
+  {
+    assert(dynamic_cast<events::GroupTCPsSet*>(event) != nullptr);
+    auto* e = static_cast<events::GroupTCPsSet*>(event);
+    if (e->getSceneName() == scene_name_)
+      set(e->getGroupTCPs());
+  }
+  else if (event->type() == events::GroupTCPsAdd::kType)
+  {
+    assert(dynamic_cast<events::GroupTCPsAdd*>(event) != nullptr);
+    auto* e = static_cast<events::GroupTCPsAdd*>(event);
+    if (e->getSceneName() == scene_name_)
+      add(e->getGroupName(), e->getTCPName(), e->getTCP());
+  }
+  else if (event->type() == events::GroupTCPsClear::kType)
+  {
+    assert(dynamic_cast<events::GroupTCPsClear*>(event) != nullptr);
+    auto* e = static_cast<events::GroupTCPsClear*>(event);
+    if (e->getSceneName() == scene_name_)
+      clear();
+  }
+  else if (event->type() == events::GroupTCPsRemove::kType)
+  {
+    assert(dynamic_cast<events::GroupTCPsRemove*>(event) != nullptr);
+    auto* e = static_cast<events::GroupTCPsRemove*>(event);
+    if (e->getSceneName() == scene_name_)
+    {
+      for (const auto& entry : e->getEntries())
+        remove(entry[0], entry[1]);
+    }
+  }
+  else if (event->type() == events::GroupTCPsRemoveGroup::kType)
+  {
+    assert(dynamic_cast<events::GroupTCPsRemoveGroup*>(event) != nullptr);
+    auto* e = static_cast<events::GroupTCPsRemoveGroup*>(event);
+    if (e->getSceneName() == scene_name_)
+    {
+      for (const auto& link_name : e->getGroupNames())
+        remove(link_name);
+    }
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 
 }  // namespace tesseract_gui

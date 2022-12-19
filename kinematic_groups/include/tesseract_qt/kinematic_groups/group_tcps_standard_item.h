@@ -45,6 +45,7 @@ public:
 
   void addGroupTCP(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp);
   void removeGroupTCP(const QString& group_name, const QString& tcp_name);
+  void removeGroup(const QString& group_name);
 
   const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
 

@@ -38,10 +38,7 @@ GroupJointStatesSet::GroupJointStatesSet(const std::string& scene_name,
 
 GroupJointStatesSet::~GroupJointStatesSet() = default;
 
-const tesseract_srdf::GroupJointStates& GroupJointStatesSet::getGroupsJointStates() const
-{
-  return group_joint_states_;
-}
+const tesseract_srdf::GroupJointStates& GroupJointStatesSet::getGroupJointStates() const { return group_joint_states_; }
 
 //////////////////////////////////////////
 

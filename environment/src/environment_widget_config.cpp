@@ -28,6 +28,7 @@
 #include <tesseract_qt/scene_graph/scene_graph_events.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
+#include <tesseract_qt/kinematic_groups/group_tcps_events.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
@@ -138,7 +139,7 @@ void EnvironmentWidgetConfig::clear()
   QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(data_->scene_name));
   data_->group_model.clear();
   QApplication::sendEvent(qApp, new events::GroupJointStatesClear(data_->scene_name));
-  data_->group_tcps_model.clear();
+  QApplication::sendEvent(qApp, new events::GroupTCPsClear(data_->scene_name));
   data_->commands_model.clear();
 }
 
@@ -201,15 +202,17 @@ void EnvironmentWidgetConfig::onUpdateKinematicsInformationModels()
   if (!data_->environment->isInitialized())
     return;
 
-  // Kinematic Groups
+  // Kinematics Information
   auto kin_info = data_->environment->getKinematicsInformation();
+
+  // Kinematic Groups
   data_->group_model.set(kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
 
   // Groups States
   QApplication::sendEvent(qApp, new events::GroupJointStatesSet(data_->scene_name, kin_info.group_states));
 
   // Tool Center Points
-  data_->group_tcps_model.set(kin_info.group_tcps);
+  QApplication::sendEvent(qApp, new events::GroupTCPsSet(data_->scene_name, kin_info.group_tcps));
 }
 
 void EnvironmentWidgetConfig::onUpdateCommandHistoryModel()

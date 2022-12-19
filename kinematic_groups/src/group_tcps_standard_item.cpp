@@ -107,6 +107,14 @@ void GroupTCPsStandardItem::removeGroupTCP(const QString& group_name, const QStr
   }
 }
 
+void GroupTCPsStandardItem::removeGroup(const QString& group_name)
+{
+  group_tcps_.erase(group_name.toStdString());
+
+  QStandardItem* item = group_items_.at(group_name.toStdString());
+  removeRow(item->index().row());
+}
+
 const tesseract_srdf::GroupTCPs& GroupTCPsStandardItem::getGroupTCPs() const { return group_tcps_; }
 
 void GroupTCPsStandardItem::ctor()

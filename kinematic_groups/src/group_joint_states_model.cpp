@@ -134,7 +134,7 @@ bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
     assert(dynamic_cast<events::GroupJointStatesSet*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesSet*>(event);
     if (e->getSceneName() == scene_name_)
-      set(e->getGroupsJointStates());
+      set(e->getGroupJointStates());
   }
   else if (event->type() == events::GroupJointStatesAdd::kType)
   {
