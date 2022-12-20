@@ -29,11 +29,12 @@
 namespace tesseract_gui
 {
 class EntityManager;
+struct ComponentInfo;
 
 class ToolPathRenderManager : public QObject
 {
 public:
-  ToolPathRenderManager(std::string scene_name, std::shared_ptr<EntityManager> entity_manager);
+  ToolPathRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
   ~ToolPathRenderManager();
 
 private:

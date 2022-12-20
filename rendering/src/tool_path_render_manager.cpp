@@ -29,6 +29,7 @@
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <ignition/rendering/Scene.hh>
 #include <ignition/rendering/AxisVisual.hh>
@@ -48,7 +49,7 @@ namespace tesseract_gui
 {
 struct ToolPathRenderManager::Implementation
 {
-  std::string scene_name;
+  ComponentInfo component_info;
   EntityManager::Ptr entity_manager;
   std::map<boost::uuids::uuid, EntityContainer::Ptr> entity_containers;
   bool render_dirty{ true };
@@ -87,7 +88,7 @@ struct ToolPathRenderManager::Implementation
 
   void clearAll()
   {
-    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
+    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info.scene_name);
     if (scene != nullptr)
     {
       for (auto& container : entity_containers)
@@ -183,10 +184,11 @@ struct ToolPathRenderManager::Implementation
   }
 };
 
-ToolPathRenderManager::ToolPathRenderManager(std::string scene_name, std::shared_ptr<EntityManager> entity_manager)
+ToolPathRenderManager::ToolPathRenderManager(ComponentInfo component_info,
+                                             std::shared_ptr<EntityManager> entity_manager)
   : data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = std::move(scene_name);
+  data_->component_info = std::move(component_info);
   data_->entity_manager = std::move(entity_manager);
 
   qApp->installEventFilter(this);
@@ -200,7 +202,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathAdd*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathAdd*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->added.push_back(e->getToolPath());
       data_->render_dirty = true;
@@ -210,7 +212,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathRemove*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemove*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->removed.push_back(e->getUUID());
       data_->render_dirty = true;
@@ -220,7 +222,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathRemoveAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemoveAll*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->render_dirty = true;
       data_->render_reset = true;
@@ -230,7 +232,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathHideAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathHideAll*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->render_dirty = true;
       data_->render_hide_all = true;
@@ -240,7 +242,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathShowAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathShowAll*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->render_dirty = true;
       data_->render_show_all = true;
@@ -250,7 +252,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathHide*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathHide*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->hide.push_back(std::make_pair(e->getUUID(), e->getChildUUID()));
       data_->render_dirty = true;
@@ -260,7 +262,7 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathShow*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathShow*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->show.push_back(std::make_pair(e->getUUID(), e->getChildUUID()));
       data_->render_dirty = true;
@@ -271,9 +273,10 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
     static const boost::uuids::uuid nil_uuid{};
 
     assert(dynamic_cast<events::PreRender*>(event) != nullptr);
-    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->scene_name && data_->render_dirty)
+    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->component_info.scene_name &&
+        data_->render_dirty)
     {
-      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
+      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
       if (scene != nullptr && data_->render_dirty)
       {
         if (data_->render_reset)  // Remove all

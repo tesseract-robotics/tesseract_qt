@@ -25,15 +25,15 @@
 
 #include <memory>
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
+#include <tesseract_qt/common/component_events.h>
 #include <tesseract_qt/collision/contact_results_types.h>
 
 namespace tesseract_gui::events
 {
-class ContactResultsClear : public SceneEvent
+class ContactResultsClear : public ComponentEvent
 {
 public:
-  ContactResultsClear(const std::string& scene_name, const std::string& ns = "");
+  ContactResultsClear(ComponentInfo component_info, const std::string& ns = "");
   ~ContactResultsClear() override;
 
   const std::string& getNamespace() const;
@@ -45,10 +45,10 @@ private:
   std::string ns_;
 };
 
-class ContactResultsSet : public SceneEvent
+class ContactResultsSet : public ComponentEvent
 {
 public:
-  ContactResultsSet(const std::string& scene_name,
+  ContactResultsSet(ComponentInfo component_info,
                     const std::variant<ContactResultVector, ContactResultMap>& contact_results,
                     const std::string& ns = "");
   ~ContactResultsSet() override;
@@ -64,22 +64,22 @@ private:
   std::variant<ContactResultVector, ContactResultMap> contact_results_;
 };
 
-class ContactResultsRemove : public SceneEventUUID
+class ContactResultsRemove : public ComponentEventUUID
 {
 public:
-  ContactResultsRemove(const std::string& scene_name, boost::uuids::uuid uuid);
-  ContactResultsRemove(const std::string& scene_name, boost::uuids::uuid uuid, boost::uuids::uuid child_uuid);
+  ContactResultsRemove(ComponentInfo component_info, boost::uuids::uuid uuid);
+  ContactResultsRemove(ComponentInfo component_info, boost::uuids::uuid uuid, boost::uuids::uuid child_uuid);
   ~ContactResultsRemove() override;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_REMOVE);
 };
 
-class ContactResultsVisbility : public SceneEventVisibility
+class ContactResultsVisbility : public ComponentEventVisibility
 {
 public:
-  ContactResultsVisbility(const std::string& scene_name, boost::uuids::uuid uuid, bool visible);
-  ContactResultsVisbility(const std::string& scene_name,
+  ContactResultsVisbility(ComponentInfo component_info, boost::uuids::uuid uuid, bool visible);
+  ContactResultsVisbility(ComponentInfo component_info,
                           boost::uuids::uuid uuid,
                           boost::uuids::uuid child_uuid,
                           bool visible);
@@ -89,10 +89,10 @@ public:
   static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_VISIBILITY);
 };
 
-class ContactResultsVisbilityAll : public SceneEventVisibilityAll
+class ContactResultsVisbilityAll : public ComponentEventVisibilityAll
 {
 public:
-  ContactResultsVisbilityAll(const std::string& scene_name, bool visible);
+  ContactResultsVisbilityAll(ComponentInfo component_info, bool visible);
   ~ContactResultsVisbilityAll() override;
 
   /** @brief Unique type for this event. */

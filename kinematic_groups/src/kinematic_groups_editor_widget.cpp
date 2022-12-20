@@ -101,7 +101,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
     tesseract_srdf::ChainGroup group{ { base_link.toStdString(), tip_link.toStdString() } };
 
     QApplication::sendEvent(
-        qApp, new events::KinematicGroupsAddChain(data_->kin_groups_model->getSceneName(), group_name, group));
+        qApp, new events::KinematicGroupsAddChain(data_->kin_groups_model->getComponentInfo(), group_name, group));
 
     ui_->groupNameLineEdit->clear();
     return;
@@ -120,7 +120,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
       group.push_back(joint.toStdString());
 
     QApplication::sendEvent(
-        qApp, new events::KinematicGroupsAddJoint(data_->kin_groups_model->getSceneName(), group_name, group));
+        qApp, new events::KinematicGroupsAddJoint(data_->kin_groups_model->getComponentInfo(), group_name, group));
 
     ui_->groupNameLineEdit->clear();
     ui_->jointListWidget->clear();
@@ -140,7 +140,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
       group.push_back(link.toStdString());
 
     QApplication::sendEvent(
-        qApp, new events::KinematicGroupsAddLink(data_->kin_groups_model->getSceneName(), group_name, group));
+        qApp, new events::KinematicGroupsAddLink(data_->kin_groups_model->getComponentInfo(), group_name, group));
 
     ui_->groupNameLineEdit->clear();
     ui_->linkListWidget->clear();
@@ -165,8 +165,8 @@ void KinematicGroupsEditorWidget::onRemoveGroup()
     }
   }
 
-  QApplication::sendEvent(qApp,
-                          new events::KinematicGroupsRemove(data_->kin_groups_model->getSceneName(), remove_groups));
+  QApplication::sendEvent(
+      qApp, new events::KinematicGroupsRemove(data_->kin_groups_model->getComponentInfo(), remove_groups));
 }
 
 void KinematicGroupsEditorWidget::onAddJoint() { ui_->jointListWidget->addItem(ui_->jointComboBox->currentText()); }

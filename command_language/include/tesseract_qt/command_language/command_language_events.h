@@ -25,7 +25,7 @@
 
 #include <memory>
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
+#include <tesseract_qt/common/component_events.h>
 
 namespace tesseract_planning
 {
@@ -34,10 +34,10 @@ class CompositeInstruction;
 
 namespace tesseract_gui::events
 {
-class CompositeInstructionClear : public SceneEvent
+class CompositeInstructionClear : public ComponentEvent
 {
 public:
-  CompositeInstructionClear(const std::string& scene_name, const std::string& ns = "");
+  CompositeInstructionClear(ComponentInfo component_info, const std::string& ns = "");
   ~CompositeInstructionClear() override;
 
   const std::string& getNamespace() const;
@@ -49,10 +49,10 @@ private:
   std::string ns_;
 };
 
-class CompositeInstructionSet : public SceneEvent
+class CompositeInstructionSet : public ComponentEvent
 {
 public:
-  CompositeInstructionSet(const std::string& scene_name,
+  CompositeInstructionSet(ComponentInfo component_info,
                           const tesseract_planning::CompositeInstruction& composite_instruction,
                           const std::string& ns = "");
   ~CompositeInstructionSet() override;
@@ -68,11 +68,11 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-class CompositeInstructionRemove : public SceneEventUUID
+class CompositeInstructionRemove : public ComponentEventUUID
 {
 public:
-  CompositeInstructionRemove(const std::string& scene_name, boost::uuids::uuid uuid);
-  CompositeInstructionRemove(const std::string& scene_name, boost::uuids::uuid uuid, boost::uuids::uuid child_uuid);
+  CompositeInstructionRemove(ComponentInfo component_info, boost::uuids::uuid uuid);
+  CompositeInstructionRemove(ComponentInfo component_info, boost::uuids::uuid uuid, boost::uuids::uuid child_uuid);
   ~CompositeInstructionRemove() override;
 
   /** @brief Unique type for this event. */

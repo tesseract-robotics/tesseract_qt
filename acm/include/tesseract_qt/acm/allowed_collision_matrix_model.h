@@ -38,16 +38,18 @@ class AllowedCollisionMatrix;
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class AllowedCollisionMatrixModel : public QStandardItemModel
 {
   Q_OBJECT
 public:
-  AllowedCollisionMatrixModel(std::string scene_name = "", QObject* parent = nullptr);
+  AllowedCollisionMatrixModel(QObject* parent = nullptr);
+  explicit AllowedCollisionMatrixModel(ComponentInfo component_info, QObject* parent = nullptr);
   AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel& other);
   AllowedCollisionMatrixModel& operator=(const AllowedCollisionMatrixModel& other);
   ~AllowedCollisionMatrixModel() override;
 
-  const std::string& getSceneName() const;
+  const ComponentInfo& getComponentInfo() const;
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 

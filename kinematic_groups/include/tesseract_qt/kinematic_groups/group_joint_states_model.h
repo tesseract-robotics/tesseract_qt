@@ -37,23 +37,27 @@ class QModelIndex;
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class GroupJointStatesModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit GroupJointStatesModel(std::string scene_name = "", QObject* parent = nullptr);
+  explicit GroupJointStatesModel(QObject* parent = nullptr);
+  explicit GroupJointStatesModel(ComponentInfo component_info, QObject* parent = nullptr);
   GroupJointStatesModel(const GroupJointStatesModel& other);
   GroupJointStatesModel& operator=(const GroupJointStatesModel& other);
+  ~GroupJointStatesModel() override;
 
-  const std::string& getSceneName() const;
+  const ComponentInfo& getComponentInfo() const;
 
   const tesseract_srdf::GroupJointStates& getGroupsJointStates() const;
 
   const tesseract_srdf::GroupsJointState& getGroupsJointState(const QModelIndex& row) const;
 
 private:
-  std::string scene_name_;
+  std::unique_ptr<ComponentInfo> component_info_;
+
   GroupJointStatesStandardItem* getRoot();
   const GroupJointStatesStandardItem* getRoot() const;
 

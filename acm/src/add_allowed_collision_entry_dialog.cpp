@@ -22,19 +22,27 @@
  */
 #include <tesseract_qt/acm/add_allowed_collision_entry_dialog.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/component_info.h>
+
 #include "ui_add_allowed_collision_entry_dialog.h"
 #include <QRegExpValidator>
 #include <QApplication>
 namespace tesseract_gui
 {
-AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(std::string scene_name, QWidget* parent)
-  : QDialog(parent), ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>()), scene_name_(std::move(scene_name))
+AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget* parent)
+  : QDialog(parent)
+  , ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
+  , component_info_(std::make_unique<ComponentInfo>())
 {
-  ui_->setupUi(this);
-  ui_->linkName1LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
-  ui_->linkName2LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
-  connect(ui_->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-  connect(ui_->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+  ctor();
+}
+
+AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(ComponentInfo component_info, QWidget* parent)
+  : QDialog(parent)
+  , ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
+  , component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+{
+  ctor();
 }
 
 AddAllowedCollisionEntryDialog::~AddAllowedCollisionEntryDialog() = default;
@@ -54,7 +62,16 @@ void AddAllowedCollisionEntryDialog::accept()
   entry[2] = ui_->reasonLineEdit->text().toStdString();
   data.push_back(entry);
 
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixAdd(scene_name_, data));
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixAdd(*component_info_, data));
+}
+
+void AddAllowedCollisionEntryDialog::ctor()
+{
+  ui_->setupUi(this);
+  ui_->linkName1LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
+  ui_->linkName2LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
+  connect(ui_->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+  connect(ui_->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 }  // namespace tesseract_gui

@@ -40,8 +40,8 @@ public:
   tesseract_scene_graph::SceneState state;
 };
 
-SceneStateChanged::SceneStateChanged(const std::string& scene_name, tesseract_scene_graph::SceneState scene_state)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneStateChanged::SceneStateChanged(ComponentInfo component_info, tesseract_scene_graph::SceneState scene_state)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->state = std::move(scene_state);
 }
@@ -51,7 +51,7 @@ const tesseract_scene_graph::SceneState& SceneStateChanged::getState() const { r
 
 //////////////////////////////////////////
 
-SceneGraphClear::SceneGraphClear(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+SceneGraphClear::SceneGraphClear(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
 SceneGraphClear::~SceneGraphClear() = default;
 
 //////////////////////////////////////////
@@ -64,8 +64,8 @@ public:
   tesseract_scene_graph::SceneGraph::ConstPtr scene_graph;
 };
 
-SceneGraphSet::SceneGraphSet(const std::string& scene_name, tesseract_scene_graph::SceneGraph::ConstPtr scene_graph)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneGraphSet::SceneGraphSet(ComponentInfo component_info, tesseract_scene_graph::SceneGraph::ConstPtr scene_graph)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->scene_graph = std::move(scene_graph);
 }
@@ -83,8 +83,8 @@ public:
   tesseract_scene_graph::Link::ConstPtr link;
 };
 
-SceneGraphAddLink::SceneGraphAddLink(const std::string& scene_name, tesseract_scene_graph::Link::ConstPtr link)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneGraphAddLink::SceneGraphAddLink(ComponentInfo component_info, tesseract_scene_graph::Link::ConstPtr link)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->link = std::move(link);
 }
@@ -100,8 +100,8 @@ public:
   tesseract_scene_graph::Joint::ConstPtr joint;
 };
 
-SceneGraphAddJoint::SceneGraphAddJoint(const std::string& scene_name, tesseract_scene_graph::Joint::ConstPtr joint)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneGraphAddJoint::SceneGraphAddJoint(ComponentInfo component_info, tesseract_scene_graph::Joint::ConstPtr joint)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint = std::move(joint);
 }
@@ -117,8 +117,8 @@ public:
   tesseract_scene_graph::Joint::ConstPtr joint;
 };
 
-SceneGraphMoveLink::SceneGraphMoveLink(const std::string& scene_name, tesseract_scene_graph::Joint::ConstPtr joint)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneGraphMoveLink::SceneGraphMoveLink(ComponentInfo component_info, tesseract_scene_graph::Joint::ConstPtr joint)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint = std::move(joint);
 }
@@ -136,8 +136,8 @@ public:
   std::string parent_link;
 };
 
-SceneGraphMoveJoint::SceneGraphMoveJoint(const std::string& scene_name, std::string joint_name, std::string parent_link)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneGraphMoveJoint::SceneGraphMoveJoint(ComponentInfo component_info, std::string joint_name, std::string parent_link)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint_name = std::move(joint_name);
   data_->parent_link = std::move(parent_link);
@@ -157,8 +157,8 @@ public:
   bool recursive;
 };
 
-SceneGraphRemoveLink::SceneGraphRemoveLink(const std::string& scene_name, std::string link_name, bool recursive)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneGraphRemoveLink::SceneGraphRemoveLink(ComponentInfo component_info, std::string link_name, bool recursive)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->link_name = std::move(link_name);
   data_->recursive = recursive;
@@ -178,8 +178,8 @@ public:
   bool recursive;
 };
 
-SceneGraphRemoveJoint::SceneGraphRemoveJoint(const std::string& scene_name, std::string joint_name, bool recursive)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SceneGraphRemoveJoint::SceneGraphRemoveJoint(ComponentInfo component_info, std::string joint_name, bool recursive)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint_name = std::move(joint_name);
   data_->recursive = recursive;
@@ -198,9 +198,9 @@ public:
   tesseract_scene_graph::Joint::ConstPtr joint;
 };
 
-SceneGraphReplaceJoint::SceneGraphReplaceJoint(const std::string& scene_name,
+SceneGraphReplaceJoint::SceneGraphReplaceJoint(ComponentInfo component_info,
                                                tesseract_scene_graph::Joint::ConstPtr joint)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint = std::move(joint);
 }
@@ -219,11 +219,11 @@ public:
   bool visible;
 };
 
-SceneGraphModifyLinkVisibility::SceneGraphModifyLinkVisibility(const std::string& scene_name,
+SceneGraphModifyLinkVisibility::SceneGraphModifyLinkVisibility(ComponentInfo component_info,
                                                                std::string link_name,
                                                                LinkVisibilityFlags flags,
                                                                bool visible)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->link_name = std::move(link_name);
   data_->flags = flags;
@@ -245,10 +245,10 @@ public:
   bool visible;
 };
 
-SceneGraphModifyLinkVisibilityALL::SceneGraphModifyLinkVisibilityALL(const std::string& scene_name,
+SceneGraphModifyLinkVisibilityALL::SceneGraphModifyLinkVisibilityALL(ComponentInfo component_info,
                                                                      LinkVisibilityFlags flags,
                                                                      bool visible)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->flags = flags;
   data_->visible = visible;
@@ -261,7 +261,7 @@ bool SceneGraphModifyLinkVisibilityALL::visible() { return data_->visible; }
 
 //////////////////////////////////////////
 
-SceneGraphPlot::SceneGraphPlot(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+SceneGraphPlot::SceneGraphPlot(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
 
 SceneGraphPlot::~SceneGraphPlot() = default;
 

@@ -27,26 +27,36 @@
 #include <memory>
 #include <tesseract_qt/common/entity.h>
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
 
 #include <ignition/common/KeyEvent.hh>
 #include <ignition/common/MouseEvent.hh>
 #include <ignition/math/Vector2.hh>
 #include <ignition/math/Vector3.hh>
 
-namespace tesseract_gui
-{
 /** @brief Namespace for all events. Refer to the EventManager class for more information about events. */
-namespace events
+namespace tesseract_gui::events
 {
+class RenderEvent : public QEvent
+{
+public:
+  RenderEvent(std::string scene_name, QEvent::Type type);
+  ~RenderEvent() override;
+
+  /** @brief Get the scene name the event is associated with */
+  const std::string& getSceneName() const;
+
+private:
+  std::string scene_name_;
+};
+
 /**
  * @brief Event called in the render thread of a 3D scene after the user camera has rendered.
  * It's safe to make rendering calls in this event's callback.
  */
-class Render : public SceneEvent
+class Render : public RenderEvent
 {
 public:
-  Render(const std::string& scene_name);
+  Render(std::string scene_name);
   ~Render() override;
 
   /** @brief Unique type for this event. */
@@ -57,7 +67,7 @@ public:
  * @brief The class for sending and receiving custom snap value events.
  * This event is used in the Transform Control plugin tool when the user manually alters their snapping values.
  */
-class SnapIntervals : public SceneEvent
+class SnapIntervals : public RenderEvent
 {
 public:
   /// \brief Constructor
@@ -67,7 +77,7 @@ public:
   SnapIntervals(const ignition::math::Vector3d& _xyz,
                 const ignition::math::Vector3d& _rpy,
                 const ignition::math::Vector3d& _scale,
-                const std::string& scene_name);
+                std::string scene_name);
 
   ~SnapIntervals() override;
 
@@ -99,7 +109,7 @@ private:
 };
 
 /** @brief Event called to spawn a resource, given its description as a string.*/
-class SpawnFromDescription : public SceneEvent
+class SpawnFromDescription : public RenderEvent
 {
 public:
   /**
@@ -107,7 +117,7 @@ public:
    * @param description The resource's description as a string, such as an SDF file.
    * @param scene_name The scene name
    */
-  explicit SpawnFromDescription(const std::string& description, const std::string& scene_name);
+  explicit SpawnFromDescription(const std::string& description, std::string scene_name);
   ~SpawnFromDescription() override;
 
   /**
@@ -126,7 +136,7 @@ private:
 };
 
 /** @brief Event called to spawn a resource, which takes the path to its file. */
-class SpawnFromPath : public SceneEvent
+class SpawnFromPath : public RenderEvent
 {
 public:
   /**
@@ -134,7 +144,7 @@ public:
    * @param file_path The path to a file.
    * @param scene_name The scene name
    */
-  explicit SpawnFromPath(const std::string& file_path, const std::string& scene_name);
+  explicit SpawnFromPath(const std::string& file_path, std::string scene_name);
   ~SpawnFromPath() override;
 
   /**
@@ -153,7 +163,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the 3D coordinates of a user's mouse hover within the scene. */
-class HoverToScene : public SceneEvent
+class HoverToScene : public RenderEvent
 {
 public:
   /**
@@ -161,7 +171,7 @@ public:
    * @param point The point at which the mouse is hovering within
    * @param scene_name Then scene name
    */
-  explicit HoverToScene(const ignition::math::Vector3d& point, const std::string& scene_name);
+  explicit HoverToScene(const ignition::math::Vector3d& point, std::string scene_name);
   ~HoverToScene() override;
 
   /**
@@ -181,7 +191,7 @@ private:
 
 /** @brief Event which is called to broadcast the 3D coordinates of a user's releasing the left button within the scene.
  */
-class LeftClickToScene : public SceneEvent
+class LeftClickToScene : public RenderEvent
 {
 public:
   /**
@@ -189,7 +199,7 @@ public:
    * @param point The point which the user has left clicked within
    * @param scene_name The scene name
    */
-  explicit LeftClickToScene(const ignition::math::Vector3d& point, const std::string& scene_name);
+  explicit LeftClickToScene(const ignition::math::Vector3d& point, std::string scene_name);
   ~LeftClickToScene() override;
 
   /**
@@ -209,14 +219,14 @@ private:
 
 /** @brief Event which is called to broadcast the 3D coordinates of a user's releasing the right button within the
  * scene. */
-class RightClickToScene : public SceneEvent
+class RightClickToScene : public RenderEvent
 {
 public:
   /**
    * @brief Constructor
    * @param point The point which the user has right clicked within the scene
    */
-  explicit RightClickToScene(const ignition::math::Vector3d& point, const std::string& scene_name);
+  explicit RightClickToScene(const ignition::math::Vector3d& point, std::string scene_name);
   ~RightClickToScene() override;
 
   /**
@@ -239,7 +249,7 @@ private:
  * @details This is primarily used by plugins which also use the right click mouse event to cancel any actions currently
  * in progress.
  */
-class DropdownMenuEnabled : public SceneEvent
+class DropdownMenuEnabled : public RenderEvent
 {
 public:
   /**
@@ -247,7 +257,7 @@ public:
    * @param menu_enabled The boolean indicating whether the dropdown menu should be enabled or disabled.
    * @param scene_name The scene name
    */
-  explicit DropdownMenuEnabled(bool menu_enabled, const std::string& scene_name);
+  explicit DropdownMenuEnabled(bool menu_enabled, std::string scene_name);
   ~DropdownMenuEnabled() override;
 
   /**
@@ -266,7 +276,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the key release within the scene. */
-class KeyReleaseOnScene : public SceneEvent
+class KeyReleaseOnScene : public RenderEvent
 {
 public:
   /**
@@ -274,7 +284,7 @@ public:
    * @param key The key released event within the scene
    * @param scene_name The scene name
    */
-  explicit KeyReleaseOnScene(const ignition::common::KeyEvent& key, const std::string& scene_name);
+  explicit KeyReleaseOnScene(const ignition::common::KeyEvent& key, std::string scene_name);
   ~KeyReleaseOnScene() override;
 
   /**
@@ -293,7 +303,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the key press within the scene. */
-class KeyPressOnScene : public SceneEvent
+class KeyPressOnScene : public RenderEvent
 {
 public:
   /**
@@ -301,7 +311,7 @@ public:
    * @param key The pressed key within the scene
    * @param scene_name The scene name
    */
-  explicit KeyPressOnScene(const ignition::common::KeyEvent& key, const std::string& scene_name);
+  explicit KeyPressOnScene(const ignition::common::KeyEvent& key, std::string scene_name);
   ~KeyPressOnScene() override;
 
   /**
@@ -324,7 +334,7 @@ private:
  * @details For the 3D coordinates of that point on the scene, see `LeftClickToScene`.
  * @sa LeftClickToScene
  */
-class LeftClickOnScene : public SceneEvent
+class LeftClickOnScene : public RenderEvent
 {
 public:
   /**
@@ -332,7 +342,7 @@ public:
    * @param mouse The left mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit LeftClickOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
+  explicit LeftClickOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
   ~LeftClickOnScene() override;
 
   /** @brief Return the left mouse event */
@@ -352,7 +362,7 @@ private:
  * @details For the 3D coordinates of that point on the scene, see `RightClickToScene`.
  * @sa RightClickToScene
  */
-class RightClickOnScene : public SceneEvent
+class RightClickOnScene : public RenderEvent
 {
 public:
   /**
@@ -360,7 +370,7 @@ public:
    * @param mouse The right mouse event on the scene
    * @param scene_name The scene name
    */
-  RightClickOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
+  RightClickOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
   ~RightClickOnScene() override;
 
   /** @brief Return the right mouse event */
@@ -379,7 +389,7 @@ private:
  * @brief Event that block the Interactive View control when some of the other plugins require it.
  * @details For example: When the transform control is active we should block the movements of the camera.
  */
-class BlockOrbit : public SceneEvent
+class BlockOrbit : public RenderEvent
 {
 public:
   /**
@@ -387,7 +397,7 @@ public:
    * @param block True to block otherwise False
    * @param scene_name The scene name
    */
-  explicit BlockOrbit(bool block, const std::string& scene_name);
+  explicit BlockOrbit(bool block, std::string scene_name);
   ~BlockOrbit() override;
 
   /**
@@ -406,7 +416,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast the 2D coordinates of a user's mouse hover within the scene. */
-class HoverOnScene : public SceneEvent
+class HoverOnScene : public RenderEvent
 {
 public:
   /**
@@ -414,7 +424,7 @@ public:
    * @param mouse he hover mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit HoverOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
+  explicit HoverOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
   ~HoverOnScene() override;
 
   /** @brief Get the point within the scene over which the user is hovering. */
@@ -430,7 +440,7 @@ private:
 };
 
 /** @brief Event called to clone a resource, given its name as a string. */
-class SpawnCloneFromName : public SceneEvent
+class SpawnCloneFromName : public RenderEvent
 {
 public:
   /**
@@ -438,7 +448,7 @@ public:
    * @param name The name of the resource to clone
    * @param scene_name The scene name
    */
-  explicit SpawnCloneFromName(const std::string& name, const std::string& scene_name);
+  explicit SpawnCloneFromName(const std::string& name, std::string scene_name);
   ~SpawnCloneFromName() override;
 
   /**
@@ -457,7 +467,7 @@ private:
 };
 
 /** @brief Event called to clone a resource, given its name as a string. */
-class DropOnScene : public SceneEvent
+class DropOnScene : public RenderEvent
 {
 public:
   /**
@@ -468,7 +478,7 @@ public:
    */
   explicit DropOnScene(const std::string& drop_text,
                        const ignition::math::Vector2i& drop_mouse,
-                       const std::string& scene_name);
+                       std::string scene_name);
   ~DropOnScene() override;
 
   /**
@@ -493,7 +503,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast information about mouse scrolls on the scene. */
-class ScrollOnScene : public SceneEvent
+class ScrollOnScene : public RenderEvent
 {
 public:
   /**
@@ -501,7 +511,7 @@ public:
    * @param mouse The scroll mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit ScrollOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
+  explicit ScrollOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
   ~ScrollOnScene() override;
 
   /** @brief Return the scroll mouse event */
@@ -517,7 +527,7 @@ private:
 };
 
 /** @brief Event which is called to broadcast information about mouse drags on the scene. */
-class DragOnScene : public SceneEvent
+class DragOnScene : public RenderEvent
 {
 public:
   /**
@@ -525,7 +535,7 @@ public:
    * @param mouse The drag mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit DragOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
+  explicit DragOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
   ~DragOnScene() override;
 
   /** @brief Return the drag on mouse event */
@@ -542,7 +552,7 @@ public:
 
 /** @brief Event which is called to broadcast information about mouse presses on the scene, with right, left or middle
  * buttons. */
-class MousePressOnScene : public SceneEvent
+class MousePressOnScene : public RenderEvent
 {
 public:
   /**
@@ -550,7 +560,7 @@ public:
    * @param mouse The mouse event on the scene
    * @param scene_name The scene name
    */
-  MousePressOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name);
+  MousePressOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
   ~MousePressOnScene() override;
 
   /** @brief Return the button press mouse event */
@@ -569,14 +579,14 @@ private:
  * @brief Event called in the render thread of a 3D scene, before the user camera is rendered.
  * @details It's safe to make rendering calls in this event's callback.
  */
-class PreRender : public SceneEvent
+class PreRender : public RenderEvent
 {
 public:
   /**
    * @brief Constructor
    * @param scene_name The scene name
    */
-  PreRender(const std::string& scene_name);
+  PreRender(std::string scene_name);
   ~PreRender() override;
 
   /** @brief Unique type for this event. */
@@ -775,6 +785,5 @@ public:
 //    std::unique_ptr<Implementation> data_;
 //  };
 
-}  // namespace events
-}  // namespace tesseract_gui
+}  // namespace tesseract_gui::events
 #endif  // TESSERACT_QT_RENDERING_RENDER_EVENTS_H

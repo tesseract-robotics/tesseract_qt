@@ -34,6 +34,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/environment/environment_widget_config.h>
 #include <tesseract_qt/tool_path/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <tesseract_support/tesseract_support_resource_locator.h>
 #include <tesseract_environment/environment.h>
@@ -71,18 +72,18 @@ int main(int argc, char** argv)
   auto env = std::make_unique<tesseract_environment::Environment>();
   env->init(urdf_path, srdf_path, locator);
 
-  std::string scene_name = env->getName();
-  auto render_widget = new tesseract_gui::RenderWidget(scene_name);
+  tesseract_gui::ComponentInfo component_info(env->getName());
+  auto render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
   render_widget->setSkyEnabled(true);
 
   auto config = std::make_shared<tesseract_gui::EnvironmentWidgetConfig>();
   config->setEnvironment(std::move(env));
 
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
-  auto* env_widget = new tesseract_gui::RenderEnvironmentWidget(scene_name, *entity_manager);
+  auto* env_widget = new tesseract_gui::RenderEnvironmentWidget(component_info.scene_name, *entity_manager);
   env_widget->setConfiguration(std::move(config));
 
-  tesseract_gui::ToolPathRenderManager tool_path_manager(scene_name, entity_manager);
+  tesseract_gui::ToolPathRenderManager tool_path_manager(component_info, entity_manager);
 
   QWidget widget;
   auto layout = new QHBoxLayout();
@@ -95,7 +96,7 @@ int main(int argc, char** argv)
   //  QObject::connect(env_widget, SIGNAL(triggerRender()), render_widget, SLOT(update()));
 
   tesseract_gui::ToolPath tool_path = getToolPath();
-  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path));
 
   widget.resize(1200, 800);
   widget.show();

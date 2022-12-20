@@ -25,7 +25,8 @@
 
 namespace tesseract_gui::events
 {
-AllowedCollisionMatrixClear::AllowedCollisionMatrixClear(const std::string& scene_name) : SceneEvent(scene_name, kType)
+AllowedCollisionMatrixClear::AllowedCollisionMatrixClear(ComponentInfo component_info)
+  : ComponentEvent(std::move(component_info), kType)
 {
 }
 
@@ -38,9 +39,9 @@ struct AllowedCollisionMatrixSet::Implementation
   tesseract_common::AllowedCollisionMatrix acm;
 };
 
-AllowedCollisionMatrixSet::AllowedCollisionMatrixSet(const std::string& scene_name,
+AllowedCollisionMatrixSet::AllowedCollisionMatrixSet(ComponentInfo component_info,
                                                      const tesseract_common::AllowedCollisionMatrix& acm)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->acm = acm;
 }
@@ -51,9 +52,9 @@ const tesseract_common::AllowedCollisionMatrix& AllowedCollisionMatrixSet::getAC
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixAdd::AllowedCollisionMatrixAdd(const std::string& scene_name,
+AllowedCollisionMatrixAdd::AllowedCollisionMatrixAdd(ComponentInfo component_info,
                                                      const std::vector<std::array<std::string, 3>>& entries)
-  : SceneEvent(scene_name, kType), entries_(entries)
+  : ComponentEvent(std::move(component_info), kType), entries_(entries)
 {
 }
 
@@ -63,9 +64,9 @@ const std::vector<std::array<std::string, 3>>& AllowedCollisionMatrixAdd::getEnt
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixRemove::AllowedCollisionMatrixRemove(const std::string& scene_name,
+AllowedCollisionMatrixRemove::AllowedCollisionMatrixRemove(ComponentInfo component_info,
                                                            const std::vector<std::array<std::string, 2>>& entries)
-  : SceneEvent(scene_name, kType), entries_(entries)
+  : ComponentEvent(std::move(component_info), kType), entries_(entries)
 {
 }
 
@@ -75,9 +76,9 @@ const std::vector<std::array<std::string, 2>>& AllowedCollisionMatrixRemove::get
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixRemoveLink::AllowedCollisionMatrixRemoveLink(const std::string& scene_name,
+AllowedCollisionMatrixRemoveLink::AllowedCollisionMatrixRemoveLink(ComponentInfo component_info,
                                                                    const std::vector<std::string>& link_names)
-  : SceneEvent(scene_name, kType), link_names_(link_names)
+  : ComponentEvent(std::move(component_info), kType), link_names_(link_names)
 {
 }
 
@@ -87,9 +88,9 @@ const std::vector<std::string>& AllowedCollisionMatrixRemoveLink::getLinkNames()
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixShow::AllowedCollisionMatrixShow(const std::string& scene_name,
+AllowedCollisionMatrixShow::AllowedCollisionMatrixShow(ComponentInfo component_info,
                                                        const std::vector<std::string>& links)
-  : SceneEvent(scene_name, kType), links_(links)
+  : ComponentEvent(std::move(component_info), kType), links_(links)
 {
 }
 

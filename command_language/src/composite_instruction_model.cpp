@@ -27,6 +27,7 @@
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <tesseract_command_language/composite_instruction.h>
 
@@ -36,17 +37,26 @@ namespace tesseract_gui
 {
 struct CompositeInstructionModel::Implementation
 {
-  std::string scene_name;
+  ComponentInfo component_info;
   std::unordered_map<std::string, std::pair<QStandardItem*, tesseract_planning::CompositeInstruction>>
       composite_instructions;
 };
 
-CompositeInstructionModel::CompositeInstructionModel(std::string scene_name, QObject* parent)
+CompositeInstructionModel::CompositeInstructionModel(QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
 
-  data_->scene_name = std::move(scene_name);
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
+CompositeInstructionModel::CompositeInstructionModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+{
+  clear();
+
+  data_->component_info = std::move(component_info);
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
@@ -54,7 +64,7 @@ CompositeInstructionModel::CompositeInstructionModel(std::string scene_name, QOb
 
 CompositeInstructionModel::~CompositeInstructionModel() = default;
 
-const std::string& CompositeInstructionModel::getSceneName() const { return data_->scene_name; }
+const ComponentInfo& CompositeInstructionModel::getComponentInfo() const { return data_->component_info; }
 
 bool CompositeInstructionModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
@@ -118,21 +128,21 @@ bool CompositeInstructionModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::CompositeInstructionSet*>(event) != nullptr);
     auto* e = static_cast<events::CompositeInstructionSet*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
       setCompositeInstruction(e->getNamespace(), e->getCompositeInstruction());
   }
   else if (event->type() == events::CompositeInstructionClear::kType)
   {
     assert(dynamic_cast<events::CompositeInstructionClear*>(event) != nullptr);
     auto* e = static_cast<events::CompositeInstructionClear*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
       clear();
   }
   else if (event->type() == events::CompositeInstructionRemove::kType)
   {
     assert(dynamic_cast<events::CompositeInstructionRemove*>(event) != nullptr);
     auto* e = static_cast<events::CompositeInstructionRemove*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       for (const auto& entry : data_->composite_instructions)
       {

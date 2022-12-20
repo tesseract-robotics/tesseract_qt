@@ -23,13 +23,23 @@
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <QApplication>
 
 namespace tesseract_gui
 {
-GroupTCPsModel::GroupTCPsModel(std::string scene_name, QObject* parent)
-  : QStandardItemModel(parent), scene_name_(std::move(scene_name))
+GroupTCPsModel::GroupTCPsModel(QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>())
+{
+  clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
+GroupTCPsModel::GroupTCPsModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
   clear();
 
@@ -39,6 +49,10 @@ GroupTCPsModel::GroupTCPsModel(std::string scene_name, QObject* parent)
 GroupTCPsModel::GroupTCPsModel(const GroupTCPsModel& other) : QStandardItemModel(other.d_ptr->parent) {}
 
 GroupTCPsModel& GroupTCPsModel::operator=(const GroupTCPsModel& /*other*/) { return *this; }
+
+GroupTCPsModel::~GroupTCPsModel() = default;
+
+const ComponentInfo& GroupTCPsModel::getComponentInfo() const { return *component_info_; }
 
 void GroupTCPsModel::clear()
 {
@@ -86,28 +100,28 @@ bool GroupTCPsModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupTCPsSet*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsSet*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
       set(e->getGroupTCPs());
   }
   else if (event->type() == events::GroupTCPsAdd::kType)
   {
     assert(dynamic_cast<events::GroupTCPsAdd*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsAdd*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
       add(e->getGroupName(), e->getTCPName(), e->getTCP());
   }
   else if (event->type() == events::GroupTCPsClear::kType)
   {
     assert(dynamic_cast<events::GroupTCPsClear*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsClear*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
       clear();
   }
   else if (event->type() == events::GroupTCPsRemove::kType)
   {
     assert(dynamic_cast<events::GroupTCPsRemove*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsRemove*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
     {
       for (const auto& entry : e->getEntries())
         remove(entry[0], entry[1]);
@@ -117,7 +131,7 @@ bool GroupTCPsModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupTCPsRemoveGroup*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsRemoveGroup*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
     {
       for (const auto& link_name : e->getGroupNames())
         remove(link_name);

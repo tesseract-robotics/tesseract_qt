@@ -34,16 +34,19 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class KinematicGroupsModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit KinematicGroupsModel(std::string scene_name = "", QObject* parent = nullptr);
+  explicit KinematicGroupsModel(QObject* parent = nullptr);
+  explicit KinematicGroupsModel(ComponentInfo component_info, QObject* parent = nullptr);
   KinematicGroupsModel(const KinematicGroupsModel& other);
   KinematicGroupsModel& operator=(const KinematicGroupsModel& other);
+  ~KinematicGroupsModel() override;
 
-  const std::string& getSceneName() const;
+  const ComponentInfo& getComponentInfo() const;
 
   const tesseract_srdf::GroupNames& getGroupNames() const;
   const tesseract_srdf::ChainGroups& getChainGroups() const;
@@ -56,11 +59,8 @@ Q_SIGNALS:
   void cleared();
 
 private:
-  std::string scene_name_;
-  tesseract_srdf::GroupNames group_names_;
-  tesseract_srdf::ChainGroups chain_groups_;
-  tesseract_srdf::JointGroups joint_groups_;
-  tesseract_srdf::LinkGroups link_groups_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   void set(const tesseract_srdf::ChainGroups& chain_groups,
            const tesseract_srdf::JointGroups& joint_groups,

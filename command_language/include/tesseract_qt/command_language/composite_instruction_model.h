@@ -33,14 +33,16 @@ class CompositeInstruction;
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class CompositeInstructionModel : public QStandardItemModel
 {
   Q_OBJECT
 public:
-  CompositeInstructionModel(std::string scene_name = "", QObject* parent = nullptr);
+  CompositeInstructionModel(QObject* parent = nullptr);
+  CompositeInstructionModel(ComponentInfo component_info, QObject* parent = nullptr);
   ~CompositeInstructionModel() override;
 
-  const std::string& getSceneName() const;
+  const ComponentInfo& getComponentInfo() const;
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 

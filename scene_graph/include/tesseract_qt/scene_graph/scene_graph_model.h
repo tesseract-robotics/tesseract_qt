@@ -38,13 +38,14 @@ class QModelIndex;
 
 namespace tesseract_gui
 {
-class SceneGraphModelImpl;
+struct ComponentInfo;
 class SceneGraphModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit SceneGraphModel(std::string scene_name = "", QObject* parent = nullptr);
+  explicit SceneGraphModel(QObject* parent = nullptr);
+  explicit SceneGraphModel(ComponentInfo component_inf, QObject* parent = nullptr);
   ~SceneGraphModel() override;
   SceneGraphModel(const SceneGraphModel& other);
   SceneGraphModel& operator=(const SceneGraphModel& other);
@@ -52,8 +53,8 @@ public:
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
 private:
-  std::string scene_name_;
-  std::unique_ptr<SceneGraphModelImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   void setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph);
   void setName(const std::string& name);

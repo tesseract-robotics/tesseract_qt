@@ -26,19 +26,31 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_qt/common/tool_path_standard_item.h>
 #include <QStandardItemModel>
+#include <Eigen/Eigen>
+#include <memory>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
+namespace boost::uuids
+{
+class uuid;
+}
+
 namespace tesseract_gui
 {
+class ToolPath;
+class ToolPathSegment;
+struct ComponentInfo;
+
 class ToolPathModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit ToolPathModel(std::string scene_name = "", QObject* parent = nullptr);
+  explicit ToolPathModel(QObject* parent = nullptr);
+  explicit ToolPathModel(ComponentInfo component_info, QObject* parent = nullptr);
+  ~ToolPathModel() override;
 
   /**
    * @brief Add tool path
@@ -68,8 +80,8 @@ public:
   void clear();
 
 private:
-  std::string scene_name_;
-  std::map<boost::uuids::uuid, QStandardItem*> tool_paths_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

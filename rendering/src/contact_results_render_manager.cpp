@@ -28,6 +28,7 @@
 
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <ignition/rendering/Scene.hh>
 #include <ignition/rendering/ArrowVisual.hh>
@@ -48,7 +49,7 @@ namespace tesseract_gui
 {
 struct ContactResultsRenderManager::Implementation
 {
-  std::string scene_name;
+  ComponentInfo component_info;
   EntityManager::Ptr entity_manager;
   std::map<boost::uuids::uuid, EntityContainer::Ptr> entity_containers;
   bool render_dirty{ true };
@@ -87,7 +88,7 @@ struct ContactResultsRenderManager::Implementation
 
   void clearAll()
   {
-    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
+    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info.scene_name);
     if (scene != nullptr)
     {
       for (auto& container : entity_containers)
@@ -183,11 +184,11 @@ struct ContactResultsRenderManager::Implementation
   }
 };
 
-ContactResultsRenderManager::ContactResultsRenderManager(std::string scene_name,
+ContactResultsRenderManager::ContactResultsRenderManager(ComponentInfo component_info,
                                                          std::shared_ptr<EntityManager> entity_manager)
   : data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = std::move(scene_name);
+  data_->component_info = std::move(component_info);
   data_->entity_manager = std::move(entity_manager);
 
   qApp->installEventFilter(this);
@@ -201,7 +202,7 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsSet*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsSet*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->added.push_back(e->getContactResults());
       data_->render_dirty = true;
@@ -211,7 +212,7 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsRemove*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsRemove*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->removed.push_back(e->getUUID());
       data_->render_dirty = true;
@@ -221,7 +222,7 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsClear*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsClear*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->render_dirty = true;
       data_->render_reset = true;
@@ -231,7 +232,7 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsVisbilityAll*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsVisbilityAll*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->render_dirty = true;
       if (e->getVisibility() == true)
@@ -244,7 +245,7 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsVisbility*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsVisbility*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       data_->render_dirty = true;
       if (e->getVisibility() == true)
@@ -258,9 +259,10 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
     static const boost::uuids::uuid nil_uuid{};
 
     assert(dynamic_cast<events::PreRender*>(event) != nullptr);
-    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->scene_name && data_->render_dirty)
+    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->component_info.scene_name &&
+        data_->render_dirty)
     {
-      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
+      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
       if (scene != nullptr && data_->render_dirty)
       {
         if (data_->render_reset)  // Remove all

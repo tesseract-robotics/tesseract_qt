@@ -24,13 +24,14 @@
 #include <tesseract_qt/tool_path/tool_path_tool_bar.h>
 #include <tesseract_qt/tool_path/tool_path_events.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/component_info.h>
 #include <QApplication>
 
 namespace tesseract_gui
 {
-struct ToolPathToolBarImpl
+struct ToolPathToolBar::Implementation
 {
-  std::string scene_name;
+  ComponentInfo component_info;
 
   QAction* remove_all;
   QAction* remove_selected;
@@ -38,24 +39,34 @@ struct ToolPathToolBarImpl
   QAction* show_all;
 };
 
-ToolPathToolBar::ToolPathToolBar(const std::string& scene_name, QWidget* parent)
-  : QToolBar(parent), data_(std::make_unique<ToolPathToolBarImpl>())
+ToolPathToolBar::ToolPathToolBar(QWidget* parent) : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = scene_name;
-  data_->remove_all = addAction(icons::getClearIcon(), "Remove All", [scene_name]() {
-    QApplication::sendEvent(qApp, new events::ToolPathRemoveAll(scene_name));
-  });
-  data_->remove_selected = addAction(icons::getTrashIcon(), "Remove Selected", [scene_name]() {
-    QApplication::sendEvent(qApp, new events::ToolPathRemoveSelected(scene_name));
-  });
-  addSeparator();
-  data_->hide_all = addAction(icons::getToolPathHideIcon(), "Hide All", [scene_name]() {
-    QApplication::sendEvent(qApp, new events::ToolPathHideAll(scene_name));
-  });
-  data_->show_all = addAction(icons::getToolPathShowIcon(), "Show All", [scene_name]() {
-    QApplication::sendEvent(qApp, new events::ToolPathShowAll(scene_name));
-  });
+  ctor(data_->component_info);
+}
+
+ToolPathToolBar::ToolPathToolBar(ComponentInfo component_info, QWidget* parent)
+  : QToolBar(parent), data_(std::make_unique<Implementation>())
+{
+  ctor(std::move(component_info));
 }
 
 ToolPathToolBar::~ToolPathToolBar() = default;
+
+void ToolPathToolBar::ctor(ComponentInfo component_info)
+{
+  data_->component_info = component_info;
+  data_->remove_all = addAction(icons::getClearIcon(), "Remove All", [component_info]() {
+    QApplication::sendEvent(qApp, new events::ToolPathRemoveAll(component_info));
+  });
+  data_->remove_selected = addAction(icons::getTrashIcon(), "Remove Selected", [component_info]() {
+    QApplication::sendEvent(qApp, new events::ToolPathRemoveSelected(component_info));
+  });
+  addSeparator();
+  data_->hide_all = addAction(icons::getToolPathHideIcon(), "Hide All", [component_info]() {
+    QApplication::sendEvent(qApp, new events::ToolPathHideAll(component_info));
+  });
+  data_->show_all = addAction(icons::getToolPathShowIcon(), "Show All", [component_info]() {
+    QApplication::sendEvent(qApp, new events::ToolPathShowAll(component_info));
+  });
+}
 }  // namespace tesseract_gui

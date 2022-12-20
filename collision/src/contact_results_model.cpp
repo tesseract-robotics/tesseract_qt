@@ -28,6 +28,7 @@
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <QApplication>
 
@@ -35,16 +36,25 @@ namespace tesseract_gui
 {
 struct ContactResultsModel::Implementation
 {
-  std::string scene_name;
+  ComponentInfo component_info;
   std::unordered_map<std::string, QStandardItem*> namespace_map;
 };
 
-ContactResultsModel::ContactResultsModel(std::string scene_name, QObject* parent)
+ContactResultsModel::ContactResultsModel(QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
 
-  data_->scene_name = std::move(scene_name);
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
+ContactResultsModel::ContactResultsModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+{
+  clear();
+
+  data_->component_info = std::move(component_info);
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
@@ -52,7 +62,7 @@ ContactResultsModel::ContactResultsModel(std::string scene_name, QObject* parent
 
 ContactResultsModel::~ContactResultsModel() = default;
 
-const std::string& ContactResultsModel::getSceneName() const { return data_->scene_name; }
+const ComponentInfo& ContactResultsModel::getComponentInfo() const { return data_->component_info; }
 
 bool ContactResultsModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
@@ -68,7 +78,7 @@ bool ContactResultsModel::setData(const QModelIndex& index, const QVariant& valu
       auto* parent_item = static_cast<ContactResultVectorStandardItem*>(item->parent());
 
       QApplication::sendEvent(qApp,
-                              new events::ContactResultsVisbility(data_->scene_name,
+                              new events::ContactResultsVisbility(data_->component_info,
                                                                   parent_item->getUUID(),
                                                                   derived_item->contact_result.getUUID(),
                                                                   value.value<Qt::CheckState>() == Qt::Checked));
@@ -79,7 +89,7 @@ bool ContactResultsModel::setData(const QModelIndex& index, const QVariant& valu
       auto* derived_item = static_cast<ContactResultVectorStandardItem*>(item);
 
       QApplication::sendEvent(qApp,
-                              new events::ContactResultsVisbility(data_->scene_name,
+                              new events::ContactResultsVisbility(data_->component_info,
                                                                   derived_item->getUUID(),
                                                                   value.value<Qt::CheckState>() == Qt::Checked));
     }
@@ -146,7 +156,7 @@ bool ContactResultsModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsSet*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsSet*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       if (e->getContactResults().index() == 0)
         setContactResults(e->getNamespace().c_str(), std::get<ContactResultVector>(e->getContactResults()));
@@ -158,14 +168,14 @@ bool ContactResultsModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsClear*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsClear*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
       clear();
   }
   else if (event->type() == events::ContactResultsRemove::kType)
   {
     assert(dynamic_cast<events::ContactResultsRemove*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsRemove*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       throw std::runtime_error("ContactResultsModel, events::ContactResultsRemove not implemented yet!");
     }

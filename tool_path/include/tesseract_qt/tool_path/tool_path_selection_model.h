@@ -27,21 +27,27 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <QItemSelectionModel>
+#include <memory>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class ToolPathSelectionModel : public QItemSelectionModel
 {
   Q_OBJECT
 
 public:
-  explicit ToolPathSelectionModel(std::string scene_name = "");
-  ToolPathSelectionModel(QAbstractItemModel* model, std::string scene_name = "");
+  ToolPathSelectionModel();
+  explicit ToolPathSelectionModel(QAbstractItemModel* model);
+
+  explicit ToolPathSelectionModel(ComponentInfo component_info);
+  ToolPathSelectionModel(QAbstractItemModel* model, ComponentInfo component_info);
+  ~ToolPathSelectionModel() override;
 
 private:
-  std::string scene_name_;
+  std::unique_ptr<ComponentInfo> component_info_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

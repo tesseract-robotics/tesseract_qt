@@ -20,28 +20,21 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
-#define TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
 
-#include <QToolBar>
-#include <memory>
+#include <tesseract_qt/common/component_info.h>
+#include <boost/uuid/random_generator.hpp>
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
-class ToolPathToolBar : public QToolBar
+ComponentInfo::ComponentInfo(std::string scene_name)
+  : scene_name(std::move(scene_name)), ns(boost::uuids::random_generator()())
 {
-  Q_OBJECT
-public:
-  explicit ToolPathToolBar(QWidget* parent = nullptr);
-  explicit ToolPathToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ToolPathToolBar();
+}
 
-private:
-  struct Implementation;
-  std::unique_ptr<Implementation> data_;
+bool ComponentInfo::operator==(const ComponentInfo& other) const
+{
+  return (scene_name == other.scene_name && ns == other.ns);
+}
 
-  void ctor(ComponentInfo component_info);
-};
+bool ComponentInfo::operator!=(const ComponentInfo& rhs) const { return !operator==(rhs); }
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H

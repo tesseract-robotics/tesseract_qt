@@ -25,7 +25,7 @@
 
 #include <memory>
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
+#include <tesseract_qt/common/component_events.h>
 
 namespace tesseract_gui
 {
@@ -43,10 +43,10 @@ class SceneGraph;
 namespace tesseract_gui::events
 {
 /** @brief Event called when scene state has changed */
-class SceneStateChanged : public SceneEvent
+class SceneStateChanged : public ComponentEvent
 {
 public:
-  SceneStateChanged(const std::string& scene_name, tesseract_scene_graph::SceneState scene_state);
+  SceneStateChanged(ComponentInfo component_info, tesseract_scene_graph::SceneState scene_state);
   ~SceneStateChanged() override;
 
   const tesseract_scene_graph::SceneState& getState() const;
@@ -61,10 +61,10 @@ private:
 };
 
 /** @brief Event called when scene graph is clear */
-class SceneGraphClear : public SceneEvent
+class SceneGraphClear : public ComponentEvent
 {
 public:
-  SceneGraphClear(const std::string& scene_name);
+  SceneGraphClear(ComponentInfo component_info);
   ~SceneGraphClear() override;
 
   /** @brief Unique type for this event. */
@@ -72,10 +72,10 @@ public:
 };
 
 /** @brief Event called when scene graph is set */
-class SceneGraphSet : public SceneEvent
+class SceneGraphSet : public ComponentEvent
 {
 public:
-  SceneGraphSet(const std::string& scene_name, std::shared_ptr<const tesseract_scene_graph::SceneGraph> scene_graph);
+  SceneGraphSet(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::SceneGraph> scene_graph);
   ~SceneGraphSet() override;
 
   std::shared_ptr<const tesseract_scene_graph::SceneGraph> getSceneGraph() const;
@@ -90,10 +90,10 @@ private:
 };
 
 /** @brief Event called to add link to scene graph */
-class SceneGraphAddLink : public SceneEvent
+class SceneGraphAddLink : public ComponentEvent
 {
 public:
-  SceneGraphAddLink(const std::string& scene_name, std::shared_ptr<const tesseract_scene_graph::Link> link);
+  SceneGraphAddLink(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Link> link);
   ~SceneGraphAddLink() override;
 
   std::shared_ptr<const tesseract_scene_graph::Link> getLink() const;
@@ -108,10 +108,10 @@ private:
 };
 
 /** @brief Event called to add joint to scene graph */
-class SceneGraphAddJoint : public SceneEvent
+class SceneGraphAddJoint : public ComponentEvent
 {
 public:
-  SceneGraphAddJoint(const std::string& scene_name, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+  SceneGraphAddJoint(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
   ~SceneGraphAddJoint() override;
 
   std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
@@ -126,10 +126,10 @@ private:
 };
 
 /** @brief Event called to move link to scene graph */
-class SceneGraphMoveLink : public SceneEvent
+class SceneGraphMoveLink : public ComponentEvent
 {
 public:
-  SceneGraphMoveLink(const std::string& scene_name, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+  SceneGraphMoveLink(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
   ~SceneGraphMoveLink() override;
 
   std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
@@ -144,10 +144,10 @@ private:
 };
 
 /** @brief Event called to move joint to scene graph */
-class SceneGraphMoveJoint : public SceneEvent
+class SceneGraphMoveJoint : public ComponentEvent
 {
 public:
-  SceneGraphMoveJoint(const std::string& scene_name, std::string joint_name, std::string parent_link);
+  SceneGraphMoveJoint(ComponentInfo component_info, std::string joint_name, std::string parent_link);
   ~SceneGraphMoveJoint() override;
 
   const std::string& getJointName() const;
@@ -163,10 +163,10 @@ private:
 };
 
 /** @brief Event called to remove link to scene graph */
-class SceneGraphRemoveLink : public SceneEvent
+class SceneGraphRemoveLink : public ComponentEvent
 {
 public:
-  SceneGraphRemoveLink(const std::string& scene_name, std::string link_name, bool recursive);
+  SceneGraphRemoveLink(ComponentInfo component_info, std::string link_name, bool recursive);
   ~SceneGraphRemoveLink() override;
 
   const std::string& getLinkName() const;
@@ -182,10 +182,10 @@ private:
 };
 
 /** @brief Event called to remove joint to scene graph */
-class SceneGraphRemoveJoint : public SceneEvent
+class SceneGraphRemoveJoint : public ComponentEvent
 {
 public:
-  SceneGraphRemoveJoint(const std::string& scene_name, std::string joint_name, bool recursive);
+  SceneGraphRemoveJoint(ComponentInfo component_info, std::string joint_name, bool recursive);
   ~SceneGraphRemoveJoint() override;
 
   const std::string& getJointName() const;
@@ -201,10 +201,10 @@ private:
 };
 
 /** @brief Event called to replace joint to scene graph */
-class SceneGraphReplaceJoint : public SceneEvent
+class SceneGraphReplaceJoint : public ComponentEvent
 {
 public:
-  SceneGraphReplaceJoint(const std::string& scene_name, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+  SceneGraphReplaceJoint(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
   ~SceneGraphReplaceJoint() override;
 
   std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
@@ -219,10 +219,10 @@ private:
 };
 
 /** @brief Event called to modify link visibility */
-class SceneGraphModifyLinkVisibility : public SceneEvent
+class SceneGraphModifyLinkVisibility : public ComponentEvent
 {
 public:
-  SceneGraphModifyLinkVisibility(const std::string& scene_name,
+  SceneGraphModifyLinkVisibility(ComponentInfo component_info,
                                  std::string link_name,
                                  LinkVisibilityFlags flags,
                                  bool visible);
@@ -242,10 +242,10 @@ private:
 };
 
 /** @brief Event called to modify all link visibility */
-class SceneGraphModifyLinkVisibilityALL : public SceneEvent
+class SceneGraphModifyLinkVisibilityALL : public ComponentEvent
 {
 public:
-  SceneGraphModifyLinkVisibilityALL(const std::string& scene_name, LinkVisibilityFlags flags, bool visible);
+  SceneGraphModifyLinkVisibilityALL(ComponentInfo component_info, LinkVisibilityFlags flags, bool visible);
   ~SceneGraphModifyLinkVisibilityALL() override;
 
   LinkVisibilityFlags getVisibilityFlags() const;
@@ -261,10 +261,10 @@ private:
 };
 
 /** @brief Event called to plot scene graph */
-class SceneGraphPlot : public SceneEvent
+class SceneGraphPlot : public ComponentEvent
 {
 public:
-  SceneGraphPlot(const std::string& scene_name);
+  SceneGraphPlot(ComponentInfo component_info);
   ~SceneGraphPlot() override;
 
   /** @brief Unique type for this event. */

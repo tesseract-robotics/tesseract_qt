@@ -46,7 +46,7 @@ AllowedCollisionMatrixWidget::~AllowedCollisionMatrixWidget() = default;
 void AllowedCollisionMatrixWidget::setModel(tesseract_gui::AllowedCollisionMatrixModel* model)
 {
   ui_->acmTreeView->setModel(model);
-  dialog_ = std::make_unique<AddAllowedCollisionEntryDialog>(model->getSceneName());
+  dialog_ = std::make_unique<AddAllowedCollisionEntryDialog>(model->getComponentInfo());
 }
 
 void AllowedCollisionMatrixWidget::onRemoveButtonClicked()
@@ -61,8 +61,9 @@ void AllowedCollisionMatrixWidget::onRemoveButtonClicked()
     if (idx.isValid() && idx.parent().isValid())
       remove.push_back({ m->data(idx.parent()).toString().toStdString(), m->data(idx).toString().toStdString() });
 
-    std::string scene_name = qobject_cast<AllowedCollisionMatrixModel*>(ui_->acmTreeView->model())->getSceneName();
-    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixRemove(scene_name, remove));
+    ComponentInfo component_info =
+        qobject_cast<AllowedCollisionMatrixModel*>(ui_->acmTreeView->model())->getComponentInfo();
+    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixRemove(component_info, remove));
   }
 }
 

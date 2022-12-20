@@ -33,13 +33,14 @@ class SceneState;
 
 namespace tesseract_gui
 {
-class SceneStateModelPrivate;
+struct ComponentInfo;
 class SceneStateModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit SceneStateModel(std::string scene_name = "", QObject* parent = nullptr);
+  explicit SceneStateModel(QObject* parent = nullptr);
+  explicit SceneStateModel(ComponentInfo component_info, QObject* parent = nullptr);
   ~SceneStateModel() override;
   SceneStateModel(const SceneStateModel& other);
   SceneStateModel& operator=(const SceneStateModel& other);
@@ -51,8 +52,8 @@ public:
   void clear();
 
 private:
-  std::string scene_name_;
-  std::unique_ptr<SceneStateModelPrivate> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

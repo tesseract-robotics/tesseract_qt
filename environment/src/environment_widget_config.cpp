@@ -34,6 +34,7 @@
 #include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <tesseract_environment/environment.h>
 
@@ -45,20 +46,20 @@ namespace tesseract_gui
 {
 struct EnvironmentWidgetConfig::Implementation
 {
-  Implementation(std::string scene_name)
-    : scene_name(std::move(scene_name))
-    , scene_model(this->scene_name)
-    //    , group_model(this->scene_name)
-    //    , group_tcps_model(this->scene_name)
-    , scene_state_model(this->scene_name)
-    , group_states_model(this->scene_name)
-    , acm_model(this->scene_name)
+  Implementation(ComponentInfo component_info)
+    : component_info(std::move(component_info))
+    , scene_model(this->component_info)
+    , group_model(this->component_info)
+    , group_tcps_model(this->component_info)
+    , scene_state_model(this->component_info)
+    , group_states_model(this->component_info)
+    , acm_model(this->component_info)
   //    , commands_model(this->scene_name)
   {
   }
 
   std::size_t hash;
-  std::string scene_name;
+  ComponentInfo component_info;
   tesseract_environment::Environment::Ptr environment;
 
   // Store link visibility properties
@@ -73,8 +74,10 @@ struct EnvironmentWidgetConfig::Implementation
   EnvironmentCommandsModel commands_model;
 };
 
-EnvironmentWidgetConfig::EnvironmentWidgetConfig(std::string scene_name)
-  : data_(std::make_unique<Implementation>(std::move(scene_name)))
+EnvironmentWidgetConfig::EnvironmentWidgetConfig() : EnvironmentWidgetConfig(ComponentInfo()) {}
+
+EnvironmentWidgetConfig::EnvironmentWidgetConfig(ComponentInfo component_info)
+  : data_(std::make_unique<Implementation>(std::move(component_info)))
 {
   data_->hash = std::hash<EnvironmentWidgetConfig*>{}(this);
   data_->environment = std::make_shared<tesseract_environment::Environment>();
@@ -136,11 +139,11 @@ EnvironmentCommandsModel& EnvironmentWidgetConfig::getEnvironmentCommandsModel()
 void EnvironmentWidgetConfig::clear()
 {
   data_->link_visibility_properties.clear();
-  QApplication::sendEvent(qApp, new events::SceneGraphClear(data_->scene_name));
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(data_->scene_name));
-  QApplication::sendEvent(qApp, new events::KinematicGroupsClear(data_->scene_name));
-  QApplication::sendEvent(qApp, new events::GroupJointStatesClear(data_->scene_name));
-  QApplication::sendEvent(qApp, new events::GroupTCPsClear(data_->scene_name));
+  QApplication::sendEvent(qApp, new events::SceneGraphClear(data_->component_info));
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(data_->component_info));
+  QApplication::sendEvent(qApp, new events::KinematicGroupsClear(data_->component_info));
+  QApplication::sendEvent(qApp, new events::GroupJointStatesClear(data_->component_info));
+  QApplication::sendEvent(qApp, new events::GroupTCPsClear(data_->component_info));
   data_->commands_model.clear();
 }
 
@@ -165,7 +168,7 @@ void EnvironmentWidgetConfig::onUpdateSceneGraphModel()
   if (!data_->environment->isInitialized())
     return;
 
-  QApplication::sendEvent(qApp, new events::SceneGraphSet(data_->scene_name, data_->environment->getSceneGraph()));
+  QApplication::sendEvent(qApp, new events::SceneGraphSet(data_->component_info, data_->environment->getSceneGraph()));
 
   // Update link visibility properties
   std::vector<std::string> link_names = data_->environment->getLinkNames();
@@ -187,7 +190,7 @@ void EnvironmentWidgetConfig::onUpdateCurrentStateModel()
   if (!data_->environment->isInitialized())
     return;
 
-  QApplication::sendEvent(qApp, new events::SceneStateChanged(data_->scene_name, data_->environment->getState()));
+  QApplication::sendEvent(qApp, new events::SceneStateChanged(data_->component_info, data_->environment->getState()));
 }
 void EnvironmentWidgetConfig::onUpdateAllowedCollisionMatrixModel()
 {
@@ -195,7 +198,8 @@ void EnvironmentWidgetConfig::onUpdateAllowedCollisionMatrixModel()
     return;
 
   QApplication::sendEvent(
-      qApp, new events::AllowedCollisionMatrixSet(data_->scene_name, *data_->environment->getAllowedCollisionMatrix()));
+      qApp,
+      new events::AllowedCollisionMatrixSet(data_->component_info, *data_->environment->getAllowedCollisionMatrix()));
 }
 
 void EnvironmentWidgetConfig::onUpdateKinematicsInformationModels()
@@ -207,15 +211,16 @@ void EnvironmentWidgetConfig::onUpdateKinematicsInformationModels()
   auto kin_info = data_->environment->getKinematicsInformation();
 
   // Kinematic Groups
-  QApplication::sendEvent(qApp,
-                          new events::KinematicGroupsSet(
-                              data_->scene_name, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
+  QApplication::sendEvent(
+      qApp,
+      new events::KinematicGroupsSet(
+          data_->component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
 
   // Groups States
-  QApplication::sendEvent(qApp, new events::GroupJointStatesSet(data_->scene_name, kin_info.group_states));
+  QApplication::sendEvent(qApp, new events::GroupJointStatesSet(data_->component_info, kin_info.group_states));
 
   // Tool Center Points
-  QApplication::sendEvent(qApp, new events::GroupTCPsSet(data_->scene_name, kin_info.group_tcps));
+  QApplication::sendEvent(qApp, new events::GroupTCPsSet(data_->component_info, kin_info.group_tcps));
 }
 
 void EnvironmentWidgetConfig::onUpdateCommandHistoryModel()

@@ -25,8 +25,8 @@
 
 namespace tesseract_gui::events
 {
-CompositeInstructionClear::CompositeInstructionClear(const std::string& scene_name, const std::string& ns)
-  : SceneEvent(scene_name, kType), ns_(ns)
+CompositeInstructionClear::CompositeInstructionClear(ComponentInfo component_info, const std::string& ns)
+  : ComponentEvent(std::move(component_info), kType), ns_(ns)
 {
 }
 
@@ -42,10 +42,10 @@ struct CompositeInstructionSet::Implementation
   tesseract_planning::CompositeInstruction composite_instruction;
 };
 
-CompositeInstructionSet::CompositeInstructionSet(const std::string& scene_name,
+CompositeInstructionSet::CompositeInstructionSet(ComponentInfo component_info,
                                                  const tesseract_planning::CompositeInstruction& composite_instruction,
                                                  const std::string& ns)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->ns = ns;
   data_->composite_instruction = composite_instruction;
@@ -61,14 +61,14 @@ const tesseract_planning::CompositeInstruction& CompositeInstructionSet::getComp
 
 //////////////////////////////////////////
 
-CompositeInstructionRemove::CompositeInstructionRemove(const std::string& scene_name, boost::uuids::uuid uuid)
-  : SceneEventUUID(scene_name, uuid, kType)
+CompositeInstructionRemove::CompositeInstructionRemove(ComponentInfo component_info, boost::uuids::uuid uuid)
+  : ComponentEventUUID(std::move(component_info), uuid, kType)
 {
 }
-CompositeInstructionRemove::CompositeInstructionRemove(const std::string& scene_name,
+CompositeInstructionRemove::CompositeInstructionRemove(ComponentInfo component_info,
                                                        boost::uuids::uuid uuid,
                                                        boost::uuids::uuid child_uuid)
-  : SceneEventUUID(scene_name, uuid, child_uuid, kType)
+  : ComponentEventUUID(std::move(component_info), uuid, child_uuid, kType)
 {
 }
 CompositeInstructionRemove::~CompositeInstructionRemove() = default;

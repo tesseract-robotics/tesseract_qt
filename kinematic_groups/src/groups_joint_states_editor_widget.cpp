@@ -86,10 +86,11 @@ void GroupsJointStatesEditorWidget::onAddJointState()
   if (state_name.empty())
     return;
 
-  QApplication::sendEvent(
-      qApp,
-      new tesseract_gui::events::GroupJointStatesAdd(
-          data_->group_states_model->getSceneName(), group_name, state_name, ui_->jointSliderWidget->getJointState()));
+  QApplication::sendEvent(qApp,
+                          new tesseract_gui::events::GroupJointStatesAdd(data_->group_states_model->getComponentInfo(),
+                                                                         group_name,
+                                                                         state_name,
+                                                                         ui_->jointSliderWidget->getJointState()));
 
   ui_->jointStateNameLineEdit->clear();
 }
@@ -111,7 +112,7 @@ void GroupsJointStatesEditorWidget::onRemoveJointState()
   if (!remove_items.empty())
     QApplication::sendEvent(
         qApp,
-        new tesseract_gui::events::GroupJointStatesRemove(data_->group_states_model->getSceneName(), remove_items));
+        new tesseract_gui::events::GroupJointStatesRemove(data_->group_states_model->getComponentInfo(), remove_items));
 }
 
 }  // namespace tesseract_gui

@@ -30,13 +30,14 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_widget.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/component_info.h>
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
-  std::string scene_name{ "scene_name" };
-  tesseract_gui::AllowedCollisionMatrixModel model(scene_name);
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  tesseract_gui::AllowedCollisionMatrixModel model(component_info);
 
   tesseract_gui::AllowedCollisionMatrixWidget widget;
 
@@ -48,7 +49,7 @@ int main(int argc, char** argv)
   entries.push_back({ "link_2", "link_3", "Adjacent" });
   entries.push_back({ "link_3", "link_4", "Adjacent" });
 
-  QApplication::sendEvent(qApp, new tesseract_gui::events::AllowedCollisionMatrixAdd(scene_name, entries));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::AllowedCollisionMatrixAdd(component_info, entries));
 
   return QApplication::exec();
 }

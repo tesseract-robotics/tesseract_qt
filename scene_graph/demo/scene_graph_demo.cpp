@@ -33,6 +33,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/scene_graph/scene_graph_standard_item.h>
 #include <tesseract_qt/scene_graph/scene_graph_tool_bar.h>
 #include <tesseract_qt/scene_graph/scene_graph_events.h>
+#include <tesseract_qt/common/component_info.h>
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
@@ -47,8 +48,8 @@ int main(int argc, char** argv)
   tesseract_common::TesseractSupportResourceLocator locator;
   auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
 
-  std::string scene_name{ "scene_name" };
-  auto* model = new tesseract_gui::SceneGraphModel(scene_name);
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  auto* model = new tesseract_gui::SceneGraphModel(component_info);
 
   auto* scene_graph_widget = new QTreeView();
   scene_graph_widget->setModel(model);
@@ -57,12 +58,12 @@ int main(int argc, char** argv)
   auto layout = new QVBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
-  layout->addWidget(new tesseract_gui::SceneGraphToolBar(scene_name));
+  layout->addWidget(new tesseract_gui::SceneGraphToolBar(component_info));
   layout->addWidget(scene_graph_widget, 1);
   widget.setLayout(layout);
   widget.show();
 
-  QApplication::sendEvent(qApp, new tesseract_gui::events::SceneGraphSet(scene_name, std::move(scene_graph)));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::SceneGraphSet(component_info, std::move(scene_graph)));
 
   return app.exec();
 }

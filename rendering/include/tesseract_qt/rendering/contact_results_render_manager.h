@@ -29,11 +29,12 @@
 namespace tesseract_gui
 {
 class EntityManager;
+struct ComponentInfo;
 
 class ContactResultsRenderManager : public QObject
 {
 public:
-  ContactResultsRenderManager(std::string scene_name, std::shared_ptr<EntityManager> entity_manager);
+  ContactResultsRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
   ~ContactResultsRenderManager();
 
 private:

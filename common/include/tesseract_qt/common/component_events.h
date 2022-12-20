@@ -20,8 +20,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_GUI_COMMON_SCENE_EVENTS_H
-#define TESSERACT_GUI_COMMON_SCENE_EVENTS_H
+#ifndef TESSERACT_GUI_COMMON_COMPONENT_EVENTS_H
+#define TESSERACT_GUI_COMMON_COMPONENT_EVENTS_H
+
+#include <tesseract_qt/common/component_info.h>
 
 #include <QEvent>
 #include <memory>
@@ -34,25 +36,28 @@ struct uuid;
 namespace tesseract_gui::events
 {
 /** @brief Event called  */
-class SceneEvent : public QEvent
+class ComponentEvent : public QEvent
 {
 public:
-  SceneEvent(std::string scene_name, QEvent::Type type);
-  ~SceneEvent() override;
+  ComponentEvent(ComponentInfo component_info, QEvent::Type type);
+  ~ComponentEvent() override;
 
   /** @brief Get the scene name the event is associated with */
-  const std::string& getSceneName() const;
+  const ComponentInfo& getComponentInfo() const;
 
 private:
-  std::string scene_name_;
+  ComponentInfo component_info_;
 };
 
-class SceneEventUUID : public SceneEvent
+class ComponentEventUUID : public ComponentEvent
 {
 public:
-  SceneEventUUID(std::string scene_name, boost::uuids::uuid uuid, QEvent::Type type);
-  SceneEventUUID(std::string scene_name, boost::uuids::uuid uuid, boost::uuids::uuid child_uuid, QEvent::Type type);
-  ~SceneEventUUID() override;
+  ComponentEventUUID(ComponentInfo component_info, boost::uuids::uuid uuid, QEvent::Type type);
+  ComponentEventUUID(ComponentInfo component_info,
+                     boost::uuids::uuid uuid,
+                     boost::uuids::uuid child_uuid,
+                     QEvent::Type type);
+  ~ComponentEventUUID() override;
 
   /** @brief Get the uuid the event is associated with */
   const boost::uuids::uuid& getUUID() const;
@@ -66,16 +71,16 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-class SceneEventVisibility : public SceneEventUUID
+class ComponentEventVisibility : public ComponentEventUUID
 {
 public:
-  SceneEventVisibility(std::string scene_name, boost::uuids::uuid uuid, bool visible, QEvent::Type type);
-  SceneEventVisibility(std::string scene_name,
-                       boost::uuids::uuid uuid,
-                       boost::uuids::uuid child_uuid,
-                       bool visible,
-                       QEvent::Type type);
-  ~SceneEventVisibility() override;
+  ComponentEventVisibility(ComponentInfo component_info, boost::uuids::uuid uuid, bool visible, QEvent::Type type);
+  ComponentEventVisibility(ComponentInfo component_info,
+                           boost::uuids::uuid uuid,
+                           boost::uuids::uuid child_uuid,
+                           bool visible,
+                           QEvent::Type type);
+  ~ComponentEventVisibility() override;
 
   /** @brief Get the visibility */
   bool getVisibility() const;
@@ -84,11 +89,11 @@ private:
   bool visible_;
 };
 
-class SceneEventVisibilityAll : public SceneEvent
+class ComponentEventVisibilityAll : public ComponentEvent
 {
 public:
-  SceneEventVisibilityAll(std::string scene_name, bool visible, QEvent::Type type);
-  ~SceneEventVisibilityAll() override;
+  ComponentEventVisibilityAll(ComponentInfo component_info, bool visible, QEvent::Type type);
+  ~ComponentEventVisibilityAll() override;
 
   /** @brief Get the visibility */
   bool getVisibility() const;
@@ -97,4 +102,4 @@ private:
   bool visible_;
 };
 }  // namespace tesseract_gui::events
-#endif  // TESSERACT_GUI_COMMON_SCENE_EVENTS_H
+#endif  // TESSERACT_GUI_COMMON_COMPONENT_EVENTS_H

@@ -33,6 +33,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/tool_path/tool_path_tree_view.h>
 #include <tesseract_qt/tool_path/tool_path_tool_bar.h>
 #include <tesseract_qt/tool_path/tool_path_events.h>
+#include <tesseract_qt/common/tool_path.h>
+#include <tesseract_qt/common/component_info.h>
 
 int main(int argc, char** argv)
 {
@@ -64,8 +66,8 @@ int main(int argc, char** argv)
   tool_path2.setDescription("Demo Tool Path 2");
   tool_path2.regenerateUUID();
 
-  std::string scene_name{ "scene_name" };
-  auto* model = new tesseract_gui::ToolPathModel(scene_name);  // NOLINT
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  auto* model = new tesseract_gui::ToolPathModel(component_info);  // NOLINT
   model->addToolPath(tool_path);
   model->addToolPath(tool_path1);
   model->addToolPath(tool_path2);
@@ -82,11 +84,11 @@ int main(int argc, char** argv)
   tool_path4.setDescription("Demo Tool Path 4");
   tool_path4.regenerateUUID();
 
-  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path3));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path4));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(scene_name, tool_path3.getUUID()));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path3));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path4));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(component_info, tool_path3.getUUID()));
 
-  auto* selection_model = new tesseract_gui::ToolPathSelectionModel(model, scene_name);
+  auto* selection_model = new tesseract_gui::ToolPathSelectionModel(model, component_info);
   auto* tool_path_widget = new tesseract_gui::ToolPathTreeView();
   tool_path_widget->setModel(model);
   tool_path_widget->setSelectionModel(selection_model);
@@ -95,7 +97,7 @@ int main(int argc, char** argv)
   auto layout = new QVBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
-  layout->addWidget(new tesseract_gui::ToolPathToolBar(scene_name));
+  layout->addWidget(new tesseract_gui::ToolPathToolBar(component_info));
   layout->addWidget(tool_path_widget, 1);
   widget.setLayout(layout);
 

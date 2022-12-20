@@ -25,6 +25,7 @@
 #include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <tesseract_common/joint_state.h>
 
@@ -32,8 +33,17 @@
 
 namespace tesseract_gui
 {
-GroupJointStatesModel::GroupJointStatesModel(std::string scene_name, QObject* parent)
-  : QStandardItemModel(parent), scene_name_(std::move(scene_name))
+GroupJointStatesModel::GroupJointStatesModel(QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>())
+{
+  clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
+GroupJointStatesModel::GroupJointStatesModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
   clear();
 
@@ -48,7 +58,9 @@ GroupJointStatesModel::GroupJointStatesModel(const GroupJointStatesModel& other)
 
 GroupJointStatesModel& GroupJointStatesModel::operator=(const GroupJointStatesModel& other) { return *this; }
 
-const std::string& GroupJointStatesModel::getSceneName() const { return scene_name_; }
+GroupJointStatesModel::~GroupJointStatesModel() = default;
+
+const ComponentInfo& GroupJointStatesModel::getComponentInfo() const { return *component_info_; }
 
 void GroupJointStatesModel::clear()
 {
@@ -133,28 +145,28 @@ bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupJointStatesSet*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesSet*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
       set(e->getGroupJointStates());
   }
   else if (event->type() == events::GroupJointStatesAdd::kType)
   {
     assert(dynamic_cast<events::GroupJointStatesAdd*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesAdd*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
       add(e->getGroupName(), e->getStateName(), e->getJointState());
   }
   else if (event->type() == events::GroupJointStatesClear::kType)
   {
     assert(dynamic_cast<events::GroupJointStatesClear*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesClear*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
       clear();
   }
   else if (event->type() == events::GroupJointStatesRemove::kType)
   {
     assert(dynamic_cast<events::GroupJointStatesRemove*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesRemove*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
     {
       for (const auto& entry : e->getEntries())
         remove(entry[0], entry[1]);
@@ -164,7 +176,7 @@ bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupJointStatesRemoveGroup*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesRemoveGroup*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == *component_info_)
     {
       for (const auto& link_name : e->getGroupNames())
         remove(link_name);

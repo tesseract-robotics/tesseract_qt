@@ -33,6 +33,7 @@ class QStandardItemModel;
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class SceneGraphModel;
 class SceneStateModel;
 class KinematicGroupsModel;
@@ -50,7 +51,8 @@ public:
   using UPtr = std::unique_ptr<EnvironmentWidgetConfig>;
   using ConstUPtr = std::unique_ptr<const EnvironmentWidgetConfig>;
 
-  EnvironmentWidgetConfig(std::string scene_name = "scene_name");
+  EnvironmentWidgetConfig();
+  EnvironmentWidgetConfig(ComponentInfo component_info);
   ~EnvironmentWidgetConfig() override;
 
   /**

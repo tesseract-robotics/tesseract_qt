@@ -28,16 +28,20 @@
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class SceneGraphToolBar : public QToolBar
 {
   Q_OBJECT
 public:
-  explicit SceneGraphToolBar(const std::string& scene_name, QWidget* parent = nullptr);
+  SceneGraphToolBar(QWidget* parent = nullptr);
+  explicit SceneGraphToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
   ~SceneGraphToolBar();
 
 private:
   class Implementation;
   std::unique_ptr<Implementation> data_;
+
+  void ctor(ComponentInfo component_info);
 };
 }  // namespace tesseract_gui
 

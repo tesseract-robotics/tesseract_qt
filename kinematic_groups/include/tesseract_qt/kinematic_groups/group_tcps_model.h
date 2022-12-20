@@ -35,19 +35,25 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class GroupTCPsModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit GroupTCPsModel(std::string scene_name = "", QObject* parent = nullptr);
+  explicit GroupTCPsModel(QObject* parent = nullptr);
+  explicit GroupTCPsModel(ComponentInfo component_info, QObject* parent = nullptr);
   GroupTCPsModel(const GroupTCPsModel& other);
   GroupTCPsModel& operator=(const GroupTCPsModel& other);
+  ~GroupTCPsModel() override;
+
+  const ComponentInfo& getComponentInfo() const;
 
   const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
 
 private:
-  std::string scene_name_;
+  std::unique_ptr<ComponentInfo> component_info_;
+
   GroupTCPsStandardItem* getRoot();
   const GroupTCPsStandardItem* getRoot() const;
 

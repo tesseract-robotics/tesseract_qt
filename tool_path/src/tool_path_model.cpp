@@ -31,14 +31,21 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/utils.h>
+#include <tesseract_qt/common/component_info.h>
+#include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
 #include <QApplication>
 
 namespace tesseract_gui
 {
-ToolPathModel::ToolPathModel(std::string scene_name, QObject* parent)
-  : QStandardItemModel(parent), scene_name_(std::move(scene_name))
+struct ToolPathModel::Implementation
+{
+  ComponentInfo component_info;
+  std::map<boost::uuids::uuid, QStandardItem*> tool_paths;
+};
+
+ToolPathModel::ToolPathModel(QObject* parent) : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
 
@@ -46,12 +53,25 @@ ToolPathModel::ToolPathModel(std::string scene_name, QObject* parent)
   qGuiApp->installEventFilter(this);
 }
 
+ToolPathModel::ToolPathModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+{
+  clear();
+
+  data_->component_info = std::move(component_info);
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
+ToolPathModel::~ToolPathModel() = default;
+
 void ToolPathModel::clear()
 {
   QStandardItemModel::clear();
   setColumnCount(2);
   setHorizontalHeaderLabels({ "Name", "Values" });
-  tool_paths_.clear();
+  data_->tool_paths.clear();
 }
 
 void ToolPathModel::addToolPath(const ToolPath& tool_path)
@@ -62,26 +82,26 @@ void ToolPathModel::addToolPath(const ToolPath& tool_path)
   auto* tool_path_item = new ToolPathStandardItem(tool_path);
   auto* tool_path_description_item = new QStandardItem(QString::fromStdString(tool_path.getDescription()));
   item->appendRow({ tool_path_item, tool_path_description_item });
-  tool_paths_[tool_path.getUUID()] = tool_path_item;
+  data_->tool_paths[tool_path.getUUID()] = tool_path_item;
 }
 
 void ToolPathModel::removeToolPath(const boost::uuids::uuid& uuid)
 {
-  auto it = tool_paths_.find(uuid);
-  if (it == tool_paths_.end())
+  auto it = data_->tool_paths.find(uuid);
+  if (it == data_->tool_paths.end())
     throw std::runtime_error("Tried to remove tool path '" + boost::uuids::to_string(uuid) + "' which does not exist!");
 
   QModelIndex idx = indexFromItem(it->second);
-  tool_paths_.erase(it);
+  data_->tool_paths.erase(it);
   removeRow(idx.row(), idx.parent());
 
-  if (tool_paths_.empty())
+  if (data_->tool_paths.empty())
     clear();
 }
 
 bool ToolPathModel::hasToolPath(const boost::uuids::uuid& uuid)
 {
-  return (tool_paths_.find(uuid) != tool_paths_.end());
+  return (data_->tool_paths.find(uuid) != data_->tool_paths.end());
 }
 
 Eigen::Isometry3d ToolPathModel::getTransform(const QModelIndex& row) const
@@ -124,31 +144,35 @@ bool ToolPathModel::setData(const QModelIndex& index, const QVariant& value, int
       assert(dynamic_cast<ToolPathStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<ToolPathStandardItem*>(item);
       if (value.value<Qt::CheckState>() == Qt::Checked)
-        QApplication::sendEvent(qApp, new events::ToolPathShow(scene_name_, derived_item->getUUID()));
+        QApplication::sendEvent(qApp, new events::ToolPathShow(data_->component_info, derived_item->getUUID()));
       else
-        QApplication::sendEvent(qApp, new events::ToolPathHide(scene_name_, derived_item->getUUID()));
+        QApplication::sendEvent(qApp, new events::ToolPathHide(data_->component_info, derived_item->getUUID()));
     }
     else if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
     {
       assert(dynamic_cast<ToolPathSegmentStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<ToolPathSegmentStandardItem*>(item);
       if (value.value<Qt::CheckState>() == Qt::Checked)
-        QApplication::sendEvent(
-            qApp, new events::ToolPathShow(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+        QApplication::sendEvent(qApp,
+                                new events::ToolPathShow(
+                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
       else
-        QApplication::sendEvent(
-            qApp, new events::ToolPathHide(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+        QApplication::sendEvent(qApp,
+                                new events::ToolPathHide(
+                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
     }
     else if (item->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
     {
       assert(dynamic_cast<TransformStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<TransformStandardItem*>(item);
       if (value.value<Qt::CheckState>() == Qt::Checked)
-        QApplication::sendEvent(
-            qApp, new events::ToolPathShow(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+        QApplication::sendEvent(qApp,
+                                new events::ToolPathShow(
+                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
       else
-        QApplication::sendEvent(
-            qApp, new events::ToolPathHide(scene_name_, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+        QApplication::sendEvent(qApp,
+                                new events::ToolPathHide(
+                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
     }
   }
   return QStandardItemModel::setData(index, value, role);
@@ -160,35 +184,35 @@ bool ToolPathModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathAdd*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathAdd*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == data_->component_info)
       addToolPath(e->getToolPath());
   }
   else if (event->type() == events::ToolPathRemove::kType)
   {
     assert(dynamic_cast<events::ToolPathRemove*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemove*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == data_->component_info)
       removeToolPath(e->getUUID());
   }
   else if (event->type() == events::ToolPathRemoveAll::kType)
   {
     assert(dynamic_cast<events::ToolPathRemoveAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemoveAll*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == data_->component_info)
       clear();
   }
   else if (event->type() == events::ToolPathHideAll::kType)
   {
     assert(dynamic_cast<events::ToolPathHideAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathHideAll*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == data_->component_info)
       setCheckedStateRecursive(invisibleRootItem(), Qt::CheckState::Unchecked);
   }
   else if (event->type() == events::ToolPathShowAll::kType)
   {
     assert(dynamic_cast<events::ToolPathShowAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathShowAll*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == data_->component_info)
       setCheckedStateRecursive(invisibleRootItem(), Qt::CheckState::Checked);
   }
 

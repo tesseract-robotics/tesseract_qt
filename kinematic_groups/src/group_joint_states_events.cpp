@@ -24,15 +24,18 @@
 
 namespace tesseract_gui::events
 {
-GroupJointStatesClear::GroupJointStatesClear(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+GroupJointStatesClear::GroupJointStatesClear(ComponentInfo component_info)
+  : ComponentEvent(std::move(component_info), kType)
+{
+}
 
 GroupJointStatesClear::~GroupJointStatesClear() = default;
 
 //////////////////////////////////////////
 
-GroupJointStatesSet::GroupJointStatesSet(const std::string& scene_name,
+GroupJointStatesSet::GroupJointStatesSet(ComponentInfo component_info,
                                          const tesseract_srdf::GroupJointStates& group_joint_states)
-  : SceneEvent(scene_name, kType), group_joint_states_(group_joint_states)
+  : ComponentEvent(std::move(component_info), kType), group_joint_states_(group_joint_states)
 {
 }
 
@@ -42,11 +45,11 @@ const tesseract_srdf::GroupJointStates& GroupJointStatesSet::getGroupJointStates
 
 //////////////////////////////////////////
 
-GroupJointStatesAdd::GroupJointStatesAdd(const std::string& scene_name,
+GroupJointStatesAdd::GroupJointStatesAdd(ComponentInfo component_info,
                                          std::string group_name,
                                          std::string state_name,
                                          tesseract_srdf::GroupsJointState state)
-  : SceneEvent(scene_name, kType)
+  : ComponentEvent(std::move(component_info), kType)
   , group_name_(std::move(group_name))
   , state_name_(std::move(state_name))
   , state_(std::move(state))
@@ -61,9 +64,9 @@ const tesseract_srdf::GroupsJointState& GroupJointStatesAdd::getJointState() con
 
 //////////////////////////////////////////
 
-GroupJointStatesRemove::GroupJointStatesRemove(const std::string& scene_name,
+GroupJointStatesRemove::GroupJointStatesRemove(ComponentInfo component_info,
                                                const std::vector<std::array<std::string, 2>>& entries)
-  : SceneEvent(scene_name, kType), entries_(entries)
+  : ComponentEvent(std::move(component_info), kType), entries_(entries)
 {
 }
 
@@ -73,9 +76,9 @@ const std::vector<std::array<std::string, 2>>& GroupJointStatesRemove::getEntrie
 
 //////////////////////////////////////////
 
-GroupJointStatesRemoveGroup::GroupJointStatesRemoveGroup(const std::string& scene_name,
+GroupJointStatesRemoveGroup::GroupJointStatesRemoveGroup(ComponentInfo component_info,
                                                          const std::vector<std::string>& group_names)
-  : SceneEvent(scene_name, kType), group_names_(group_names)
+  : ComponentEvent(std::move(component_info), kType), group_names_(group_names)
 {
 }
 

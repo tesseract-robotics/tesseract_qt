@@ -24,25 +24,25 @@
 #define TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_EVENTS_H
 
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
+#include <tesseract_qt/common/component_events.h>
 #include <tesseract_srdf/kinematics_information.h>
 
 namespace tesseract_gui::events
 {
-class GroupJointStatesClear : public SceneEvent
+class GroupJointStatesClear : public ComponentEvent
 {
 public:
-  GroupJointStatesClear(const std::string& scene_name);
+  GroupJointStatesClear(ComponentInfo component_info);
   ~GroupJointStatesClear() override;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_CLEAR);
 };
 
-class GroupJointStatesSet : public SceneEvent
+class GroupJointStatesSet : public ComponentEvent
 {
 public:
-  GroupJointStatesSet(const std::string& scene_name, const tesseract_srdf::GroupJointStates& group_joint_states);
+  GroupJointStatesSet(ComponentInfo component_info, const tesseract_srdf::GroupJointStates& group_joint_states);
   ~GroupJointStatesSet() override;
 
   const tesseract_srdf::GroupJointStates& getGroupJointStates() const;
@@ -54,10 +54,10 @@ private:
   tesseract_srdf::GroupJointStates group_joint_states_;
 };
 
-class GroupJointStatesAdd : public SceneEvent
+class GroupJointStatesAdd : public ComponentEvent
 {
 public:
-  GroupJointStatesAdd(const std::string& scene_name,
+  GroupJointStatesAdd(ComponentInfo component_info,
                       std::string group_name,
                       std::string state_name,
                       tesseract_srdf::GroupsJointState state);
@@ -76,10 +76,10 @@ private:
   tesseract_srdf::GroupsJointState state_;
 };
 
-class GroupJointStatesRemove : public SceneEvent
+class GroupJointStatesRemove : public ComponentEvent
 {
 public:
-  GroupJointStatesRemove(const std::string& scene_name, const std::vector<std::array<std::string, 2>>& entries);
+  GroupJointStatesRemove(ComponentInfo component_info, const std::vector<std::array<std::string, 2>>& entries);
   ~GroupJointStatesRemove() override;
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
@@ -91,10 +91,10 @@ private:
   std::vector<std::array<std::string, 2>> entries_;
 };
 
-class GroupJointStatesRemoveGroup : public SceneEvent
+class GroupJointStatesRemoveGroup : public ComponentEvent
 {
 public:
-  GroupJointStatesRemoveGroup(const std::string& scene_name, const std::vector<std::string>& group_names);
+  GroupJointStatesRemoveGroup(ComponentInfo component_info, const std::vector<std::string>& group_names);
   ~GroupJointStatesRemoveGroup() override;
 
   const std::vector<std::string>& getGroupNames() const;
@@ -109,7 +109,7 @@ private:
 // class GroupJointStatesShow : public SceneEvent
 //{
 // public:
-//  GroupJointStatesShow(const std::string& scene_name, QString group_name, QString state_name,
+//  GroupJointStatesShow(ComponentInfo component_info, QString group_name, QString state_name,
 //  tesseract_srdf::GroupsJointState state); ~GroupJointStatesShow() override;
 
 //  const std::string& getGroupName() const;

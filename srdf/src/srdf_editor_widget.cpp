@@ -42,8 +42,9 @@
 #include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_events.h>
+#include <tesseract_qt/common/component_info.h>
 
-static const std::string SCENE_NAME{ "srdf_scene" };
+static const tesseract_gui::ComponentInfo COMPONENT_INFO{ "srdf_scene" };
 
 namespace tesseract_gui
 {
@@ -67,7 +68,7 @@ struct SRDFEditorWidgetImpl
 
   QStringListModel joint_model;
 
-  AllowedCollisionMatrixModel acm_model{ SCENE_NAME };
+  AllowedCollisionMatrixModel acm_model{ COMPONENT_INFO };
 
   QStringListModel group_names_model;
 
@@ -153,13 +154,13 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     this->data_->link_model.setStringList(QStringList());
     this->data_->group_names_model.setStringList(QStringList());
 
-    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(SCENE_NAME));
+    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(COMPONENT_INFO));
 
-    QApplication::sendEvent(qApp, new events::KinematicGroupsClear(SCENE_NAME));
+    QApplication::sendEvent(qApp, new events::KinematicGroupsClear(COMPONENT_INFO));
     this->data_->group_link_list_model.setStringList(QStringList());
     this->data_->group_joint_list_model.setStringList(QStringList());
 
-    QApplication::sendEvent(qApp, new events::GroupJointStatesClear(SCENE_NAME));
+    QApplication::sendEvent(qApp, new events::GroupJointStatesClear(COMPONENT_INFO));
     //    this->data_->user_tcp_model.clear();
     //    this->data_->opw_kinematics_model.clear();
 
@@ -197,15 +198,15 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
 
     // Build ACM Model
     QApplication::sendEvent(
-        qApp, new events::AllowedCollisionMatrixSet(SCENE_NAME, *(data_->env->getAllowedCollisionMatrix())));
+        qApp, new events::AllowedCollisionMatrixSet(COMPONENT_INFO, *(data_->env->getAllowedCollisionMatrix())));
 
     // Build Kinematic Groups Model
-    QApplication::sendEvent(
-        qApp,
-        new events::KinematicGroupsSet(SCENE_NAME, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
+    QApplication::sendEvent(qApp,
+                            new events::KinematicGroupsSet(
+                                COMPONENT_INFO, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
 
     // Build Groups Joint States Model
-    QApplication::sendEvent(qApp, new events::GroupJointStatesSet(SCENE_NAME, kin_info.group_states));
+    QApplication::sendEvent(qApp, new events::GroupJointStatesSet(COMPONENT_INFO, kin_info.group_states));
 
     //    // Build Groups TCPs Model
     //    this->data_->user_tcp_model.setEnvironment(this->data_->render_util.getEnvironment());
@@ -292,15 +293,16 @@ void SRDFEditorWidget::onAddChainGroup(const QString& group_name, const QString&
   tesseract_srdf::ChainGroup list = { std::make_pair(base_link.toStdString(), tip_link.toStdString()) };
   std::set<std::string> groups = this->data_->env->getKinematicsInformation().group_names;
 
-  QApplication::sendEvent(qApp, new events::KinematicGroupsAddChain(SCENE_NAME, group_name.toStdString(), list));
+  QApplication::sendEvent(qApp, new events::KinematicGroupsAddChain(COMPONENT_INFO, group_name.toStdString(), list));
 
   if (!group_name.isEmpty())
   {
     if (std::find(groups.begin(), groups.end(), group_name.toStdString()) != groups.end())
     {
       // Remove Group States, TCPs and OPW Kinematics associated with the group
-      QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
-      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp,
+                              new events::GroupJointStatesRemoveGroup(COMPONENT_INFO, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(COMPONENT_INFO, { group_name.toStdString() }));
       //    removeGroupOPWKinematics({group_name.toStdString()});
     }
   }
@@ -319,15 +321,16 @@ void SRDFEditorWidget::onAddJointGroup(const QString& group_name)
   for (const auto& j : qjoints)
     joints.push_back(j.toStdString());
 
-  QApplication::sendEvent(qApp, new events::KinematicGroupsAddJoint(SCENE_NAME, group_name.toStdString(), joints));
+  QApplication::sendEvent(qApp, new events::KinematicGroupsAddJoint(COMPONENT_INFO, group_name.toStdString(), joints));
 
   if (!group_name.isEmpty())
   {
     if (std::find(groups.begin(), groups.end(), group_name.toStdString()) != groups.end())
     {
       // Remove Group States, TCPs and OPW Kinematics associated with the group
-      QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
-      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp,
+                              new events::GroupJointStatesRemoveGroup(COMPONENT_INFO, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(COMPONENT_INFO, { group_name.toStdString() }));
       //      removeGroupOPWKinematics(group_name);
     }
   }
@@ -347,15 +350,16 @@ void SRDFEditorWidget::onAddLinkGroup(const QString& group_name)
   for (const auto& l : qlinks)
     links.push_back(l.toStdString());
 
-  QApplication::sendEvent(qApp, new events::KinematicGroupsAddLink(SCENE_NAME, group_name.toStdString(), links));
+  QApplication::sendEvent(qApp, new events::KinematicGroupsAddLink(COMPONENT_INFO, group_name.toStdString(), links));
 
   if (!group_name.isEmpty())
   {
     if (std::find(groups.begin(), groups.end(), group_name.toStdString()) != groups.end())
     {
       // Remove Group States, TCPs and OPW Kinematics associated with the group
-      QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
-      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp,
+                              new events::GroupJointStatesRemoveGroup(COMPONENT_INFO, { group_name.toStdString() }));
+      QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(COMPONENT_INFO, { group_name.toStdString() }));
       //    removeGroupOPWKinematics(group_name);
     }
   }
@@ -393,9 +397,9 @@ void SRDFEditorWidget::onRemoveKinematicGroup(int index)
     remove_groups.push_back(
         this->data_->kin_groups_model.item(index, 0)->data(Qt::DisplayRole).toString().toStdString());
 
-    QApplication::sendEvent(qApp, new events::KinematicGroupsRemove(SCENE_NAME, remove_groups));
-    QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(SCENE_NAME, remove_groups));
-    QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(SCENE_NAME, remove_groups));
+    QApplication::sendEvent(qApp, new events::KinematicGroupsRemove(COMPONENT_INFO, remove_groups));
+    QApplication::sendEvent(qApp, new events::GroupJointStatesRemoveGroup(COMPONENT_INFO, remove_groups));
+    QApplication::sendEvent(qApp, new events::GroupTCPsRemoveGroup(COMPONENT_INFO, remove_groups));
     //    removeGroupOPWKinematics(group_name);
   }
 }
@@ -420,7 +424,7 @@ void SRDFEditorWidget::onGenerateACM(long resolution)
     contact_manager->contactTest(results, request);
   }
 
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(SCENE_NAME));
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(COMPONENT_INFO));
   tesseract_common::AllowedCollisionMatrix acm;
   for (const auto& pair : results)
   {
@@ -460,7 +464,7 @@ void SRDFEditorWidget::onGenerateACM(long resolution)
       acm, tesseract_environment::ModifyAllowedCollisionsType::REPLACE);
   this->data_->env->applyCommand(cmd);
 
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixSet(SCENE_NAME, acm));
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixSet(COMPONENT_INFO, acm));
 
   Q_EMIT showStatusMessage("Finished generating allowed collision matrix!", 2000);
 }

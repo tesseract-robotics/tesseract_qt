@@ -158,15 +158,23 @@ public:
 };
 
 /////////////////////////////////////////////////
-Render::Render(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+RenderEvent::RenderEvent(std::string scene_name, QEvent::Type type) : QEvent(type), scene_name_(std::move(scene_name))
+{
+}
+RenderEvent::~RenderEvent() = default;
+
+const std::string& RenderEvent::getSceneName() const { return scene_name_; }
+
+/////////////////////////////////////////////////
+Render::Render(std::string scene_name) : RenderEvent(std::move(scene_name), kType) {}
 Render::~Render() = default;
 
 /////////////////////////////////////////////////
 SnapIntervals::SnapIntervals(const ignition::math::Vector3d& _xyz,
                              const ignition::math::Vector3d& _rpy,
                              const ignition::math::Vector3d& _scale,
-                             const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+                             std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->xyz = _xyz;
   data_->rpy = _rpy;
@@ -185,8 +193,8 @@ ignition::math::Vector3d SnapIntervals::getRotation() const { return data_->rpy;
 ignition::math::Vector3d SnapIntervals::getScale() const { return data_->scale; }
 
 /////////////////////////////////////////////////
-SpawnFromDescription::SpawnFromDescription(const std::string& description, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SpawnFromDescription::SpawnFromDescription(const std::string& description, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->description = description;
 }
@@ -196,8 +204,8 @@ SpawnFromDescription::~SpawnFromDescription() = default;
 const std::string& SpawnFromDescription::getDescription() const { return data_->description; }
 
 /////////////////////////////////////////////////
-SpawnFromPath::SpawnFromPath(const std::string& file_path, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SpawnFromPath::SpawnFromPath(const std::string& file_path, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->file_path = file_path;
 }
@@ -207,8 +215,8 @@ SpawnFromPath::~SpawnFromPath() = default;
 const std::string& SpawnFromPath::getFilePath() const { return data_->file_path; }
 
 /////////////////////////////////////////////////
-HoverToScene::HoverToScene(const ignition::math::Vector3d& point, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+HoverToScene::HoverToScene(const ignition::math::Vector3d& point, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->point = point;
 }
@@ -218,8 +226,8 @@ HoverToScene::~HoverToScene() = default;
 ignition::math::Vector3d HoverToScene::getPoint() const { return data_->point; }
 
 /////////////////////////////////////////////////
-HoverOnScene::HoverOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+HoverOnScene::HoverOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->mouse = mouse;
 }
@@ -229,8 +237,8 @@ HoverOnScene::~HoverOnScene() = default;
 ignition::common::MouseEvent HoverOnScene::getMouse() const { return data_->mouse; }
 
 /////////////////////////////////////////////////
-LeftClickToScene::LeftClickToScene(const ignition::math::Vector3d& point, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+LeftClickToScene::LeftClickToScene(const ignition::math::Vector3d& point, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->point = point;
 }
@@ -240,8 +248,8 @@ LeftClickToScene::~LeftClickToScene() = default;
 ignition::math::Vector3d LeftClickToScene::getPoint() const { return data_->point; }
 
 /////////////////////////////////////////////////
-RightClickToScene::RightClickToScene(const ignition::math::Vector3d& point, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+RightClickToScene::RightClickToScene(const ignition::math::Vector3d& point, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->point = point;
 }
@@ -251,8 +259,8 @@ RightClickToScene::~RightClickToScene() = default;
 ignition::math::Vector3d RightClickToScene::getPoint() const { return data_->point; }
 
 /////////////////////////////////////////////////
-DropdownMenuEnabled::DropdownMenuEnabled(bool menu_enabled, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+DropdownMenuEnabled::DropdownMenuEnabled(bool menu_enabled, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->menu_enabled = menu_enabled;
 }
@@ -262,8 +270,8 @@ DropdownMenuEnabled::~DropdownMenuEnabled() = default;
 bool DropdownMenuEnabled::getMenuEnabled() const { return data_->menu_enabled; }
 
 /////////////////////////////////////////////////
-RightClickOnScene::RightClickOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+RightClickOnScene::RightClickOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->mouse = mouse;
 }
@@ -273,8 +281,8 @@ RightClickOnScene::~RightClickOnScene() = default;
 const ignition::common::MouseEvent& RightClickOnScene::getMouse() const { return data_->mouse; }
 
 /////////////////////////////////////////////////
-LeftClickOnScene::LeftClickOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+LeftClickOnScene::LeftClickOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->mouse = mouse;
 }
@@ -284,8 +292,8 @@ LeftClickOnScene::~LeftClickOnScene() = default;
 const ignition::common::MouseEvent& LeftClickOnScene::getMouse() const { return data_->mouse; }
 
 /////////////////////////////////////////////////
-BlockOrbit::BlockOrbit(bool block, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+BlockOrbit::BlockOrbit(bool block, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->block = block;
 }
@@ -295,8 +303,8 @@ BlockOrbit::~BlockOrbit() = default;
 bool BlockOrbit::getBlock() const { return data_->block; }
 
 /////////////////////////////////////////////////
-KeyReleaseOnScene::KeyReleaseOnScene(const ignition::common::KeyEvent& key, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+KeyReleaseOnScene::KeyReleaseOnScene(const ignition::common::KeyEvent& key, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->key = key;
 }
@@ -306,8 +314,8 @@ KeyReleaseOnScene::~KeyReleaseOnScene() = default;
 ignition::common::KeyEvent KeyReleaseOnScene::getKey() const { return data_->key; }
 
 /////////////////////////////////////////////////
-KeyPressOnScene::KeyPressOnScene(const ignition::common::KeyEvent& key, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+KeyPressOnScene::KeyPressOnScene(const ignition::common::KeyEvent& key, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->key = key;
 }
@@ -317,8 +325,8 @@ KeyPressOnScene::~KeyPressOnScene() = default;
 ignition::common::KeyEvent KeyPressOnScene::getKey() const { return data_->key; }
 
 /////////////////////////////////////////////////
-SpawnCloneFromName::SpawnCloneFromName(const std::string& name, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+SpawnCloneFromName::SpawnCloneFromName(const std::string& name, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->name = name;
 }
@@ -331,8 +339,8 @@ const std::string& SpawnCloneFromName::getName() const { return data_->name; }
 /////////////////////////////////////////////////
 DropOnScene::DropOnScene(const std::string& drop_text,
                          const ignition::math::Vector2i& drop_mouse,
-                         const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+                         std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->drop_text = drop_text;
   data_->mouse = drop_mouse;
@@ -346,8 +354,8 @@ const std::string& DropOnScene::getDropText() const { return data_->drop_text; }
 const ignition::math::Vector2i& DropOnScene::getMouse() const { return data_->mouse; }
 
 /////////////////////////////////////////////////
-ScrollOnScene::ScrollOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+ScrollOnScene::ScrollOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->mouse = mouse;
 }
@@ -357,8 +365,8 @@ ScrollOnScene::~ScrollOnScene() = default;
 const ignition::common::MouseEvent& ScrollOnScene::getMouse() const { return data_->mouse; }
 
 /////////////////////////////////////////////////
-DragOnScene::DragOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+DragOnScene::DragOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->mouse = mouse;
 }
@@ -368,8 +376,8 @@ DragOnScene::~DragOnScene() = default;
 ignition::common::MouseEvent DragOnScene::getMouse() const { return data_->mouse; }
 
 /////////////////////////////////////////////////
-MousePressOnScene::MousePressOnScene(const ignition::common::MouseEvent& mouse, const std::string& scene_name)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+MousePressOnScene::MousePressOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name)
+  : RenderEvent(std::move(scene_name), kType), data_(std::make_unique<Implementation>())
 {
   data_->mouse = mouse;
 }
@@ -393,7 +401,7 @@ const ignition::common::MouseEvent& MousePressOnScene::getMouse() const { return
 //}
 
 /////////////////////////////////////////////////
-PreRender::PreRender(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+PreRender::PreRender(std::string scene_name) : RenderEvent(std::move(scene_name), kType) {}
 PreRender::~PreRender() = default;
 
 }  // namespace tesseract_gui::events

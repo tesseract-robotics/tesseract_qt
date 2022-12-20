@@ -27,6 +27,7 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <tesseract_scene_graph/scene_state.h>
 
@@ -34,8 +35,10 @@
 
 namespace tesseract_gui
 {
-struct SceneStateModelPrivate
+struct SceneStateModel::Implementation
 {
+  ComponentInfo component_info;
+
   std::vector<std::string> link_names;
   std::vector<std::string> joint_names_tf;
   std::vector<std::string> joint_names_value;
@@ -62,15 +65,25 @@ struct SceneStateModelPrivate
   }
 };
 
-SceneStateModel::SceneStateModel(std::string scene_name, QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<SceneStateModelPrivate>()), scene_name_(std::move(scene_name))
+SceneStateModel::SceneStateModel(QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
 }
 
+SceneStateModel::SceneStateModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+{
+  clear();
+  data_->component_info = std::move(component_info);
+}
+
 SceneStateModel::~SceneStateModel() = default;
 
-SceneStateModel::SceneStateModel(const SceneStateModel& other) : SceneStateModel(scene_name_, other.d_ptr->parent) {}
+SceneStateModel::SceneStateModel(const SceneStateModel& other)
+  : SceneStateModel(data_->component_info, other.d_ptr->parent)
+{
+}
 
 SceneStateModel& SceneStateModel::operator=(const SceneStateModel& other) { return *this; }
 
@@ -211,7 +224,7 @@ bool SceneStateModel::setData(const QModelIndex& index, const QVariant& value, i
       assert(dynamic_cast<TransformStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<TransformStandardItem*>(item);
       QApplication::sendEvent(qApp,
-                              new events::SceneGraphModifyLinkVisibility(scene_name_,
+                              new events::SceneGraphModifyLinkVisibility(data_->component_info,
                                                                          derived_item->text().toStdString(),
                                                                          LinkVisibilityFlags::AXIS,
                                                                          value.value<Qt::CheckState>() == Qt::Checked));
@@ -243,14 +256,14 @@ bool SceneStateModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::SceneGraphClear*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphClear*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == data_->component_info)
       clear();
   }
   else if (event->type() == events::SceneStateChanged::kType)
   {
     assert(dynamic_cast<events::SceneStateChanged*>(event) != nullptr);
     auto* e = static_cast<events::SceneStateChanged*>(event);
-    if (e->getSceneName() == scene_name_)
+    if (e->getComponentInfo() == data_->component_info)
       setState(e->getState());
   }
 

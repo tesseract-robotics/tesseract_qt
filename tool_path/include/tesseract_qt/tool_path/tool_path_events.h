@@ -25,7 +25,7 @@
 
 #include <memory>
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
+#include <tesseract_qt/common/component_events.h>
 
 namespace tesseract_gui
 {
@@ -40,10 +40,10 @@ struct uuid;
 namespace tesseract_gui::events
 {
 /** @brief Event called to add a tool path */
-class ToolPathAdd : public SceneEvent
+class ToolPathAdd : public ComponentEvent
 {
 public:
-  ToolPathAdd(const std::string& scene_name, const tesseract_gui::ToolPath& tool_path);
+  ToolPathAdd(ComponentInfo component_info, const tesseract_gui::ToolPath& tool_path);
   ~ToolPathAdd() override;
 
   const tesseract_gui::ToolPath& getToolPath() const;
@@ -58,10 +58,10 @@ private:
 };
 
 /** @brief Event called to remove a tool path */
-class ToolPathRemove : public SceneEvent
+class ToolPathRemove : public ComponentEvent
 {
 public:
-  ToolPathRemove(const std::string& scene_name, const boost::uuids::uuid& uuid);
+  ToolPathRemove(ComponentInfo component_info, const boost::uuids::uuid& uuid);
   ~ToolPathRemove() override;
 
   const boost::uuids::uuid& getUUID() const;
@@ -76,10 +76,10 @@ private:
 };
 
 /** @brief Event called to remove all a tool paths for a given scene */
-class ToolPathRemoveAll : public SceneEvent
+class ToolPathRemoveAll : public ComponentEvent
 {
 public:
-  ToolPathRemoveAll(const std::string& scene_name);
+  ToolPathRemoveAll(ComponentInfo component_info);
   ~ToolPathRemoveAll() override;
 
   /** @brief Unique type for this event. */
@@ -87,10 +87,10 @@ public:
 };
 
 /** @brief Event called to remove selected a tool paths for a given scene */
-class ToolPathRemoveSelected : public SceneEvent
+class ToolPathRemoveSelected : public ComponentEvent
 {
 public:
-  ToolPathRemoveSelected(const std::string& scene_name);
+  ToolPathRemoveSelected(ComponentInfo component_info);
   ~ToolPathRemoveSelected() override;
 
   /** @brief Unique type for this event. */
@@ -98,11 +98,11 @@ public:
 };
 
 /** @brief Event called to hide a tool path */
-class ToolPathHide : public SceneEvent
+class ToolPathHide : public ComponentEvent
 {
 public:
-  ToolPathHide(const std::string& scene_name, const boost::uuids::uuid& uuid);
-  ToolPathHide(const std::string& scene_name, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
+  ToolPathHide(ComponentInfo component_info, const boost::uuids::uuid& uuid);
+  ToolPathHide(ComponentInfo component_info, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
   ~ToolPathHide() override;
 
   const boost::uuids::uuid& getUUID() const;
@@ -118,10 +118,10 @@ private:
 };
 
 /** @brief Event called to hide all a tool paths for a given scene */
-class ToolPathHideAll : public SceneEvent
+class ToolPathHideAll : public ComponentEvent
 {
 public:
-  ToolPathHideAll(const std::string& scene_name);
+  ToolPathHideAll(ComponentInfo component_info);
   ~ToolPathHideAll() override;
 
   /** @brief Unique type for this event. */
@@ -129,11 +129,11 @@ public:
 };
 
 /** @brief Event called to show a tool path */
-class ToolPathShow : public SceneEvent
+class ToolPathShow : public ComponentEvent
 {
 public:
-  ToolPathShow(const std::string& scene_name, const boost::uuids::uuid& uuid);
-  ToolPathShow(const std::string& scene_name, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
+  ToolPathShow(ComponentInfo component_info, const boost::uuids::uuid& uuid);
+  ToolPathShow(ComponentInfo component_info, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
   ~ToolPathShow() override;
 
   const boost::uuids::uuid& getUUID() const;
@@ -149,10 +149,10 @@ private:
 };
 
 /** @brief Event called to show all a tool paths for a given scene */
-class ToolPathShowAll : public SceneEvent
+class ToolPathShowAll : public ComponentEvent
 {
 public:
-  ToolPathShowAll(const std::string& scene_name);
+  ToolPathShowAll(ComponentInfo component_info);
   ~ToolPathShowAll() override;
 
   /** @brief Unique type for this event. */

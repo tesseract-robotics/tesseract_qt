@@ -26,6 +26,7 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_common/allowed_collision_matrix.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/component_info.h>
 
 #include <QApplication>
 
@@ -33,15 +34,25 @@ namespace tesseract_gui
 {
 struct AllowedCollisionMatrixModel::Implementation
 {
-  std::string scene_name;
+  ComponentInfo component_info;
   std::unordered_map<std::string, QStandardItem*> items;
 };
 
-AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(std::string scene_name, QObject* parent)
+AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
-  data_->scene_name = std::move(scene_name);
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
+AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+{
+  clear();
+
+  data_->component_info = std::move(component_info);
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
@@ -50,7 +61,7 @@ AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(std::string scene_name,
 AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel& other)
   : QStandardItemModel(other.d_ptr->parent), data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = other.getSceneName();
+  data_->component_info = other.getComponentInfo();
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
@@ -60,11 +71,11 @@ AllowedCollisionMatrixModel::~AllowedCollisionMatrixModel() = default;
 
 AllowedCollisionMatrixModel& AllowedCollisionMatrixModel::operator=(const AllowedCollisionMatrixModel& other)
 {
-  data_->scene_name = other.getSceneName();
+  data_->component_info = other.getComponentInfo();
   return *this;
 }
 
-const std::string& AllowedCollisionMatrixModel::getSceneName() const { return data_->scene_name; }
+const ComponentInfo& AllowedCollisionMatrixModel::getComponentInfo() const { return data_->component_info; }
 
 void AllowedCollisionMatrixModel::set(const tesseract_common::AllowedCollisionMatrix& acm)
 {
@@ -236,7 +247,7 @@ bool AllowedCollisionMatrixModel::setData(const QModelIndex& index, const QVaria
     }
 
     if (!links.empty())
-      QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixShow(data_->scene_name, links));
+      QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixShow(data_->component_info, links));
   }
   return QStandardItemModel::setData(index, value, role);
 }
@@ -247,14 +258,14 @@ bool AllowedCollisionMatrixModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::AllowedCollisionMatrixSet*>(event) != nullptr);
     auto* e = static_cast<events::AllowedCollisionMatrixSet*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
       set(e->getACM());
   }
   else if (event->type() == events::AllowedCollisionMatrixAdd::kType)
   {
     assert(dynamic_cast<events::AllowedCollisionMatrixAdd*>(event) != nullptr);
     auto* e = static_cast<events::AllowedCollisionMatrixAdd*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       for (const auto& entry : e->getEntries())
         add(entry[0], entry[1], entry[2]);
@@ -264,14 +275,14 @@ bool AllowedCollisionMatrixModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::AllowedCollisionMatrixClear*>(event) != nullptr);
     auto* e = static_cast<events::AllowedCollisionMatrixClear*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
       clear();
   }
   else if (event->type() == events::AllowedCollisionMatrixRemove::kType)
   {
     assert(dynamic_cast<events::AllowedCollisionMatrixRemove*>(event) != nullptr);
     auto* e = static_cast<events::AllowedCollisionMatrixRemove*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       for (const auto& entry : e->getEntries())
         remove(entry[0], entry[1]);
@@ -281,7 +292,7 @@ bool AllowedCollisionMatrixModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::AllowedCollisionMatrixRemoveLink*>(event) != nullptr);
     auto* e = static_cast<events::AllowedCollisionMatrixRemoveLink*>(event);
-    if (e->getSceneName() == data_->scene_name)
+    if (e->getComponentInfo() == data_->component_info)
     {
       for (const auto& link_name : e->getLinkNames())
         remove(link_name);

@@ -24,8 +24,8 @@
 
 namespace tesseract_gui::events
 {
-ContactResultsClear::ContactResultsClear(const std::string& scene_name, const std::string& ns)
-  : SceneEvent(scene_name, kType), ns_(ns)
+ContactResultsClear::ContactResultsClear(ComponentInfo component_info, const std::string& ns)
+  : ComponentEvent(std::move(component_info), kType), ns_(ns)
 {
 }
 
@@ -35,10 +35,10 @@ const std::string& ContactResultsClear::getNamespace() const { return ns_; }
 
 //////////////////////////////////////////
 
-ContactResultsSet::ContactResultsSet(const std::string& scene_name,
+ContactResultsSet::ContactResultsSet(ComponentInfo component_info,
                                      const std::variant<ContactResultVector, ContactResultMap>& contact_results,
                                      const std::string& ns)
-  : SceneEvent(scene_name, kType), ns_(ns), contact_results_(contact_results)
+  : ComponentEvent(std::move(component_info), kType), ns_(ns), contact_results_(contact_results)
 {
 }
 
@@ -52,37 +52,37 @@ const std::variant<ContactResultVector, ContactResultMap>& ContactResultsSet::ge
 
 //////////////////////////////////////////
 
-ContactResultsRemove::ContactResultsRemove(const std::string& scene_name, boost::uuids::uuid uuid)
-  : SceneEventUUID(scene_name, uuid, kType)
+ContactResultsRemove::ContactResultsRemove(ComponentInfo component_info, boost::uuids::uuid uuid)
+  : ComponentEventUUID(std::move(component_info), uuid, kType)
 {
 }
-ContactResultsRemove::ContactResultsRemove(const std::string& scene_name,
+ContactResultsRemove::ContactResultsRemove(ComponentInfo component_info,
                                            boost::uuids::uuid uuid,
                                            boost::uuids::uuid child_uuid)
-  : SceneEventUUID(scene_name, uuid, child_uuid, kType)
+  : ComponentEventUUID(std::move(component_info), uuid, child_uuid, kType)
 {
 }
 ContactResultsRemove::~ContactResultsRemove() = default;
 
 //////////////////////////////////////////
 
-ContactResultsVisbility::ContactResultsVisbility(const std::string& scene_name, boost::uuids::uuid uuid, bool visible)
-  : SceneEventVisibility(scene_name, uuid, visible, kType)
+ContactResultsVisbility::ContactResultsVisbility(ComponentInfo component_info, boost::uuids::uuid uuid, bool visible)
+  : ComponentEventVisibility(std::move(component_info), uuid, visible, kType)
 {
 }
-ContactResultsVisbility::ContactResultsVisbility(const std::string& scene_name,
+ContactResultsVisbility::ContactResultsVisbility(ComponentInfo component_info,
                                                  boost::uuids::uuid uuid,
                                                  boost::uuids::uuid child_uuid,
                                                  bool visible)
-  : SceneEventVisibility(scene_name, uuid, child_uuid, visible, kType)
+  : ComponentEventVisibility(std::move(component_info), uuid, child_uuid, visible, kType)
 {
 }
 ContactResultsVisbility::~ContactResultsVisbility() = default;
 
 //////////////////////////////////////////
 
-ContactResultsVisbilityAll::ContactResultsVisbilityAll(const std::string& scene_name, bool visible)
-  : SceneEventVisibilityAll(scene_name, visible, kType)
+ContactResultsVisbilityAll::ContactResultsVisbilityAll(ComponentInfo component_info, bool visible)
+  : ComponentEventVisibilityAll(std::move(component_info), visible, kType)
 {
 }
 

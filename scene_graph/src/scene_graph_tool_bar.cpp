@@ -25,13 +25,14 @@
 #include <tesseract_qt/scene_graph/scene_graph_events.h>
 #include <tesseract_qt/scene_graph/scene_graph_link_visibility.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/component_info.h>
 #include <QApplication>
 
 namespace tesseract_gui
 {
 struct SceneGraphToolBar::Implementation
 {
-  std::string scene_name;
+  ComponentInfo component_info;
 
   QAction* show_all_links_action;
   QAction* hide_all_links_action;
@@ -51,10 +52,22 @@ struct SceneGraphToolBar::Implementation
   QAction* plot_scene_graph_action;
 };
 
-SceneGraphToolBar::SceneGraphToolBar(const std::string& scene_name, QWidget* parent)
+SceneGraphToolBar::SceneGraphToolBar(QWidget* parent) : QToolBar(parent), data_(std::make_unique<Implementation>())
+{
+  ctor(data_->component_info);
+}
+
+SceneGraphToolBar::SceneGraphToolBar(ComponentInfo component_info, QWidget* parent)
   : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = scene_name;
+  ctor(component_info);
+}
+
+SceneGraphToolBar::~SceneGraphToolBar() = default;
+
+void SceneGraphToolBar::ctor(ComponentInfo component_info)
+{
+  data_->component_info = component_info;
   //  data_->remove_all = addAction(icons::getClearIcon(), "Remove All", [scene_name]() {
   //    QApplication::sendEvent(qApp, new events::ToolPathRemoveAll(scene_name));
   //  });
@@ -68,61 +81,60 @@ SceneGraphToolBar::SceneGraphToolBar(const std::string& scene_name, QWidget* par
   //  data_->show_all = addAction(icons::getToolPathShowIcon(), "Show All", [scene_name]() {
   //    QApplication::sendEvent(qApp, new events::ToolPathShowAll(scene_name));
   //  });
-  data_->show_all_links_action = addAction(icons::getShowAllLinksIcon(), "Show All Links", [scene_name]() {
-    QApplication::sendEvent(qApp,
-                            new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::LINK, true));
-  });
-  data_->hide_all_links_action = addAction(icons::getHideAllLinksIcon(), "Hide All Links", [scene_name]() {
+  data_->show_all_links_action = addAction(icons::getShowAllLinksIcon(), "Show All Links", [component_info]() {
     QApplication::sendEvent(
-        qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::LINK, false));
+        qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::LINK, true));
+  });
+  data_->hide_all_links_action = addAction(icons::getHideAllLinksIcon(), "Hide All Links", [component_info]() {
+    QApplication::sendEvent(
+        qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::LINK, false));
   });
   addSeparator();
   data_->show_visual_all_links_action =
-      addAction(icons::getShowVisualAllLinksIcon(), "Show Visual All Links", [scene_name]() {
+      addAction(icons::getShowVisualAllLinksIcon(), "Show Visual All Links", [component_info]() {
         QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::VISUAL, true));
+            qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::VISUAL, true));
       });
   data_->hide_visual_all_links_action =
-      addAction(icons::getHideVisualAllLinksIcon(), "Hide Visual All Links", [scene_name]() {
+      addAction(icons::getHideVisualAllLinksIcon(), "Hide Visual All Links", [component_info]() {
         QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::VISUAL, false));
+            qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::VISUAL, false));
       });
   addSeparator();
   data_->show_collision_all_links_action =
-      addAction(icons::getShowCollisionAllLinksIcon(), "Show Collision All Links", [scene_name]() {
+      addAction(icons::getShowCollisionAllLinksIcon(), "Show Collision All Links", [component_info]() {
         QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::COLLISION, true));
+            qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::COLLISION, true));
       });
   data_->hide_collision_all_links_action =
-      addAction(icons::getHideCollisionAllLinksIcon(), "Hide Collision All Links", [scene_name]() {
+      addAction(icons::getHideCollisionAllLinksIcon(), "Hide Collision All Links", [component_info]() {
         QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::COLLISION, false));
+            qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::COLLISION, false));
       });
   addSeparator();
-  data_->select_all_links_action = addAction(icons::getSelectAllLinksIcon(), "Select All Links", [scene_name]() {
+  data_->select_all_links_action = addAction(icons::getSelectAllLinksIcon(), "Select All Links", [component_info]() {
     QApplication::sendEvent(
-        qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::WIREBOX, true));
+        qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::WIREBOX, true));
   });
-  data_->deselect_all_links_action = addAction(icons::getDeselectAllLinksIcon(), "Deselect All Links", [scene_name]() {
-    QApplication::sendEvent(
-        qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::WIREBOX, false));
-  });
+  data_->deselect_all_links_action =
+      addAction(icons::getDeselectAllLinksIcon(), "Deselect All Links", [component_info]() {
+        QApplication::sendEvent(
+            qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::WIREBOX, false));
+      });
   addSeparator();
   data_->show_axis_all_links_action =
-      addAction(icons::getShowAxisAllLinksIcon(), "Show Axis All Links", [scene_name]() {
+      addAction(icons::getShowAxisAllLinksIcon(), "Show Axis All Links", [component_info]() {
         QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::AXIS, true));
+            qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::AXIS, true));
       });
   data_->hide_axis_all_links_action =
-      addAction(icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", [scene_name]() {
+      addAction(icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", [component_info]() {
         QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(scene_name, LinkVisibilityFlags::AXIS, false));
+            qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::AXIS, false));
       });
   addSeparator();
-  data_->plot_scene_graph_action = addAction(icons::getPlotIcon(), "Plot Scene Graph", [scene_name]() {
-    QApplication::sendEvent(qApp, new events::SceneGraphPlot(scene_name));
+  data_->plot_scene_graph_action = addAction(icons::getPlotIcon(), "Plot Scene Graph", [component_info]() {
+    QApplication::sendEvent(qApp, new events::SceneGraphPlot(component_info));
   });
 }
-
-SceneGraphToolBar::~SceneGraphToolBar() = default;
 }  // namespace tesseract_gui

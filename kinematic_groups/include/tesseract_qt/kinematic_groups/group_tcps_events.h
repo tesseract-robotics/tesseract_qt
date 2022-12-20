@@ -24,25 +24,25 @@
 #define TESSERACT_QT_KINEMATIC_GROUPS_GROUP_TCPS_EVENTS_H
 
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
+#include <tesseract_qt/common/component_events.h>
 #include <tesseract_srdf/kinematics_information.h>
 
 namespace tesseract_gui::events
 {
-class GroupTCPsClear : public SceneEvent
+class GroupTCPsClear : public ComponentEvent
 {
 public:
-  GroupTCPsClear(const std::string& scene_name);
+  GroupTCPsClear(ComponentInfo component_info);
   ~GroupTCPsClear() override;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_CLEAR);
 };
 
-class GroupTCPsSet : public SceneEvent
+class GroupTCPsSet : public ComponentEvent
 {
 public:
-  GroupTCPsSet(const std::string& scene_name, const tesseract_srdf::GroupTCPs& group_tcps);
+  GroupTCPsSet(ComponentInfo component_info, const tesseract_srdf::GroupTCPs& group_tcps);
   ~GroupTCPsSet() override;
 
   const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
@@ -54,14 +54,14 @@ private:
   tesseract_srdf::GroupTCPs group_tcps_;
 };
 
-class GroupTCPsAdd : public SceneEvent
+class GroupTCPsAdd : public ComponentEvent
 {
 public:
   // LCOV_EXCL_START
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   // LCOV_EXCL_STOP
 
-  GroupTCPsAdd(const std::string& scene_name,
+  GroupTCPsAdd(ComponentInfo component_info,
                std::string group_name,
                std::string tcp_name,
                const Eigen::Isometry3d& tcp);
@@ -80,10 +80,10 @@ private:
   Eigen::Isometry3d tcp_;
 };
 
-class GroupTCPsRemove : public SceneEvent
+class GroupTCPsRemove : public ComponentEvent
 {
 public:
-  GroupTCPsRemove(const std::string& scene_name, const std::vector<std::array<std::string, 2>>& entries);
+  GroupTCPsRemove(ComponentInfo component_info, const std::vector<std::array<std::string, 2>>& entries);
   ~GroupTCPsRemove() override;
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
@@ -95,10 +95,10 @@ private:
   std::vector<std::array<std::string, 2>> entries_;
 };
 
-class GroupTCPsRemoveGroup : public SceneEvent
+class GroupTCPsRemoveGroup : public ComponentEvent
 {
 public:
-  GroupTCPsRemoveGroup(const std::string& scene_name, const std::vector<std::string>& group_names);
+  GroupTCPsRemoveGroup(ComponentInfo component_info, const std::vector<std::string>& group_names);
   ~GroupTCPsRemoveGroup() override;
 
   const std::vector<std::string>& getGroupNames() const;
@@ -113,7 +113,7 @@ private:
 // class GroupJointStatesShow : public SceneEvent
 //{
 // public:
-//  GroupJointStatesShow(const std::string& scene_name, QString group_name, QString state_name,
+//  GroupJointStatesShow(ComponentInfo component_info, QString group_name, QString state_name,
 //  tesseract_srdf::GroupsJointState state); ~GroupJointStatesShow() override;
 
 //  const std::string& getGroupName() const;

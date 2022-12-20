@@ -46,7 +46,8 @@ add_library(
   src/position_standard_item.cpp
   src/quaternion_standard_item.cpp
   src/rgba_standard_item.cpp
-  src/scene_events.cpp
+  src/component_events.cpp
+  src/component_info.cpp
   src/standard_item_utils.cpp
   src/plugin_info_container_standard_item.cpp
   src/entity_manager.cpp

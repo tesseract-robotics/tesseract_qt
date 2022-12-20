@@ -26,7 +26,7 @@
 #include <memory>
 #include <vector>
 #include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/scene_events.h>
+#include <tesseract_qt/common/component_events.h>
 
 namespace tesseract_common
 {
@@ -35,20 +35,20 @@ class AllowedCollisionMatrix;
 
 namespace tesseract_gui::events
 {
-class AllowedCollisionMatrixClear : public SceneEvent
+class AllowedCollisionMatrixClear : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixClear(const std::string& scene_name);
+  AllowedCollisionMatrixClear(ComponentInfo component_info);
   ~AllowedCollisionMatrixClear() override;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::ACM_CLEAR);
 };
 
-class AllowedCollisionMatrixSet : public SceneEvent
+class AllowedCollisionMatrixSet : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixSet(const std::string& scene_name, const tesseract_common::AllowedCollisionMatrix& acm);
+  AllowedCollisionMatrixSet(ComponentInfo component_info, const tesseract_common::AllowedCollisionMatrix& acm);
   ~AllowedCollisionMatrixSet() override;
 
   const tesseract_common::AllowedCollisionMatrix& getACM() const;
@@ -61,10 +61,10 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-class AllowedCollisionMatrixAdd : public SceneEvent
+class AllowedCollisionMatrixAdd : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixAdd(const std::string& scene_name, const std::vector<std::array<std::string, 3>>& entries);
+  AllowedCollisionMatrixAdd(ComponentInfo component_info, const std::vector<std::array<std::string, 3>>& entries);
   ~AllowedCollisionMatrixAdd() override;
 
   const std::vector<std::array<std::string, 3>>& getEntries() const;
@@ -76,10 +76,10 @@ private:
   std::vector<std::array<std::string, 3>> entries_;
 };
 
-class AllowedCollisionMatrixRemove : public SceneEvent
+class AllowedCollisionMatrixRemove : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixRemove(const std::string& scene_name, const std::vector<std::array<std::string, 2>>& entries);
+  AllowedCollisionMatrixRemove(ComponentInfo component_info, const std::vector<std::array<std::string, 2>>& entries);
   ~AllowedCollisionMatrixRemove() override;
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
@@ -91,10 +91,10 @@ private:
   std::vector<std::array<std::string, 2>> entries_;
 };
 
-class AllowedCollisionMatrixRemoveLink : public SceneEvent
+class AllowedCollisionMatrixRemoveLink : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixRemoveLink(const std::string& scene_name, const std::vector<std::string>& link_names);
+  AllowedCollisionMatrixRemoveLink(ComponentInfo component_info, const std::vector<std::string>& link_names);
   ~AllowedCollisionMatrixRemoveLink() override;
 
   const std::vector<std::string>& getLinkNames() const;
@@ -106,10 +106,10 @@ private:
   std::vector<std::string> link_names_;
 };
 
-class AllowedCollisionMatrixShow : public SceneEvent
+class AllowedCollisionMatrixShow : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixShow(const std::string& scene_name, const std::vector<std::string>& links);
+  AllowedCollisionMatrixShow(ComponentInfo component_info, const std::vector<std::string>& links);
   ~AllowedCollisionMatrixShow() override;
 
   const std::vector<std::string>& getLinks() const;

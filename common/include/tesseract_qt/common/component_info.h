@@ -20,28 +20,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
-#define TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
+#ifndef TESSERACT_GUI_COMMON_COMPONENT_INFO_H
+#define TESSERACT_GUI_COMMON_COMPONENT_INFO_H
 
-#include <QToolBar>
-#include <memory>
+#include <string>
+#include <boost/uuid/uuid.hpp>
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
-class ToolPathToolBar : public QToolBar
+/** @brief All modesl will have this object to allow associating disconnected object together. */
+struct ComponentInfo
 {
-  Q_OBJECT
-public:
-  explicit ToolPathToolBar(QWidget* parent = nullptr);
-  explicit ToolPathToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ToolPathToolBar();
+  /** @breif Default Construction */
+  ComponentInfo() = default;
 
-private:
-  struct Implementation;
-  std::unique_ptr<Implementation> data_;
+  /** @brief Assigns provided scene name and generates random namespace */
+  explicit ComponentInfo(std::string scene_name);
 
-  void ctor(ComponentInfo component_info);
+  /** @brief The associated render scene */
+  std::string scene_name{ "tesseract_default" };
+
+  /** @brief The associated namespace */
+  boost::uuids::uuid ns{};
+
+  bool operator==(const ComponentInfo& other) const;
+  bool operator!=(const ComponentInfo& rhs) const;
 };
+
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
+#endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_H

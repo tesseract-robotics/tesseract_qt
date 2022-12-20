@@ -35,8 +35,8 @@ public:
   tesseract_gui::ToolPath tool_path;
 };
 
-ToolPathAdd::ToolPathAdd(const std::string& scene_name, const ToolPath& tool_path)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+ToolPathAdd::ToolPathAdd(ComponentInfo component_info, const ToolPath& tool_path)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->tool_path = tool_path;
 }
@@ -52,8 +52,8 @@ public:
   boost::uuids::uuid uuid;
 };
 
-ToolPathRemove::ToolPathRemove(const std::string& scene_name, const boost::uuids::uuid& uuid)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+ToolPathRemove::ToolPathRemove(ComponentInfo component_info, const boost::uuids::uuid& uuid)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->uuid = uuid;
 }
@@ -61,10 +61,13 @@ ToolPathRemove::~ToolPathRemove() = default;
 
 const boost::uuids::uuid& ToolPathRemove::getUUID() const { return data_->uuid; }
 
-ToolPathRemoveAll::ToolPathRemoveAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathRemoveAll::ToolPathRemoveAll(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
 ToolPathRemoveAll::~ToolPathRemoveAll() = default;
 
-ToolPathRemoveSelected::ToolPathRemoveSelected(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathRemoveSelected::ToolPathRemoveSelected(ComponentInfo component_info)
+  : ComponentEvent(std::move(component_info), kType)
+{
+}
 ToolPathRemoveSelected::~ToolPathRemoveSelected() = default;
 
 class ToolPathHide::Implementation
@@ -74,16 +77,16 @@ public:
   boost::uuids::uuid child_uuid{};
 };
 
-ToolPathHide::ToolPathHide(const std::string& scene_name, const boost::uuids::uuid& uuid)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+ToolPathHide::ToolPathHide(ComponentInfo component_info, const boost::uuids::uuid& uuid)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->uuid = uuid;
 }
 
-ToolPathHide::ToolPathHide(const std::string& scene_name,
+ToolPathHide::ToolPathHide(ComponentInfo component_info,
                            const boost::uuids::uuid& uuid,
                            const boost::uuids::uuid& child_uuid)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->uuid = uuid;
   data_->child_uuid = child_uuid;
@@ -93,7 +96,7 @@ ToolPathHide::~ToolPathHide() = default;
 const boost::uuids::uuid& ToolPathHide::getUUID() const { return data_->uuid; }
 const boost::uuids::uuid& ToolPathHide::getChildUUID() const { return data_->child_uuid; }
 
-ToolPathHideAll::ToolPathHideAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathHideAll::ToolPathHideAll(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
 ToolPathHideAll::~ToolPathHideAll() = default;
 
 class ToolPathShow::Implementation
@@ -103,16 +106,16 @@ public:
   boost::uuids::uuid child_uuid{};
 };
 
-ToolPathShow::ToolPathShow(const std::string& scene_name, const boost::uuids::uuid& uuid)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+ToolPathShow::ToolPathShow(ComponentInfo component_info, const boost::uuids::uuid& uuid)
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->uuid = uuid;
 }
 
-ToolPathShow::ToolPathShow(const std::string& scene_name,
+ToolPathShow::ToolPathShow(ComponentInfo component_info,
                            const boost::uuids::uuid& uuid,
                            const boost::uuids::uuid& child_uuid)
-  : SceneEvent(scene_name, kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->uuid = uuid;
   data_->child_uuid = child_uuid;
@@ -123,7 +126,7 @@ ToolPathShow::~ToolPathShow() = default;
 const boost::uuids::uuid& ToolPathShow::getUUID() const { return data_->uuid; }
 const boost::uuids::uuid& ToolPathShow::getChildUUID() const { return data_->child_uuid; }
 
-ToolPathShowAll::ToolPathShowAll(const std::string& scene_name) : SceneEvent(scene_name, kType) {}
+ToolPathShowAll::ToolPathShowAll(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
 ToolPathShowAll::~ToolPathShowAll() = default;
 
 }  // namespace tesseract_gui::events
