@@ -62,6 +62,39 @@ GroupJointStatesModel::~GroupJointStatesModel() = default;
 
 const ComponentInfo& GroupJointStatesModel::getComponentInfo() const { return *component_info_; }
 
+bool GroupJointStatesModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+  // Need emit application event to change visible
+  if (role == Qt::CheckStateRole)
+  {
+    QStandardItem* item = itemFromIndex(index);
+    if (item->type() == static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE))
+    {
+      assert(dynamic_cast<GroupJointStateStandardItem*>(item) != nullptr);
+      assert(dynamic_cast<NamespaceStandardItem*>(item->parent()) != nullptr);
+      auto* derived_item = static_cast<GroupJointStateStandardItem*>(item);
+      auto* parent_item = static_cast<NamespaceStandardItem*>(item->parent());
+
+      if (value.value<Qt::CheckState>() == Qt::Checked)
+      {
+        QApplication::sendEvent(qApp,
+                                new events::GroupJointStatesShow(*component_info_,
+                                                                 parent_item->text().toStdString(),
+                                                                 derived_item->getName().toStdString(),
+                                                                 derived_item->getState()));
+      }
+      else
+      {
+        QApplication::sendEvent(qApp,
+                                new events::GroupJointStatesHide(*component_info_,
+                                                                 parent_item->text().toStdString(),
+                                                                 derived_item->getName().toStdString()));
+      }
+    }
+  }
+  return QStandardItemModel::setData(index, value, role);
+}
+
 void GroupJointStatesModel::clear()
 {
   QStandardItemModel::clear();
@@ -72,7 +105,9 @@ void GroupJointStatesModel::clear()
 
 void GroupJointStatesModel::set(const tesseract_srdf::GroupJointStates& group_joint_states)
 {
-  clear();
+  QStandardItemModel::clear();
+  setColumnCount(2);
+  setHorizontalHeaderLabels({ "Name", "Values" });
   appendRow(new GroupJointStatesStandardItem(group_joint_states));
 }
 
@@ -93,7 +128,7 @@ void GroupJointStatesModel::remove(const std::string& group_name)
   getRoot()->removeGroup(QString::fromStdString(group_name));
 }
 
-const tesseract_srdf::GroupJointStates& GroupJointStatesModel::getGroupsJointStates() const
+tesseract_srdf::GroupJointStates GroupJointStatesModel::getGroupsJointStates() const
 {
   return getRoot()->getGroupJointStates();
 }
@@ -114,7 +149,7 @@ NamespaceStandardItem* findJointStateGroupItem(QStandardItem* item)
   return findJointStateGroupItem(item->parent());
 }
 
-const tesseract_srdf::GroupsJointState& GroupJointStatesModel::getGroupsJointState(const QModelIndex& row) const
+tesseract_srdf::GroupsJointState GroupJointStatesModel::getGroupsJointState(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
 

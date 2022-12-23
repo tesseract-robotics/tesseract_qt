@@ -49,11 +49,13 @@ public:
   GroupJointStatesModel& operator=(const GroupJointStatesModel& other);
   ~GroupJointStatesModel() override;
 
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+
   const ComponentInfo& getComponentInfo() const;
 
-  const tesseract_srdf::GroupJointStates& getGroupsJointStates() const;
+  tesseract_srdf::GroupJointStates getGroupsJointStates() const;
 
-  const tesseract_srdf::GroupsJointState& getGroupsJointState(const QModelIndex& row) const;
+  tesseract_srdf::GroupsJointState getGroupsJointState(const QModelIndex& row) const;
 
 private:
   std::unique_ptr<ComponentInfo> component_info_;

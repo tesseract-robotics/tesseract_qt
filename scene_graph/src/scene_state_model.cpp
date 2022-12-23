@@ -69,6 +69,9 @@ SceneStateModel::SceneStateModel(QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
 }
 
 SceneStateModel::SceneStateModel(ComponentInfo component_info, QObject* parent)
@@ -76,6 +79,9 @@ SceneStateModel::SceneStateModel(ComponentInfo component_info, QObject* parent)
 {
   clear();
   data_->component_info = std::move(component_info);
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
 }
 
 SceneStateModel::~SceneStateModel() = default;

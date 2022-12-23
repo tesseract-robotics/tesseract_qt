@@ -40,7 +40,7 @@ ContactResultVectorStandardItem::ContactResultVectorStandardItem(const ContactRe
 
 ContactResultVectorStandardItem::ContactResultVectorStandardItem(const QString& text,
                                                                  const ContactResultVector& contact_results)
-  : QStandardItem(icons::getCollisionIcon(), text)
+  : QStandardItem(icons::getCollisionIcon(), text), data_(std::make_unique<Implementation>())
 {
   ctor(contact_results);
 }
@@ -48,7 +48,7 @@ ContactResultVectorStandardItem::ContactResultVectorStandardItem(const QString& 
 ContactResultVectorStandardItem::ContactResultVectorStandardItem(const QIcon& icon,
                                                                  const QString& text,
                                                                  const ContactResultVector& contact_results)
-  : QStandardItem(icon, text)
+  : QStandardItem(icon, text), data_(std::make_unique<Implementation>())
 {
   ctor(contact_results);
 }

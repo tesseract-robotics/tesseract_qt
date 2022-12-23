@@ -39,6 +39,10 @@ public:
                               const std::unordered_map<std::string, double>& state);
   int type() const override;
 
+  QString getName() const;
+
+  std::unordered_map<std::string, double> getState() const;
+
 private:
   void ctor(const std::unordered_map<std::string, double>& state);
 };

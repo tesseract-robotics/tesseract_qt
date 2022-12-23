@@ -28,27 +28,30 @@
 
 namespace tesseract_gui
 {
-GroupJointStatesStandardItem::GroupJointStatesStandardItem() : QStandardItem("Group Joint States") { ctor(); }
-
-GroupJointStatesStandardItem::GroupJointStatesStandardItem(tesseract_srdf::GroupJointStates group_joint_states)
-  : QStandardItem("Group Joint States"), group_joint_states_(std::move(group_joint_states))
+GroupJointStatesStandardItem::GroupJointStatesStandardItem() : QStandardItem("Group Joint States")
 {
-  ctor();
+  ctor(tesseract_srdf::GroupJointStates{});
+}
+
+GroupJointStatesStandardItem::GroupJointStatesStandardItem(const tesseract_srdf::GroupJointStates& group_joint_states)
+  : QStandardItem("Group Joint States")
+{
+  ctor(group_joint_states);
 }
 
 GroupJointStatesStandardItem::GroupJointStatesStandardItem(const QString& text,
-                                                           tesseract_srdf::GroupJointStates group_joint_states)
-  : QStandardItem(text), group_joint_states_(std::move(group_joint_states))
+                                                           const tesseract_srdf::GroupJointStates& group_joint_states)
+  : QStandardItem(text)
 {
-  ctor();
+  ctor(group_joint_states);
 }
 
 GroupJointStatesStandardItem::GroupJointStatesStandardItem(const QIcon& icon,
                                                            const QString& text,
-                                                           tesseract_srdf::GroupJointStates group_joint_states)
-  : QStandardItem(icon, text), group_joint_states_(std::move(group_joint_states))
+                                                           const tesseract_srdf::GroupJointStates& group_joint_states)
+  : QStandardItem(icon, text)
 {
-  ctor();
+  ctor(group_joint_states);
 }
 
 int GroupJointStatesStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATES); }
@@ -81,53 +84,57 @@ void GroupJointStatesStandardItem::addGroupJointState(const QString& group_name,
 {
   removeGroupJointState(group_name, state_name);
   addGroupJointStateItem(group_name, state_name, state);
-
-  group_joint_states_[group_name.toStdString()][state_name.toStdString()] = state;
 }
 
 void GroupJointStatesStandardItem::removeGroupJointState(const QString& group_name, const QString& state_name)
 {
-  auto group_it = group_joint_states_.find(group_name.toStdString());
-  if (group_it != group_joint_states_.end())
+  auto item = group_items_.find(group_name.toStdString());
+  if (item != group_items_.end())
   {
-    QStandardItem* item = group_items_.at(group_name.toStdString());
-    for (int i = item->rowCount(); i > 0; i--)
+    for (int i = item->second->rowCount(); i > 0; i--)
     {
-      QStandardItem* child_item = item->child(i - 1);
+      QStandardItem* child_item = item->second->child(i - 1);
       if (child_item->text() == state_name)
-        item->removeRow(i - 1);
+        item->second->removeRow(i - 1);
     }
 
-    auto state_it = group_it->second.find(state_name.toStdString());
-    if (state_it != group_it->second.end())
-      group_it->second.erase(state_it);
-
-    if (group_it->second.empty())
+    if (item->second->rowCount() == 0)
     {
-      group_joint_states_.erase(group_it);
-      removeRow(item->index().row());
+      removeRow(item->second->index().row());
     }
   }
 }
 
 void GroupJointStatesStandardItem::removeGroup(const QString& group_name)
 {
-  group_joint_states_.erase(group_name.toStdString());
-
   QStandardItem* item = group_items_.at(group_name.toStdString());
   removeRow(item->index().row());
 }
 
-const tesseract_srdf::GroupJointStates& GroupJointStatesStandardItem::getGroupJointStates() const
+tesseract_srdf::GroupJointStates GroupJointStatesStandardItem::getGroupJointStates() const
 {
-  return group_joint_states_;
+  tesseract_srdf::GroupJointStates group_joint_states;
+  for (const auto& group_item : group_items_)
+  {
+    for (int i = 0; i < group_item.second->rowCount(); ++i)
+    {
+      const auto* child = group_item.second->child(i);
+      if (child->type() == static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE))
+      {
+        const auto* group_state_item = static_cast<const GroupJointStateStandardItem*>(child);
+        group_joint_states[group_item.second->text().toStdString()][group_state_item->getName().toStdString()] =
+            group_state_item->getState();
+      }
+    }
+  }
+  return group_joint_states;
 }
 
-void GroupJointStatesStandardItem::ctor()
+void GroupJointStatesStandardItem::ctor(const tesseract_srdf::GroupJointStates& group_joint_states)
 {
-  for (auto& group : group_joint_states_)
+  for (const auto& group : group_joint_states)
   {
-    for (auto& state : group.second)
+    for (const auto& state : group.second)
       addGroupJointStateItem(QString::fromStdString(group.first), QString::fromStdString(state.first), state.second);
   }
 }

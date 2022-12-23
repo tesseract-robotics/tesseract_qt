@@ -21,11 +21,32 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/environment/environment_commands_model.h>
+#include <tesseract_qt/environment/environment_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/component_info.h>
+
+#include <QApplication>
 
 namespace tesseract_gui
 {
-EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent) : QStandardItemModel(parent) { clear(); }
+EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>())
+{
+  clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
+EnvironmentCommandsModel::EnvironmentCommandsModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+{
+  clear();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+
 EnvironmentCommandsModel::EnvironmentCommandsModel(const EnvironmentCommandsModel& other)
   : QStandardItemModel(other.d_ptr->parent)
 {
@@ -35,6 +56,8 @@ EnvironmentCommandsModel& EnvironmentCommandsModel::operator=(const EnvironmentC
 {
   return *this;
 }
+
+EnvironmentCommandsModel::~EnvironmentCommandsModel() = default;
 
 void EnvironmentCommandsModel::clear()
 {
@@ -70,6 +93,30 @@ EnvironmentCommandsStandardItem* EnvironmentCommandsModel::getRoot()
 const EnvironmentCommandsStandardItem* EnvironmentCommandsModel::getRoot() const
 {
   return dynamic_cast<const EnvironmentCommandsStandardItem*>(item(0));
+}
+
+bool EnvironmentCommandsModel::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() == events::EnvironmentCommandsSet::kType)
+  {
+    assert(dynamic_cast<events::EnvironmentCommandsSet*>(event) != nullptr);
+    auto* e = static_cast<events::EnvironmentCommandsSet*>(event);
+    if (e->getComponentInfo() == *component_info_)
+      set(e->getCommands());
+  }
+  else if (event->type() == events::EnvironmentCommandsAppend::kType)
+  {
+    assert(dynamic_cast<events::EnvironmentCommandsAppend*>(event) != nullptr);
+    auto* e = static_cast<events::EnvironmentCommandsAppend*>(event);
+    if (e->getComponentInfo() == *component_info_)
+    {
+      for (const auto& command : e->getCommands())
+        appendCommand(command);
+    }
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 
 }  // namespace tesseract_gui

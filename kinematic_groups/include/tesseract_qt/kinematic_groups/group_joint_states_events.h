@@ -106,23 +106,46 @@ private:
   std::vector<std::string> group_names_;
 };
 
-// class GroupJointStatesShow : public SceneEvent
-//{
-// public:
-//  GroupJointStatesShow(ComponentInfo component_info, QString group_name, QString state_name,
-//  tesseract_srdf::GroupsJointState state); ~GroupJointStatesShow() override;
+class GroupJointStatesShow : public ComponentEvent
+{
+public:
+  GroupJointStatesShow(ComponentInfo component_info,
+                       std::string group_name,
+                       std::string state_name,
+                       tesseract_srdf::GroupsJointState state);
 
-//  const std::string& getGroupName() const;
-//  const std::string& getStateName() const;
-//  const tesseract_srdf::GroupsJointState& getJointState() const;
+  ~GroupJointStatesShow() override;
 
-//  /** @brief Unique type for this event. */
-//  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_SHOW);
+  const std::string& getGroupName() const;
+  const std::string& getStateName() const;
+  const tesseract_srdf::GroupsJointState& getJointState() const;
 
-// private:
-//  struct Implementation;
-//  std::unique_ptr<Implementation> data_;
-//};
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_SHOW);
+
+private:
+  std::string group_name_;
+  std::string state_name_;
+  tesseract_srdf::GroupsJointState state_;
+};
+
+class GroupJointStatesHide : public ComponentEvent
+{
+public:
+  GroupJointStatesHide(ComponentInfo component_info, std::string group_name, std::string state_name);
+
+  ~GroupJointStatesHide() override;
+
+  const std::string& getGroupName() const;
+  const std::string& getStateName() const;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_HIDE);
+
+private:
+  std::string group_name_;
+  std::string state_name_;
+};
 
 }  // namespace tesseract_gui::events
 #endif  // TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_EVENTS_H

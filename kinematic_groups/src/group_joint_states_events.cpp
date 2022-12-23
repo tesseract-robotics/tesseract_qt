@@ -88,4 +88,35 @@ const std::vector<std::string>& GroupJointStatesRemoveGroup::getGroupNames() con
 
 //////////////////////////////////////////
 
+GroupJointStatesShow::GroupJointStatesShow(ComponentInfo component_info,
+                                           std::string group_name,
+                                           std::string state_name,
+                                           tesseract_srdf::GroupsJointState state)
+  : ComponentEvent(std::move(component_info), kType)
+  , group_name_(std::move(group_name))
+  , state_name_(std::move(state_name))
+  , state_(std::move(state))
+{
+}
+
+GroupJointStatesShow::~GroupJointStatesShow() = default;
+
+const std::string& GroupJointStatesShow::getGroupName() const { return group_name_; }
+const std::string& GroupJointStatesShow::getStateName() const { return state_name_; }
+const tesseract_srdf::GroupsJointState& GroupJointStatesShow::getJointState() const { return state_; }
+
+//////////////////////////////////////////
+
+GroupJointStatesHide::GroupJointStatesHide(ComponentInfo component_info, std::string group_name, std::string state_name)
+  : ComponentEvent(std::move(component_info), kType)
+  , group_name_(std::move(group_name))
+  , state_name_(std::move(state_name))
+{
+}
+
+GroupJointStatesHide::~GroupJointStatesHide() = default;
+
+const std::string& GroupJointStatesHide::getGroupName() const { return group_name_; }
+const std::string& GroupJointStatesHide::getStateName() const { return state_name_; }
+
 }  // namespace tesseract_gui::events

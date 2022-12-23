@@ -50,8 +50,21 @@ GroupJointStateStandardItem::GroupJointStateStandardItem(const QIcon& icon,
 
 int GroupJointStateStandardItem::type() const { return static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE); }
 
+QString GroupJointStateStandardItem::getName() const { return text(); }
+
+std::unordered_map<std::string, double> GroupJointStateStandardItem::getState() const
+{
+  std::unordered_map<std::string, double> state;
+  for (int i = 0; i < rowCount(); ++i)
+    state[child(i, 0)->text().toStdString()] = child(i, 1)->data().toDouble();
+
+  return state;
+}
+
 void GroupJointStateStandardItem::ctor(const std::unordered_map<std::string, double>& state)
 {
+  setCheckable(true);
+
   for (const auto& s : state)
     appendRow(createStandardItemFloat(s.first, s.second));
 

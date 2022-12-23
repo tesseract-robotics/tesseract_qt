@@ -70,6 +70,12 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent)
   connect(ui->state_tree_view, &QTreeView::expanded, [this]() { ui->state_tree_view->resizeColumnToContents(0); });
   connect(ui->groups_tree_view, &QTreeView::collapsed, [this]() { ui->groups_tree_view->resizeColumnToContents(0); });
   connect(ui->groups_tree_view, &QTreeView::expanded, [this]() { ui->groups_tree_view->resizeColumnToContents(0); });
+  connect(ui->group_states_tree_view, &QTreeView::collapsed, [this]() {
+    ui->group_states_tree_view->resizeColumnToContents(0);
+  });
+  connect(ui->group_states_tree_view, &QTreeView::expanded, [this]() {
+    ui->group_states_tree_view->resizeColumnToContents(0);
+  });
   connect(ui->group_tcps_tree_view, &QTreeView::collapsed, [this]() {
     ui->group_tcps_tree_view->resizeColumnToContents(0);
   });
@@ -85,21 +91,6 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent)
   connect(ui->cmd_history_tree_view, &QTreeView::expanded, [this]() {
     ui->cmd_history_tree_view->resizeColumnToContents(0);
   });
-
-  //  connect(ui->acm_tree_view, SIGNAL(entrySelected()), this, SIGNAL(entrySelected()));
-  connect(ui->acm_tree_view,
-          SIGNAL(selectedLinksChanged(std::vector<std::string>)),
-          this,
-          SLOT(onACMSelectedLinks(std::vector<std::string>)));
-
-  connect(ui->group_states_tree_view,
-          SIGNAL(showGroupsJointState(std::unordered_map<std::string, double>)),
-          this,
-          SLOT(onShowGroupsJointState(std::unordered_map<std::string, double>)));
-  connect(ui->contacts_widget,
-          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)),
-          this,
-          SIGNAL(showContactResults(tesseract_collision::ContactResultVector)));
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;
@@ -241,32 +232,32 @@ void EnvironmentWidget::onEnable()
   emit linkVisibilityChanged(link_names);
 }
 
-void EnvironmentWidget::onACMSelectedLinks(const std::vector<std::string>& link_names)
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
+// void EnvironmentWidget::onACMSelectedLinks(const std::vector<std::string>& link_names)
+//{
+//  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
 
-  std::vector<std::string> changed_link_names;
-  changed_link_names.reserve(link_visibility_properties.size());
+//  std::vector<std::string> changed_link_names;
+//  changed_link_names.reserve(link_visibility_properties.size());
 
-  for (auto& link : link_visibility_properties)
-  {
-    link.second.wirebox = false;
-    changed_link_names.push_back(link.first);
-  }
+//  for (auto& link : link_visibility_properties)
+//  {
+//    link.second.wirebox = false;
+//    changed_link_names.push_back(link.first);
+//  }
 
-  for (const auto& link : link_names)
-  {
-    auto it = link_visibility_properties.find(link);
-    if (it != link_visibility_properties.end())
-      it->second.wirebox = true;
-  }
+//  for (const auto& link : link_names)
+//  {
+//    auto it = link_visibility_properties.find(link);
+//    if (it != link_visibility_properties.end())
+//      it->second.wirebox = true;
+//  }
 
-  emit linkVisibilityChanged(changed_link_names);
-}
+//  emit linkVisibilityChanged(changed_link_names);
+//}
 
-void EnvironmentWidget::onShowGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state)
-{
-  data_->config->environment().setState(groups_joint_state);
-}
+// void EnvironmentWidget::onShowGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state)
+//{
+//  data_->config->environment().setState(groups_joint_state);
+//}
 
 }  // namespace tesseract_gui

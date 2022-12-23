@@ -22,6 +22,7 @@
  */
 
 #include <tesseract_qt/environment/environment_widget_config.h>
+#include <tesseract_qt/environment/environment_events.h>
 #include <tesseract_qt/environment/environment_commands_model.h>
 #include <tesseract_qt/scene_graph/scene_graph_model.h>
 #include <tesseract_qt/scene_graph/scene_state_model.h>
@@ -54,7 +55,7 @@ struct EnvironmentWidgetConfig::Implementation
     , scene_state_model(this->component_info)
     , group_states_model(this->component_info)
     , acm_model(this->component_info)
-  //    , commands_model(this->scene_name)
+    , commands_model(this->component_info)
   {
   }
 
@@ -144,7 +145,7 @@ void EnvironmentWidgetConfig::clear()
   QApplication::sendEvent(qApp, new events::KinematicGroupsClear(data_->component_info));
   QApplication::sendEvent(qApp, new events::GroupJointStatesClear(data_->component_info));
   QApplication::sendEvent(qApp, new events::GroupTCPsClear(data_->component_info));
-  data_->commands_model.clear();
+  QApplication::sendEvent(qApp, new events::EnvironmentCommandsClear(data_->component_info));
 }
 
 bool EnvironmentWidgetConfig::isValid() const
@@ -228,7 +229,8 @@ void EnvironmentWidgetConfig::onUpdateCommandHistoryModel()
   if (!data_->environment->isInitialized())
     return;
 
-  data_->commands_model.set(data_->environment->getCommandHistory());
+  QApplication::sendEvent(
+      qApp, new events::EnvironmentCommandsSet(data_->component_info, data_->environment->getCommandHistory()));
 }
 
 void EnvironmentWidgetConfig::tesseractEventFilter(const tesseract_environment::Event& event)

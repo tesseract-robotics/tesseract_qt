@@ -38,7 +38,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -162,7 +162,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::GroupJointStatesTreeView" name="group_states_tree_view">
+        <widget class="QTreeView" name="group_states_tree_view">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -249,11 +249,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>tesseract_gui::GroupJointStatesTreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/kinematic_groups/group_joint_states_tree_view.h</header>
-  </customwidget>
   <customwidget>
    <class>tesseract_gui::ContactResultsWidget</class>
    <extends>QWidget</extends>

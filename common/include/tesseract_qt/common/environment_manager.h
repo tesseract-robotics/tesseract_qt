@@ -20,33 +20,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATES_TREE_VIEW_H
-#define TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATES_TREE_VIEW_H
+#ifndef TESSERACT_GUI_COMMON_ENVIRONMENT_MANAGER_H
+#define TESSERACT_GUI_COMMON_ENVIRONMENT_MANAGER_H
 
-#include <QTreeView>
 #include <memory>
 
 namespace tesseract_gui
 {
-struct GroupJointStatesTreeViewImpl;
-class GroupJointStatesTreeView : public QTreeView
+struct ComponentInfo;
+class EnvironmentWrapper;
+class EnvironmentManager
 {
-  Q_OBJECT
 public:
-  explicit GroupJointStatesTreeView(QWidget* parent = nullptr);
-  ~GroupJointStatesTreeView();
+  EnvironmentManager();
+  ~EnvironmentManager();
+  EnvironmentManager(const EnvironmentManager&) = delete;
+  EnvironmentManager& operator=(const EnvironmentManager&) = delete;
+  EnvironmentManager(EnvironmentManager&&) = delete;
+  EnvironmentManager& operator=(EnvironmentManager&&) = delete;
 
-  void setModel(QAbstractItemModel* model) override;
+  static std::shared_ptr<EnvironmentManager> instance();
 
-Q_SIGNALS:
-  void showGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state);
-
-public Q_SLOTS:
-  void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
+  void set(std::shared_ptr<const EnvironmentWrapper> env);
+  std::shared_ptr<const EnvironmentWrapper> get(const ComponentInfo& component_info) const;
 
 private:
-  std::unique_ptr<GroupJointStatesTreeViewImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATES_TREE_VIEW_H
+#endif  // TESSERACT_GUI_COMMON_ENVIRONMENT_MANAGER_H

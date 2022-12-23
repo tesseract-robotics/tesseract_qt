@@ -1,0 +1,69 @@
+/**
+ * @author Levi Armstrong <levi.armstrong@gmail.com>
+ *
+ * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ *
+ * @par License
+ * GNU Lesser General Public License Version 3, 29 June 2007
+ * @par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * @par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * @par
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#include <map>
+#include <unordered_map>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
+#include <tesseract_qt/common/component_info.h>
+
+namespace tesseract_gui
+{
+struct EnvironmentManager::Implementation
+{
+  std::unordered_map<std::string, std::map<boost::uuids::uuid, std::shared_ptr<const EnvironmentWrapper>>> environments;
+};
+
+EnvironmentManager::EnvironmentManager() : data_(std::make_unique<Implementation>()) {}
+
+EnvironmentManager::~EnvironmentManager() = default;
+
+std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
+{
+  static std::shared_ptr<EnvironmentManager> singleton = nullptr;
+  if (singleton == nullptr)
+    singleton = std::make_shared<EnvironmentManager>();
+
+  return singleton;
+}
+
+void EnvironmentManager::set(std::shared_ptr<const EnvironmentWrapper> env)
+{
+  ComponentInfo component_info = env->getComponentInfo();
+  data_->environments[component_info.scene_name][component_info.ns] = env;
+}
+
+std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::get(const ComponentInfo& component_info) const
+{
+  auto it = data_->environments.find(component_info.scene_name);
+  if (it == data_->environments.end())
+    return nullptr;
+
+  auto it2 = it->second.find(component_info.ns);
+  if (it2 == it->second.end())
+    return nullptr;
+
+  return it2->second;
+}
+
+}  // namespace tesseract_gui

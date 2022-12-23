@@ -16,6 +16,7 @@ add_library(
   ${PROJECT_NAME}_environment SHARED
   ${ENVIRONMENT_WIDGET_headers_MOC}
   ${ENVIRONMENT_WIDGET_headers_UI}
+  src/environment_events.cpp
   src/environment_widget.cpp
   src/environment_widget_config.cpp
   src/environment_commands_standard_item.cpp

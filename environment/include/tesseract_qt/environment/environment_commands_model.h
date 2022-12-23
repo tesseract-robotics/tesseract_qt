@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_WIDGETS_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H
-#define TESSERACT_QT_WIDGETS_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H
+#ifndef TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H
+#define TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
@@ -36,26 +36,34 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class EnvironmentCommandsModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
   explicit EnvironmentCommandsModel(QObject* parent = nullptr);
+  explicit EnvironmentCommandsModel(ComponentInfo component_info, QObject* parent = nullptr);
   EnvironmentCommandsModel(const EnvironmentCommandsModel& other);
   EnvironmentCommandsModel& operator=(const EnvironmentCommandsModel& other);
+  ~EnvironmentCommandsModel() override;
+
+  const tesseract_environment::Commands& getCommands() const;
+
+private:
+  std::unique_ptr<ComponentInfo> component_info_;
+
+  EnvironmentCommandsStandardItem* getRoot();
+  const EnvironmentCommandsStandardItem* getRoot() const;
 
   void set(const tesseract_environment::Commands& commands);
   void appendCommand(const tesseract_environment::Command::ConstPtr& command);
   void clear();
 
-  const tesseract_environment::Commands& getCommands() const;
-
-private:
-  EnvironmentCommandsStandardItem* getRoot();
-  const EnvironmentCommandsStandardItem* getRoot() const;
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_WIDGETS_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H
+#endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H

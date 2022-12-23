@@ -68,6 +68,9 @@ void ContactResultsWidget::onComputeClicked()
 
   QApplication::sendEvent(qApp, new events::ContactResultsSet(data_->model->getComponentInfo(), tracked_object));
 
+  // This hides the root element
+  ui->tree_view->setRootIndex(data_->model->index(0, 0));
+
   ui->tree_view->expandToDepth(1);
 }
 

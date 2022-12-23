@@ -83,7 +83,6 @@ Q_SIGNALS:
   void environmentChanged(const tesseract_environment::Environment& env);
   void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
   void linkVisibilityChanged(const std::vector<std::string>& links);
-  void showContactResults(const tesseract_collision::ContactResultVector& contact_results);
   void triggerRender();
 
 public Q_SLOTS:
@@ -91,9 +90,6 @@ public Q_SLOTS:
   virtual void onRender(float dt);
   virtual void onPlotSceneGraph();
   virtual void onEnable();
-
-  void onACMSelectedLinks(const std::vector<std::string>& link_names);
-  void onShowGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state);
 
 protected:
   std::unique_ptr<Ui::EnvironmentWidget> ui;

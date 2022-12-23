@@ -20,46 +20,57 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_MODEL_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_MODEL_H
+#ifndef TESSERACT_GUI_COMMON_ENVIRONMENT_WRAPPER_H
+#define TESSERACT_GUI_COMMON_ENVIRONMENT_WRAPPER_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <QStandardItemModel>
-#include <QMetaType>
 #include <memory>
+#include <QObject>
 
-#include <tesseract_qt/collision/contact_results_types.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+namespace tesseract_environment
+{
+class Environment;
+class EnvironmentMonitor;
+class Event;
+}  // namespace tesseract_environment
 
 namespace tesseract_gui
 {
 struct ComponentInfo;
-class ContactResultsModel : public QStandardItemModel
+class EnvironmentWrapper : public QObject
 {
   Q_OBJECT
 public:
-  ContactResultsModel(QObject* parent = nullptr);
-  ContactResultsModel(ComponentInfo component_info, QObject* parent = nullptr);
-  ~ContactResultsModel() override;
+  EnvironmentWrapper(ComponentInfo component_info);
+  EnvironmentWrapper(ComponentInfo component_info, std::shared_ptr<tesseract_environment::Environment> env);
+  virtual ~EnvironmentWrapper();
 
   const ComponentInfo& getComponentInfo() const;
-  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+  virtual std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const;
 
-protected:
+private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
-  void setContactResults(const QString& ns, const ContactResultVector& contact_results);
-  void setContactResults(const QString& ns, const ContactResultMap& contact_results);
-  void removeNamespace(const QString& ns);
-  void clear();
+  void tesseractEventFilter(const tesseract_environment::Event& event);
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
+
+class EnvironmentMonitorWrapper : public EnvironmentWrapper
+{
+  Q_OBJECT
+public:
+  EnvironmentMonitorWrapper(ComponentInfo component_info,
+                            std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor);
+  ~EnvironmentMonitorWrapper() override;
+
+  std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
+
+private:
+  std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor_;
+};
+
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_MODEL_H
+#endif  // TESSERACT_GUI_COMMON_ENVIRONMENT_WRAPPER_H
