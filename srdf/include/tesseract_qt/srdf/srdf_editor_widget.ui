@@ -29,7 +29,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="load_page">
       <property name="geometry">
@@ -236,7 +236,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::GroupsJointStatesEditorWidget" name="group_states_widget" native="true"/>
+        <widget class="tesseract_gui::GroupJointStatesEditorWidget" name="group_states_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -338,9 +338,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::GroupsJointStatesEditorWidget</class>
+   <class>tesseract_gui::GroupJointStatesEditorWidget</class>
    <extends>QWidget</extends>
-   <header>tesseract_qt/kinematic_groups/groups_joint_states_editor_widget.h</header>
+   <header>tesseract_qt/kinematic_groups/group_joint_states_editor_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

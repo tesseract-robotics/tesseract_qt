@@ -37,6 +37,16 @@ add_library(
   ${COMMON_WIDGETS_headers_MOC}
   ${COMMON_WIDGETS_headers_UI}
   ${COMMON_WIDGETS_resources_RCC}
+  src/events/component_events.cpp
+  src/events/allowed_collision_matrix_events.cpp
+  src/events/command_language_events.cpp
+  src/events/contact_results_events.cpp
+  src/events/environment_events.cpp
+  src/events/group_joint_states_events.cpp
+  src/events/group_tcps_events.cpp
+  src/events/kinematic_groups_events.cpp
+  src/events/scene_graph_events.cpp
+  src/events/tool_path_events.cpp
   src/calibration_info_standard_item.cpp
   src/cartesian_editor_widget.cpp
   src/collision_margin_data_standard_item.cpp
@@ -49,7 +59,6 @@ add_library(
   src/position_standard_item.cpp
   src/quaternion_standard_item.cpp
   src/rgba_standard_item.cpp
-  src/component_events.cpp
   src/component_info.cpp
   src/standard_item_utils.cpp
   src/plugin_info_container_standard_item.cpp

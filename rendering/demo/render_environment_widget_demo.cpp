@@ -32,7 +32,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/rendering/render_environment_widget.h>
 #include <tesseract_qt/rendering/tool_path_render_manager.h>
 #include <tesseract_qt/environment/environment_widget_config.h>
-#include <tesseract_qt/tool_path/tool_path_events.h>
+#include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/component_info.h>
 

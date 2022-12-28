@@ -10,7 +10,6 @@ qt5_wrap_cpp(TOOL_PATH_MODEL_headers_MOC include/tesseract_qt/tool_path/tool_pat
 add_library(
   ${PROJECT_NAME}_tool_path_models SHARED
   ${TOOL_PATH_MODEL_headers_MOC}
-  src/tool_path_events.cpp
   src/tool_path_selection_model.cpp
   src/tool_path_model.cpp
   src/tool_path_utils.cpp)

@@ -46,6 +46,9 @@ private:
   std::shared_ptr<tesseract_environment::Environment> env_;
 
   void tesseractEventFilter(const tesseract_environment::Event& event);
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 class MonitorEnvironmentWrapper : public EnvironmentWrapper
@@ -62,6 +65,9 @@ private:
   std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor_;
 
   void tesseractEventFilter(const tesseract_environment::Event& event);
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_WRAPPERS_H

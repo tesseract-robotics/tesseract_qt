@@ -2,8 +2,8 @@
 #include "ui_manipulation_widget.h"
 
 #include <tesseract_qt/scene_graph/scene_state_model.h>
-#include <tesseract_qt/scene_graph/scene_graph_events.h>
 
+#include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/link_visibility_properties.h>
 

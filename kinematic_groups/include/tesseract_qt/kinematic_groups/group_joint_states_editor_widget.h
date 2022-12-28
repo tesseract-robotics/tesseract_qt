@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_GROUPS_JOINT_STATES_EDITOR_WIDGET_H
-#define TESSERACT_QT_GROUPS_JOINT_STATES_EDITOR_WIDGET_H
+#ifndef TESSERACT_QT_GROUP_JOINT_STATES_EDITOR_WIDGET_H
+#define TESSERACT_QT_GROUP_JOINT_STATES_EDITOR_WIDGET_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
@@ -38,25 +38,33 @@ class QStringListModel;
 
 namespace Ui
 {
-class GroupsJointStatesEditorWidget;
+class GroupJointStatesEditorWidget;
 }
+
+class QItemSelectionModel;
 
 namespace tesseract_gui
 {
-using GroupJointsRetriever = std::function<std::vector<tesseract_scene_graph::Joint::ConstPtr>(QString)>;
-
+class ComponentInfo;
 class GroupJointStatesModel;
-struct GroupsJointStatesEditorWidgetImpl;
-class GroupsJointStatesEditorWidget : public QWidget
+class GroupJointStatesEditorWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit GroupsJointStatesEditorWidget(QWidget* parent = nullptr);
-  ~GroupsJointStatesEditorWidget();
+  explicit GroupJointStatesEditorWidget(QWidget* parent = nullptr);
+  explicit GroupJointStatesEditorWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~GroupJointStatesEditorWidget();
 
-  void config(GroupJointsRetriever group_joints_retriever);
-  void setModels(GroupJointStatesModel* group_states_model, QStringListModel* group_names_model);
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
+
+  void setModel(std::shared_ptr<GroupJointStatesModel> model);
+  std::shared_ptr<GroupJointStatesModel> getModel();
+  std::shared_ptr<const GroupJointStatesModel> getModel() const;
+
+  QItemSelectionModel& getSelectionModel();
+  const QItemSelectionModel& getSelectionModel() const;
 
 Q_SIGNALS:
   void jointStateChanged(std::unordered_map<std::string, double> state);
@@ -65,11 +73,15 @@ private Q_SLOTS:
   void onGroupNameChanged();
   void onAddJointState();
   void onRemoveJointState();
+  void onApply();
 
 private:
-  std::unique_ptr<Ui::GroupsJointStatesEditorWidget> ui_;
-  std::unique_ptr<GroupsJointStatesEditorWidgetImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Ui::GroupJointStatesEditorWidget> ui_;
+  std::unique_ptr<Implementation> data_;
+
+  void ctor(ComponentInfo component_info);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_GROUPS_JOINT_STATES_EDITOR_WIDGET_H
+#endif  // TESSERACT_QT_GROUP_JOINT_STATES_EDITOR_WIDGET_H

@@ -22,8 +22,8 @@
  */
 
 #include <tesseract_qt/scene_graph/scene_graph_tool_bar.h>
-#include <tesseract_qt/scene_graph/scene_graph_events.h>
-#include <tesseract_qt/scene_graph/scene_graph_link_visibility.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/scene_graph_link_visibility.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <QApplication>

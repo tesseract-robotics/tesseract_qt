@@ -23,7 +23,7 @@
 
 #include <tesseract_qt/command_language/composite_instruction_model.h>
 #include <tesseract_qt/command_language/composite_instruction_standard_item.h>
-#include <tesseract_qt/command_language/command_language_events.h>
+#include <tesseract_qt/common/events/command_language_events.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>

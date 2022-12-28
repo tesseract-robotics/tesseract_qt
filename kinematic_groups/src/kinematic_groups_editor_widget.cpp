@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
+#include <tesseract_qt/common/events/kinematic_groups_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include "ui_kinematic_groups_editor_widget.h"
 

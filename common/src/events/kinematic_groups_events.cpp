@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
+#include <tesseract_qt/common/events/kinematic_groups_events.h>
 
 namespace tesseract_gui::events
 {

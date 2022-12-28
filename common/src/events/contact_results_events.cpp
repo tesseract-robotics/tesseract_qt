@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/collision/contact_results_events.h>
+#include <tesseract_qt/common/events/contact_results_events.h>
 #include <tesseract_scene_graph/scene_state.h>
 
 namespace tesseract_gui::events
@@ -92,9 +92,13 @@ ContactResultsVisbilityAll::~ContactResultsVisbilityAll() = default;
 //////////////////////////////////////////
 
 ContactResultsCompute::ContactResultsCompute(ComponentInfo component_info,
-                                             const tesseract_collision::CollisionCheckConfig& config,
-                                             const std::string& ns)
-  : ComponentEvent(std::move(component_info), kType), ns_(ns), config_(config)
+                                             tesseract_collision::CollisionCheckConfig config,
+                                             StateType state_type,
+                                             std::string ns)
+  : ComponentEvent(std::move(component_info), kType)
+  , ns_(std::move(ns))
+  , config_(std::move(config))
+  , state_type_(std::move(state_type))
 {
 }
 
@@ -102,46 +106,8 @@ ContactResultsCompute::~ContactResultsCompute() = default;
 
 const std::string& ContactResultsCompute::getNamespace() const { return ns_; }
 const tesseract_collision::CollisionCheckConfig& ContactResultsCompute::getConfig() const { return config_; }
+ContactResultsCompute::StateType ContactResultsCompute::getStateType() const { return state_type_; }
 
 //////////////////////////////////////////
 
-ContactResultsComputeState::ContactResultsComputeState(ComponentInfo component_info,
-                                                       const tesseract_collision::CollisionCheckConfig& config,
-                                                       const tesseract_scene_graph::SceneState& state,
-                                                       const std::string& ns)
-  : ComponentEvent(std::move(component_info), kType)
-  , ns_(ns)
-  , config_(config)
-  , state_(std::make_unique<tesseract_scene_graph::SceneState>(state))
-{
-}
-
-ContactResultsComputeState::~ContactResultsComputeState() = default;
-
-const std::string& ContactResultsComputeState::getNamespace() const { return ns_; }
-const tesseract_collision::CollisionCheckConfig& ContactResultsComputeState::getConfig() const { return config_; }
-const tesseract_scene_graph::SceneState& ContactResultsComputeState::getState() const { return *state_; }
-
-//////////////////////////////////////////
-
-ContactResultsComputeNamedState::ContactResultsComputeNamedState(
-    ComponentInfo component_info,
-    const tesseract_collision::CollisionCheckConfig& config,
-    const std::string& group_name,
-    const std::string& state_name,
-    const std::string& ns)
-  : ComponentEvent(std::move(component_info), kType)
-  , ns_(ns)
-  , config_(config)
-  , group_name_(group_name)
-  , state_name_(state_name)
-{
-}
-
-ContactResultsComputeNamedState::~ContactResultsComputeNamedState() = default;
-
-const std::string& ContactResultsComputeNamedState::getNamespace() const { return ns_; }
-const tesseract_collision::CollisionCheckConfig& ContactResultsComputeNamedState::getConfig() const { return config_; }
-const std::string& ContactResultsComputeNamedState::getGroupName() const { return group_name_; }
-const std::string& ContactResultsComputeNamedState::getStateName() const { return state_name_; }
 }  // namespace tesseract_gui::events

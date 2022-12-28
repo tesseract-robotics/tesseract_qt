@@ -30,7 +30,6 @@ add_library(
   src/sphere_standard_item.cpp
   src/polygon_mesh_standard_item.cpp
   src/octree_standard_item.cpp
-  src/scene_graph_events.cpp
   src/scene_graph_standard_item.cpp
   src/scene_state_standard_item.cpp
   src/scene_state_model.cpp

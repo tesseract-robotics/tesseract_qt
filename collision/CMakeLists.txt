@@ -14,7 +14,6 @@ add_library(
   src/contact_request_standard_item.cpp
   src/contact_result_standard_item.cpp
   src/contact_result_vector_standard_item.cpp
-  src/contact_results_events.cpp
   src/contact_results_model.cpp)
 
 target_link_libraries(

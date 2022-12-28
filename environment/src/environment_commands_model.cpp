@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/environment/environment_commands_model.h>
-#include <tesseract_qt/environment/environment_events.h>
+#include <tesseract_qt/common/events/environment_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/component_info.h>
 

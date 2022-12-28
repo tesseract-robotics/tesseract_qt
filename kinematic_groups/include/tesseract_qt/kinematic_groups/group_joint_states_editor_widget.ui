@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GroupsJointStatesEditorWidget</class>
- <widget class="QWidget" name="GroupsJointStatesEditorWidget">
+ <class>GroupJointStatesEditorWidget</class>
+ <widget class="QWidget" name="GroupJointStatesEditorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -65,7 +65,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="groupNamesComboBox"/>
+       <widget class="tesseract_gui::GroupNamesComboBox" name="groupNamesComboBox"/>
       </item>
       <item row="2" column="1">
        <widget class="QLineEdit" name="jointStateNameLineEdit"/>
@@ -133,6 +133,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="applyPushButton">
+        <property name="text">
+         <string>Apply</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -140,21 +147,34 @@
     <widget class="tesseract_gui::JointStateSliderWidget" name="jointSliderWidget" native="true"/>
    </item>
    <item>
-    <widget class="tesseract_gui::TreeView" name="treeView"/>
+    <widget class="tesseract_gui::GroupJointStatesWidget" name="groupJointStatesWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::TreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/common/tree_view.h</header>
-  </customwidget>
-  <customwidget>
    <class>tesseract_gui::JointStateSliderWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/joint_state_slider/joint_state_slider_widget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::GroupJointStatesWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/kinematic_groups/group_joint_states_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::GroupNamesComboBox</class>
+   <extends>QComboBox</extends>
+   <header>tesseract_qt/kinematic_groups/group_names_combo_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -67,6 +67,7 @@ public Q_SLOTS:
   void onRemoveButtonClicked();
   void onAddButtonClicked();
   void onGenerateButtonClicked();
+  void onApplyButtonClicked();
 
 private:
   struct Implementation;

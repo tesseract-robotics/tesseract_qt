@@ -21,10 +21,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
 #include <tesseract_qt/kinematic_groups/chain_group_standard_item.h>
 #include <tesseract_qt/kinematic_groups/joint_group_standard_item.h>
 #include <tesseract_qt/kinematic_groups/link_group_standard_item.h>
+#include <tesseract_qt/common/events/kinematic_groups_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/component_info.h>
 

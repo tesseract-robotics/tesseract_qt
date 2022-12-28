@@ -1,5 +1,6 @@
 find_package(tesseract_common REQUIRED)
 find_package(tesseract_scene_graph REQUIRED)
+find_package(tesseract_environment REQUIRED)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -7,8 +8,7 @@ tesseract_variables()
 
 qt5_wrap_cpp(ACM_MODEL_headers_MOC include/tesseract_qt/acm/allowed_collision_matrix_model.h)
 
-add_library(${PROJECT_NAME}_acm_models SHARED ${ACM_MODEL_headers_MOC} src/allowed_collision_matrix_events.cpp
-                                              src/allowed_collision_matrix_model.cpp)
+add_library(${PROJECT_NAME}_acm_models SHARED ${ACM_MODEL_headers_MOC} src/allowed_collision_matrix_model.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_acm_models
@@ -42,6 +42,7 @@ target_link_libraries(
   ${PROJECT_NAME}_acm_widgets
   PUBLIC tesseract::tesseract_scene_graph
          tesseract::tesseract_common
+         tesseract::tesseract_environment
          Qt5::Core
          Qt5::Widgets
          Qt5::Gui

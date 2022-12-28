@@ -23,12 +23,9 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
-#include <QStandardItemModel>
-#include <QStringListModel>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/kinematic_groups/groups_joint_states_editor_widget.h>
-#include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
+#include <tesseract_qt/kinematic_groups/group_joint_states_editor_widget.h>
 
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
@@ -68,13 +65,9 @@ int main(int argc, char** argv)
   tesseract_common::TesseractSupportResourceLocator locator;
   sg = tesseract_urdf::parseURDFFile(path, locator);
 
-  tesseract_gui::GroupJointStatesModel model;
-  QStringList list{ "group1", "group2" };
-  QStringListModel group_names;
-  group_names.setStringList(list);
-  tesseract_gui::GroupsJointStatesEditorWidget widget;
-  widget.config(getGroupJoints);
-  widget.setModels(&model, &group_names);
+  tesseract_gui::GroupJointStatesEditorWidget widget;
+  //  widget.config(getGroupJoints);
+  //  widget.setModels(&model, &group_names);
   widget.show();
 
   return app.exec();

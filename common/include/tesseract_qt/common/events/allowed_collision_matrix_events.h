@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_EVENTS_H
-#define TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_EVENTS_H
+#ifndef TESSERACT_QT_COMMON_ALLOWED_COLLISION_MATRIX_EVENTS_H
+#define TESSERACT_QT_COMMON_ALLOWED_COLLISION_MATRIX_EVENTS_H
 
 #include <memory>
 #include <vector>
-#include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/component_events.h>
+#include <tesseract_qt/common/events/event_type.h>
+#include <tesseract_qt/common/events/component_events.h>
 
 namespace tesseract_common
 {
@@ -124,17 +124,17 @@ private:
 class AllowedCollisionMatrixGenerate : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixGenerate(ComponentInfo component_info, double resolution);
+  AllowedCollisionMatrixGenerate(ComponentInfo component_info, long resolution);
   ~AllowedCollisionMatrixGenerate() override;
 
-  double getResolution() const;
+  long getResolution() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::ACM_GENERATE);
 
 private:
-  double resolution_{ 0.1 };
+  long resolution_;
 };
 
 }  // namespace tesseract_gui::events
-#endif  // TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_EVENTS_H
+#endif  // TESSERACT_QT_COMMON_ALLOWED_COLLISION_MATRIX_EVENTS_H

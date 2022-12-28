@@ -22,7 +22,7 @@
  */
 
 #include <tesseract_qt/tool_path/tool_path_tool_bar.h>
-#include <tesseract_qt/tool_path/tool_path_events.h>
+#include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <QApplication>

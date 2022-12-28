@@ -26,12 +26,10 @@
 #include <tesseract_qt/rendering/utils.h>
 #include <tesseract_qt/rendering/conversions.h>
 
-#include <tesseract_qt/scene_graph/scene_graph_events.h>
-
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_qt/common/component_events.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
 
 #include <QApplication>
 

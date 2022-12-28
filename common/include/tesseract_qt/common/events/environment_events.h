@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_EVENTS_H
-#define TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_EVENTS_H
+#ifndef TESSERACT_QT_COMMON_ENVIRONMENT_EVENTS_H
+#define TESSERACT_QT_COMMON_ENVIRONMENT_EVENTS_H
 
 #include <vector>
 #include <unordered_map>
-#include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/component_events.h>
+#include <tesseract_qt/common/events/event_type.h>
+#include <tesseract_qt/common/events/component_events.h>
 
 namespace tesseract_environment
 {
@@ -112,4 +112,4 @@ private:
 };
 
 }  // namespace tesseract_gui::events
-#endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_EVENTS_H
+#endif  // TESSERACT_QT_COMMON_ENVIRONMENT_EVENTS_H

@@ -24,7 +24,7 @@
 #include <tesseract_qt/collision/contact_results_model.h>
 #include <tesseract_qt/collision/contact_result_standard_item.h>
 #include <tesseract_qt/collision/contact_result_vector_standard_item.h>
-#include <tesseract_qt/collision/contact_results_events.h>
+#include <tesseract_qt/common/events/contact_results_events.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>

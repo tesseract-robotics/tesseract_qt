@@ -1,6 +1,6 @@
 #include <tesseract_qt/collision/contact_results_compute_widget.h>
 #include <tesseract_qt/collision/contact_results_model.h>
-#include <tesseract_qt/collision/contact_results_events.h>
+#include <tesseract_qt/common/events/contact_results_events.h>
 #include "ui_contact_results_compute_widget.h"
 
 #include <QTreeView>
@@ -63,29 +63,6 @@ void ContactResultsComputeWidget::onComputeClicked()
       static_cast<tesseract_collision::ContactTestType>(ui->contact_test_type->currentIndex());
 
   QApplication::sendEvent(qApp, new events::ContactResultsCompute(getComponentInfo(), config));
-
-  //  tesseract_collision::ContactResultMap contacts;
-  //  auto contact_manager = data_->env->getDiscreteContactManager();
-  //  contact_manager->applyContactManagerConfig(config);
-  //  contact_manager->contactTest(contacts, request);
-
-  //  // Convert to tracked objects
-  //  ContactResultMap tracked_object;
-  //  for (const auto& contact : contacts)
-  //  {
-  //    ContactResultVector crv;
-  //    for (const auto& result : contact.second)
-  //      crv().push_back(ContactResult(result));
-
-  //    tracked_object[contact.first] = crv;
-  //  }
-
-  //  QApplication::sendEvent(qApp, new events::ContactResultsSet(data_->model->getComponentInfo(), tracked_object));
-
-  //  // This hides the root element
-  //  ui->tree_view->setRootIndex(data_->model->index(0, 0));
-
-  //  ui->tree_view->expandToDepth(1);
 }
 
 void ContactResultsComputeWidget::ctor(ComponentInfo component_info)

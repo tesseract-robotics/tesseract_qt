@@ -35,13 +35,14 @@
 #include <QStatusBar>
 
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
-#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
-#include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
-#include <tesseract_qt/kinematic_groups/group_tcps_events.h>
+
+#include <tesseract_qt/common/events/group_tcps_events.h>
+#include <tesseract_qt/common/events/group_joint_states_events.h>
+#include <tesseract_qt/common/events/kinematic_groups_events.h>
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/component_info.h>
 
 static const tesseract_gui::ComponentInfo COMPONENT_INFO{ "srdf_scene" };
@@ -93,10 +94,10 @@ SRDFEditorWidget::SRDFEditorWidget(std::shared_ptr<tesseract_common::ResourceLoc
 
   ui_->toolBox->setCurrentIndex(0);
   //  ui_->acm_widget->setModel(&data_->acm_model);
-  ui_->group_states_widget->setModels(&data_->group_joint_states_model, &data_->group_names_model);
-  ui_->groups_widget->setModels(&data_->kin_groups_model, &data_->link_model, &data_->joint_model);
+  //  ui_->group_states_widget->setModels(&data_->group_joint_states_model, &data_->group_names_model);
+  //  ui_->groups_widget->setModels(&data_->kin_groups_model, &data_->link_model, &data_->joint_model);
 
-  ui_->group_states_widget->config([this](QString group_name) { return groupJointsRetrevier(group_name); });
+  //  ui_->group_states_widget->config([this](QString group_name) { return groupJointsRetrevier(group_name); });
 
   /** @todo Add validators to kinematic group editor widget */
 

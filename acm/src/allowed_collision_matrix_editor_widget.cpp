@@ -23,8 +23,13 @@
 
 #include <tesseract_qt/acm/allowed_collision_matrix_editor_widget.h>
 #include <tesseract_qt/acm/add_allowed_collision_entry_dialog.h>
-#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/environment_events.h>
+
 #include "ui_allowed_collision_matrix_editor_widget.h"
+
+#include <tesseract_environment/commands/modify_allowed_collisions_command.h>
+
 #include <QDialog>
 #include <QApplication>
 #include <QItemSelection>
@@ -112,6 +117,14 @@ void AllowedCollisionMatrixEditorWidget::onGenerateButtonClicked()
       qApp, new events::AllowedCollisionMatrixGenerate(getComponentInfo(), ui_->resolutionSlider->value()));
 }
 
+void AllowedCollisionMatrixEditorWidget::onApplyButtonClicked()
+{
+  auto cmd = std::make_shared<tesseract_environment::ModifyAllowedCollisionsCommand>(
+      ui_->acm_widget->getModel()->getAllowedCollisionMatrix(),
+      tesseract_environment::ModifyAllowedCollisionsType::REPLACE);
+  QApplication::sendEvent(qApp, new events::EnvironmentApplyCommand(getComponentInfo(), { cmd }));
+}
+
 void AllowedCollisionMatrixEditorWidget::ctor(ComponentInfo component_info)
 {
   ui_->setupUi(this);
@@ -121,6 +134,7 @@ void AllowedCollisionMatrixEditorWidget::ctor(ComponentInfo component_info)
   connect(ui_->generatePushButton, SIGNAL(clicked()), this, SLOT(onGenerateButtonClicked()));
   connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveButtonClicked()));
   connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddButtonClicked()));
+  connect(ui_->applyPushButton, SIGNAL(clicked()), this, SLOT(onApplyButtonClicked()));
 }
 
 }  // namespace tesseract_gui

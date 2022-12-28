@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/acm/add_allowed_collision_entry_dialog.h>
-#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/component_info.h>
 
 #include "ui_add_allowed_collision_entry_dialog.h"

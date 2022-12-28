@@ -24,8 +24,7 @@
 #include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/utils.h>
 
-#include <tesseract_qt/tool_path/tool_path_events.h>
-
+#include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>

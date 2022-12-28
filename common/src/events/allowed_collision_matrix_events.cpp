@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_common/allowed_collision_matrix.h>
 
 namespace tesseract_gui::events
@@ -100,12 +100,12 @@ const std::vector<std::string>& AllowedCollisionMatrixShow::getLinks() const { r
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(ComponentInfo component_info, double resolution)
+AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(ComponentInfo component_info, long resolution)
   : ComponentEvent(std::move(component_info), kType), resolution_(resolution)
 {
 }
 
 AllowedCollisionMatrixGenerate::~AllowedCollisionMatrixGenerate() = default;
 
-double AllowedCollisionMatrixGenerate::getResolution() const { return resolution_; }
+long AllowedCollisionMatrixGenerate::getResolution() const { return resolution_; }
 }  // namespace tesseract_gui::events

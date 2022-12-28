@@ -22,19 +22,20 @@
  */
 
 #include <tesseract_qt/environment/environment_widget_config.h>
-#include <tesseract_qt/environment/environment_events.h>
 #include <tesseract_qt/environment/environment_commands_model.h>
 #include <tesseract_qt/scene_graph/scene_graph_model.h>
 #include <tesseract_qt/scene_graph/scene_state_model.h>
-#include <tesseract_qt/scene_graph/scene_graph_events.h>
 #include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_qt/kinematic_groups/kinematic_groups_events.h>
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
-#include <tesseract_qt/kinematic_groups/group_tcps_events.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
-#include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
-#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/group_joint_states_events.h>
+#include <tesseract_qt/common/events/group_tcps_events.h>
+#include <tesseract_qt/common/events/kinematic_groups_events.h>
+#include <tesseract_qt/common/events/environment_events.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/component_info.h>
 
 #include <tesseract_environment/environment.h>

@@ -31,7 +31,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/scene_graph/scene_graph_model.h>
 #include <tesseract_qt/scene_graph/scene_graph_standard_item.h>
 #include <tesseract_qt/scene_graph/scene_graph_tool_bar.h>
-#include <tesseract_qt/scene_graph/scene_graph_events.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/tree_view.h>
 #include <tesseract_urdf/urdf_parser.h>

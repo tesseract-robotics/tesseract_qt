@@ -22,11 +22,12 @@
  */
 
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
-#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_common/allowed_collision_matrix.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
+
+#include <tesseract_common/allowed_collision_matrix.h>
 
 #include <QApplication>
 

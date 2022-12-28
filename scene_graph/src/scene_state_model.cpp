@@ -21,8 +21,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/scene_graph/scene_state_model.h>
-#include <tesseract_qt/scene_graph/scene_graph_events.h>
-#include <tesseract_qt/scene_graph/scene_graph_link_visibility.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/scene_graph_link_visibility.h>
 #include <tesseract_qt/common/transform_standard_item.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>

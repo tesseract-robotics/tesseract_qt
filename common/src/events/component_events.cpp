@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/common/component_events.h>
+#include <tesseract_qt/common/events/component_events.h>
 #include <boost/uuid/uuid.hpp>
 
 namespace tesseract_gui::events

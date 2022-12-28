@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_qt/kinematic_groups/group_joint_state_standard_item.h>
-#include <tesseract_qt/kinematic_groups/group_joint_states_events.h>
+#include <tesseract_qt/common/events/group_joint_states_events.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/component_info.h>

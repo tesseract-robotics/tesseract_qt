@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_EVENTS_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_EVENTS_H
+#ifndef TESSERACT_QT_COMMON_CONTACT_RESULTS_EVENTS_H
+#define TESSERACT_QT_COMMON_CONTACT_RESULTS_EVENTS_H
 
 #include <memory>
-#include <tesseract_qt/common/event_type.h>
-#include <tesseract_qt/common/component_events.h>
-#include <tesseract_qt/collision/contact_results_types.h>
+#include <tesseract_qt/common/events/event_type.h>
+#include <tesseract_qt/common/events/component_events.h>
+#include <tesseract_qt/common/contact_results_types.h>
 
 namespace tesseract_scene_graph
 {
@@ -107,13 +107,22 @@ public:
 class ContactResultsCompute : public ComponentEvent
 {
 public:
+  enum StateType
+  {
+    CURRENT_STATE,
+    NAMED_STATE,
+    USER_DEFINED_STATE
+  };
+
   ContactResultsCompute(ComponentInfo component_info,
-                        const tesseract_collision::CollisionCheckConfig& config,
-                        const std::string& ns = "");
+                        tesseract_collision::CollisionCheckConfig config,
+                        StateType state_type = CURRENT_STATE,
+                        std::string ns = "");
   ~ContactResultsCompute() override;
 
   const std::string& getNamespace() const;
   const tesseract_collision::CollisionCheckConfig& getConfig() const;
+  StateType getStateType() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_COMPUTE);
@@ -121,55 +130,9 @@ public:
 private:
   std::string ns_;
   tesseract_collision::CollisionCheckConfig config_;
-};
-
-class ContactResultsComputeState : public ComponentEvent
-{
-public:
-  ContactResultsComputeState(ComponentInfo component_info,
-                             const tesseract_collision::CollisionCheckConfig& config,
-                             const tesseract_scene_graph::SceneState& state,
-                             const std::string& ns = "");
-  ~ContactResultsComputeState() override;
-
-  const std::string& getNamespace() const;
-  const tesseract_collision::CollisionCheckConfig& getConfig() const;
-  const tesseract_scene_graph::SceneState& getState() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_COMPUTE_STATE);
-
-private:
-  std::string ns_;
-  tesseract_collision::CollisionCheckConfig config_;
-  std::unique_ptr<tesseract_scene_graph::SceneState> state_;
-};
-
-class ContactResultsComputeNamedState : public ComponentEvent
-{
-public:
-  ContactResultsComputeNamedState(ComponentInfo component_info,
-                                  const tesseract_collision::CollisionCheckConfig& config,
-                                  const std::string& group_name,
-                                  const std::string& state_name,
-                                  const std::string& ns = "");
-  ~ContactResultsComputeNamedState() override;
-
-  const std::string& getNamespace() const;
-  const tesseract_collision::CollisionCheckConfig& getConfig() const;
-  const std::string& getGroupName() const;
-  const std::string& getStateName() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_COMPUTE_NAMED_STATE);
-
-private:
-  std::string ns_;
-  tesseract_collision::CollisionCheckConfig config_;
-  std::string group_name_;
-  std::string state_name_;
+  StateType state_type_;
 };
 
 }  // namespace tesseract_gui::events
 
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_EVENTS_H
+#endif  // TESSERACT_QT_COMMON_CONTACT_RESULTS_EVENTS_H

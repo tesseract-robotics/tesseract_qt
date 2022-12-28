@@ -20,46 +20,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_MODEL_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_MODEL_H
+#ifndef TESSERACT_QT_KINEMATIC_GROUP_GROUP_NAMES_COMBO_BOX_H
+#define TESSERACT_QT_KINEMATIC_GROUP_GROUP_NAMES_COMBO_BOX_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <QStandardItemModel>
-#include <QMetaType>
 #include <memory>
-
-#include <tesseract_qt/common/contact_results_types.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <QComboBox>
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
-class ContactResultsModel : public QStandardItemModel
+class ComponentInfo;
+class GroupNamesComboBox : public QComboBox
 {
   Q_OBJECT
 public:
-  ContactResultsModel(QObject* parent = nullptr);
-  ContactResultsModel(ComponentInfo component_info, QObject* parent = nullptr);
-  ~ContactResultsModel() override;
+  explicit GroupNamesComboBox(QWidget* parent = 0);
+  explicit GroupNamesComboBox(ComponentInfo component_info, QWidget* parent = 0);
+  ~GroupNamesComboBox() override;
 
+  void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
-  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+
+  void updateModel();
 
 protected:
+  void showPopup() override;
+
+private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
-
-  void setContactResults(const QString& ns, const ContactResultVector& contact_results);
-  void setContactResults(const QString& ns, const ContactResultMap& contact_results);
-  void removeNamespace(const QString& ns);
-  void clear();
-
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_MODEL_H
+#endif  // TESSERACT_QT_KINEMATIC_GROUP_GROUP_NAMES_COMBO_BOX_H

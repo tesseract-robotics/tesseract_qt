@@ -24,8 +24,7 @@
 #include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/utils.h>
 
-#include <tesseract_qt/collision/contact_results_events.h>
-
+#include <tesseract_qt/common/events/contact_results_events.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/component_info.h>

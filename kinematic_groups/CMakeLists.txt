@@ -20,15 +20,12 @@ add_library(
   src/opw_params_standard_item.cpp
   src/joint_group_standard_item.cpp
   src/kinematic_groups_model.cpp
-  src/kinematic_groups_events.cpp
   src/kinematics_info_standard_item.cpp
   src/group_joint_state_standard_item.cpp
   src/group_joint_states_standard_item.cpp
-  src/group_joint_states_events.cpp
   src/group_joint_states_model.cpp
   src/group_tcps_standard_item.cpp
-  src/group_tcps_model.cpp
-  src/group_tcps_events.cpp)
+  src/group_tcps_model.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_kinematic_groups_models
   PUBLIC tesseract::tesseract_common
@@ -43,23 +40,25 @@ target_include_directories(
 
 qt5_wrap_cpp(
   KINEMATIC_GROUP_WIDGET_headers_MOC
+  include/tesseract_qt/kinematic_groups/group_names_combo_box.h
   include/tesseract_qt/kinematic_groups/group_joint_states_widget.h
+  include/tesseract_qt/kinematic_groups/group_joint_states_editor_widget.h
   include/tesseract_qt/kinematic_groups/group_tcps_widget.h
   include/tesseract_qt/kinematic_groups/kinematic_groups_widget.h
-  include/tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h
-  include/tesseract_qt/kinematic_groups/groups_joint_states_editor_widget.h)
+  include/tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h)
 qt5_wrap_ui(KINEMATIC_GROUP_WIDGET_headers_UI include/tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.ui
-            include/tesseract_qt/kinematic_groups/groups_joint_states_editor_widget.ui)
+            include/tesseract_qt/kinematic_groups/group_joint_states_editor_widget.ui)
 
 add_library(
   ${PROJECT_NAME}_kinematic_groups_widgets SHARED
   ${KINEMATIC_GROUP_WIDGET_headers_MOC}
   ${KINEMATIC_GROUP_WIDGET_headers_UI}
+  src/group_names_combo_box.cpp
   src/group_joint_states_widget.cpp
+  src/group_joint_states_editor_widget.cpp
   src/group_tcps_widget.cpp
   src/kinematic_groups_widget.cpp
-  src/kinematic_groups_editor_widget.cpp
-  src/groups_joint_states_editor_widget.cpp)
+  src/kinematic_groups_editor_widget.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_kinematic_groups_widgets
   PUBLIC Qt5::Core

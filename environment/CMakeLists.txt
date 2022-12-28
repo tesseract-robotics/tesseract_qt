@@ -14,7 +14,6 @@ qt5_wrap_cpp(
 add_library(
   ${PROJECT_NAME}_environment_models SHARED
   ${ENVIRONMENT_MODEL_headers_MOC}
-  src/environment_events.cpp
   src/environment_widget_config.cpp
   src/environment_commands_standard_item.cpp
   src/environment_commands_model.cpp

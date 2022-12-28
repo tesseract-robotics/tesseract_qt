@@ -28,7 +28,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/acm/allowed_collision_matrix_editor_widget.h>
-#include <tesseract_qt/acm/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/component_info.h>
 
 int main(int argc, char** argv)

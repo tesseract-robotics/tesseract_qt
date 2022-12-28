@@ -11,7 +11,6 @@ add_library(
   ${PROJECT_NAME}_command_language_models SHARED
   ${COMMAND_LANGUAGE_MODEL_headers_MOC}
   src/cartesian_waypoint_standard_item.cpp
-  src/command_language_events.cpp
   src/joint_waypoint_standard_item.cpp
   src/null_waypoint_standard_item.cpp
   src/state_waypoint_standard_item.cpp

@@ -21,8 +21,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/tool_path/tool_path_model.h>
-#include <tesseract_qt/tool_path/tool_path_events.h>
 #include <tesseract_qt/tool_path/tool_path_utils.h>
+#include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/transform_standard_item.h>
 #include <tesseract_qt/common/tool_path_standard_item.h>
 #include <tesseract_qt/common/tool_path_segment_standard_item.h>

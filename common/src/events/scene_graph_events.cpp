@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/scene_graph/scene_graph_events.h>
-#include <tesseract_qt/scene_graph/scene_graph_link_visibility.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/scene_graph_link_visibility.h>
 
 #include <tesseract_scene_graph/graph.h>
 #include <tesseract_scene_graph/link.h>
