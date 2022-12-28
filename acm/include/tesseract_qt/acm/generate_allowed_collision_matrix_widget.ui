@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AllowedCollisionMatrixWidget</class>
- <widget class="QWidget" name="AllowedCollisionMatrixWidget">
+ <class>GenerateAllowedCollisionMatrixWidget</class>
+ <widget class="QWidget" name="GenerateAllowedCollisionMatrixWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -87,7 +87,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTreeView" name="acmTreeView">
+    <widget class="tesseract_gui::TreeView" name="acmTreeView">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -158,6 +158,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tesseract_gui::TreeView</class>
+   <extends>QTreeView</extends>
+   <header>tesseract_qt/common/tree_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

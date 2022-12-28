@@ -60,7 +60,7 @@
    <item>
     <widget class="QTabWidget" name="kinGroupTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="chainTab">
       <attribute name="title">
@@ -268,7 +268,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTreeView" name="kinGroupTreeView">
+    <widget class="tesseract_gui::TreeView" name="kinGroupTreeView">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -276,6 +276,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tesseract_gui::TreeView</class>
+   <extends>QTreeView</extends>
+   <header>tesseract_qt/common/tree_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

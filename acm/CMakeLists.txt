@@ -8,9 +8,9 @@ tesseract_variables()
 qt5_wrap_cpp(
   ACM_headers_MOC
   include/tesseract_qt/acm/allowed_collision_matrix_model.h
-  include/tesseract_qt/acm/allowed_collision_matrix_widget.h
+  include/tesseract_qt/acm/generate_allowed_collision_matrix_widget.h
   include/tesseract_qt/acm/add_allowed_collision_entry_dialog.h)
-qt5_wrap_ui(ACM_WIDGET_headers_UI include/tesseract_qt/acm/allowed_collision_matrix_widget.ui
+qt5_wrap_ui(ACM_WIDGET_headers_UI include/tesseract_qt/acm/generate_allowed_collision_matrix_widget.ui
             include/tesseract_qt/acm/add_allowed_collision_entry_dialog.ui)
 
 add_library(
@@ -19,7 +19,7 @@ add_library(
   ${ACM_WIDGET_headers_UI}
   src/allowed_collision_matrix_events.cpp
   src/allowed_collision_matrix_model.cpp
-  src/allowed_collision_matrix_widget.cpp
+  src/generate_allowed_collision_matrix_widget.cpp
   src/add_allowed_collision_entry_dialog.cpp)
 
 target_link_libraries(

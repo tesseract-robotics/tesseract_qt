@@ -44,6 +44,7 @@ class ToolPathAdd : public ComponentEvent
 {
 public:
   ToolPathAdd(ComponentInfo component_info, const tesseract_gui::ToolPath& tool_path);
+  ToolPathAdd(const ToolPathAdd& other);
   ~ToolPathAdd() override;
 
   const tesseract_gui::ToolPath& getToolPath() const;
@@ -62,6 +63,7 @@ class ToolPathRemove : public ComponentEvent
 {
 public:
   ToolPathRemove(ComponentInfo component_info, const boost::uuids::uuid& uuid);
+  ToolPathRemove(const ToolPathRemove& other);
   ~ToolPathRemove() override;
 
   const boost::uuids::uuid& getUUID() const;
@@ -80,6 +82,7 @@ class ToolPathRemoveAll : public ComponentEvent
 {
 public:
   ToolPathRemoveAll(ComponentInfo component_info);
+  ToolPathRemoveAll(const ToolPathRemoveAll& other);
   ~ToolPathRemoveAll() override;
 
   /** @brief Unique type for this event. */
@@ -91,6 +94,7 @@ class ToolPathRemoveSelected : public ComponentEvent
 {
 public:
   ToolPathRemoveSelected(ComponentInfo component_info);
+  ToolPathRemoveSelected(const ToolPathRemoveSelected& other);
   ~ToolPathRemoveSelected() override;
 
   /** @brief Unique type for this event. */
@@ -103,6 +107,7 @@ class ToolPathHide : public ComponentEvent
 public:
   ToolPathHide(ComponentInfo component_info, const boost::uuids::uuid& uuid);
   ToolPathHide(ComponentInfo component_info, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
+  ToolPathHide(const ToolPathHide& other);
   ~ToolPathHide() override;
 
   const boost::uuids::uuid& getUUID() const;
@@ -122,6 +127,7 @@ class ToolPathHideAll : public ComponentEvent
 {
 public:
   ToolPathHideAll(ComponentInfo component_info);
+  ToolPathHideAll(const ToolPathHideAll& other);
   ~ToolPathHideAll() override;
 
   /** @brief Unique type for this event. */
@@ -134,6 +140,7 @@ class ToolPathShow : public ComponentEvent
 public:
   ToolPathShow(ComponentInfo component_info, const boost::uuids::uuid& uuid);
   ToolPathShow(ComponentInfo component_info, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
+  ToolPathShow(const ToolPathShow& other);
   ~ToolPathShow() override;
 
   const boost::uuids::uuid& getUUID() const;
@@ -153,6 +160,7 @@ class ToolPathShowAll : public ComponentEvent
 {
 public:
   ToolPathShowAll(ComponentInfo component_info);
+  ToolPathShowAll(const ToolPathShowAll& other);
   ~ToolPathShowAll() override;
 
   /** @brief Unique type for this event. */

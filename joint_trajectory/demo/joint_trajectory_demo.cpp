@@ -25,7 +25,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QDebug>
-#include <QTreeView>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/joint_trajectory/joint_trajectory_model.h>

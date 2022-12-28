@@ -52,15 +52,7 @@ struct ToolPathRenderManager::Implementation
   ComponentInfo component_info;
   EntityManager::Ptr entity_manager;
   std::map<boost::uuids::uuid, EntityContainer::Ptr> entity_containers;
-  bool render_dirty{ true };
-  bool render_reset{ true };
-  bool render_show_all{ true };
-  bool render_hide_all{ false };
-
-  std::vector<tesseract_gui::ToolPath> added;
-  std::vector<boost::uuids::uuid> removed;
-  std::vector<std::pair<boost::uuids::uuid, boost::uuids::uuid>> show;
-  std::vector<std::pair<boost::uuids::uuid, boost::uuids::uuid>> hide;
+  std::vector<std::unique_ptr<events::ComponentEvent>> events;
 
   void clear(ignition::rendering::Scene& scene, EntityContainer& container)
   {
@@ -203,188 +195,144 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
     assert(dynamic_cast<events::ToolPathAdd*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathAdd*>(event);
     if (e->getComponentInfo() == data_->component_info)
-    {
-      data_->added.push_back(e->getToolPath());
-      data_->render_dirty = true;
-    }
+      data_->events.push_back(std::make_unique<events::ToolPathAdd>(*e));
   }
   else if (event->type() == events::ToolPathRemove::kType)
   {
     assert(dynamic_cast<events::ToolPathRemove*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemove*>(event);
     if (e->getComponentInfo() == data_->component_info)
-    {
-      data_->removed.push_back(e->getUUID());
-      data_->render_dirty = true;
-    }
+      data_->events.push_back(std::make_unique<events::ToolPathRemove>(*e));
   }
   else if (event->type() == events::ToolPathRemoveAll::kType)
   {
     assert(dynamic_cast<events::ToolPathRemoveAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemoveAll*>(event);
     if (e->getComponentInfo() == data_->component_info)
-    {
-      data_->render_dirty = true;
-      data_->render_reset = true;
-    }
+      data_->events.push_back(std::make_unique<events::ToolPathRemoveAll>(*e));
   }
   else if (event->type() == events::ToolPathHideAll::kType)
   {
     assert(dynamic_cast<events::ToolPathHideAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathHideAll*>(event);
     if (e->getComponentInfo() == data_->component_info)
-    {
-      data_->render_dirty = true;
-      data_->render_hide_all = true;
-    }
+      data_->events.push_back(std::make_unique<events::ToolPathHideAll>(*e));
   }
   else if (event->type() == events::ToolPathShowAll::kType)
   {
     assert(dynamic_cast<events::ToolPathShowAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathShowAll*>(event);
     if (e->getComponentInfo() == data_->component_info)
-    {
-      data_->render_dirty = true;
-      data_->render_show_all = true;
-    }
+      data_->events.push_back(std::make_unique<events::ToolPathShowAll>(*e));
   }
   else if (event->type() == events::ToolPathHide::kType)
   {
     assert(dynamic_cast<events::ToolPathHide*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathHide*>(event);
     if (e->getComponentInfo() == data_->component_info)
-    {
-      data_->hide.push_back(std::make_pair(e->getUUID(), e->getChildUUID()));
-      data_->render_dirty = true;
-    }
+      data_->events.push_back(std::make_unique<events::ToolPathHide>(*e));
   }
   else if (event->type() == events::ToolPathShow::kType)
   {
     assert(dynamic_cast<events::ToolPathShow*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathShow*>(event);
     if (e->getComponentInfo() == data_->component_info)
-    {
-      data_->show.push_back(std::make_pair(e->getUUID(), e->getChildUUID()));
-      data_->render_dirty = true;
-    }
+      data_->events.push_back(std::make_unique<events::ToolPathShow>(*e));
   }
   else if (event->type() == events::PreRender::kType)
   {
     static const boost::uuids::uuid nil_uuid{};
 
     assert(dynamic_cast<events::PreRender*>(event) != nullptr);
-    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->component_info.scene_name &&
-        data_->render_dirty)
-    {
-      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
-      if (scene != nullptr && data_->render_dirty)
-      {
-        if (data_->render_reset)  // Remove all
-        {
-          data_->clearAll();
-          data_->render_reset = false;
-        }
-
-        // Check Added
-        if (!data_->added.empty())
-        {
-          for (const auto& tool_path : data_->added)
-          {
-            // Clear it if it exists
-            data_->clear(*scene, tool_path.getUUID());
-            EntityContainer::Ptr tool_path_container =
-                data_->entity_manager->getEntityContainer(boost::uuids::to_string(tool_path.getUUID()));
-            data_->entity_containers[tool_path.getUUID()] = tool_path_container;
-
-            std::string tool_path_name = boost::uuids::to_string(tool_path.getUUID());
-            auto tool_path_entity =
-                tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, tool_path_name);
-            ignition::rendering::VisualPtr ign_tool_path =
-                scene->CreateVisual(tool_path_entity.id, tool_path_entity.unique_name);
-            ign_tool_path->SetUserData(USER_VISIBILITY, true);
-            ign_tool_path->SetUserData(USER_PARENT_VISIBILITY, true);
-            for (const auto& segment : tool_path)
-            {
-              std::string segment_name = boost::uuids::to_string(segment.getUUID());
-              auto segment_entity =
-                  tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, segment_name);
-              ignition::rendering::VisualPtr ign_segment =
-                  scene->CreateVisual(segment_entity.id, segment_entity.unique_name);
-              ign_segment->SetUserData(USER_VISIBILITY, true);
-              ign_segment->SetUserData(USER_PARENT_VISIBILITY, true);
-              for (const auto& pose : segment)
-              {
-                std::string pose_name = boost::uuids::to_string(pose.getUUID());
-                auto pose_entity =
-                    tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pose_name);
-                ignition::rendering::AxisVisualPtr axis =
-                    scene->CreateAxisVisual(pose_entity.id, pose_entity.unique_name);
-                axis->SetLocalPose(ignition::math::eigen3::convert(pose.getTransform()));
-                axis->SetInheritScale(false);
-                axis->SetLocalScale(0.05, 0.05, 0.05);
-                axis->SetUserData(USER_VISIBILITY, true);
-                axis->SetUserData(USER_PARENT_VISIBILITY, true);
-
-                ign_segment->AddChild(axis);
-              }
-              ign_tool_path->AddChild(ign_segment);
-            }
-            scene->RootVisual()->AddChild(ign_tool_path);
-          }
-          data_->added.clear();
-        }
-
-        // Check Removed
-        if (!data_->removed.empty())
-        {
-          for (const auto& r : data_->removed)
-            data_->clear(*scene, r);
-
-          data_->removed.clear();
-        }
-
-        // Check Hide
-        if (!data_->hide.empty())
-        {
-          for (const auto& h : data_->hide)
-            data_->setVisibility(*scene, h.first, h.second, false, false);
-
-          data_->hide.clear();
-        }
-
-        // Check Show
-        if (!data_->show.empty())
-        {
-          for (const auto& s : data_->show)
-            data_->setVisibility(*scene, s.first, s.second, true, false);
-
-          data_->show.clear();
-        }
-
-        // Check Hide All
-        if (data_->render_hide_all)
-        {
-          for (const auto& e : data_->entity_containers)
-            data_->setVisibility(*scene, e.first, nil_uuid, false, true);
-
-          data_->render_hide_all = false;
-        }
-
-        // Check Show All
-        if (data_->render_show_all)
-        {
-          for (const auto& e : data_->entity_containers)
-            data_->setVisibility(*scene, e.first, nil_uuid, true, true);
-
-          data_->render_show_all = false;
-        }
-
-        data_->render_dirty = false;
-      }
-    }
+    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->component_info.scene_name)
+      render();
   }
 
   // Standard event processing
   return QObject::eventFilter(obj, event);
+}
+
+void ToolPathRenderManager::render()
+{
+  static const boost::uuids::uuid nil_uuid{};
+  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
+
+  for (const auto& event : data_->events)
+  {
+    if (event->type() == events::ToolPathAdd::kType)
+    {
+      auto& e = static_cast<events::ToolPathAdd&>(*event);
+      // Clear it if it exists
+      data_->clear(*scene, e.getToolPath().getUUID());
+      EntityContainer::Ptr tool_path_container =
+          data_->entity_manager->getEntityContainer(boost::uuids::to_string(e.getToolPath().getUUID()));
+      data_->entity_containers[e.getToolPath().getUUID()] = tool_path_container;
+
+      std::string tool_path_name = boost::uuids::to_string(e.getToolPath().getUUID());
+      auto tool_path_entity =
+          tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, tool_path_name);
+      ignition::rendering::VisualPtr ign_tool_path =
+          scene->CreateVisual(tool_path_entity.id, tool_path_entity.unique_name);
+      ign_tool_path->SetUserData(USER_VISIBILITY, true);
+      ign_tool_path->SetUserData(USER_PARENT_VISIBILITY, true);
+      for (const auto& segment : e.getToolPath())
+      {
+        std::string segment_name = boost::uuids::to_string(segment.getUUID());
+        auto segment_entity =
+            tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, segment_name);
+        ignition::rendering::VisualPtr ign_segment = scene->CreateVisual(segment_entity.id, segment_entity.unique_name);
+        ign_segment->SetUserData(USER_VISIBILITY, true);
+        ign_segment->SetUserData(USER_PARENT_VISIBILITY, true);
+        for (const auto& pose : segment)
+        {
+          std::string pose_name = boost::uuids::to_string(pose.getUUID());
+          auto pose_entity =
+              tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pose_name);
+          ignition::rendering::AxisVisualPtr axis = scene->CreateAxisVisual(pose_entity.id, pose_entity.unique_name);
+          axis->SetLocalPose(ignition::math::eigen3::convert(pose.getTransform()));
+          axis->SetInheritScale(false);
+          axis->SetLocalScale(0.05, 0.05, 0.05);
+          axis->SetUserData(USER_VISIBILITY, true);
+          axis->SetUserData(USER_PARENT_VISIBILITY, true);
+
+          ign_segment->AddChild(axis);
+        }
+        ign_tool_path->AddChild(ign_segment);
+      }
+      scene->RootVisual()->AddChild(ign_tool_path);
+    }
+    else if (event->type() == events::ToolPathRemove::kType)
+    {
+      auto& e = static_cast<events::ToolPathRemove&>(*event);
+      data_->clear(*scene, e.getUUID());
+    }
+    else if (event->type() == events::ToolPathRemoveAll::kType)
+    {
+      auto& e = static_cast<events::ToolPathRemoveAll&>(*event);
+      data_->clearAll();
+    }
+    else if (event->type() == events::ToolPathHideAll::kType)
+    {
+      for (const auto& container : data_->entity_containers)
+        data_->setVisibility(*scene, container.first, nil_uuid, false, true);
+    }
+    else if (event->type() == events::ToolPathShowAll::kType)
+    {
+      for (const auto& container : data_->entity_containers)
+        data_->setVisibility(*scene, container.first, nil_uuid, true, true);
+    }
+    else if (event->type() == events::ToolPathHide::kType)
+    {
+      auto& e = static_cast<events::ToolPathHide&>(*event);
+      data_->setVisibility(*scene, e.getUUID(), e.getChildUUID(), false, false);
+    }
+    else if (event->type() == events::ToolPathShow::kType)
+    {
+      auto& e = static_cast<events::ToolPathShow&>(*event);
+      data_->setVisibility(*scene, e.getUUID(), e.getChildUUID(), true, false);
+    }
+  }
+
+  data_->events.clear();
 }
 }  // namespace tesseract_gui

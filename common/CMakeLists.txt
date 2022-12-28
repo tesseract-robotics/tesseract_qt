@@ -20,7 +20,8 @@ qt5_wrap_cpp(
   include/tesseract_qt/common/image_viewer_widget.h
   include/tesseract_qt/common/json_model.h
   include/tesseract_qt/common/environment_manager.h
-  include/tesseract_qt/common/environment_wrapper.h)
+  include/tesseract_qt/common/environment_wrapper.h
+  include/tesseract_qt/common/tree_view.h)
 
 qt5_wrap_ui(COMMON_WIDGETS_headers_UI include/tesseract_qt/common/cartesian_editor_widget.ui
             include/tesseract_qt/common/image_viewer_widget.ui)
@@ -66,6 +67,7 @@ add_library(
   src/tool_path_standard_item.cpp
   src/icon_utils.cpp
   src/image_viewer_widget.cpp
+  src/tree_view.cpp
   src/type_standard_item.cpp
   src/vector_double_standard_item.cpp
   src/vector_string_standard_item.cpp

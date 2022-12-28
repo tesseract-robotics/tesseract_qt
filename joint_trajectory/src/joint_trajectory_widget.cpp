@@ -103,8 +103,6 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent, bool add_toolbar)
   connect(ui_->trajectoryPauseButton, SIGNAL(clicked()), this, SLOT(onPauseButtonClicked()));
   connect(ui_->trajectorySlider, SIGNAL(valueChanged(int)), this, SLOT(onSliderValueChanged(int)));
   connect(data_->player_timer.get(), SIGNAL(timeout()), this, SLOT(onPlayerTimerTimeout()));
-  connect(
-      ui_->trajectoryTreeView, &QTreeView::expanded, [this]() { ui_->trajectoryTreeView->resizeColumnToContents(0); });
 
   TransformFactory::registerTransform<FirstDerivative>();
   TransformFactory::registerTransform<IntegralTransform>();

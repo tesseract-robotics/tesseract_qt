@@ -144,7 +144,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="joint_tab">
       <attribute name="title">
@@ -221,7 +221,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="QTreeView" name="state_tree_view">
+        <widget class="tesseract_gui::TreeView" name="state_tree_view">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -234,6 +234,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>tesseract_gui::TreeView</class>
+   <extends>QTreeView</extends>
+   <header>tesseract_qt/common/tree_view.h</header>
+  </customwidget>
   <customwidget>
    <class>tesseract_gui::JointStateSliderWidget</class>
    <extends>QWidget</extends>

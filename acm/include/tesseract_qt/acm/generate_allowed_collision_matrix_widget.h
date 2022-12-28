@@ -37,19 +37,19 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace Ui
 {
-class AllowedCollisionMatrixWidget;
+class GenerateAllowedCollisionMatrixWidget;
 }
 
 namespace tesseract_gui
 {
 class AddAllowedCollisionEntryDialog;
-class AllowedCollisionMatrixWidget : public QWidget
+class GenerateAllowedCollisionMatrixWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit AllowedCollisionMatrixWidget(QWidget* parent = nullptr);
-  ~AllowedCollisionMatrixWidget();
+  explicit GenerateAllowedCollisionMatrixWidget(QWidget* parent = nullptr);
+  ~GenerateAllowedCollisionMatrixWidget();
 
   void setModel(tesseract_gui::AllowedCollisionMatrixModel* model);
 
@@ -62,7 +62,7 @@ Q_SIGNALS:
   void generateClicked(long resolution);
 
 private:
-  std::unique_ptr<Ui::AllowedCollisionMatrixWidget> ui_;
+  std::unique_ptr<Ui::GenerateAllowedCollisionMatrixWidget> ui_;
   std::unique_ptr<AddAllowedCollisionEntryDialog> dialog_;
 };
 

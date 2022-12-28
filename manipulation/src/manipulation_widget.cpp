@@ -75,8 +75,6 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
 
   addToolBar();
 
-  connect(ui->state_tree_view, &QTreeView::expanded, [this]() { ui->state_tree_view->resizeColumnToContents(0); });
-
   connect(ui->group_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui->working_frame_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onWorkingFrameChanged()));
   connect(ui->tcp_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onTCPNameChanged()));

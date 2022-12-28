@@ -31,6 +31,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/command_language/composite_instruction_model.h>
 #include <tesseract_qt/command_language/command_language_events.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/tree_view.h>
 
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/cartesian_waypoint.h>
@@ -98,7 +99,7 @@ int main(int argc, char** argv)
   tesseract_gui::ComponentInfo component_info{ "scene_name" };
   tesseract_gui::CompositeInstructionModel model(component_info);
 
-  QTreeView widget;
+  tesseract_gui::TreeView widget;
   widget.setModel(&model);
   widget.show();
 

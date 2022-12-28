@@ -20,34 +20,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_GUI_COMMON_ENVIRONMENT_WRAPPER_H
-#define TESSERACT_GUI_COMMON_ENVIRONMENT_WRAPPER_H
+#ifndef TESSERACT_QT_RENDERING_SCENE_GRAPH_RENDER_MANAGER_H
+#define TESSERACT_QT_RENDERING_SCENE_GRAPH_RENDER_MANAGER_H
 
 #include <memory>
 #include <QObject>
 
-namespace tesseract_environment
-{
-class Environment;
-}  // namespace tesseract_environment
-
 namespace tesseract_gui
 {
+class EntityManager;
 struct ComponentInfo;
-class EnvironmentWrapper : public QObject
-{
-  Q_OBJECT
-public:
-  EnvironmentWrapper(ComponentInfo component_info);
-  virtual ~EnvironmentWrapper();
 
-  const ComponentInfo& getComponentInfo() const;
-  virtual std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const = 0;
+class SceneGraphRenderManager : public QObject
+{
+public:
+  SceneGraphRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
+  ~SceneGraphRenderManager();
 
 private:
-  std::unique_ptr<ComponentInfo> component_info_;
-};
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
+
+  void render();
+};
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_GUI_COMMON_ENVIRONMENT_WRAPPER_H
+#endif  // TESSERACT_QT_RENDERING_SCENE_GRAPH_RENDER_MANAGER_H

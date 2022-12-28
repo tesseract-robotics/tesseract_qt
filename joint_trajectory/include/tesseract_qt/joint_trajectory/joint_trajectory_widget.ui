@@ -33,7 +33,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTreeView" name="trajectoryTreeView">
+    <widget class="tesseract_gui::TreeView" name="trajectoryTreeView">
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -156,6 +156,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tesseract_gui::TreeView</class>
+   <extends>QTreeView</extends>
+   <header>tesseract_qt/common/tree_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

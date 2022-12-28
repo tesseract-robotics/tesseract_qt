@@ -140,11 +140,16 @@
     <widget class="tesseract_gui::JointStateSliderWidget" name="jointSliderWidget" native="true"/>
    </item>
    <item>
-    <widget class="QTreeView" name="treeView"/>
+    <widget class="tesseract_gui::TreeView" name="treeView"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>tesseract_gui::TreeView</class>
+   <extends>QTreeView</extends>
+   <header>tesseract_qt/common/tree_view.h</header>
+  </customwidget>
   <customwidget>
    <class>tesseract_gui::JointStateSliderWidget</class>
    <extends>QWidget</extends>

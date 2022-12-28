@@ -19,9 +19,6 @@ ContactResultsWidget::ContactResultsWidget(QWidget* parent)
 {
   ui->setupUi(this);
 
-  connect(ui->tree_view, &QTreeView::collapsed, [this]() { ui->tree_view->resizeColumnToContents(0); });
-  connect(ui->tree_view, &QTreeView::expanded, [this]() { ui->tree_view->resizeColumnToContents(0); });
-
   connect(ui->compute_push_button, SIGNAL(clicked()), this, SLOT(onComputeClicked()));
 }
 

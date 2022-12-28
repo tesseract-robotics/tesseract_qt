@@ -23,82 +23,18 @@
 
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_environment/environment.h>
-#include <tesseract_environment/environment_monitor.h>
 
 #include <QApplication>
 
 namespace tesseract_gui
 {
-struct EnvironmentWrapper::Implementation
+EnvironmentWrapper::EnvironmentWrapper(ComponentInfo component_info)
+  : component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
-  ComponentInfo component_info;
-  std::shared_ptr<const tesseract_environment::Environment> env;
-};
-
-EnvironmentWrapper::EnvironmentWrapper(ComponentInfo component_info) : data_(std::make_unique<Implementation>())
-{
-  data_->component_info = std::move(component_info);
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
-}
-
-EnvironmentWrapper::EnvironmentWrapper(ComponentInfo component_info,
-                                       std::shared_ptr<tesseract_environment::Environment> env)
-  : EnvironmentWrapper(std::move(component_info))
-{
-  data_->env = std::move(env);
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
 }
 
 EnvironmentWrapper::~EnvironmentWrapper() = default;
 
-const ComponentInfo& EnvironmentWrapper::getComponentInfo() const { return data_->component_info; }
-
-std::shared_ptr<const tesseract_environment::Environment> EnvironmentWrapper::getEnvironment() const
-{
-  return data_->env;
-}
-
-void EnvironmentWrapper::tesseractEventFilter(const tesseract_environment::Event& event)
-{
-  switch (event.type)
-  {
-    case tesseract_environment::Events::COMMAND_APPLIED:
-    {
-      //      onUpdateModels();
-      //      emit environmentChanged(*data_->environment);
-      //      break;
-    }
-    case tesseract_environment::Events::SCENE_STATE_CHANGED:
-    {
-      //      onUpdateCurrentStateModel();
-      //      emit environmentCurrentStateChanged(*data_->environment);
-      //      break;
-    }
-  }
-}
-
-bool EnvironmentWrapper::eventFilter(QObject* obj, QEvent* event)
-{
-  // Standard event processing
-  return QObject::eventFilter(obj, event);
-}
-
-EnvironmentMonitorWrapper::EnvironmentMonitorWrapper(
-    ComponentInfo component_info,
-    std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor)
-  : EnvironmentWrapper(std::move(component_info)), env_monitor_(std::move(env_monitor))
-{
-}
-EnvironmentMonitorWrapper::~EnvironmentMonitorWrapper() = default;
-
-std::shared_ptr<const tesseract_environment::Environment> EnvironmentMonitorWrapper::getEnvironment() const
-{
-  return env_monitor_->getEnvironment();
-}
+const ComponentInfo& EnvironmentWrapper::getComponentInfo() const { return *component_info_; }
 
 }  // namespace tesseract_gui

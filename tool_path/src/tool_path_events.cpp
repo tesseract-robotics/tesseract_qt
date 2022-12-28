@@ -40,6 +40,7 @@ ToolPathAdd::ToolPathAdd(ComponentInfo component_info, const ToolPath& tool_path
 {
   data_->tool_path = tool_path;
 }
+ToolPathAdd::ToolPathAdd(const ToolPathAdd& other) : ToolPathAdd(other.getComponentInfo(), other.getToolPath()) {}
 ToolPathAdd::~ToolPathAdd() = default;
 
 const ToolPath& ToolPathAdd::getToolPath() const { return data_->tool_path; }
@@ -57,11 +58,17 @@ ToolPathRemove::ToolPathRemove(ComponentInfo component_info, const boost::uuids:
 {
   data_->uuid = uuid;
 }
+ToolPathRemove::ToolPathRemove(const ToolPathRemove& other) : ToolPathRemove(other.getComponentInfo(), other.getUUID())
+{
+}
 ToolPathRemove::~ToolPathRemove() = default;
 
 const boost::uuids::uuid& ToolPathRemove::getUUID() const { return data_->uuid; }
 
+//////////////////////////////////////////
+
 ToolPathRemoveAll::ToolPathRemoveAll(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
+ToolPathRemoveAll::ToolPathRemoveAll(const ToolPathRemoveAll& other) : ToolPathRemoveAll(other.getComponentInfo()) {}
 ToolPathRemoveAll::~ToolPathRemoveAll() = default;
 
 ToolPathRemoveSelected::ToolPathRemoveSelected(ComponentInfo component_info)
@@ -69,6 +76,8 @@ ToolPathRemoveSelected::ToolPathRemoveSelected(ComponentInfo component_info)
 {
 }
 ToolPathRemoveSelected::~ToolPathRemoveSelected() = default;
+
+//////////////////////////////////////////
 
 class ToolPathHide::Implementation
 {
@@ -91,13 +100,22 @@ ToolPathHide::ToolPathHide(ComponentInfo component_info,
   data_->uuid = uuid;
   data_->child_uuid = child_uuid;
 }
+ToolPathHide::ToolPathHide(const ToolPathHide& other)
+  : ToolPathHide(other.getComponentInfo(), other.getUUID(), other.getChildUUID())
+{
+}
 ToolPathHide::~ToolPathHide() = default;
 
 const boost::uuids::uuid& ToolPathHide::getUUID() const { return data_->uuid; }
 const boost::uuids::uuid& ToolPathHide::getChildUUID() const { return data_->child_uuid; }
 
+//////////////////////////////////////////
+
 ToolPathHideAll::ToolPathHideAll(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
+ToolPathHideAll::ToolPathHideAll(const ToolPathHideAll& other) : ToolPathHideAll(other.getComponentInfo()) {}
 ToolPathHideAll::~ToolPathHideAll() = default;
+
+//////////////////////////////////////////
 
 class ToolPathShow::Implementation
 {
@@ -120,13 +138,19 @@ ToolPathShow::ToolPathShow(ComponentInfo component_info,
   data_->uuid = uuid;
   data_->child_uuid = child_uuid;
 }
-
+ToolPathShow::ToolPathShow(const ToolPathShow& other)
+  : ToolPathShow(other.getComponentInfo(), other.getUUID(), other.getChildUUID())
+{
+}
 ToolPathShow::~ToolPathShow() = default;
 
 const boost::uuids::uuid& ToolPathShow::getUUID() const { return data_->uuid; }
 const boost::uuids::uuid& ToolPathShow::getChildUUID() const { return data_->child_uuid; }
 
+//////////////////////////////////////////
+
 ToolPathShowAll::ToolPathShowAll(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
+ToolPathShowAll::ToolPathShowAll(const ToolPathShowAll& other) : ToolPathShowAll(other.getComponentInfo()) {}
 ToolPathShowAll::~ToolPathShowAll() = default;
 
 }  // namespace tesseract_gui::events

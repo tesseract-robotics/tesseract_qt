@@ -45,6 +45,11 @@ SceneStateChanged::SceneStateChanged(ComponentInfo component_info, tesseract_sce
 {
   data_->state = std::move(scene_state);
 }
+SceneStateChanged::SceneStateChanged(const SceneStateChanged& other)
+  : SceneStateChanged(other.getComponentInfo(), data_->state)
+{
+}
+
 SceneStateChanged::~SceneStateChanged() = default;
 
 const tesseract_scene_graph::SceneState& SceneStateChanged::getState() const { return data_->state; }
@@ -52,6 +57,7 @@ const tesseract_scene_graph::SceneState& SceneStateChanged::getState() const { r
 //////////////////////////////////////////
 
 SceneGraphClear::SceneGraphClear(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
+SceneGraphClear::SceneGraphClear(const SceneGraphClear& other) : SceneGraphClear(other.getComponentInfo()) {}
 SceneGraphClear::~SceneGraphClear() = default;
 
 //////////////////////////////////////////
@@ -68,6 +74,9 @@ SceneGraphSet::SceneGraphSet(ComponentInfo component_info, tesseract_scene_graph
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->scene_graph = std::move(scene_graph);
+}
+SceneGraphSet::SceneGraphSet(const SceneGraphSet& other) : SceneGraphSet(other.getComponentInfo(), data_->scene_graph)
+{
 }
 SceneGraphSet::~SceneGraphSet() = default;
 
@@ -88,6 +97,10 @@ SceneGraphAddLink::SceneGraphAddLink(ComponentInfo component_info, tesseract_sce
 {
   data_->link = std::move(link);
 }
+SceneGraphAddLink::SceneGraphAddLink(const SceneGraphAddLink& other)
+  : SceneGraphAddLink(other.getComponentInfo(), data_->link)
+{
+}
 SceneGraphAddLink::~SceneGraphAddLink() = default;
 
 tesseract_scene_graph::Link::ConstPtr SceneGraphAddLink::getLink() const { return data_->link; }
@@ -105,6 +118,10 @@ SceneGraphAddJoint::SceneGraphAddJoint(ComponentInfo component_info, tesseract_s
 {
   data_->joint = std::move(joint);
 }
+SceneGraphAddJoint::SceneGraphAddJoint(const SceneGraphAddJoint& other)
+  : SceneGraphAddJoint(other.getComponentInfo(), data_->joint)
+{
+}
 SceneGraphAddJoint::~SceneGraphAddJoint() = default;
 
 tesseract_scene_graph::Joint::ConstPtr SceneGraphAddJoint::getJoint() const { return data_->joint; }
@@ -121,6 +138,10 @@ SceneGraphMoveLink::SceneGraphMoveLink(ComponentInfo component_info, tesseract_s
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint = std::move(joint);
+}
+SceneGraphMoveLink::SceneGraphMoveLink(const SceneGraphMoveLink& other)
+  : SceneGraphMoveLink(other.getComponentInfo(), data_->joint)
+{
 }
 
 SceneGraphMoveLink::~SceneGraphMoveLink() = default;
@@ -141,6 +162,10 @@ SceneGraphMoveJoint::SceneGraphMoveJoint(ComponentInfo component_info, std::stri
 {
   data_->joint_name = std::move(joint_name);
   data_->parent_link = std::move(parent_link);
+}
+SceneGraphMoveJoint::SceneGraphMoveJoint(const SceneGraphMoveJoint& other)
+  : SceneGraphMoveJoint(other.getComponentInfo(), data_->joint_name, data_->parent_link)
+{
 }
 
 SceneGraphMoveJoint::~SceneGraphMoveJoint() = default;
@@ -163,7 +188,10 @@ SceneGraphRemoveLink::SceneGraphRemoveLink(ComponentInfo component_info, std::st
   data_->link_name = std::move(link_name);
   data_->recursive = recursive;
 }
-
+SceneGraphRemoveLink::SceneGraphRemoveLink(const SceneGraphRemoveLink& other)
+  : SceneGraphRemoveLink(other.getComponentInfo(), data_->link_name, data_->recursive)
+{
+}
 SceneGraphRemoveLink::~SceneGraphRemoveLink() = default;
 
 const std::string& SceneGraphRemoveLink::getLinkName() const { return data_->link_name; }
@@ -184,7 +212,10 @@ SceneGraphRemoveJoint::SceneGraphRemoveJoint(ComponentInfo component_info, std::
   data_->joint_name = std::move(joint_name);
   data_->recursive = recursive;
 }
-
+SceneGraphRemoveJoint::SceneGraphRemoveJoint(const SceneGraphRemoveJoint& other)
+  : SceneGraphRemoveJoint(other.getComponentInfo(), data_->joint_name, data_->recursive)
+{
+}
 SceneGraphRemoveJoint::~SceneGraphRemoveJoint() = default;
 
 const std::string& SceneGraphRemoveJoint::getJointName() const { return data_->joint_name; }
@@ -203,6 +234,10 @@ SceneGraphReplaceJoint::SceneGraphReplaceJoint(ComponentInfo component_info,
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint = std::move(joint);
+}
+SceneGraphReplaceJoint::SceneGraphReplaceJoint(const SceneGraphReplaceJoint& other)
+  : SceneGraphReplaceJoint(other.getComponentInfo(), data_->joint)
+{
 }
 
 SceneGraphReplaceJoint::~SceneGraphReplaceJoint() = default;
@@ -229,7 +264,10 @@ SceneGraphModifyLinkVisibility::SceneGraphModifyLinkVisibility(ComponentInfo com
   data_->flags = flags;
   data_->visible = visible;
 }
-
+SceneGraphModifyLinkVisibility::SceneGraphModifyLinkVisibility(const SceneGraphModifyLinkVisibility& other)
+  : SceneGraphModifyLinkVisibility(other.getComponentInfo(), data_->link_name, data_->flags, data_->visible)
+{
+}
 SceneGraphModifyLinkVisibility::~SceneGraphModifyLinkVisibility() = default;
 
 const std::string& SceneGraphModifyLinkVisibility::getLinkName() const { return data_->link_name; }
@@ -253,7 +291,10 @@ SceneGraphModifyLinkVisibilityALL::SceneGraphModifyLinkVisibilityALL(ComponentIn
   data_->flags = flags;
   data_->visible = visible;
 }
-
+SceneGraphModifyLinkVisibilityALL::SceneGraphModifyLinkVisibilityALL(const SceneGraphModifyLinkVisibilityALL& other)
+  : SceneGraphModifyLinkVisibilityALL(other.getComponentInfo(), data_->flags, data_->visible)
+{
+}
 SceneGraphModifyLinkVisibilityALL::~SceneGraphModifyLinkVisibilityALL() = default;
 
 LinkVisibilityFlags SceneGraphModifyLinkVisibilityALL::getVisibilityFlags() const { return data_->flags; }
@@ -262,7 +303,7 @@ bool SceneGraphModifyLinkVisibilityALL::visible() { return data_->visible; }
 //////////////////////////////////////////
 
 SceneGraphPlot::SceneGraphPlot(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
-
+SceneGraphPlot::SceneGraphPlot(const SceneGraphPlot& other) : SceneGraphPlot(other.getComponentInfo()) {}
 SceneGraphPlot::~SceneGraphPlot() = default;
 
 }  // namespace tesseract_gui::events

@@ -32,12 +32,12 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/rendering/tool_path_render_manager.h>
 #include <tesseract_qt/tool_path/tool_path_model.h>
 #include <tesseract_qt/tool_path/tool_path_selection_model.h>
-#include <tesseract_qt/tool_path/tool_path_tree_view.h>
 #include <tesseract_qt/tool_path/tool_path_tool_bar.h>
 #include <tesseract_qt/tool_path/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/tree_view.h>
 
 tesseract_gui::ToolPath getToolPath()
 {
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 
   auto* model = new tesseract_gui::ToolPathModel(component_info);  // NOLINT
   auto* selection_model = new tesseract_gui::ToolPathSelectionModel(model, component_info);
-  auto* tool_path_widget = new tesseract_gui::ToolPathTreeView();
+  auto* tool_path_widget = new tesseract_gui::TreeView();
   tool_path_widget->setModel(model);
   tool_path_widget->setSelectionModel(selection_model);
 

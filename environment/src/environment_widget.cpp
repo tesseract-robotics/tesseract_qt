@@ -63,34 +63,6 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent)
   // Setup Contacts tab
   data_->contact_results_model = new ContactResultsModel();
   ui->contacts_widget->setModel(data_->contact_results_model);
-
-  connect(ui->scene_tree_view, &QTreeView::collapsed, [this]() { ui->scene_tree_view->resizeColumnToContents(0); });
-  connect(ui->scene_tree_view, &QTreeView::expanded, [this]() { ui->scene_tree_view->resizeColumnToContents(0); });
-  connect(ui->state_tree_view, &QTreeView::collapsed, [this]() { ui->state_tree_view->resizeColumnToContents(0); });
-  connect(ui->state_tree_view, &QTreeView::expanded, [this]() { ui->state_tree_view->resizeColumnToContents(0); });
-  connect(ui->groups_tree_view, &QTreeView::collapsed, [this]() { ui->groups_tree_view->resizeColumnToContents(0); });
-  connect(ui->groups_tree_view, &QTreeView::expanded, [this]() { ui->groups_tree_view->resizeColumnToContents(0); });
-  connect(ui->group_states_tree_view, &QTreeView::collapsed, [this]() {
-    ui->group_states_tree_view->resizeColumnToContents(0);
-  });
-  connect(ui->group_states_tree_view, &QTreeView::expanded, [this]() {
-    ui->group_states_tree_view->resizeColumnToContents(0);
-  });
-  connect(ui->group_tcps_tree_view, &QTreeView::collapsed, [this]() {
-    ui->group_tcps_tree_view->resizeColumnToContents(0);
-  });
-  connect(ui->group_tcps_tree_view, &QTreeView::expanded, [this]() {
-    ui->group_tcps_tree_view->resizeColumnToContents(0);
-  });
-
-  connect(ui->acm_tree_view, &QTreeView::collapsed, [this]() { ui->acm_tree_view->resizeColumnToContents(0); });
-  connect(ui->acm_tree_view, &QTreeView::expanded, [this]() { ui->acm_tree_view->resizeColumnToContents(0); });
-  connect(ui->cmd_history_tree_view, &QTreeView::collapsed, [this]() {
-    ui->cmd_history_tree_view->resizeColumnToContents(0);
-  });
-  connect(ui->cmd_history_tree_view, &QTreeView::expanded, [this]() {
-    ui->cmd_history_tree_view->resizeColumnToContents(0);
-  });
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;

@@ -25,7 +25,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QDebug>
-#include <QTreeView>
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QTabWidget>

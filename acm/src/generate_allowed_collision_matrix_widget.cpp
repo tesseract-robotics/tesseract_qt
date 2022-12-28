@@ -21,35 +21,33 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/acm/allowed_collision_matrix_widget.h>
+#include <tesseract_qt/acm/generate_allowed_collision_matrix_widget.h>
 #include <tesseract_qt/acm/add_allowed_collision_entry_dialog.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_events.h>
-#include "ui_allowed_collision_matrix_widget.h"
+#include "ui_generate_allowed_collision_matrix_widget.h"
 #include <QDialog>
 #include <QApplication>
 
 namespace tesseract_gui
 {
-AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(QWidget* parent)
-  : QWidget(parent), ui_(std::make_unique<Ui::AllowedCollisionMatrixWidget>())
+GenerateAllowedCollisionMatrixWidget::GenerateAllowedCollisionMatrixWidget(QWidget* parent)
+  : QWidget(parent), ui_(std::make_unique<Ui::GenerateAllowedCollisionMatrixWidget>())
 {
   ui_->setupUi(this);
   connect(ui_->generatePushButton, SIGNAL(clicked()), this, SLOT(onGenerateButtonClicked()));
   connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveButtonClicked()));
   connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddButtonClicked()));
-  connect(ui_->acmTreeView, &QTreeView::collapsed, [this]() { ui_->acmTreeView->resizeColumnToContents(0); });
-  connect(ui_->acmTreeView, &QTreeView::expanded, [this]() { ui_->acmTreeView->resizeColumnToContents(0); });
 }
 
-AllowedCollisionMatrixWidget::~AllowedCollisionMatrixWidget() = default;
+GenerateAllowedCollisionMatrixWidget::~GenerateAllowedCollisionMatrixWidget() = default;
 
-void AllowedCollisionMatrixWidget::setModel(tesseract_gui::AllowedCollisionMatrixModel* model)
+void GenerateAllowedCollisionMatrixWidget::setModel(tesseract_gui::AllowedCollisionMatrixModel* model)
 {
   ui_->acmTreeView->setModel(model);
   dialog_ = std::make_unique<AddAllowedCollisionEntryDialog>(model->getComponentInfo());
 }
 
-void AllowedCollisionMatrixWidget::onRemoveButtonClicked()
+void GenerateAllowedCollisionMatrixWidget::onRemoveButtonClicked()
 {
   QItemSelectionModel* selection = ui_->acmTreeView->selectionModel();
   QModelIndexList indices = selection->selectedRows();
@@ -67,12 +65,15 @@ void AllowedCollisionMatrixWidget::onRemoveButtonClicked()
   }
 }
 
-void AllowedCollisionMatrixWidget::onAddButtonClicked()
+void GenerateAllowedCollisionMatrixWidget::onAddButtonClicked()
 {
   if (dialog_ != nullptr)
     dialog_->show();
 }
 
-void AllowedCollisionMatrixWidget::onGenerateButtonClicked() { emit generateClicked(ui_->resolutionSlider->value()); }
+void GenerateAllowedCollisionMatrixWidget::onGenerateButtonClicked()
+{
+  emit generateClicked(ui_->resolutionSlider->value());
+}
 
 }  // namespace tesseract_gui

@@ -47,6 +47,7 @@ class SceneStateChanged : public ComponentEvent
 {
 public:
   SceneStateChanged(ComponentInfo component_info, tesseract_scene_graph::SceneState scene_state);
+  SceneStateChanged(const SceneStateChanged& other);
   ~SceneStateChanged() override;
 
   const tesseract_scene_graph::SceneState& getState() const;
@@ -65,6 +66,7 @@ class SceneGraphClear : public ComponentEvent
 {
 public:
   SceneGraphClear(ComponentInfo component_info);
+  SceneGraphClear(const SceneGraphClear& other);
   ~SceneGraphClear() override;
 
   /** @brief Unique type for this event. */
@@ -76,6 +78,7 @@ class SceneGraphSet : public ComponentEvent
 {
 public:
   SceneGraphSet(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::SceneGraph> scene_graph);
+  SceneGraphSet(const SceneGraphSet& other);
   ~SceneGraphSet() override;
 
   std::shared_ptr<const tesseract_scene_graph::SceneGraph> getSceneGraph() const;
@@ -94,6 +97,7 @@ class SceneGraphAddLink : public ComponentEvent
 {
 public:
   SceneGraphAddLink(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Link> link);
+  SceneGraphAddLink(const SceneGraphAddLink& other);
   ~SceneGraphAddLink() override;
 
   std::shared_ptr<const tesseract_scene_graph::Link> getLink() const;
@@ -112,6 +116,7 @@ class SceneGraphAddJoint : public ComponentEvent
 {
 public:
   SceneGraphAddJoint(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+  SceneGraphAddJoint(const SceneGraphAddJoint& other);
   ~SceneGraphAddJoint() override;
 
   std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
@@ -130,6 +135,7 @@ class SceneGraphMoveLink : public ComponentEvent
 {
 public:
   SceneGraphMoveLink(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+  SceneGraphMoveLink(const SceneGraphMoveLink& other);
   ~SceneGraphMoveLink() override;
 
   std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
@@ -148,6 +154,7 @@ class SceneGraphMoveJoint : public ComponentEvent
 {
 public:
   SceneGraphMoveJoint(ComponentInfo component_info, std::string joint_name, std::string parent_link);
+  SceneGraphMoveJoint(const SceneGraphMoveJoint& other);
   ~SceneGraphMoveJoint() override;
 
   const std::string& getJointName() const;
@@ -167,6 +174,7 @@ class SceneGraphRemoveLink : public ComponentEvent
 {
 public:
   SceneGraphRemoveLink(ComponentInfo component_info, std::string link_name, bool recursive);
+  SceneGraphRemoveLink(const SceneGraphRemoveLink& other);
   ~SceneGraphRemoveLink() override;
 
   const std::string& getLinkName() const;
@@ -186,6 +194,7 @@ class SceneGraphRemoveJoint : public ComponentEvent
 {
 public:
   SceneGraphRemoveJoint(ComponentInfo component_info, std::string joint_name, bool recursive);
+  SceneGraphRemoveJoint(const SceneGraphRemoveJoint& other);
   ~SceneGraphRemoveJoint() override;
 
   const std::string& getJointName() const;
@@ -205,6 +214,7 @@ class SceneGraphReplaceJoint : public ComponentEvent
 {
 public:
   SceneGraphReplaceJoint(ComponentInfo component_info, std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+  SceneGraphReplaceJoint(const SceneGraphReplaceJoint& other);
   ~SceneGraphReplaceJoint() override;
 
   std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
@@ -226,6 +236,7 @@ public:
                                  std::string link_name,
                                  LinkVisibilityFlags flags,
                                  bool visible);
+  SceneGraphModifyLinkVisibility(const SceneGraphModifyLinkVisibility& other);
   ~SceneGraphModifyLinkVisibility() override;
 
   const std::string& getLinkName() const;
@@ -246,6 +257,7 @@ class SceneGraphModifyLinkVisibilityALL : public ComponentEvent
 {
 public:
   SceneGraphModifyLinkVisibilityALL(ComponentInfo component_info, LinkVisibilityFlags flags, bool visible);
+  SceneGraphModifyLinkVisibilityALL(const SceneGraphModifyLinkVisibilityALL& other);
   ~SceneGraphModifyLinkVisibilityALL() override;
 
   LinkVisibilityFlags getVisibilityFlags() const;
@@ -265,6 +277,7 @@ class SceneGraphPlot : public ComponentEvent
 {
 public:
   SceneGraphPlot(ComponentInfo component_info);
+  SceneGraphPlot(const SceneGraphPlot& other);
   ~SceneGraphPlot() override;
 
   /** @brief Unique type for this event. */

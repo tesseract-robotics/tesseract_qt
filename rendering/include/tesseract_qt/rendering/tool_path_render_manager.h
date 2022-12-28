@@ -43,6 +43,8 @@ private:
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
+
+  void render();
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_RENDERING_TOOL_PATH_RENDER_MANAGER_H

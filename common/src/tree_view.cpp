@@ -20,26 +20,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_TREE_VIEW_H
-#define TESSERACT_QT_TOOL_PATH_TOOL_PATH_TREE_VIEW_H
-
-#include <QTreeView>
-#include <memory>
+#include <tesseract_qt/common/tree_view.h>
 
 namespace tesseract_gui
 {
-struct ToolPathTreeViewImpl;
-class ToolPathTreeView : public QTreeView
+TreeView::TreeView(QWidget* parent) : QTreeView(parent)
 {
-  Q_OBJECT
-public:
-  explicit ToolPathTreeView(QWidget* parent = nullptr);
-  ~ToolPathTreeView();
+  connect(this, &QTreeView::collapsed, [this]() { resizeColumnToContents(0); });
+  connect(this, &QTreeView::expanded, [this]() { resizeColumnToContents(0); });
+}
 
-  void setModel(QAbstractItemModel* model) override;
+TreeView::~TreeView() = default;
 
-private:
-  std::unique_ptr<ToolPathTreeViewImpl> data_;
-};
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_TREE_VIEW_H

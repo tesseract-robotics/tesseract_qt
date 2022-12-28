@@ -9,7 +9,8 @@ qt5_wrap_cpp(
   ENVIRONMENT_WIDGET_headers_MOC
   include/tesseract_qt/environment/environment_widget.h
   include/tesseract_qt/environment/environment_widget_config.h
-  include/tesseract_qt/environment/environment_commands_model.h)
+  include/tesseract_qt/environment/environment_commands_model.h
+  include/tesseract_qt/environment/environment_wrappers.h)
 qt5_wrap_ui(ENVIRONMENT_WIDGET_headers_UI include/tesseract_qt/environment/environment_widget.ui)
 
 add_library(
@@ -21,6 +22,7 @@ add_library(
   src/environment_widget_config.cpp
   src/environment_commands_standard_item.cpp
   src/environment_commands_model.cpp
+  src/environment_wrappers.cpp
   src/commands/add_contact_managers_plugin_info_command_standard_item.cpp
   src/commands/add_kinematics_information_command_standard_item.cpp
   src/commands/add_link_command_standard_item.cpp
