@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_GROUPS_JOINT_STATES_MODEL_H
-#define TESSERACT_QT_GROUPS_JOINT_STATES_MODEL_H
+#ifndef TESSERACT_QT_KINEMATIC_GROUPS_GROUPS_JOINT_STATES_MODEL_H
+#define TESSERACT_QT_KINEMATIC_GROUPS_GROUPS_JOINT_STATES_MODEL_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
@@ -75,4 +75,4 @@ private:
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_GROUPS_JOINT_STATES_MODEL_H
+#endif  // TESSERACT_QT_KINEMATIC_GROUPS_GROUPS_JOINT_STATES_MODEL_H

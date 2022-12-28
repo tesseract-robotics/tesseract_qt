@@ -93,6 +93,8 @@ SceneStateModel::SceneStateModel(const SceneStateModel& other)
 
 SceneStateModel& SceneStateModel::operator=(const SceneStateModel& other) { return *this; }
 
+const ComponentInfo& SceneStateModel::getComponentInfo() const { return data_->component_info; }
+
 void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_state)
 {
   bool sort_required{ false };

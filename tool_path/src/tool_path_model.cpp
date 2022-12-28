@@ -74,6 +74,8 @@ void ToolPathModel::clear()
   data_->tool_paths.clear();
 }
 
+const ComponentInfo& ToolPathModel::getComponentInfo() const { return data_->component_info; }
+
 void ToolPathModel::addToolPath(const ToolPath& tool_path)
 {
   std::string ns = (tool_path.getNamespace().empty()) ? "general" : tool_path.getNamespace();

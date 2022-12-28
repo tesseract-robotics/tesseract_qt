@@ -92,7 +92,7 @@ SRDFEditorWidget::SRDFEditorWidget(std::shared_ptr<tesseract_common::ResourceLoc
   data_->locator = std::move(locator);
 
   ui_->toolBox->setCurrentIndex(0);
-  ui_->acm_widget->setModel(&data_->acm_model);
+  //  ui_->acm_widget->setModel(&data_->acm_model);
   ui_->group_states_widget->setModels(&data_->group_joint_states_model, &data_->group_names_model);
   ui_->groups_widget->setModels(&data_->kin_groups_model, &data_->link_model, &data_->joint_model);
 

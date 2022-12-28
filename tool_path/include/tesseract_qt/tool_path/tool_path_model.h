@@ -52,6 +52,8 @@ public:
   explicit ToolPathModel(ComponentInfo component_info, QObject* parent = nullptr);
   ~ToolPathModel() override;
 
+  const ComponentInfo& getComponentInfo() const;
+
   /**
    * @brief Add tool path
    * @param trajectory_set The tool path associated with the key

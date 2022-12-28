@@ -20,43 +20,62 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#ifndef TESSERACT_QT_ACM_GENERATE_ALLOWED_COLLISION_MATRIX_WIDGET_H
+#define TESSERACT_QT_ACM_GENERATE_ALLOWED_COLLISION_MATRIX_WIDGET_H
 
+#include <tesseract_common/macros.h>
+TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+#ifndef Q_MOC_RUN
+#include <tesseract_qt/acm/allowed_collision_matrix_model.h>
+#include <tesseract_common/allowed_collision_matrix.h>
 #include <memory>
+#endif
+TESSERACT_COMMON_IGNORE_WARNINGS_POP
+
 #include <QWidget>
+
+namespace Ui
+{
+class AllowedCollisionMatrixEditorWidget;
+}
 
 class QItemSelectionModel;
 
 namespace tesseract_gui
 {
-class ComponentInfo;
-class ContactResultsModel;
-class ContactResultsWidget : public QWidget
+class AddAllowedCollisionEntryDialog;
+class AllowedCollisionMatrixEditorWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ContactResultsWidget(QWidget* parent = nullptr);
-  explicit ContactResultsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ContactResultsWidget();
+  explicit AllowedCollisionMatrixEditorWidget(QWidget* parent = nullptr);
+  explicit AllowedCollisionMatrixEditorWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~AllowedCollisionMatrixEditorWidget();
 
   void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
 
-  void setModel(std::shared_ptr<ContactResultsModel> model);
-  std::shared_ptr<ContactResultsModel> getModel();
-  std::shared_ptr<const ContactResultsModel> getModel() const;
+  void setModel(std::shared_ptr<AllowedCollisionMatrixModel> model);
+  std::shared_ptr<AllowedCollisionMatrixModel> getModel();
+  std::shared_ptr<const AllowedCollisionMatrixModel> getModel() const;
 
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
 
+public Q_SLOTS:
+  void onRemoveButtonClicked();
+  void onAddButtonClicked();
+  void onGenerateButtonClicked();
+
 private:
   struct Implementation;
+  std::unique_ptr<Ui::AllowedCollisionMatrixEditorWidget> ui_;
   std::unique_ptr<Implementation> data_;
 
   void ctor(ComponentInfo component_info);
 };
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+
+#endif  // TESSERACT_QT_ACM_GENERATE_ALLOWED_COLLISION_MATRIX_WIDGET_H

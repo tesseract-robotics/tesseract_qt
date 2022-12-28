@@ -47,6 +47,8 @@ public:
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
+  const ComponentInfo& getComponentInfo() const;
+
   // Caution when using methods below. In most cases you should use application events.
   void setState(const tesseract_scene_graph::SceneState& scene_state);
   void clear();

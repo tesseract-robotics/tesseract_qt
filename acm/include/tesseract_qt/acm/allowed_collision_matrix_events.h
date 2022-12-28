@@ -121,5 +121,20 @@ private:
   std::vector<std::string> links_;
 };
 
+class AllowedCollisionMatrixGenerate : public ComponentEvent
+{
+public:
+  AllowedCollisionMatrixGenerate(ComponentInfo component_info, double resolution);
+  ~AllowedCollisionMatrixGenerate() override;
+
+  double getResolution() const;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::ACM_GENERATE);
+
+private:
+  double resolution_{ 0.1 };
+};
+
 }  // namespace tesseract_gui::events
 #endif  // TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_EVENTS_H

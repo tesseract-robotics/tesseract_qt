@@ -59,6 +59,8 @@ EnvironmentCommandsModel& EnvironmentCommandsModel::operator=(const EnvironmentC
 
 EnvironmentCommandsModel::~EnvironmentCommandsModel() = default;
 
+const ComponentInfo& EnvironmentCommandsModel::getComponentInfo() const { return *component_info_; }
+
 void EnvironmentCommandsModel::clear()
 {
   QStandardItemModel::clear();

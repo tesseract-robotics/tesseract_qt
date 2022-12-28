@@ -21,8 +21,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/collision/contact_results_widget.h>
-#include <tesseract_qt/collision/contact_results_model.h>
+#include <tesseract_qt/kinematic_groups/group_tcps_widget.h>
+#include <tesseract_qt/kinematic_groups/group_tcps_model.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/tree_view.h>
 
@@ -30,51 +30,48 @@
 
 namespace tesseract_gui
 {
-struct ContactResultsWidget::Implementation
+struct GroupTCPsWidget::Implementation
 {
-  std::shared_ptr<ContactResultsModel> model;
+  std::shared_ptr<GroupTCPsModel> model;
   QVBoxLayout* layout;
   TreeView* tree_view;
 };
 
-ContactResultsWidget::ContactResultsWidget(QWidget* parent) : QWidget(parent), data_(std::make_unique<Implementation>())
+GroupTCPsWidget::GroupTCPsWidget(QWidget* parent) : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   ctor(ComponentInfo());
 }
-ContactResultsWidget::ContactResultsWidget(ComponentInfo component_info, QWidget* parent)
+GroupTCPsWidget::GroupTCPsWidget(ComponentInfo component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   ctor(std::move(component_info));
 }
-ContactResultsWidget::~ContactResultsWidget() = default;
+GroupTCPsWidget::~GroupTCPsWidget() = default;
 
-void ContactResultsWidget::setComponentInfo(ComponentInfo component_info)
+void GroupTCPsWidget::setComponentInfo(ComponentInfo component_info)
 {
   // Create model
-  data_->model = std::make_shared<ContactResultsModel>(std::move(component_info));
+  data_->model = std::make_shared<GroupTCPsModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& ContactResultsWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+const ComponentInfo& GroupTCPsWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
 
-void ContactResultsWidget::setModel(std::shared_ptr<ContactResultsModel> model)
+void GroupTCPsWidget::setModel(std::shared_ptr<GroupTCPsModel> model)
 {
   data_->model = std::move(model);
   data_->tree_view->setModel(data_->model.get());
 }
-std::shared_ptr<ContactResultsModel> ContactResultsWidget::getModel() { return data_->model; }
-std::shared_ptr<const ContactResultsModel> ContactResultsWidget::getModel() const { return data_->model; }
+std::shared_ptr<GroupTCPsModel> GroupTCPsWidget::getModel() { return data_->model; }
+std::shared_ptr<const GroupTCPsModel> GroupTCPsWidget::getModel() const { return data_->model; }
 
-QItemSelectionModel& ContactResultsWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
-const QItemSelectionModel& ContactResultsWidget::getSelectionModel() const
-{
-  return *data_->tree_view->selectionModel();
-}
+QItemSelectionModel& GroupTCPsWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
+const QItemSelectionModel& GroupTCPsWidget::getSelectionModel() const { return *data_->tree_view->selectionModel(); }
 
-void ContactResultsWidget::ctor(ComponentInfo component_info)
+void GroupTCPsWidget::ctor(ComponentInfo component_info)
 {
   // Create model
-  data_->model = std::make_shared<ContactResultsModel>(std::move(component_info));
+  data_->model = std::make_shared<GroupTCPsModel>(std::move(component_info));
 
   // Create tree widget
   data_->tree_view = new TreeView();

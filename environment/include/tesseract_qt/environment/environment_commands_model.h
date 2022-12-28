@@ -48,6 +48,8 @@ public:
   EnvironmentCommandsModel& operator=(const EnvironmentCommandsModel& other);
   ~EnvironmentCommandsModel() override;
 
+  const ComponentInfo& getComponentInfo() const;
+
   const tesseract_environment::Commands& getCommands() const;
 
 private:

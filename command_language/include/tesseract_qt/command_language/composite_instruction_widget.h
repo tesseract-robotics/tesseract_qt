@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#ifndef TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_WIDGET_H
+#define TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_WIDGET_H
 
 #include <memory>
 #include <QWidget>
@@ -31,22 +31,22 @@ class QItemSelectionModel;
 namespace tesseract_gui
 {
 class ComponentInfo;
-class ContactResultsModel;
-class ContactResultsWidget : public QWidget
+class CompositeInstructionModel;
+class CompositeInstructionWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ContactResultsWidget(QWidget* parent = nullptr);
-  explicit ContactResultsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ContactResultsWidget();
+  explicit CompositeInstructionWidget(QWidget* parent = nullptr);
+  explicit CompositeInstructionWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~CompositeInstructionWidget();
 
   void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
 
-  void setModel(std::shared_ptr<ContactResultsModel> model);
-  std::shared_ptr<ContactResultsModel> getModel();
-  std::shared_ptr<const ContactResultsModel> getModel() const;
+  void setModel(std::shared_ptr<CompositeInstructionModel> model);
+  std::shared_ptr<CompositeInstructionModel> getModel();
+  std::shared_ptr<const CompositeInstructionModel> getModel() const;
 
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
@@ -59,4 +59,5 @@ private:
 };
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+
+#endif  // TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_WIDGET_H

@@ -100,4 +100,12 @@ const std::vector<std::string>& AllowedCollisionMatrixShow::getLinks() const { r
 
 //////////////////////////////////////////
 
+AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(ComponentInfo component_info, double resolution)
+  : ComponentEvent(std::move(component_info), kType), resolution_(resolution)
+{
+}
+
+AllowedCollisionMatrixGenerate::~AllowedCollisionMatrixGenerate() = default;
+
+double AllowedCollisionMatrixGenerate::getResolution() const { return resolution_; }
 }  // namespace tesseract_gui::events

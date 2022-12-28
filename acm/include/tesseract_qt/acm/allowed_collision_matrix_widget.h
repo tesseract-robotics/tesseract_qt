@@ -23,49 +23,40 @@
 #ifndef TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_WIDGET_H
 #define TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_WIDGET_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_qt/acm/allowed_collision_matrix_model.h>
-#include <tesseract_common/allowed_collision_matrix.h>
 #include <memory>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
 #include <QWidget>
-#include <QItemSelection>
 
-namespace Ui
-{
-class GenerateAllowedCollisionMatrixWidget;
-}
+class QItemSelectionModel;
 
 namespace tesseract_gui
 {
-class AddAllowedCollisionEntryDialog;
-class GenerateAllowedCollisionMatrixWidget : public QWidget
+class ComponentInfo;
+class AllowedCollisionMatrixModel;
+class AllowedCollisionMatrixWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit GenerateAllowedCollisionMatrixWidget(QWidget* parent = nullptr);
-  ~GenerateAllowedCollisionMatrixWidget();
+  explicit AllowedCollisionMatrixWidget(QWidget* parent = nullptr);
+  explicit AllowedCollisionMatrixWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~AllowedCollisionMatrixWidget();
 
-  void setModel(tesseract_gui::AllowedCollisionMatrixModel* model);
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
 
-public Q_SLOTS:
-  void onRemoveButtonClicked();
-  void onAddButtonClicked();
-  void onGenerateButtonClicked();
+  void setModel(std::shared_ptr<AllowedCollisionMatrixModel> model);
+  std::shared_ptr<AllowedCollisionMatrixModel> getModel();
+  std::shared_ptr<const AllowedCollisionMatrixModel> getModel() const;
 
-Q_SIGNALS:
-  void generateClicked(long resolution);
+  QItemSelectionModel& getSelectionModel();
+  const QItemSelectionModel& getSelectionModel() const;
 
 private:
-  std::unique_ptr<Ui::GenerateAllowedCollisionMatrixWidget> ui_;
-  std::unique_ptr<AddAllowedCollisionEntryDialog> dialog_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
+
+  void ctor(ComponentInfo component_info);
 };
 
 }  // namespace tesseract_gui
-
 #endif  // TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_WIDGET_H

@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_WIDGET_H
+#define TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_WIDGET_H
 
 #include <memory>
 #include <QWidget>
@@ -31,22 +31,22 @@ class QItemSelectionModel;
 namespace tesseract_gui
 {
 class ComponentInfo;
-class ContactResultsModel;
-class ContactResultsWidget : public QWidget
+class SceneGraphModel;
+class SceneGraphWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ContactResultsWidget(QWidget* parent = nullptr);
-  explicit ContactResultsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ContactResultsWidget();
+  explicit SceneGraphWidget(QWidget* parent = nullptr);
+  explicit SceneGraphWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~SceneGraphWidget();
 
   void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
 
-  void setModel(std::shared_ptr<ContactResultsModel> model);
-  std::shared_ptr<ContactResultsModel> getModel();
-  std::shared_ptr<const ContactResultsModel> getModel() const;
+  void setModel(std::shared_ptr<SceneGraphModel> model);
+  std::shared_ptr<SceneGraphModel> getModel();
+  std::shared_ptr<const SceneGraphModel> getModel() const;
 
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
@@ -59,4 +59,4 @@ private:
 };
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_WIDGET_H

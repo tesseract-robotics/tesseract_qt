@@ -5,14 +5,11 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(COMMAND_LANGUAGE_headers_MOC include/tesseract_qt/command_language/composite_instruction_model.h)
-# qt5_wrap_ui(COMMAND_LANGUAGE_WIDGET_headers_UI include/tesseract_qt/acm/allowed_collision_matrix_widget.ui
-# include/tesseract_qt/acm/add_allowed_collision_entry_dialog.ui)
+qt5_wrap_cpp(COMMAND_LANGUAGE_MODEL_headers_MOC include/tesseract_qt/command_language/composite_instruction_model.h)
 
 add_library(
-  ${PROJECT_NAME}_command_language SHARED
-  ${COMMAND_LANGUAGE_headers_MOC}
-  # ${COMMAND_LANGUAGE_WIDGET_headers_UI}
+  ${PROJECT_NAME}_command_language_models SHARED
+  ${COMMAND_LANGUAGE_MODEL_headers_MOC}
   src/cartesian_waypoint_standard_item.cpp
   src/command_language_events.cpp
   src/joint_waypoint_standard_item.cpp
@@ -30,15 +27,33 @@ add_library(
   src/composite_instruction_model.cpp)
 
 target_link_libraries(
-  ${PROJECT_NAME}_command_language
+  ${PROJECT_NAME}_command_language_models
+  PUBLIC tesseract::tesseract_command_language
+         tesseract::tesseract_common
+         Qt5::Core
+         Qt5::Gui
+         ${PROJECT_NAME}_common)
+target_include_directories(
+  ${PROJECT_NAME}_command_language_models
+  PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+         "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/command_language>" "$<INSTALL_INTERFACE:include>")
+
+qt5_wrap_cpp(COMMAND_LANGUAGE_WIDGET_headers_MOC include/tesseract_qt/command_language/composite_instruction_widget.h)
+
+add_library(${PROJECT_NAME}_command_language_widgets SHARED ${COMMAND_LANGUAGE_WIDGET_headers_MOC}
+                                                            src/composite_instruction_widget.cpp)
+
+target_link_libraries(
+  ${PROJECT_NAME}_command_language_widgets
   PUBLIC tesseract::tesseract_command_language
          tesseract::tesseract_common
          Qt5::Core
          Qt5::Widgets
          Qt5::Gui
+         ${PROJECT_NAME}_command_language_models
          ${PROJECT_NAME}_common)
 target_include_directories(
-  ${PROJECT_NAME}_command_language
+  ${PROJECT_NAME}_command_language_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
          "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/command_language>" "$<INSTALL_INTERFACE:include>")
 
@@ -48,4 +63,4 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
-install_targets(TARGETS ${PROJECT_NAME}_command_language)
+install_targets(TARGETS ${PROJECT_NAME}_command_language_models ${PROJECT_NAME}_command_language_widgets)

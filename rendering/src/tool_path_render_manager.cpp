@@ -254,6 +254,9 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
 
 void ToolPathRenderManager::render()
 {
+  if (data_->events.empty())
+    return;
+
   static const boost::uuids::uuid nil_uuid{};
   ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
 

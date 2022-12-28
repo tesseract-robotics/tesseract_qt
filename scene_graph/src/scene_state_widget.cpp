@@ -21,8 +21,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/collision/contact_results_widget.h>
-#include <tesseract_qt/collision/contact_results_model.h>
+#include <tesseract_qt/scene_graph/scene_state_widget.h>
+#include <tesseract_qt/scene_graph/scene_state_model.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/tree_view.h>
 
@@ -30,51 +30,48 @@
 
 namespace tesseract_gui
 {
-struct ContactResultsWidget::Implementation
+struct SceneStateWidget::Implementation
 {
-  std::shared_ptr<ContactResultsModel> model;
+  std::shared_ptr<SceneStateModel> model;
   QVBoxLayout* layout;
   TreeView* tree_view;
 };
 
-ContactResultsWidget::ContactResultsWidget(QWidget* parent) : QWidget(parent), data_(std::make_unique<Implementation>())
+SceneStateWidget::SceneStateWidget(QWidget* parent) : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   ctor(ComponentInfo());
 }
-ContactResultsWidget::ContactResultsWidget(ComponentInfo component_info, QWidget* parent)
+SceneStateWidget::SceneStateWidget(ComponentInfo component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   ctor(std::move(component_info));
 }
-ContactResultsWidget::~ContactResultsWidget() = default;
+SceneStateWidget::~SceneStateWidget() = default;
 
-void ContactResultsWidget::setComponentInfo(ComponentInfo component_info)
+void SceneStateWidget::setComponentInfo(ComponentInfo component_info)
 {
   // Create model
-  data_->model = std::make_shared<ContactResultsModel>(std::move(component_info));
+  data_->model = std::make_shared<SceneStateModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& ContactResultsWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+const ComponentInfo& SceneStateWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
 
-void ContactResultsWidget::setModel(std::shared_ptr<ContactResultsModel> model)
+void SceneStateWidget::setModel(std::shared_ptr<SceneStateModel> model)
 {
   data_->model = std::move(model);
   data_->tree_view->setModel(data_->model.get());
 }
-std::shared_ptr<ContactResultsModel> ContactResultsWidget::getModel() { return data_->model; }
-std::shared_ptr<const ContactResultsModel> ContactResultsWidget::getModel() const { return data_->model; }
+std::shared_ptr<SceneStateModel> SceneStateWidget::getModel() { return data_->model; }
+std::shared_ptr<const SceneStateModel> SceneStateWidget::getModel() const { return data_->model; }
 
-QItemSelectionModel& ContactResultsWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
-const QItemSelectionModel& ContactResultsWidget::getSelectionModel() const
-{
-  return *data_->tree_view->selectionModel();
-}
+QItemSelectionModel& SceneStateWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
+const QItemSelectionModel& SceneStateWidget::getSelectionModel() const { return *data_->tree_view->selectionModel(); }
 
-void ContactResultsWidget::ctor(ComponentInfo component_info)
+void SceneStateWidget::ctor(ComponentInfo component_info)
 {
   // Create model
-  data_->model = std::make_shared<ContactResultsModel>(std::move(component_info));
+  data_->model = std::make_shared<SceneStateModel>(std::move(component_info));
 
   // Create tree widget
   data_->tree_view = new TreeView();

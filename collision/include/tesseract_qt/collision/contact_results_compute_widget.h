@@ -20,11 +20,17 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_COMPUTE_WIDGET_H
+#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_COMPUTE_WIDGET_H
 
-#include <memory>
 #include <QWidget>
+#include <memory>
+#include <tesseract_collision/core/types.h>
+
+namespace Ui
+{
+class ContactResultsComputeWidget;
+}
 
 class QItemSelectionModel;
 
@@ -32,14 +38,14 @@ namespace tesseract_gui
 {
 class ComponentInfo;
 class ContactResultsModel;
-class ContactResultsWidget : public QWidget
+class ContactResultsComputeWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ContactResultsWidget(QWidget* parent = nullptr);
-  explicit ContactResultsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ContactResultsWidget();
+  explicit ContactResultsComputeWidget(QWidget* parent = nullptr);
+  explicit ContactResultsComputeWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~ContactResultsComputeWidget();
 
   void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
@@ -51,12 +57,14 @@ public:
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
 
+protected Q_SLOTS:
+  void onComputeClicked();
+
 private:
-  struct Implementation;
-  std::unique_ptr<Implementation> data_;
+  std::unique_ptr<Ui::ContactResultsComputeWidget> ui;
 
   void ctor(ComponentInfo component_info);
 };
-
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+
+#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_COMPUTE_WIDGET_H

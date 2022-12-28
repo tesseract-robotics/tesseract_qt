@@ -21,7 +21,7 @@ target_link_libraries(
          Qt5::Widgets
          Qt5::Gui
          ${PROJECT_NAME}_common
-         ${PROJECT_NAME}_scene_graph
+         ${PROJECT_NAME}_scene_graph_widgets
          ${PROJECT_NAME}_joint_state_slider)
 target_include_directories(
   ${PROJECT_NAME}_manipulation

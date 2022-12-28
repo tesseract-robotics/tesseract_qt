@@ -38,7 +38,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -240,7 +240,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::ContactResultsWidget" name="contacts_widget" native="true"/>
+        <widget class="tesseract_gui::ContactResultsComputeWidget" name="contacts_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -255,9 +255,9 @@
    <header>tesseract_qt/common/tree_view.h</header>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::ContactResultsWidget</class>
+   <class>tesseract_gui::ContactResultsComputeWidget</class>
    <extends>QWidget</extends>
-   <header>tesseract_qt/collision/contact_results_widget.h</header>
+   <header>tesseract_qt/collision/contact_results_compute_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

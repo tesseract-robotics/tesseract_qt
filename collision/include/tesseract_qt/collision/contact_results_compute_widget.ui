@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ContactResultsWidget</class>
- <widget class="QWidget" name="ContactResultsWidget">
+ <class>ContactResultsComputeWidget</class>
+ <widget class="QWidget" name="ContactResultsComputeWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -170,9 +170,12 @@
     </widget>
    </item>
    <item>
-    <widget class="tesseract_gui::TreeView" name="tree_view">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
+    <widget class="tesseract_gui::ContactResultsWidget" name="contact_results_widget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -180,9 +183,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::TreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/common/tree_view.h</header>
+   <class>tesseract_gui::ContactResultsWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/collision/contact_results_widget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

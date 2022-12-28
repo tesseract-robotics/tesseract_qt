@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#ifndef TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_WIDGET_H
+#define TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_WIDGET_H
 
 #include <memory>
 #include <QWidget>
@@ -31,22 +31,22 @@ class QItemSelectionModel;
 namespace tesseract_gui
 {
 class ComponentInfo;
-class ContactResultsModel;
-class ContactResultsWidget : public QWidget
+class GroupJointStatesModel;
+class GroupJointStatesWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ContactResultsWidget(QWidget* parent = nullptr);
-  explicit ContactResultsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ContactResultsWidget();
+  explicit GroupJointStatesWidget(QWidget* parent = nullptr);
+  explicit GroupJointStatesWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~GroupJointStatesWidget();
 
   void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
 
-  void setModel(std::shared_ptr<ContactResultsModel> model);
-  std::shared_ptr<ContactResultsModel> getModel();
-  std::shared_ptr<const ContactResultsModel> getModel() const;
+  void setModel(std::shared_ptr<GroupJointStatesModel> model);
+  std::shared_ptr<GroupJointStatesModel> getModel();
+  std::shared_ptr<const GroupJointStatesModel> getModel() const;
 
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
@@ -59,4 +59,4 @@ private:
 };
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#endif  // TESSERACT_QT_KINEMATIC_GROUPS_GROUP_JOINT_STATES_WIDGET_H

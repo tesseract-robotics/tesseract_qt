@@ -20,8 +20,8 @@ add_executable(${PROJECT_NAME}_render_tool_path_widget_demo render_tool_path_wid
 target_link_libraries(
   ${PROJECT_NAME}_render_tool_path_widget_demo
   PRIVATE ${PROJECT_NAME}_rendering
-          ${PROJECT_NAME}_tool_path_model
-          ${PROJECT_NAME}_tool_path_widget
+          ${PROJECT_NAME}_tool_path_models
+          ${PROJECT_NAME}_tool_path_widgets
           tesseract::tesseract_common
           tesseract::tesseract_support
           Qt5::Core

@@ -270,6 +270,9 @@ bool SceneGraphRenderManager::eventFilter(QObject* obj, QEvent* event)
 
 void SceneGraphRenderManager::render()
 {
+  if (data_->events.empty())
+    return;
+
   ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
 
   for (const auto& event : data_->events)

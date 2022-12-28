@@ -52,6 +52,8 @@ public:
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
+  const ComponentInfo& getComponentInfo() const;
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;

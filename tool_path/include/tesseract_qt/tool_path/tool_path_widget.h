@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_WIDGET_H
+#define TESSERACT_QT_TOOL_PATH_TOOL_PATH_WIDGET_H
 
 #include <memory>
 #include <QWidget>
@@ -31,22 +31,22 @@ class QItemSelectionModel;
 namespace tesseract_gui
 {
 class ComponentInfo;
-class ContactResultsModel;
-class ContactResultsWidget : public QWidget
+class ToolPathModel;
+class ToolPathWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ContactResultsWidget(QWidget* parent = nullptr);
-  explicit ContactResultsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ContactResultsWidget();
+  explicit ToolPathWidget(QWidget* parent = nullptr);
+  explicit ToolPathWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~ToolPathWidget();
 
   void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
 
-  void setModel(std::shared_ptr<ContactResultsModel> model);
-  std::shared_ptr<ContactResultsModel> getModel();
-  std::shared_ptr<const ContactResultsModel> getModel() const;
+  void setModel(std::shared_ptr<ToolPathModel> model);
+  std::shared_ptr<ToolPathModel> getModel();
+  std::shared_ptr<const ToolPathModel> getModel() const;
 
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
@@ -59,4 +59,4 @@ private:
 };
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_WIDGET_H
+#endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_WIDGET_H

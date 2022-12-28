@@ -84,6 +84,8 @@ SceneGraphModel::SceneGraphModel(const SceneGraphModel& other)
 
 SceneGraphModel& SceneGraphModel::operator=(const SceneGraphModel& other) { return *this; }
 
+const ComponentInfo& SceneGraphModel::getComponentInfo() const { return data_->component_info; }
+
 void SceneGraphModel::setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph)
 {
   clear();

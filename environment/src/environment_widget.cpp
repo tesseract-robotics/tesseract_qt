@@ -32,7 +32,7 @@
 #include <tesseract_qt/kinematic_groups/group_tcps_model.h>
 #include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
-#include <tesseract_qt/collision/contact_results_widget.h>
+#include <tesseract_qt/collision/contact_results_compute_widget.h>
 #include <tesseract_qt/collision/contact_results_model.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/utils.h>
@@ -49,8 +49,6 @@ struct EnvironmentWidgetImpl
   EnvironmentWidgetImpl() : config(std::make_shared<EnvironmentWidgetConfig>()) {}
 
   EnvironmentWidgetConfig::Ptr config{ nullptr };
-
-  ContactResultsModel* contact_results_model;
 };
 
 EnvironmentWidget::EnvironmentWidget(QWidget* parent)
@@ -59,10 +57,6 @@ EnvironmentWidget::EnvironmentWidget(QWidget* parent)
   ui->setupUi(this);
 
   ui->tab_widget->setCurrentIndex(0);
-
-  // Setup Contacts tab
-  data_->contact_results_model = new ContactResultsModel();
-  ui->contacts_widget->setModel(data_->contact_results_model);
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;
@@ -94,8 +88,6 @@ void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig
   ui->group_states_tree_view->setModel(&data_->config->getGroupJointStatesModel());
   ui->acm_tree_view->setModel(&data_->config->getAllowedCollisionMatrixModel());
   ui->cmd_history_tree_view->setModel(&data_->config->getEnvironmentCommandsModel());
-
-  ui->contacts_widget->setEnvironment(data_->config->getEnvironment());
 
   onModelsUpdated();
 

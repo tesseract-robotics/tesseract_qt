@@ -6,19 +6,15 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 tesseract_variables()
 
 qt5_wrap_cpp(
-  ENVIRONMENT_WIDGET_headers_MOC
-  include/tesseract_qt/environment/environment_widget.h
+  ENVIRONMENT_MODEL_headers_MOC
   include/tesseract_qt/environment/environment_widget_config.h
   include/tesseract_qt/environment/environment_commands_model.h
   include/tesseract_qt/environment/environment_wrappers.h)
-qt5_wrap_ui(ENVIRONMENT_WIDGET_headers_UI include/tesseract_qt/environment/environment_widget.ui)
 
 add_library(
-  ${PROJECT_NAME}_environment SHARED
-  ${ENVIRONMENT_WIDGET_headers_MOC}
-  ${ENVIRONMENT_WIDGET_headers_UI}
+  ${PROJECT_NAME}_environment_models SHARED
+  ${ENVIRONMENT_MODEL_headers_MOC}
   src/environment_events.cpp
-  src/environment_widget.cpp
   src/environment_widget_config.cpp
   src/environment_commands_standard_item.cpp
   src/environment_commands_model.cpp
@@ -45,19 +41,46 @@ add_library(
   src/commands/set_active_continuous_contact_manager_command_standard_item.cpp
   src/commands/set_active_discrete_contact_manager_command_standard_item.cpp)
 target_link_libraries(
-  ${PROJECT_NAME}_environment
+  ${PROJECT_NAME}_environment_models
+  PUBLIC tesseract::tesseract_environment
+         tesseract::tesseract_common
+         Qt5::Core
+         Qt5::Gui
+         ${PROJECT_NAME}_common
+         ${PROJECT_NAME}_scene_graph_models
+         ${PROJECT_NAME}_kinematic_groups_models
+         ${PROJECT_NAME}_acm_models
+         ${PROJECT_NAME}_collision_models)
+target_include_directories(
+  ${PROJECT_NAME}_environment_models
+  PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/environment>"
+         "$<INSTALL_INTERFACE:include>")
+
+qt5_wrap_cpp(ENVIRONMENT_WIDGET_headers_MOC include/tesseract_qt/environment/environment_commands_widget.h
+             include/tesseract_qt/environment/environment_widget.h)
+qt5_wrap_ui(ENVIRONMENT_WIDGET_headers_UI include/tesseract_qt/environment/environment_widget.ui)
+
+add_library(
+  ${PROJECT_NAME}_environment_widgets SHARED
+  ${ENVIRONMENT_WIDGET_headers_MOC}
+  ${ENVIRONMENT_WIDGET_headers_UI}
+  src/environment_widget.cpp
+  src/environment_commands_widget.cpp)
+target_link_libraries(
+  ${PROJECT_NAME}_environment_widgets
   PUBLIC tesseract::tesseract_environment
          tesseract::tesseract_common
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
+         ${PROJECT_NAME}_environment_models
          ${PROJECT_NAME}_common
-         ${PROJECT_NAME}_scene_graph
-         ${PROJECT_NAME}_kinematic_groups
-         ${PROJECT_NAME}_acm
-         ${PROJECT_NAME}_collision)
+         ${PROJECT_NAME}_scene_graph_widgets
+         ${PROJECT_NAME}_kinematic_groups_widgets
+         ${PROJECT_NAME}_acm_widgets
+         ${PROJECT_NAME}_collision_widgets)
 target_include_directories(
-  ${PROJECT_NAME}_environment
+  ${PROJECT_NAME}_environment_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/environment>"
          "$<INSTALL_INTERFACE:include>")
 
@@ -67,4 +90,4 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
-install_targets(TARGETS ${PROJECT_NAME}_environment)
+install_targets(TARGETS ${PROJECT_NAME}_environment_models ${PROJECT_NAME}_environment_widgets)
