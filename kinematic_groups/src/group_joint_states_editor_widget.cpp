@@ -44,11 +44,8 @@ struct GroupJointStatesEditorWidget::Implementation
 };
 
 GroupJointStatesEditorWidget::GroupJointStatesEditorWidget(QWidget* parent)
-  : QWidget(parent)
-  , ui_(std::make_unique<Ui::GroupJointStatesEditorWidget>())
-  , data_(std::make_unique<Implementation>())
+  : GroupJointStatesEditorWidget(ComponentInfo(), parent)
 {
-  ctor(ComponentInfo());
 }
 
 GroupJointStatesEditorWidget::GroupJointStatesEditorWidget(ComponentInfo component_info, QWidget* parent)
@@ -56,7 +53,22 @@ GroupJointStatesEditorWidget::GroupJointStatesEditorWidget(ComponentInfo compone
   , ui_(std::make_unique<Ui::GroupJointStatesEditorWidget>())
   , data_(std::make_unique<Implementation>())
 {
-  ctor(std::move(component_info));
+  ui_->setupUi(this);
+
+  ui_->groupJointStatesWidget->setComponentInfo(component_info);
+
+  connect(ui_->groupNamesComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
+  connect(ui_->groupNamesComboBox, SIGNAL(aboutToShowPopup()), this, SLOT(onUpdateModels()));
+  connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddJointState()));
+  connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveJointState()));
+  connect(ui_->applyPushButton, SIGNAL(clicked()), this, SLOT(onApply()));
+  connect(ui_->jointSliderWidget,
+          &tesseract_gui::JointStateSliderWidget::jointStateChanged,
+          this,
+          &tesseract_gui::GroupJointStatesEditorWidget::jointStateChanged);
+
+  onUpdateModels();
+  onGroupNameChanged();
 }
 
 GroupJointStatesEditorWidget::~GroupJointStatesEditorWidget() = default;
@@ -64,7 +76,7 @@ GroupJointStatesEditorWidget::~GroupJointStatesEditorWidget() = default;
 void GroupJointStatesEditorWidget::setComponentInfo(ComponentInfo component_info)
 {
   ui_->groupJointStatesWidget->setComponentInfo(component_info);
-  ui_->groupNamesComboBox->setComponentInfo(component_info);
+  onUpdateModels();
 }
 
 const ComponentInfo& GroupJointStatesEditorWidget::getComponentInfo() const
@@ -75,7 +87,7 @@ const ComponentInfo& GroupJointStatesEditorWidget::getComponentInfo() const
 void GroupJointStatesEditorWidget::setModel(std::shared_ptr<GroupJointStatesModel> model)
 {
   ui_->groupJointStatesWidget->setModel(model);
-  ui_->groupNamesComboBox->setComponentInfo(model->getComponentInfo());
+  onUpdateModels();
 }
 std::shared_ptr<GroupJointStatesModel> GroupJointStatesEditorWidget::getModel()
 {
@@ -159,23 +171,23 @@ void GroupJointStatesEditorWidget::onApply()
   QApplication::sendEvent(qApp, new events::EnvironmentApplyCommand(getComponentInfo(), { cmd }));
 }
 
-void GroupJointStatesEditorWidget::ctor(ComponentInfo component_info)
+void GroupJointStatesEditorWidget::onUpdateModels()
 {
-  ui_->setupUi(this);
+  QStringList list;
+  data_->group_names_model.setStringList(list);
 
-  ui_->groupJointStatesWidget->setComponentInfo(component_info);
-  ui_->groupNamesComboBox->setComponentInfo(component_info);
+  auto env_wrapper = tesseract_gui::EnvironmentManager::instance()->get(tesseract_gui::ComponentInfo());
+  if (env_wrapper == nullptr)
+    return;
 
-  connect(ui_->groupNamesComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
-  connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddJointState()));
-  connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveJointState()));
-  connect(ui_->applyPushButton, SIGNAL(clicked()), this, SLOT(onApply()));
-  connect(ui_->jointSliderWidget,
-          &tesseract_gui::JointStateSliderWidget::jointStateChanged,
-          this,
-          &tesseract_gui::GroupJointStatesEditorWidget::jointStateChanged);
+  auto env = env_wrapper->getEnvironment();
+  if (env == nullptr || !env->isInitialized())
+    return;
 
-  onGroupNameChanged();
+  for (const auto& group_name : env->getGroupNames())
+    list.append(QString::fromStdString(group_name));
+
+  data_->group_names_model.setStringList(list);
 }
 
 }  // namespace tesseract_gui

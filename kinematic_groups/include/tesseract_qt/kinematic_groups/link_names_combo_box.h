@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_KINEMATIC_GROUP_GROUP_NAMES_COMBO_BOX_H
-#define TESSERACT_QT_KINEMATIC_GROUP_GROUP_NAMES_COMBO_BOX_H
+#ifndef TESSERACT_QT_KINEMATIC_GROUP_LINK_NAMES_COMBO_BOX_H
+#define TESSERACT_QT_KINEMATIC_GROUP_LINK_NAMES_COMBO_BOX_H
 
 #include <memory>
 #include <QComboBox>
@@ -29,13 +29,13 @@
 namespace tesseract_gui
 {
 class ComponentInfo;
-class GroupNamesComboBox : public QComboBox
+class LinkNamesComboBox : public QComboBox
 {
   Q_OBJECT
 public:
-  explicit GroupNamesComboBox(QWidget* parent = 0);
-  explicit GroupNamesComboBox(ComponentInfo component_info, QWidget* parent = 0);
-  ~GroupNamesComboBox() override;
+  explicit LinkNamesComboBox(QWidget* parent = 0);
+  explicit LinkNamesComboBox(ComponentInfo component_info, QWidget* parent = 0);
+  ~LinkNamesComboBox() override;
 
   void setComponentInfo(ComponentInfo component_info);
   const ComponentInfo& getComponentInfo() const;
@@ -51,4 +51,4 @@ private:
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_KINEMATIC_GROUP_GROUP_NAMES_COMBO_BOX_H
+#endif  // TESSERACT_QT_KINEMATIC_GROUP_LINK_NAMES_COMBO_BOX_H

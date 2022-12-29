@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/kinematic_groups/group_names_combo_box.h>
+#include <tesseract_qt/kinematic_groups/joint_names_combo_box.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
@@ -32,29 +32,29 @@
 
 namespace tesseract_gui
 {
-struct GroupNamesComboBox::Implementation
+struct JointNamesComboBox::Implementation
 {
   ComponentInfo component_info;
   QStringListModel model;
 };
 
-GroupNamesComboBox::GroupNamesComboBox(QWidget* parent) : GroupNamesComboBox(ComponentInfo(), parent) {}
-GroupNamesComboBox::GroupNamesComboBox(ComponentInfo component_info, QWidget* parent)
+JointNamesComboBox::JointNamesComboBox(QWidget* parent) : JointNamesComboBox(ComponentInfo(), parent) {}
+JointNamesComboBox::JointNamesComboBox(ComponentInfo component_info, QWidget* parent)
   : QComboBox(parent), data_(std::make_unique<Implementation>())
 {
   data_->component_info = std::move(component_info);
   setModel(&data_->model);
 }
-GroupNamesComboBox::~GroupNamesComboBox() = default;
+JointNamesComboBox::~JointNamesComboBox() = default;
 
-void GroupNamesComboBox::setComponentInfo(ComponentInfo component_info)
+void JointNamesComboBox::setComponentInfo(ComponentInfo component_info)
 {
   data_->component_info = std::move(component_info);
   updateModel();
 }
-const ComponentInfo& GroupNamesComboBox::getComponentInfo() const { return data_->component_info; }
+const ComponentInfo& JointNamesComboBox::getComponentInfo() const { return data_->component_info; }
 
-void GroupNamesComboBox::updateModel()
+void JointNamesComboBox::updateModel()
 {
   QStringList list;
   static_cast<QStringListModel*>(model())->setStringList(list);
@@ -67,13 +67,13 @@ void GroupNamesComboBox::updateModel()
   if (env == nullptr || !env->isInitialized())
     return;
 
-  for (const auto& group_name : env->getGroupNames())
-    list.append(QString::fromStdString(group_name));
+  for (const auto& link_name : env->getActiveJointNames())
+    list.append(QString::fromStdString(link_name));
 
   static_cast<QStringListModel*>(model())->setStringList(list);
 }
 
-void GroupNamesComboBox::showPopup()
+void JointNamesComboBox::showPopup()
 {
   updateModel();
   QComboBox::showPopup();

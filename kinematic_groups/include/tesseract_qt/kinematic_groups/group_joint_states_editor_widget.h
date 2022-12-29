@@ -74,13 +74,12 @@ private Q_SLOTS:
   void onAddJointState();
   void onRemoveJointState();
   void onApply();
+  void onUpdateModels();
 
 private:
   struct Implementation;
   std::unique_ptr<Ui::GroupJointStatesEditorWidget> ui_;
   std::unique_ptr<Implementation> data_;
-
-  void ctor(ComponentInfo component_info);
 };
 }  // namespace tesseract_gui
 

@@ -40,7 +40,6 @@ target_include_directories(
 
 qt5_wrap_cpp(
   KINEMATIC_GROUP_WIDGET_headers_MOC
-  include/tesseract_qt/kinematic_groups/group_names_combo_box.h
   include/tesseract_qt/kinematic_groups/group_joint_states_widget.h
   include/tesseract_qt/kinematic_groups/group_joint_states_editor_widget.h
   include/tesseract_qt/kinematic_groups/group_tcps_widget.h
@@ -53,7 +52,6 @@ add_library(
   ${PROJECT_NAME}_kinematic_groups_widgets SHARED
   ${KINEMATIC_GROUP_WIDGET_headers_MOC}
   ${KINEMATIC_GROUP_WIDGET_headers_UI}
-  src/group_names_combo_box.cpp
   src/group_joint_states_widget.cpp
   src/group_joint_states_editor_widget.cpp
   src/group_tcps_widget.cpp

@@ -60,7 +60,7 @@
    <item>
     <widget class="QTabWidget" name="kinGroupTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="chainTab">
       <attribute name="title">
@@ -75,7 +75,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="tipLinkNameComboBox"/>
+        <widget class="tesseract_gui::ComboBox" name="tipLinkNameComboBox"/>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="baseLinkNameLabel">
@@ -85,7 +85,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="baseLinkNameComboBox"/>
+        <widget class="tesseract_gui::ComboBox" name="baseLinkNameComboBox"/>
        </item>
        <item row="2" column="0">
         <spacer name="verticalSpacer">
@@ -128,7 +128,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="jointComboBox"/>
+        <widget class="tesseract_gui::ComboBox" name="jointComboBox"/>
        </item>
        <item row="0" column="3">
         <widget class="QPushButton" name="removeJointPushButton">
@@ -165,7 +165,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="linkComboBox"/>
+        <widget class="tesseract_gui::ComboBox" name="linkComboBox"/>
        </item>
        <item row="0" column="2">
         <widget class="QPushButton" name="addLinkPushButton">
@@ -264,13 +264,23 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="applyPushButton">
+        <property name="text">
+         <string>Apply</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="tesseract_gui::TreeView" name="kinGroupTreeView">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
+    <widget class="tesseract_gui::KinematicGroupsWidget" name="kinGroupsWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -278,9 +288,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::TreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/common/tree_view.h</header>
+   <class>tesseract_gui::ComboBox</class>
+   <extends>QComboBox</extends>
+   <header>tesseract_qt/common/combo_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::KinematicGroupsWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/kinematic_groups/kinematic_groups_widget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -20,30 +20,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#include <QApplication>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#ifndef TESSERACT_QT_KINEMATIC_GROUP_JOINT_NAMES_COMBO_BOX_H
+#define TESSERACT_QT_KINEMATIC_GROUP_JOINT_NAMES_COMBO_BOX_H
 
-#include <tesseract_qt/kinematic_groups/group_joint_states_editor_widget.h>
+#include <memory>
+#include <QComboBox>
 
-#include <tesseract_urdf/urdf_parser.h>
-#include <tesseract_support/tesseract_support_resource_locator.h>
-
-int main(int argc, char** argv)
+namespace tesseract_gui
 {
-  QApplication app(argc, argv);
+class ComponentInfo;
+class JointNamesComboBox : public QComboBox
+{
+  Q_OBJECT
+public:
+  explicit JointNamesComboBox(QWidget* parent = 0);
+  explicit JointNamesComboBox(ComponentInfo component_info, QWidget* parent = 0);
+  ~JointNamesComboBox() override;
 
-  Q_INIT_RESOURCE(tesseract_qt_resources);
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
 
-  // Load Scene Graph
-  std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
-  tesseract_common::TesseractSupportResourceLocator locator;
+  void updateModel();
 
-  /** @todo need to load environment */
+protected:
+  void showPopup() override;
 
-  tesseract_gui::GroupJointStatesEditorWidget widget;
-  widget.show();
+private:
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
+};
+}  // namespace tesseract_gui
 
-  return app.exec();
-}
+#endif  // TESSERACT_QT_KINEMATIC_GROUP_JOINT_NAMES_COMBO_BOX_H

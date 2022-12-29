@@ -41,29 +41,30 @@ namespace Ui
 class KinematicGroupsEditorWidget;
 }
 
+class QItemSelectionModel;
+
 namespace tesseract_gui
 {
+class ComponentInfo;
 class KinematicGroupsModel;
-
-using ChainGroupValidator = std::function<bool(QString, QString)>;
-using JointGroupValidator = std::function<bool(QStringList)>;
-using LinkGroupValidator = std::function<bool(QStringList)>;
-
 class KinematicGroupsEditorWidget : public QWidget
 {
   Q_OBJECT
 
 public:
   explicit KinematicGroupsEditorWidget(QWidget* parent = nullptr);
+  explicit KinematicGroupsEditorWidget(ComponentInfo component_info, QWidget* parent = nullptr);
   ~KinematicGroupsEditorWidget();
 
-  void setValidators(ChainGroupValidator chain_group_validator,
-                     JointGroupValidator joint_group_validator,
-                     LinkGroupValidator link_group_validator);
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
 
-  void setModels(KinematicGroupsModel* kin_groups_model,
-                 QStringListModel* link_names_model,
-                 QStringListModel* joint_names_model);
+  void setModel(std::shared_ptr<KinematicGroupsModel> model);
+  std::shared_ptr<KinematicGroupsModel> getModel();
+  std::shared_ptr<const KinematicGroupsModel> getModel() const;
+
+  QItemSelectionModel& getSelectionModel();
+  const QItemSelectionModel& getSelectionModel() const;
 
 public Q_SLOTS:
   void onAddGroup();
@@ -72,11 +73,18 @@ public Q_SLOTS:
   void onRemoveJoint();
   void onAddLink();
   void onRemoveLink();
+  void onApply();
+  void onUpdateLinkNamesModel();
+  void onUpdateJointNamesModel();
 
 private:
   struct Implementation;
   std::unique_ptr<Ui::KinematicGroupsEditorWidget> ui_;
   std::unique_ptr<Implementation> data_;
+
+  bool validateChainGroup(QString base_link, QString tip_link);
+  bool validateJointChain(QStringList joints);
+  bool validateLinkChain(QStringList links);
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_EDITOR_WIDGET_H
