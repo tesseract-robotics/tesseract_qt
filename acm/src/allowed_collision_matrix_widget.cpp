@@ -38,14 +38,29 @@ struct AllowedCollisionMatrixWidget::Implementation
 };
 
 AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(QWidget* parent)
-  : QWidget(parent), data_(std::make_unique<Implementation>())
+  : AllowedCollisionMatrixWidget(ComponentInfo(), parent)
 {
-  ctor(ComponentInfo());
 }
+
 AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(ComponentInfo component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
-  ctor(std::move(component_info));
+  // Create model
+  data_->model = std::make_shared<AllowedCollisionMatrixModel>(std::move(component_info));
+
+  // Create tree widget
+  data_->tree_view = new TreeView();
+  data_->tree_view->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
+  data_->tree_view->setModel(data_->model.get());
+
+  // Create layout
+  data_->layout = new QVBoxLayout();
+  data_->layout->setMargin(0);
+  data_->layout->setSpacing(0);
+  data_->layout->addWidget(data_->tree_view);
+
+  // Set layout
+  setLayout(data_->layout);
 }
 AllowedCollisionMatrixWidget::~AllowedCollisionMatrixWidget() = default;
 
@@ -75,22 +90,4 @@ const QItemSelectionModel& AllowedCollisionMatrixWidget::getSelectionModel() con
   return *data_->tree_view->selectionModel();
 }
 
-void AllowedCollisionMatrixWidget::ctor(ComponentInfo component_info)
-{
-  // Create model
-  data_->model = std::make_shared<AllowedCollisionMatrixModel>(std::move(component_info));
-
-  // Create tree widget
-  data_->tree_view = new TreeView();
-  data_->tree_view->setModel(data_->model.get());
-
-  // Create layout
-  data_->layout = new QVBoxLayout();
-  data_->layout->setMargin(0);
-  data_->layout->setSpacing(0);
-  data_->layout->addWidget(data_->tree_view);
-
-  // Set layout
-  setLayout(data_->layout);
-}
 }  // namespace tesseract_gui

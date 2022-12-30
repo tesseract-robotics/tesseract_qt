@@ -54,8 +54,6 @@ public:
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
-
-  void ctor(ComponentInfo component_info);
 };
 
 }  // namespace tesseract_gui

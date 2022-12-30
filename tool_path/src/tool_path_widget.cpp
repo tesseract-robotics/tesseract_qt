@@ -37,14 +37,27 @@ struct ToolPathWidget::Implementation
   TreeView* tree_view;
 };
 
-ToolPathWidget::ToolPathWidget(QWidget* parent) : QWidget(parent), data_(std::make_unique<Implementation>())
-{
-  ctor(ComponentInfo());
-}
+ToolPathWidget::ToolPathWidget(QWidget* parent) : ToolPathWidget(ComponentInfo(), parent) {}
+
 ToolPathWidget::ToolPathWidget(ComponentInfo component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
-  ctor(std::move(component_info));
+  // Create model
+  data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
+
+  // Create tree widget
+  data_->tree_view = new TreeView();
+  data_->tree_view->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
+  data_->tree_view->setModel(data_->model.get());
+
+  // Create layout
+  data_->layout = new QVBoxLayout();
+  data_->layout->setMargin(0);
+  data_->layout->setSpacing(0);
+  data_->layout->addWidget(data_->tree_view);
+
+  // Set layout
+  setLayout(data_->layout);
 }
 ToolPathWidget::~ToolPathWidget() = default;
 
@@ -67,23 +80,4 @@ std::shared_ptr<const ToolPathModel> ToolPathWidget::getModel() const { return d
 
 QItemSelectionModel& ToolPathWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
 const QItemSelectionModel& ToolPathWidget::getSelectionModel() const { return *data_->tree_view->selectionModel(); }
-
-void ToolPathWidget::ctor(ComponentInfo component_info)
-{
-  // Create model
-  data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
-
-  // Create tree widget
-  data_->tree_view = new TreeView();
-  data_->tree_view->setModel(data_->model.get());
-
-  // Create layout
-  data_->layout = new QVBoxLayout();
-  data_->layout->setMargin(0);
-  data_->layout->setSpacing(0);
-  data_->layout->addWidget(data_->tree_view);
-
-  // Set layout
-  setLayout(data_->layout);
-}
 }  // namespace tesseract_gui

@@ -37,14 +37,27 @@ struct SceneGraphWidget::Implementation
   TreeView* tree_view;
 };
 
-SceneGraphWidget::SceneGraphWidget(QWidget* parent) : QWidget(parent), data_(std::make_unique<Implementation>())
-{
-  ctor(ComponentInfo());
-}
+SceneGraphWidget::SceneGraphWidget(QWidget* parent) : SceneGraphWidget(ComponentInfo(), parent) {}
+
 SceneGraphWidget::SceneGraphWidget(ComponentInfo component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
-  ctor(std::move(component_info));
+  // Create model
+  data_->model = std::make_shared<SceneGraphModel>(std::move(component_info));
+
+  // Create tree widget
+  data_->tree_view = new TreeView();
+  data_->tree_view->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
+  data_->tree_view->setModel(data_->model.get());
+
+  // Create layout
+  data_->layout = new QVBoxLayout();
+  data_->layout->setMargin(0);
+  data_->layout->setSpacing(0);
+  data_->layout->addWidget(data_->tree_view);
+
+  // Set layout
+  setLayout(data_->layout);
 }
 SceneGraphWidget::~SceneGraphWidget() = default;
 
@@ -68,22 +81,4 @@ std::shared_ptr<const SceneGraphModel> SceneGraphWidget::getModel() const { retu
 QItemSelectionModel& SceneGraphWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
 const QItemSelectionModel& SceneGraphWidget::getSelectionModel() const { return *data_->tree_view->selectionModel(); }
 
-void SceneGraphWidget::ctor(ComponentInfo component_info)
-{
-  // Create model
-  data_->model = std::make_shared<SceneGraphModel>(std::move(component_info));
-
-  // Create tree widget
-  data_->tree_view = new TreeView();
-  data_->tree_view->setModel(data_->model.get());
-
-  // Create layout
-  data_->layout = new QVBoxLayout();
-  data_->layout->setMargin(0);
-  data_->layout->setSpacing(0);
-  data_->layout->addWidget(data_->tree_view);
-
-  // Set layout
-  setLayout(data_->layout);
-}
 }  // namespace tesseract_gui
