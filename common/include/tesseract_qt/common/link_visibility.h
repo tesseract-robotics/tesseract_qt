@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_LINK_VISIBILITY_H
-#define TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_LINK_VISIBILITY_H
+#ifndef TESSERACT_QT_COMMON_LINK_VISIBILITY_H
+#define TESSERACT_QT_COMMON_LINK_VISIBILITY_H
 
 namespace tesseract_gui
 {
@@ -32,7 +32,7 @@ enum class LinkVisibilityFlags : int
   VISUAL = 4,
   AXIS = 8,
   WIREBOX = 16,
-  ALL = LINK | COLLISION | VISUAL | AXIS | WIREBOX,
+  ALL = 32,
 };
 
 inline LinkVisibilityFlags operator|(LinkVisibilityFlags a, LinkVisibilityFlags b)
@@ -47,4 +47,4 @@ inline bool operator&(LinkVisibilityFlags a, LinkVisibilityFlags b)
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_LINK_VISIBILITY_H
+#endif  // TESSERACT_QT_COMMON_LINK_VISIBILITY_H

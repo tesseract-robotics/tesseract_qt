@@ -240,7 +240,7 @@ void KinematicGroupsEditorWidget::onUpdateLinkNamesModel()
   QStringList list;
   data_->link_names_model.setStringList(list);
 
-  auto env_wrapper = tesseract_gui::EnvironmentManager::instance()->get(tesseract_gui::ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(getComponentInfo());
   if (env_wrapper == nullptr)
     return;
 
@@ -259,7 +259,7 @@ void KinematicGroupsEditorWidget::onUpdateJointNamesModel()
   QStringList list;
   data_->joint_names_model.setStringList(list);
 
-  auto env_wrapper = tesseract_gui::EnvironmentManager::instance()->get(tesseract_gui::ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(getComponentInfo());
   if (env_wrapper == nullptr)
     return;
 
@@ -275,7 +275,7 @@ void KinematicGroupsEditorWidget::onUpdateJointNamesModel()
 
 bool KinematicGroupsEditorWidget::validateChainGroup(QString base_link, QString tip_link)
 {
-  auto env_wrapper = tesseract_gui::EnvironmentManager::instance()->get(tesseract_gui::ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(getComponentInfo());
   if (env_wrapper == nullptr)
     return true;
 
@@ -290,7 +290,7 @@ bool KinematicGroupsEditorWidget::validateChainGroup(QString base_link, QString 
 
 bool KinematicGroupsEditorWidget::validateJointChain(QStringList joints)
 {
-  auto env_wrapper = tesseract_gui::EnvironmentManager::instance()->get(tesseract_gui::ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(getComponentInfo());
   if (env_wrapper == nullptr)
     return true;
 
@@ -305,7 +305,7 @@ bool KinematicGroupsEditorWidget::validateJointChain(QStringList joints)
 
 bool KinematicGroupsEditorWidget::validateLinkChain(QStringList links)
 {
-  auto env_wrapper = tesseract_gui::EnvironmentManager::instance()->get(tesseract_gui::ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(getComponentInfo());
   if (env_wrapper == nullptr)
     return true;
 

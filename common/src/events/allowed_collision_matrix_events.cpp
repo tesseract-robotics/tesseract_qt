@@ -88,18 +88,6 @@ const std::vector<std::string>& AllowedCollisionMatrixRemoveLink::getLinkNames()
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixShow::AllowedCollisionMatrixShow(ComponentInfo component_info,
-                                                       const std::vector<std::string>& links)
-  : ComponentEvent(std::move(component_info), kType), links_(links)
-{
-}
-
-AllowedCollisionMatrixShow::~AllowedCollisionMatrixShow() = default;
-
-const std::vector<std::string>& AllowedCollisionMatrixShow::getLinks() const { return links_; }
-
-//////////////////////////////////////////
-
 AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(ComponentInfo component_info, long resolution)
   : ComponentEvent(std::move(component_info), kType), resolution_(resolution)
 {

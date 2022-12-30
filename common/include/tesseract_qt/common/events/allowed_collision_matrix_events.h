@@ -106,21 +106,6 @@ private:
   std::vector<std::string> link_names_;
 };
 
-class AllowedCollisionMatrixShow : public ComponentEvent
-{
-public:
-  AllowedCollisionMatrixShow(ComponentInfo component_info, const std::vector<std::string>& links);
-  ~AllowedCollisionMatrixShow() override;
-
-  const std::vector<std::string>& getLinks() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::ACM_VISIBILITY);
-
-private:
-  std::vector<std::string> links_;
-};
-
 class AllowedCollisionMatrixGenerate : public ComponentEvent
 {
 public:

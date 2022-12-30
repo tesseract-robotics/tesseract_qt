@@ -23,205 +23,55 @@
 #include <tesseract_qt/environment/environment_widget.h>
 #include "ui_environment_widget.h"
 
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/environment/environment_widget_config.h>
-#include <tesseract_qt/environment/environment_commands_model.h>
-#include <tesseract_qt/scene_graph/scene_graph_model.h>
-#include <tesseract_qt/scene_graph/scene_state_model.h>
-#include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_qt/kinematic_groups/group_tcps_model.h>
-#include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
-#include <tesseract_qt/acm/allowed_collision_matrix_model.h>
-#include <tesseract_qt/collision/contact_results_compute_widget.h>
-#include <tesseract_qt/collision/contact_results_model.h>
-#include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/utils.h>
 #include <tesseract_qt/common/image_viewer_widget.h>
 
-#include <tesseract_collision/core/types.h>
-
-#include <QStandardItemModel>
-
 namespace tesseract_gui
 {
-struct EnvironmentWidgetImpl
+struct EnvironmentWidget::Implementation
 {
-  EnvironmentWidgetImpl() : config(std::make_shared<EnvironmentWidgetConfig>()) {}
-
-  EnvironmentWidgetConfig::Ptr config{ nullptr };
+  ComponentInfo component_info;
 };
 
-EnvironmentWidget::EnvironmentWidget(QWidget* parent)
-  : QWidget(parent), ui(std::make_unique<Ui::EnvironmentWidget>()), data_(std::make_unique<EnvironmentWidgetImpl>())
+EnvironmentWidget::EnvironmentWidget(QWidget* parent) : EnvironmentWidget(ComponentInfo(), parent) {}
+EnvironmentWidget::EnvironmentWidget(ComponentInfo component_info, QWidget* parent)
+  : QWidget(parent), ui(std::make_unique<Ui::EnvironmentWidget>()), data_(std::make_unique<Implementation>())
 {
   ui->setupUi(this);
-
   ui->tab_widget->setCurrentIndex(0);
+
+  setComponentInfo(std::move(component_info));
 }
 
 EnvironmentWidget::~EnvironmentWidget() = default;
 
-void EnvironmentWidget::setConfiguration(std::shared_ptr<EnvironmentWidgetConfig> config)
+void EnvironmentWidget::setComponentInfo(ComponentInfo component_info)
 {
-  if (config != nullptr)
-  {
-    disconnect(data_->config.get(), SIGNAL(modelsUpdated()), this, SLOT(onModelsUpdated()));
-    disconnect(data_->config.get(),
-               SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)),
-               this,
-               SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)));
-    disconnect(data_->config.get(),
-               SIGNAL(environmentChanged(tesseract_environment::Environment)),
-               this,
-               SIGNAL(environmentChanged(tesseract_environment::Environment)));
-    disconnect(data_->config.get(),
-               SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)),
-               this,
-               SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
-  }
+  data_->component_info = std::move(component_info);
 
-  data_->config = std::move(config);
-  ui->scene_tree_view->setModel(&data_->config->getSceneGraphModel());
-  ui->state_tree_view->setModel(&data_->config->getSceneStateModel());
-  ui->groups_tree_view->setModel(&data_->config->getKinematicGroupsModel());
-  ui->group_tcps_tree_view->setModel(&data_->config->getGroupTCPsModel());
-  ui->group_states_tree_view->setModel(&data_->config->getGroupJointStatesModel());
-  ui->acm_tree_view->setModel(&data_->config->getAllowedCollisionMatrixModel());
-  ui->cmd_history_tree_view->setModel(&data_->config->getEnvironmentCommandsModel());
-
-  onModelsUpdated();
-
-  connect(data_->config.get(), SIGNAL(modelsUpdated()), this, SLOT(onModelsUpdated()));
-  connect(data_->config.get(),
-          SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)),
-          this,
-          SIGNAL(environmentSet(std::shared_ptr<tesseract_environment::Environment>)));
-  connect(data_->config.get(),
-          SIGNAL(environmentChanged(tesseract_environment::Environment)),
-          this,
-          SIGNAL(environmentChanged(tesseract_environment::Environment)));
-  connect(data_->config.get(),
-          SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)),
-          this,
-          SIGNAL(environmentCurrentStateChanged(tesseract_environment::Environment)));
-  connect(&data_->config->getSceneGraphModel(),
-          SIGNAL(itemChanged(QStandardItem*)),
-          this,
-          SLOT(onSceneGraphModelItemChanged(QStandardItem*)));
-  connect(&data_->config->getSceneStateModel(),
-          SIGNAL(itemChanged(QStandardItem*)),
-          this,
-          SLOT(onSceneStateModelItemChanged(QStandardItem*)));
-  connect(this,
-          SIGNAL(linkVisibilityChanged(std::vector<std::string>)),
-          this,
-          SLOT(updateVisibilityCheckedStates(std::vector<std::string>)));
-
-  emit configurationSet(*data_->config);
-  emit environmentSet(data_->config->getEnvironment());
+  ui->scene_widget->setComponentInfo(data_->component_info);
+  ui->scene_state_widget->setComponentInfo(data_->component_info);
+  ui->acm_widget->setComponentInfo(data_->component_info);
+  ui->groups_widget->setComponentInfo(data_->component_info);
+  ui->group_states_widget->setComponentInfo(data_->component_info);
+  ui->group_tcps_widget->setComponentInfo(data_->component_info);
+  ui->cmd_history_widget->setComponentInfo(data_->component_info);
+  ui->contacts_widget->setComponentInfo(data_->component_info);
 }
 
-const tesseract_environment::Environment& EnvironmentWidget::environment() const
-{
-  return data_->config->environment();
-}
-
-tesseract_environment::Environment& EnvironmentWidget::environment() { return data_->config->environment(); }
-
-tesseract_environment::Environment::ConstPtr EnvironmentWidget::getEnvironment() const
-{
-  return data_->config->getEnvironment();
-}
-
-tesseract_environment::Environment::Ptr EnvironmentWidget::getEnvironment() { return data_->config->getEnvironment(); }
-
-const std::unordered_map<std::string, LinkVisibilityProperties>& EnvironmentWidget::getLinkVisibilityProperties() const
-{
-  return data_->config->getLinkVisibilityProperties();
-}
-
-EnvironmentWidget* EnvironmentWidget::clone() const
-{
-  return new EnvironmentWidget(nullptr);  // NOLINT
-}
-
-void EnvironmentWidget::onModelsUpdated()
-{
-  if (!data_->config->environment().isInitialized())
-    return;
-
-  // This hides the root element
-  ui->group_states_tree_view->setRootIndex(data_->config->getGroupJointStatesModel().index(0, 0));
-
-  // This hides the root element
-  ui->group_tcps_tree_view->setRootIndex(data_->config->getGroupTCPsModel().index(0, 0));
-
-  // This hides the root element
-  ui->cmd_history_tree_view->setRootIndex(data_->config->getEnvironmentCommandsModel().index(0, 0));
-
-  // New data may have been added so resize first column
-  ui->scene_tree_view->resizeColumnToContents(0);
-  ui->state_tree_view->resizeColumnToContents(0);
-  ui->acm_tree_view->resizeColumnToContents(0);
-  ui->groups_tree_view->resizeColumnToContents(0);
-  ui->group_tcps_tree_view->resizeColumnToContents(0);
-  ui->group_states_tree_view->resizeColumnToContents(0);
-  ui->cmd_history_tree_view->resizeColumnToContents(0);
-}
-
-void EnvironmentWidget::onRender(float /*dt*/) {}
+const ComponentInfo& EnvironmentWidget::getComponentInfo() const { return data_->component_info; }
 
 void EnvironmentWidget::onPlotSceneGraph()
 {
-  tesseract_common::fs::path dot_path("/tmp/environment_widget_scene_graph.dot");
-  tesseract_common::fs::path image_path("/tmp/environment_widget_scene_graph.png");
-  data_->config->getEnvironment()->getSceneGraph()->saveDOT(dot_path.c_str());
-  saveDotImage(dot_path, image_path, "png");
+  //  tesseract_common::fs::path dot_path("/tmp/environment_widget_scene_graph.dot");
+  //  tesseract_common::fs::path image_path("/tmp/environment_widget_scene_graph.png");
+  //  data_->config->getEnvironment()->getSceneGraph()->saveDOT(dot_path.c_str());
+  //  saveDotImage(dot_path, image_path, "png");
 
-  auto* image_viewer = new ImageViewerWidget();
-  image_viewer->loadImage(image_path.c_str());
-  image_viewer->show();
+  //  auto* image_viewer = new ImageViewerWidget();
+  //  image_viewer->loadImage(image_path.c_str());
+  //  image_viewer->show();
 }
-
-void EnvironmentWidget::onEnable()
-{
-  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-  std::vector<std::string> link_names;
-  link_names.reserve(link_visibility_properties.size());
-
-  for (auto& link : link_visibility_properties)
-    link_names.push_back(link.first);
-
-  emit linkVisibilityChanged(link_names);
-}
-
-// void EnvironmentWidget::onACMSelectedLinks(const std::vector<std::string>& link_names)
-//{
-//  LinkVisibilityPropertiesMap& link_visibility_properties = data_->config->getLinkVisibilityProperties();
-
-//  std::vector<std::string> changed_link_names;
-//  changed_link_names.reserve(link_visibility_properties.size());
-
-//  for (auto& link : link_visibility_properties)
-//  {
-//    link.second.wirebox = false;
-//    changed_link_names.push_back(link.first);
-//  }
-
-//  for (const auto& link : link_names)
-//  {
-//    auto it = link_visibility_properties.find(link);
-//    if (it != link_visibility_properties.end())
-//      it->second.wirebox = true;
-//  }
-
-//  emit linkVisibilityChanged(changed_link_names);
-//}
-
-// void EnvironmentWidget::onShowGroupsJointState(const std::unordered_map<std::string, double>& groups_joint_state)
-//{
-//  data_->config->environment().setState(groups_joint_state);
-//}
 
 }  // namespace tesseract_gui

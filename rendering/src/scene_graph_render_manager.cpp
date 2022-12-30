@@ -26,10 +26,14 @@
 #include <tesseract_qt/rendering/utils.h>
 #include <tesseract_qt/rendering/conversions.h>
 
+#include <tesseract_qt/common/utils.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
+
+#include <tesseract_qt/common/link_visibility.h>
 
 #include <QApplication>
 
@@ -292,30 +296,134 @@ void SceneGraphRenderManager::render()
     else if (event->type() == events::SceneGraphRemoveLink::kType)
     {
       auto& e = static_cast<events::SceneGraphRemoveLink&>(*event);
-      if (data_->entity_container->hasTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, e.getLinkName()))
+      if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName()))
       {
-        auto entity =
-            data_->entity_container->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, e.getLinkName());
+        auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName());
         scene->DestroyNodeById(entity.id);
       }
     }
     else if (event->type() == events::SceneGraphModifyLinkVisibility::kType)
     {
       auto& e = static_cast<events::SceneGraphModifyLinkVisibility&>(*event);
+      for (const auto& link_name : e.getLinkNames())
+      {
+        if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, link_name))
+        {
+          auto link_entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, link_name);
+          auto link_visual_node = scene->VisualById(link_entity.id);
+
+          if (e.getVisibilityFlags() & LinkVisibilityFlags::LINK || e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
+            link_visual_node->SetUserData(USER_VISIBILITY, e.visible());
+
+          bool link_visible = std::get<bool>(link_visual_node->UserData(USER_VISIBILITY));
+
+          std::string visual_key = link_name + "::Visuals";
+          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          {
+            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto node = scene->VisualById(entity.id);
+            if (e.getVisibilityFlags() & LinkVisibilityFlags::VISUAL ||
+                e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
+              node->SetUserData(USER_VISIBILITY, e.visible());
+
+            bool visible = std::get<bool>(node->UserData(USER_VISIBILITY));
+            node->SetVisible(link_visible & visible);
+          }
+
+          visual_key = link_name + "::Collisions";
+          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          {
+            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto node = scene->VisualById(entity.id);
+            if (e.getVisibilityFlags() & LinkVisibilityFlags::COLLISION ||
+                e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
+              node->SetUserData(USER_VISIBILITY, e.visible());
+
+            bool visible = std::get<bool>(node->UserData(USER_VISIBILITY));
+            node->SetVisible(link_visible & visible);
+          }
+
+          visual_key = link_name + "::WireBox";
+          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          {
+            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto node = scene->VisualById(entity.id);
+            if (e.getVisibilityFlags() & LinkVisibilityFlags::WIREBOX ||
+                e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
+              node->SetUserData(USER_VISIBILITY, e.visible());
+
+            bool visible = std::get<bool>(node->UserData(USER_VISIBILITY));
+            node->SetVisible(visible);
+          }
+
+          visual_key = link_name + "::Axis";
+          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          {
+            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto node = scene->VisualById(entity.id);
+            if (e.getVisibilityFlags() & LinkVisibilityFlags::AXIS || e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
+              node->SetUserData(USER_VISIBILITY, e.visible());
+
+            bool visible = std::get<bool>(node->UserData(USER_VISIBILITY));
+            node->SetVisible(visible);
+          }
+        }
+      }
     }
     else if (event->type() == events::SceneGraphModifyLinkVisibilityALL::kType)
     {
       auto& e = static_cast<events::SceneGraphModifyLinkVisibilityALL&>(*event);
+
+      for (const auto& ns : data_->entity_container->getTrackedEntities(EntityContainer::VISUAL_NS))
+      {
+        std::vector<std::string> sub_ns = getNamespaces(ns.first);
+        if (sub_ns.size() == 2)
+        {
+          if (sub_ns[1] == "Visuals" && e.getVisibilityFlags() & LinkVisibilityFlags::VISUAL)
+          {
+            auto link_entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, sub_ns[0]);
+            auto link_visual_node = scene->VisualById(link_entity.id);
+            if (e.visible())
+              link_visual_node->SetUserData(USER_VISIBILITY, e.visible());
+
+            auto node = scene->VisualById(ns.second.id);
+            node->SetUserData(USER_VISIBILITY, e.visible());
+            node->SetVisible(e.visible());
+          }
+          else if (sub_ns[1] == "Collisions" && e.getVisibilityFlags() & LinkVisibilityFlags::COLLISION)
+          {
+            auto link_entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, sub_ns[0]);
+            auto link_visual_node = scene->VisualById(link_entity.id);
+            if (e.visible())
+              link_visual_node->SetUserData(USER_VISIBILITY, e.visible());
+
+            auto node = scene->VisualById(ns.second.id);
+            node->SetUserData(USER_VISIBILITY, e.visible());
+            node->SetVisible(e.visible());
+          }
+          else if (sub_ns[1] == "Axis" && e.getVisibilityFlags() & LinkVisibilityFlags::AXIS)
+          {
+            auto node = scene->VisualById(ns.second.id);
+            node->SetUserData(USER_VISIBILITY, e.visible());
+            node->SetVisible(e.visible());
+          }
+          else if (sub_ns[1] == "WireBox" && e.getVisibilityFlags() & LinkVisibilityFlags::WIREBOX)
+          {
+            auto node = scene->VisualById(ns.second.id);
+            node->SetUserData(USER_VISIBILITY, e.visible());
+            node->SetVisible(e.visible());
+          }
+        }
+      }
     }
     else if (event->type() == events::SceneStateChanged::kType)
     {
       auto& e = static_cast<events::SceneStateChanged&>(*event);
       for (const auto& pair : e.getState().link_transforms)
       {
-        if (data_->entity_container->hasTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pair.first))
+        if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, pair.first))
         {
-          Entity entity =
-              data_->entity_container->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pair.first);
+          Entity entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, pair.first);
           scene->VisualById(entity.id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
         }
       }

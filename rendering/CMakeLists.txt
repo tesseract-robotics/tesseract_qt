@@ -18,7 +18,6 @@ qt5_wrap_cpp(
   RENDERING_WIDGET_headers_MOC
   include/tesseract_qt/rendering/render_events.h
   include/tesseract_qt/rendering/interactive_view_control.h
-  include/tesseract_qt/rendering/render_environment_widget.h
   include/tesseract_qt/rendering/render_widget.h
   include/tesseract_qt/rendering/scene_graph_render_manager.h
   include/tesseract_qt/rendering/tool_path_render_manager.h
@@ -29,7 +28,6 @@ add_library(
   ${RENDERING_WIDGET_headers_MOC}
   src/conversions.cpp
   src/interactive_view_control.cpp
-  src/render_environment_widget.cpp
   src/render_events.cpp
   src/render_widget.cpp
   src/scene_graph_render_manager.cpp
@@ -50,7 +48,6 @@ target_link_libraries(
          Qt5::Widgets
          Qt5::OpenGL
          ${PROJECT_NAME}_common
-         ${PROJECT_NAME}_environment_widgets
          ${PROJECT_NAME}_tool_path_widgets)
 target_include_directories(${PROJECT_NAME}_rendering PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                                             "$<INSTALL_INTERFACE:include>")

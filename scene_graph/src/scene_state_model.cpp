@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/scene_graph/scene_state_model.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
-#include <tesseract_qt/common/scene_graph_link_visibility.h>
+#include <tesseract_qt/common/link_visibility.h>
 #include <tesseract_qt/common/transform_standard_item.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
@@ -233,7 +233,7 @@ bool SceneStateModel::setData(const QModelIndex& index, const QVariant& value, i
       auto* derived_item = static_cast<TransformStandardItem*>(item);
       QApplication::sendEvent(qApp,
                               new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         derived_item->text().toStdString(),
+                                                                         { derived_item->text().toStdString() },
                                                                          LinkVisibilityFlags::AXIS,
                                                                          value.value<Qt::CheckState>() == Qt::Checked));
     }

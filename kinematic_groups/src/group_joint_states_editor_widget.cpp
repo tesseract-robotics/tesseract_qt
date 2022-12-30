@@ -109,7 +109,7 @@ const QItemSelectionModel& GroupJointStatesEditorWidget::getSelectionModel() con
 
 void GroupJointStatesEditorWidget::onGroupNameChanged()
 {
-  auto env_wrapper = EnvironmentManager::instance()->get(ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(ComponentInfo());
   if (env_wrapper == nullptr)
     return;
 
@@ -176,7 +176,7 @@ void GroupJointStatesEditorWidget::onUpdateModels()
   QStringList list;
   data_->group_names_model.setStringList(list);
 
-  auto env_wrapper = tesseract_gui::EnvironmentManager::instance()->get(tesseract_gui::ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(tesseract_gui::ComponentInfo());
   if (env_wrapper == nullptr)
     return;
 

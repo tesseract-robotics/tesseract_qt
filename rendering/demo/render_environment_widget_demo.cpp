@@ -29,12 +29,17 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/rendering/render_widget.h>
-#include <tesseract_qt/rendering/render_environment_widget.h>
+#include <tesseract_qt/rendering/scene_graph_render_manager.h>
 #include <tesseract_qt/rendering/tool_path_render_manager.h>
-#include <tesseract_qt/environment/environment_widget_config.h>
+
+#include <tesseract_qt/environment/environment_widget.h>
+#include <tesseract_qt/environment/environment_wrappers.h>
+
 #include <tesseract_qt/common/events/tool_path_events.h>
+#include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/entity_manager.h>
 
 #include <tesseract_support/tesseract_support_resource_locator.h>
 #include <tesseract_environment/environment.h>
@@ -69,20 +74,16 @@ int main(int argc, char** argv)
   tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
   tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
 
-  auto env = std::make_unique<tesseract_environment::Environment>();
+  auto env = std::make_shared<tesseract_environment::Environment>();
   env->init(urdf_path, srdf_path, locator);
 
   tesseract_gui::ComponentInfo component_info(env->getName());
+  auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
   auto render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
   render_widget->setSkyEnabled(true);
 
-  auto config = std::make_shared<tesseract_gui::EnvironmentWidgetConfig>();
-  config->setEnvironment(std::move(env));
-
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
-  auto* env_widget = new tesseract_gui::RenderEnvironmentWidget(component_info.scene_name, *entity_manager);
-  env_widget->setConfiguration(std::move(config));
-
+  tesseract_gui::SceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
   tesseract_gui::ToolPathRenderManager tool_path_manager(component_info, entity_manager);
 
   QWidget widget;
@@ -93,13 +94,14 @@ int main(int argc, char** argv)
   layout->addWidget(render_widget, 1);
   widget.setLayout(layout);
 
-  //  QObject::connect(env_widget, SIGNAL(triggerRender()), render_widget, SLOT(update()));
+  widget.resize(1200, 800);
+  widget.show();
+
+  tesseract_gui::EnvironmentManager::set(
+      std::make_shared<tesseract_gui::DefaultEnvironmentWrapper>(component_info, env));
 
   tesseract_gui::ToolPath tool_path = getToolPath();
   QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path));
-
-  widget.resize(1200, 800);
-  widget.show();
 
   return app.exec();
 }

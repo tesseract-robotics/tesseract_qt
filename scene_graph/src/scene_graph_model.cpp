@@ -25,7 +25,7 @@
 #include <tesseract_qt/scene_graph/link_standard_item.h>
 #include <tesseract_qt/scene_graph/joint_standard_item.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
-#include <tesseract_qt/common/scene_graph_link_visibility.h>
+#include <tesseract_qt/common/link_visibility.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
@@ -115,7 +115,7 @@ bool SceneGraphModel::setData(const QModelIndex& index, const QVariant& value, i
       auto* derived_item = static_cast<LinkStandardItem*>(item);
       QApplication::sendEvent(qApp,
                               new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         derived_item->link->getName(),
+                                                                         { derived_item->link->getName() },
                                                                          LinkVisibilityFlags::LINK,
                                                                          value.value<Qt::CheckState>() == Qt::Checked));
     }
@@ -125,7 +125,7 @@ bool SceneGraphModel::setData(const QModelIndex& index, const QVariant& value, i
       auto* derived_item = static_cast<LinkStandardItem*>(item->parent());
       QApplication::sendEvent(qApp,
                               new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         derived_item->link->getName(),
+                                                                         { derived_item->link->getName() },
                                                                          LinkVisibilityFlags::VISUAL,
                                                                          value.value<Qt::CheckState>() == Qt::Checked));
     }
@@ -135,7 +135,7 @@ bool SceneGraphModel::setData(const QModelIndex& index, const QVariant& value, i
       auto* derived_item = static_cast<LinkStandardItem*>(item->parent());
       QApplication::sendEvent(qApp,
                               new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         derived_item->link->getName(),
+                                                                         { derived_item->link->getName() },
                                                                          LinkVisibilityFlags::COLLISION,
                                                                          value.value<Qt::CheckState>() == Qt::Checked));
     }
@@ -233,16 +233,21 @@ bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
     if (e->getComponentInfo() == data_->component_info)
     {
       const auto& link_items = data_->scene_graph_item->getLinks();
-      auto it = link_items.find(e->getLinkName());
-      if (it != link_items.end())
+      for (const auto& link_name : e->getLinkNames())
       {
-        Qt::CheckState checked_state = (e->visible()) ? Qt::Checked : Qt::Unchecked;
-        if (flags & LinkVisibilityFlags::LINK)
-          it->second->setCheckState(checked_state);
-        else if (flags & LinkVisibilityFlags::COLLISION)
-          it->second->getCollisionsItem()->setCheckState(checked_state);
-        else if (flags & LinkVisibilityFlags::VISUAL)
-          it->second->getVisualsItem()->setCheckState(checked_state);
+        auto it = link_items.find(link_name);
+        if (it != link_items.end())
+        {
+          Qt::CheckState checked_state = (e->visible()) ? Qt::Checked : Qt::Unchecked;
+          if (flags & LinkVisibilityFlags::LINK)
+            it->second->setCheckState(checked_state);
+
+          if (flags & LinkVisibilityFlags::COLLISION)
+            it->second->getCollisionsItem()->setCheckState(checked_state);
+
+          if (flags & LinkVisibilityFlags::VISUAL)
+            it->second->getVisualsItem()->setCheckState(checked_state);
+        }
       }
     }
   }
@@ -259,9 +264,11 @@ bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
       {
         if (flags & LinkVisibilityFlags::LINK)
           link_item.second->setCheckState(checked_state);
-        else if (flags & LinkVisibilityFlags::COLLISION && link_item.second->getCollisionsItem() != nullptr)
+
+        if (flags & LinkVisibilityFlags::COLLISION && link_item.second->getCollisionsItem() != nullptr)
           link_item.second->getCollisionsItem()->setCheckState(checked_state);
-        else if (flags & LinkVisibilityFlags::VISUAL && link_item.second->getVisualsItem() != nullptr)
+
+        if (flags & LinkVisibilityFlags::VISUAL && link_item.second->getVisualsItem() != nullptr)
           link_item.second->getVisualsItem()->setCheckState(checked_state);
       }
     }

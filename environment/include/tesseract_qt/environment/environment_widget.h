@@ -25,7 +25,6 @@
 
 #include <QWidget>
 #include <memory>
-#include <tesseract_environment/environment.h>
 
 namespace Ui
 {
@@ -36,8 +35,7 @@ class QStandardItem;
 
 namespace tesseract_gui
 {
-class EnvironmentWidgetConfig;
-struct EnvironmentWidgetImpl;
+class ComponentInfo;
 struct LinkVisibilityProperties;
 
 class EnvironmentWidget : public QWidget
@@ -46,56 +44,21 @@ class EnvironmentWidget : public QWidget
 
 public:
   explicit EnvironmentWidget(QWidget* parent = nullptr);
+  explicit EnvironmentWidget(ComponentInfo component_info, QWidget* parent = nullptr);
   ~EnvironmentWidget() override;
 
-  /**
-   * @brief Configure the environment widget
-   * @param config The environment widgets configuration
-   */
-  void setConfiguration(std::shared_ptr<EnvironmentWidgetConfig> config);
-
-  /**
-   * @brief The the environment
-   * @return The environment
-   */
-  const tesseract_environment::Environment& environment() const;
-  tesseract_environment::Environment& environment();
-
-  /**
-   * @brief The the environment
-   * @return The environment
-   */
-  tesseract_environment::Environment::ConstPtr getEnvironment() const;
-  tesseract_environment::Environment::Ptr getEnvironment();
-
-  /** @brief Get the link visibility properties */
-  const std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties() const;
-
-  /**
-   * @brief Make a clone of the widget
-   * @return A unique clone of the widget
-   */
-  virtual EnvironmentWidget* clone() const;
-
-Q_SIGNALS:
-  void configurationSet(EnvironmentWidgetConfig& config);
-  void environmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
-  void environmentChanged(const tesseract_environment::Environment& env);
-  void environmentCurrentStateChanged(const tesseract_environment::Environment& env);
-  void linkVisibilityChanged(const std::vector<std::string>& links);
-  void triggerRender();
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
 
 public Q_SLOTS:
-  virtual void onModelsUpdated();
-  virtual void onRender(float dt);
   virtual void onPlotSceneGraph();
-  virtual void onEnable();
 
 protected:
+  struct Implementation;
   std::unique_ptr<Ui::EnvironmentWidget> ui;
-  std::unique_ptr<EnvironmentWidgetImpl> data_;
+  std::unique_ptr<Implementation> data_;
 
-  void updateModels();
+  //  void updateModels();
 };
 }  // namespace tesseract_gui
 

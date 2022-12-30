@@ -86,6 +86,7 @@ add_library(
   src/joint_trajectory_standard_item.cpp
   src/json_model.cpp
   src/manipulator_info_standard_item.cpp
+  src/model_manager.cpp
   src/utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common

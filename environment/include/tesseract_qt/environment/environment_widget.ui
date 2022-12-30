@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>339</width>
-    <height>311</height>
+    <width>506</width>
+    <height>431</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,7 +38,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>7</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="scene_tab">
       <attribute name="title">
@@ -58,11 +58,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="scene_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::SceneGraphWidget" name="scene_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -84,11 +80,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="state_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::SceneStateWidget" name="scene_state_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -110,11 +102,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="acm_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::AllowedCollisionMatrixWidget" name="acm_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -136,11 +124,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="groups_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::KinematicGroupsWidget" name="groups_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -162,11 +146,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="group_states_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::GroupJointStatesWidget" name="group_states_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -188,11 +168,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="group_tcps_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::GroupTCPsWidget" name="group_tcps_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -214,11 +190,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="cmd_history_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::EnvironmentCommandsWidget" name="cmd_history_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -250,14 +222,51 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::TreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/common/tree_view.h</header>
-  </customwidget>
-  <customwidget>
    <class>tesseract_gui::ContactResultsComputeWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/collision/contact_results_compute_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::AllowedCollisionMatrixWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/acm/allowed_collision_matrix_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::GroupJointStatesWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/kinematic_groups/group_joint_states_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::KinematicGroupsWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/kinematic_groups/kinematic_groups_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::EnvironmentCommandsWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/environment/environment_commands_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::GroupTCPsWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/kinematic_groups/group_tcps_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::SceneGraphWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/scene_graph/scene_graph_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::SceneStateWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/scene_graph/scene_state_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

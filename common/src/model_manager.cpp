@@ -20,27 +20,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_LINK_VISIBILITY_PROPERTIES_H
-#define TESSERACT_QT_COMMON_LINK_VISIBILITY_PROPERTIES_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+#include <map>
 #include <unordered_map>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <tesseract_qt/common/model_manager.h>
+#include <tesseract_qt/common/component_info.h>
 
 namespace tesseract_gui
 {
-/** @brief Stores the link visibility properties */
-struct LinkVisibilityProperties
-{
-  bool link{ true };
-  bool visual{ true };
-  bool collision{ false };
-  bool wirebox{ false };
-  bool axis{ false };
-};
+ModelManager::ModelManager() {}
+ModelManager::~ModelManager() = default;
 
-using LinkVisibilityPropertiesMap = std::unordered_map<std::string, LinkVisibilityProperties>;
+std::shared_ptr<ModelManager> ModelManager::instance()
+{
+  static std::shared_ptr<ModelManager> singleton = nullptr;
+  if (singleton == nullptr)
+    singleton = std::make_shared<ModelManager>();
+
+  return singleton;
+}
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COMMON_LINK_VISIBILITY_PROPERTIES_H

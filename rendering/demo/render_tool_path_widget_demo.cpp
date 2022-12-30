@@ -92,11 +92,11 @@ int main(int argc, char** argv)
   layout->addWidget(render_widget, 1);
   widget.setLayout(layout);
 
-  tesseract_gui::ToolPath tool_path = getToolPath();
-  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path));
-
   widget.resize(1200, 800);
   widget.show();
+
+  tesseract_gui::ToolPath tool_path = getToolPath();
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path));
 
   return app.exec();
 }

@@ -24,6 +24,11 @@
 #include <tesseract_qt/environment/environment_wrappers.h>
 #include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/events/contact_results_events.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/events/group_joint_states_events.h>
+#include <tesseract_qt/common/events/group_tcps_events.h>
+#include <tesseract_qt/common/events/kinematic_groups_events.h>
+#include <tesseract_qt/common/events/environment_events.h>
 #include <tesseract_qt/common/component_info.h>
 
 #include <tesseract_environment/environment.h>
@@ -163,10 +168,37 @@ void eventFilterHelper(QObject* /*obj*/,
   }
 }
 
+void broadcast(const ComponentInfo& component_info, const tesseract_environment::Environment& env)
+{
+  auto lock = env.lockRead();
+
+  // Broadcast environment data
+  QApplication::sendEvent(qApp, new events::SceneGraphSet(component_info, env.getSceneGraph()->clone()));
+  QApplication::sendEvent(qApp, new events::SceneStateChanged(component_info, env.getState()));
+  QApplication::sendEvent(qApp, new events::EnvironmentCommandsSet(component_info, env.getCommandHistory()));
+  QApplication::sendEvent(qApp,
+                          new events::AllowedCollisionMatrixSet(component_info, *env.getAllowedCollisionMatrix()));
+
+  auto kin_info = env.getKinematicsInformation();
+  QApplication::sendEvent(qApp,
+                          new events::KinematicGroupsSet(
+                              component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
+  QApplication::sendEvent(qApp, new events::GroupJointStatesSet(component_info, kin_info.group_states));
+  QApplication::sendEvent(qApp, new events::GroupTCPsSet(component_info, kin_info.group_tcps));
+}
+
+DefaultEnvironmentWrapper::DefaultEnvironmentWrapper(std::shared_ptr<tesseract_environment::Environment> env)
+  : DefaultEnvironmentWrapper(ComponentInfo(), std::move(env))
+{
+}
+
 DefaultEnvironmentWrapper::DefaultEnvironmentWrapper(ComponentInfo component_info,
                                                      std::shared_ptr<tesseract_environment::Environment> env)
   : EnvironmentWrapper(std::move(component_info)), env_(std::move(env))
 {
+  // Broadcast data to initialize available widgets
+  broadcast(getComponentInfo(), *env_);
+
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }
@@ -192,10 +224,21 @@ bool DefaultEnvironmentWrapper::eventFilter(QObject* obj, QEvent* event)
 }
 
 MonitorEnvironmentWrapper::MonitorEnvironmentWrapper(
+    std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor)
+  : MonitorEnvironmentWrapper(ComponentInfo(), std::move(env_monitor))
+{
+}
+
+MonitorEnvironmentWrapper::MonitorEnvironmentWrapper(
     ComponentInfo component_info,
     std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor)
   : EnvironmentWrapper(std::move(component_info)), env_monitor_(std::move(env_monitor))
 {
+  std::size_t uuid = std::hash<MonitorEnvironmentWrapper*>()(this);
+  env_monitor_->environment().addEventCallback(uuid, [this](const tesseract_environment::Event& event) {
+    tesseractEventFilterHelper(event, getComponentInfo(), env_monitor_->environment());
+  });
+
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }

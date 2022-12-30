@@ -37,6 +37,7 @@ class DefaultEnvironmentWrapper : public EnvironmentWrapper
 {
   Q_OBJECT
 public:
+  DefaultEnvironmentWrapper(std::shared_ptr<tesseract_environment::Environment> env);
   DefaultEnvironmentWrapper(ComponentInfo component_info, std::shared_ptr<tesseract_environment::Environment> env);
   ~DefaultEnvironmentWrapper() override;
 
@@ -55,6 +56,7 @@ class MonitorEnvironmentWrapper : public EnvironmentWrapper
 {
   Q_OBJECT
 public:
+  MonitorEnvironmentWrapper(std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor);
   MonitorEnvironmentWrapper(ComponentInfo component_info,
                             std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor);
   ~MonitorEnvironmentWrapper() override;

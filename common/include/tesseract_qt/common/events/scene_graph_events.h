@@ -233,15 +233,15 @@ class SceneGraphModifyLinkVisibility : public ComponentEvent
 {
 public:
   SceneGraphModifyLinkVisibility(ComponentInfo component_info,
-                                 std::string link_name,
+                                 std::vector<std::string> link_names,
                                  LinkVisibilityFlags flags,
                                  bool visible);
   SceneGraphModifyLinkVisibility(const SceneGraphModifyLinkVisibility& other);
   ~SceneGraphModifyLinkVisibility() override;
 
-  const std::string& getLinkName() const;
+  const std::vector<std::string>& getLinkNames() const;
   LinkVisibilityFlags getVisibilityFlags() const;
-  bool visible();
+  bool visible() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::SCENE_GRAPH_MODIFY_LINK_VISIBILITY);
@@ -261,7 +261,7 @@ public:
   ~SceneGraphModifyLinkVisibilityALL() override;
 
   LinkVisibilityFlags getVisibilityFlags() const;
-  bool visible();
+  bool visible() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::SCENE_GRAPH_MODIFY_LINK_VISIBILITY_ALL);

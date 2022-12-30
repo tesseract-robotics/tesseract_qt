@@ -23,9 +23,11 @@
 
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
 #include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/link_visibility.h>
 
 #include <tesseract_common/allowed_collision_matrix.h>
 
@@ -225,6 +227,10 @@ tesseract_common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowed
 
 bool AllowedCollisionMatrixModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
+  // Must apply changes first so the code below works correctly
+  if (!QStandardItemModel::setData(index, value, role))
+    return false;
+
   // Need emit application event to change visible
   if (role == Qt::CheckStateRole)
   {
@@ -247,10 +253,15 @@ bool AllowedCollisionMatrixModel::setData(const QModelIndex& index, const QVaria
       }
     }
 
+    QApplication::sendEvent(
+        qApp,
+        new events::SceneGraphModifyLinkVisibilityALL(data_->component_info, LinkVisibilityFlags::WIREBOX, false));
     if (!links.empty())
-      QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixShow(data_->component_info, links));
+      QApplication::sendEvent(
+          qApp,
+          new events::SceneGraphModifyLinkVisibility(data_->component_info, links, LinkVisibilityFlags::WIREBOX, true));
   }
-  return QStandardItemModel::setData(index, value, role);
+  return true;
 }
 
 bool AllowedCollisionMatrixModel::eventFilter(QObject* obj, QEvent* event)

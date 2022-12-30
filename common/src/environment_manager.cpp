@@ -38,6 +38,13 @@ EnvironmentManager::EnvironmentManager() : data_(std::make_unique<Implementation
 
 EnvironmentManager::~EnvironmentManager() = default;
 
+std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::get(const ComponentInfo& component_info)
+{
+  return instance()->getHelper(component_info);
+}
+
+void EnvironmentManager::set(std::shared_ptr<const EnvironmentWrapper> env) { instance()->setHelper(env); }
+
 std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
 {
   static std::shared_ptr<EnvironmentManager> singleton = nullptr;
@@ -47,13 +54,13 @@ std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
   return singleton;
 }
 
-void EnvironmentManager::set(std::shared_ptr<const EnvironmentWrapper> env)
+void EnvironmentManager::setHelper(std::shared_ptr<const EnvironmentWrapper> env)
 {
   ComponentInfo component_info = env->getComponentInfo();
   data_->environments[component_info.scene_name][component_info.ns] = env;
 }
 
-std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::get(const ComponentInfo& component_info) const
+std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getHelper(const ComponentInfo& component_info) const
 {
   auto it = data_->environments.find(component_info.scene_name);
   if (it == data_->environments.end())

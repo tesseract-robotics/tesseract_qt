@@ -39,14 +39,16 @@ public:
   EnvironmentManager(EnvironmentManager&&) = delete;
   EnvironmentManager& operator=(EnvironmentManager&&) = delete;
 
-  static std::shared_ptr<EnvironmentManager> instance();
-
-  void set(std::shared_ptr<const EnvironmentWrapper> env);
-  std::shared_ptr<const EnvironmentWrapper> get(const ComponentInfo& component_info) const;
+  static std::shared_ptr<const EnvironmentWrapper> get(const ComponentInfo& component_info);
+  static void set(std::shared_ptr<const EnvironmentWrapper> env);
 
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
+
+  static std::shared_ptr<EnvironmentManager> instance();
+  void setHelper(std::shared_ptr<const EnvironmentWrapper> env);
+  std::shared_ptr<const EnvironmentWrapper> getHelper(const ComponentInfo& component_info) const;
 };
 }  // namespace tesseract_gui
 

@@ -5,7 +5,6 @@
 
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/icon_utils.h>
-#include <tesseract_qt/common/link_visibility_properties.h>
 
 #include <tesseract_environment/environment.h>
 #include <tesseract_kinematics/core/kinematic_group.h>
@@ -34,7 +33,7 @@ struct ManipulationWidgetImpl
   tesseract_common::TransformMap tcp_offsets;
   std::vector<SceneStateModel> state_models;
 
-  LinkVisibilityPropertiesMap link_visibility_properties;
+  //  LinkVisibilityPropertiesMap link_visibility_properties;
 
   // Toolbar
   QToolBar* toolbar{ nullptr };
@@ -146,7 +145,7 @@ const tesseract_environment::Environment& ManipulationWidget::environment() cons
 
 const std::unordered_map<std::string, LinkVisibilityProperties>& ManipulationWidget::getLinkVisibilityProperties() const
 {
-  return data_->link_visibility_properties;
+  //  return data_->link_visibility_properties;
 }
 
 const tesseract_kinematics::KinematicGroup& ManipulationWidget::kinematicGroup() const { return *data_->kin_group; }

@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/common/events/scene_graph_events.h>
-#include <tesseract_qt/common/scene_graph_link_visibility.h>
+#include <tesseract_qt/common/link_visibility.h>
 
 #include <tesseract_scene_graph/graph.h>
 #include <tesseract_scene_graph/link.h>
@@ -46,7 +46,7 @@ SceneStateChanged::SceneStateChanged(ComponentInfo component_info, tesseract_sce
   data_->state = std::move(scene_state);
 }
 SceneStateChanged::SceneStateChanged(const SceneStateChanged& other)
-  : SceneStateChanged(other.getComponentInfo(), data_->state)
+  : SceneStateChanged(other.getComponentInfo(), other.getState())
 {
 }
 
@@ -75,7 +75,8 @@ SceneGraphSet::SceneGraphSet(ComponentInfo component_info, tesseract_scene_graph
 {
   data_->scene_graph = std::move(scene_graph);
 }
-SceneGraphSet::SceneGraphSet(const SceneGraphSet& other) : SceneGraphSet(other.getComponentInfo(), data_->scene_graph)
+SceneGraphSet::SceneGraphSet(const SceneGraphSet& other)
+  : SceneGraphSet(other.getComponentInfo(), other.getSceneGraph())
 {
 }
 SceneGraphSet::~SceneGraphSet() = default;
@@ -98,7 +99,7 @@ SceneGraphAddLink::SceneGraphAddLink(ComponentInfo component_info, tesseract_sce
   data_->link = std::move(link);
 }
 SceneGraphAddLink::SceneGraphAddLink(const SceneGraphAddLink& other)
-  : SceneGraphAddLink(other.getComponentInfo(), data_->link)
+  : SceneGraphAddLink(other.getComponentInfo(), other.getLink())
 {
 }
 SceneGraphAddLink::~SceneGraphAddLink() = default;
@@ -119,7 +120,7 @@ SceneGraphAddJoint::SceneGraphAddJoint(ComponentInfo component_info, tesseract_s
   data_->joint = std::move(joint);
 }
 SceneGraphAddJoint::SceneGraphAddJoint(const SceneGraphAddJoint& other)
-  : SceneGraphAddJoint(other.getComponentInfo(), data_->joint)
+  : SceneGraphAddJoint(other.getComponentInfo(), other.getJoint())
 {
 }
 SceneGraphAddJoint::~SceneGraphAddJoint() = default;
@@ -140,7 +141,7 @@ SceneGraphMoveLink::SceneGraphMoveLink(ComponentInfo component_info, tesseract_s
   data_->joint = std::move(joint);
 }
 SceneGraphMoveLink::SceneGraphMoveLink(const SceneGraphMoveLink& other)
-  : SceneGraphMoveLink(other.getComponentInfo(), data_->joint)
+  : SceneGraphMoveLink(other.getComponentInfo(), other.getJoint())
 {
 }
 
@@ -164,7 +165,7 @@ SceneGraphMoveJoint::SceneGraphMoveJoint(ComponentInfo component_info, std::stri
   data_->parent_link = std::move(parent_link);
 }
 SceneGraphMoveJoint::SceneGraphMoveJoint(const SceneGraphMoveJoint& other)
-  : SceneGraphMoveJoint(other.getComponentInfo(), data_->joint_name, data_->parent_link)
+  : SceneGraphMoveJoint(other.getComponentInfo(), other.getJointName(), other.getParentLink())
 {
 }
 
@@ -189,7 +190,7 @@ SceneGraphRemoveLink::SceneGraphRemoveLink(ComponentInfo component_info, std::st
   data_->recursive = recursive;
 }
 SceneGraphRemoveLink::SceneGraphRemoveLink(const SceneGraphRemoveLink& other)
-  : SceneGraphRemoveLink(other.getComponentInfo(), data_->link_name, data_->recursive)
+  : SceneGraphRemoveLink(other.getComponentInfo(), other.getLinkName(), other.isRecursive())
 {
 }
 SceneGraphRemoveLink::~SceneGraphRemoveLink() = default;
@@ -213,7 +214,7 @@ SceneGraphRemoveJoint::SceneGraphRemoveJoint(ComponentInfo component_info, std::
   data_->recursive = recursive;
 }
 SceneGraphRemoveJoint::SceneGraphRemoveJoint(const SceneGraphRemoveJoint& other)
-  : SceneGraphRemoveJoint(other.getComponentInfo(), data_->joint_name, data_->recursive)
+  : SceneGraphRemoveJoint(other.getComponentInfo(), other.getJointName(), other.isRecursive())
 {
 }
 SceneGraphRemoveJoint::~SceneGraphRemoveJoint() = default;
@@ -236,7 +237,7 @@ SceneGraphReplaceJoint::SceneGraphReplaceJoint(ComponentInfo component_info,
   data_->joint = std::move(joint);
 }
 SceneGraphReplaceJoint::SceneGraphReplaceJoint(const SceneGraphReplaceJoint& other)
-  : SceneGraphReplaceJoint(other.getComponentInfo(), data_->joint)
+  : SceneGraphReplaceJoint(other.getComponentInfo(), other.getJoint())
 {
 }
 
@@ -249,30 +250,33 @@ tesseract_scene_graph::Joint::ConstPtr SceneGraphReplaceJoint::getJoint() const 
 class SceneGraphModifyLinkVisibility::Implementation
 {
 public:
-  std::string link_name;
+  std::vector<std::string> link_names;
   LinkVisibilityFlags flags;
   bool visible;
 };
 
 SceneGraphModifyLinkVisibility::SceneGraphModifyLinkVisibility(ComponentInfo component_info,
-                                                               std::string link_name,
+                                                               std::vector<std::string> link_names,
                                                                LinkVisibilityFlags flags,
                                                                bool visible)
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
-  data_->link_name = std::move(link_name);
+  data_->link_names = std::move(link_names);
   data_->flags = flags;
   data_->visible = visible;
 }
 SceneGraphModifyLinkVisibility::SceneGraphModifyLinkVisibility(const SceneGraphModifyLinkVisibility& other)
-  : SceneGraphModifyLinkVisibility(other.getComponentInfo(), data_->link_name, data_->flags, data_->visible)
+  : SceneGraphModifyLinkVisibility(other.getComponentInfo(),
+                                   other.getLinkNames(),
+                                   other.getVisibilityFlags(),
+                                   other.visible())
 {
 }
 SceneGraphModifyLinkVisibility::~SceneGraphModifyLinkVisibility() = default;
 
-const std::string& SceneGraphModifyLinkVisibility::getLinkName() const { return data_->link_name; }
+const std::vector<std::string>& SceneGraphModifyLinkVisibility::getLinkNames() const { return data_->link_names; }
 LinkVisibilityFlags SceneGraphModifyLinkVisibility::getVisibilityFlags() const { return data_->flags; }
-bool SceneGraphModifyLinkVisibility::visible() { return data_->visible; }
+bool SceneGraphModifyLinkVisibility::visible() const { return data_->visible; }
 
 //////////////////////////////////////////
 
@@ -292,13 +296,13 @@ SceneGraphModifyLinkVisibilityALL::SceneGraphModifyLinkVisibilityALL(ComponentIn
   data_->visible = visible;
 }
 SceneGraphModifyLinkVisibilityALL::SceneGraphModifyLinkVisibilityALL(const SceneGraphModifyLinkVisibilityALL& other)
-  : SceneGraphModifyLinkVisibilityALL(other.getComponentInfo(), data_->flags, data_->visible)
+  : SceneGraphModifyLinkVisibilityALL(other.getComponentInfo(), other.getVisibilityFlags(), other.visible())
 {
 }
 SceneGraphModifyLinkVisibilityALL::~SceneGraphModifyLinkVisibilityALL() = default;
 
 LinkVisibilityFlags SceneGraphModifyLinkVisibilityALL::getVisibilityFlags() const { return data_->flags; }
-bool SceneGraphModifyLinkVisibilityALL::visible() { return data_->visible; }
+bool SceneGraphModifyLinkVisibilityALL::visible() const { return data_->visible; }
 
 //////////////////////////////////////////
 
