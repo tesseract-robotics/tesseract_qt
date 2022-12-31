@@ -35,7 +35,8 @@ namespace tesseract_common
 {
 class JointTrajectorySet;
 class JointState;
-class JointTrajectoryInfo;
+class JointTrajectory;
+using JointTrajectoryInfo = std::pair<JointState, JointTrajectory>;
 }  // namespace tesseract_common
 
 namespace boost::uuids
@@ -57,6 +58,10 @@ public:
 
   const ComponentInfo& getComponentInfo() const;
 
+  tesseract_common::JointState getJointState(const QModelIndex& row) const;
+  tesseract_common::JointTrajectoryInfo getJointTrajectory(const QModelIndex& row) const;
+  tesseract_common::JointTrajectorySet getJointTrajectorySet(const QModelIndex& row) const;
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
@@ -66,7 +71,7 @@ private:
    * @param trajectory_set The trajectory set associated with the key
    * @return The key associated with added trajectory for removal
    */
-  QString addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set);
+  void addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set);
 
   /**
    * @brief Remove the joint trajectory set
@@ -80,10 +85,6 @@ private:
    * @return True if a trajectory exists under the provided key, otherwise false
    */
   bool hasJointTrajectorySet(const boost::uuids::uuid& uuid);
-
-  const tesseract_common::JointState& getJointState(const QModelIndex& row) const;
-  const tesseract_common::JointTrajectoryInfo& getJointTrajectory(const QModelIndex& row) const;
-  const tesseract_common::JointTrajectorySet& getJointTrajectorySet(const QModelIndex& row) const;
 
   void clear();
 

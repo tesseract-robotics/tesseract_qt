@@ -80,55 +80,15 @@ public:
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
 
-  //  void setModel(JointTrajectoryModel* model);
-
-  //  /**
-  //   * @brief Set the default environment to use if environment was not provided with the trajectory set
-  //   * @param env The default environment to use for trajectory set not containing an environment
-  //   */
-  //  void setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
-
-  //  /**
-  //   * @brief Get the default environment
-  //   * @return The default environment
-  //   */
-  //  std::shared_ptr<const tesseract_environment::Environment> getDefaultEnvironment() const;
-
-  //  /**
-  //   * @brief Add joint trajectory set
-  //   * @param trajectory_set The trajectory set associated with the key
-  //   * @return The key associated with added trajectory for removal
-  //   */
-  //  QString addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set);
-
-  //  /**
-  //   * @brief Remove the joint trajectory set
-  //   * @param key The key associated with the joint trajectory set to be removed
-  //   */
-  //  void removeJointTrajectorySet(const QString& key);
-
-  //  /**
-  //   * @brief Check a trajectory set with the provided key exists
-  //   * @param key The key associated with the joint trajectory set to find
-  //   * @return True if a trajectory exists under the provided key, otherwise false
-  //   */
-  //  bool hasJointTrajectorySet(const QString& key);
-
 Q_SIGNALS:
   void showJointState(const tesseract_common::JointState& state);
-  void configureJointTrajectorySet(const QString& uuid,
-                                   const tesseract_common::JointTrajectorySet& joint_trajectory_set);
-  void jointTrajectorySetRemoved(const QString& uuid);
-
-public Q_SLOTS:
-  virtual void onOpen();
-  virtual void onSave();
-  virtual void onRemove();
-  virtual void onPlot();
-  virtual void onEnable();
-  virtual void onRender(float dt);
+  void configureJointTrajectorySet(const tesseract_common::JointTrajectorySet& joint_trajectory_set);
 
 private Q_SLOTS:
+  void onOpen();
+  void onSave();
+  void onRemove();
+  void onPlot();
   void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
   void onPauseButtonClicked();
   void onPlayButtonClicked();

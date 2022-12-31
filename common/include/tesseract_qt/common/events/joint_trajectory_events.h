@@ -32,11 +32,6 @@ namespace tesseract_common
 class JointTrajectorySet;
 }
 
-namespace boost::uuids
-{
-struct uuid;
-}
-
 namespace tesseract_gui::events
 {
 /** @brief Event called to add a joint trajectory */

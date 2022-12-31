@@ -37,6 +37,7 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/joint_trajectory_set.h>
 
 #include <tesseract_common/joint_state.h>
 #include <tesseract_common/serialization.h>
@@ -59,9 +60,7 @@ namespace tesseract_gui
 struct JointTrajectoryWidget::Implementation
 {
   ComponentInfo component_info;
-
-  JointTrajectoryModel* model{ nullptr };
-  tesseract_environment::Environment::ConstPtr default_env{ nullptr };
+  std::shared_ptr<JointTrajectoryModel> model;
   std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player;
   std::unique_ptr<QTimer> player_timer;
   std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog;
@@ -117,14 +116,37 @@ JointTrajectoryWidget::~JointTrajectoryWidget()
   ms.endGroup();
 }
 
-void JointTrajectoryWidget::setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env)
+void JointTrajectoryWidget::setComponentInfo(ComponentInfo component_info)
 {
-  data_->default_env = std::move(env);
+  // Create model
+  data_->model = std::make_shared<JointTrajectoryModel>(std::move(component_info));
+  ui_->trajectoryTreeView->setModel(data_->model.get());
+
+  connect(ui_->trajectoryTreeView->selectionModel(),
+          SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
+          this,
+          SLOT(onCurrentRowChanged(QModelIndex, QModelIndex)));
 }
 
-std::shared_ptr<const tesseract_environment::Environment> JointTrajectoryWidget::getDefaultEnvironment() const
+const ComponentInfo& JointTrajectoryWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+
+void JointTrajectoryWidget::setModel(std::shared_ptr<JointTrajectoryModel> model)
 {
-  return data_->default_env;
+  data_->model = std::move(model);
+  ui_->trajectoryTreeView->setModel(data_->model.get());
+
+  connect(ui_->trajectoryTreeView->selectionModel(),
+          SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
+          this,
+          SLOT(onCurrentRowChanged(QModelIndex, QModelIndex)));
+}
+std::shared_ptr<JointTrajectoryModel> JointTrajectoryWidget::getModel() { return data_->model; }
+std::shared_ptr<const JointTrajectoryModel> JointTrajectoryWidget::getModel() const { return data_->model; }
+
+QItemSelectionModel& JointTrajectoryWidget::getSelectionModel() { return *ui_->trajectoryTreeView->selectionModel(); }
+const QItemSelectionModel& JointTrajectoryWidget::getSelectionModel() const
+{
+  return *ui_->trajectoryTreeView->selectionModel();
 }
 
 void JointTrajectoryWidget::onOpen()
@@ -204,15 +226,17 @@ bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, cons
   tesseract_common::JointTrajectorySet joint_trajectory_set;
   if (suffix == "jtsx" && file_info.suffix() == "jtsx")
   {
-    addJointTrajectorySet(tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::JointTrajectorySet>(
-        filename.toStdString()));
+    auto jts = tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::JointTrajectorySet>(
+        filename.toStdString());
+    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
     return true;
   }
 
   if (suffix == "jtsb" && file_info.suffix() == "jtsb")
   {
-    addJointTrajectorySet(tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::JointTrajectorySet>(
-        filename.toStdString()));
+    auto jts = tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::JointTrajectorySet>(
+        filename.toStdString());
+    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
     return true;
   }
 
@@ -231,7 +255,8 @@ bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, cons
 
     tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
     jts.appendJointTrajectory(jt);
-    addJointTrajectorySet(jts);
+
+    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
     return true;
   }
 
@@ -249,7 +274,7 @@ bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, cons
       initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
 
     tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
-    addJointTrajectorySet(jts);
+    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
     return true;
   }
 
@@ -261,8 +286,8 @@ void JointTrajectoryWidget::onRemove()
   if (data_->selected_item != nullptr &&
       data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
   {
-    QString uuid = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->uuid;
-    removeJointTrajectorySet(uuid);
+    boost::uuids::uuid uuid = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->trajectory_set.getUUID();
+    QApplication::sendEvent(qApp, new events::JointTrajectoryRemove(data_->component_info, uuid));
     data_->selected_item = nullptr;
     onDisablePlayer();
   }
@@ -277,40 +302,6 @@ void JointTrajectoryWidget::onPlot()
   data_->plot_dialog = std::make_unique<JointTrajectoryPlotDialog>(data_->current_trajectory);
   data_->plot_dialog->setWindowFlags(Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
   data_->plot_dialog->show();
-}
-
-void JointTrajectoryWidget::setModel(JointTrajectoryModel* model)
-{
-  ui_->trajectoryTreeView->setModel(model);
-  ui_->trajectoryTreeView->setColumnWidth(0, 175);
-  data_->model = model;
-
-  connect(ui_->trajectoryTreeView->selectionModel(),
-          SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
-          this,
-          SLOT(onCurrentRowChanged(QModelIndex, QModelIndex)));
-}
-
-QString JointTrajectoryWidget::addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set)
-{
-  if (trajectory_set.getEnvironment() != nullptr)
-    return data_->model->addJointTrajectorySet(trajectory_set);
-
-  if (data_->default_env != nullptr)
-    trajectory_set.applyEnvironment(data_->default_env->clone());
-
-  return data_->model->addJointTrajectorySet(trajectory_set);
-}
-
-void JointTrajectoryWidget::removeJointTrajectorySet(const QString& key)
-{
-  data_->model->removeJointTrajectorySet(key);
-  emit jointTrajectorySetRemoved(key);
-}
-
-bool JointTrajectoryWidget::hasJointTrajectorySet(const QString& key)
-{
-  return data_->model->hasJointTrajectorySet(key);
 }
 
 void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, const QModelIndex& /*previous*/)
@@ -339,9 +330,9 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       QApplication::sendEvent(qApp, event);
 
       data_->current_trajectory = data_->model->getJointTrajectory(current_index);
+      auto jts = data_->model->getJointTrajectorySet(current_index);
 
-      auto details = data_->model->getJointTrajectorySetDetails(current_index);
-      emit configureJointTrajectorySet(details.first, details.second);
+      emit configureJointTrajectorySet(jts);
 
       data_->player->setTrajectory(data_->current_trajectory.second);
 
@@ -358,14 +349,12 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       event->plot_enabled = true;
       QApplication::sendEvent(qApp, event);
 
-      auto details = data_->model->getJointTrajectorySetDetails(current_index);
-      const tesseract_common::JointTrajectorySet& traj_set = details.second;
-
-      emit configureJointTrajectorySet(details.first, details.second);
+      auto jts = data_->model->getJointTrajectorySet(current_index);
+      emit configureJointTrajectorySet(jts);
 
       data_->current_trajectory = tesseract_common::JointTrajectoryInfo();
-      data_->current_trajectory.first = traj_set.getInitialState();
-      for (const auto& t : traj_set.getJointTrajectories())
+      data_->current_trajectory.first = jts.getInitialState();
+      for (const auto& t : jts.getJointTrajectories())
         data_->current_trajectory.second.insert(
             data_->current_trajectory.second.end(), t.second.begin(), t.second.end());
 
@@ -385,8 +374,8 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       QApplication::sendEvent(qApp, event);
 
       const tesseract_common::JointState& state = data_->model->getJointState(current_index);
-      auto details = data_->model->getJointTrajectorySetDetails(current_index);
-      emit configureJointTrajectorySet(details.first, details.second);
+      auto jts = data_->model->getJointTrajectorySet(current_index);
+      emit configureJointTrajectorySet(jts);
       emit showJointState(state);
       break;
     }
@@ -440,10 +429,6 @@ void JointTrajectoryWidget::onEnablePlayer()
 }
 
 void JointTrajectoryWidget::onDisablePlayer() { ui_->trajectoryPlayerFrame->setEnabled(false); }
-
-void JointTrajectoryWidget::onEnable() {}
-
-void JointTrajectoryWidget::onRender(float /*dt*/) {}
 
 const QString& JointTrajectoryWidget::getDefaultDirectory() const { return data_->default_directory; }
 void JointTrajectoryWidget::setDefaultDirectory(const QString& default_directory)

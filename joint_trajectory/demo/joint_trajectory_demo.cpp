@@ -27,6 +27,9 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QDebug>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
+#include <tesseract_qt/common/joint_trajectory_set.h>
+#include <tesseract_qt/common/events/joint_trajectory_events.h>
+
 #include <tesseract_qt/joint_trajectory/joint_trajectory_model.h>
 #include <tesseract_qt/joint_trajectory/joint_trajectory_widget.h>
 
@@ -66,16 +69,29 @@ int main(int argc, char** argv)
     trajectory_set.appendJointTrajectory(trajectory);
   }
 
-  auto* model = new tesseract_gui::JointTrajectoryModel();  // NOLINT
-  QString set1_key = model->addJointTrajectorySet(trajectory_set);
-  QString set2_key = model->addJointTrajectorySet(trajectory_set);
-  QString set3_key = model->addJointTrajectorySet(trajectory_set);
+  auto trajectory_set1{ trajectory_set };
+  trajectory_set1.setDescription("Demo Tool Path 1");
+  trajectory_set1.regenerateUUID();
 
-  model->removeJointTrajectorySet(set2_key);
+  auto trajectory_set2{ trajectory_set };
+  trajectory_set2.setDescription("Demo Tool Path 2");
+  trajectory_set2.regenerateUUID();
+
+  auto trajectory_set3{ trajectory_set };
+  trajectory_set3.setDescription("Demo Tool Path 3");
+  trajectory_set3.regenerateUUID();
+
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
 
   tesseract_gui::JointTrajectoryWidget widget;
-  widget.setModel(model);
   widget.show();
+
+  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set1));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set2));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set3));
+  QApplication::sendEvent(qApp,
+                          new tesseract_gui::events::JointTrajectoryRemove(component_info, trajectory_set2.getUUID()));
 
   return QApplication::exec();
 }
