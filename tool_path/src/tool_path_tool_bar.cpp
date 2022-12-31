@@ -39,20 +39,10 @@ struct ToolPathToolBar::Implementation
   QAction* show_all;
 };
 
-ToolPathToolBar::ToolPathToolBar(QWidget* parent) : QToolBar(parent), data_(std::make_unique<Implementation>())
-{
-  ctor(data_->component_info);
-}
+ToolPathToolBar::ToolPathToolBar(QWidget* parent) : ToolPathToolBar(ComponentInfo(), parent) {}
 
 ToolPathToolBar::ToolPathToolBar(ComponentInfo component_info, QWidget* parent)
   : QToolBar(parent), data_(std::make_unique<Implementation>())
-{
-  ctor(std::move(component_info));
-}
-
-ToolPathToolBar::~ToolPathToolBar() = default;
-
-void ToolPathToolBar::ctor(ComponentInfo component_info)
 {
   data_->component_info = component_info;
   data_->remove_all = addAction(icons::getClearIcon(), "Remove All", [component_info]() {
@@ -69,4 +59,7 @@ void ToolPathToolBar::ctor(ComponentInfo component_info)
     QApplication::sendEvent(qApp, new events::ToolPathShowAll(component_info));
   });
 }
+
+ToolPathToolBar::~ToolPathToolBar() = default;
+
 }  // namespace tesseract_gui

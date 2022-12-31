@@ -26,21 +26,40 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_common/joint_state.h>
-//#include <tesseract_common/joint_trajectory_set.h>
-#include <tesseract_qt/common/joint_trajectory_set.h>
+#include <memory>
 #include <QStandardItemModel>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
+namespace tesseract_common
+{
+class JointTrajectorySet;
+class JointState;
+class JointTrajectoryInfo;
+}  // namespace tesseract_common
+
+namespace boost::uuids
+{
+class uuid;
+}
+
 namespace tesseract_gui
 {
+struct ComponentInfo;
 class JointTrajectoryModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
   explicit JointTrajectoryModel(QObject* parent = nullptr);
+  explicit JointTrajectoryModel(ComponentInfo component_info, QObject* parent = nullptr);
+  ~JointTrajectoryModel() override;
+
+  const ComponentInfo& getComponentInfo() const;
+
+private:
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   /**
    * @brief Add joint trajectory set
@@ -51,27 +70,25 @@ public:
 
   /**
    * @brief Remove the joint trajectory set
-   * @param key The key associated with the joint trajectory set to be removed
+   * @param uuid The uuid associated with the joint trajectory set to be removed
    */
-  void removeJointTrajectorySet(const QString& key);
+  void removeJointTrajectorySet(const boost::uuids::uuid& uuid);
 
   /**
    * @brief Check a trajectory set with the provided key exists
-   * @param key The key associated with the joint trajectory set to find
+   * @param uuid The uuid associated with the joint trajectory set to find
    * @return True if a trajectory exists under the provided key, otherwise false
    */
-  bool hasJointTrajectorySet(const QString& key);
+  bool hasJointTrajectorySet(const boost::uuids::uuid& uuid);
 
   const tesseract_common::JointState& getJointState(const QModelIndex& row) const;
   const tesseract_common::JointTrajectoryInfo& getJointTrajectory(const QModelIndex& row) const;
   const tesseract_common::JointTrajectorySet& getJointTrajectorySet(const QModelIndex& row) const;
-  std::pair<const QString&, const tesseract_common::JointTrajectorySet&>
-  getJointTrajectorySetDetails(const QModelIndex& row) const;
 
   void clear();
 
-private:
-  std::map<QString, QStandardItem*> trajectory_sets_;
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui

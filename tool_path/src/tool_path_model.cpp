@@ -45,13 +45,7 @@ struct ToolPathModel::Implementation
   std::map<boost::uuids::uuid, QStandardItem*> tool_paths;
 };
 
-ToolPathModel::ToolPathModel(QObject* parent) : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
-{
-  clear();
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
-}
+ToolPathModel::ToolPathModel(QObject* parent) : ToolPathModel(ComponentInfo(), parent) {}
 
 ToolPathModel::ToolPathModel(ComponentInfo component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())

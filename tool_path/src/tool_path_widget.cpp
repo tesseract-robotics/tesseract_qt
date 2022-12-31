@@ -23,6 +23,7 @@
 
 #include <tesseract_qt/tool_path/tool_path_widget.h>
 #include <tesseract_qt/tool_path/tool_path_model.h>
+#include <tesseract_qt/tool_path/tool_path_selection_model.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/tree_view.h>
 
@@ -33,6 +34,7 @@ namespace tesseract_gui
 struct ToolPathWidget::Implementation
 {
   std::shared_ptr<ToolPathModel> model;
+  std::shared_ptr<ToolPathSelectionModel> selection_model;
   QVBoxLayout* layout;
   TreeView* tree_view;
 };
@@ -43,7 +45,8 @@ ToolPathWidget::ToolPathWidget(ComponentInfo component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
-  data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
+  data_->model = std::make_shared<ToolPathModel>(component_info);
+  data_->selection_model = std::make_shared<ToolPathSelectionModel>(data_->model.get(), component_info);
 
   // Create tree widget
   data_->tree_view = new TreeView();
@@ -65,7 +68,10 @@ void ToolPathWidget::setComponentInfo(ComponentInfo component_info)
 {
   // Create model
   data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
+  data_->selection_model = std::make_shared<ToolPathSelectionModel>(data_->model.get(), component_info);
+
   data_->tree_view->setModel(data_->model.get());
+  data_->tree_view->setSelectionModel(data_->selection_model.get());
 }
 
 const ComponentInfo& ToolPathWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }

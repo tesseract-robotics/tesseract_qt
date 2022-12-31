@@ -33,6 +33,8 @@
 #include <tesseract_qt/plot/transforms/outlier_removal.h>
 #include <tesseract_qt/plot/transforms/scale_transform.h>
 
+#include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
@@ -42,6 +44,7 @@
 #include <tesseract_command_language/poly/instruction_poly.h>
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/utils.h>
+
 #include <QTimer>
 #include <QToolBar>
 #include <QFileDialog>
@@ -53,8 +56,10 @@ const double SLIDER_RESOLUTION = 0.001;
 
 namespace tesseract_gui
 {
-struct JointTrajectoryWidgetPrivate
+struct JointTrajectoryWidget::Implementation
 {
+  ComponentInfo component_info;
+
   JointTrajectoryModel* model{ nullptr };
   tesseract_environment::Environment::ConstPtr default_env{ nullptr };
   std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player;
@@ -67,27 +72,16 @@ struct JointTrajectoryWidgetPrivate
 
   // Store the selected item
   QStandardItem* selected_item;
-
-  // Toolbar
-  QToolBar* toolbar;
-  QAction* open_action;
-  QAction* save_action;
-  QAction* remove_action;
-  QAction* plot_action;
 };
 
-JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent, bool add_toolbar)
-  : QWidget(parent)
-  , ui_(std::make_unique<Ui::JointTrajectoryWidget>())
-  , data_(std::make_unique<JointTrajectoryWidgetPrivate>())
+JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent) : JointTrajectoryWidget(ComponentInfo(), parent) {}
+
+JointTrajectoryWidget::JointTrajectoryWidget(ComponentInfo component_info, QWidget* parent)
+  : QWidget(parent), ui_(std::make_unique<Ui::JointTrajectoryWidget>()), data_(std::make_unique<Implementation>())
 {
   ui_->setupUi(this);
 
-  if (add_toolbar)
-  {
-    createToolBar();
-    ui_->verticalLayout->insertWidget(0, data_->toolbar);
-  }
+  data_->component_info = std::move(component_info);
 
   QSettings ms;
   ms.beginGroup("JointTrajectoryWidget");
@@ -110,6 +104,9 @@ JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent, bool add_toolbar)
   TransformFactory::registerTransform<MovingRMS>();
   TransformFactory::registerTransform<OutlierRemovalFilter>();
   TransformFactory::registerTransform<ScaleTransform>();
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
 }
 
 JointTrajectoryWidget::~JointTrajectoryWidget()
@@ -118,20 +115,6 @@ JointTrajectoryWidget::~JointTrajectoryWidget()
   ms.beginGroup("JointTrajectoryWidget");
   ms.setValue("default_directory", data_->default_directory);
   ms.endGroup();
-}
-
-void JointTrajectoryWidget::createToolBar()
-{
-  data_->toolbar = new QToolBar;  // NOLINT
-  data_->open_action = data_->toolbar->addAction(icons::getImportIcon(), "Open", this, SLOT(onOpen()));
-  data_->save_action = data_->toolbar->addAction(icons::getSaveIcon(), "Save", this, SLOT(onSave()));
-  data_->remove_action = data_->toolbar->addAction(icons::getTrashIcon(), "Remove", this, SLOT(onRemove()));
-  data_->toolbar->addSeparator();
-  data_->plot_action = data_->toolbar->addAction(icons::getPlotIcon(), "Plot Joint Trajectory", this, SLOT(onPlot()));
-
-  data_->save_action->setDisabled(true);
-  data_->remove_action->setDisabled(true);
-  data_->plot_action->setDisabled(true);
 }
 
 void JointTrajectoryWidget::setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env)
@@ -339,16 +322,21 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
   {
     case static_cast<int>(StandardItemType::COMMON_NAMESPACE):
     {
-      data_->save_action->setDisabled(true);
-      data_->remove_action->setDisabled(true);
-      data_->plot_action->setDisabled(true);
+      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      event->save_enabled = false;
+      event->remove_enabled = false;
+      event->plot_enabled = false;
+      QApplication::sendEvent(qApp, event);
+
       break;
     }
     case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
     {
-      data_->save_action->setDisabled(true);
-      data_->remove_action->setDisabled(true);
-      data_->plot_action->setDisabled(false);
+      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      event->save_enabled = false;
+      event->remove_enabled = false;
+      event->plot_enabled = true;
+      QApplication::sendEvent(qApp, event);
 
       data_->current_trajectory = data_->model->getJointTrajectory(current_index);
 
@@ -364,9 +352,11 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET):
     {
-      data_->save_action->setDisabled(false);
-      data_->remove_action->setDisabled(false);
-      data_->plot_action->setDisabled(false);
+      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      event->save_enabled = true;
+      event->remove_enabled = true;
+      event->plot_enabled = true;
+      QApplication::sendEvent(qApp, event);
 
       auto details = data_->model->getJointTrajectorySetDetails(current_index);
       const tesseract_common::JointTrajectorySet& traj_set = details.second;
@@ -388,9 +378,11 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     default:
     {
-      data_->save_action->setDisabled(true);
-      data_->remove_action->setDisabled(true);
-      data_->plot_action->setDisabled(true);
+      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      event->save_enabled = false;
+      event->remove_enabled = false;
+      event->plot_enabled = false;
+      QApplication::sendEvent(qApp, event);
 
       const tesseract_common::JointState& state = data_->model->getJointState(current_index);
       auto details = data_->model->getJointTrajectorySetDetails(current_index);
@@ -457,6 +449,39 @@ const QString& JointTrajectoryWidget::getDefaultDirectory() const { return data_
 void JointTrajectoryWidget::setDefaultDirectory(const QString& default_directory)
 {
   data_->default_directory = default_directory;
+}
+
+// Documentation inherited
+bool JointTrajectoryWidget::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() == events::JointTrajectoryOpen::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectoryOpen*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectoryOpen*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      onOpen();
+  }
+  else if (event->type() == events::JointTrajectorySave::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectorySave*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectorySave*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      onSave();
+  }
+  else if (event->type() == events::JointTrajectoryPlot::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectoryPlot*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectoryPlot*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      onPlot();
+  }
+  else if (event->type() == events::JointTrajectoryRemoveSelected::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectoryRemoveSelected*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectoryRemoveSelected*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      onRemove();
+  }
 }
 
 }  // namespace tesseract_gui

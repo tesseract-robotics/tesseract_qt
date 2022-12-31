@@ -54,6 +54,12 @@ public:
 
   const ComponentInfo& getComponentInfo() const;
 
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+
+private:
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
+
   /**
    * @brief Add tool path
    * @param trajectory_set The tool path associated with the key
@@ -76,14 +82,7 @@ public:
   Eigen::Isometry3d getTransform(const QModelIndex& row) const;
   ToolPathSegment getToolPathSegment(const QModelIndex& row) const;
   ToolPath getToolPath(const QModelIndex& row) const;
-
-  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-
   void clear();
-
-private:
-  struct Implementation;
-  std::unique_ptr<Implementation> data_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

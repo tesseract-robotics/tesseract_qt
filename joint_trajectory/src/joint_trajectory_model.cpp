@@ -24,17 +24,45 @@
 #include <tesseract_qt/joint_trajectory/joint_trajectory_set_item.h>
 #include <tesseract_qt/joint_trajectory/joint_trajectory_info_item.h>
 #include <tesseract_qt/joint_trajectory/joint_trajectory_state_item.h>
+
+#include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/utils.h>
 
-#include <QUuid>
+#include <tesseract_common/joint_state.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
+#include <QApplication>
 
 namespace tesseract_gui
 {
-JointTrajectoryModel::JointTrajectoryModel(QObject* parent) : QStandardItemModel(parent) { clear(); }
+struct JointTrajectoryModel::Implementation
+{
+  ComponentInfo component_info;
+  std::map<boost::uuids::uuid, QStandardItem*> trajectory_sets;
+};
+
+JointTrajectoryModel::JointTrajectoryModel(QObject* parent) : JointTrajectoryModel(ComponentInfo(), parent) {}
+
+JointTrajectoryModel::JointTrajectoryModel(ComponentInfo component_info, QObject* parent)
+  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+{
+  clear();
+
+  data_->component_info = std::move(component_info);
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
+}
+JointTrajectoryModel::~JointTrajectoryModel() = default;
+
+const ComponentInfo& JointTrajectoryModel::getComponentInfo() const { return data_->component_info; }
 
 void JointTrajectoryModel::clear()
 {
@@ -45,31 +73,31 @@ void JointTrajectoryModel::clear()
 
 QString JointTrajectoryModel::addJointTrajectorySet(const tesseract_common::JointTrajectorySet& trajectory_set)
 {
-  QString key = QUuid::createUuid().toString();
+  boost::uuids::uuid uuid = trajectory_set.getUUID();
   std::string ns = (trajectory_set.getNamespace().empty()) ? "general" : trajectory_set.getNamespace();
   NamespaceStandardItem* item = createNamespaceItem(*invisibleRootItem(), ns);
 
   auto* trajectory_container_item = new JointTrajectorySetItem(key, trajectory_set);
   auto* trajectory_description_item = new QStandardItem(QString::fromStdString(trajectory_set.getDescription()));
   item->appendRow({ trajectory_container_item, trajectory_description_item });
-  trajectory_sets_[key] = trajectory_container_item;
-  return key;
+  data_->trajectory_sets[uuid] = trajectory_container_item;
 }
 
-void JointTrajectoryModel::removeJointTrajectorySet(const QString& key)
+void JointTrajectoryModel::removeJointTrajectorySet(const boost::uuids::uuid& uuid)
 {
-  auto it = trajectory_sets_.find(key);
-  if (it == trajectory_sets_.end())
-    throw std::runtime_error("Tried to remove trajectory set '" + key.toStdString() + "' which does not exist!");
+  auto it = data_->trajectory_sets.find(uuid);
+  if (it == data_->trajectory_sets.end())
+    throw std::runtime_error("Tried to remove trajectory set '" + boost::uuids::to_string(uuid) +
+                             "' which does not exist!");
 
   QModelIndex idx = indexFromItem(it->second);
-  trajectory_sets_.erase(it);
+  data_->trajectory_sets.erase(it);
   removeRow(idx.row(), idx.parent());
 }
 
-bool JointTrajectoryModel::hasJointTrajectorySet(const QString& key)
+bool JointTrajectoryModel::hasJointTrajectorySet(const boost::uuids::uuid& uuid)
 {
-  return (trajectory_sets_.find(key) != trajectory_sets_.end());
+  return (data_->trajectory_sets.find(uuid) != data_->trajectory_sets.end());
 }
 
 JointTrajectoryStateItem* findJointStateItem(QStandardItem* item)
@@ -125,13 +153,32 @@ const tesseract_common::JointTrajectorySet& JointTrajectoryModel::getJointTrajec
   return findJointTrajectorySetItem(item)->trajectory_set;
 }
 
-std::pair<const QString&, const tesseract_common::JointTrajectorySet&>
-JointTrajectoryModel::getJointTrajectorySetDetails(const QModelIndex& row) const
+bool JointTrajectoryModel::eventFilter(QObject* obj, QEvent* event)
 {
-  QStandardItem* item = itemFromIndex(row);
-  JointTrajectorySetItem* jts_item = findJointTrajectorySetItem(item);
-  return std::pair<const QString&, const tesseract_common::JointTrajectorySet&>(jts_item->uuid,
-                                                                                jts_item->trajectory_set);
+  if (event->type() == events::JointTrajectoryAdd::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectoryAdd*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectoryAdd*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      addJointTrajectorySet(e->getJointTrajectory());
+  }
+  else if (event->type() == events::JointTrajectoryRemove::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectoryRemove*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectoryRemove*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      removeJointTrajectorySet(e->getUUID());
+  }
+  else if (event->type() == events::JointTrajectoryRemoveAll::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectoryRemoveAll*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectoryRemoveAll*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      clear();
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 
 }  // namespace tesseract_gui

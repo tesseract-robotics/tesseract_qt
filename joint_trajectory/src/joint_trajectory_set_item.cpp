@@ -29,24 +29,22 @@
 
 namespace tesseract_gui
 {
-JointTrajectorySetItem::JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getSetIcon(), "Trajectory Set"), uuid(std::move(uuid)), trajectory_set(trajectory_set)
+JointTrajectorySetItem::JointTrajectorySetItem(const tesseract_common::JointTrajectorySet& trajectory_set)
+  : QStandardItem(icons::getSetIcon(), "Trajectory Set"), trajectory_set(trajectory_set)
 {
   ctor();
 }
 
 JointTrajectorySetItem::JointTrajectorySetItem(const QString& text,
-                                               QString uuid,
                                                const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icons::getSetIcon(), text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
+  : QStandardItem(icons::getSetIcon(), text), trajectory_set(trajectory_set)
 {
   ctor();
 }
 JointTrajectorySetItem::JointTrajectorySetItem(const QIcon& icon,
                                                const QString& text,
-                                               QString uuid,
                                                const tesseract_common::JointTrajectorySet& trajectory_set)
-  : QStandardItem(icon, text), uuid(std::move(uuid)), trajectory_set(trajectory_set)
+  : QStandardItem(icon, text), trajectory_set(trajectory_set)
 {
   ctor();
 }

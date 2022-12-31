@@ -36,17 +36,13 @@ namespace tesseract_gui
 class JointTrajectorySetItem : public QStandardItem
 {
 public:
-  JointTrajectorySetItem(QString uuid, const tesseract_common::JointTrajectorySet& trajectory_set);
-  explicit JointTrajectorySetItem(const QString& text,
-                                  QString uuid,
-                                  const tesseract_common::JointTrajectorySet& trajectory_set);
+  JointTrajectorySetItem(const tesseract_common::JointTrajectorySet& trajectory_set);
+  explicit JointTrajectorySetItem(const QString& text, const tesseract_common::JointTrajectorySet& trajectory_set);
   JointTrajectorySetItem(const QIcon& icon,
                          const QString& text,
-                         QString uuid,
                          const tesseract_common::JointTrajectorySet& trajectory_set);
   int type() const override;
 
-  QString uuid;
   tesseract_common::JointTrajectorySet trajectory_set;
 
 private:

@@ -57,51 +57,62 @@ class Command;
 
 namespace tesseract_gui
 {
+class ComponentInfo;
 class JointTrajectoryModel;
 class JointTrajectoryPlotDialog;
 
-struct JointTrajectoryWidgetPrivate;
 class JointTrajectoryWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit JointTrajectoryWidget(QWidget* parent = nullptr, bool add_toolbar = true);
+  explicit JointTrajectoryWidget(QWidget* parent = nullptr);
+  explicit JointTrajectoryWidget(ComponentInfo component_info, QWidget* parent = nullptr);
   ~JointTrajectoryWidget();
 
-  void setModel(JointTrajectoryModel* model);
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
 
-  /**
-   * @brief Set the default environment to use if environment was not provided with the trajectory set
-   * @param env The default environment to use for trajectory set not containing an environment
-   */
-  void setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
+  void setModel(std::shared_ptr<JointTrajectoryModel> model);
+  std::shared_ptr<JointTrajectoryModel> getModel();
+  std::shared_ptr<const JointTrajectoryModel> getModel() const;
 
-  /**
-   * @brief Get the default environment
-   * @return The default environment
-   */
-  std::shared_ptr<const tesseract_environment::Environment> getDefaultEnvironment() const;
+  QItemSelectionModel& getSelectionModel();
+  const QItemSelectionModel& getSelectionModel() const;
 
-  /**
-   * @brief Add joint trajectory set
-   * @param trajectory_set The trajectory set associated with the key
-   * @return The key associated with added trajectory for removal
-   */
-  QString addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set);
+  //  void setModel(JointTrajectoryModel* model);
 
-  /**
-   * @brief Remove the joint trajectory set
-   * @param key The key associated with the joint trajectory set to be removed
-   */
-  void removeJointTrajectorySet(const QString& key);
+  //  /**
+  //   * @brief Set the default environment to use if environment was not provided with the trajectory set
+  //   * @param env The default environment to use for trajectory set not containing an environment
+  //   */
+  //  void setDefaultEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
 
-  /**
-   * @brief Check a trajectory set with the provided key exists
-   * @param key The key associated with the joint trajectory set to find
-   * @return True if a trajectory exists under the provided key, otherwise false
-   */
-  bool hasJointTrajectorySet(const QString& key);
+  //  /**
+  //   * @brief Get the default environment
+  //   * @return The default environment
+  //   */
+  //  std::shared_ptr<const tesseract_environment::Environment> getDefaultEnvironment() const;
+
+  //  /**
+  //   * @brief Add joint trajectory set
+  //   * @param trajectory_set The trajectory set associated with the key
+  //   * @return The key associated with added trajectory for removal
+  //   */
+  //  QString addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set);
+
+  //  /**
+  //   * @brief Remove the joint trajectory set
+  //   * @param key The key associated with the joint trajectory set to be removed
+  //   */
+  //  void removeJointTrajectorySet(const QString& key);
+
+  //  /**
+  //   * @brief Check a trajectory set with the provided key exists
+  //   * @param key The key associated with the joint trajectory set to find
+  //   * @return True if a trajectory exists under the provided key, otherwise false
+  //   */
+  //  bool hasJointTrajectorySet(const QString& key);
 
 Q_SIGNALS:
   void showJointState(const tesseract_common::JointState& state);
@@ -127,15 +138,18 @@ private Q_SLOTS:
   void onDisablePlayer();
 
 protected:
+  struct Implementation;
   std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
-  std::unique_ptr<JointTrajectoryWidgetPrivate> data_;
-  void createToolBar();
+  std::unique_ptr<Implementation> data_;
 
   const QString& getDefaultDirectory() const;
   void setDefaultDirectory(const QString& default_directory);
 
   bool saveJointTrajectorySet(QString filename, const QString& suffix);
   bool openJointTrajectorySet(const QString& filename, const QString& suffix);
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui

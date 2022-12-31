@@ -45,6 +45,7 @@ add_library(
   src/events/environment_events.cpp
   src/events/group_joint_states_events.cpp
   src/events/group_tcps_events.cpp
+  src/events/joint_trajectory_events.cpp
   src/events/kinematic_groups_events.cpp
   src/events/scene_graph_events.cpp
   src/events/tool_path_events.cpp

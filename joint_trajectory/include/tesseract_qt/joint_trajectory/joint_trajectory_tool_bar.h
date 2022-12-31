@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
-#define TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
+#ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_TOOL_BAR_H
+#define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_TOOL_BAR_H
 
 #include <QToolBar>
 #include <memory>
@@ -29,17 +29,20 @@
 namespace tesseract_gui
 {
 struct ComponentInfo;
-class ToolPathToolBar : public QToolBar
+class JointTrajectoryToolBar : public QToolBar
 {
   Q_OBJECT
 public:
-  explicit ToolPathToolBar(QWidget* parent = nullptr);
-  explicit ToolPathToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~ToolPathToolBar();
+  explicit JointTrajectoryToolBar(QWidget* parent = nullptr);
+  explicit JointTrajectoryToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~JointTrajectoryToolBar();
 
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H
+#endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_TOOL_BAR_H

@@ -72,6 +72,12 @@ public:
                      tesseract_environment::Commands commands,
                      std::string description = "");
 
+  /** @brief Get the uuid */
+  boost::uuids::uuid getUUID() const;
+
+  /** @brief Regenerate uuid */
+  void regenerateUUID();
+
   /**
    * @brief Append a Joint Trajectory
    * @brief This will adjust the time because each trajectory most likely starts from zero
@@ -169,6 +175,9 @@ private:
 
   /** @brief The namespace associated with the trajectory set */
   std::string ns_{ "general" };
+
+  /** @brief The trajectory set uuid */
+  boost::uuids::uuid uuid_{};
 
   /**
    * @brief Append a joint state to the end
