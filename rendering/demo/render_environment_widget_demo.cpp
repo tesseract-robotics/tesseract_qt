@@ -38,6 +38,9 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/scene_graph/scene_graph_tool_bar.h>
 
+#include <tesseract_qt/tool_path/tool_path_tool_bar.h>
+#include <tesseract_qt/tool_path/tool_path_widget.h>
+
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/tool_path.h>
@@ -81,9 +84,6 @@ int main(int argc, char** argv)
   env->init(urdf_path, srdf_path, locator);
 
   tesseract_gui::ComponentInfo component_info(env->getName());
-  auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
-  auto render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
-  render_widget->setSkyEnabled(true);
 
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
   tesseract_gui::SceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
@@ -91,11 +91,21 @@ int main(int argc, char** argv)
 
   QMainWindow window;
   window.addToolBar(new tesseract_gui::SceneGraphToolBar(component_info));
+  window.addToolBar(new tesseract_gui::ToolPathToolBar(component_info));
+
+  auto render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
+  render_widget->setSkyEnabled(true);
   window.setCentralWidget(render_widget);
 
+  auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
   auto* dw = new QDockWidget();
   dw->setWidget(env_widget);
   window.addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dw);
+
+  auto* tool_path_widget = new tesseract_gui::ToolPathWidget(component_info);
+  auto* dw2 = new QDockWidget();
+  dw2->setWidget(tool_path_widget);
+  window.addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dw2);
 
   window.resize(1200, 800);
   window.show();
