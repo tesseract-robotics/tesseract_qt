@@ -23,13 +23,13 @@
 #include <tesseract_qt/planning/task_composer_node_info_standard_item.h>
 #include <tesseract_qt/planning/task_composer_standard_item_utils.h>
 
-#include <tesseract_qt/command_language/composite_instruction_standard_item.h>
-#include <tesseract_qt/command_language/null_instruction_standard_item.h>
-#include <tesseract_qt/command_language/instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/null_instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/instruction_standard_item.h>
 
-#include <tesseract_qt/scene_graph/scene_state_standard_item.h>
+#include <tesseract_qt/scene_graph/models/scene_state_standard_item.h>
 
-#include <tesseract_qt/environment/environment_commands_standard_item.h>
+#include <tesseract_qt/environment/models/environment_commands_standard_item.h>
 
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/standard_item_utils.h>

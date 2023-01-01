@@ -28,9 +28,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QVBoxLayout>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/tool_path/tool_path_widget.h>
-#include <tesseract_qt/tool_path/tool_path_selection_model.h>
-#include <tesseract_qt/tool_path/tool_path_tool_bar.h>
+#include <tesseract_qt/tool_path/widgets/tool_path_widget.h>
+#include <tesseract_qt/tool_path/widgets/tool_path_tool_bar.h>
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/component_info.h>

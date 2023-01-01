@@ -36,7 +36,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/rendering/render_widget.h>
 #include <tesseract_qt/rendering/scene_graph_render_manager.h>
 
-#include <tesseract_qt/environment/environment_widget.h>
+#include <tesseract_qt/environment/widgets/environment_widget.h>
 #include <tesseract_qt/environment/environment_wrappers.h>
 
 #include <tesseract_qt/common/entity_manager.h>

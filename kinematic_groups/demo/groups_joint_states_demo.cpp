@@ -25,7 +25,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/kinematic_groups/group_joint_states_editor_widget.h>
+#include <tesseract_qt/kinematic_groups/widgets/group_joint_states_editor_widget.h>
 
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>

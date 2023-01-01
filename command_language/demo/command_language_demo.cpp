@@ -28,7 +28,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <sstream>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/command_language/composite_instruction_widget.h>
+#include <tesseract_qt/command_language/widgets/composite_instruction_widget.h>
 #include <tesseract_qt/common/events/command_language_events.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/tree_view.h>

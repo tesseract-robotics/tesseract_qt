@@ -26,7 +26,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QStandardItemModel>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h>
+#include <tesseract_qt/kinematic_groups/widgets/kinematic_groups_editor_widget.h>
 #include <QStringListModel>
 
 int main(int argc, char** argv)

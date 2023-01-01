@@ -25,7 +25,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/environment/environment_widget.h>
+#include <tesseract_qt/environment/widgets/environment_widget.h>
 #include <tesseract_qt/environment/environment_wrappers.h>
 
 #include <tesseract_qt/common/component_info.h>

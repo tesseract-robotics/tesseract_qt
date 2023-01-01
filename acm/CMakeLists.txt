@@ -6,9 +6,9 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(ACM_MODEL_headers_MOC include/tesseract_qt/acm/allowed_collision_matrix_model.h)
+qt5_wrap_cpp(ACM_MODEL_headers_MOC include/tesseract_qt/acm/models/allowed_collision_matrix_model.h)
 
-add_library(${PROJECT_NAME}_acm_models SHARED ${ACM_MODEL_headers_MOC} src/allowed_collision_matrix_model.cpp)
+add_library(${PROJECT_NAME}_acm_models SHARED ${ACM_MODEL_headers_MOC} src/models/allowed_collision_matrix_model.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_acm_models
@@ -23,20 +23,20 @@ target_include_directories(
 
 qt5_wrap_cpp(
   ACM_WIDGET_headers_MOC
-  include/tesseract_qt/acm/allowed_collision_matrix_widget.h
-  include/tesseract_qt/acm/allowed_collision_matrix_editor_widget.h
-  include/tesseract_qt/acm/add_allowed_collision_entry_dialog.h)
+  include/tesseract_qt/acm/widgets/allowed_collision_matrix_widget.h
+  include/tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.h
+  include/tesseract_qt/acm/widgets/add_allowed_collision_entry_dialog.h)
 
-qt5_wrap_ui(ACM_WIDGET_headers_UI include/tesseract_qt/acm/allowed_collision_matrix_editor_widget.ui
-            include/tesseract_qt/acm/add_allowed_collision_entry_dialog.ui)
+qt5_wrap_ui(ACM_WIDGET_headers_UI include/tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.ui
+            include/tesseract_qt/acm/widgets/add_allowed_collision_entry_dialog.ui)
 
 add_library(
   ${PROJECT_NAME}_acm_widgets SHARED
   ${ACM_WIDGET_headers_MOC}
   ${ACM_WIDGET_headers_UI}
-  src/allowed_collision_matrix_widget.cpp
-  src/allowed_collision_matrix_editor_widget.cpp
-  src/add_allowed_collision_entry_dialog.cpp)
+  src/widgets/allowed_collision_matrix_widget.cpp
+  src/widgets/allowed_collision_matrix_editor_widget.cpp
+  src/widgets/add_allowed_collision_entry_dialog.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_acm_widgets

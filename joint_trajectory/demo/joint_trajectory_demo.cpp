@@ -30,8 +30,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
 
-#include <tesseract_qt/joint_trajectory/joint_trajectory_model.h>
-#include <tesseract_qt/joint_trajectory/joint_trajectory_widget.h>
+#include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h>
 
 int main(int argc, char** argv)
 {

@@ -34,10 +34,10 @@
 #include <QFileDialog>
 #include <QStatusBar>
 
-#include <tesseract_qt/acm/allowed_collision_matrix_model.h>
-#include <tesseract_qt/kinematic_groups/kinematic_groups_model.h>
-#include <tesseract_qt/kinematic_groups/group_joint_states_model.h>
-#include <tesseract_qt/kinematic_groups/group_tcps_model.h>
+#include <tesseract_qt/acm/models/allowed_collision_matrix_model.h>
+#include <tesseract_qt/kinematic_groups/models/kinematic_groups_model.h>
+#include <tesseract_qt/kinematic_groups/models/group_joint_states_model.h>
+#include <tesseract_qt/kinematic_groups/models/group_tcps_model.h>
 
 #include <tesseract_qt/common/events/group_tcps_events.h>
 #include <tesseract_qt/common/events/group_joint_states_events.h>

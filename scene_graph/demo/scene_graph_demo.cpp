@@ -28,9 +28,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QDebug>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/scene_graph/scene_graph_model.h>
-#include <tesseract_qt/scene_graph/scene_graph_standard_item.h>
-#include <tesseract_qt/scene_graph/scene_graph_tool_bar.h>
+#include <tesseract_qt/scene_graph/widgets/scene_graph_widget.h>
+#include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/tree_view.h>
@@ -49,17 +48,13 @@ int main(int argc, char** argv)
   auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
 
   tesseract_gui::ComponentInfo component_info{ "scene_name" };
-  auto* model = new tesseract_gui::SceneGraphModel(component_info);
-
-  auto* scene_graph_widget = new tesseract_gui::TreeView();
-  scene_graph_widget->setModel(model);
 
   QWidget widget;
   auto layout = new QVBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
   layout->addWidget(new tesseract_gui::SceneGraphToolBar(component_info));
-  layout->addWidget(scene_graph_widget, 1);
+  layout->addWidget(new tesseract_gui::SceneGraphWidget(component_info), 1);
   widget.setLayout(layout);
   widget.show();
 
