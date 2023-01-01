@@ -68,19 +68,6 @@ SceneGraphToolBar::~SceneGraphToolBar() = default;
 void SceneGraphToolBar::ctor(ComponentInfo component_info)
 {
   data_->component_info = component_info;
-  //  data_->remove_all = addAction(icons::getClearIcon(), "Remove All", [scene_name]() {
-  //    QApplication::sendEvent(qApp, new events::ToolPathRemoveAll(scene_name));
-  //  });
-  //  data_->remove_selected = addAction(icons::getTrashIcon(), "Remove Selected", [scene_name]() {
-  //    QApplication::sendEvent(qApp, new events::ToolPathRemoveSelected(scene_name));
-  //  });
-  //  addSeparator();
-  //  data_->hide_all = addAction(icons::getToolPathHideIcon(), "Hide All", [scene_name]() {
-  //    QApplication::sendEvent(qApp, new events::ToolPathHideAll(scene_name));
-  //  });
-  //  data_->show_all = addAction(icons::getToolPathShowIcon(), "Show All", [scene_name]() {
-  //    QApplication::sendEvent(qApp, new events::ToolPathShowAll(scene_name));
-  //  });
   data_->show_all_links_action = addAction(icons::getShowAllLinksIcon(), "Show All Links", [component_info]() {
     QApplication::sendEvent(
         qApp, new events::SceneGraphModifyLinkVisibilityALL(component_info, LinkVisibilityFlags::LINK, true));

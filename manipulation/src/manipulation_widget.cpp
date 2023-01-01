@@ -214,6 +214,7 @@ void ManipulationWidget::onShowAllLinks()
 
   emit linkVisibilityChanged(link_names);
 }
+
 void ManipulationWidget::onHideAllLinks()
 {
   std::vector<std::string> link_names;
@@ -227,6 +228,7 @@ void ManipulationWidget::onHideAllLinks()
 
   emit linkVisibilityChanged(link_names);
 }
+
 void ManipulationWidget::onShowVisualAllLinks()
 {
   std::vector<std::string> link_names;

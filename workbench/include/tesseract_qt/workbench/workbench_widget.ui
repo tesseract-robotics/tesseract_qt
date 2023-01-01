@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WorkbenchWidget</class>
  <widget class="QWidget" name="WorkbenchWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>369</width>
+    <height>73</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
     <horstretch>0</horstretch>

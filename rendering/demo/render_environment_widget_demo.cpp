@@ -24,7 +24,8 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QDebug>
-#include <QHBoxLayout>
+#include <QMainWindow>
+#include <QDockWidget>
 #include <memory>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
@@ -34,6 +35,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/environment/environment_widget.h>
 #include <tesseract_qt/environment/environment_wrappers.h>
+
+#include <tesseract_qt/scene_graph/scene_graph_tool_bar.h>
 
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/environment_manager.h>
@@ -86,16 +89,16 @@ int main(int argc, char** argv)
   tesseract_gui::SceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
   tesseract_gui::ToolPathRenderManager tool_path_manager(component_info, entity_manager);
 
-  QWidget widget;
-  auto layout = new QHBoxLayout();
-  layout->setMargin(0);
-  layout->setSpacing(0);
-  layout->addWidget(env_widget);
-  layout->addWidget(render_widget, 1);
-  widget.setLayout(layout);
+  QMainWindow window;
+  window.addToolBar(new tesseract_gui::SceneGraphToolBar(component_info));
+  window.setCentralWidget(render_widget);
 
-  widget.resize(1200, 800);
-  widget.show();
+  auto* dw = new QDockWidget();
+  dw->setWidget(env_widget);
+  window.addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dw);
+
+  window.resize(1200, 800);
+  window.show();
 
   tesseract_gui::EnvironmentManager::set(
       std::make_shared<tesseract_gui::DefaultEnvironmentWrapper>(component_info, env));

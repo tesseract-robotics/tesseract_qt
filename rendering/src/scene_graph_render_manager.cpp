@@ -379,27 +379,42 @@ void SceneGraphRenderManager::render()
         std::vector<std::string> sub_ns = getNamespaces(ns.first);
         if (sub_ns.size() == 2)
         {
-          if (sub_ns[1] == "Visuals" && e.getVisibilityFlags() & LinkVisibilityFlags::VISUAL)
+          if (sub_ns[1] == "Visuals" || sub_ns[1] == "Collisions")
           {
             auto link_entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, sub_ns[0]);
             auto link_visual_node = scene->VisualById(link_entity.id);
-            if (e.visible())
-              link_visual_node->SetUserData(USER_VISIBILITY, e.visible());
 
-            auto node = scene->VisualById(ns.second.id);
-            node->SetUserData(USER_VISIBILITY, e.visible());
-            node->SetVisible(e.visible());
-          }
-          else if (sub_ns[1] == "Collisions" && e.getVisibilityFlags() & LinkVisibilityFlags::COLLISION)
-          {
-            auto link_entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, sub_ns[0]);
-            auto link_visual_node = scene->VisualById(link_entity.id);
-            if (e.visible())
+            if (e.getVisibilityFlags() & LinkVisibilityFlags::LINK)
+            {
               link_visual_node->SetUserData(USER_VISIBILITY, e.visible());
+              bool link_visible = std::get<bool>(link_visual_node->UserData(USER_VISIBILITY));
 
-            auto node = scene->VisualById(ns.second.id);
-            node->SetUserData(USER_VISIBILITY, e.visible());
-            node->SetVisible(e.visible());
+              auto node = scene->VisualById(ns.second.id);
+              bool visible = std::get<bool>(node->UserData(USER_VISIBILITY));
+              node->SetVisible(link_visible & visible);
+            }
+
+            if (sub_ns[1] == "Visuals" && e.getVisibilityFlags() & LinkVisibilityFlags::VISUAL)
+            {
+              if (e.visible())
+                link_visual_node->SetUserData(USER_VISIBILITY, e.visible());
+
+              bool link_visible = std::get<bool>(link_visual_node->UserData(USER_VISIBILITY));
+              auto node = scene->VisualById(ns.second.id);
+              node->SetUserData(USER_VISIBILITY, e.visible());
+              node->SetVisible(link_visible && e.visible());
+            }
+
+            if (sub_ns[1] == "Collisions" && e.getVisibilityFlags() & LinkVisibilityFlags::COLLISION)
+            {
+              if (e.visible())
+                link_visual_node->SetUserData(USER_VISIBILITY, e.visible());
+
+              bool link_visible = std::get<bool>(link_visual_node->UserData(USER_VISIBILITY));
+              auto node = scene->VisualById(ns.second.id);
+              node->SetUserData(USER_VISIBILITY, e.visible());
+              node->SetVisible(link_visible && e.visible());
+            }
           }
           else if (sub_ns[1] == "Axis" && e.getVisibilityFlags() & LinkVisibilityFlags::AXIS)
           {
