@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>301</height>
+    <height>637</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -221,11 +221,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TreeView" name="state_tree_view">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <widget class="tesseract_gui::SceneStateWidget" name="state_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -234,11 +230,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>tesseract_gui::TreeView</class>
-   <extends>QTreeView</extends>
-   <header>tesseract_qt/common/tree_view.h</header>
-  </customwidget>
   <customwidget>
    <class>tesseract_gui::JointStateSliderWidget</class>
    <extends>QWidget</extends>
@@ -249,6 +240,12 @@
    <class>tesseract_gui::CartesianEditorWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/common/cartesian_editor_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::SceneStateWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/scene_graph/widgets/scene_state_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

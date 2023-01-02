@@ -55,14 +55,14 @@ enum class ManipulationStateType : int
   END
 };
 
-struct LinkVisibilityProperties;
-struct ManipulationWidgetImpl;
+class ComponentInfo;
 class ManipulationWidget : public QWidget
 {
   Q_OBJECT
 
 public:
   explicit ManipulationWidget(bool single_state = true, QWidget* parent = nullptr);
+  explicit ManipulationWidget(ComponentInfo component_info, bool single_state = true, QWidget* parent = nullptr);
   ~ManipulationWidget();
 
   /**
@@ -77,19 +77,6 @@ public:
    * @return The number of state
    */
   int getStateCount() const;
-
-  /**
-   * @brief Set the environment
-   * @param env The environment
-   */
-  void setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
-
-  /**
-   * @brief Get the environment
-   * @return The environment
-   */
-  std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const;
-  const tesseract_environment::Environment& environment() const;
 
   /**
    * @brief Get the kinematic group
@@ -187,33 +174,13 @@ public:
    */
   Eigen::VectorXd getActiveJointValues() const;
 
-  /** @brief Get the link visibility properties */
-  const std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties() const;
-  std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties();
-
 Q_SIGNALS:
-  void environmentSet(const std::shared_ptr<const tesseract_environment::Environment>& env);
-  void linkVisibilityChanged(const std::vector<std::string>& links);
   void manipulationStateChanged(const tesseract_scene_graph::SceneState& state, int state_index);
   void groupNameChanged(const QString& group_name);
   void modeChanged(int mode);
   void workingFrameChanged(const QString& working_frame_name);
   void tcpNameChanged(const QString& tcp_name);
   void tcpOffsetNameChanged(const QString& tcp_offset_name);
-
-public Q_SLOTS:
-  virtual void onRender(float dt);
-  virtual void onShowAllLinks();
-  virtual void onHideAllLinks();
-  virtual void onShowVisualAllLinks();
-  virtual void onHideVisualAllLinks();
-  virtual void onShowCollisionAllLinks();
-  virtual void onHideCollisionAllLinks();
-  virtual void onShowAxisAllLinks();
-  virtual void onHideAxisAllLinks();
-  virtual void onSelectAllLinks();
-  virtual void onDeselectAllLinks();
-  virtual void onEnable();
 
 private Q_SLOTS:
   void onGroupNameChanged();
@@ -227,10 +194,9 @@ private Q_SLOTS:
   void onReset();
 
 private:
+  struct Implementation;
   std::unique_ptr<Ui::ManipulationWidget> ui;
-  std::unique_ptr<ManipulationWidgetImpl> data_;
-
-  void addToolBar();
+  std::unique_ptr<Implementation> data_;
 
   tesseract_scene_graph::SceneState getReducedSceneState(const tesseract_scene_graph::SceneState& scene_state);
 };
