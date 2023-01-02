@@ -80,13 +80,12 @@ public:
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
 
-Q_SIGNALS:
-  void showJointState(const tesseract_common::JointState& state);
-  void configureJointTrajectorySet(const tesseract_common::JointTrajectorySet& joint_trajectory_set);
+  const QString& getDefaultDirectory() const;
+  void setDefaultDirectory(const QString& default_directory);
 
 private Q_SLOTS:
-  void onOpen();
-  void onSave();
+  void onSaveFinished(int results);
+  void onOpenFinished(int results);
   void onRemove();
   void onPlot();
   void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
@@ -101,12 +100,6 @@ protected:
   struct Implementation;
   std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
   std::unique_ptr<Implementation> data_;
-
-  const QString& getDefaultDirectory() const;
-  void setDefaultDirectory(const QString& default_directory);
-
-  bool saveJointTrajectorySet(QString filename, const QString& suffix);
-  bool openJointTrajectorySet(const QString& filename, const QString& suffix);
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

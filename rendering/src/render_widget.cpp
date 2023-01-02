@@ -547,7 +547,7 @@ RenderWidget::RenderWidget(const std::string& scene_name, QWidget* parent)
   data_->view_controller = std::make_shared<InteractiveViewControl>(scene_name);
 
   // This is critical to sync the monitor refresh with rendering of the widget
-  connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
+  connect(this, SIGNAL(frameSwapped()), this, SLOT(onFrameSwapped()));
 }
 
 /////////////////////////////////////////////////
@@ -790,6 +790,16 @@ void RenderWidget::onHovered(int mouse_x, int mouse_y) { data_->renderer.newHove
 void RenderWidget::onDropped(const QString& drop, int mouse_x, int mouse_y)
 {
   data_->renderer.newDropEvent(drop.toStdString(), { mouse_x, mouse_y });
+}
+
+/////////////////////////////////////////////////
+
+void RenderWidget::onFrameSwapped()
+{
+  // Weird issue between QFileDialog and update being called, QFileDialogs are launched as application modality and this
+  // check was added to prevent the issue.
+  if (QApplication::activeModalWidget() == nullptr)
+    update();
 }
 
 /////////////////////////////////////////////////

@@ -25,6 +25,7 @@
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h>
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_set_item.h>
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_model.h>
+#include <tesseract_qt/joint_trajectory/models/joint_trajectory_utils.h>
 
 #include <tesseract_qt/plot/transforms/first_derivative.h>
 #include <tesseract_qt/plot/transforms/integral_transform.h>
@@ -34,23 +35,20 @@
 #include <tesseract_qt/plot/transforms/scale_transform.h>
 
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
 
 #include <tesseract_common/joint_state.h>
-#include <tesseract_common/serialization.h>
 #include <tesseract_visualization/trajectory_player.h>
-#include <tesseract_command_language/poly/instruction_poly.h>
-#include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/utils.h>
+#include <tesseract_state_solver/state_solver.h>
 
 #include <QTimer>
-#include <QToolBar>
 #include <QFileDialog>
-#include <QFileInfo>
-#include <QSettings>
 #include <set>
 
 const double SLIDER_RESOLUTION = 0.001;
@@ -59,15 +57,24 @@ namespace tesseract_gui
 {
 struct JointTrajectoryWidget::Implementation
 {
-  ComponentInfo component_info;
   std::shared_ptr<JointTrajectoryModel> model;
   std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player;
   std::unique_ptr<QTimer> player_timer;
   std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog;
+
+  QString default_directory;
+
+  std::unique_ptr<QFileDialog> open_dialog;
+  QStringList open_dialog_filters;
+  QStringList open_dialog_ext;
+
+  std::unique_ptr<QFileDialog> save_dialog;
+  QStringList save_dialog_filters;
+
   double current_duration{ 0 };
   tesseract_common::JointTrajectoryInfo current_trajectory;
 
-  QString default_directory;
+  tesseract_scene_graph::StateSolver::UPtr state_solver;
 
   // Store the selected item
   QStandardItem* selected_item;
@@ -80,10 +87,11 @@ JointTrajectoryWidget::JointTrajectoryWidget(ComponentInfo component_info, QWidg
 {
   ui_->setupUi(this);
 
-  data_->component_info = std::move(component_info);
+  // Set component information
+  setComponentInfo(component_info);
 
   QSettings ms;
-  ms.beginGroup("JointTrajectoryWidget");
+  ms.beginGroup("JointTrajectoryWidgets");
   data_->default_directory =
       ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
   ms.endGroup();
@@ -103,6 +111,39 @@ JointTrajectoryWidget::JointTrajectoryWidget(ComponentInfo component_info, QWidg
   TransformFactory::registerTransform<MovingRMS>();
   TransformFactory::registerTransform<OutlierRemovalFilter>();
   TransformFactory::registerTransform<ScaleTransform>();
+
+  {  // Setup open dialog
+    data_->open_dialog_filters.append("Joint Trajectory Set XML (*.jtsx)");
+    data_->open_dialog_filters.append("Joint Trajectory Set Binary (*.jtsb)");
+    data_->open_dialog_filters.append("Composite Instruction XML (*.cpix)");
+    data_->open_dialog_filters.append("Composite Instruction Binary (*.cpib)");
+
+    data_->open_dialog_ext.append("jtsx");
+    data_->open_dialog_ext.append("jtsb");
+    data_->open_dialog_ext.append("cpix");
+    data_->open_dialog_ext.append("cpib");
+
+    data_->open_dialog = std::make_unique<QFileDialog>(nullptr, "Open Joint Trajectory Set", data_->default_directory);
+    data_->open_dialog->setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+    data_->open_dialog->setModal(true);
+    data_->open_dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    data_->open_dialog->setNameFilters(data_->open_dialog_filters);
+
+    connect(data_->open_dialog.get(), SIGNAL(finished(int)), this, SLOT(onOpenFinished(int)));
+  }
+
+  {  // Setup save dialog
+    data_->save_dialog_filters.append("Joint Trajectory Set XML (*.jtsx)");
+    data_->save_dialog_filters.append("Joint Trajectory Set Binary (*.jtsb)");
+
+    data_->save_dialog = std::make_unique<QFileDialog>(nullptr, "Save Joint Trajectory Set", data_->default_directory);
+    data_->save_dialog->setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+    data_->save_dialog->setModal(true);
+    data_->save_dialog->setAcceptMode(QFileDialog::AcceptSave);
+    data_->save_dialog->setNameFilters(data_->save_dialog_filters);
+
+    connect(data_->save_dialog.get(), SIGNAL(finished(int)), this, SLOT(onSaveFinished(int)));
+  }
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
@@ -149,136 +190,37 @@ const QItemSelectionModel& JointTrajectoryWidget::getSelectionModel() const
   return *ui_->trajectoryTreeView->selectionModel();
 }
 
-void JointTrajectoryWidget::onOpen()
+const QString& JointTrajectoryWidget::getDefaultDirectory() const { return data_->default_directory; }
+void JointTrajectoryWidget::setDefaultDirectory(const QString& default_directory)
 {
-  QStringList filters;
-  filters.append("Joint Trajectory Set XML (*.jtsx)");
-  filters.append("Joint Trajectory Set Binary (*.jtsb)");
-  filters.append("Composite Instruction XML (*.cpix)");
-  filters.append("Composite Instruction Binary (*.cpib)");
-
-  QStringList ext;
-  ext.append("jtsx");
-  ext.append("jtsb");
-  ext.append("cpix");
-  ext.append("cpib");
-
-  QFileDialog dialog(this, "Open Joint Trajectory Set", data_->default_directory);
-  dialog.setAcceptMode(QFileDialog::AcceptOpen);
-  dialog.setNameFilters(filters);
-  if (dialog.exec() == 1)
-  {
-    int idx = filters.indexOf(dialog.selectedNameFilter());
-    data_->default_directory = QFileInfo(dialog.selectedFiles()[0]).absoluteDir().path();
-    openJointTrajectorySet(dialog.selectedFiles()[0], ext[idx]);
-  }
+  data_->default_directory = default_directory;
 }
 
-void JointTrajectoryWidget::onSave()
+void JointTrajectoryWidget::onSaveFinished(int results)
 {
-  if (data_->selected_item != nullptr &&
-      data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
+  if (results == 1)
   {
-    QList<QString> filters;
-    filters.append("Joint Trajectory Set XML (*.jtsx)");
-    filters.append("Joint Trajectory Set Binary (*.jtsb)");
-    QFileDialog dialog(this, "Save Joint Trajectory Set", data_->default_directory);
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setNameFilters(filters);
-    if (dialog.exec() == 1)
-    {
-      data_->default_directory = QFileInfo(dialog.selectedFiles()[0]).absoluteDir().path();
-      saveJointTrajectorySet(dialog.selectedFiles()[0], (dialog.selectedNameFilter() == filters[0]) ? "jtsx" : "jtsb");
-    }
+    tesseract_common::JointTrajectorySet jts =
+        dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->trajectory_set;
+    data_->default_directory = QFileInfo(data_->save_dialog->selectedFiles()[0]).absoluteDir().path();
+    saveJointTrajectorySet(jts,
+                           data_->save_dialog->selectedFiles()[0],
+                           (data_->save_dialog->selectedNameFilter() == data_->save_dialog_filters[0]) ? "jtsx" :
+                                                                                                         "jtsb");
   }
+
+  setEnabled(true);
 }
 
-bool JointTrajectoryWidget::saveJointTrajectorySet(QString filename, const QString& suffix)
+void JointTrajectoryWidget::onOpenFinished(int results)
 {
-  auto* item = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item);
-  QFileInfo file_info(filename);
-  if (suffix == "jtsx")
+  if (results == 1)
   {
-    if (file_info.suffix() != "jtsx")
-      filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".jtsx";
-
-    tesseract_common::Serialization::toArchiveFileXML<tesseract_common::JointTrajectorySet>(item->trajectory_set,
-                                                                                            filename.toStdString());
-    return true;
+    int idx = data_->open_dialog_filters.indexOf(data_->open_dialog->selectedNameFilter());
+    data_->default_directory = QFileInfo(data_->open_dialog->selectedFiles()[0]).absoluteDir().path();
+    openJointTrajectorySet(
+        data_->model->getComponentInfo(), data_->open_dialog->selectedFiles()[0], data_->open_dialog_ext[idx]);
   }
-
-  if (suffix == "jtsb")
-  {
-    if (file_info.suffix() != "jtsb")
-      filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".jtsb";
-
-    tesseract_common::Serialization::toArchiveFileBinary<tesseract_common::JointTrajectorySet>(item->trajectory_set,
-                                                                                               filename.toStdString());
-    return true;
-  }
-
-  return false;
-}
-
-bool JointTrajectoryWidget::openJointTrajectorySet(const QString& filename, const QString& suffix)
-{
-  QFileInfo file_info(filename);
-  tesseract_common::JointTrajectorySet joint_trajectory_set;
-  if (suffix == "jtsx" && file_info.suffix() == "jtsx")
-  {
-    auto jts = tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::JointTrajectorySet>(
-        filename.toStdString());
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
-    return true;
-  }
-
-  if (suffix == "jtsb" && file_info.suffix() == "jtsb")
-  {
-    auto jts = tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::JointTrajectorySet>(
-        filename.toStdString());
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
-    return true;
-  }
-
-  if (suffix == "cpix" && file_info.suffix() == "cpix")
-  {
-    auto cpi =
-        tesseract_common::Serialization::fromArchiveFileXML<tesseract_planning::InstructionPoly>(filename.toStdString())
-            .as<tesseract_planning::CompositeInstruction>();
-    tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
-    if (jt.empty())
-      return false;
-
-    std::unordered_map<std::string, double> initial_state;
-    for (std::size_t i = 0; i < jt.states.front().joint_names.size(); ++i)
-      initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
-
-    tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
-    jts.appendJointTrajectory(jt);
-
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
-    return true;
-  }
-
-  if (suffix == "cpib" && file_info.suffix() == "cpib")
-  {
-    auto cpi = tesseract_common::Serialization::fromArchiveFileBinary<tesseract_planning::InstructionPoly>(
-                   filename.toStdString())
-                   .as<tesseract_planning::CompositeInstruction>();
-    tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
-    if (jt.empty())
-      return false;
-
-    std::unordered_map<std::string, double> initial_state;
-    for (std::size_t i = 0; i < jt.states.front().joint_names.size(); ++i)
-      initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
-
-    tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(data_->component_info, std::move(jts)));
-    return true;
-  }
-
-  return false;
 }
 
 void JointTrajectoryWidget::onRemove()
@@ -287,7 +229,7 @@ void JointTrajectoryWidget::onRemove()
       data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
   {
     boost::uuids::uuid uuid = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->trajectory_set.getUUID();
-    QApplication::sendEvent(qApp, new events::JointTrajectoryRemove(data_->component_info, uuid));
+    QApplication::sendEvent(qApp, new events::JointTrajectoryRemove(data_->model->getComponentInfo(), uuid));
     data_->selected_item = nullptr;
     onDisablePlayer();
   }
@@ -313,7 +255,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
   {
     case static_cast<int>(StandardItemType::COMMON_NAMESPACE):
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
       event->save_enabled = false;
       event->remove_enabled = false;
       event->plot_enabled = false;
@@ -323,16 +265,22 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
       event->save_enabled = false;
       event->remove_enabled = false;
       event->plot_enabled = true;
       QApplication::sendEvent(qApp, event);
 
       data_->current_trajectory = data_->model->getJointTrajectory(current_index);
-      auto jts = data_->model->getJointTrajectorySet(current_index);
 
-      emit configureJointTrajectorySet(jts);
+      auto jts = data_->model->getJointTrajectorySet(current_index);
+      if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+      {
+        data_->state_solver = jts.getEnvironment()->getStateSolver();
+        auto env_wrapper =
+            std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
+        EnvironmentManager::set(env_wrapper);
+      }
 
       data_->player->setTrajectory(data_->current_trajectory.second);
 
@@ -343,14 +291,21 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET):
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
       event->save_enabled = true;
       event->remove_enabled = true;
       event->plot_enabled = true;
       QApplication::sendEvent(qApp, event);
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
-      emit configureJointTrajectorySet(jts);
+
+      if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+      {
+        data_->state_solver = jts.getEnvironment()->getStateSolver();
+        auto env_wrapper =
+            std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
+        EnvironmentManager::set(env_wrapper);
+      }
 
       data_->current_trajectory = tesseract_common::JointTrajectoryInfo();
       data_->current_trajectory.first = jts.getInitialState();
@@ -367,7 +322,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     default:
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->component_info);
+      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
       event->save_enabled = false;
       event->remove_enabled = false;
       event->plot_enabled = false;
@@ -375,8 +330,18 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       const tesseract_common::JointState& state = data_->model->getJointState(current_index);
       auto jts = data_->model->getJointTrajectorySet(current_index);
-      emit configureJointTrajectorySet(jts);
-      emit showJointState(state);
+
+      if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+      {
+        auto env_wrapper =
+            std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
+        EnvironmentManager::set(env_wrapper);
+
+        data_->state_solver = jts.getEnvironment()->getStateSolver();
+        auto scene_state = data_->state_solver->getState(state.joint_names, state.position);
+        QApplication::sendEvent(qApp, new events::SceneStateChanged(data_->model->getComponentInfo(), scene_state));
+      }
+
       break;
     }
   }
@@ -412,7 +377,9 @@ void JointTrajectoryWidget::onSliderValueChanged(int value)
   data_->current_duration = value * SLIDER_RESOLUTION;
   tesseract_common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
-  emit showJointState(state);
+
+  auto scene_state = data_->state_solver->getState(state.joint_names, state.position);
+  QApplication::sendEvent(qApp, new events::SceneStateChanged(data_->model->getComponentInfo(), scene_state));
 }
 
 void JointTrajectoryWidget::onEnablePlayer()
@@ -430,12 +397,6 @@ void JointTrajectoryWidget::onEnablePlayer()
 
 void JointTrajectoryWidget::onDisablePlayer() { ui_->trajectoryPlayerFrame->setEnabled(false); }
 
-const QString& JointTrajectoryWidget::getDefaultDirectory() const { return data_->default_directory; }
-void JointTrajectoryWidget::setDefaultDirectory(const QString& default_directory)
-{
-  data_->default_directory = default_directory;
-}
-
 // Documentation inherited
 bool JointTrajectoryWidget::eventFilter(QObject* obj, QEvent* event)
 {
@@ -443,30 +404,46 @@ bool JointTrajectoryWidget::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::JointTrajectoryOpen*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryOpen*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      onOpen();
+    if (e->getComponentInfo() == data_->model->getComponentInfo())
+    {
+      data_->open_dialog->show();
+      data_->open_dialog->raise();
+      data_->open_dialog->activateWindow();
+    }
   }
   else if (event->type() == events::JointTrajectorySave::kType)
   {
     assert(dynamic_cast<events::JointTrajectorySave*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectorySave*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      onSave();
+    if (e->getComponentInfo() == data_->model->getComponentInfo())
+    {
+      if (data_->selected_item != nullptr &&
+          data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
+      {
+        setDisabled(true);
+        data_->save_dialog->show();
+        data_->save_dialog->raise();
+        data_->save_dialog->activateWindow();
+      }
+    }
   }
   else if (event->type() == events::JointTrajectoryPlot::kType)
   {
     assert(dynamic_cast<events::JointTrajectoryPlot*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryPlot*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->model->getComponentInfo())
       onPlot();
   }
   else if (event->type() == events::JointTrajectoryRemoveSelected::kType)
   {
     assert(dynamic_cast<events::JointTrajectoryRemoveSelected*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryRemoveSelected*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->model->getComponentInfo())
       onRemove();
   }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
 }
 
 }  // namespace tesseract_gui

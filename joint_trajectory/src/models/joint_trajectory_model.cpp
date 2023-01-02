@@ -26,9 +26,9 @@
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_state_item.h>
 
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
-#include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
@@ -77,15 +77,13 @@ void JointTrajectoryModel::addJointTrajectorySet(tesseract_common::JointTrajecto
 {
   if (trajectory_set.getEnvironment() == nullptr)
   {
-    auto env_wrapper = EnvironmentManager::get(getComponentInfo());
-    if (env_wrapper == nullptr)
-      return;
-
-    auto env = env_wrapper->getEnvironment();
-    if (env == nullptr || !env->isInitialized())
-      return;
-
-    trajectory_set.applyEnvironment(env->clone());
+    auto env_wrapper = EnvironmentManager::getDefault();
+    if (env_wrapper != nullptr)
+    {
+      auto env = env_wrapper->getEnvironment();
+      if (env != nullptr || env->isInitialized())
+        trajectory_set.applyEnvironment(env->clone());
+    }
   }
 
   boost::uuids::uuid uuid = trajectory_set.getUUID();

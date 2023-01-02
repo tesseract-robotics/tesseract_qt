@@ -25,12 +25,14 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QDebug>
+#include <QMainWindow>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
 
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h>
+#include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
 
 int main(int argc, char** argv)
 {
@@ -82,8 +84,10 @@ int main(int argc, char** argv)
 
   tesseract_gui::ComponentInfo component_info{ "scene_name" };
 
-  tesseract_gui::JointTrajectoryWidget widget;
-  widget.show();
+  QMainWindow window;
+  window.addToolBar(new tesseract_gui::JointTrajectoryToolBar(component_info));
+  window.setCentralWidget(new tesseract_gui::JointTrajectoryWidget(component_info));
+  window.show();
 
   QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set));
   QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set1));

@@ -25,6 +25,8 @@
 #include <string>
 #include <boost/uuid/uuid.hpp>
 
+#include <QString>
+
 namespace tesseract_gui::events
 {
 class JointTrajectoryAdd::Implementation

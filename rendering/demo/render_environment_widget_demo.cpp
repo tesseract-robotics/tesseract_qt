@@ -34,21 +34,28 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/rendering/tool_path_render_manager.h>
 
 #include <tesseract_qt/environment/widgets/environment_widget.h>
-#include <tesseract_qt/environment/environment_wrappers.h>
 
 #include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
 
 #include <tesseract_qt/tool_path/widgets/tool_path_tool_bar.h>
 #include <tesseract_qt/tool_path/widgets/tool_path_widget.h>
 
+#include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
+#include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h>
+
 #include <tesseract_qt/common/events/tool_path_events.h>
+#include <tesseract_qt/common/events/joint_trajectory_events.h>
+
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/tool_path.h>
+#include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/entity_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_support/tesseract_support_resource_locator.h>
 #include <tesseract_environment/environment.h>
+#include <tesseract_common/joint_state.h>
 
 tesseract_gui::ToolPath getToolPath()
 {
@@ -70,6 +77,41 @@ tesseract_gui::ToolPath getToolPath()
   return tool_path;
 }
 
+tesseract_common::JointTrajectorySet getJointTrajectorySet()
+{
+  std::unordered_map<std::string, double> initial_state{ { "joint_a1", 0 }, { "joint_a2", 0 }, { "joint_a3", 0 },
+                                                         { "joint_a4", 0 }, { "joint_a5", 0 }, { "joint_a6", 0 },
+                                                         { "joint_a7", 0 } };
+
+  tesseract_common::JointTrajectorySet trajectory_set(initial_state);
+  for (int i = 0; i < 5; ++i)
+  {
+    tesseract_common::JointTrajectory trajectory("description");
+
+    for (int j = 0; j < 5; ++j)
+    {
+      tesseract_common::JointState state;
+      state.joint_names = { "joint_a1", "joint_a2", "joint_a3", "joint_a4", "joint_a5", "joint_a6", "joint_a7" };
+      state.position.resize(7);
+      state.velocity.resize(7);
+      state.acceleration.resize(7);
+      state.time = j;
+
+      // Add State Position
+      for (Eigen::Index k = 0; k < 7; ++k)
+      {
+        state.position[k] = k + j;
+        state.velocity[k] = 2 * (k + j);
+        state.acceleration[k] = 3 * (k + j);
+      }
+      trajectory.push_back(state);
+    }
+    trajectory_set.appendJointTrajectory(trajectory);
+  }
+
+  return trajectory_set;
+}
+
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
@@ -84,14 +126,17 @@ int main(int argc, char** argv)
   env->init(urdf_path, srdf_path, locator);
 
   tesseract_gui::ComponentInfo component_info(env->getName());
-
+  tesseract_gui::ComponentInfo jt_component_info(env->getName());
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
+
   tesseract_gui::SceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
   tesseract_gui::ToolPathRenderManager tool_path_manager(component_info, entity_manager);
+  tesseract_gui::SceneGraphRenderManager joint_trajectory_manager(jt_component_info, entity_manager);
 
   QMainWindow window;
   window.addToolBar(new tesseract_gui::SceneGraphToolBar(component_info));
   window.addToolBar(new tesseract_gui::ToolPathToolBar(component_info));
+  window.addToolBar(new tesseract_gui::JointTrajectoryToolBar(jt_component_info));
 
   auto render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
   render_widget->setSkyEnabled(true);
@@ -107,6 +152,11 @@ int main(int argc, char** argv)
   dw2->setWidget(tool_path_widget);
   window.addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dw2);
 
+  auto* joint_traj_widget = new tesseract_gui::JointTrajectoryWidget(jt_component_info);
+  auto* dw3 = new QDockWidget();
+  dw3->setWidget(joint_traj_widget);
+  window.addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dw3);
+
   window.resize(1200, 800);
   window.show();
 
@@ -115,6 +165,9 @@ int main(int argc, char** argv)
 
   tesseract_gui::ToolPath tool_path = getToolPath();
   QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path));
+
+  tesseract_common::JointTrajectorySet trajectory_set = getJointTrajectorySet();
+  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(jt_component_info, trajectory_set));
 
   return app.exec();
 }

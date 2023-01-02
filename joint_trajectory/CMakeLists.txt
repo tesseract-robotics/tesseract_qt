@@ -14,7 +14,8 @@ add_library(
   src/models/joint_trajectory_info_item.cpp
   src/models/joint_trajectory_set_item.cpp
   src/models/joint_trajectory_state_item.cpp
-  src/models/joint_trajectory_model.cpp)
+  src/models/joint_trajectory_model.cpp
+  src/models/joint_trajectory_utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_joint_trajectory_models
   PUBLIC tesseract::tesseract_common

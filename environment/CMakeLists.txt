@@ -5,13 +5,11 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(ENVIRONMENT_MODEL_headers_MOC include/tesseract_qt/environment/models/environment_commands_model.h
-             include/tesseract_qt/environment/environment_wrappers.h)
+qt5_wrap_cpp(ENVIRONMENT_MODEL_headers_MOC include/tesseract_qt/environment/models/environment_commands_model.h)
 
 add_library(
   ${PROJECT_NAME}_environment_models SHARED
   ${ENVIRONMENT_MODEL_headers_MOC}
-  src/environment_wrappers.cpp
   src/models/environment_commands_standard_item.cpp
   src/models/environment_commands_model.cpp
   src/models/commands/add_contact_managers_plugin_info_command_standard_item.cpp

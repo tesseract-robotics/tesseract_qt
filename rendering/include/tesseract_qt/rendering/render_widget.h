@@ -257,6 +257,9 @@ public:
    */
   void handleKeyRelease(const ignition::common::KeyEvent& event);
 
+private Q_SLOTS:
+  void onFrameSwapped();
+
 protected:
   // Documentation inherited
   void mousePressEvent(QMouseEvent* event) override;

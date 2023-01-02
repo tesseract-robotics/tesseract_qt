@@ -29,6 +29,11 @@ namespace tesseract_gui
 {
 struct ComponentInfo;
 class EnvironmentWrapper;
+
+/**
+ * @brief This managers all environments which can be accessed by anything within the application
+ * @details The first environment added is automatically set as the default
+ */
 class EnvironmentManager
 {
 public:
@@ -40,15 +45,20 @@ public:
   EnvironmentManager& operator=(EnvironmentManager&&) = delete;
 
   static std::shared_ptr<const EnvironmentWrapper> get(const ComponentInfo& component_info);
-  static void set(std::shared_ptr<const EnvironmentWrapper> env);
+  static void set(std::shared_ptr<const EnvironmentWrapper> env, bool set_default = false);
+
+  static std::shared_ptr<const EnvironmentWrapper> getDefault();
+  static void setDefault(const ComponentInfo& component_info);
 
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
   static std::shared_ptr<EnvironmentManager> instance();
-  void setHelper(std::shared_ptr<const EnvironmentWrapper> env);
+  void setHelper(std::shared_ptr<const EnvironmentWrapper> env, bool set_default);
   std::shared_ptr<const EnvironmentWrapper> getHelper(const ComponentInfo& component_info) const;
+  void setDefaultHelper(const ComponentInfo& component_info);
+  std::shared_ptr<const EnvironmentWrapper> getDefaultHelper() const;
 };
 }  // namespace tesseract_gui
 

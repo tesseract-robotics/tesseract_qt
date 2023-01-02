@@ -32,6 +32,7 @@ namespace tesseract_gui
 struct EnvironmentManager::Implementation
 {
   std::unordered_map<std::string, std::map<boost::uuids::uuid, std::shared_ptr<const EnvironmentWrapper>>> environments;
+  ComponentInfo default_component_info;
 };
 
 EnvironmentManager::EnvironmentManager() : data_(std::make_unique<Implementation>()) {}
@@ -43,7 +44,17 @@ std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::get(const Componen
   return instance()->getHelper(component_info);
 }
 
-void EnvironmentManager::set(std::shared_ptr<const EnvironmentWrapper> env) { instance()->setHelper(env); }
+void EnvironmentManager::set(std::shared_ptr<const EnvironmentWrapper> env, bool set_default)
+{
+  instance()->setHelper(env, set_default);
+}
+
+std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getDefault() { return instance()->getDefaultHelper(); }
+
+void EnvironmentManager::setDefault(const ComponentInfo& component_info)
+{
+  instance()->setDefaultHelper(component_info);
+}
 
 std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
 {
@@ -54,9 +65,12 @@ std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
   return singleton;
 }
 
-void EnvironmentManager::setHelper(std::shared_ptr<const EnvironmentWrapper> env)
+void EnvironmentManager::setHelper(std::shared_ptr<const EnvironmentWrapper> env, bool set_default)
 {
   ComponentInfo component_info = env->getComponentInfo();
+  if (data_->environments.empty() || set_default)
+    data_->default_component_info = component_info;
+
   data_->environments[component_info.scene_name][component_info.ns] = env;
 }
 
@@ -71,6 +85,24 @@ std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getHelper(const Co
     return nullptr;
 
   return it2->second;
+}
+
+void EnvironmentManager::setDefaultHelper(const ComponentInfo& component_info)
+{
+  auto it = data_->environments.find(component_info.scene_name);
+  if (it == data_->environments.end())
+    return;
+
+  auto it2 = it->second.find(component_info.ns);
+  if (it2 == it->second.end())
+    return;
+
+  data_->default_component_info = component_info;
+}
+
+std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getDefaultHelper() const
+{
+  return getHelper(data_->default_component_info);
 }
 
 }  // namespace tesseract_gui

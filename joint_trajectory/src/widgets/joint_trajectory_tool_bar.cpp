@@ -64,6 +64,10 @@ JointTrajectoryToolBar::JointTrajectoryToolBar(ComponentInfo component_info, QWi
     QApplication::sendEvent(qApp, new events::JointTrajectoryPlot(component_info));
   });
 
+  data_->save_action->setDisabled(true);
+  data_->plot_action->setDisabled(true);
+  data_->remove_action->setDisabled(true);
+
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }

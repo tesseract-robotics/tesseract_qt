@@ -285,6 +285,8 @@ void SceneGraphRenderManager::render()
     }
     else if (event->type() == events::SceneGraphSet::kType)
     {
+      data_->clear();
+
       auto& e = static_cast<events::SceneGraphSet&>(*event);
       loadSceneGraph(*scene, *data_->entity_container, *e.getSceneGraph(), "");
     }

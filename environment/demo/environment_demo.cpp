@@ -26,10 +26,10 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/environment/widgets/environment_widget.h>
-#include <tesseract_qt/environment/environment_wrappers.h>
 
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_environment/environment.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
