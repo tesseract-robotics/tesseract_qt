@@ -55,7 +55,7 @@ enum class ManipulationStateType : int
   END
 };
 
-class ComponentInfo;
+struct ComponentInfo;
 class ManipulationWidget : public QWidget
 {
   Q_OBJECT
@@ -64,6 +64,9 @@ public:
   explicit ManipulationWidget(bool single_state = true, QWidget* parent = nullptr);
   explicit ManipulationWidget(ComponentInfo parent_component_info, bool single_state = true, QWidget* parent = nullptr);
   ~ManipulationWidget();
+
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
 
   /**
    * @brief Check if widget is in a valid state

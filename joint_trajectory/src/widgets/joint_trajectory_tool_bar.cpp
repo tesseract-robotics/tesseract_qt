@@ -46,22 +46,22 @@ JointTrajectoryToolBar::JointTrajectoryToolBar(ComponentInfo component_info, QWi
   : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
   data_->component_info = component_info;
-  data_->remove_all_action = addAction(icons::getClearIcon(), "Remove All", [component_info]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryRemoveAll(component_info));
+  data_->remove_all_action = addAction(icons::getClearIcon(), "Remove All", [this]() {
+    QApplication::sendEvent(qApp, new events::JointTrajectoryRemoveAll(data_->component_info));
   });
-  data_->remove_action = addAction(icons::getTrashIcon(), "Remove All", [component_info]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryRemoveSelected(component_info));
-  });
-  addSeparator();
-  data_->open_action = addAction(icons::getImportIcon(), "Open", [component_info]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryOpen(component_info));
-  });
-  data_->save_action = addAction(icons::getSaveIcon(), "Save", [component_info]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectorySave(component_info));
+  data_->remove_action = addAction(icons::getTrashIcon(), "Remove All", [this]() {
+    QApplication::sendEvent(qApp, new events::JointTrajectoryRemoveSelected(data_->component_info));
   });
   addSeparator();
-  data_->plot_action = addAction(icons::getPlotIcon(), "Plot Joint Trajectory", [component_info]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryPlot(component_info));
+  data_->open_action = addAction(icons::getImportIcon(), "Open", [this]() {
+    QApplication::sendEvent(qApp, new events::JointTrajectoryOpen(data_->component_info));
+  });
+  data_->save_action = addAction(icons::getSaveIcon(), "Save", [this]() {
+    QApplication::sendEvent(qApp, new events::JointTrajectorySave(data_->component_info));
+  });
+  addSeparator();
+  data_->plot_action = addAction(icons::getPlotIcon(), "Plot Joint Trajectory", [this]() {
+    QApplication::sendEvent(qApp, new events::JointTrajectoryPlot(data_->component_info));
   });
 
   data_->save_action->setDisabled(true);
@@ -73,6 +73,9 @@ JointTrajectoryToolBar::JointTrajectoryToolBar(ComponentInfo component_info, QWi
 }
 
 JointTrajectoryToolBar::~JointTrajectoryToolBar() = default;
+
+void JointTrajectoryToolBar::setComponentInfo(ComponentInfo component_info) { data_->component_info = component_info; }
+const ComponentInfo& JointTrajectoryToolBar::getComponentInfo() const { return data_->component_info; }
 
 bool JointTrajectoryToolBar::eventFilter(QObject* obj, QEvent* event)
 {

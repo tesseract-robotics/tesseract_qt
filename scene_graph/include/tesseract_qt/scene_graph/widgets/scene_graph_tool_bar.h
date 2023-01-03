@@ -37,11 +37,12 @@ public:
   explicit SceneGraphToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
   ~SceneGraphToolBar();
 
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
+
 private:
   class Implementation;
   std::unique_ptr<Implementation> data_;
-
-  void ctor(ComponentInfo component_info);
 };
 }  // namespace tesseract_gui
 

@@ -99,6 +99,24 @@ ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info, bool
 
 ManipulationWidget::~ManipulationWidget() = default;
 
+void ManipulationWidget::setComponentInfo(ComponentInfo component_info)
+{
+  data_->parent_component_info = std::move(component_info);
+  if (data_->single_state)
+  {
+    data_->state_models[0] = std::make_shared<SceneStateModel>(data_->parent_component_info.createChild());
+    ui->state_widget->setModel(data_->state_models[0]);
+  }
+  else
+  {
+    throw std::runtime_error("ManipulationWidget, only single state is currently supported");
+  }
+
+  onReset();
+}
+
+const ComponentInfo& ManipulationWidget::getComponentInfo() const { return data_->parent_component_info; }
+
 bool ManipulationWidget::isValid() const
 {
   auto env_wrapper = EnvironmentManager::get(data_->parent_component_info);

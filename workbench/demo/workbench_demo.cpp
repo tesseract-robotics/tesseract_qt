@@ -26,10 +26,11 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/workbench/workbench_widget.h>
-#include <tesseract_qt/environment/environment_widget.h>
-#include <tesseract_qt/environment/environment_widget_config.h>
-#include <tesseract_qt/joint_trajectory/joint_trajectory_widget.h>
-#include <tesseract_qt/manipulation/manipulation_widget.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
+#include <tesseract_qt/common/component_info.h>
+
+#include <tesseract_environment/environment.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
 int main(int argc, char** argv)
@@ -42,21 +43,16 @@ int main(int argc, char** argv)
   tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
   tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
 
-  auto env = std::make_unique<tesseract_environment::Environment>();
+  auto env = std::make_shared<tesseract_environment::Environment>();
   env->init(urdf_path, srdf_path, locator);
 
-  auto config = std::make_shared<tesseract_gui::EnvironmentWidgetConfig>();
-  config->setEnvironment(std::move(env));
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
 
-  auto* env_widget = new tesseract_gui::EnvironmentWidget();  // NOLINT
-
-  auto* jt_widget = new tesseract_gui::JointTrajectoryWidget();  // NOLINT
-
-  auto manipulation_widget = new tesseract_gui::ManipulationWidget();  // NOLINT
-
-  tesseract_gui::WorkbenchWidget widget(env_widget, jt_widget, manipulation_widget);
-  env_widget->setConfiguration(std::move(config));
+  tesseract_gui::WorkbenchWidget widget(component_info);
   widget.show();
+
+  tesseract_gui::EnvironmentManager::set(
+      std::make_shared<tesseract_gui::DefaultEnvironmentWrapper>(component_info, env));
 
   return QApplication::exec();
 }

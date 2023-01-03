@@ -37,6 +37,9 @@ public:
   explicit JointTrajectoryToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
   ~JointTrajectoryToolBar();
 
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
