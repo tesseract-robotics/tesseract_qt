@@ -24,10 +24,14 @@
 #define TESSERACT_GUI_COMMON_COMPONENT_INFO_H
 
 #include <string>
+#include <functional>
 #include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_hash.hpp>
 
 namespace tesseract_gui
 {
+struct ComponentInfo;
+
 /** @brief All modesl will have this object to allow associating disconnected object together. */
 struct ComponentInfo
 {
@@ -43,9 +47,50 @@ struct ComponentInfo
   /** @brief The associated namespace */
   boost::uuids::uuid ns{};
 
-  bool operator==(const ComponentInfo& other) const;
+  /** @brief Check if it has a parent component */
+  bool hasParent() const;
+
+  /** @brief Get the parent hash */
+  std::shared_ptr<const ComponentInfo> getParent() const;
+
+  /** @brief Create child component info object */
+  ComponentInfo createChild() const;
+
+  /**
+   * @brief Check if the provided ComponentInfo is the objects parent
+   * @param other The object to check if parent
+   * @return True if the scene_name is equal and the provided objects ns equals this objects parent_ns, otherwise false
+   */
+  bool isParent(const ComponentInfo& other) const;
+
+  /**
+   * @brief Check if the provided ComponentInfo a child of this object
+   * @param other The object to check if child
+   * @return True if the scene_name is equal and the provided objects parent_ns equals this objects ns, otherwise false
+   */
+  bool isChild(const ComponentInfo& other) const;
+
+  bool operator==(const ComponentInfo& rhs) const;
   bool operator!=(const ComponentInfo& rhs) const;
+
+private:
+  /** @brief The associated parent ns */
+  std::shared_ptr<const ComponentInfo> parent_;
 };
 
 }  // namespace tesseract_gui
+
+namespace std
+{
+template <>
+struct hash<tesseract_gui::ComponentInfo>
+{
+  auto operator()(const tesseract_gui::ComponentInfo& obj) const -> size_t
+  {
+    return (hash<std::string>{}(obj.scene_name) ^ hash<boost::uuids::uuid>{}(obj.ns) ^
+            hash<std::shared_ptr<const tesseract_gui::ComponentInfo>>{}(obj.getParent()));
+  }
+};
+
+}  // namespace std
 #endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_H

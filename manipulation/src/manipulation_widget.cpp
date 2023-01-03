@@ -18,6 +18,8 @@ namespace tesseract_gui
 {
 struct ManipulationWidget::Implementation
 {
+  ComponentInfo parent_component_info;
+
   bool single_state;
   tesseract_kinematics::KinematicGroup::UPtr kin_group;
   std::vector<tesseract_scene_graph::StateSolver::UPtr> state_solvers;
@@ -41,11 +43,12 @@ ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
 {
 }
 
-ManipulationWidget::ManipulationWidget(ComponentInfo component_info, bool single_state, QWidget* parent)
+ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info, bool single_state, QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::ManipulationWidget>()), data_(std::make_unique<Implementation>())
 {
   ui->setupUi(this);
 
+  data_->parent_component_info = std::move(parent_component_info);
   data_->single_state = single_state;
   data_->state_solvers.resize((single_state) ? 1 : 2);
   data_->states.resize((single_state) ? 1 : 2);
@@ -53,7 +56,7 @@ ManipulationWidget::ManipulationWidget(ComponentInfo component_info, bool single
 
   if (single_state)
   {
-    data_->state_models[0] = std::make_shared<SceneStateModel>(component_info);
+    data_->state_models[0] = std::make_shared<SceneStateModel>(data_->parent_component_info.createChild());
     ui->state_widget->setModel(data_->state_models[0]);
   }
   else
@@ -98,7 +101,7 @@ ManipulationWidget::~ManipulationWidget() = default;
 
 bool ManipulationWidget::isValid() const
 {
-  auto env_wrapper = EnvironmentManager::getDefault();
+  auto env_wrapper = EnvironmentManager::get(data_->parent_component_info);
   if (env_wrapper == nullptr)
     return false;
 
@@ -172,7 +175,7 @@ tesseract_scene_graph::SceneState ManipulationWidget::getState(int index) const
 
 void ManipulationWidget::onGroupNameChanged()
 {
-  auto env_wrapper = EnvironmentManager::getDefault();
+  auto env_wrapper = EnvironmentManager::get(data_->parent_component_info);
   if (env_wrapper == nullptr)
     return;
 
@@ -430,7 +433,7 @@ void ManipulationWidget::onReset()
 
   QString current_group_name = ui->group_combo_box->currentText();
 
-  auto env_wrapper = EnvironmentManager::getDefault();
+  auto env_wrapper = EnvironmentManager::get(data_->parent_component_info);
   if (env_wrapper == nullptr)
   {
     data_->group_names_model.setStringList(QStringList());
@@ -443,6 +446,10 @@ void ManipulationWidget::onReset()
     data_->group_names_model.setStringList(QStringList());
     return;
   }
+
+  auto child_env_wrapper =
+      std::make_shared<DefaultEnvironmentWrapper>(data_->state_models[0]->getComponentInfo(), env->clone());
+  EnvironmentManager::set(child_env_wrapper);
 
   auto lock = env->lockRead();
 

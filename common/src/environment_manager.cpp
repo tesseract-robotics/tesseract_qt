@@ -31,7 +31,7 @@ namespace tesseract_gui
 {
 struct EnvironmentManager::Implementation
 {
-  std::unordered_map<std::string, std::map<boost::uuids::uuid, std::shared_ptr<const EnvironmentWrapper>>> environments;
+  std::unordered_map<ComponentInfo, std::shared_ptr<const EnvironmentWrapper>> environments;
   ComponentInfo default_component_info;
 };
 
@@ -71,30 +71,22 @@ void EnvironmentManager::setHelper(std::shared_ptr<const EnvironmentWrapper> env
   if (data_->environments.empty() || set_default)
     data_->default_component_info = component_info;
 
-  data_->environments[component_info.scene_name][component_info.ns] = env;
+  data_->environments[component_info] = env;
 }
 
 std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getHelper(const ComponentInfo& component_info) const
 {
-  auto it = data_->environments.find(component_info.scene_name);
+  auto it = data_->environments.find(component_info);
   if (it == data_->environments.end())
     return nullptr;
 
-  auto it2 = it->second.find(component_info.ns);
-  if (it2 == it->second.end())
-    return nullptr;
-
-  return it2->second;
+  return it->second;
 }
 
 void EnvironmentManager::setDefaultHelper(const ComponentInfo& component_info)
 {
-  auto it = data_->environments.find(component_info.scene_name);
+  auto it = data_->environments.find(component_info);
   if (it == data_->environments.end())
-    return;
-
-  auto it2 = it->second.find(component_info.ns);
-  if (it2 == it->second.end())
     return;
 
   data_->default_component_info = component_info;

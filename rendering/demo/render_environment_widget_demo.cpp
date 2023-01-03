@@ -126,12 +126,11 @@ int main(int argc, char** argv)
   env->init(urdf_path, srdf_path, locator);
 
   tesseract_gui::ComponentInfo component_info(env->getName());
-  tesseract_gui::ComponentInfo jt_component_info(env->getName());
+  tesseract_gui::ComponentInfo jt_component_info = component_info.createChild();
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
 
   tesseract_gui::SceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
   tesseract_gui::ToolPathRenderManager tool_path_manager(component_info, entity_manager);
-  tesseract_gui::SceneGraphRenderManager joint_trajectory_manager(jt_component_info, entity_manager);
 
   QMainWindow window;
   window.addToolBar(new tesseract_gui::SceneGraphToolBar(component_info));

@@ -31,9 +31,36 @@ ComponentInfo::ComponentInfo(std::string scene_name)
 {
 }
 
-bool ComponentInfo::operator==(const ComponentInfo& other) const
+bool ComponentInfo::hasParent() const { return parent_ != nullptr; }
+
+std::shared_ptr<const ComponentInfo> ComponentInfo::getParent() const { return parent_; }
+
+ComponentInfo ComponentInfo::createChild() const
 {
-  return (scene_name == other.scene_name && ns == other.ns);
+  ComponentInfo child{ scene_name };
+  child.parent_ = std::make_shared<ComponentInfo>(*this);
+  return child;
+}
+
+bool ComponentInfo::isParent(const ComponentInfo& other) const
+{
+  if (parent_ == nullptr)
+    return false;
+
+  return (scene_name == other.scene_name && *parent_ == other);
+}
+
+bool ComponentInfo::isChild(const ComponentInfo& other) const
+{
+  if (other.parent_ == nullptr)
+    return false;
+
+  return (scene_name == other.scene_name && *this == *other.parent_);
+}
+
+bool ComponentInfo::operator==(const ComponentInfo& rhs) const
+{
+  return (scene_name == rhs.scene_name && ns == rhs.ns && parent_ == rhs.parent_);
 }
 
 bool ComponentInfo::operator!=(const ComponentInfo& rhs) const { return !operator==(rhs); }

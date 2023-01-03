@@ -67,38 +67,30 @@ public:
   }
 
 private:
-  std::unordered_map<std::string, std::map<boost::uuids::uuid, std::map<ModelType, std::shared_ptr<void>>>> data_;
+  std::unordered_map<ComponentInfo, std::map<ModelType, std::shared_ptr<void>>> data_;
 
   static std::shared_ptr<ModelManager> instance();
 
   template <typename T>
   std::shared_ptr<T> getHelper(const ComponentInfo& component_info, ModelType type)
   {
-    auto it = data_.find(component_info.scene_name);
+    auto it = data_.find(component_info);
     if (it == data_.end())
     {
       auto model = std::make_shared<T>(component_info);
-      data_[component_info.scene_name][component_info.ns][type] = model;
+      data_[component_info][type] = model;
       return model;
     }
 
-    auto it2 = it->second.find(component_info.ns);
+    auto it2 = it->second.find(type);
     if (it2 == it->second.end())
     {
       auto model = std::make_shared<T>(component_info);
-      data_[component_info.scene_name][component_info.ns][type] = model;
+      data_[component_info][type] = model;
       return model;
     }
 
-    auto it3 = it2->second.find(type);
-    if (it3 == it2->second.end())
-    {
-      auto model = std::make_shared<T>(component_info);
-      data_[component_info.scene_name][component_info.ns][type] = model;
-      return model;
-    }
-
-    return std::dynamic_pointer_cast<T>(it3->second);
+    return std::dynamic_pointer_cast<T>(it2->second);
   }
 };
 }  // namespace tesseract_gui

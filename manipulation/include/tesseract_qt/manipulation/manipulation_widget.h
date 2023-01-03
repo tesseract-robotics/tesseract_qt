@@ -62,7 +62,7 @@ class ManipulationWidget : public QWidget
 
 public:
   explicit ManipulationWidget(bool single_state = true, QWidget* parent = nullptr);
-  explicit ManipulationWidget(ComponentInfo component_info, bool single_state = true, QWidget* parent = nullptr);
+  explicit ManipulationWidget(ComponentInfo parent_component_info, bool single_state = true, QWidget* parent = nullptr);
   ~ManipulationWidget();
 
   /**

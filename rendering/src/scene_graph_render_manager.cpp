@@ -52,112 +52,59 @@ struct SceneGraphRenderManager::Implementation
 {
   ComponentInfo component_info;
   EntityManager::Ptr entity_manager;
-  EntityContainer::Ptr entity_container;
+  std::unordered_map<ComponentInfo, EntityContainer::Ptr> entity_containers;
   std::vector<std::unique_ptr<events::ComponentEvent>> events;
 
   void clear()
   {
     ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info.scene_name);
-    for (const auto& ns : entity_container->getTrackedEntities())
+    for (const auto& entity_container : entity_containers)
     {
-      for (const auto& entity : ns.second)
-        scene->DestroyNodeById(entity.second.id);
+      for (const auto& ns : entity_container.second->getTrackedEntities())
+      {
+        for (const auto& entity : ns.second)
+          scene->DestroyNodeById(entity.second.id);
+      }
+
+      for (const auto& ns : entity_container.second->getUntrackedEntities())
+      {
+        for (const auto& entity : ns.second)
+          scene->DestroyNodeById(entity.id);
+      }
+
+      entity_manager->removeEntityContainer(boost::uuids::to_string(entity_container.first.ns));
+      entity_container.second->clear();
     }
 
-    for (const auto& ns : entity_container->getUntrackedEntities())
-    {
-      for (const auto& entity : ns.second)
-        scene->DestroyNodeById(entity.id);
-    }
-
-    entity_container->clear();
+    entity_containers.clear();
   }
 
-  //  /**
-  //   * @brief Currently there is a bug in ignition which does not correctly handle set visibility. This is a
-  //   workaround to
-  //   * solve the issue until a long term fix is introduced.
-  //   * @details https://github.com/gazebosim/gz-rendering/issues/771
-  //   */
-  //  void updateVisibility(const ignition::rendering::NodePtr& node, bool parent_visibility, bool recursive)
-  //  {
-  //    for (std::size_t i = 0; i < node->ChildCount(); ++i)
-  //    {
-  //      auto child_node = node->ChildByIndex(i);
-  //      auto axis = std::dynamic_pointer_cast<ignition::rendering::AxisVisual>(child_node);
-  //      if (axis != nullptr)
-  //      {
-  //        if (recursive)
-  //        {
-  //          axis->SetVisible(parent_visibility);
-  //          axis->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
-  //          axis->SetUserData(USER_VISIBILITY, parent_visibility);
-  //        }
-  //        else
-  //        {
-  //          bool local_visibility = std::get<bool>(axis->UserData(USER_VISIBILITY));
-  //          axis->SetVisible(parent_visibility & local_visibility);
-  //          axis->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
-  //        }
-  //      }
-  //      else
-  //      {
-  //        auto visual = std::dynamic_pointer_cast<ignition::rendering::Visual>(child_node);
-  //        if (visual != nullptr)
-  //        {
-  //          if (recursive)
-  //          {
-  //            visual->SetVisible(parent_visibility);
-  //            visual->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
-  //            visual->SetUserData(USER_VISIBILITY, parent_visibility);
-  //            updateVisibility(child_node, parent_visibility, recursive);
-  //          }
-  //          else
-  //          {
-  //            bool local_visibility = std::get<bool>(visual->UserData(USER_VISIBILITY));
-  //            visual->SetVisible(parent_visibility & local_visibility);
-  //            visual->SetUserData(USER_PARENT_VISIBILITY, parent_visibility);
-  //            updateVisibility(child_node, parent_visibility & local_visibility, recursive);
-  //          }
-  //        }
-  //        else
-  //        {
-  //          updateVisibility(child_node, parent_visibility, recursive);
-  //        }
-  //      }
-  //    }
-  //  }
+  void clear(const ComponentInfo& ci)
+  {
+    assert(ci.scene_name == component_info.scene_name);
 
-  //  void setVisibility(ignition::rendering::Scene& scene,
-  //                     const boost::uuids::uuid& uuid,
-  //                     const boost::uuids::uuid& child_uuid,
-  //                     bool visible,
-  //                     bool recursive)
-  //  {
-  //    auto it = entity_containers.find(uuid);
-  //    if (it != entity_containers.end())
-  //    {
-  //      std::string visual_key = boost::uuids::to_string(uuid);
-  //      if (!child_uuid.is_nil())
-  //        visual_key = boost::uuids::to_string(child_uuid);
+    auto it = entity_containers.find(ci);
+    if (it != entity_containers.end())
+    {
+      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info.scene_name);
+      for (const auto& ns : it->second->getTrackedEntities())
+      {
+        for (const auto& entity : ns.second)
+          scene->DestroyNodeById(entity.second.id);
+      }
 
-  //      if (it->second->hasTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key))
-  //      {
-  //        auto entity = it->second->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key);
-  //        auto visual_node = scene.VisualById(entity.id);
-  //        if (visual_node != nullptr)
-  //        {
-  //          bool parent_visibility = std::get<bool>(visual_node->UserData(USER_PARENT_VISIBILITY));
-  //          visual_node->SetVisible(parent_visibility & visible);
-  //          visual_node->SetUserData(USER_VISIBILITY, visible);
-  //          auto axis = std::dynamic_pointer_cast<ignition::rendering::AxisVisual>(visual_node);
-  //          // There is a bug in the axis visual object which shows the rings so must hide
-  //          if (axis == nullptr)
-  //            updateVisibility(visual_node, visible, recursive);
-  //        }
-  //      }
-  //    }
-  //  }
+      for (const auto& ns : it->second->getUntrackedEntities())
+      {
+        for (const auto& entity : ns.second)
+          scene->DestroyNodeById(entity.id);
+      }
+
+      it->second->clear();
+
+      entity_containers.erase(it);
+      entity_manager->removeEntityContainer(boost::uuids::to_string(ci.ns));
+    }
+  }
 };
 
 SceneGraphRenderManager::SceneGraphRenderManager(ComponentInfo component_info,
@@ -166,7 +113,6 @@ SceneGraphRenderManager::SceneGraphRenderManager(ComponentInfo component_info,
 {
   data_->component_info = std::move(component_info);
   data_->entity_manager = std::move(entity_manager);
-  data_->entity_container = data_->entity_manager->getEntityContainer(boost::uuids::to_string(component_info.ns));
 
   qApp->installEventFilter(this);
 }
@@ -179,84 +125,84 @@ bool SceneGraphRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::SceneGraphClear*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphClear*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphClear>(*e));
   }
   else if (event->type() == events::SceneGraphSet::kType)
   {
     assert(dynamic_cast<events::SceneGraphSet*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphSet*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphSet>(*e));
   }
   else if (event->type() == events::SceneGraphAddLink::kType)
   {
     assert(dynamic_cast<events::SceneGraphAddLink*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphAddLink*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphAddLink>(*e));
   }
   else if (event->type() == events::SceneGraphAddJoint::kType)
   {
     assert(dynamic_cast<events::SceneGraphAddJoint*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphAddJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphAddJoint>(*e));
   }
   else if (event->type() == events::SceneGraphMoveLink::kType)
   {
     assert(dynamic_cast<events::SceneGraphMoveLink*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphMoveLink*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphMoveLink>(*e));
   }
   else if (event->type() == events::SceneGraphMoveJoint::kType)
   {
     assert(dynamic_cast<events::SceneGraphMoveJoint*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphMoveJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphMoveJoint>(*e));
   }
   else if (event->type() == events::SceneGraphRemoveLink::kType)
   {
     assert(dynamic_cast<events::SceneGraphRemoveLink*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphRemoveLink*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphRemoveLink>(*e));
   }
   else if (event->type() == events::SceneGraphRemoveJoint::kType)
   {
     assert(dynamic_cast<events::SceneGraphRemoveJoint*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphRemoveJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphRemoveJoint>(*e));
   }
   else if (event->type() == events::SceneGraphReplaceJoint::kType)
   {
     assert(dynamic_cast<events::SceneGraphReplaceJoint*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphReplaceJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphReplaceJoint>(*e));
   }
   else if (event->type() == events::SceneGraphModifyLinkVisibility::kType)
   {
     assert(dynamic_cast<events::SceneGraphModifyLinkVisibility*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphModifyLinkVisibility*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphModifyLinkVisibility>(*e));
   }
   else if (event->type() == events::SceneGraphModifyLinkVisibilityALL::kType)
   {
     assert(dynamic_cast<events::SceneGraphModifyLinkVisibilityALL*>(event) != nullptr);
     auto* e = static_cast<events::SceneGraphModifyLinkVisibilityALL*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneGraphModifyLinkVisibilityALL>(*e));
   }
   else if (event->type() == events::SceneStateChanged::kType)
   {
     assert(dynamic_cast<events::SceneStateChanged*>(event) != nullptr);
     auto* e = static_cast<events::SceneStateChanged*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
       data_->events.push_back(std::make_unique<events::SceneStateChanged>(*e));
   }
   else if (event->type() == events::PreRender::kType)
@@ -277,41 +223,55 @@ void SceneGraphRenderManager::render()
 
   ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
 
+  auto getEntityContainer = [this](const ComponentInfo& component_info) -> EntityContainer::Ptr {
+    auto it = data_->entity_containers.find(component_info);
+    if (it != data_->entity_containers.end())
+      return it->second;
+
+    auto entity_container = data_->entity_manager->getEntityContainer(boost::uuids::to_string(component_info.ns));
+    data_->entity_containers[component_info] = entity_container;
+    return entity_container;
+  };
+
   for (const auto& event : data_->events)
   {
     if (event->type() == events::SceneGraphClear::kType)
     {
-      data_->clear();
+      auto& e = static_cast<events::SceneGraphClear&>(*event);
+      data_->clear(e.getComponentInfo());
     }
     else if (event->type() == events::SceneGraphSet::kType)
     {
-      data_->clear();
-
       auto& e = static_cast<events::SceneGraphSet&>(*event);
-      loadSceneGraph(*scene, *data_->entity_container, *e.getSceneGraph(), "");
+      data_->clear(e.getComponentInfo());
+      EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
+      loadSceneGraph(*scene, *entity_container, *e.getSceneGraph(), "");
     }
     else if (event->type() == events::SceneGraphAddLink::kType)
     {
       auto& e = static_cast<events::SceneGraphAddLink&>(*event);
-      scene->RootVisual()->AddChild(loadLink(*scene, *data_->entity_container, *e.getLink()));
+      EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
+      scene->RootVisual()->AddChild(loadLink(*scene, *entity_container, *e.getLink()));
     }
     else if (event->type() == events::SceneGraphRemoveLink::kType)
     {
       auto& e = static_cast<events::SceneGraphRemoveLink&>(*event);
-      if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName()))
+      EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
+      if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName()))
       {
-        auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName());
+        auto entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName());
         scene->DestroyNodeById(entity.id);
       }
     }
     else if (event->type() == events::SceneGraphModifyLinkVisibility::kType)
     {
       auto& e = static_cast<events::SceneGraphModifyLinkVisibility&>(*event);
+      EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
       for (const auto& link_name : e.getLinkNames())
       {
-        if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, link_name))
+        if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, link_name))
         {
-          auto link_entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, link_name);
+          auto link_entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, link_name);
           auto link_visual_node = scene->VisualById(link_entity.id);
 
           if (e.getVisibilityFlags() & LinkVisibilityFlags::LINK || e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
@@ -320,9 +280,9 @@ void SceneGraphRenderManager::render()
           bool link_visible = std::get<bool>(link_visual_node->UserData(USER_VISIBILITY));
 
           std::string visual_key = link_name + "::Visuals";
-          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
           {
-            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
             auto node = scene->VisualById(entity.id);
             if (e.getVisibilityFlags() & LinkVisibilityFlags::VISUAL ||
                 e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
@@ -333,9 +293,9 @@ void SceneGraphRenderManager::render()
           }
 
           visual_key = link_name + "::Collisions";
-          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
           {
-            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
             auto node = scene->VisualById(entity.id);
             if (e.getVisibilityFlags() & LinkVisibilityFlags::COLLISION ||
                 e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
@@ -346,9 +306,9 @@ void SceneGraphRenderManager::render()
           }
 
           visual_key = link_name + "::WireBox";
-          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
           {
-            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
             auto node = scene->VisualById(entity.id);
             if (e.getVisibilityFlags() & LinkVisibilityFlags::WIREBOX ||
                 e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
@@ -359,9 +319,9 @@ void SceneGraphRenderManager::render()
           }
 
           visual_key = link_name + "::Axis";
-          if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
+          if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, visual_key))
           {
-            auto entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
+            auto entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, visual_key);
             auto node = scene->VisualById(entity.id);
             if (e.getVisibilityFlags() & LinkVisibilityFlags::AXIS || e.getVisibilityFlags() & LinkVisibilityFlags::ALL)
               node->SetUserData(USER_VISIBILITY, e.visible());
@@ -375,15 +335,15 @@ void SceneGraphRenderManager::render()
     else if (event->type() == events::SceneGraphModifyLinkVisibilityALL::kType)
     {
       auto& e = static_cast<events::SceneGraphModifyLinkVisibilityALL&>(*event);
-
-      for (const auto& ns : data_->entity_container->getTrackedEntities(EntityContainer::VISUAL_NS))
+      EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
+      for (const auto& ns : entity_container->getTrackedEntities(EntityContainer::VISUAL_NS))
       {
         std::vector<std::string> sub_ns = getNamespaces(ns.first);
         if (sub_ns.size() == 2)
         {
           if (sub_ns[1] == "Visuals" || sub_ns[1] == "Collisions")
           {
-            auto link_entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, sub_ns[0]);
+            auto link_entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, sub_ns[0]);
             auto link_visual_node = scene->VisualById(link_entity.id);
 
             if (e.getVisibilityFlags() & LinkVisibilityFlags::LINK)
@@ -436,11 +396,12 @@ void SceneGraphRenderManager::render()
     else if (event->type() == events::SceneStateChanged::kType)
     {
       auto& e = static_cast<events::SceneStateChanged&>(*event);
+      EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
       for (const auto& pair : e.getState().link_transforms)
       {
-        if (data_->entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, pair.first))
+        if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, pair.first))
         {
-          Entity entity = data_->entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, pair.first);
+          Entity entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, pair.first);
           scene->VisualById(entity.id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
         }
       }
