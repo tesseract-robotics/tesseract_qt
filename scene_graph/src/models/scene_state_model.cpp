@@ -28,8 +28,11 @@
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_scene_graph/scene_state.h>
+#include <tesseract_environment/environment.h>
 
 #include <QApplication>
 
@@ -79,6 +82,11 @@ SceneStateModel::SceneStateModel(ComponentInfo component_info, QObject* parent)
 {
   clear();
   data_->component_info = std::move(component_info);
+
+  // If an environment has already been assigned load the data
+  auto env_wrapper = EnvironmentManager::get(data_->component_info);
+  if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+    setState(env_wrapper->getEnvironment()->getState());
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);

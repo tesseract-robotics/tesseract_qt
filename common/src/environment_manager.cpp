@@ -51,7 +51,7 @@ void EnvironmentManager::set(std::shared_ptr<EnvironmentWrapper> env, bool set_d
 
 std::shared_ptr<EnvironmentWrapper> EnvironmentManager::find(const ComponentInfo& component_info)
 {
-  instance()->findHelper(component_info);
+  return instance()->findHelper(component_info);
 }
 
 std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getDefault() { return instance()->getDefaultHelper(); }

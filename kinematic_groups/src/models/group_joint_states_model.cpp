@@ -27,26 +27,27 @@
 #include <tesseract_qt/common/namespace_standard_item.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_common/joint_state.h>
+#include <tesseract_environment/environment.h>
 
 #include <QApplication>
 
 namespace tesseract_gui
 {
-GroupJointStatesModel::GroupJointStatesModel(QObject* parent)
-  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>())
-{
-  clear();
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
-}
+GroupJointStatesModel::GroupJointStatesModel(QObject* parent) : GroupJointStatesModel(ComponentInfo(), parent) {}
 
 GroupJointStatesModel::GroupJointStatesModel(ComponentInfo component_info, QObject* parent)
   : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
   clear();
+
+  // If an environment has already been assigned load the data
+  auto env_wrapper = EnvironmentManager::get(*component_info_);
+  if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+    set(env_wrapper->getEnvironment()->getKinematicsInformation().group_states);
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);

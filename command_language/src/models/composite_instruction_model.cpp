@@ -43,12 +43,8 @@ struct CompositeInstructionModel::Implementation
 };
 
 CompositeInstructionModel::CompositeInstructionModel(QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+  : CompositeInstructionModel(ComponentInfo(), parent)
 {
-  clear();
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
 }
 
 CompositeInstructionModel::CompositeInstructionModel(ComponentInfo component_info, QObject* parent)

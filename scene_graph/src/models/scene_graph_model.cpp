@@ -30,8 +30,11 @@
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_scene_graph/graph.h>
+#include <tesseract_environment/environment.h>
 
 #include <QApplication>
 
@@ -46,18 +49,7 @@ struct SceneGraphModel::Implementation
   void clear() { scene_graph_item->clear(); }
 };
 
-SceneGraphModel::SceneGraphModel(QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
-{
-  setColumnCount(2);
-  setHorizontalHeaderLabels({ "Name", "Values" });
-
-  data_->scene_graph_item = new SceneGraphStandardItem();  // NOLINT
-  appendRow(data_->scene_graph_item);
-
-  // Install event filter
-  qGuiApp->installEventFilter(this);
-}
+SceneGraphModel::SceneGraphModel(QObject* parent) : SceneGraphModel(ComponentInfo(), parent) {}
 
 SceneGraphModel::SceneGraphModel(ComponentInfo component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
@@ -68,6 +60,11 @@ SceneGraphModel::SceneGraphModel(ComponentInfo component_info, QObject* parent)
   data_->component_info = std::move(component_info);
   data_->scene_graph_item = new SceneGraphStandardItem();  // NOLINT
   appendRow(data_->scene_graph_item);
+
+  // If an environment has already been assigned load the data
+  auto env_wrapper = EnvironmentManager::get(data_->component_info);
+  if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+    setSceneGraph(*env_wrapper->getEnvironment()->getSceneGraph());
 
   // Install event filter
   qGuiApp->installEventFilter(this);

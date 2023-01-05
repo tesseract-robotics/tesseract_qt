@@ -46,6 +46,9 @@ public:
   const ComponentInfo& getComponentInfo() const;
   virtual std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const = 0;
 
+  // This should broadcast events with associated data for models */
+  virtual void broadcast() const = 0;
+
 private:
   std::unique_ptr<ComponentInfo> component_info_;
 };
@@ -59,11 +62,10 @@ public:
   ~DefaultEnvironmentWrapper() override;
 
   std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
+  void broadcast() const override;
 
 private:
   std::shared_ptr<tesseract_environment::Environment> env_;
-
-  void tesseractEventFilter(const tesseract_environment::Event& event);
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
@@ -79,14 +81,13 @@ public:
   ~MonitorEnvironmentWrapper() override;
 
   std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
+  void broadcast() const override;
 
   std::shared_ptr<tesseract_environment::EnvironmentMonitor> getEnvironmentMonitor();
   std::shared_ptr<const tesseract_environment::EnvironmentMonitor> getEnvironmentMonitor() const;
 
 private:
   std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor_;
-
-  void tesseractEventFilter(const tesseract_environment::Event& event);
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

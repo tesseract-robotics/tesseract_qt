@@ -25,24 +25,28 @@
 #include <tesseract_qt/common/events/environment_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
+
+#include <tesseract_environment/environment.h>
 
 #include <QApplication>
 
 namespace tesseract_gui
 {
-EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent)
-  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>())
+EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent) : EnvironmentCommandsModel(ComponentInfo(), parent)
 {
-  clear();
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
 }
 
 EnvironmentCommandsModel::EnvironmentCommandsModel(ComponentInfo component_info, QObject* parent)
   : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
   clear();
+
+  // If an environment has already been assigned load the data
+  auto env_wrapper = EnvironmentManager::get(*component_info_);
+  if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+    set(env_wrapper->getEnvironment()->getCommandHistory());
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);

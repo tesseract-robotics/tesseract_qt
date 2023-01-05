@@ -180,7 +180,7 @@ void eventFilterHelper(QObject* /*obj*/,
   }
 }
 
-void broadcast(const ComponentInfo& component_info, const tesseract_environment::Environment& env)
+void broadcastHelper(const ComponentInfo& component_info, const tesseract_environment::Environment& env)
 {
   auto lock = env.lockRead();
 
@@ -208,8 +208,13 @@ DefaultEnvironmentWrapper::DefaultEnvironmentWrapper(ComponentInfo component_inf
                                                      std::shared_ptr<tesseract_environment::Environment> env)
   : EnvironmentWrapper(std::move(component_info)), env_(std::move(env))
 {
+  std::size_t uuid = std::hash<DefaultEnvironmentWrapper*>()(this);
+  env_->addEventCallback(uuid, [this](const tesseract_environment::Event& event) {
+    tesseractEventFilterHelper(event, getComponentInfo(), *env_);
+  });
+
   // Broadcast data to initialize available widgets
-  broadcast(getComponentInfo(), *env_);
+  broadcastHelper(getComponentInfo(), *env_);
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
@@ -222,10 +227,7 @@ std::shared_ptr<const tesseract_environment::Environment> DefaultEnvironmentWrap
   return env_;
 }
 
-void DefaultEnvironmentWrapper::tesseractEventFilter(const tesseract_environment::Event& event)
-{
-  tesseractEventFilterHelper(event, getComponentInfo(), *env_);
-}
+void DefaultEnvironmentWrapper::broadcast() const { broadcastHelper(getComponentInfo(), *env_); }
 
 bool DefaultEnvironmentWrapper::eventFilter(QObject* obj, QEvent* event)
 {
@@ -251,6 +253,8 @@ MonitorEnvironmentWrapper::MonitorEnvironmentWrapper(
     tesseractEventFilterHelper(event, getComponentInfo(), env_monitor_->environment());
   });
 
+  broadcastHelper(getComponentInfo(), env_monitor_->environment());
+
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }
@@ -261,6 +265,8 @@ std::shared_ptr<const tesseract_environment::Environment> MonitorEnvironmentWrap
   return env_monitor_->getEnvironment();
 }
 
+void MonitorEnvironmentWrapper::broadcast() const { broadcastHelper(getComponentInfo(), env_monitor_->environment()); }
+
 std::shared_ptr<tesseract_environment::EnvironmentMonitor> MonitorEnvironmentWrapper::getEnvironmentMonitor()
 {
   return env_monitor_;
@@ -270,11 +276,6 @@ std::shared_ptr<const tesseract_environment::EnvironmentMonitor>
 MonitorEnvironmentWrapper::getEnvironmentMonitor() const
 {
   return env_monitor_;
-}
-
-void MonitorEnvironmentWrapper::tesseractEventFilter(const tesseract_environment::Event& event)
-{
-  tesseractEventFilterHelper(event, getComponentInfo(), env_monitor_->environment());
 }
 
 bool MonitorEnvironmentWrapper::eventFilter(QObject* obj, QEvent* event)

@@ -28,8 +28,11 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/link_visibility.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_common/allowed_collision_matrix.h>
+#include <tesseract_environment/environment.h>
 
 #include <QApplication>
 
@@ -42,12 +45,8 @@ struct AllowedCollisionMatrixModel::Implementation
 };
 
 AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject* parent)
-  : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
+  : AllowedCollisionMatrixModel(ComponentInfo(), parent)
 {
-  clear();
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
 }
 
 AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(ComponentInfo component_info, QObject* parent)
@@ -56,6 +55,11 @@ AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(ComponentInfo component
   clear();
 
   data_->component_info = std::move(component_info);
+
+  // If an environment has already been assigned load the data
+  auto env_wrapper = EnvironmentManager::get(data_->component_info);
+  if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+    set(*env_wrapper->getEnvironment()->getAllowedCollisionMatrix());
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);

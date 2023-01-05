@@ -25,24 +25,26 @@
 #include <tesseract_qt/common/events/group_tcps_events.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
+
+#include <tesseract_environment/environment.h>
 
 #include <QApplication>
 
 namespace tesseract_gui
 {
-GroupTCPsModel::GroupTCPsModel(QObject* parent)
-  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>())
-{
-  clear();
-
-  // Install event filter for interactive view controller
-  qGuiApp->installEventFilter(this);
-}
+GroupTCPsModel::GroupTCPsModel(QObject* parent) : GroupTCPsModel(ComponentInfo(), parent) {}
 
 GroupTCPsModel::GroupTCPsModel(ComponentInfo component_info, QObject* parent)
   : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
   clear();
+
+  // If an environment has already been assigned load the data
+  auto env_wrapper = EnvironmentManager::get(*component_info_);
+  if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+    set(env_wrapper->getEnvironment()->getKinematicsInformation().group_tcps);
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
