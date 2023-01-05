@@ -27,6 +27,7 @@
 #include <memory>
 #include <tesseract_qt/common/entity.h>
 #include <tesseract_qt/common/events/event_type.h>
+#include <tesseract_qt/common/events/render_events.h>
 
 #include <ignition/common/KeyEvent.hh>
 #include <ignition/common/MouseEvent.hh>
@@ -36,33 +37,6 @@
 /** @brief Namespace for all events. Refer to the EventManager class for more information about events. */
 namespace tesseract_gui::events
 {
-class RenderEvent : public QEvent
-{
-public:
-  RenderEvent(std::string scene_name, QEvent::Type type);
-  ~RenderEvent() override;
-
-  /** @brief Get the scene name the event is associated with */
-  const std::string& getSceneName() const;
-
-private:
-  std::string scene_name_;
-};
-
-/**
- * @brief Event called in the render thread of a 3D scene after the user camera has rendered.
- * It's safe to make rendering calls in this event's callback.
- */
-class Render : public RenderEvent
-{
-public:
-  Render(std::string scene_name);
-  ~Render() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::RENDER);
-};
-
 /**
  * @brief The class for sending and receiving custom snap value events.
  * This event is used in the Transform Control plugin tool when the user manually alters their snapping values.
@@ -573,24 +547,6 @@ private:
   /** @brief Private data pointer */
   class Implementation;
   std::unique_ptr<Implementation> data_;
-};
-
-/**
- * @brief Event called in the render thread of a 3D scene, before the user camera is rendered.
- * @details It's safe to make rendering calls in this event's callback.
- */
-class PreRender : public RenderEvent
-{
-public:
-  /**
-   * @brief Constructor
-   * @param scene_name The scene name
-   */
-  PreRender(std::string scene_name);
-  ~PreRender() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::PRE_RENDER);
 };
 
 //  /// \brief Event which is called to share WorldControl information.

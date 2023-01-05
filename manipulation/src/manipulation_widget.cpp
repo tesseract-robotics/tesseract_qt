@@ -119,9 +119,13 @@ const ComponentInfo& ManipulationWidget::getComponentInfo() const { return data_
 
 bool ManipulationWidget::isValid() const
 {
-  auto env_wrapper = EnvironmentManager::get(data_->parent_component_info);
+  std::shared_ptr<EnvironmentWrapper> env_wrapper = EnvironmentManager::find(data_->parent_component_info);
   if (env_wrapper == nullptr)
-    return false;
+  {
+    env_wrapper = EnvironmentManager::getDefault();
+    if (env_wrapper == nullptr)
+      return false;
+  }
 
   auto env = env_wrapper->getEnvironment();
   if (env == nullptr || !env->isInitialized())
@@ -193,9 +197,13 @@ tesseract_scene_graph::SceneState ManipulationWidget::getState(int index) const
 
 void ManipulationWidget::onGroupNameChanged()
 {
-  auto env_wrapper = EnvironmentManager::get(data_->parent_component_info);
+  std::shared_ptr<EnvironmentWrapper> env_wrapper = EnvironmentManager::find(data_->parent_component_info);
   if (env_wrapper == nullptr)
-    return;
+  {
+    env_wrapper = EnvironmentManager::getDefault();
+    if (env_wrapper == nullptr)
+      return;
+  }
 
   auto env = env_wrapper->getEnvironment();
   if (env == nullptr || !env->isInitialized())
@@ -451,7 +459,10 @@ void ManipulationWidget::onReset()
 
   QString current_group_name = ui->group_combo_box->currentText();
 
-  auto env_wrapper = EnvironmentManager::get(data_->parent_component_info);
+  std::shared_ptr<EnvironmentWrapper> env_wrapper = EnvironmentManager::find(data_->parent_component_info);
+  if (env_wrapper == nullptr)
+    env_wrapper = EnvironmentManager::getDefault();
+
   if (env_wrapper == nullptr)
   {
     data_->group_names_model.setStringList(QStringList());

@@ -44,10 +44,40 @@ public:
   EnvironmentManager(EnvironmentManager&&) = delete;
   EnvironmentManager& operator=(EnvironmentManager&&) = delete;
 
-  static std::shared_ptr<const EnvironmentWrapper> get(const ComponentInfo& component_info);
-  static void set(std::shared_ptr<const EnvironmentWrapper> env, bool set_default = false);
+  /**
+   * @brief Store the environment wrapper
+   * @param env The environment wrapper to store
+   * @param set_default Indicate if this should be set as the default. The first environment wrapper added is
+   * automatically assigned as the default
+   */
+  static void set(std::shared_ptr<EnvironmentWrapper> env, bool set_default = false);
 
-  static std::shared_ptr<const EnvironmentWrapper> getDefault();
+  /**
+   * @brief Get the environment wrapper associated with the provided component info
+   * @param component_info The component info used to retrieve environment wrapper
+   * @return The environment wrapper, if not found a nullptr is retuned
+   */
+  static std::shared_ptr<EnvironmentWrapper> get(const ComponentInfo& component_info);
+
+  /**
+   * @brief This will search for the first environment
+   * @details It starts with the provided component info then searches the parents until it finds an available
+   * environment wrapper.
+   * @param component_info The component info used begin the search
+   * @return The first available environment wrapper, if not found a nullptr is retuned
+   */
+  static std::shared_ptr<EnvironmentWrapper> find(const ComponentInfo& component_info);
+
+  /**
+   * @brief Get the default environment wrapper.
+   * @return The default environment wrapper
+   */
+  static std::shared_ptr<EnvironmentWrapper> getDefault();
+
+  /**
+   * @brief Set the default environment wrapper
+   * @param component_info The component info associated with the environment wrapper to set as default
+   */
   static void setDefault(const ComponentInfo& component_info);
 
 private:
@@ -55,10 +85,11 @@ private:
   std::unique_ptr<Implementation> data_;
 
   static std::shared_ptr<EnvironmentManager> instance();
-  void setHelper(std::shared_ptr<const EnvironmentWrapper> env, bool set_default);
-  std::shared_ptr<const EnvironmentWrapper> getHelper(const ComponentInfo& component_info) const;
+  void setHelper(std::shared_ptr<EnvironmentWrapper> env, bool set_default);
+  std::shared_ptr<EnvironmentWrapper> getHelper(const ComponentInfo& component_info) const;
+  std::shared_ptr<EnvironmentWrapper> findHelper(const ComponentInfo& component_info) const;
   void setDefaultHelper(const ComponentInfo& component_info);
-  std::shared_ptr<const EnvironmentWrapper> getDefaultHelper() const;
+  std::shared_ptr<EnvironmentWrapper> getDefaultHelper() const;
 };
 }  // namespace tesseract_gui
 

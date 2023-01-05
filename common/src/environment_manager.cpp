@@ -31,7 +31,7 @@ namespace tesseract_gui
 {
 struct EnvironmentManager::Implementation
 {
-  std::unordered_map<ComponentInfo, std::shared_ptr<const EnvironmentWrapper>> environments;
+  std::unordered_map<ComponentInfo, std::shared_ptr<EnvironmentWrapper>> environments;
   ComponentInfo default_component_info;
 };
 
@@ -39,17 +39,22 @@ EnvironmentManager::EnvironmentManager() : data_(std::make_unique<Implementation
 
 EnvironmentManager::~EnvironmentManager() = default;
 
-std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::get(const ComponentInfo& component_info)
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::get(const ComponentInfo& component_info)
 {
   return instance()->getHelper(component_info);
 }
 
-void EnvironmentManager::set(std::shared_ptr<const EnvironmentWrapper> env, bool set_default)
+void EnvironmentManager::set(std::shared_ptr<EnvironmentWrapper> env, bool set_default)
 {
   instance()->setHelper(env, set_default);
 }
 
-std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getDefault() { return instance()->getDefaultHelper(); }
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::find(const ComponentInfo& component_info)
+{
+  instance()->findHelper(component_info);
+}
+
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getDefault() { return instance()->getDefaultHelper(); }
 
 void EnvironmentManager::setDefault(const ComponentInfo& component_info)
 {
@@ -65,7 +70,7 @@ std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
   return singleton;
 }
 
-void EnvironmentManager::setHelper(std::shared_ptr<const EnvironmentWrapper> env, bool set_default)
+void EnvironmentManager::setHelper(std::shared_ptr<EnvironmentWrapper> env, bool set_default)
 {
   ComponentInfo component_info = env->getComponentInfo();
   if (data_->environments.empty() || set_default)
@@ -74,13 +79,25 @@ void EnvironmentManager::setHelper(std::shared_ptr<const EnvironmentWrapper> env
   data_->environments[component_info] = env;
 }
 
-std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getHelper(const ComponentInfo& component_info) const
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getHelper(const ComponentInfo& component_info) const
 {
   auto it = data_->environments.find(component_info);
   if (it == data_->environments.end())
     return nullptr;
 
   return it->second;
+}
+
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::findHelper(const ComponentInfo& component_info) const
+{
+  auto env_wrapper = getHelper(component_info);
+  if (env_wrapper != nullptr)
+    return env_wrapper;
+
+  if (component_info.hasParent())
+    return findHelper(*component_info.getParent());
+
+  return nullptr;
 }
 
 void EnvironmentManager::setDefaultHelper(const ComponentInfo& component_info)
@@ -92,7 +109,7 @@ void EnvironmentManager::setDefaultHelper(const ComponentInfo& component_info)
   data_->default_component_info = component_info;
 }
 
-std::shared_ptr<const EnvironmentWrapper> EnvironmentManager::getDefaultHelper() const
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getDefaultHelper() const
 {
   return getHelper(data_->default_component_info);
 }

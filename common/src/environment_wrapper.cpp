@@ -261,6 +261,17 @@ std::shared_ptr<const tesseract_environment::Environment> MonitorEnvironmentWrap
   return env_monitor_->getEnvironment();
 }
 
+std::shared_ptr<tesseract_environment::EnvironmentMonitor> MonitorEnvironmentWrapper::getEnvironmentMonitor()
+{
+  return env_monitor_;
+}
+
+std::shared_ptr<const tesseract_environment::EnvironmentMonitor>
+MonitorEnvironmentWrapper::getEnvironmentMonitor() const
+{
+  return env_monitor_;
+}
+
 void MonitorEnvironmentWrapper::tesseractEventFilter(const tesseract_environment::Event& event)
 {
   tesseractEventFilterHelper(event, getComponentInfo(), env_monitor_->environment());

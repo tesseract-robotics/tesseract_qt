@@ -26,8 +26,8 @@
 
 namespace tesseract_gui
 {
-ComponentInfo::ComponentInfo(std::string scene_name)
-  : scene_name(std::move(scene_name)), ns(boost::uuids::random_generator()())
+ComponentInfo::ComponentInfo(std::string scene_name, std::string description)
+  : scene_name(std::move(scene_name)), ns(boost::uuids::random_generator()()), description(std::move(description))
 {
 }
 

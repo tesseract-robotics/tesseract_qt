@@ -39,13 +39,19 @@ struct ComponentInfo
   ComponentInfo() = default;
 
   /** @brief Assigns provided scene name and generates random namespace */
-  explicit ComponentInfo(std::string scene_name);
+  explicit ComponentInfo(std::string scene_name, std::string description = "");
 
   /** @brief The associated render scene */
   std::string scene_name{ "tesseract_default" };
 
   /** @brief The associated namespace */
   boost::uuids::uuid ns{};
+
+  /**
+   * @brief A description
+   * @details This is not used for comparision
+   */
+  std::string description;
 
   /** @brief Check if it has a parent component */
   bool hasParent() const;

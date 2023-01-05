@@ -157,19 +157,6 @@ public:
   ignition::common::MouseEvent mouse;
 };
 
-/////////////////////////////////////////////////
-RenderEvent::RenderEvent(std::string scene_name, QEvent::Type type) : QEvent(type), scene_name_(std::move(scene_name))
-{
-}
-RenderEvent::~RenderEvent() = default;
-
-const std::string& RenderEvent::getSceneName() const { return scene_name_; }
-
-/////////////////////////////////////////////////
-Render::Render(std::string scene_name) : RenderEvent(std::move(scene_name), kType) {}
-Render::~Render() = default;
-
-/////////////////////////////////////////////////
 SnapIntervals::SnapIntervals(const ignition::math::Vector3d& _xyz,
                              const ignition::math::Vector3d& _rpy,
                              const ignition::math::Vector3d& _scale,
@@ -401,7 +388,5 @@ const ignition::common::MouseEvent& MousePressOnScene::getMouse() const { return
 //}
 
 /////////////////////////////////////////////////
-PreRender::PreRender(std::string scene_name) : RenderEvent(std::move(scene_name), kType) {}
-PreRender::~PreRender() = default;
 
 }  // namespace tesseract_gui::events

@@ -17,7 +17,7 @@ target_link_libraries(
          Qt5::Widgets
          ${PROJECT_NAME}_environment_widgets
          ${PROJECT_NAME}_joint_trajectory_widgets
-         ${PROJECT_NAME}_manipulation)
+         ${PROJECT_NAME}_manipulation_widgets)
 target_include_directories(
   ${PROJECT_NAME}_workbench_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/workbench>"

@@ -32,6 +32,7 @@ enum class EventType : int
   EVENT_TYPE = QEvent::Type::User + 1000,
 
   // Render Events
+  PRE_RENDER                          = EVENT_TYPE,
   RENDER                              = EVENT_TYPE + 1,
   SNAP_INTERVALS                      = EVENT_TYPE + 2,
   SPAWN_FROM_DESCRIPTION              = EVENT_TYPE + 3,
@@ -51,8 +52,7 @@ enum class EventType : int
   SCROLL_ON_SCENE                     = EVENT_TYPE + 17,
   DRAG_ON_SCENE                       = EVENT_TYPE + 18,
   MOUSE_PRESS_ON_SCENE                = EVENT_TYPE + 19,
-  PRE_RENDER                          = EVENT_TYPE + 20,
-  RENDER_TYPES_END                    = EVENT_TYPE + 21,
+  RENDER_TYPES_END                    = EVENT_TYPE + 20,
 
   // Tool Path
   TOOL_PATH_ADD             = RENDER_TYPES_END + 1,

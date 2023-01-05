@@ -80,6 +80,9 @@ public:
 
   std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
 
+  std::shared_ptr<tesseract_environment::EnvironmentMonitor> getEnvironmentMonitor();
+  std::shared_ptr<const tesseract_environment::EnvironmentMonitor> getEnvironmentMonitor() const;
+
 private:
   std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor_;
 
