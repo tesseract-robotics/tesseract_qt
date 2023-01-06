@@ -2,7 +2,7 @@ find_package(tesseract_support REQUIRED)
 add_executable(${PROJECT_NAME}_render_widget_demo render_widget_demo.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_render_widget_demo
-  PRIVATE ${PROJECT_NAME}_rendering
+  PRIVATE ${PROJECT_NAME}_render_widgets
           tesseract::tesseract_common
           Qt5::Core
           Qt5::Widgets)
@@ -10,7 +10,7 @@ target_link_libraries(
 add_executable(${PROJECT_NAME}_render_environment_widget_demo render_environment_widget_demo.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_render_environment_widget_demo
-  PRIVATE ${PROJECT_NAME}_rendering
+  PRIVATE ${PROJECT_NAME}_render_widgets
           ${PROJECT_NAME}_environment_widgets
           ${PROJECT_NAME}_joint_trajectory_widgets
           tesseract::tesseract_common

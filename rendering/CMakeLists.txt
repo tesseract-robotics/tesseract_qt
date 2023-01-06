@@ -22,7 +22,7 @@ qt5_wrap_cpp(
   include/tesseract_qt/rendering/contact_results_render_manager.h)
 
 add_library(
-  ${PROJECT_NAME}_rendering SHARED
+  ${PROJECT_NAME}_render_widgets SHARED
   ${RENDERING_WIDGET_headers_MOC}
   src/conversions.cpp
   src/interactive_view_control.cpp
@@ -34,7 +34,7 @@ add_library(
   src/utils.cpp)
 
 target_link_libraries(
-  ${PROJECT_NAME}_rendering
+  ${PROJECT_NAME}_render_widgets
   PUBLIC tesseract::tesseract_common
          ignition-common4::ignition-common4-profiler
          ignition-common4::ignition-common4-events
@@ -47,9 +47,9 @@ target_link_libraries(
          Qt5::OpenGL
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_tool_path_widgets)
-target_include_directories(${PROJECT_NAME}_rendering PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-                                                            "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_rendering ${PROJECT_NAME}_common)
+target_include_directories(
+  ${PROJECT_NAME}_render_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                                        "$<INSTALL_INTERFACE:include>")
 
 add_subdirectory(demo)
 
@@ -57,4 +57,4 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
-install_targets(TARGETS ${PROJECT_NAME}_rendering)
+install_targets(TARGETS ${PROJECT_NAME}_render_widgets)

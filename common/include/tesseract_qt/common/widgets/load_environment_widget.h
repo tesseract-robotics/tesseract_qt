@@ -20,41 +20,39 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_TOOL_PATH_RENDER_MANAGER_H
-#define TESSERACT_QT_COMMON_TOOL_PATH_RENDER_MANAGER_H
+#ifndef TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_WIDGET_H
+#define TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_WIDGET_H
 
 #include <memory>
-#include <QObject>
+#include <QWidget>
 
-namespace tesseract_gui::events
+namespace Ui
 {
-class ComponentEvent;
+class LoadEnvironmentWidget;
 }
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
-
-class ToolPathRenderManager : public QObject
+class LoadEnvironmentWidget : public QWidget
 {
+  Q_OBJECT
+
 public:
-  using Ptr = std::shared_ptr<ToolPathRenderManager>;
-  using ConstPtr = std::shared_ptr<const ToolPathRenderManager>;
-  using UPtr = std::unique_ptr<ToolPathRenderManager>;
-  using ConstUPtr = std::unique_ptr<const ToolPathRenderManager>;
+  explicit LoadEnvironmentWidget(QWidget* parent = nullptr);
+  ~LoadEnvironmentWidget();
 
-  ToolPathRenderManager(ComponentInfo component_info);
-  ~ToolPathRenderManager();
+  const QString& getURDFFilePath() const;
+  const QString& getSRDFFilePath() const;
 
-protected:
-  std::unique_ptr<ComponentInfo> component_info_;
-  std::vector<std::unique_ptr<events::ComponentEvent>> events_;
+public Q_SLOTS:
+  void onBrowseURDFClicked();
+  void onBrowseSRDFClicked();
 
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
-
-  virtual void render() = 0;
+private:
+  std::unique_ptr<Ui::LoadEnvironmentWidget> ui_;
+  QString urdf_filepath_;
+  QString srdf_filepath_;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COMMON_TOOL_PATH_RENDER_MANAGER_H
+#endif  // TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_WIDGET_H

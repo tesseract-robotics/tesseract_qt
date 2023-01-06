@@ -25,7 +25,7 @@ add_executable(${PROJECT_NAME}_srdf_app src/srdf_editor_app.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_srdf_app
   PRIVATE ${PROJECT_NAME}_srdf
-          ${PROJECT_NAME}_rendering
+          ${PROJECT_NAME}_render_widgets
           ${PROJECT_NAME}_environment_widgets
           tesseract::tesseract_common)
 

@@ -20,41 +20,43 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_TOOL_PATH_RENDER_MANAGER_H
-#define TESSERACT_QT_COMMON_TOOL_PATH_RENDER_MANAGER_H
+#ifndef TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_DIALOG_H
+#define TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_DIALOG_H
 
 #include <memory>
-#include <QObject>
+#include <QDialog>
 
-namespace tesseract_gui::events
+namespace Ui
 {
-class ComponentEvent;
+class LoadEnvironmentDialog;
 }
 
+namespace tesseract_common
+{
+class ResourceLocator;
+}
 namespace tesseract_gui
 {
 struct ComponentInfo;
-
-class ToolPathRenderManager : public QObject
+class LoadEnvironmentDialog : public QDialog
 {
+  Q_OBJECT
+
 public:
-  using Ptr = std::shared_ptr<ToolPathRenderManager>;
-  using ConstPtr = std::shared_ptr<const ToolPathRenderManager>;
-  using UPtr = std::unique_ptr<ToolPathRenderManager>;
-  using ConstUPtr = std::unique_ptr<const ToolPathRenderManager>;
+  explicit LoadEnvironmentDialog(QWidget* parent = nullptr);
+  explicit LoadEnvironmentDialog(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~LoadEnvironmentDialog();
 
-  ToolPathRenderManager(ComponentInfo component_info);
-  ~ToolPathRenderManager();
+  void setResourceLocator(std::shared_ptr<tesseract_common::ResourceLocator> resource_locator);
 
-protected:
-  std::unique_ptr<ComponentInfo> component_info_;
-  std::vector<std::unique_ptr<events::ComponentEvent>> events_;
+public Q_SLOTS:
+  void onAccepted();
 
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
-
-  virtual void render() = 0;
+private:
+  std::unique_ptr<Ui::LoadEnvironmentDialog> ui_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COMMON_TOOL_PATH_RENDER_MANAGER_H
+#endif  // TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_DIALOG_H

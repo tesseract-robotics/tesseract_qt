@@ -131,6 +131,8 @@ QIcon getTesseractIcon();
 
 QIcon getRestoreIcon();
 
+QIcon getLayoutIcon();
+
 QIcon getDateTimeIcon();
 
 QIcon getGreenCircleIcon();

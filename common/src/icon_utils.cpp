@@ -396,6 +396,12 @@ QIcon getRestoreIcon()
   return icon;
 }
 
+QIcon getLayoutIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_qt/png/layout.png");
+  return icon;
+}
+
 QIcon getDateTimeIcon()
 {
   static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/datetime.svg"));
