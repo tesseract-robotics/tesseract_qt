@@ -20,32 +20,41 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_RENDERING_SCENE_GRAPH_RENDER_MANAGER_H
-#define TESSERACT_QT_RENDERING_SCENE_GRAPH_RENDER_MANAGER_H
+#ifndef TESSERACT_QT_COMMON_SCENE_GRAPH_RENDER_MANAGER_H
+#define TESSERACT_QT_COMMON_SCENE_GRAPH_RENDER_MANAGER_H
 
 #include <memory>
 #include <QObject>
 
+namespace tesseract_gui::events
+{
+class ComponentEvent;
+}
+
 namespace tesseract_gui
 {
-class EntityManager;
 struct ComponentInfo;
 
 class SceneGraphRenderManager : public QObject
 {
 public:
-  SceneGraphRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
+  using Ptr = std::shared_ptr<SceneGraphRenderManager>;
+  using ConstPtr = std::shared_ptr<const SceneGraphRenderManager>;
+  using UPtr = std::unique_ptr<SceneGraphRenderManager>;
+  using ConstUPtr = std::unique_ptr<const SceneGraphRenderManager>;
+
+  SceneGraphRenderManager(ComponentInfo component_info);
   ~SceneGraphRenderManager();
 
-private:
-  struct Implementation;
-  std::unique_ptr<Implementation> data_;
+protected:
+  std::unique_ptr<ComponentInfo> component_info_;
+  std::vector<std::unique_ptr<events::ComponentEvent>> events_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
 
-  void render();
+  virtual void render() = 0;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_RENDERING_SCENE_GRAPH_RENDER_MANAGER_H
+#endif  // TESSERACT_QT_COMMON_SCENE_GRAPH_EVENT_MANAGER_H

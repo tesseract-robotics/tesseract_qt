@@ -34,7 +34,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/srdf/srdf_editor_widget.h>
 #include <tesseract_qt/rendering/render_widget.h>
-#include <tesseract_qt/rendering/scene_graph_render_manager.h>
+#include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>
 
 #include <tesseract_qt/environment/widgets/environment_widget.h>
 
@@ -63,7 +63,7 @@ int main(int argc, char** argv)
   auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
   auto* render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
 
-  tesseract_gui::SceneGraphRenderManager scene_graph_manager{ component_info, entity_manager };
+  tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager{ component_info, entity_manager };
 
   auto tab_widget = new QTabWidget();
   tab_widget->addTab(srdf_widget, "SRDF");

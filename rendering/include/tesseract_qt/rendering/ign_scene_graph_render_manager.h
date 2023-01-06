@@ -20,31 +20,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_RENDERING_TOOL_PATH_RENDER_MANAGER_H
-#define TESSERACT_QT_RENDERING_TOOL_PATH_RENDER_MANAGER_H
+#ifndef TESSERACT_QT_RENDERING_IGN_SCENE_GRAPH_RENDER_MANAGER_H
+#define TESSERACT_QT_RENDERING_IGN_SCENE_GRAPH_RENDER_MANAGER_H
 
-#include <memory>
-#include <QObject>
+#include <tesseract_qt/common/events/scene_graph_render_manager.h>
 
 namespace tesseract_gui
 {
 class EntityManager;
 struct ComponentInfo;
 
-class ToolPathRenderManager : public QObject
+class IgnSceneGraphRenderManager : public SceneGraphRenderManager
 {
 public:
-  ToolPathRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
-  ~ToolPathRenderManager();
+  IgnSceneGraphRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
+  ~IgnSceneGraphRenderManager();
 
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
-
-  void render();
+  void render() override;
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_RENDERING_TOOL_PATH_RENDER_MANAGER_H
+
+#endif  // TESSERACT_QT_RENDERING_IGN_SCENE_GRAPH_RENDER_MANAGER_H

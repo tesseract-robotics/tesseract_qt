@@ -21,8 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/rendering/scene_graph_render_manager.h>
-#include <tesseract_qt/rendering/render_events.h>
+#include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>
 #include <tesseract_qt/rendering/utils.h>
 #include <tesseract_qt/rendering/conversions.h>
 
@@ -48,16 +47,15 @@ const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
 
 namespace tesseract_gui
 {
-struct SceneGraphRenderManager::Implementation
+struct IgnSceneGraphRenderManager::Implementation
 {
-  ComponentInfo component_info;
+  std::string scene_name;
   EntityManager::Ptr entity_manager;
   std::unordered_map<ComponentInfo, EntityContainer::Ptr> entity_containers;
-  std::vector<std::unique_ptr<events::ComponentEvent>> events;
 
   void clear()
   {
-    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info.scene_name);
+    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
     for (const auto& entity_container : entity_containers)
     {
       for (const auto& ns : entity_container.second->getTrackedEntities())
@@ -81,12 +79,12 @@ struct SceneGraphRenderManager::Implementation
 
   void clear(const ComponentInfo& ci)
   {
-    assert(ci.scene_name == component_info.scene_name);
+    assert(ci.scene_name == scene_name);
 
     auto it = entity_containers.find(ci);
     if (it != entity_containers.end())
     {
-      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info.scene_name);
+      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
       for (const auto& ns : it->second->getTrackedEntities())
       {
         for (const auto& entity : ns.second)
@@ -107,121 +105,22 @@ struct SceneGraphRenderManager::Implementation
   }
 };
 
-SceneGraphRenderManager::SceneGraphRenderManager(ComponentInfo component_info,
-                                                 std::shared_ptr<EntityManager> entity_manager)
-  : data_(std::make_unique<Implementation>())
+IgnSceneGraphRenderManager::IgnSceneGraphRenderManager(ComponentInfo component_info,
+                                                       std::shared_ptr<EntityManager> entity_manager)
+  : SceneGraphRenderManager(std::move(component_info)), data_(std::make_unique<Implementation>())
 {
-  data_->component_info = std::move(component_info);
+  data_->scene_name = component_info_->scene_name;
   data_->entity_manager = std::move(entity_manager);
-
-  qApp->installEventFilter(this);
 }
 
-SceneGraphRenderManager::~SceneGraphRenderManager() { data_->clear(); }
+IgnSceneGraphRenderManager::~IgnSceneGraphRenderManager() { data_->clear(); }
 
-bool SceneGraphRenderManager::eventFilter(QObject* obj, QEvent* event)
+void IgnSceneGraphRenderManager::render()
 {
-  if (event->type() == events::SceneGraphClear::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphClear*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphClear*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphClear>(*e));
-  }
-  else if (event->type() == events::SceneGraphSet::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphSet*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphSet*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphSet>(*e));
-  }
-  else if (event->type() == events::SceneGraphAddLink::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphAddLink*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphAddLink*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphAddLink>(*e));
-  }
-  else if (event->type() == events::SceneGraphAddJoint::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphAddJoint*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphAddJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphAddJoint>(*e));
-  }
-  else if (event->type() == events::SceneGraphMoveLink::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphMoveLink*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphMoveLink*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphMoveLink>(*e));
-  }
-  else if (event->type() == events::SceneGraphMoveJoint::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphMoveJoint*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphMoveJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphMoveJoint>(*e));
-  }
-  else if (event->type() == events::SceneGraphRemoveLink::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphRemoveLink*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphRemoveLink*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphRemoveLink>(*e));
-  }
-  else if (event->type() == events::SceneGraphRemoveJoint::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphRemoveJoint*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphRemoveJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphRemoveJoint>(*e));
-  }
-  else if (event->type() == events::SceneGraphReplaceJoint::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphReplaceJoint*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphReplaceJoint*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphReplaceJoint>(*e));
-  }
-  else if (event->type() == events::SceneGraphModifyLinkVisibility::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphModifyLinkVisibility*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphModifyLinkVisibility*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphModifyLinkVisibility>(*e));
-  }
-  else if (event->type() == events::SceneGraphModifyLinkVisibilityALL::kType)
-  {
-    assert(dynamic_cast<events::SceneGraphModifyLinkVisibilityALL*>(event) != nullptr);
-    auto* e = static_cast<events::SceneGraphModifyLinkVisibilityALL*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneGraphModifyLinkVisibilityALL>(*e));
-  }
-  else if (event->type() == events::SceneStateChanged::kType)
-  {
-    assert(dynamic_cast<events::SceneStateChanged*>(event) != nullptr);
-    auto* e = static_cast<events::SceneStateChanged*>(event);
-    if (e->getComponentInfo() == data_->component_info || e->getComponentInfo().isParent(data_->component_info))
-      data_->events.push_back(std::make_unique<events::SceneStateChanged>(*e));
-  }
-  else if (event->type() == events::PreRender::kType)
-  {
-    assert(dynamic_cast<events::PreRender*>(event) != nullptr);
-    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->component_info.scene_name)
-      render();
-  }
-
-  // Standard event processing
-  return QObject::eventFilter(obj, event);
-}
-
-void SceneGraphRenderManager::render()
-{
-  if (data_->events.empty())
+  if (events_.empty())
     return;
 
-  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
+  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
 
   auto getEntityContainer = [this](const ComponentInfo& component_info) -> EntityContainer::Ptr {
     auto it = data_->entity_containers.find(component_info);
@@ -233,7 +132,7 @@ void SceneGraphRenderManager::render()
     return entity_container;
   };
 
-  for (const auto& event : data_->events)
+  for (const auto& event : events_)
   {
     if (event->type() == events::SceneGraphClear::kType)
     {
@@ -364,7 +263,7 @@ void SceneGraphRenderManager::render()
               bool link_visible = std::get<bool>(link_visual_node->UserData(USER_VISIBILITY));
               auto node = scene->VisualById(ns.second.id);
               node->SetUserData(USER_VISIBILITY, e.visible());
-              node->SetVisible(link_visible && e.visible());
+              node->SetVisible(link_visible & e.visible());
             }
 
             if (sub_ns[1] == "Collisions" && e.getVisibilityFlags() & LinkVisibilityFlags::COLLISION)
@@ -375,7 +274,7 @@ void SceneGraphRenderManager::render()
               bool link_visible = std::get<bool>(link_visual_node->UserData(USER_VISIBILITY));
               auto node = scene->VisualById(ns.second.id);
               node->SetUserData(USER_VISIBILITY, e.visible());
-              node->SetVisible(link_visible && e.visible());
+              node->SetVisible(link_visible & e.visible());
             }
           }
           else if (sub_ns[1] == "Axis" && e.getVisibilityFlags() & LinkVisibilityFlags::AXIS)
@@ -408,7 +307,7 @@ void SceneGraphRenderManager::render()
     }
   }
 
-  data_->events.clear();
+  events_.clear();
 }
 
 }  // namespace tesseract_gui

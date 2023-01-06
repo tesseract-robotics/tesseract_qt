@@ -24,6 +24,7 @@
 #define TESSERACT_GUI_COMMON_ENVIRONMENT_MANAGER_H
 
 #include <memory>
+#include <unordered_map>
 
 namespace tesseract_gui
 {
@@ -58,6 +59,12 @@ public:
    * @return The environment wrapper, if not found a nullptr is retuned
    */
   static std::shared_ptr<EnvironmentWrapper> get(const ComponentInfo& component_info);
+
+  /**
+   * @brief Get all environment wrappers
+   * @return A map of all environment wrappers
+   */
+  static std::unordered_map<ComponentInfo, std::shared_ptr<EnvironmentWrapper>> getAll();
 
   /**
    * @brief This will search for the first environment

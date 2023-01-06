@@ -30,8 +30,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/rendering/render_widget.h>
-#include <tesseract_qt/rendering/scene_graph_render_manager.h>
-#include <tesseract_qt/rendering/tool_path_render_manager.h>
+#include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>
+#include <tesseract_qt/rendering/ign_tool_path_render_manager.h>
 
 #include <tesseract_qt/environment/widgets/environment_widget.h>
 
@@ -129,8 +129,8 @@ int main(int argc, char** argv)
   tesseract_gui::ComponentInfo jt_component_info = component_info.createChild();
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
 
-  tesseract_gui::SceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
-  tesseract_gui::ToolPathRenderManager tool_path_manager(component_info, entity_manager);
+  tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
+  tesseract_gui::IgnToolPathRenderManager tool_path_manager(component_info, entity_manager);
 
   QMainWindow window;
   window.addToolBar(new tesseract_gui::SceneGraphToolBar(component_info));

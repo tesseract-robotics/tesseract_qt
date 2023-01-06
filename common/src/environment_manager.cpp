@@ -39,14 +39,19 @@ EnvironmentManager::EnvironmentManager() : data_(std::make_unique<Implementation
 
 EnvironmentManager::~EnvironmentManager() = default;
 
+void EnvironmentManager::set(std::shared_ptr<EnvironmentWrapper> env, bool set_default)
+{
+  instance()->setHelper(env, set_default);
+}
+
 std::shared_ptr<EnvironmentWrapper> EnvironmentManager::get(const ComponentInfo& component_info)
 {
   return instance()->getHelper(component_info);
 }
 
-void EnvironmentManager::set(std::shared_ptr<EnvironmentWrapper> env, bool set_default)
+std::unordered_map<ComponentInfo, std::shared_ptr<EnvironmentWrapper>> EnvironmentManager::getAll()
 {
-  instance()->setHelper(env, set_default);
+  return instance()->data_->environments;
 }
 
 std::shared_ptr<EnvironmentWrapper> EnvironmentManager::find(const ComponentInfo& component_info)

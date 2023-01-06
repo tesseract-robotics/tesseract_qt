@@ -49,7 +49,9 @@ add_library(
   src/events/kinematic_groups_events.cpp
   src/events/render_events.cpp
   src/events/scene_graph_events.cpp
+  src/events/scene_graph_render_manager.cpp
   src/events/tool_path_events.cpp
+  src/events/tool_path_render_manager.cpp
   src/calibration_info_standard_item.cpp
   src/cartesian_editor_widget.cpp
   src/collision_margin_data_standard_item.cpp

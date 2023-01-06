@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/rendering/tool_path_render_manager.h>
-#include <tesseract_qt/rendering/render_events.h>
+#include <tesseract_qt/rendering/ign_tool_path_render_manager.h>
 #include <tesseract_qt/rendering/utils.h>
 
 #include <tesseract_qt/common/events/tool_path_events.h>
@@ -46,12 +45,10 @@ const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
 
 namespace tesseract_gui
 {
-struct ToolPathRenderManager::Implementation
+struct IgnToolPathRenderManager::Implementation
 {
-  ComponentInfo component_info;
   EntityManager::Ptr entity_manager;
   std::map<boost::uuids::uuid, EntityContainer::Ptr> entity_containers;
-  std::vector<std::unique_ptr<events::ComponentEvent>> events;
 
   void clear(ignition::rendering::Scene& scene, EntityContainer& container)
   {
@@ -77,9 +74,9 @@ struct ToolPathRenderManager::Implementation
       clear(scene, *(it->second));
   }
 
-  void clearAll()
+  void clearAll(const std::string& scene_name)
   {
-    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info.scene_name);
+    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
     if (scene != nullptr)
     {
       for (auto& container : entity_containers)
@@ -175,91 +172,24 @@ struct ToolPathRenderManager::Implementation
   }
 };
 
-ToolPathRenderManager::ToolPathRenderManager(ComponentInfo component_info,
-                                             std::shared_ptr<EntityManager> entity_manager)
-  : data_(std::make_unique<Implementation>())
+IgnToolPathRenderManager::IgnToolPathRenderManager(ComponentInfo component_info,
+                                                   std::shared_ptr<EntityManager> entity_manager)
+  : ToolPathRenderManager(std::move(component_info)), data_(std::make_unique<Implementation>())
 {
-  data_->component_info = std::move(component_info);
   data_->entity_manager = std::move(entity_manager);
-
-  qApp->installEventFilter(this);
 }
 
-ToolPathRenderManager::~ToolPathRenderManager() { data_->clearAll(); }
+IgnToolPathRenderManager::~IgnToolPathRenderManager() { data_->clearAll(component_info_->scene_name); }
 
-bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
+void IgnToolPathRenderManager::render()
 {
-  if (event->type() == events::ToolPathAdd::kType)
-  {
-    assert(dynamic_cast<events::ToolPathAdd*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathAdd*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      data_->events.push_back(std::make_unique<events::ToolPathAdd>(*e));
-  }
-  else if (event->type() == events::ToolPathRemove::kType)
-  {
-    assert(dynamic_cast<events::ToolPathRemove*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathRemove*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      data_->events.push_back(std::make_unique<events::ToolPathRemove>(*e));
-  }
-  else if (event->type() == events::ToolPathRemoveAll::kType)
-  {
-    assert(dynamic_cast<events::ToolPathRemoveAll*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathRemoveAll*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      data_->events.push_back(std::make_unique<events::ToolPathRemoveAll>(*e));
-  }
-  else if (event->type() == events::ToolPathHideAll::kType)
-  {
-    assert(dynamic_cast<events::ToolPathHideAll*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathHideAll*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      data_->events.push_back(std::make_unique<events::ToolPathHideAll>(*e));
-  }
-  else if (event->type() == events::ToolPathShowAll::kType)
-  {
-    assert(dynamic_cast<events::ToolPathShowAll*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathShowAll*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      data_->events.push_back(std::make_unique<events::ToolPathShowAll>(*e));
-  }
-  else if (event->type() == events::ToolPathHide::kType)
-  {
-    assert(dynamic_cast<events::ToolPathHide*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathHide*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      data_->events.push_back(std::make_unique<events::ToolPathHide>(*e));
-  }
-  else if (event->type() == events::ToolPathShow::kType)
-  {
-    assert(dynamic_cast<events::ToolPathShow*>(event) != nullptr);
-    auto* e = static_cast<events::ToolPathShow*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      data_->events.push_back(std::make_unique<events::ToolPathShow>(*e));
-  }
-  else if (event->type() == events::PreRender::kType)
-  {
-    static const boost::uuids::uuid nil_uuid{};
-
-    assert(dynamic_cast<events::PreRender*>(event) != nullptr);
-    if (static_cast<events::PreRender*>(event)->getSceneName() == data_->component_info.scene_name)
-      render();
-  }
-
-  // Standard event processing
-  return QObject::eventFilter(obj, event);
-}
-
-void ToolPathRenderManager::render()
-{
-  if (data_->events.empty())
+  if (events_.empty())
     return;
 
   static const boost::uuids::uuid nil_uuid{};
-  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->component_info.scene_name);
+  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->scene_name);
 
-  for (const auto& event : data_->events)
+  for (const auto& event : events_)
   {
     if (event->type() == events::ToolPathAdd::kType)
     {
@@ -311,7 +241,7 @@ void ToolPathRenderManager::render()
     else if (event->type() == events::ToolPathRemoveAll::kType)
     {
       auto& e = static_cast<events::ToolPathRemoveAll&>(*event);
-      data_->clearAll();
+      data_->clearAll(component_info_->scene_name);
     }
     else if (event->type() == events::ToolPathHideAll::kType)
     {
@@ -335,6 +265,6 @@ void ToolPathRenderManager::render()
     }
   }
 
-  data_->events.clear();
+  events_.clear();
 }
 }  // namespace tesseract_gui
