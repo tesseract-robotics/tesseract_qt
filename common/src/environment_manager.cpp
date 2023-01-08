@@ -66,6 +66,8 @@ void EnvironmentManager::setDefault(const ComponentInfo& component_info)
   instance()->setDefaultHelper(component_info);
 }
 
+void EnvironmentManager::remove(const ComponentInfo& component_info) { instance()->removeHelper(component_info); }
+
 std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
 {
   static std::shared_ptr<EnvironmentManager> singleton = nullptr;
@@ -117,6 +119,32 @@ void EnvironmentManager::setDefaultHelper(const ComponentInfo& component_info)
 std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getDefaultHelper() const
 {
   return getHelper(data_->default_component_info);
+}
+
+void EnvironmentManager::removeHelper(const ComponentInfo& component_info)
+{
+  bool update_default{ false };
+  std::vector<ComponentInfo> remove_component_infos;
+  for (const auto& env : data_->environments)
+  {
+    if (component_info == env.first || env.first.isParent(component_info))
+    {
+      remove_component_infos.push_back(env.first);
+
+      if (env.first == data_->default_component_info)
+        update_default = true;
+    }
+  }
+
+  for (const auto& rci : remove_component_infos)
+    data_->environments.erase(rci);
+
+  if (update_default)
+  {
+    data_->default_component_info = ComponentInfo();
+    if (!data_->environments.empty())
+      data_->default_component_info = data_->environments.begin()->first;
+  }
 }
 
 }  // namespace tesseract_gui

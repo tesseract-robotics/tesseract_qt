@@ -52,6 +52,7 @@ private:
   std::unique_ptr<Ui::LoadEnvironmentWidget> ui_;
   QString urdf_filepath_;
   QString srdf_filepath_;
+  QString default_directory_;
 };
 }  // namespace tesseract_gui
 

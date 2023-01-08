@@ -45,7 +45,16 @@ EnvironmentWrapper::EnvironmentWrapper(ComponentInfo component_info)
 {
 }
 
-EnvironmentWrapper::~EnvironmentWrapper() = default;
+EnvironmentWrapper::~EnvironmentWrapper()
+{
+  // clear environment data
+  QApplication::sendEvent(qApp, new events::SceneGraphClear(*component_info_));
+  QApplication::sendEvent(qApp, new events::EnvironmentCommandsClear(*component_info_));
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(*component_info_));
+  QApplication::sendEvent(qApp, new events::KinematicGroupsClear(*component_info_));
+  QApplication::sendEvent(qApp, new events::GroupJointStatesClear(*component_info_));
+  QApplication::sendEvent(qApp, new events::GroupTCPsClear(*component_info_));
+}
 
 const ComponentInfo& EnvironmentWrapper::getComponentInfo() const { return *component_info_; }
 
@@ -183,6 +192,9 @@ void eventFilterHelper(QObject* /*obj*/,
 void broadcastHelper(const ComponentInfo& component_info, const tesseract_environment::Environment& env)
 {
   auto lock = env.lockRead();
+
+  if (!env.isInitialized())
+    return;
 
   // Broadcast environment data
   QApplication::sendEvent(qApp, new events::SceneGraphSet(component_info, env.getSceneGraph()->clone()));

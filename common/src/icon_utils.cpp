@@ -235,6 +235,12 @@ QIcon getPlotIcon()
   return icon;
 }
 
+QIcon getOpenIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/open.svg"));
+  return icon;
+}
+
 QIcon getImportIcon()
 {
   static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/import.svg"));

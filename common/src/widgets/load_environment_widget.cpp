@@ -24,6 +24,8 @@
 #include "ui_load_environment_widget.h"
 
 #include <QFileDialog>
+#include <QSettings>
+#include <QStandardPaths>
 
 namespace tesseract_gui
 {
@@ -32,11 +34,23 @@ LoadEnvironmentWidget::LoadEnvironmentWidget(QWidget* parent)
 {
   ui_->setupUi(this);
 
+  QSettings ms;
+  ms.beginGroup("LoadEnvironmentWidget");
+  default_directory_ =
+      ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
+  ms.endGroup();
+
   connect(ui_->urdf_browse_button, SIGNAL(clicked()), this, SLOT(onBrowseURDFClicked()));
   connect(ui_->srdf_browse_button, SIGNAL(clicked()), this, SLOT(onBrowseSRDFClicked()));
 }
 
-LoadEnvironmentWidget::~LoadEnvironmentWidget() = default;
+LoadEnvironmentWidget::~LoadEnvironmentWidget()
+{
+  QSettings ms;
+  ms.beginGroup("LoadEnvironmentWidget");
+  ms.setValue("default_directory", default_directory_);
+  ms.endGroup();
+}
 
 const QString& LoadEnvironmentWidget::getURDFFilePath() const { return urdf_filepath_; }
 const QString& LoadEnvironmentWidget::getSRDFFilePath() const { return srdf_filepath_; }
@@ -46,7 +60,7 @@ void LoadEnvironmentWidget::onBrowseURDFClicked()
   QStringList filters;
   filters.append("URDF (*.urdf)");
 
-  QFileDialog dialog(this, "Open URDF");
+  QFileDialog dialog(this, "Open URDF", default_directory_);
   dialog.setAcceptMode(QFileDialog::AcceptOpen);
   dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
   dialog.setModal(true);
@@ -55,6 +69,8 @@ void LoadEnvironmentWidget::onBrowseURDFClicked()
   {
     urdf_filepath_ = dialog.selectedFiles().first();
     ui_->urdf_line_edit->setText(urdf_filepath_);
+    if (QFileInfo(urdf_filepath_).exists())
+      default_directory_ = QFileInfo(urdf_filepath_).absoluteDir().path();
   }
 }
 
@@ -63,7 +79,7 @@ void LoadEnvironmentWidget::onBrowseSRDFClicked()
   QStringList filters;
   filters.append("SRDF (*.srdf)");
 
-  QFileDialog dialog(this, "Open SRDF");
+  QFileDialog dialog(this, "Open SRDF", default_directory_);
   dialog.setAcceptMode(QFileDialog::AcceptOpen);
   dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
   dialog.setModal(true);
@@ -72,6 +88,8 @@ void LoadEnvironmentWidget::onBrowseSRDFClicked()
   {
     srdf_filepath_ = dialog.selectedFiles().first();
     ui_->srdf_line_edit->setText(srdf_filepath_);
+    if (QFileInfo(srdf_filepath_).exists())
+      default_directory_ = QFileInfo(srdf_filepath_).absoluteDir().path();
   }
 }
 

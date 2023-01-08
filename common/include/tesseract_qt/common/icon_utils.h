@@ -94,6 +94,7 @@ QIcon getURLIcon();
 
 QIcon getLogIcon();
 
+QIcon getOpenIcon();
 QIcon getTrashIcon();
 QIcon getPlotIcon();
 QIcon getImportIcon();

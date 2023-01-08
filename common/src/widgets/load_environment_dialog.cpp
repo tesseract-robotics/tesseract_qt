@@ -65,10 +65,22 @@ void LoadEnvironmentDialog::onAccepted()
 {
   tesseract_common::fs::path urdf_filepath(ui_->load_widget->getURDFFilePath().toStdString());
   tesseract_common::fs::path srdf_filepath(ui_->load_widget->getSRDFFilePath().toStdString());
+  bool urdf_filepath_exists = tesseract_common::fs::exists(urdf_filepath);
+  bool srdf_filepath_exists = tesseract_common::fs::exists(srdf_filepath);
+  if (urdf_filepath_exists && srdf_filepath_exists)
+  {
+    auto env = std::make_shared<tesseract_environment::Environment>();
+    env->init(urdf_filepath, srdf_filepath, data_->resource_locator);
+    auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(data_->component_info, env);
+    EnvironmentManager::set(env_wrapper);
+  }
 
-  auto env = std::make_shared<tesseract_environment::Environment>();
-  env->init(urdf_filepath, srdf_filepath, data_->resource_locator);
-  auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(data_->component_info, env);
-  EnvironmentManager::set(env_wrapper);
+  if (urdf_filepath_exists && !srdf_filepath_exists)
+  {
+    auto env = std::make_shared<tesseract_environment::Environment>();
+    env->init(urdf_filepath, data_->resource_locator);
+    auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(data_->component_info, env);
+    EnvironmentManager::set(env_wrapper);
+  }
 }
 }  // namespace tesseract_gui

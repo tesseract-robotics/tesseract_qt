@@ -87,6 +87,9 @@ public:
    */
   static void setDefault(const ComponentInfo& component_info);
 
+  /** @brief Remove environment */
+  static void remove(const ComponentInfo& component_info);
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
@@ -97,6 +100,7 @@ private:
   std::shared_ptr<EnvironmentWrapper> findHelper(const ComponentInfo& component_info) const;
   void setDefaultHelper(const ComponentInfo& component_info);
   std::shared_ptr<EnvironmentWrapper> getDefaultHelper() const;
+  void removeHelper(const ComponentInfo& component_info);
 };
 }  // namespace tesseract_gui
 
