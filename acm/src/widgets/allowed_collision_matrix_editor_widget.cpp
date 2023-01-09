@@ -42,15 +42,24 @@ struct AllowedCollisionMatrixEditorWidget::Implementation
 };
 
 AllowedCollisionMatrixEditorWidget::AllowedCollisionMatrixEditorWidget(QWidget* parent)
-  : QWidget(parent), ui_(std::make_unique<Ui::AllowedCollisionMatrixEditorWidget>())
+  : AllowedCollisionMatrixEditorWidget(ComponentInfo(), parent)
 {
-  ctor(ComponentInfo());
 }
 
 AllowedCollisionMatrixEditorWidget::AllowedCollisionMatrixEditorWidget(ComponentInfo component_info, QWidget* parent)
-  : QWidget(parent), ui_(std::make_unique<Ui::AllowedCollisionMatrixEditorWidget>())
+  : QWidget(parent)
+  , ui_(std::make_unique<Ui::AllowedCollisionMatrixEditorWidget>())
+  , data_(std::make_unique<Implementation>())
 {
-  ctor(std::move(component_info));
+  ui_->setupUi(this);
+
+  ui_->acm_widget->setComponentInfo(component_info);
+  data_->dialog = std::make_unique<AddAllowedCollisionEntryDialog>(component_info);
+
+  connect(ui_->generatePushButton, SIGNAL(clicked()), this, SLOT(onGenerateButtonClicked()));
+  connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveButtonClicked()));
+  connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddButtonClicked()));
+  connect(ui_->applyPushButton, SIGNAL(clicked()), this, SLOT(onApplyButtonClicked()));
 }
 
 AllowedCollisionMatrixEditorWidget::~AllowedCollisionMatrixEditorWidget() = default;
@@ -123,18 +132,6 @@ void AllowedCollisionMatrixEditorWidget::onApplyButtonClicked()
       ui_->acm_widget->getModel()->getAllowedCollisionMatrix(),
       tesseract_environment::ModifyAllowedCollisionsType::REPLACE);
   QApplication::sendEvent(qApp, new events::EnvironmentApplyCommand(getComponentInfo(), { cmd }));
-}
-
-void AllowedCollisionMatrixEditorWidget::ctor(ComponentInfo component_info)
-{
-  ui_->setupUi(this);
-
-  ui_->acm_widget->setComponentInfo(component_info);
-
-  connect(ui_->generatePushButton, SIGNAL(clicked()), this, SLOT(onGenerateButtonClicked()));
-  connect(ui_->removePushButton, SIGNAL(clicked()), this, SLOT(onRemoveButtonClicked()));
-  connect(ui_->addPushButton, SIGNAL(clicked()), this, SLOT(onAddButtonClicked()));
-  connect(ui_->applyPushButton, SIGNAL(clicked()), this, SLOT(onApplyButtonClicked()));
 }
 
 }  // namespace tesseract_gui

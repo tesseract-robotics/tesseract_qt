@@ -58,8 +58,6 @@ public:
 private:
   std::unique_ptr<Ui::AddAllowedCollisionEntryDialog> ui_;
   std::unique_ptr<ComponentInfo> component_info_;
-
-  void ctor();
 };
 }  // namespace tesseract_gui
 

@@ -30,11 +30,8 @@
 namespace tesseract_gui
 {
 AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget* parent)
-  : QDialog(parent)
-  , ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
-  , component_info_(std::make_unique<ComponentInfo>())
+  : AddAllowedCollisionEntryDialog(ComponentInfo(), parent)
 {
-  ctor();
 }
 
 AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(ComponentInfo component_info, QWidget* parent)
@@ -42,7 +39,11 @@ AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(ComponentInfo com
   , ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
   , component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
-  ctor();
+  ui_->setupUi(this);
+  ui_->linkName1LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
+  ui_->linkName2LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
+  connect(ui_->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+  connect(ui_->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 AddAllowedCollisionEntryDialog::~AddAllowedCollisionEntryDialog() = default;
@@ -63,15 +64,6 @@ void AddAllowedCollisionEntryDialog::accept()
   data.push_back(entry);
 
   QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixAdd(*component_info_, data));
-}
-
-void AddAllowedCollisionEntryDialog::ctor()
-{
-  ui_->setupUi(this);
-  ui_->linkName1LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
-  ui_->linkName2LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
-  connect(ui_->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-  connect(ui_->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 }  // namespace tesseract_gui

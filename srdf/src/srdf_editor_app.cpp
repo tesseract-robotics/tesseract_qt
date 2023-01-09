@@ -59,7 +59,7 @@ int main(int argc, char** argv)
   auto locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
   tesseract_gui::ComponentInfo component_info{ "srdf_scene" };
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
-  auto* srdf_widget = new tesseract_gui::SRDFEditorWidget(locator);
+  auto* srdf_widget = new tesseract_gui::SRDFEditorWidget(component_info, locator);
   auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
   auto* render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
 

@@ -35,8 +35,42 @@
 #include <tesseract_environment/environment.h>
 #include <tesseract_environment/environment_monitor.h>
 #include <tesseract_collision/core/common.h>
+#include <tesseract_common/yaml_utils.h>
 
 #include <QApplication>
+
+static const std::string DEFAULT_CONTACT_MANAGER_PLUGINS =
+    R"(contact_manager_plugins:
+         search_paths:
+           - /usr/local/lib
+         search_libraries:
+           - tesseract_collision_bullet_factories
+         discrete_plugins:
+           default: BulletDiscreteBVHManager
+           plugins:
+             BulletDiscreteBVHManager:
+               class: BulletDiscreteBVHManagerFactory)";
+
+void applyDefaultContactManager(tesseract_environment::Environment& env)
+{
+  YAML::Node config;
+  try
+  {
+    config = YAML::Load(DEFAULT_CONTACT_MANAGER_PLUGINS);
+  }
+  // LCOV_EXCL_START
+  catch (...)
+  {
+    return;
+  }
+  // LCOV_EXCL_STOP
+
+  const YAML::Node& cm_plugin_info = config[tesseract_common::ContactManagersPluginInfo::CONFIG_KEY];
+  auto contact_managers_plugin_info = cm_plugin_info.as<tesseract_common::ContactManagersPluginInfo>();
+
+  env.applyCommand(
+      std::make_shared<tesseract_environment::AddContactManagersPluginInfoCommand>(contact_managers_plugin_info));
+}
 
 namespace tesseract_gui
 {
@@ -85,7 +119,7 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
 void eventFilterHelper(QObject* /*obj*/,
                        QEvent* event,
                        const ComponentInfo& component_info,
-                       const tesseract_environment::Environment& env)
+                       tesseract_environment::Environment& env)
 {
   if (event->type() == events::ContactResultsCompute::kType)
   {
@@ -99,7 +133,12 @@ void eventFilterHelper(QObject* /*obj*/,
     {
       case events::ContactResultsCompute::StateType::CURRENT_STATE:
       {
-        auto contact_manager = env.getDiscreteContactManager();
+        tesseract_collision::DiscreteContactManager::UPtr contact_manager = env.getDiscreteContactManager();
+        if (contact_manager == nullptr)
+        {
+          applyDefaultContactManager(env);
+          contact_manager = env.getDiscreteContactManager();
+        }
         contact_manager->applyContactManagerConfig(e->getConfig().contact_manager_config);
         contact_manager->contactTest(contacts, e->getConfig().contact_request);
         break;
@@ -134,7 +173,13 @@ void eventFilterHelper(QObject* /*obj*/,
     if (e->getComponentInfo() != component_info)
       return;
 
-    auto contact_manager = env.getDiscreteContactManager();
+    tesseract_collision::DiscreteContactManager::UPtr contact_manager = env.getDiscreteContactManager();
+    if (contact_manager == nullptr)
+    {
+      applyDefaultContactManager(env);
+      contact_manager = env.getDiscreteContactManager();
+    }
+
     auto state_solver = env.getStateSolver();
 
     // We want to disable the allowed contact function for this process so it is set null
@@ -186,6 +231,15 @@ void eventFilterHelper(QObject* /*obj*/,
     }
 
     QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixSet(component_info, acm));
+  }
+  else if (event->type() == events::EnvironmentApplyCommand::kType)
+  {
+    assert(dynamic_cast<events::EnvironmentApplyCommand*>(event) != nullptr);
+    auto* e = static_cast<events::EnvironmentApplyCommand*>(event);
+    if (e->getComponentInfo() != component_info)
+      return;
+
+    env.applyCommands(e->getCommands());
   }
 }
 

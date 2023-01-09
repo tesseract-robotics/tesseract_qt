@@ -214,15 +214,11 @@ tesseract_common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowed
   for (int parent_rows = 0; parent_rows < invisibleRootItem()->rowCount(); ++parent_rows)
   {
     QStandardItem* parent = invisibleRootItem()->child(parent_rows);
-    if (parent->checkState() == Qt::Checked)
+    for (int child_row = 0; child_row < parent->rowCount(); ++child_row)
     {
-      for (int child_row = 0; child_row < parent->rowCount(); ++child_row)
-      {
-        QStandardItem* child = parent->child(child_row);
-        QStandardItem* reason = parent->child(child_row, 1);
-        acm.addAllowedCollision(
-            parent->text().toStdString(), child->text().toStdString(), reason->text().toStdString());
-      }
+      QStandardItem* child = parent->child(child_row);
+      QStandardItem* reason = parent->child(child_row, 1);
+      acm.addAllowedCollision(parent->text().toStdString(), child->text().toStdString(), reason->text().toStdString());
     }
   }
 
