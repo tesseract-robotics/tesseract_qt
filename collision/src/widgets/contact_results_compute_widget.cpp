@@ -62,7 +62,10 @@ void ContactResultsComputeWidget::onComputeClicked()
   config.contact_request.type =
       static_cast<tesseract_collision::ContactTestType>(ui->contact_test_type->currentIndex());
 
-  QApplication::sendEvent(qApp, new events::ContactResultsCompute(getComponentInfo(), config));
+  QApplication::sendEvent(
+      qApp,
+      new events::ContactResultsCompute(
+          getComponentInfo(), config, events::ContactResultsCompute::StateType::CURRENT_STATE, "Contact Results"));
 }
 
 void ContactResultsComputeWidget::ctor(ComponentInfo component_info)

@@ -92,6 +92,7 @@ int main(int argc, char** argv)
   plan_f1.setDescription("to_end_plan");
 
   // Add Instructions to program
+  program.appendMoveInstruction(start_instruction);
   program.appendMoveInstruction(plan_f0);
   program.appendMoveInstruction(plan_c0);
   program.appendMoveInstruction(plan_f1);

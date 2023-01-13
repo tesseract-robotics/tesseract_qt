@@ -57,6 +57,12 @@ ComponentEventUUID::ComponentEventUUID(ComponentInfo component_info,
   data_->uuid = uuid;
   data_->child_uuid = child_uuid;
 }
+
+ComponentEventUUID::ComponentEventUUID(const ComponentEventUUID& other)
+  : ComponentEventUUID(other.getComponentInfo(), other.getUUID(), other.getChildUUID(), other.type())
+{
+}
+
 ComponentEventUUID::~ComponentEventUUID() = default;
 
 const boost::uuids::uuid& ComponentEventUUID::getUUID() const { return data_->uuid; }

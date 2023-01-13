@@ -48,6 +48,7 @@ add_library(
   src/events/allowed_collision_matrix_events.cpp
   src/events/command_language_events.cpp
   src/events/contact_results_events.cpp
+  src/events/contact_results_render_manager.cpp
   src/events/environment_events.cpp
   src/events/group_joint_states_events.cpp
   src/events/group_tcps_events.cpp

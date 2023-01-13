@@ -73,6 +73,7 @@ struct JointTrajectoryWidget::Implementation
 
   double current_duration{ 0 };
   tesseract_common::JointTrajectoryInfo current_trajectory;
+  tesseract_environment::Environment::ConstPtr current_environment;
 
   tesseract_scene_graph::StateSolver::UPtr state_solver;
 
@@ -274,8 +275,10 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       data_->current_trajectory = data_->model->getJointTrajectory(current_index);
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
-      if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+      if (data_->current_environment != jts.getEnvironment() && jts.getEnvironment() != nullptr &&
+          jts.getEnvironment()->isInitialized())
       {
+        data_->current_environment = jts.getEnvironment();
         data_->state_solver = jts.getEnvironment()->getStateSolver();
         auto env_wrapper =
             std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
@@ -299,8 +302,10 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
 
-      if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+      if (data_->current_environment != jts.getEnvironment() && jts.getEnvironment() != nullptr &&
+          jts.getEnvironment()->isInitialized())
       {
+        data_->current_environment = jts.getEnvironment();
         data_->state_solver = jts.getEnvironment()->getStateSolver();
         auto env_wrapper =
             std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
@@ -333,9 +338,13 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
       {
-        auto env_wrapper =
-            std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
-        EnvironmentManager::set(env_wrapper);
+        if (data_->current_environment != jts.getEnvironment())
+        {
+          data_->current_environment = jts.getEnvironment();
+          auto env_wrapper =
+              std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
+          EnvironmentManager::set(env_wrapper);
+        }
 
         data_->state_solver = jts.getEnvironment()->getStateSolver();
         auto scene_state = data_->state_solver->getState(state.joint_names, state.position);

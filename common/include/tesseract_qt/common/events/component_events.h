@@ -57,6 +57,7 @@ public:
                      boost::uuids::uuid uuid,
                      boost::uuids::uuid child_uuid,
                      QEvent::Type type);
+  ComponentEventUUID(const ComponentEventUUID& other);
   ~ComponentEventUUID() override;
 
   /** @brief Get the uuid the event is associated with */

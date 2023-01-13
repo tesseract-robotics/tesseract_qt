@@ -20,32 +20,41 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef TESSERACT_QT_COMMON_CONTACT_RESULTS_RENDER_MANAGER_H
+#define TESSERACT_QT_COMMON_CONTACT_RESULTS_RENDER_MANAGER_H
 
-#ifndef TESSERACT_GUI_COMMON_ENTITY_H
-#define TESSERACT_GUI_COMMON_ENTITY_H
-
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#include <string>
-#include <vector>
-#include <unordered_map>
 #include <memory>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <QObject>
+
+namespace tesseract_gui::events
+{
+class ComponentEvent;
+}
 
 namespace tesseract_gui
 {
-struct Entity
+struct ComponentInfo;
+
+class ContactResultsRenderManager : public QObject
 {
-  int id{ -1 };
-  std::string unique_name;
+public:
+  using Ptr = std::shared_ptr<ContactResultsRenderManager>;
+  using ConstPtr = std::shared_ptr<const ContactResultsRenderManager>;
+  using UPtr = std::unique_ptr<ContactResultsRenderManager>;
+  using ConstUPtr = std::unique_ptr<const ContactResultsRenderManager>;
+
+  ContactResultsRenderManager(ComponentInfo component_info);
+  ~ContactResultsRenderManager();
+
+protected:
+  std::unique_ptr<ComponentInfo> component_info_;
+  std::vector<std::unique_ptr<events::ComponentEvent>> events_;
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
+
+  virtual void render() = 0;
 };
-
-using EntityMap = std::unordered_map<std::string, Entity>;
-using EntityVector = std::vector<Entity>;
-
-using UnmanagedObject = std::shared_ptr<void>;
-using UnmanagedObjectMap = std::unordered_map<std::string, UnmanagedObject>;
-using UnmanagedObjectVector = std::vector<UnmanagedObject>;
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_GUI_COMMON_ENTITY_H
+#endif  // TESSERACT_QT_COMMON_CONTACT_RESULTS_RENDER_MANAGER_H
