@@ -75,23 +75,35 @@ void applyDefaultContactManager(tesseract_environment::Environment& env)
 ///////////////////////////////////////
 
 void tesseractEventFilterHelper(const tesseract_environment::Event& event,
-                                const tesseract_gui::ComponentInfo& component_info,
-                                const tesseract_environment::Environment& env)
+                                tesseract_gui::EnvironmentWrapper& env_wrapper,
+                                int& current_revision)
 {
+  if (!env_wrapper.getEnvironment()->isInitialized())
+    return;
+
   switch (event.type)
   {
     case tesseract_environment::Events::COMMAND_APPLIED:
     {
-      //      QApplication::sendEvent(qApp, new events::ToolPathRemoveAll(component_info));
-      //      onUpdateModels();
-      //      emit environmentChanged(*data_->environment);
-      //      break;
+      const auto& e = static_cast<const tesseract_environment::CommandAppliedEvent&>(event);
+      if (current_revision == 0 || e.revision < current_revision)
+      {
+        env_wrapper.broadcast();
+      }
+      else
+      {
+        /** @todo update to handle explicit commands */
+        env_wrapper.broadcast();
+      }
+      current_revision = e.revision;
+      break;
     }
     case tesseract_environment::Events::SCENE_STATE_CHANGED:
     {
-      //      onUpdateCurrentStateModel();
-      //      emit environmentCurrentStateChanged(*data_->environment);
-      //      break;
+      const auto& e = static_cast<const tesseract_environment::SceneStateChangedEvent&>(event);
+      QApplication::sendEvent(qApp,
+                              new tesseract_gui::events::SceneStateChanged(env_wrapper.getComponentInfo(), e.state));
+      break;
     }
   }
 }
@@ -275,9 +287,8 @@ void EnvironmentWrapper::init()
     throw std::runtime_error("EnvironmentWrapper::init was called multipel times");
 
   std::size_t uuid = std::hash<EnvironmentWrapper*>()(this);
-  environment().addEventCallback(uuid, [this](const tesseract_environment::Event& event) {
-    tesseractEventFilterHelper(event, getComponentInfo(), environment());
-  });
+  environment().addEventCallback(
+      uuid, [this](const tesseract_environment::Event& event) { tesseractEventFilterHelper(event, *this, revision_); });
 
   // Broadcast data to initialize available widgets
   broadcast();

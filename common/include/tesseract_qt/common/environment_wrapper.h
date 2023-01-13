@@ -54,9 +54,9 @@ protected:
 
   std::unique_ptr<ComponentInfo> component_info_;
   bool initialized_{ false };
+  int revision_{ 0 };
 
   virtual tesseract_environment::Environment& environment() = 0;
-  const tesseract_environment::Environment& environment() const;
 
   /** @brief This function is called when added to the environment manager */
   void init();
