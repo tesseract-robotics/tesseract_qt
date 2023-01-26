@@ -46,6 +46,7 @@ add_library(
   ${COMMON_WIDGETS_resources_RCC}
   src/events/component_events.cpp
   src/events/allowed_collision_matrix_events.cpp
+  src/events/application_events.cpp
   src/events/command_language_events.cpp
   src/events/contact_results_events.cpp
   src/events/contact_results_render_manager.cpp

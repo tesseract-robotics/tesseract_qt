@@ -208,9 +208,13 @@ void InteractiveViewControlPrivate::onRender()
   }
   else if (mouse_event.Type() == ignition::common::MouseEvent::PRESS)
   {
-    target = ignition::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);
-    view_control->SetTarget(target);
-    updateReferenceVisual();
+    // Do not updated reference target on middle button because it is annoying when trying to orbit around an object
+    if (mouse_event.Button() != ignition::common::MouseEvent::MIDDLE)
+    {
+      target = ignition::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);
+      view_control->SetTarget(target);
+      updateReferenceVisual();
+    }
     mouse_press_dirty = false;
   }
   else

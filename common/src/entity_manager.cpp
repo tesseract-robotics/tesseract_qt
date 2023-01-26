@@ -25,7 +25,7 @@
 
 namespace tesseract_gui
 {
-int EntityManager::entity_counter_ = 1000;  // NOLINT
+int EntityManager::entity_counter_ = 10000;  // NOLINT
 
 std::shared_ptr<EntityContainer> EntityManager::getEntityContainer(const std::string& name)
 {

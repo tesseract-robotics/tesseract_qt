@@ -357,7 +357,8 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
       cylinder->AddGeometry(scene.CreateCylinder());
 
       const auto& shape = static_cast<const tesseract_geometry::Cylinder&>(geometry);
-      cylinder->Scale(shape.getRadius() * scale.x(), shape.getRadius() * scale.y(), shape.getLength() * scale.z());
+      const double diameter = 2.0 * shape.getRadius();
+      cylinder->Scale(diameter * scale.x(), diameter * scale.y(), shape.getLength() * scale.z());
       cylinder->SetMaterial(ign_material);
       return cylinder;
     }

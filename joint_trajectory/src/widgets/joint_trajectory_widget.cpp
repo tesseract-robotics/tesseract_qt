@@ -275,14 +275,20 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       data_->current_trajectory = data_->model->getJointTrajectory(current_index);
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
-      if (data_->current_environment != jts.getEnvironment() && jts.getEnvironment() != nullptr &&
+
+      if (jts.getEnvironment() != nullptr && data_->current_environment != jts.getEnvironment() &&
           jts.getEnvironment()->isInitialized())
       {
         data_->current_environment = jts.getEnvironment();
         data_->state_solver = jts.getEnvironment()->getStateSolver();
-        auto env_wrapper =
-            std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
-        EnvironmentManager::set(env_wrapper);
+
+        // If no parent then it using the top most so no need to overwrite existing environment
+        if (data_->model->getComponentInfo().getParent() != nullptr)
+        {
+          auto env_wrapper =
+              std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
+          EnvironmentManager::set(env_wrapper);
+        }
       }
 
       data_->player->setTrajectory(data_->current_trajectory.second);
@@ -302,14 +308,19 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
 
-      if (data_->current_environment != jts.getEnvironment() && jts.getEnvironment() != nullptr &&
+      if (jts.getEnvironment() != nullptr && data_->current_environment != jts.getEnvironment() &&
           jts.getEnvironment()->isInitialized())
       {
         data_->current_environment = jts.getEnvironment();
         data_->state_solver = jts.getEnvironment()->getStateSolver();
-        auto env_wrapper =
-            std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
-        EnvironmentManager::set(env_wrapper);
+
+        // If no parent then it using the top most so no need to overwrite existing environment
+        if (data_->model->getComponentInfo().getParent() != nullptr)
+        {
+          auto env_wrapper =
+              std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
+          EnvironmentManager::set(env_wrapper);
+        }
       }
 
       data_->current_trajectory = tesseract_common::JointTrajectoryInfo();
@@ -338,14 +349,15 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
       {
-        if (data_->current_environment != jts.getEnvironment())
+        if (data_->model->getComponentInfo().getParent() != nullptr &&
+            data_->current_environment != jts.getEnvironment())
         {
-          data_->current_environment = jts.getEnvironment();
           auto env_wrapper =
               std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
           EnvironmentManager::set(env_wrapper);
         }
 
+        data_->current_environment = jts.getEnvironment();
         data_->state_solver = jts.getEnvironment()->getStateSolver();
         auto scene_state = data_->state_solver->getState(state.joint_names, state.position);
         QApplication::sendEvent(qApp, new events::SceneStateChanged(data_->model->getComponentInfo(), scene_state));

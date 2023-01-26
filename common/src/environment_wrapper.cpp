@@ -93,7 +93,52 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
       else
       {
         /** @todo update to handle explicit commands */
-        env_wrapper.broadcast();
+        bool broadcast{ false };
+        for (std::size_t i = current_revision; i < e.revision; ++i)
+        {
+          const auto& cmd = e.commands.at(i);
+          switch (cmd->getType())
+          {
+            case tesseract_environment::CommandType::ADD_SCENE_GRAPH:
+            case tesseract_environment::CommandType::ADD_LINK:
+            case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
+            case tesseract_environment::CommandType::REMOVE_LINK:
+            case tesseract_environment::CommandType::REMOVE_JOINT:
+            {
+              broadcast = true;
+              break;
+            }
+            case tesseract_environment::CommandType::MOVE_LINK:
+            case tesseract_environment::CommandType::MOVE_JOINT:
+            case tesseract_environment::CommandType::REPLACE_JOINT:
+            case tesseract_environment::CommandType::CHANGE_JOINT_ORIGIN:
+            case tesseract_environment::CommandType::CHANGE_LINK_ORIGIN:
+            {
+              break;
+            }
+            case tesseract_environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
+            case tesseract_environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
+            case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
+            case tesseract_environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
+            case tesseract_environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:
+            case tesseract_environment::CommandType::CHANGE_JOINT_ACCELERATION_LIMITS:
+            case tesseract_environment::CommandType::ADD_KINEMATICS_INFORMATION:
+            case tesseract_environment::CommandType::CHANGE_COLLISION_MARGINS:
+            case tesseract_environment::CommandType::ADD_CONTACT_MANAGERS_PLUGIN_INFO:
+            case tesseract_environment::CommandType::SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER:
+            case tesseract_environment::CommandType::SET_ACTIVE_DISCRETE_CONTACT_MANAGER:
+            {
+              break;
+            }
+            // LCOV_EXCL_START
+            default:
+            {
+              CONSOLE_BRIDGE_logError("Tesseract Qt Environment Wrapper, Unhandled environment command");
+            }
+          }
+        }
+        if (broadcast)
+          env_wrapper.broadcast();
       }
       current_revision = e.revision;
       break;
@@ -286,6 +331,10 @@ void EnvironmentWrapper::init()
   if (initialized_)
     throw std::runtime_error("EnvironmentWrapper::init was called multipel times");
 
+  // Get current revision
+  revision_ = environment().getRevision();
+
+  // Add environment event callback
   std::size_t uuid = std::hash<EnvironmentWrapper*>()(this);
   environment().addEventCallback(
       uuid, [this](const tesseract_environment::Event& event) { tesseractEventFilterHelper(event, *this, revision_); });
