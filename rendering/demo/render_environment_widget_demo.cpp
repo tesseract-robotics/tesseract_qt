@@ -4,7 +4,7 @@
  * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
- * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * GNU Lesser General Public License Version 3, 29 June 2007
  * @par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,6 +39,9 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/tool_path/widgets/tool_path_tool_bar.h>
 #include <tesseract_qt/tool_path/widgets/tool_path_widget.h>
+
+#include <tesseract_qt/manipulation/manipulation_widget.h>
+#include <tesseract_qt/manipulation/manipulation_tool_bar.h>
 
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h>
@@ -136,6 +139,7 @@ int main(int argc, char** argv)
   window.addToolBar(new tesseract_gui::SceneGraphToolBar(component_info));
   window.addToolBar(new tesseract_gui::ToolPathToolBar(component_info));
   window.addToolBar(new tesseract_gui::JointTrajectoryToolBar(jt_component_info));
+  window.addToolBar(new tesseract_gui::ManipulationToolBar(component_info));
 
   auto render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
   render_widget->setSkyEnabled(true);
@@ -155,6 +159,11 @@ int main(int argc, char** argv)
   auto* dw3 = new QDockWidget();
   dw3->setWidget(joint_traj_widget);
   window.addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dw3);
+
+  auto* manipulation_widget = new tesseract_gui::ManipulationWidget(component_info, true);
+  auto* dw4 = new QDockWidget();
+  dw4->setWidget(manipulation_widget);
+  window.addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dw4);
 
   window.resize(1200, 800);
   window.show();

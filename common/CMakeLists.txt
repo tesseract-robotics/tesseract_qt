@@ -55,6 +55,7 @@ add_library(
   src/events/group_tcps_events.cpp
   src/events/joint_trajectory_events.cpp
   src/events/kinematic_groups_events.cpp
+  src/events/manipulation_events.cpp
   src/events/render_events.cpp
   src/events/scene_graph_events.cpp
   src/events/scene_graph_render_manager.cpp

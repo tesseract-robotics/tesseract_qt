@@ -4,6 +4,7 @@
 #include <tesseract_qt/scene_graph/models/scene_state_model.h>
 
 #include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/events/manipulation_events.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
@@ -11,6 +12,7 @@
 #include <tesseract_environment/environment.h>
 #include <tesseract_kinematics/core/kinematic_group.h>
 
+#include <QStringList>
 #include <QStringListModel>
 #include <QApplication>
 
@@ -20,61 +22,58 @@ struct ManipulationWidget::Implementation
 {
   ComponentInfo parent_component_info;
 
-  bool single_state;
+  /** @brief If true adding and removing states is disabled */
+  bool use_parent_component_info{ false };
+
   tesseract_kinematics::KinematicGroup::UPtr kin_group;
-  std::vector<tesseract_scene_graph::StateSolver::UPtr> state_solvers;
-  std::vector<std::unordered_map<std::string, double>> states;
+  QStringList state_names;
+  std::unordered_map<std::string, tesseract_scene_graph::StateSolver::UPtr> state_solvers;
+  std::unordered_map<std::string, std::unordered_map<std::string, double>> states;
+  std::unordered_map<std::string, std::shared_ptr<SceneStateModel>> state_models;
 
   QStringListModel group_names_model;
   QStringListModel working_frames_model;
   QStringListModel tcp_names_model;
   QStringListModel tcp_offset_names_model;
+  QStringListModel state_names_model;
   tesseract_common::TransformMap tcp_offsets;
-
-  std::vector<std::shared_ptr<SceneStateModel>> state_models;
 
   //  // Toolbar
   //  QToolBar* toolbar{ nullptr };
   //  QAction* reset_action{ nullptr };
 };
 
-ManipulationWidget::ManipulationWidget(bool single_state, QWidget* parent)
-  : ManipulationWidget(ComponentInfo(), single_state, parent)
+ManipulationWidget::ManipulationWidget(bool use_parent_component_info, QWidget* parent)
+  : ManipulationWidget(ComponentInfo(), use_parent_component_info, parent)
 {
 }
 
-ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info, bool single_state, QWidget* parent)
+ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info,
+                                       bool use_parent_component_info,
+                                       QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::ManipulationWidget>()), data_(std::make_unique<Implementation>())
 {
   ui->setupUi(this);
 
   data_->parent_component_info = std::move(parent_component_info);
-  data_->single_state = single_state;
-  data_->state_solvers.resize((single_state) ? 1 : 2);
-  data_->states.resize((single_state) ? 1 : 2);
-  data_->state_models.resize((single_state) ? 1 : 2);
+  data_->use_parent_component_info = use_parent_component_info;
 
-  if (single_state)
-  {
-    data_->state_models[0] = std::make_shared<SceneStateModel>(data_->parent_component_info.createChild());
-    ui->state_widget->setModel(data_->state_models[0]);
-  }
-  else
-  {
-    throw std::runtime_error("ManipulationWidget, only single state is currently supported");
-  }
+  addStateHelper("default");
+  ui->state_widget->setModel(data_->state_models["default"]);
 
   ui->group_combo_box->setModel(&data_->group_names_model);
   ui->working_frame_combo_box->setModel(&data_->working_frames_model);
   ui->tcp_combo_box->setModel(&data_->tcp_names_model);
   ui->tcp_offset_combo_box->setModel(&data_->tcp_offset_names_model);
+  ui->state_combo_box->setModel(&data_->state_names_model);
 
   connect(ui->group_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui->working_frame_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onWorkingFrameChanged()));
   connect(ui->tcp_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onTCPNameChanged()));
   connect(ui->tcp_offset_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onTCPOffsetNameChanged()));
-  connect(ui->state_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onManipulatorTypeChanged()));
+  connect(ui->state_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onStateNameChanged()));
   connect(ui->mode_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onModeChanged()));
+  connect(ui->reload_push_button, SIGNAL(clicked()), this, SLOT(onReset()));
 
   connect(ui->joint_state_slider,
           &tesseract_gui::JointStateSliderWidget::jointStateChanged,
@@ -86,12 +85,6 @@ ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info, bool
           this,
           &tesseract_gui::ManipulationWidget::onCartesianTransformChanged);
 
-  if (data_->single_state)
-  {
-    ui->state_label->hide();
-    ui->state_combo_box->hide();
-  }
-
   ui->tabWidget->setCurrentIndex(0);
 
   onModeChanged();
@@ -99,18 +92,108 @@ ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info, bool
 
 ManipulationWidget::~ManipulationWidget() = default;
 
+void ManipulationWidget::addState(const std::string& state_name)
+{
+  if (data_->use_parent_component_info)
+    throw std::runtime_error("ManipulationWidget, cannot add states when use_parent_component_info is enabled");
+
+  addStateHelper(state_name);
+}
+
+void ManipulationWidget::removeState(const std::string& state_name)
+{
+  if (data_->use_parent_component_info)
+    throw std::runtime_error("ManipulationWidget, cannot remove states when use_parent_component_info is enabled");
+
+  removeStateHelper(state_name);
+}
+
+void ManipulationWidget::addStateHelper(const std::string& state_name)
+{
+  data_->state_names.push_back(state_name.c_str());
+  data_->state_names.removeDuplicates();
+  data_->state_solvers[state_name] = nullptr;
+  data_->states[state_name] = std::unordered_map<std::string, double>{};
+  if (data_->use_parent_component_info)
+    data_->state_models[state_name] = std::make_shared<SceneStateModel>(data_->parent_component_info);
+  else
+    data_->state_models[state_name] = std::make_shared<SceneStateModel>(data_->parent_component_info.createChild());
+
+  const bool is_empty = data_->state_names_model.stringList().isEmpty();
+  const QString current_state_name =
+      (is_empty) ? QString::fromStdString(state_name) : ui->state_combo_box->currentText();
+  data_->state_names_model.setStringList(data_->state_names);
+  ui->state_combo_box->setCurrentText(current_state_name);
+
+  {  // Update toolbar if one exists
+    std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+    for (const auto& it : data_->state_models)
+      state_component_infos[it.first] = it.second->getComponentInfo();
+    QApplication::sendEvent(qApp,
+                            new events::ManipulationChanged(
+                                data_->parent_component_info, current_state_name.toStdString(), state_component_infos));
+  }
+
+  if (!data_->use_parent_component_info)
+  {
+    std::shared_ptr<EnvironmentWrapper> env_wrapper = EnvironmentManager::find(data_->parent_component_info);
+    if (env_wrapper == nullptr)
+      env_wrapper = EnvironmentManager::getDefault();
+
+    if (env_wrapper == nullptr)
+      return;
+
+    auto env = env_wrapper->getEnvironment();
+    if (env == nullptr || !env->isInitialized())
+      return;
+
+    auto child_env_wrapper =
+        std::make_shared<DefaultEnvironmentWrapper>(data_->state_models[state_name]->getComponentInfo(), env->clone());
+    EnvironmentManager::set(child_env_wrapper);
+  }
+}
+
+void ManipulationWidget::removeStateHelper(const std::string& state_name)
+{
+  if (!data_->use_parent_component_info)
+    EnvironmentManager::remove(data_->state_models[state_name]->getComponentInfo());
+
+  const QString current_state_name = ui->state_combo_box->currentText();
+
+  data_->state_names.removeAll(state_name.c_str());
+  data_->state_solvers.erase(state_name);
+  data_->states.erase(state_name);
+  data_->state_models.erase(state_name);
+
+  data_->state_names_model.setStringList(data_->state_names);
+
+  const bool is_empty = data_->state_names_model.stringList().isEmpty();
+  if (!is_empty && (current_state_name.toStdString() != state_name))
+    ui->state_combo_box->setCurrentText(current_state_name);
+
+  // Update toolbar if one exists
+  std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+  for (const auto& it : data_->state_models)
+    state_component_infos[it.first] = it.second->getComponentInfo();
+  QApplication::sendEvent(qApp,
+                          new events::ManipulationChanged(data_->parent_component_info,
+                                                          ui->state_combo_box->currentText().toStdString(),
+                                                          state_component_infos));
+}
+
 void ManipulationWidget::setComponentInfo(ComponentInfo component_info)
 {
   data_->parent_component_info = std::move(component_info);
-  if (data_->single_state)
+
+  const std::string current_state = ui->state_combo_box->currentText().toStdString();
+  const QStringList state_names = data_->state_names;
+  for (const auto& state_name : state_names)
   {
-    data_->state_models[0] = std::make_shared<SceneStateModel>(data_->parent_component_info.createChild());
-    ui->state_widget->setModel(data_->state_models[0]);
+    removeStateHelper(state_name.toStdString());
+    addStateHelper(state_name.toStdString());
   }
-  else
-  {
-    throw std::runtime_error("ManipulationWidget, only single state is currently supported");
-  }
+
+  ui->state_widget->setModel(data_->state_models[current_state]);
 
   onReset();
 }
@@ -133,20 +216,20 @@ bool ManipulationWidget::isValid() const
 
   for (const auto& state_solver : data_->state_solvers)
   {
-    if (state_solver == nullptr)
+    if (state_solver.second == nullptr)
       return false;
   }
 
   for (const auto& state : data_->states)
   {
-    if (state.empty())
+    if (state.second.empty())
       return false;
   }
 
   return true;
 }
 
-int ManipulationWidget::getStateCount() const { return (data_->single_state) ? 1 : 2; }
+int ManipulationWidget::getStateCount() const { return data_->states.size(); }
 
 const tesseract_kinematics::KinematicGroup& ManipulationWidget::kinematicGroup() const { return *data_->kin_group; }
 
@@ -169,9 +252,9 @@ Eigen::Isometry3d ManipulationWidget::getTCPOffset() const
   return it->second;
 }
 
-int ManipulationWidget::getActiveStateIndex() const { return ui->state_combo_box->currentIndex(); }
+std::string ManipulationWidget::getActiveStateName() const { return ui->state_combo_box->currentText().toStdString(); }
 
-tesseract_scene_graph::SceneState ManipulationWidget::getActiveState() const { return getState(getActiveStateIndex()); }
+tesseract_scene_graph::SceneState ManipulationWidget::getActiveState() const { return getState(getActiveStateName()); }
 
 void ManipulationWidget::setActiveState(const std::unordered_map<std::string, double>& state)
 {
@@ -190,9 +273,9 @@ void ManipulationWidget::setActiveCartesianTransform(const Eigen::Isometry3d& tr
   }
 }
 
-tesseract_scene_graph::SceneState ManipulationWidget::getState(int index) const
+tesseract_scene_graph::SceneState ManipulationWidget::getState(const std::string& state_name) const
 {
-  return data_->state_solvers.at(index)->getState(data_->states.at(index));
+  return data_->state_solvers.at(state_name)->getState(data_->states.at(state_name));
 }
 
 void ManipulationWidget::onGroupNameChanged()
@@ -221,13 +304,15 @@ void ManipulationWidget::onGroupNameChanged()
     ui->tcp_offset_combo_box->blockSignals(true);
 
     data_->kin_group = env->getKinematicGroup(group_name);
-    for (std::size_t i = 0; i < getStateCount(); ++i)
+
+    for (const auto& state_name : data_->state_names)
     {
-      data_->state_solvers[i] = env->getStateSolver();
-      QApplication::sendEvent(qApp,
-                              new events::SceneStateChanged(data_->state_models[0]->getComponentInfo(),
-                                                            tesseract_scene_graph::SceneState()));
-      data_->states[i].clear();
+      data_->state_solvers[state_name.toStdString()] = env->getStateSolver();
+      QApplication::sendEvent(
+          qApp,
+          new events::SceneStateChanged(data_->state_models[state_name.toStdString()]->getComponentInfo(),
+                                        tesseract_scene_graph::SceneState()));
+      data_->states[state_name.toStdString()].clear();
     }
 
     // Update working frames
@@ -279,8 +364,8 @@ void ManipulationWidget::onGroupNameChanged()
 
     ui->joint_state_slider->setJoints(joints);
 
-    for (std::size_t i = 0; i < getStateCount(); ++i)
-      data_->states[i] = ui->joint_state_slider->getJointState();
+    for (const auto& state_name : data_->state_names)
+      data_->states[state_name.toStdString()] = ui->joint_state_slider->getJointState();
 
     ui->cartesian_widget->setTransform(getActiveCartesianTransform());
   }
@@ -328,30 +413,29 @@ void ManipulationWidget::onTCPOffsetNameChanged()
   Q_EMIT tcpOffsetNameChanged(ui->tcp_offset_combo_box->currentText());
 }
 
-void ManipulationWidget::onManipulatorTypeChanged()
+void ManipulationWidget::onStateNameChanged()
 {
-  ui->joint_state_slider->setJointState(data_->states[ui->state_combo_box->currentIndex()]);
+  ui->joint_state_slider->setJointState(data_->states[ui->state_combo_box->currentText().toStdString()]);
+  ui->state_widget->setModel(data_->state_models[ui->state_combo_box->currentText().toStdString()]);
 }
 
 void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::string, double> state)
 {
   if (isValid())
   {
-    data_->state_solvers[ui->state_combo_box->currentIndex()]->setState(state);
-    data_->states[ui->state_combo_box->currentIndex()] = state;
-    tesseract_scene_graph::SceneState scene_state =
-        data_->state_solvers[ui->state_combo_box->currentIndex()]->getState();
+    const std::string state_name = ui->state_combo_box->currentText().toStdString();
+    data_->state_solvers[state_name]->setState(state);
+    data_->states[state_name] = state;
+    tesseract_scene_graph::SceneState scene_state = data_->state_solvers[state_name]->getState();
     tesseract_scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
     QApplication::sendEvent(
-        qApp,
-        new events::SceneStateChanged(data_->state_models[ui->state_combo_box->currentIndex()]->getComponentInfo(),
-                                      reduced_scene_state));
+        qApp, new events::SceneStateChanged(data_->state_models[state_name]->getComponentInfo(), reduced_scene_state));
 
     // Update the cartesian transform details
     if (ui->mode_combo_box->currentIndex() == 0)
       ui->cartesian_widget->setTransform(getActiveCartesianTransform());
 
-    Q_EMIT manipulationStateChanged(reduced_scene_state, ui->state_combo_box->currentIndex());
+    Q_EMIT manipulationStateChanged(reduced_scene_state, state_name);
   }
 }
 
@@ -390,10 +474,11 @@ Eigen::VectorXd ManipulationWidget::getActiveJointValues() const
   Eigen::VectorXd jv{ Eigen::VectorXd::Zero(data_->kin_group->numJoints()) };
   std::vector<std::string> joint_names = data_->kin_group->getJointNames();
   Eigen::Index idx{ 0 };
+  const std::string active_state_name = getActiveStateName();
   for (const auto& jn : joint_names)
   {
-    auto j_it = data_->states[getActiveStateIndex()].find(jn);
-    if (j_it != data_->states[getActiveStateIndex()].end())
+    auto j_it = data_->states[active_state_name].find(jn);
+    if (j_it != data_->states[active_state_name].end())
       jv(idx) = j_it->second;
 
     ++idx;
@@ -448,13 +533,14 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
 
 void ManipulationWidget::onReset()
 {
-  for (std::size_t i = 0; i < getStateCount(); ++i)
+  for (const auto& state_name : data_->state_names)
   {
-    data_->state_solvers[i] = nullptr;
+    data_->state_solvers[state_name.toStdString()] = nullptr;
     QApplication::sendEvent(
         qApp,
-        new events::SceneStateChanged(data_->state_models[i]->getComponentInfo(), tesseract_scene_graph::SceneState()));
-    data_->states[i].clear();
+        new events::SceneStateChanged(data_->state_models[state_name.toStdString()]->getComponentInfo(),
+                                      tesseract_scene_graph::SceneState()));
+    data_->states[state_name.toStdString()].clear();
   }
 
   QString current_group_name = ui->group_combo_box->currentText();
@@ -476,9 +562,15 @@ void ManipulationWidget::onReset()
     return;
   }
 
-  auto child_env_wrapper =
-      std::make_shared<DefaultEnvironmentWrapper>(data_->state_models[0]->getComponentInfo(), env->clone());
-  EnvironmentManager::set(child_env_wrapper);
+  if (!data_->use_parent_component_info)
+  {
+    for (const auto& state_name : data_->state_names)
+    {
+      auto child_env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(
+          data_->state_models[state_name.toStdString()]->getComponentInfo(), env->clone());
+      EnvironmentManager::set(child_env_wrapper);
+    }
+  }
 
   auto lock = env->lockRead();
 

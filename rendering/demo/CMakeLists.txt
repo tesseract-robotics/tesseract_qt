@@ -13,6 +13,7 @@ target_link_libraries(
   PRIVATE ${PROJECT_NAME}_render_widgets
           ${PROJECT_NAME}_environment_widgets
           ${PROJECT_NAME}_joint_trajectory_widgets
+          ${PROJECT_NAME}_manipulation_widgets
           tesseract::tesseract_common
           tesseract::tesseract_support
           Qt5::Core

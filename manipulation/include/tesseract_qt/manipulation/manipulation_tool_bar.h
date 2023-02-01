@@ -20,24 +20,36 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#include <QApplication>
-#include <QDebug>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#ifndef TESSERACT_QT_MANIPULATION_MANIPULATION_TOOL_BAR_H
+#define TESSERACT_QT_MANIPULATION_MANIPULATION_TOOL_BAR_H
 
-#include <tesseract_qt/rendering/render_widget.h>
+#include <QToolBar>
+#include <memory>
 
-int main(int argc, char** argv)
+namespace tesseract_gui
 {
-  QApplication app(argc, argv);
+struct ComponentInfo;
+class ManipulationToolBar : public QToolBar
+{
+  Q_OBJECT
+public:
+  ManipulationToolBar(QWidget* parent = nullptr);
+  explicit ManipulationToolBar(ComponentInfo parent_component_info, QWidget* parent = nullptr);
+  ~ManipulationToolBar();
 
-  Q_INIT_RESOURCE(tesseract_qt_resources);
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
 
-  std::string scene_name = "scene";
-  tesseract_gui::RenderWidget widget(scene_name);
-  widget.setSkyEnabled(true);
-  widget.show();
+private Q_SLOTS:
+  void onStateNameChanged(const QString& text);
 
-  return app.exec();
-}
+private:
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
+};
+}  // namespace tesseract_gui
+
+#endif  // TESSERACT_QT_MANIPULATION_MANIPULATION_TOOL_BAR_H
