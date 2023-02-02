@@ -25,6 +25,7 @@
 #include <tesseract_qt/workbench/workbench_widget.h>
 #include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
+#include <tesseract_qt/manipulation/manipulation_tool_bar.h>
 #include <tesseract_qt/common/component_info.h>
 
 #include <QToolBar>
@@ -40,6 +41,7 @@ struct WorkbenchWidget::Implementation
   SceneGraphToolBar* env_toolbar;
   SceneGraphToolBar* jt_env_toolbar;
   JointTrajectoryToolBar* jt_toolbar;
+  ManipulationToolBar* manip_toolbar;
 };
 
 WorkbenchWidget::WorkbenchWidget(QWidget* parent) : WorkbenchWidget(ComponentInfo(), parent) {}
@@ -59,6 +61,9 @@ WorkbenchWidget::WorkbenchWidget(ComponentInfo component_info, QWidget* parent)
   data_->jt_toolbar = new JointTrajectoryToolBar();
   static_cast<QVBoxLayout*>(ui->joint_trajectory_widget->layout())->insertWidget(0, data_->jt_toolbar);
 
+  data_->manip_toolbar = new ManipulationToolBar();
+  static_cast<QVBoxLayout*>(ui->manipulation_widget->layout())->insertWidget(0, data_->manip_toolbar);
+
   setComponentInfo(std::move(component_info));
 }
 
@@ -71,6 +76,7 @@ void WorkbenchWidget::setComponentInfo(ComponentInfo component_info)
 
   ui->environment_widget->setComponentInfo(data_->component_info);
   data_->env_toolbar->setComponentInfo(data_->component_info);
+  data_->manip_toolbar->setComponentInfo(data_->component_info);
   ui->manipulation_widget->setComponentInfo(data_->component_info);
   ui->joint_trajectory_widget->setComponentInfo(data_->jt_component_info);
   data_->jt_toolbar->setComponentInfo(data_->jt_component_info);
@@ -87,7 +93,6 @@ JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() { return *ui-
 const JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() const { return *ui->joint_trajectory_widget; }
 
 ManipulationWidget& WorkbenchWidget::getManipulationWidget() { return *ui->manipulation_widget; }
-
 const ManipulationWidget& WorkbenchWidget::getManipulationWidget() const { return *ui->manipulation_widget; }
 
 }  // namespace tesseract_gui

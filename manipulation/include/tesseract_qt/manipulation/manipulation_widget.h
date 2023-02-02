@@ -53,9 +53,9 @@ struct ComponentInfo;
 class ManipulationWidget : public QWidget
 {
   Q_OBJECT
-
 public:
-  explicit ManipulationWidget(bool use_parent_component_info = false, QWidget* parent = nullptr);
+  explicit ManipulationWidget(QWidget* parent = nullptr);
+  explicit ManipulationWidget(bool use_parent_component_info, QWidget* parent = nullptr);
   explicit ManipulationWidget(ComponentInfo parent_component_info,
                               bool use_parent_component_info = false,
                               QWidget* parent = nullptr);

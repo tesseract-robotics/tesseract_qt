@@ -174,6 +174,8 @@ void ManipulationToolBar::setComponentInfo(ComponentInfo component_info)
 {
   data_->parent_component_info = component_info;
   data_->state_name.clear();
+  data_->state_names_model.setStringList(QStringList());
+  data_->state_names_combo_box->clear();
 }
 const ComponentInfo& ManipulationToolBar::getComponentInfo() const { return data_->parent_component_info; }
 
@@ -187,14 +189,15 @@ bool ManipulationToolBar::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::ManipulationChanged*>(event);
     if (e->getComponentInfo() == data_->parent_component_info)
     {
-      data_->state_name = e->getStateName();
+      std::string state_name = e->getStateName();
+      data_->state_name = state_name;
       data_->state_component_infos = e->getStateComponentInfos();
       QStringList state_names;
       for (const auto& it : data_->state_component_infos)
         state_names.push_back(it.first.c_str());
 
       data_->state_names_model.setStringList(state_names);
-      data_->state_names_combo_box->setCurrentText(data_->state_name.c_str());
+      data_->state_names_combo_box->setCurrentText(QString::fromStdString(state_name));
     }
   }
 

@@ -43,6 +43,7 @@ struct ManipulationWidget::Implementation
   //  QAction* reset_action{ nullptr };
 };
 
+ManipulationWidget::ManipulationWidget(QWidget* parent) : ManipulationWidget(ComponentInfo(), false, parent) {}
 ManipulationWidget::ManipulationWidget(bool use_parent_component_info, QWidget* parent)
   : ManipulationWidget(ComponentInfo(), use_parent_component_info, parent)
 {
@@ -147,16 +148,24 @@ void ManipulationWidget::addStateHelper(const std::string& state_name)
     if (env == nullptr || !env->isInitialized())
       return;
 
-    auto child_env_wrapper =
-        std::make_shared<DefaultEnvironmentWrapper>(data_->state_models[state_name]->getComponentInfo(), env->clone());
-    EnvironmentManager::set(child_env_wrapper);
+    auto it = data_->state_models.find(state_name);
+    if (it != data_->state_models.end())
+    {
+      auto child_env_wrapper =
+          std::make_shared<DefaultEnvironmentWrapper>(it->second->getComponentInfo(), env->clone());
+      EnvironmentManager::set(child_env_wrapper);
+    }
   }
 }
 
 void ManipulationWidget::removeStateHelper(const std::string& state_name)
 {
   if (!data_->use_parent_component_info)
-    EnvironmentManager::remove(data_->state_models[state_name]->getComponentInfo());
+  {
+    auto it = data_->state_models.find(state_name);
+    if (it != data_->state_models.end())
+      EnvironmentManager::remove(it->second->getComponentInfo());
+  }
 
   const QString current_state_name = ui->state_combo_box->currentText();
 
@@ -193,7 +202,9 @@ void ManipulationWidget::setComponentInfo(ComponentInfo component_info)
     addStateHelper(state_name.toStdString());
   }
 
-  ui->state_widget->setModel(data_->state_models[current_state]);
+  auto it = data_->state_models.find(current_state);
+  if (it != data_->state_models.end())
+    ui->state_widget->setModel(it->second);
 
   onReset();
 }
@@ -310,7 +321,7 @@ void ManipulationWidget::onGroupNameChanged()
       data_->state_solvers[state_name.toStdString()] = env->getStateSolver();
       QApplication::sendEvent(
           qApp,
-          new events::SceneStateChanged(data_->state_models[state_name.toStdString()]->getComponentInfo(),
+          new events::SceneStateChanged(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
                                         tesseract_scene_graph::SceneState()));
       data_->states[state_name.toStdString()].clear();
     }
@@ -415,8 +426,15 @@ void ManipulationWidget::onTCPOffsetNameChanged()
 
 void ManipulationWidget::onStateNameChanged()
 {
-  ui->joint_state_slider->setJointState(data_->states[ui->state_combo_box->currentText().toStdString()]);
-  ui->state_widget->setModel(data_->state_models[ui->state_combo_box->currentText().toStdString()]);
+  const std::string current_state_name = ui->state_combo_box->currentText().toStdString();
+
+  auto it = data_->states.find(current_state_name);
+  if (it != data_->states.end())
+    ui->joint_state_slider->setJointState(it->second);
+
+  auto it2 = data_->state_models.find(current_state_name);
+  if (it2 != data_->state_models.end())
+    ui->state_widget->setModel(it2->second);
 }
 
 void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::string, double> state)
@@ -538,7 +556,7 @@ void ManipulationWidget::onReset()
     data_->state_solvers[state_name.toStdString()] = nullptr;
     QApplication::sendEvent(
         qApp,
-        new events::SceneStateChanged(data_->state_models[state_name.toStdString()]->getComponentInfo(),
+        new events::SceneStateChanged(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
                                       tesseract_scene_graph::SceneState()));
     data_->states[state_name.toStdString()].clear();
   }
@@ -567,7 +585,7 @@ void ManipulationWidget::onReset()
     for (const auto& state_name : data_->state_names)
     {
       auto child_env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(
-          data_->state_models[state_name.toStdString()]->getComponentInfo(), env->clone());
+          data_->state_models.at(state_name.toStdString())->getComponentInfo(), env->clone());
       EnvironmentManager::set(child_env_wrapper);
     }
   }
@@ -605,6 +623,15 @@ void ManipulationWidget::onReset()
     ui->group_combo_box->setCurrentText("");
 
   onGroupNameChanged();
+
+  // Update toolbar if one exists
+  std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+  for (const auto& it : data_->state_models)
+    state_component_infos[it.first] = it.second->getComponentInfo();
+  QApplication::sendEvent(qApp,
+                          new events::ManipulationChanged(data_->parent_component_info,
+                                                          ui->state_combo_box->currentText().toStdString(),
+                                                          state_component_infos));
 }
 
 // void ManipulationWidget::addToolBar()

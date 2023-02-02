@@ -37,6 +37,7 @@ ManipulationChanged::ManipulationChanged(
     std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos)
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
+  assert((state_component_infos.empty() ? true : !state_name.empty()));
   data_->state_name = std::move(state_name);
   data_->state_component_infos = std::move(state_component_infos);
 }
