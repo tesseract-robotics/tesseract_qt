@@ -37,10 +37,6 @@ struct ManipulationWidget::Implementation
   QStringListModel tcp_offset_names_model;
   QStringListModel state_names_model;
   tesseract_common::TransformMap tcp_offsets;
-
-  //  // Toolbar
-  //  QToolBar* toolbar{ nullptr };
-  //  QAction* reset_action{ nullptr };
 };
 
 ManipulationWidget::ManipulationWidget(QWidget* parent) : ManipulationWidget(ComponentInfo(), false, parent) {}
@@ -634,37 +630,4 @@ void ManipulationWidget::onReset()
                                                           state_component_infos));
 }
 
-// void ManipulationWidget::addToolBar()
-//{
-//  data_->toolbar = new QToolBar;  // NOLINT
-//  data_->show_all_links_action =
-//      data_->toolbar->addAction(icons::getShowAllLinksIcon(), "Show All Links", this, SLOT(onShowAllLinks()));
-//  data_->hide_all_links_action =
-//      data_->toolbar->addAction(icons::getHideAllLinksIcon(), "Hide All Links", this, SLOT(onHideAllLinks()));
-//  data_->toolbar->addSeparator();
-//  data_->show_visual_all_links_action = data_->toolbar->addAction(
-//      icons::getShowVisualAllLinksIcon(), "Show Visual All Links", this, SLOT(onShowVisualAllLinks()));
-//  data_->hide_visual_all_links_action = data_->toolbar->addAction(
-//      icons::getHideVisualAllLinksIcon(), "Hide Visual All Links", this, SLOT(onHideVisualAllLinks()));
-//  data_->toolbar->addSeparator();
-//  data_->show_collision_all_links_action = data_->toolbar->addAction(
-//      icons::getShowCollisionAllLinksIcon(), "Show Collision All Links", this, SLOT(onShowCollisionAllLinks()));
-//  data_->hide_collision_all_links_action = data_->toolbar->addAction(
-//      icons::getHideCollisionAllLinksIcon(), "Hide Collision All Links", this, SLOT(onHideCollisionAllLinks()));
-//  data_->toolbar->addSeparator();
-//  data_->select_all_links_action =
-//      data_->toolbar->addAction(icons::getSelectAllLinksIcon(), "Select All Links", this, SLOT(onSelectAllLinks()));
-//  data_->deselect_all_links_action = data_->toolbar->addAction(
-//      icons::getDeselectAllLinksIcon(), "Deselect All Links", this, SLOT(onDeselectAllLinks()));
-//  data_->toolbar->addSeparator();
-//  data_->show_axis_all_links_action = data_->toolbar->addAction(
-//      icons::getShowAxisAllLinksIcon(), "Show Axis All Links", this, SLOT(onShowAxisAllLinks()));
-//  data_->hide_axis_all_links_action = data_->toolbar->addAction(
-//      icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", this, SLOT(onHideAxisAllLinks()));
-//  data_->toolbar->addSeparator();
-//  data_->reset_action = data_->toolbar->addAction(icons::getRestoreIcon(), "Reload Environment", this,
-//  SLOT(onReset()));
-
-//  ui->vertical_layout->insertWidget(0, data_->toolbar);
-//}
 }  // namespace tesseract_gui
