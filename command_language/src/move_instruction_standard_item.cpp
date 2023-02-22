@@ -70,8 +70,6 @@ std::string toString(tesseract_planning::MoveInstructionType m_type)
       return "FREESPACE";
     case tesseract_planning::MoveInstructionType::CIRCULAR:
       return "CIRCULAR";
-    case tesseract_planning::MoveInstructionType::START:
-      return "START";
     default:
       throw std::runtime_error("Unhandled tesseract_planning::MoveInstructionType");
   }

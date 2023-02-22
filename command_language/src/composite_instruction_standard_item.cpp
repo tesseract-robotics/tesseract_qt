@@ -83,20 +83,6 @@ void CompositeInstructionStandardItem::ctor(const tesseract_planning::CompositeI
   appendRow(createStandardItemString("order", toString(ci.getOrder())));
   appendRow(createStandardItemString("profile", ci.getProfile()));
   appendRow(new ManipulatorInfoStandardItem("manip info", ci.getManipulatorInfo()));
-  if (ci.hasStartInstruction())
-  {
-    auto* item = new MoveInstructionStandardItem("start instruction",
-                                                 ci.getStartInstruction().as<tesseract_planning::MoveInstruction>());
-    auto* desc = new QStandardItem("Move Instruction");
-    appendRow({ item, desc });
-  }
-  else
-  {
-    auto* item = new NullInstructionStandardItem("start instruction");
-    auto* desc = new QStandardItem("Null Instruction");
-    appendRow({ item, desc });
-  }
-
   appendRow(new VectorInstructionStandardItem("instructions", ci.getInstructions()));
 }
 }  // namespace tesseract_gui

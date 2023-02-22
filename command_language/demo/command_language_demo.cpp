@@ -66,8 +66,8 @@ int main(int argc, char** argv)
 
   // Start Joint Position for the program
   StateWaypointPoly wp0{ StateWaypoint(joint_names, joint_pos) };
-  MoveInstruction start_instruction(wp0, MoveInstructionType::START);
-  program.setStartInstruction(start_instruction);
+  MoveInstruction start_instruction(wp0, MoveInstructionType::FREESPACE);
+  program.appendMoveInstruction(start_instruction);
 
   // Create cartesian waypoint
   CartesianWaypointPoly wp1{ CartesianWaypoint(Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, -0.2, 0.62) *
