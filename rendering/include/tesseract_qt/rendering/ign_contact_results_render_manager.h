@@ -20,30 +20,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_RENDERING_CONTACT_RESULTS_RENDER_MANAGER_H
-#define TESSERACT_QT_RENDERING_CONTACT_RESULTS_RENDER_MANAGER_H
+#ifndef TESSERACT_QT_RENDERING_IGN_CONTACT_RESULTS_RENDER_MANAGER_H
+#define TESSERACT_QT_RENDERING_IGN_CONTACT_RESULTS_RENDER_MANAGER_H
 
-#include <memory>
-#include <QObject>
+#include <tesseract_qt/common/events/contact_results_render_manager.h>
 
 namespace tesseract_gui
 {
 class EntityManager;
 struct ComponentInfo;
 
-class ContactResultsRenderManager : public QObject
+class IgnContactResultsRenderManager : public ContactResultsRenderManager
 {
 public:
-  ContactResultsRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
-  ~ContactResultsRenderManager();
+  IgnContactResultsRenderManager(ComponentInfo component_info);
+  ~IgnContactResultsRenderManager();
 
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
+  void render() override;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_RENDERING_CONTACT_RESULTS_RENDER_MANAGER_H
+#endif  // TESSERACT_QT_RENDERING_IGN_CONTACT_RESULTS_RENDER_MANAGER_H

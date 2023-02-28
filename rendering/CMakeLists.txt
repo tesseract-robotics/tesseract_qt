@@ -18,19 +18,18 @@ qt5_wrap_cpp(
   RENDERING_WIDGET_headers_MOC
   include/tesseract_qt/rendering/render_events.h
   include/tesseract_qt/rendering/interactive_view_control.h
-  include/tesseract_qt/rendering/render_widget.h
-  include/tesseract_qt/rendering/contact_results_render_manager.h)
+  include/tesseract_qt/rendering/render_widget.h)
 
 add_library(
   ${PROJECT_NAME}_render_widgets SHARED
   ${RENDERING_WIDGET_headers_MOC}
   src/conversions.cpp
   src/interactive_view_control.cpp
+  src/ign_contact_results_render_manager.cpp
   src/ign_scene_graph_render_manager.cpp
   src/ign_tool_path_render_manager.cpp
   src/render_events.cpp
   src/render_widget.cpp
-  src/contact_results_render_manager.cpp
   src/utils.cpp)
 
 target_link_libraries(
@@ -45,8 +44,7 @@ target_link_libraries(
          Qt5::Gui
          Qt5::Widgets
          Qt5::OpenGL
-         ${PROJECT_NAME}_common
-         ${PROJECT_NAME}_tool_path_widgets)
+         ${PROJECT_NAME}_common)
 target_include_directories(
   ${PROJECT_NAME}_render_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                         "$<INSTALL_INTERFACE:include>")

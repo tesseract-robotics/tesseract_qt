@@ -38,7 +38,7 @@ class TrackedObject
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  TrackedObject() = default;
+  TrackedObject() : uuid_(boost::uuids::random_generator()()) {}
   TrackedObject(T tracked_object) : object_(tracked_object), uuid_(boost::uuids::random_generator()()) {}
   TrackedObject(T tracked_object, boost::uuids::uuid uuid) : object_(tracked_object), uuid_(uuid) {}
 

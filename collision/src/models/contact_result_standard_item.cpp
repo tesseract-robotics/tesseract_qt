@@ -70,6 +70,7 @@ std::string toString(tesseract_collision::ContinuousCollisionType cc_type)
 void ContactResultStandardItem::ctor()
 {
   setCheckable(true);
+  setCheckState(Qt::CheckState::Checked);
   appendRow(createStandardItemFloat("distance", contact_result().distance));
   appendRow(new PositionStandardItem("normal", contact_result().normal));
   appendRow(createStandardItemBool("single_contact_point", contact_result().single_contact_point));

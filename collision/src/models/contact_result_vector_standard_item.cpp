@@ -63,7 +63,7 @@ const boost::uuids::uuid& ContactResultVectorStandardItem::getUUID() const { ret
 void ContactResultVectorStandardItem::ctor(const ContactResultVector& contact_results)
 {
   setCheckable(true);
-  data_->uuid == contact_results.getUUID();
+  data_->uuid = contact_results.getUUID();
 
   for (std::size_t i = 0; i < contact_results().size(); ++i)
   {

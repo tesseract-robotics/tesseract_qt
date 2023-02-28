@@ -32,6 +32,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/rendering/render_widget.h>
 #include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>
 #include <tesseract_qt/rendering/ign_tool_path_render_manager.h>
+#include <tesseract_qt/rendering/ign_contact_results_render_manager.h>
 
 #include <tesseract_qt/environment/widgets/environment_widget.h>
 
@@ -134,6 +135,7 @@ int main(int argc, char** argv)
 
   tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
   tesseract_gui::IgnToolPathRenderManager tool_path_manager(component_info, entity_manager);
+  tesseract_gui::IgnContactResultsRenderManager contact_results_manager(component_info);
 
   QMainWindow window;
   window.addToolBar(new tesseract_gui::SceneGraphToolBar(component_info));
