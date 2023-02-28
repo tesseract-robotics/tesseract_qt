@@ -24,11 +24,15 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QStandardItemModel>
-#include <QTreeView>
+#include <QVBoxLayout>
 #include <QDebug>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/scene_graph/scene_graph_standard_item.h>
+#include <tesseract_qt/scene_graph/widgets/scene_graph_widget.h>
+#include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
+#include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/tree_view.h>
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
@@ -43,16 +47,18 @@ int main(int argc, char** argv)
   tesseract_common::TesseractSupportResourceLocator locator;
   auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
 
-  auto* model = new QStandardItemModel();
-  model->setColumnCount(2);
-  model->setHorizontalHeaderLabels({ "Name", "Values" });
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
 
-  auto* item = new tesseract_gui::SceneGraphStandardItem(*scene_graph);
-  model->appendRow(item);
-
-  QTreeView widget;
-  widget.setModel(model);
+  QWidget widget;
+  auto layout = new QVBoxLayout();
+  layout->setMargin(0);
+  layout->setSpacing(0);
+  layout->addWidget(new tesseract_gui::SceneGraphToolBar(component_info));
+  layout->addWidget(new tesseract_gui::SceneGraphWidget(component_info), 1);
+  widget.setLayout(layout);
   widget.show();
+
+  QApplication::sendEvent(qApp, new tesseract_gui::events::SceneGraphSet(component_info, std::move(scene_graph)));
 
   return app.exec();
 }

@@ -28,9 +28,9 @@ target_link_libraries(
          Qt5::Widgets
          Qt5::Gui
          ${PROJECT_NAME}_common
-         ${PROJECT_NAME}_scene_graph
-         ${PROJECT_NAME}_environment
-         ${PROJECT_NAME}_command_language)
+         ${PROJECT_NAME}_scene_graph_widgets
+         ${PROJECT_NAME}_environment_widgets
+         ${PROJECT_NAME}_command_language_widgets)
 target_include_directories(
   ${PROJECT_NAME}_planning PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                   "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/planning>" "$<INSTALL_INTERFACE:include>")

@@ -28,11 +28,12 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QVBoxLayout>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/tool_path/tool_path_model.h>
-#include <tesseract_qt/tool_path/tool_path_selection_model.h>
-#include <tesseract_qt/tool_path/tool_path_tree_view.h>
-#include <tesseract_qt/tool_path/tool_path_tool_bar.h>
-#include <tesseract_qt/tool_path/tool_path_events.h>
+#include <tesseract_qt/tool_path/widgets/tool_path_widget.h>
+#include <tesseract_qt/tool_path/widgets/tool_path_tool_bar.h>
+#include <tesseract_qt/common/events/tool_path_events.h>
+#include <tesseract_qt/common/tool_path.h>
+#include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/tree_view.h>
 
 int main(int argc, char** argv)
 {
@@ -64,16 +65,6 @@ int main(int argc, char** argv)
   tool_path2.setDescription("Demo Tool Path 2");
   tool_path2.regenerateUUID();
 
-  std::string scene_name{ "scene_name" };
-  auto* model = new tesseract_gui::ToolPathModel(scene_name);  // NOLINT
-  model->addToolPath(tool_path);
-  model->addToolPath(tool_path1);
-  model->addToolPath(tool_path2);
-
-  model->removeToolPath(tool_path1.getUUID());
-
-  // Use event method
-
   tesseract_gui::ToolPath tool_path3{ tool_path };
   tool_path3.setDescription("Demo Tool Path 3");
   tool_path3.regenerateUUID();
@@ -82,27 +73,23 @@ int main(int argc, char** argv)
   tool_path4.setDescription("Demo Tool Path 4");
   tool_path4.regenerateUUID();
 
-  if (qApp != nullptr)
-  {
-    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path3));
-    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(scene_name, tool_path4));
-    QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(scene_name, tool_path3.getUUID()));
-  }
-
-  auto* selection_model = new tesseract_gui::ToolPathSelectionModel(model, scene_name);
-  auto* tool_path_widget = new tesseract_gui::ToolPathTreeView();
-  tool_path_widget->setModel(model);
-  tool_path_widget->setSelectionModel(selection_model);
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
 
   QWidget widget;
   auto layout = new QVBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
-  layout->addWidget(new tesseract_gui::ToolPathToolBar(scene_name));
-  layout->addWidget(tool_path_widget, 1);
+  layout->addWidget(new tesseract_gui::ToolPathToolBar(component_info));
+  layout->addWidget(new tesseract_gui::ToolPathWidget(component_info), 1);
   widget.setLayout(layout);
-
   widget.show();
+
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path1));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path2));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path3));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path4));
+  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathRemove(component_info, tool_path3.getUUID()));
 
   return QApplication::exec();
 }

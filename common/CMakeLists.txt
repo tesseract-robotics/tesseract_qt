@@ -17,11 +17,21 @@ tesseract_variables()
 qt5_wrap_cpp(
   COMMON_WIDGETS_headers_MOC
   include/tesseract_qt/common/cartesian_editor_widget.h
+  include/tesseract_qt/common/combo_box.h
   include/tesseract_qt/common/image_viewer_widget.h
-  include/tesseract_qt/common/json_model.h)
+  include/tesseract_qt/common/json_model.h
+  include/tesseract_qt/common/environment_manager.h
+  include/tesseract_qt/common/environment_wrapper.h
+  include/tesseract_qt/common/tree_view.h
+  include/tesseract_qt/common/widgets/load_environment_widget.h
+  include/tesseract_qt/common/widgets/load_environment_dialog.h)
 
-qt5_wrap_ui(COMMON_WIDGETS_headers_UI include/tesseract_qt/common/cartesian_editor_widget.ui
-            include/tesseract_qt/common/image_viewer_widget.ui)
+qt5_wrap_ui(
+  COMMON_WIDGETS_headers_UI
+  include/tesseract_qt/common/cartesian_editor_widget.ui
+  include/tesseract_qt/common/image_viewer_widget.ui
+  include/tesseract_qt/common/widgets/load_environment_widget.ui
+  include/tesseract_qt/common/widgets/load_environment_dialog.ui)
 
 qt5_add_resources(
   COMMON_WIDGETS_resources_RCC
@@ -34,9 +44,29 @@ add_library(
   ${COMMON_WIDGETS_headers_MOC}
   ${COMMON_WIDGETS_headers_UI}
   ${COMMON_WIDGETS_resources_RCC}
+  src/events/component_events.cpp
+  src/events/allowed_collision_matrix_events.cpp
+  src/events/application_events.cpp
+  src/events/command_language_events.cpp
+  src/events/contact_results_events.cpp
+  src/events/contact_results_render_manager.cpp
+  src/events/environment_events.cpp
+  src/events/group_joint_states_events.cpp
+  src/events/group_tcps_events.cpp
+  src/events/joint_trajectory_events.cpp
+  src/events/kinematic_groups_events.cpp
+  src/events/manipulation_events.cpp
+  src/events/render_events.cpp
+  src/events/scene_graph_events.cpp
+  src/events/scene_graph_render_manager.cpp
+  src/events/tool_path_events.cpp
+  src/events/tool_path_render_manager.cpp
+  src/widgets/load_environment_widget.cpp
+  src/widgets/load_environment_dialog.cpp
   src/calibration_info_standard_item.cpp
   src/cartesian_editor_widget.cpp
   src/collision_margin_data_standard_item.cpp
+  src/combo_box.cpp
   src/contact_managers_plugin_info_standard_item.cpp
   src/kinematics_plugin_info_standard_item.cpp
   src/namespace_standard_item.cpp
@@ -46,10 +76,13 @@ add_library(
   src/position_standard_item.cpp
   src/quaternion_standard_item.cpp
   src/rgba_standard_item.cpp
+  src/component_info.cpp
   src/standard_item_utils.cpp
   src/plugin_info_container_standard_item.cpp
   src/entity_manager.cpp
   src/entity_container.cpp
+  src/environment_manager.cpp
+  src/environment_wrapper.cpp
   src/joint_trajectory_set.cpp
   src/svg_util.cpp
   src/theme_utils.cpp
@@ -60,6 +93,7 @@ add_library(
   src/tool_path_standard_item.cpp
   src/icon_utils.cpp
   src/image_viewer_widget.cpp
+  src/tree_view.cpp
   src/type_standard_item.cpp
   src/vector_double_standard_item.cpp
   src/vector_string_standard_item.cpp
@@ -67,6 +101,7 @@ add_library(
   src/joint_trajectory_standard_item.cpp
   src/json_model.cpp
   src/manipulator_info_standard_item.cpp
+  src/model_manager.cpp
   src/utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common

@@ -17,7 +17,7 @@
 
 #include <tesseract_qt/rendering/render_widget.h>
 //#include <tesseract_qt/rendring/gui_utils.h>
-#include <tesseract_qt/rendering/events.h>
+#include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/conversions.h>
 #include <tesseract_qt/rendering/interactive_view_control.h>
 
@@ -45,6 +45,7 @@
 #include <QOpenGLTextureBlitter>
 #include <QOffscreenSurface>
 #include <QApplication>
+#include <QTimer>
 
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -89,6 +90,9 @@ public:
 
   /** @brief User camera */
   ignition::rendering::CameraPtr camera{ nullptr };
+
+  /** @brief User light */
+  ignition::rendering::DirectionalLightPtr light{ nullptr };
 
   /** @brief The currently hovered mouse position in screen coordinates */
   ignition::math::Vector2i mouse_hover_pos{ ignition::math::Vector2i::Zero };
@@ -413,16 +417,17 @@ void Renderer::initialize()
   data_->camera->SetFarClipPlane(camera_far_clip);
   data_->camera->SetImageWidth(texture_size.width());
   data_->camera->SetImageHeight(texture_size.height());
-  data_->camera->SetAntiAliasing(8);
+  data_->camera->SetAntiAliasing(camera_anti_aliasing);
   data_->camera->SetHFOV(M_PI * 0.5);
 
   /** @todo LEVI Need figure out haw to get the camera by name. */
   // create directional light
-  ignition::rendering::DirectionalLightPtr light0 = scene->CreateDirectionalLight();
-  light0->SetDirection(1, 0, 0);
-  light0->SetDiffuseColor(0.8, 0.8, 0.8);
-  light0->SetSpecularColor(0.5, 0.5, 0.5);
-  data_->camera->AddChild(light0);
+  data_->light = scene->CreateDirectionalLight();
+  data_->light->SetDirection(1, 0, 0);
+  data_->light->SetDiffuseColor(0.8, 0.8, 0.8);
+  data_->light->SetSpecularColor(0.5, 0.5, 0.5);
+  data_->light->SetCastShadows(shadows_enable);
+  data_->camera->AddChild(data_->light);
 
   // Generate initial texture
   data_->camera->PreRender();
@@ -460,8 +465,11 @@ void Renderer::destroy()
 void Renderer::newHoverEvent(const ignition::math::Vector2i& hover_pos)
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
-  data_->mouse_hover_pos = hover_pos;
-  data_->hover_dirty = true;
+  if (hover_event_enable)
+  {
+    data_->mouse_hover_pos = hover_pos;
+    data_->hover_dirty = true;
+  }
 }
 
 /////////////////////////////////////////////////
@@ -535,6 +543,9 @@ public:
   /** @brief The shared context used by the render engine */
   QOpenGLContext* context{ nullptr };
 
+  /** @brief This calls update on a timer */
+  QTimer update_timer;
+
   /** @brief List of our QT connections. */
   QList<QMetaObject::Connection> connections;
 };
@@ -546,8 +557,12 @@ RenderWidget::RenderWidget(const std::string& scene_name, QWidget* parent)
   data_->renderer.scene_name = scene_name;
   data_->view_controller = std::make_shared<InteractiveViewControl>(scene_name);
 
-  // This is critical to sync the monitor refresh with rendering of the widget
-  connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
+  connect(&data_->update_timer, SIGNAL(timeout()), this, SLOT(update()));
+  data_->update_timer.start(1000.0 / data_->renderer.update_frequency);
+
+  // The use of QTimer is prefered over the method below
+  //  // This is critical to sync the monitor refresh with rendering of the widget
+  //  connect(this, SIGNAL(frameSwapped()), this, SLOT(onFrameSwapped()));
 }
 
 /////////////////////////////////////////////////
@@ -790,6 +805,16 @@ void RenderWidget::onHovered(int mouse_x, int mouse_y) { data_->renderer.newHove
 void RenderWidget::onDropped(const QString& drop, int mouse_x, int mouse_y)
 {
   data_->renderer.newDropEvent(drop.toStdString(), { mouse_x, mouse_y });
+}
+
+/////////////////////////////////////////////////
+
+void RenderWidget::onFrameSwapped()
+{
+  // Weird issue between QFileDialog and update being called, QFileDialogs are launched as application modality and this
+  // check was added to prevent the issue.
+  if (QApplication::activeModalWidget() == nullptr)
+    update();
 }
 
 /////////////////////////////////////////////////

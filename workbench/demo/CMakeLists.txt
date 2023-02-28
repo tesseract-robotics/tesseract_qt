@@ -8,8 +8,8 @@ target_link_libraries(
   PRIVATE tesseract::tesseract_support
           tesseract::tesseract_urdf
           tesseract::tesseract_srdf
-          ${PROJECT_NAME}_workbench
-          ${PROJECT_NAME}_environment
+          ${PROJECT_NAME}_workbench_widgets
+          ${PROJECT_NAME}_environment_widgets
           ${PROJECT_NAME}_common)
 
 install_targets(TARGETS ${PROJECT_NAME}_workbench_demo)

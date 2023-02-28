@@ -15,10 +15,8 @@ target_link_libraries(
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
-         ${PROJECT_NAME}_acm
-         ${PROJECT_NAME}_kinematic_groups
-         ${PROJECT_NAME}_kinematic_groups_editor_widget
-         ${PROJECT_NAME}_groups_joint_states_editor_widget)
+         ${PROJECT_NAME}_acm_widgets
+         ${PROJECT_NAME}_kinematic_groups_widgets)
 target_include_directories(
   ${PROJECT_NAME}_srdf PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                               "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/srdf>" "$<INSTALL_INTERFACE:include>")
@@ -27,8 +25,8 @@ add_executable(${PROJECT_NAME}_srdf_app src/srdf_editor_app.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_srdf_app
   PRIVATE ${PROJECT_NAME}_srdf
-          ${PROJECT_NAME}_rendering
-          ${PROJECT_NAME}_environment
+          ${PROJECT_NAME}_render_widgets
+          ${PROJECT_NAME}_environment_widgets
           tesseract::tesseract_common)
 
 # Mark cpp header files for installation

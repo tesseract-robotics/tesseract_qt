@@ -48,18 +48,20 @@ class SRDFEditorWidget;
 
 namespace tesseract_gui
 {
-struct SRDFEditorWidgetImpl;
+struct ComponentInfo;
 class SRDFEditorWidget : public QWidget
 {
   Q_OBJECT
 
 public:
   explicit SRDFEditorWidget(std::shared_ptr<tesseract_common::ResourceLocator> locator, QWidget* parent = nullptr);
+  explicit SRDFEditorWidget(ComponentInfo component_info,
+                            std::shared_ptr<tesseract_common::ResourceLocator> locator,
+                            QWidget* parent = nullptr);
   ~SRDFEditorWidget();
 
 Q_SIGNALS:
   void showStatusMessage(const QString& message, int timeout);
-  void environmentSet(const std::shared_ptr<tesseract_environment::Environment>& env);
 
 public Q_SLOTS:
   /**
@@ -74,71 +76,17 @@ public Q_SLOTS:
   void onBrowseSRDFLoadClicked();
   void onBrowseSRDFSaveClicked();
 
-  void onAddChainGroup(const QString& group_name, const QString& base_link, const QString& tip_link);
-  void onAddJointGroup(const QString& group_name);
-  void onAddJointGroupJoint(const QString& joint_name);
-  void onRemoveJointGroupJoint(int index);
-
-  void onAddLinkGroup(const QString& group_name);
-  void onAddLinkGroupLink(const QString& link_name);
-  void onRemoveLinkGroupLink(int index);
-
-  void onRemoveKinematicGroup(int index);
-
-  void onGenerateACM(long resolution);
-  void onRemoveACMEntry(int index);
-  void onClickedACMEntry(int index);
-
-  void onLoadJointGroup(const QString& group_name);
-  void onJointValue(const QString& joint_name, double joint_value);
-
-  void onAddUserDefinedJointState(const QString& group_name, const QString& state_name);
-  void onRemoveUserDefinedJointState(int index);
-
-  void onAddUserDefinedTCP(const QString& group_name,
-                           const QString& tcp_name,
-                           const QVector3D& position,
-                           const QVector3D& orientation);
-  void onRemoveUserDefinedTCP(int index);
-
-  void onAddGroupOPWKinematics(const QString& group_name,
-                               double a1,
-                               double a2,
-                               double b,
-                               double c1,
-                               double c2,
-                               double c3,
-                               double c4,
-                               double o1,
-                               double o2,
-                               double o3,
-                               double o4,
-                               double o5,
-                               double o6,
-                               int sc1,
-                               int sc2,
-                               int sc3,
-                               int sc4,
-                               int sc5,
-                               int sc6);
-
-  void onRemoveGroupOPWKinematics(int index);
-
 protected Q_SLOTS:
   void onLoad();
   void onSave();
 
 private:
   std::unique_ptr<Ui::SRDFEditorWidget> ui_;
-  std::unique_ptr<SRDFEditorWidgetImpl> data_;
 
-  void removeGroupStates(const QString& group_name);
-  void removeGroupTCPs(const QString& group_name);
-  void removeGroupOPWKinematics(const QString& group_name);
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
   void enablePages(bool enable);
-
-  std::vector<std::shared_ptr<const tesseract_scene_graph::Joint>> groupJointsRetrevier(QString group_name);
 };
 }  // namespace tesseract_gui
 

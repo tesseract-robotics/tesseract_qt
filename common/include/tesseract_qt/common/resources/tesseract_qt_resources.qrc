@@ -104,5 +104,6 @@
         <file>svg/tool_path.svg</file>
         <file>svg/tool_path_show.svg</file>
         <file>svg/tool_path_hide.svg</file>
+        <file>svg/open.svg</file>
     </qresource>
 </RCC>

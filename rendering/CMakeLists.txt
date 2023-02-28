@@ -16,25 +16,24 @@ tesseract_variables()
 
 qt5_wrap_cpp(
   RENDERING_WIDGET_headers_MOC
-  include/tesseract_qt/rendering/events.h
+  include/tesseract_qt/rendering/render_events.h
   include/tesseract_qt/rendering/interactive_view_control.h
-  include/tesseract_qt/rendering/render_environment_widget.h
-  include/tesseract_qt/rendering/render_widget.h
-  include/tesseract_qt/rendering/tool_path_render_manager.h)
+  include/tesseract_qt/rendering/render_widget.h)
 
 add_library(
-  ${PROJECT_NAME}_rendering SHARED
+  ${PROJECT_NAME}_render_widgets SHARED
   ${RENDERING_WIDGET_headers_MOC}
   src/conversions.cpp
-  src/events.cpp
   src/interactive_view_control.cpp
-  src/render_environment_widget.cpp
+  src/ign_contact_results_render_manager.cpp
+  src/ign_scene_graph_render_manager.cpp
+  src/ign_tool_path_render_manager.cpp
+  src/render_events.cpp
   src/render_widget.cpp
-  src/tool_path_render_manager.cpp
   src/utils.cpp)
 
 target_link_libraries(
-  ${PROJECT_NAME}_rendering
+  ${PROJECT_NAME}_render_widgets
   PUBLIC tesseract::tesseract_common
          ignition-common4::ignition-common4-profiler
          ignition-common4::ignition-common4-events
@@ -45,12 +44,10 @@ target_link_libraries(
          Qt5::Gui
          Qt5::Widgets
          Qt5::OpenGL
-         ${PROJECT_NAME}_common
-         ${PROJECT_NAME}_environment
-         ${PROJECT_NAME}_tool_path_model)
-target_include_directories(${PROJECT_NAME}_rendering PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-                                                            "$<INSTALL_INTERFACE:include>")
-add_dependencies(${PROJECT_NAME}_rendering ${PROJECT_NAME}_common)
+         ${PROJECT_NAME}_common)
+target_include_directories(
+  ${PROJECT_NAME}_render_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                                        "$<INSTALL_INTERFACE:include>")
 
 add_subdirectory(demo)
 
@@ -58,4 +55,4 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
-install_targets(TARGETS ${PROJECT_NAME}_rendering)
+install_targets(TARGETS ${PROJECT_NAME}_render_widgets)

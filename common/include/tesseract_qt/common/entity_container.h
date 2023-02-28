@@ -111,24 +111,61 @@ public:
   std::unordered_map<std::string, EntityVector> getUntrackedEntities() const;
 
   /**
-   * @brief Add unmanaged object under the provided namespace
+   * @brief Add a tracked unmanaged object
+   * @param ns The namespace to store it under
+   * @param name The tracked name
+   */
+  void addTrackedUnmanagedObject(const std::string& ns, const std::string& name, UnmanagedObject object);
+
+  /**
+   * @brief Get a tracked unmanaged object
+   * @throws If either the namespace or name do not exist
+   * @param ns The namespace to search under
+   * @param name The name to locate
+   * @return The unmanaged object
+   */
+  UnmanagedObject getTrackedUnmanagedObject(const std::string& ns, const std::string& name);
+
+  /**
+   * @brief Check if a tracked unmanaged object exists
+   * @param ns The namespace to search under
+   * @param name The name to locate
+   * @return True if it exists, otherwise false
+   */
+  bool hasTrackedUnmanagedObject(const std::string& ns, const std::string& name);
+
+  /**
+   * @brief Get the tracked unmanaged object under the provided namespace
+   * @param ns The namespace to return
+   * @return Tracked unmanaged objects for the provided namespace
+   */
+  UnmanagedObjectMap getTrackedUnmanagedObjects(const std::string& ns) const;
+
+  /**
+   * @brief Get all tracked unmanaged objects
+   * @return All tracked unmanaged objects
+   */
+  std::unordered_map<std::string, UnmanagedObjectMap> getTrackedUnmanagedObjects() const;
+
+  /**
+   * @brief Add untracked unmanaged object under the provided namespace
    * @details This allows for storing object that must be manually deleted and not owned by the render engine
    * @param ns The namespace to store it under
    */
-  void addUnmanagedObject(const std::string& ns, std::shared_ptr<const void> object);
+  void addUntrackedUnmanagedObject(const std::string& ns, UnmanagedObject object);
 
   /**
-   * @brief Get the unmanaged objects under the provided namespace
+   * @brief Get the untracked unmanaged objects under the provided namespace
    * @param ns The namespace to return
    * @return Unmanaged objects for the provided namespace
    */
-  std::vector<std::shared_ptr<const void>> getUnmanagedObjects(const std::string& ns) const;
+  UnmanagedObjectVector getUntrackedUnmanagedObjects(const std::string& ns) const;
 
   /**
-   * @brief Get all unmanaged objects
-   * @return All unmanaged objects
+   * @brief Get all untracked unmanaged objects
+   * @return All untracked unmanaged objects
    */
-  std::unordered_map<std::string, std::vector<std::shared_ptr<const void>>> getUnmanagedObjects() const;
+  std::unordered_map<std::string, UnmanagedObjectVector> getUntrackedUnmanagedObjects() const;
 
   /** @brief Check if empty */
   bool empty() const;
@@ -145,7 +182,8 @@ private:
   std::string name_;
   std::unordered_map<std::string, EntityMap> tracked_entity_map_;
   std::unordered_map<std::string, EntityVector> untracked_entity_map_;
-  std::unordered_map<std::string, std::vector<std::shared_ptr<const void>>> unmanaged_objects_map_;
+  std::unordered_map<std::string, UnmanagedObjectMap> tracked_unmanaged_objects_map_;
+  std::unordered_map<std::string, UnmanagedObjectVector> untracked_unmanaged_objects_map_;
 
   mutable std::shared_mutex mutex_;
 };

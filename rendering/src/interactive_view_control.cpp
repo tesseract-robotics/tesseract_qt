@@ -29,7 +29,7 @@
 #include <ignition/rendering/RayQuery.hh>
 #include <ignition/rendering/Utils.hh>
 
-#include <tesseract_qt/rendering/events.h>
+#include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/utils.h>
 #include <tesseract_qt/rendering/interactive_view_control.h>
 
@@ -208,9 +208,13 @@ void InteractiveViewControlPrivate::onRender()
   }
   else if (mouse_event.Type() == ignition::common::MouseEvent::PRESS)
   {
-    target = ignition::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);
-    view_control->SetTarget(target);
-    updateReferenceVisual();
+    // Do not updated reference target on middle button because it is annoying when trying to orbit around an object
+    if (mouse_event.Button() != ignition::common::MouseEvent::MIDDLE)
+    {
+      target = ignition::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);
+      view_control->SetTarget(target);
+      updateReferenceVisual();
+    }
     mouse_press_dirty = false;
   }
   else

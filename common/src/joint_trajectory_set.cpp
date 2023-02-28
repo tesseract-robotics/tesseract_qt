@@ -31,6 +31,9 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/set.hpp>
 #include <boost/serialization/shared_ptr.hpp>
+#include <boost/uuid/uuid_serialize.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/random_generator.hpp>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_common/utils.h>
@@ -50,7 +53,7 @@ namespace tesseract_common
 
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
                                        std::string description)
-  : description_(std::move(description))
+  : description_(std::move(description)), uuid_(boost::uuids::random_generator()())
 {
   initial_state_.joint_names.reserve(initial_state.size());
   initial_state_.position.resize(static_cast<Eigen::Index>(initial_state.size()));
@@ -82,6 +85,10 @@ JointTrajectorySet::JointTrajectorySet(tesseract_environment::Environment::UPtr 
 {
   environment_ = std::move(environment);
 }
+
+boost::uuids::uuid JointTrajectorySet::getUUID() const { return uuid_; }
+
+void JointTrajectorySet::regenerateUUID() { uuid_ = boost::uuids::random_generator()(); }
 
 void JointTrajectorySet::applyEnvironment(tesseract_environment::Environment::UPtr env)
 {
@@ -254,6 +261,7 @@ void JointTrajectorySet::serialize(Archive& ar, const unsigned int /*version*/)
   ar& BOOST_SERIALIZATION_NVP(commands_);
   ar& BOOST_SERIALIZATION_NVP(description_);
   ar& BOOST_SERIALIZATION_NVP(ns_);
+  ar& BOOST_SERIALIZATION_NVP(uuid_);
 }
 
 }  // namespace tesseract_common

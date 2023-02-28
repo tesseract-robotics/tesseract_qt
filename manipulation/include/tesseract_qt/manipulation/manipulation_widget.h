@@ -49,21 +49,39 @@ class KinematicGroup;
 
 namespace tesseract_gui
 {
-enum class ManipulationStateType : int
-{
-  START,
-  END
-};
-
-struct LinkVisibilityProperties;
-struct ManipulationWidgetImpl;
+struct ComponentInfo;
 class ManipulationWidget : public QWidget
 {
   Q_OBJECT
-
 public:
-  explicit ManipulationWidget(bool single_state = true, QWidget* parent = nullptr);
+  explicit ManipulationWidget(QWidget* parent = nullptr);
+  explicit ManipulationWidget(bool use_parent_component_info, QWidget* parent = nullptr);
+  explicit ManipulationWidget(ComponentInfo parent_component_info,
+                              bool use_parent_component_info = false,
+                              QWidget* parent = nullptr);
   ~ManipulationWidget();
+
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
+
+  /**
+   * @brief Add state to manipulation widget
+   * @param state_name The name of the state
+   */
+  void addState(const std::string& state_name);
+
+  /**
+   * @brief Remove state from manipulation widget
+   * @param state_name The name of the state
+   */
+  void removeState(const std::string& state_name);
+
+  /**
+   * @brief Get state for the given state name
+   * @param state_name The state name to retrieve
+   * @return The state
+   */
+  tesseract_scene_graph::SceneState getState(const std::string& state_name) const;
 
   /**
    * @brief Check if widget is in a valid state
@@ -77,19 +95,6 @@ public:
    * @return The number of state
    */
   int getStateCount() const;
-
-  /**
-   * @brief Set the environment
-   * @param env The environment
-   */
-  void setEnvironment(std::shared_ptr<const tesseract_environment::Environment> env);
-
-  /**
-   * @brief Get the environment
-   * @return The environment
-   */
-  std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const;
-  const tesseract_environment::Environment& environment() const;
 
   /**
    * @brief Get the kinematic group
@@ -137,23 +142,16 @@ public:
   Eigen::Isometry3d getTCPOffset() const;
 
   /**
-   * @brief Get the current state index
-   * @return The active state index
+   * @brief Get the current state name
+   * @return The active state name
    */
-  int getActiveStateIndex() const;
+  std::string getActiveStateName() const;
 
   /**
    * @brief Get active state
    * @return The active state
    */
   tesseract_scene_graph::SceneState getActiveState() const;
-
-  /**
-   * @brief Get state for the given index
-   * @param index The index to retrieve state under
-   * @return The state
-   */
-  tesseract_scene_graph::SceneState getState(int index) const;
 
   /**
    * @brief Set the active state
@@ -187,33 +185,13 @@ public:
    */
   Eigen::VectorXd getActiveJointValues() const;
 
-  /** @brief Get the link visibility properties */
-  const std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties() const;
-  std::unordered_map<std::string, LinkVisibilityProperties>& getLinkVisibilityProperties();
-
 Q_SIGNALS:
-  void environmentSet(const std::shared_ptr<const tesseract_environment::Environment>& env);
-  void linkVisibilityChanged(const std::vector<std::string>& links);
-  void manipulationStateChanged(const tesseract_scene_graph::SceneState& state, int state_index);
+  void manipulationStateChanged(const tesseract_scene_graph::SceneState& state, const std::string& state_index);
   void groupNameChanged(const QString& group_name);
   void modeChanged(int mode);
   void workingFrameChanged(const QString& working_frame_name);
   void tcpNameChanged(const QString& tcp_name);
   void tcpOffsetNameChanged(const QString& tcp_offset_name);
-
-public Q_SLOTS:
-  virtual void onRender(float dt);
-  virtual void onShowAllLinks();
-  virtual void onHideAllLinks();
-  virtual void onShowVisualAllLinks();
-  virtual void onHideVisualAllLinks();
-  virtual void onShowCollisionAllLinks();
-  virtual void onHideCollisionAllLinks();
-  virtual void onShowAxisAllLinks();
-  virtual void onHideAxisAllLinks();
-  virtual void onSelectAllLinks();
-  virtual void onDeselectAllLinks();
-  virtual void onEnable();
 
 private Q_SLOTS:
   void onGroupNameChanged();
@@ -221,18 +199,19 @@ private Q_SLOTS:
   void onWorkingFrameChanged();
   void onTCPNameChanged();
   void onTCPOffsetNameChanged();
-  void onManipulatorTypeChanged();
+  void onStateNameChanged();
   void onJointStateSliderChanged(std::unordered_map<std::string, double> state);
   void onCartesianTransformChanged(const Eigen::Isometry3d& transform);
   void onReset();
 
 private:
+  struct Implementation;
   std::unique_ptr<Ui::ManipulationWidget> ui;
-  std::unique_ptr<ManipulationWidgetImpl> data_;
-
-  void addToolBar();
+  std::unique_ptr<Implementation> data_;
 
   tesseract_scene_graph::SceneState getReducedSceneState(const tesseract_scene_graph::SceneState& scene_state);
+  void addStateHelper(const std::string& state_name);
+  void removeStateHelper(const std::string& state_name);
 };
 
 }  // namespace tesseract_gui

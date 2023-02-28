@@ -235,6 +235,12 @@ QIcon getPlotIcon()
   return icon;
 }
 
+QIcon getOpenIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/open.svg"));
+  return icon;
+}
+
 QIcon getImportIcon()
 {
   static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/import.svg"));
@@ -393,6 +399,12 @@ QIcon getTesseractIcon()
 QIcon getRestoreIcon()
 {
   static QIcon icon = QIcon(":/tesseract_qt/png/restore.png");
+  return icon;
+}
+
+QIcon getLayoutIcon()
+{
+  static QIcon icon = QIcon(":/tesseract_qt/png/layout.png");
   return icon;
 }
 

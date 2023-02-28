@@ -22,8 +22,8 @@
  */
 
 #include <tesseract_qt/planning/task_composer_standard_item_utils.h>
-#include <tesseract_qt/command_language/composite_instruction_standard_item.h>
-#include <tesseract_qt/command_language/move_instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/move_instruction_standard_item.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_task_composer/task_composer_data_storage.h>

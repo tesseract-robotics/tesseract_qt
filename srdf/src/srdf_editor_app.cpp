@@ -25,7 +25,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QDebug>
-#include <QTreeView>
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QTabWidget>
@@ -35,10 +34,16 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/srdf/srdf_editor_widget.h>
 #include <tesseract_qt/rendering/render_widget.h>
-#include <tesseract_qt/rendering/render_environment_widget.h>
-#include <tesseract_qt/rendering/render_widget.h>
-#include <tesseract_qt/environment/environment_widget_config.h>
+#include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>
+
+#include <tesseract_qt/environment/widgets/environment_widget.h>
+
+#include <tesseract_qt/common/entity_manager.h>
+#include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/theme_utils.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
+
 #include <tesseract_common/resource_locator.h>
 
 int main(int argc, char** argv)
@@ -52,14 +57,13 @@ int main(int argc, char** argv)
   app.setApplicationName("Tesseract SRDF Editor");
 
   auto locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
-  std::string scene_name{ "srdf_scene" };
+  tesseract_gui::ComponentInfo component_info{ "srdf_scene" };
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
-  auto* srdf_widget = new tesseract_gui::SRDFEditorWidget(locator);
-  auto* env_widget = new tesseract_gui::RenderEnvironmentWidget(scene_name, *entity_manager);
-  auto* render_widget = new tesseract_gui::RenderWidget(scene_name);
+  auto* srdf_widget = new tesseract_gui::SRDFEditorWidget(component_info, locator);
+  auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
+  auto* render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
 
-  auto env_config = std::make_shared<tesseract_gui::EnvironmentWidgetConfig>();
-  env_widget->setConfiguration(env_config);
+  tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager{ component_info, entity_manager };
 
   auto tab_widget = new QTabWidget();
   tab_widget->addTab(srdf_widget, "SRDF");
@@ -79,24 +83,25 @@ int main(int argc, char** argv)
   window.statusBar()->showMessage("Ready!");
   window.resize(1200, 800);
 
-  QApplication::connect(srdf_widget,
-                        &tesseract_gui::SRDFEditorWidget::environmentSet,
-                        [env_config](const std::shared_ptr<tesseract_environment::Environment>& env) {
-                          env_config->setEnvironment(env);
-                        });
+  //  QApplication::connect(srdf_widget,
+  //                        &tesseract_gui::SRDFEditorWidget::environmentSet,
+  //                        [env_config](const std::shared_ptr<tesseract_environment::Environment>& env) {
+  //                          env_config->setEnvironment(env);
+  //                        });
 
-  QApplication::connect(
-      srdf_widget, &tesseract_gui::SRDFEditorWidget::showStatusMessage, [&window](const QString& message, int timeout) {
-        window.statusBar()->showMessage(message, timeout);
-        window.repaint();
-      });
+  //  QApplication::connect(
+  //      srdf_widget, &tesseract_gui::SRDFEditorWidget::showStatusMessage, [&window](const QString& message, int
+  //      timeout) {
+  //        window.statusBar()->showMessage(message, timeout);
+  //        window.repaint();
+  //      });
 
-  QApplication::connect(window.statusBar(), &QStatusBar::messageChanged, [&window](const QString& message) {
-    if (message.isEmpty())
-      window.statusBar()->showMessage("Ready!");
+  //  QApplication::connect(window.statusBar(), &QStatusBar::messageChanged, [&window](const QString& message) {
+  //    if (message.isEmpty())
+  //      window.statusBar()->showMessage("Ready!");
 
-    window.repaint();
-  });
+  //    window.repaint();
+  //  });
 
   window.show();
 

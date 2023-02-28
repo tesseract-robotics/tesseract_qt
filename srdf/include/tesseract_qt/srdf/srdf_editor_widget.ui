@@ -29,7 +29,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="load_page">
       <property name="geometry">
@@ -176,7 +176,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::AllowedCollisionMatrixWidget" name="acm_widget" native="true"/>
+        <widget class="tesseract_gui::AllowedCollisionMatrixEditorWidget" name="acm_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -236,7 +236,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::GroupsJointStatesEditorWidget" name="group_states_widget" native="true"/>
+        <widget class="tesseract_gui::GroupJointStatesEditorWidget" name="group_states_widget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -326,21 +326,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::AllowedCollisionMatrixWidget</class>
+   <class>tesseract_gui::AllowedCollisionMatrixEditorWidget</class>
    <extends>QWidget</extends>
-   <header>tesseract_qt/acm/allowed_collision_matrix_widget.h</header>
+   <header>tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>tesseract_gui::KinematicGroupsEditorWidget</class>
    <extends>QWidget</extends>
-   <header>tesseract_qt/kinematic_groups/kinematic_groups_editor_widget.h</header>
+   <header>tesseract_qt/kinematic_groups/widgets/kinematic_groups_editor_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::GroupsJointStatesEditorWidget</class>
+   <class>tesseract_gui::GroupJointStatesEditorWidget</class>
    <extends>QWidget</extends>
-   <header>tesseract_qt/kinematic_groups/groups_joint_states_editor_widget.h</header>
+   <header>tesseract_qt/kinematic_groups/widgets/group_joint_states_editor_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

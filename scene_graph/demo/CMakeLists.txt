@@ -6,7 +6,7 @@ target_link_libraries(
   ${PROJECT_NAME}_scene_graph_demo
   PRIVATE tesseract::tesseract_support
           tesseract::tesseract_urdf
-          ${PROJECT_NAME}_scene_graph
+          ${PROJECT_NAME}_scene_graph_widgets
           ${PROJECT_NAME}_common)
 
 install_targets(TARGETS ${PROJECT_NAME}_scene_graph_demo)

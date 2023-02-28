@@ -153,19 +153,6 @@ ToolPath::iterator ToolPath::erase(const_iterator first, const_iterator last) { 
 void ToolPath::push_back(const ToolPathSegment& x) { container_.push_back(x); }
 void ToolPath::push_back(const ToolPathSegment&& x) { container_.push_back(x); }
 
-template <typename... Args>
-#if __cplusplus > 201402L
-ToolPath::reference ToolPath::emplace_back(Args&&... args)
-{
-  return container_.emplace_back(std::forward<Args>(args)...);
-}
-#else
-void ToolPath::emplace_back(Args&&... args)
-{
-  container_.emplace_back(std::forward<Args>(args)...);
-}
-#endif
-
 void ToolPath::pop_back() { container_.pop_back(); }
 void ToolPath::swap(tesseract_common::AlignedVector<ToolPathSegment>& other) { container_.swap(other); }
 // LCOV_EXCL_STOP

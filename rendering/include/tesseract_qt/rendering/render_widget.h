@@ -94,11 +94,18 @@ public:
   /** @brief Default camera far clipping plane distance */
   double camera_far_clip{ 1000.0 };
 
+  /**
+   * @brief Set the level of anti-aliasing used during rendering.
+   * @details If a value of 0 is given, no anti-aliasing will be performed. Higher values can significantly
+   * slow-down rendering times, depending on the underlying render engine.
+   */
+  unsigned int camera_anti_aliasing{ 8 };
+
   /** @brief Scene background color */
   ignition::math::Color background_color{ 0.8f, 0.8f, 0.8f, 1.0f };
 
   /** @brief Ambient color */
-  ignition::math::Color ambient_light{ 0.0f, 0.0f, 1.0f, 1.0f };
+  ignition::math::Color ambient_light{ 0.4f, 0.4f, 0.4f, 1.0f };
 
   /** @brief True if engine has been initialized */
   bool initialized{ false };
@@ -117,6 +124,18 @@ public:
 
   /** @brief True if grid is enabled */
   bool grid_enable{ true };
+
+  /** @brief True if shadows is enabled */
+  bool shadows_enable{ false };
+
+  /**
+   * @brief True if hover event is enabled
+   * @details This is an expensive operation so only enable if needed
+   */
+  bool hover_event_enable{ false };
+
+  /** @brief The desired update frequency for rendering, default is 60hz */
+  int update_frequency{ 60 };
 
 private:
   /** @brief Handle mouse event for view control */
@@ -256,6 +275,9 @@ public:
    * @param event The key event to process
    */
   void handleKeyRelease(const ignition::common::KeyEvent& event);
+
+private Q_SLOTS:
+  void onFrameSwapped();
 
 protected:
   // Documentation inherited

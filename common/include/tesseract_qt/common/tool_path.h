@@ -113,6 +113,11 @@ public:
   /** const_reverse_iterator */
   using const_reverse_iterator = typename tesseract_common::AlignedVector<ToolPathSegment>::const_reverse_iterator;
 
+  template <class InputIt>
+  ToolPath(InputIt first, InputIt last) : container_(first, last)
+  {
+  }
+
   ///////////////
   // Iterators //
   ///////////////
@@ -212,9 +217,15 @@ public:
   /** @brief constructs an element in-place at the end  */
   template <typename... Args>
 #if __cplusplus > 201402L
-  reference emplace_back(Args&&... args);
+  reference emplace_back(Args&&... args)
+  {
+    return container_.emplace_back(std::forward<Args>(args)...);
+  }
 #else
-  void emplace_back(Args&&... args);
+  void emplace_back(Args&&... args)
+  {
+    container_.emplace_back(std::forward<Args>(args)...);
+  }
 #endif
 
   /** @brief removes the last element */

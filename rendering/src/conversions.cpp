@@ -22,6 +22,9 @@
 #include <ignition/rendering/WireBox.hh>
 #include <ignition/rendering/AxisVisual.hh>
 
+const std::string USER_VISIBILITY = "user_visibility";
+const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
+
 namespace tesseract_gui
 {
 //////////////////////////////////////////////////
@@ -210,13 +213,27 @@ ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
 {
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, link.getName());
   ignition::rendering::VisualPtr ign_link = scene.CreateVisual(entity.id, entity.unique_name);
-  ign_link->AddChild(loadLinkVisuals(scene, entity_container, link));
-  ign_link->AddChild(loadLinkCollisions(scene, entity_container, link));
-  auto axis = loadLinkAxis(scene, entity_container, link);
-  axis->SetVisible(false);
-  ign_link->AddChild(axis);
+  ign_link->SetUserData(USER_VISIBILITY, true);
+
+  ignition::rendering::VisualPtr ign_link_visuals = loadLinkVisuals(scene, entity_container, link);
+  ign_link_visuals->SetUserData(USER_VISIBILITY, true);
+  ign_link->AddChild(ign_link_visuals);
+
+  ignition::rendering::VisualPtr ign_link_collisions = loadLinkCollisions(scene, entity_container, link);
+  ign_link_collisions->SetUserData(USER_VISIBILITY, false);
+  ign_link->AddChild(ign_link_collisions);
+
+  auto ign_link_axis = loadLinkAxis(scene, entity_container, link);
+  ign_link_axis->SetVisible(false);
+  ign_link_axis->SetUserData(USER_VISIBILITY, false);
+  ign_link->AddChild(ign_link_axis);
+
   if (!link.visual.empty() || !link.collision.empty())
-    ign_link->AddChild(loadLinkWireBox(scene, entity_container, link, ign_link->LocalBoundingBox()));
+  {
+    auto ign_link_wirebox = loadLinkWireBox(scene, entity_container, link, ign_link->LocalBoundingBox());
+    ign_link_wirebox->SetUserData(USER_VISIBILITY, false);
+    ign_link->AddChild(ign_link_wirebox);
+  }
 
   return ign_link;
 }
@@ -340,7 +357,8 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
       cylinder->AddGeometry(scene.CreateCylinder());
 
       const auto& shape = static_cast<const tesseract_geometry::Cylinder&>(geometry);
-      cylinder->Scale(shape.getRadius() * scale.x(), shape.getRadius() * scale.y(), shape.getLength() * scale.z());
+      const double diameter = 2.0 * shape.getRadius();
+      cylinder->Scale(diameter * scale.x(), diameter * scale.y(), shape.getLength() * scale.z());
       cylinder->SetMaterial(ign_material);
       return cylinder;
     }

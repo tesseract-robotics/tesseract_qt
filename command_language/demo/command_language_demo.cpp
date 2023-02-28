@@ -28,7 +28,11 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <sstream>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/command_language/composite_instruction_model.h>
+#include <tesseract_qt/command_language/widgets/composite_instruction_widget.h>
+#include <tesseract_qt/common/events/command_language_events.h>
+#include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/tree_view.h>
+
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/cartesian_waypoint.h>
 #include <tesseract_command_language/move_instruction.h>
@@ -88,16 +92,16 @@ int main(int argc, char** argv)
   plan_f1.setDescription("to_end_plan");
 
   // Add Instructions to program
+  program.appendMoveInstruction(start_instruction);
   program.appendMoveInstruction(plan_f0);
   program.appendMoveInstruction(plan_c0);
   program.appendMoveInstruction(plan_f1);
 
-  tesseract_gui::CompositeInstructionModel model;
-  model.setCompositeInstruction("general", program);
-
-  QTreeView widget;
-  widget.setModel(&model);
+  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  tesseract_gui::CompositeInstructionWidget widget(component_info);
   widget.show();
+
+  QApplication::sendEvent(qApp, new tesseract_gui::events::CompositeInstructionSet(component_info, program, "general"));
 
   return QApplication::exec();
 }
