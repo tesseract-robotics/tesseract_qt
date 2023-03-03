@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.15.0 (2023-03-03)
+-------------------
 * Update rosinstall depends
 * Switch to leveraging event filters (`#22 <https://github.com/tesseract-robotics/tesseract_qt/issues/22>`_)
 * Removed start instructions as they are no longer used
