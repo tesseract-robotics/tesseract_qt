@@ -2,6 +2,27 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update rosinstall depends
+* Switch to leveraging event filters (`#22 <https://github.com/tesseract-robotics/tesseract_qt/issues/22>`_)
+* Removed start instructions as they are no longer used
+* Fix tool path render visibility
+* Sync render widget with monitor refresh rate
+* Add tool path icon and finish event filters
+* Add tool path render manager
+* Add tool path selection model
+* Add ToolPathToolBar
+* Tool Path Changes
+* Add SceneEvent class to remove duplication in events
+* Fix use of removeRow by passing in index parent so correct row is removed
+* Update interactive view control to latest fixing large jumps
+* Add tool path widgets
+* Add render widget to the srdf editor application
+* Add rendering widget leveraging ignition
+* Update dependencies.rosinstall
+* Contributors: Levi Armstrong, Tyler Marr
+
 0.14.0 (2022-10-23)
 -------------------
 * Fix QToolbox theme
