@@ -2,6 +2,12 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update dependencies.rosinstall
+* Remove process planning request standard item
+* Contributors: Levi Armstrong
+
 0.15.0 (2023-03-03)
 -------------------
 * Update rosinstall depends
