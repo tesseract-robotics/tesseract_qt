@@ -67,6 +67,6 @@ void CartesianWaypointStandardItem::ctor(const tesseract_planning::CartesianWayp
   appendRow(new VectorDoubleStandardItem("upper_tolerance", cwp.getUpperTolerance()));
 
   if (cwp.hasSeed())
-    appendRow(new JointStateStandardItem(cwp.getSeed()));
+    appendRow(new JointStateStandardItem("seed", cwp.getSeed()));
 }
 }  // namespace tesseract_gui
