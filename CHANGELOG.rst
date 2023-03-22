@@ -2,6 +2,15 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update rosinstall depends
+* Include fix for Jammy/Humble
+* Add more details to node info standard items
+* Fix cartesian waypoint standard item seed text
+* Update dependencies.rosinstall
+* Contributors: Levi Armstrong, Roelof Oomen
+
 0.15.1 (2023-03-14)
 -------------------
 * Update dependencies.rosinstall
