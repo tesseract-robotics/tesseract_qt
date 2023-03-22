@@ -66,7 +66,8 @@ void TaskComposerNodeInfoMapStandardItem::ctor(
     const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map)
 {
   for (const auto& pair : info_map)
-    appendRow(new TaskComposerNodeInfoStandardItem(QString::fromStdString(boost::uuids::to_string(pair.first)),
-                                                   *pair.second));
+    appendRow({ new TaskComposerNodeInfoStandardItem(QString::fromStdString(boost::uuids::to_string(pair.first)),
+                                                     *pair.second),
+                new QStandardItem(pair.second->name.c_str()) });
 }
 }  // namespace tesseract_gui

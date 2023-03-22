@@ -196,7 +196,7 @@ void eventFilterHelper(QObject* /*obj*/,
     {
       tesseract_gui::ContactResultVector crv;
       for (const auto& result : contact.second)
-        crv().push_back(tesseract_gui::ContactResult(result));
+        crv().emplace_back(tesseract_gui::ContactResult(result));
 
       tracked_object[contact.first] = crv;
     }
