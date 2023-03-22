@@ -27,6 +27,7 @@
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/component_info.h>
 #include <shared_mutex>
+#include <mutex>
 
 namespace tesseract_gui
 {
