@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.15.2 (2023-03-22)
+-------------------
 * Update rosinstall depends
 * Include fix for Jammy/Humble
 * Add more details to node info standard items
