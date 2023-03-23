@@ -42,6 +42,7 @@
 #include <tesseract_task_composer/nodes/fix_state_collision_task.h>
 #include <tesseract_task_composer/nodes/discrete_contact_check_task.h>
 #include <tesseract_task_composer/nodes/continuous_contact_check_task.h>
+#include <tesseract_task_composer/nodes/time_optimal_parameterization_task.h>
 
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
@@ -196,6 +197,17 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
     if (derived_type != nullptr)
     {
       addContactResults(derived_type->contact_results);
+      return;
+    }
+  }
+
+  {  // Try ContinuousContactCheckTaskInfo
+    const auto* derived_type = dynamic_cast<const tesseract_planning::TimeOptimalParameterizationTaskInfo*>(&info);
+    if (derived_type != nullptr)
+    {
+      appendRow(createStandardItemFloat("max_velocity_scaling_factor", derived_type->max_velocity_scaling_factor));
+      appendRow(
+          createStandardItemFloat("max_acceleration_scaling_factor", derived_type->max_acceleration_scaling_factor));
       return;
     }
   }
