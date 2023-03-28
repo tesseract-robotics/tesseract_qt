@@ -358,7 +358,11 @@ DefaultEnvironmentWrapper::DefaultEnvironmentWrapper(ComponentInfo component_inf
   qGuiApp->installEventFilter(this);
 }
 
-DefaultEnvironmentWrapper::~DefaultEnvironmentWrapper() = default;
+DefaultEnvironmentWrapper::~DefaultEnvironmentWrapper()
+{
+  if (initialized_ && env_)
+    env_->removeEventCallback(std::hash<EnvironmentWrapper*>()(this));
+}
 
 std::shared_ptr<const tesseract_environment::Environment> DefaultEnvironmentWrapper::getEnvironment() const
 {
@@ -389,7 +393,13 @@ MonitorEnvironmentWrapper::MonitorEnvironmentWrapper(
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }
-MonitorEnvironmentWrapper::~MonitorEnvironmentWrapper() = default;
+
+MonitorEnvironmentWrapper::~MonitorEnvironmentWrapper()
+{
+  if (initialized_ && env_monitor_) {
+    environment().removeEventCallback(std::hash<EnvironmentWrapper *>()(this));
+  }
+}
 
 std::shared_ptr<const tesseract_environment::Environment> MonitorEnvironmentWrapper::getEnvironment() const
 {
