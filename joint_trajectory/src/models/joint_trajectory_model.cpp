@@ -81,7 +81,7 @@ void JointTrajectoryModel::addJointTrajectorySet(tesseract_common::JointTrajecto
     if (env_wrapper != nullptr)
     {
       auto env = env_wrapper->getEnvironment();
-      if (env != nullptr || env->isInitialized())
+      if (env != nullptr && env->isInitialized())
         trajectory_set.applyEnvironment(env->clone());
     }
     else
@@ -90,7 +90,7 @@ void JointTrajectoryModel::addJointTrajectorySet(tesseract_common::JointTrajecto
       if (env_wrapper != nullptr)
       {
         auto env = env_wrapper->getEnvironment();
-        if (env != nullptr || env->isInitialized())
+        if (env != nullptr && env->isInitialized())
           trajectory_set.applyEnvironment(env->clone());
       }
     }
