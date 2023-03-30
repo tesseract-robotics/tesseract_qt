@@ -396,9 +396,8 @@ MonitorEnvironmentWrapper::MonitorEnvironmentWrapper(
 
 MonitorEnvironmentWrapper::~MonitorEnvironmentWrapper()
 {
-  if (initialized_ && env_monitor_) {
-    environment().removeEventCallback(std::hash<EnvironmentWrapper *>()(this));
-  }
+  if (initialized_ && env_monitor_)
+    environment().removeEventCallback(std::hash<EnvironmentWrapper*>()(this));
 }
 
 std::shared_ptr<const tesseract_environment::Environment> MonitorEnvironmentWrapper::getEnvironment() const
