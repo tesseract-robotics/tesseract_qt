@@ -263,7 +263,7 @@ void eventFilterHelper(QObject* /*obj*/,
         if (link2->collision.empty())
           continue;
 
-        if (results.find(tesseract_collision::getObjectPairKey(link_names[i], link_names[j])) == results.end())
+        if (results.find(tesseract_common::makeOrderedLinkPair(link_names[i], link_names[j])) == results.end())
           acm.addAllowedCollision(link_names[i], link_names[j], "Never");
       }
     }
