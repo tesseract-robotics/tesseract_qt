@@ -25,6 +25,7 @@
 #include <tesseract_qt/environment/models/commands/add_kinematics_information_command_standard_item.h>
 #include <tesseract_qt/environment/models/commands/add_link_command_standard_item.h>
 #include <tesseract_qt/environment/models/commands/add_scene_graph_command_standard_item.h>
+#include <tesseract_qt/environment/models/commands/add_trajectory_link_command_standard_item.h>
 #include <tesseract_qt/environment/models/commands/change_collision_margins_command_standard_item.h>
 #include <tesseract_qt/environment/models/commands/change_joint_acceleration_limits_command_standard_item.h>
 #include <tesseract_qt/environment/models/commands/change_joint_origin_command_standard_item.h>
@@ -231,6 +232,12 @@ void EnvironmentCommandsStandardItem::addCommand(const QString& text,
       auto cmd = std::static_pointer_cast<const tesseract_environment::SetActiveDiscreteContactManagerCommand>(command);
       appendRow({ new SetActiveDiscreteContactManagerCommandStandardItem(text, cmd),
                   new QStandardItem("Set Active Discrete Contact Manager") });
+      break;
+    }
+    case tesseract_environment::CommandType::ADD_TRAJECTORY_LINK:
+    {
+      auto cmd = std::static_pointer_cast<const tesseract_environment::AddTrajectoryLinkCommand>(command);
+      appendRow({ new AddTrajectoryLinkCommandStandardItem(text, cmd), new QStandardItem("Add Trajectory Link") });
       break;
     }
     default:

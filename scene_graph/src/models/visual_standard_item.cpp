@@ -70,46 +70,50 @@ void VisualStandardItem::ctor()
   {
     case tesseract_geometry::GeometryType::BOX:
     {
-      geometry_item = new BoxStandardItem(std::static_pointer_cast<tesseract_geometry::Box>(visual->geometry));
+      geometry_item = new BoxStandardItem(std::static_pointer_cast<const tesseract_geometry::Box>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CAPSULE:
     {
-      geometry_item = new CapsuleStandardItem(std::static_pointer_cast<tesseract_geometry::Capsule>(visual->geometry));
+      geometry_item =
+          new CapsuleStandardItem(std::static_pointer_cast<const tesseract_geometry::Capsule>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CONE:
     {
-      geometry_item = new ConeStandardItem(std::static_pointer_cast<tesseract_geometry::Cone>(visual->geometry));
+      geometry_item = new ConeStandardItem(std::static_pointer_cast<const tesseract_geometry::Cone>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CYLINDER:
     {
       geometry_item =
-          new CylinderStandardItem(std::static_pointer_cast<tesseract_geometry::Cylinder>(visual->geometry));
+          new CylinderStandardItem(std::static_pointer_cast<const tesseract_geometry::Cylinder>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::PLANE:
     {
-      geometry_item = new PlaneStandardItem(std::static_pointer_cast<tesseract_geometry::Plane>(visual->geometry));
+      geometry_item =
+          new PlaneStandardItem(std::static_pointer_cast<const tesseract_geometry::Plane>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::SPHERE:
     {
-      geometry_item = new SphereStandardItem(std::static_pointer_cast<tesseract_geometry::Sphere>(visual->geometry));
+      geometry_item =
+          new SphereStandardItem(std::static_pointer_cast<const tesseract_geometry::Sphere>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::OCTREE:
     {
-      geometry_item = new OctreeStandardItem(std::static_pointer_cast<tesseract_geometry::Octree>(visual->geometry));
+      geometry_item =
+          new OctreeStandardItem(std::static_pointer_cast<const tesseract_geometry::Octree>(visual->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CONVEX_MESH:
     case tesseract_geometry::GeometryType::MESH:
     case tesseract_geometry::GeometryType::SDF_MESH:
     {
-      geometry_item =
-          new PolygonMeshStandardItem(std::static_pointer_cast<tesseract_geometry::PolygonMesh>(visual->geometry));
+      geometry_item = new PolygonMeshStandardItem(
+          std::static_pointer_cast<const tesseract_geometry::PolygonMesh>(visual->geometry));
       break;
     }
   }

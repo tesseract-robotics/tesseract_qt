@@ -28,13 +28,13 @@
 
 namespace tesseract_gui
 {
-PolygonMeshStandardItem::PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::Ptr mesh)
+PolygonMeshStandardItem::PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::ConstPtr mesh)
   : QStandardItem(icons::getConvexMeshIcon(), "PolygonMesh"), mesh(std::move(mesh))
 {
   ctor();
 }
 
-PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text, tesseract_geometry::PolygonMesh::Ptr mesh)
+PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text, tesseract_geometry::PolygonMesh::ConstPtr mesh)
   : QStandardItem(icons::getConvexMeshIcon(), text), mesh(std::move(mesh))
 {
   ctor();
@@ -42,7 +42,7 @@ PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text, tesseract_
 
 PolygonMeshStandardItem::PolygonMeshStandardItem(const QIcon& icon,
                                                  const QString& text,
-                                                 tesseract_geometry::PolygonMesh::Ptr mesh)
+                                                 tesseract_geometry::PolygonMesh::ConstPtr mesh)
   : QStandardItem(icon, text), mesh(std::move(mesh))
 {
   ctor();
@@ -58,7 +58,7 @@ void PolygonMeshStandardItem::ctor()
     setText("Convex Mesh");
 
     std::string method{ "Default" };
-    auto convex_mesh = std::static_pointer_cast<tesseract_geometry::ConvexMesh>(mesh);
+    auto convex_mesh = std::static_pointer_cast<const tesseract_geometry::ConvexMesh>(mesh);
     if (convex_mesh->getCreationMethod() == tesseract_geometry::ConvexMesh::MESH)
       method = "Mesh";
     else if (convex_mesh->getCreationMethod() == tesseract_geometry::ConvexMesh::CONVERTED)

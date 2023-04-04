@@ -27,19 +27,21 @@
 
 namespace tesseract_gui
 {
-OctreeStandardItem::OctreeStandardItem(tesseract_geometry::Octree::Ptr octree)
+OctreeStandardItem::OctreeStandardItem(tesseract_geometry::Octree::ConstPtr octree)
   : QStandardItem(icons::getOctreeIcon(), "Octree"), octree(std::move(octree))
 {
   ctor();
 }
 
-OctreeStandardItem::OctreeStandardItem(const QString& text, tesseract_geometry::Octree::Ptr octree)
+OctreeStandardItem::OctreeStandardItem(const QString& text, tesseract_geometry::Octree::ConstPtr octree)
   : QStandardItem(icons::getOctreeIcon(), text), octree(std::move(octree))
 {
   ctor();
 }
 
-OctreeStandardItem::OctreeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Octree::Ptr octree)
+OctreeStandardItem::OctreeStandardItem(const QIcon& icon,
+                                       const QString& text,
+                                       tesseract_geometry::Octree::ConstPtr octree)
   : QStandardItem(icon, text), octree(std::move(octree))
 {
   ctor();

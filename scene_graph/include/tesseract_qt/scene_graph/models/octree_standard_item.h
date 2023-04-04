@@ -37,12 +37,12 @@ namespace tesseract_gui
 class OctreeStandardItem : public QStandardItem
 {
 public:
-  OctreeStandardItem(tesseract_geometry::Octree::Ptr octree);
-  explicit OctreeStandardItem(const QString& text, tesseract_geometry::Octree::Ptr octree);
-  OctreeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Octree::Ptr octree);
+  OctreeStandardItem(tesseract_geometry::Octree::ConstPtr octree);
+  explicit OctreeStandardItem(const QString& text, tesseract_geometry::Octree::ConstPtr octree);
+  OctreeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Octree::ConstPtr octree);
   int type() const override;
 
-  tesseract_geometry::Octree::Ptr octree;
+  tesseract_geometry::Octree::ConstPtr octree;
 
 private:
   void ctor();

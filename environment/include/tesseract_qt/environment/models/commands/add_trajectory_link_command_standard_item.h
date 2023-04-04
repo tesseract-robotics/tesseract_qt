@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2023 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_SCENE_GRAPH_SPHERE_STANDARD_ITEM_H
-#define TESSERACT_QT_SCENE_GRAPH_SPHERE_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_ENVIRONMENT_ADD_TRAJECTORY_LINK_COMMAND_STANDARD_ITEM_H
+#define TESSERACT_QT_ENVIRONMENT_ADD_TRAJECTORY_LINK_COMMAND_STANDARD_ITEM_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_geometry/impl/sphere.h>
+#include <tesseract_environment/commands/add_trajectory_link_command.h>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
@@ -34,19 +34,22 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-class SphereStandardItem : public QStandardItem
+class AddTrajectoryLinkCommandStandardItem : public QStandardItem
 {
 public:
-  SphereStandardItem(tesseract_geometry::Sphere::ConstPtr sphere);
-  explicit SphereStandardItem(const QString& text, tesseract_geometry::Sphere::ConstPtr sphere);
-  SphereStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Sphere::ConstPtr sphere);
+  explicit AddTrajectoryLinkCommandStandardItem(tesseract_environment::AddTrajectoryLinkCommand::ConstPtr command);
+  explicit AddTrajectoryLinkCommandStandardItem(const QString& text,
+                                                tesseract_environment::AddTrajectoryLinkCommand::ConstPtr command);
+  explicit AddTrajectoryLinkCommandStandardItem(const QIcon& icon,
+                                                const QString& text,
+                                                tesseract_environment::AddTrajectoryLinkCommand::ConstPtr command);
   int type() const override;
 
-  tesseract_geometry::Sphere::ConstPtr sphere;
+  tesseract_environment::AddTrajectoryLinkCommand::ConstPtr command;
 
 private:
   void ctor();
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_SCENE_GRAPH_SPHERE_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_ENVIRONMENT_ADD_TRAJECTORY_LINK_COMMAND_STANDARD_ITEM_H

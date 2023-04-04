@@ -37,12 +37,12 @@ namespace tesseract_gui
 class PlaneStandardItem : public QStandardItem
 {
 public:
-  PlaneStandardItem(tesseract_geometry::Plane::Ptr plane);
-  explicit PlaneStandardItem(const QString& text, tesseract_geometry::Plane::Ptr plane);
-  PlaneStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Plane::Ptr plane);
+  PlaneStandardItem(tesseract_geometry::Plane::ConstPtr plane);
+  explicit PlaneStandardItem(const QString& text, tesseract_geometry::Plane::ConstPtr plane);
+  PlaneStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Plane::ConstPtr plane);
   int type() const override;
 
-  tesseract_geometry::Plane::Ptr plane;
+  tesseract_geometry::Plane::ConstPtr plane;
 
 private:
   void ctor();

@@ -37,12 +37,12 @@ namespace tesseract_gui
 class BoxStandardItem : public QStandardItem
 {
 public:
-  BoxStandardItem(tesseract_geometry::Box::Ptr box);
-  explicit BoxStandardItem(const QString& text, tesseract_geometry::Box::Ptr box);
-  BoxStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Box::Ptr box);
+  BoxStandardItem(tesseract_geometry::Box::ConstPtr box);
+  explicit BoxStandardItem(const QString& text, tesseract_geometry::Box::ConstPtr box);
+  BoxStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Box::ConstPtr box);
   int type() const override;
 
-  tesseract_geometry::Box::Ptr box;
+  tesseract_geometry::Box::ConstPtr box;
 
 private:
   void ctor();

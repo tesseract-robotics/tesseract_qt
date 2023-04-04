@@ -110,7 +110,7 @@ const tesseract_environment::Commands& JointTrajectorySet::getEnvironmentCommand
 JointState JointTrajectorySet::getNewTrajectoryInitialState() const
 {
   JointState prev_state = initial_state_;
-  if (!joint_trajectory_.empty())
+  if (!joint_trajectory_.empty() && !joint_trajectory_.back().second.empty())
   {
     const JointTrajectoryInfo& info = joint_trajectory_.back();
     const JointState& last_state = info.second.back();

@@ -27,13 +27,13 @@
 
 namespace tesseract_gui
 {
-CapsuleStandardItem::CapsuleStandardItem(tesseract_geometry::Capsule::Ptr capsule)
+CapsuleStandardItem::CapsuleStandardItem(tesseract_geometry::Capsule::ConstPtr capsule)
   : QStandardItem(icons::getCapsuleIcon(), "Capsule"), capsule(std::move(capsule))
 {
   ctor();
 }
 
-CapsuleStandardItem::CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::Ptr capsule)
+CapsuleStandardItem::CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::ConstPtr capsule)
   : QStandardItem(icons::getCapsuleIcon(), text), capsule(std::move(capsule))
 {
   ctor();
@@ -41,7 +41,7 @@ CapsuleStandardItem::CapsuleStandardItem(const QString& text, tesseract_geometry
 
 CapsuleStandardItem::CapsuleStandardItem(const QIcon& icon,
                                          const QString& text,
-                                         tesseract_geometry::Capsule::Ptr capsule)
+                                         tesseract_geometry::Capsule::ConstPtr capsule)
   : QStandardItem(icon, text), capsule(std::move(capsule))
 {
   ctor();
