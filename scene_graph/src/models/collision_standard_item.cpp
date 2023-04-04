@@ -67,47 +67,51 @@ void CollisionStandardItem::ctor()
   {
     case tesseract_geometry::GeometryType::BOX:
     {
-      geometry_item = new BoxStandardItem(std::static_pointer_cast<tesseract_geometry::Box>(collision->geometry));
+      geometry_item = new BoxStandardItem(std::static_pointer_cast<const tesseract_geometry::Box>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CAPSULE:
     {
       geometry_item =
-          new CapsuleStandardItem(std::static_pointer_cast<tesseract_geometry::Capsule>(collision->geometry));
+          new CapsuleStandardItem(std::static_pointer_cast<const tesseract_geometry::Capsule>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CONE:
     {
-      geometry_item = new ConeStandardItem(std::static_pointer_cast<tesseract_geometry::Cone>(collision->geometry));
+      geometry_item =
+          new ConeStandardItem(std::static_pointer_cast<const tesseract_geometry::Cone>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CYLINDER:
     {
       geometry_item =
-          new CylinderStandardItem(std::static_pointer_cast<tesseract_geometry::Cylinder>(collision->geometry));
+          new CylinderStandardItem(std::static_pointer_cast<const tesseract_geometry::Cylinder>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::PLANE:
     {
-      geometry_item = new PlaneStandardItem(std::static_pointer_cast<tesseract_geometry::Plane>(collision->geometry));
+      geometry_item =
+          new PlaneStandardItem(std::static_pointer_cast<const tesseract_geometry::Plane>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::SPHERE:
     {
-      geometry_item = new SphereStandardItem(std::static_pointer_cast<tesseract_geometry::Sphere>(collision->geometry));
+      geometry_item =
+          new SphereStandardItem(std::static_pointer_cast<const tesseract_geometry::Sphere>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::OCTREE:
     {
-      geometry_item = new OctreeStandardItem(std::static_pointer_cast<tesseract_geometry::Octree>(collision->geometry));
+      geometry_item =
+          new OctreeStandardItem(std::static_pointer_cast<const tesseract_geometry::Octree>(collision->geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CONVEX_MESH:
     case tesseract_geometry::GeometryType::MESH:
     case tesseract_geometry::GeometryType::SDF_MESH:
     {
-      geometry_item =
-          new PolygonMeshStandardItem(std::static_pointer_cast<tesseract_geometry::PolygonMesh>(collision->geometry));
+      geometry_item = new PolygonMeshStandardItem(
+          std::static_pointer_cast<const tesseract_geometry::PolygonMesh>(collision->geometry));
       break;
     }
   }

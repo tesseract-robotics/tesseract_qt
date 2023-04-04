@@ -27,19 +27,19 @@
 
 namespace tesseract_gui
 {
-BoxStandardItem::BoxStandardItem(tesseract_geometry::Box::Ptr box)
+BoxStandardItem::BoxStandardItem(tesseract_geometry::Box::ConstPtr box)
   : QStandardItem(icons::getCubeIcon(), "Box"), box(std::move(box))
 {
   ctor();
 }
 
-BoxStandardItem::BoxStandardItem(const QString& text, tesseract_geometry::Box::Ptr box)
+BoxStandardItem::BoxStandardItem(const QString& text, tesseract_geometry::Box::ConstPtr box)
   : QStandardItem(icons::getCubeIcon(), text), box(std::move(box))
 {
   ctor();
 }
 
-BoxStandardItem::BoxStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Box::Ptr box)
+BoxStandardItem::BoxStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Box::ConstPtr box)
   : QStandardItem(icon, text), box(std::move(box))
 {
   ctor();

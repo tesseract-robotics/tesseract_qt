@@ -27,19 +27,19 @@
 
 namespace tesseract_gui
 {
-PlaneStandardItem::PlaneStandardItem(tesseract_geometry::Plane::Ptr plane)
+PlaneStandardItem::PlaneStandardItem(tesseract_geometry::Plane::ConstPtr plane)
   : QStandardItem(icons::getPlaneIcon(), "Plane"), plane(std::move(plane))
 {
   ctor();
 }
 
-PlaneStandardItem::PlaneStandardItem(const QString& text, tesseract_geometry::Plane::Ptr plane)
+PlaneStandardItem::PlaneStandardItem(const QString& text, tesseract_geometry::Plane::ConstPtr plane)
   : QStandardItem(icons::getPlaneIcon(), text), plane(std::move(plane))
 {
   ctor();
 }
 
-PlaneStandardItem::PlaneStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Plane::Ptr plane)
+PlaneStandardItem::PlaneStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Plane::ConstPtr plane)
   : QStandardItem(icon, text), plane(std::move(plane))
 {
   ctor();

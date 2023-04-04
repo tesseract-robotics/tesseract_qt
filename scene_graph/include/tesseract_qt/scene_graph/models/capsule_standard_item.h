@@ -37,12 +37,12 @@ namespace tesseract_gui
 class CapsuleStandardItem : public QStandardItem
 {
 public:
-  CapsuleStandardItem(tesseract_geometry::Capsule::Ptr capsule);
-  explicit CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::Ptr capsule);
-  CapsuleStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Capsule::Ptr capsule);
+  CapsuleStandardItem(tesseract_geometry::Capsule::ConstPtr capsule);
+  explicit CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::ConstPtr capsule);
+  CapsuleStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Capsule::ConstPtr capsule);
   int type() const override;
 
-  tesseract_geometry::Capsule::Ptr capsule;
+  tesseract_geometry::Capsule::ConstPtr capsule;
 
 private:
   void ctor();

@@ -37,12 +37,12 @@ namespace tesseract_gui
 class ConeStandardItem : public QStandardItem
 {
 public:
-  ConeStandardItem(tesseract_geometry::Cone::Ptr cone);
-  explicit ConeStandardItem(const QString& text, tesseract_geometry::Cone::Ptr cone);
-  ConeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cone::Ptr cone);
+  ConeStandardItem(tesseract_geometry::Cone::ConstPtr cone);
+  explicit ConeStandardItem(const QString& text, tesseract_geometry::Cone::ConstPtr cone);
+  ConeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cone::ConstPtr cone);
   int type() const override;
 
-  tesseract_geometry::Cone::Ptr cone;
+  tesseract_geometry::Cone::ConstPtr cone;
 
 private:
   void ctor();

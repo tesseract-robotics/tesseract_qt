@@ -37,12 +37,12 @@ namespace tesseract_gui
 class CylinderStandardItem : public QStandardItem
 {
 public:
-  CylinderStandardItem(tesseract_geometry::Cylinder::Ptr cylinder);
-  explicit CylinderStandardItem(const QString& text, tesseract_geometry::Cylinder::Ptr cylinder);
-  CylinderStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cylinder::Ptr cylinder);
+  CylinderStandardItem(tesseract_geometry::Cylinder::ConstPtr cylinder);
+  explicit CylinderStandardItem(const QString& text, tesseract_geometry::Cylinder::ConstPtr cylinder);
+  CylinderStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cylinder::ConstPtr cylinder);
   int type() const override;
 
-  tesseract_geometry::Cylinder::Ptr cylinder;
+  tesseract_geometry::Cylinder::ConstPtr cylinder;
 
 private:
   void ctor();

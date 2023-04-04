@@ -27,19 +27,21 @@
 
 namespace tesseract_gui
 {
-SphereStandardItem::SphereStandardItem(tesseract_geometry::Sphere::Ptr sphere)
+SphereStandardItem::SphereStandardItem(tesseract_geometry::Sphere::ConstPtr sphere)
   : QStandardItem(icons::getSphereIcon(), "Sphere"), sphere(std::move(sphere))
 {
   ctor();
 }
 
-SphereStandardItem::SphereStandardItem(const QString& text, tesseract_geometry::Sphere::Ptr sphere)
+SphereStandardItem::SphereStandardItem(const QString& text, tesseract_geometry::Sphere::ConstPtr sphere)
   : QStandardItem(icons::getSphereIcon(), text), sphere(std::move(sphere))
 {
   ctor();
 }
 
-SphereStandardItem::SphereStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Sphere::Ptr sphere)
+SphereStandardItem::SphereStandardItem(const QIcon& icon,
+                                       const QString& text,
+                                       tesseract_geometry::Sphere::ConstPtr sphere)
   : QStandardItem(icon, text), sphere(std::move(sphere))
 {
   ctor();

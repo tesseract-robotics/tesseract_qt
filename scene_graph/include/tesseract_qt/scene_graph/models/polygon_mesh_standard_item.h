@@ -37,12 +37,12 @@ namespace tesseract_gui
 class PolygonMeshStandardItem : public QStandardItem
 {
 public:
-  PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::Ptr mesh);
-  explicit PolygonMeshStandardItem(const QString& text, tesseract_geometry::PolygonMesh::Ptr mesh);
-  PolygonMeshStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::PolygonMesh::Ptr mesh);
+  PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::ConstPtr mesh);
+  explicit PolygonMeshStandardItem(const QString& text, tesseract_geometry::PolygonMesh::ConstPtr mesh);
+  PolygonMeshStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::PolygonMesh::ConstPtr mesh);
   int type() const override;
 
-  tesseract_geometry::PolygonMesh::Ptr mesh;
+  tesseract_geometry::PolygonMesh::ConstPtr mesh;
 
 private:
   void ctor();

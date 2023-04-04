@@ -101,6 +101,7 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
           {
             case tesseract_environment::CommandType::ADD_SCENE_GRAPH:
             case tesseract_environment::CommandType::ADD_LINK:
+            case tesseract_environment::CommandType::ADD_TRAJECTORY_LINK:
             case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
             case tesseract_environment::CommandType::REMOVE_LINK:
             case tesseract_environment::CommandType::REMOVE_JOINT:

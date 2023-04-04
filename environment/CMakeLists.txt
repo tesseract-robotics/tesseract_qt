@@ -16,6 +16,7 @@ add_library(
   src/models/commands/add_kinematics_information_command_standard_item.cpp
   src/models/commands/add_link_command_standard_item.cpp
   src/models/commands/add_scene_graph_command_standard_item.cpp
+  src/models/commands/add_trajectory_link_command_standard_item.cpp
   src/models/commands/change_collision_margins_command_standard_item.cpp
   src/models/commands/change_joint_acceleration_limits_command_standard_item.cpp
   src/models/commands/change_joint_origin_command_standard_item.cpp

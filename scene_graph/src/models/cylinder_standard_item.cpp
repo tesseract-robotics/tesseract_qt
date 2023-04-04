@@ -27,13 +27,13 @@
 
 namespace tesseract_gui
 {
-CylinderStandardItem::CylinderStandardItem(tesseract_geometry::Cylinder::Ptr cylinder)
+CylinderStandardItem::CylinderStandardItem(tesseract_geometry::Cylinder::ConstPtr cylinder)
   : QStandardItem(icons::getCylinderIcon(), "Cylinder"), cylinder(std::move(cylinder))
 {
   ctor();
 }
 
-CylinderStandardItem::CylinderStandardItem(const QString& text, tesseract_geometry::Cylinder::Ptr cylinder)
+CylinderStandardItem::CylinderStandardItem(const QString& text, tesseract_geometry::Cylinder::ConstPtr cylinder)
   : QStandardItem(icons::getCylinderIcon(), text), cylinder(std::move(cylinder))
 {
   ctor();
@@ -41,7 +41,7 @@ CylinderStandardItem::CylinderStandardItem(const QString& text, tesseract_geomet
 
 CylinderStandardItem::CylinderStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           tesseract_geometry::Cylinder::Ptr cylinder)
+                                           tesseract_geometry::Cylinder::ConstPtr cylinder)
   : QStandardItem(icon, text), cylinder(std::move(cylinder))
 {
   ctor();
