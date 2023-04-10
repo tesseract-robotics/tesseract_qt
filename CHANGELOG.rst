@@ -2,6 +2,15 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update rosinstall depends
+* Add trajectory link command support
+* Update for ContactResultMapClass
+* Fixed environment segfaults (`#32 <https://github.com/tesseract-robotics/tesseract_qt/issues/32>`_)
+* Add support for TOTG node info class
+* Contributors: Levi Armstrong, afrixs
+
 0.15.2 (2023-03-22)
 -------------------
 * Update rosinstall depends
