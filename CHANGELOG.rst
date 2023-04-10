@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.16.0 (2023-04-10)
+-------------------
 * Update rosinstall depends
 * Add trajectory link command support
 * Update for ContactResultMapClass
