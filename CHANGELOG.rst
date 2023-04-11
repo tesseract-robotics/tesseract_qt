@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update depends
+* Contributors: Levi Armstrong
+
 0.16.0 (2023-04-10)
 -------------------
 * Update rosinstall depends
