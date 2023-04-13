@@ -51,9 +51,17 @@ public:
   QItemSelectionModel& getSelectionModel();
   const QItemSelectionModel& getSelectionModel() const;
 
+private Q_SLOTS:
+  void onSaveFinished(int results);
+  void onOpenFinished(int results);
+  void onCurrentRowChanged(const QModelIndex& current, const QModelIndex& previous);
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
+
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 }  // namespace tesseract_gui

@@ -70,7 +70,9 @@ enum class EventType : int
   TOOL_PATH_HIDE_ALL        = RENDER_TYPES_END + 6,
   TOOL_PATH_SHOW            = RENDER_TYPES_END + 7,
   TOOL_PATH_SHOW_ALL        = RENDER_TYPES_END + 8,
-  TOOL_PATH_TYPES_END       = RENDER_TYPES_END + 9,
+  TOOL_PATH_OPEN            = RENDER_TYPES_END + 9,
+  TOOL_PATH_SAVE            = RENDER_TYPES_END + 10,
+  TOOL_PATH_TYPES_END       = RENDER_TYPES_END + 11,
 
   // Scene Graph
   SCENE_GRAPH_TYPES_START                = TOOL_PATH_TYPES_END,

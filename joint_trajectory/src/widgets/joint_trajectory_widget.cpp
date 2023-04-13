@@ -78,7 +78,7 @@ struct JointTrajectoryWidget::Implementation
   tesseract_scene_graph::StateSolver::UPtr state_solver;
 
   // Store the selected item
-  QStandardItem* selected_item;
+  QStandardItem* selected_item{ nullptr };
 };
 
 JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent) : JointTrajectoryWidget(ComponentInfo(), parent) {}
@@ -92,7 +92,7 @@ JointTrajectoryWidget::JointTrajectoryWidget(ComponentInfo component_info, QWidg
   setComponentInfo(component_info);
 
   QSettings ms;
-  ms.beginGroup("JointTrajectoryWidgets");
+  ms.beginGroup("JointTrajectoryWidget");
   data_->default_directory =
       ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
   ms.endGroup();

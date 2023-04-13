@@ -24,11 +24,21 @@ target_include_directories(
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/tool_path>"
          "$<INSTALL_INTERFACE:include>")
 
-qt5_wrap_cpp(TOOL_PATH_WIDGET_headers_MOC include/tesseract_qt/tool_path/widgets/tool_path_widget.h
-             include/tesseract_qt/tool_path/widgets/tool_path_tool_bar.h)
+qt5_wrap_cpp(
+  TOOL_PATH_WIDGET_headers_MOC
+  include/tesseract_qt/tool_path/widgets/tool_path_widget.h
+  include/tesseract_qt/tool_path/widgets/tool_path_tool_bar.h
+  include/tesseract_qt/tool_path/widgets/load_tool_path_dialog.h)
 
-add_library(${PROJECT_NAME}_tool_path_widgets SHARED ${TOOL_PATH_WIDGET_headers_MOC} src/widgets/tool_path_tool_bar.cpp
-                                                     src/widgets/tool_path_widget.cpp)
+qt5_wrap_ui(TOOL_PATH_WIDGET_headers_UI include/tesseract_qt/tool_path/widgets/load_tool_path_dialog.ui)
+
+add_library(
+  ${PROJECT_NAME}_tool_path_widgets SHARED
+  ${TOOL_PATH_WIDGET_headers_MOC}
+  ${TOOL_PATH_WIDGET_headers_UI}
+  src/widgets/load_tool_path_dialog.cpp
+  src/widgets/tool_path_tool_bar.cpp
+  src/widgets/tool_path_widget.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_tool_path_widgets

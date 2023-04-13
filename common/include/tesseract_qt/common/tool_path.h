@@ -43,6 +43,7 @@ public:
 
   ToolPath(std::string description = "");
   ToolPath(boost::uuids::uuid uuid, std::string description = "");
+  ToolPath(const tesseract_common::Toolpath& tool_path, std::string description = "");
   virtual ~ToolPath() = default;
 
   /** @brief Get the uuid */

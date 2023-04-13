@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2023 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -20,33 +20,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_TOOL_PATH_STANDARD_ITEM_H
-#define TESSERACT_QT_COMMON_TOOL_PATH_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_TOOL_PATH_LOAD_TOOL_PATH_DIALOG_H
+#define TESSERACT_QT_TOOL_PATH_LOAD_TOOL_PATH_DIALOG_H
 
-#include <QStandardItem>
-#include <tesseract_qt/common/tool_path.h>
+#include <QDialog>
+#include <memory>
+
+namespace Ui
+{
+class LoadToolPathDialog;
+}
 
 namespace tesseract_gui
 {
-class ToolPathStandardItem : public QStandardItem
+struct ComponentInfo;
+class LoadToolPathDialog : public QDialog
 {
-public:
-  explicit ToolPathStandardItem(const ToolPath& tool_path);
-  ToolPathStandardItem(const QString& text, const ToolPath& tool_path);
-  ToolPathStandardItem(const QIcon& icon, const QString& text, const ToolPath& tool_path);
-  int type() const override;
+  Q_OBJECT
 
-  const boost::uuids::uuid& getUUID() const;
-  const boost::uuids::uuid& getParentUUID() const;
-  ToolPath getToolPath() const;
-  tesseract_common::Toolpath getCommonToolPath() const;
+public:
+  explicit LoadToolPathDialog(QWidget* parent = nullptr);
+  explicit LoadToolPathDialog(ComponentInfo component_info, QWidget* parent = nullptr);
+  ~LoadToolPathDialog();
+
+  QString getLinkName() const;
+  QString getFilePath() const;
 
 private:
-  void ctor(const ToolPath& tool_path);
-  boost::uuids::uuid uuid_{};
-  boost::uuids::uuid parent_uuid_{};
-  std::string description_;
+  std::unique_ptr<Ui::LoadToolPathDialog> ui_;
+  std::unique_ptr<ComponentInfo> component_info_;
 };
 }  // namespace tesseract_gui
-
-#endif  // TESSERACT_QT_COMMON_TOOL_PATH_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_TOOL_PATH_LOAD_TOOL_PATH_DIALOG_H

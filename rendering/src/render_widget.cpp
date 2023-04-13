@@ -557,7 +557,7 @@ RenderWidget::RenderWidget(const std::string& scene_name, QWidget* parent)
   data_->renderer.scene_name = scene_name;
   data_->view_controller = std::make_shared<InteractiveViewControl>(scene_name);
 
-  connect(&data_->update_timer, SIGNAL(timeout()), this, SLOT(update()));
+  connect(&data_->update_timer, SIGNAL(timeout()), this, SLOT(onFrameSwapped()));
   data_->update_timer.start(1000.0 / data_->renderer.update_frequency);
 
   // The use of QTimer is prefered over the method below

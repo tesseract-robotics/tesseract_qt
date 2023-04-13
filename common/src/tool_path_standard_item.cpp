@@ -68,6 +68,18 @@ ToolPath ToolPathStandardItem::getToolPath() const
   return tool_path;
 }
 
+tesseract_common::Toolpath ToolPathStandardItem::getCommonToolPath() const
+{
+  tesseract_common::Toolpath tool_path;
+  tool_path.reserve(rowCount());
+  for (std::size_t i = 0; i < rowCount(); ++i)
+  {
+    if (child(i, 0)->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
+      tool_path.push_back(dynamic_cast<ToolPathSegmentStandardItem*>(child(i, 0))->getCommonToolPathSegment());
+  }
+  return tool_path;
+}
+
 void ToolPathStandardItem::ctor(const ToolPath& tool_path)
 {
   setCheckable(true);

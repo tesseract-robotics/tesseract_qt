@@ -47,6 +47,21 @@ ToolPath::ToolPath(boost::uuids::uuid uuid, std::string description) : uuid_(uui
 {
 }
 
+ToolPath::ToolPath(const tesseract_common::Toolpath& tool_path, std::string description)
+  : uuid_(boost::uuids::random_generator()()), description_(std::move(description))
+{
+  long cnt{ 0 };
+  for (const auto& seg : tool_path)
+  {
+    tesseract_gui::ToolPathSegment segment("Segment [" + std::to_string(cnt++) + "]");
+    segment.reserve(seg.size());
+    for (const auto& p : seg)
+      segment.push_back(p);
+
+    push_back(segment);
+  }
+}
+
 boost::uuids::uuid ToolPath::getUUID() const { return uuid_; }
 
 void ToolPath::regenerateUUID() { uuid_ = boost::uuids::random_generator()(); }

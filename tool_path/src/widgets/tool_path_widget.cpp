@@ -24,10 +24,19 @@
 #include <tesseract_qt/tool_path/widgets/tool_path_widget.h>
 #include <tesseract_qt/tool_path/models/tool_path_model.h>
 #include <tesseract_qt/tool_path/models/tool_path_selection_model.h>
+#include <tesseract_qt/tool_path/models/tool_path_utils.h>
+#include <tesseract_qt/common/tool_path_standard_item.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/tree_view.h>
+#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/events/tool_path_events.h>
 
+#include <QApplication>
 #include <QVBoxLayout>
+#include <QFileDialog>
+#include <QSettings>
+#include <QStandardPaths>
+#include <QStandardItemModel>
 
 namespace tesseract_gui
 {
@@ -37,6 +46,18 @@ struct ToolPathWidget::Implementation
   std::shared_ptr<ToolPathSelectionModel> selection_model;
   QVBoxLayout* layout;
   TreeView* tree_view;
+
+  QString default_directory;
+
+  std::unique_ptr<QFileDialog> open_dialog;
+  QStringList open_dialog_filters;
+  QStringList open_dialog_ext;
+
+  std::unique_ptr<QFileDialog> save_dialog;
+  QStringList save_dialog_filters;
+
+  // Store the selected item
+  QStandardItem* selected_item{ nullptr };
 };
 
 ToolPathWidget::ToolPathWidget(QWidget* parent) : ToolPathWidget(ComponentInfo(), parent) {}
@@ -47,6 +68,13 @@ ToolPathWidget::ToolPathWidget(ComponentInfo component_info, QWidget* parent)
   // Create model
   data_->model = std::make_shared<ToolPathModel>(component_info);
   data_->selection_model = std::make_shared<ToolPathSelectionModel>(data_->model.get(), component_info);
+
+  // Load Qt Settings
+  QSettings ms;
+  ms.beginGroup("ToolPathWidget");
+  data_->default_directory =
+      ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
+  ms.endGroup();
 
   // Create tree widget
   data_->tree_view = new TreeView();
@@ -61,8 +89,56 @@ ToolPathWidget::ToolPathWidget(ComponentInfo component_info, QWidget* parent)
 
   // Set layout
   setLayout(data_->layout);
+
+  {  // Setup open dialog
+    data_->open_dialog_filters.append("Tool Path XML (*.tpx)");
+    data_->open_dialog_filters.append("Tool Path Binary (*.tpb)");
+    data_->open_dialog_filters.append("Tool Path YAML (*.yaml)");
+    data_->open_dialog_filters.append("Tool Path Json (*.json)");
+
+    data_->open_dialog_ext.append("tpx");
+    data_->open_dialog_ext.append("tpb");
+    data_->open_dialog_ext.append("yaml");
+    data_->open_dialog_ext.append("json");
+
+    data_->open_dialog = std::make_unique<QFileDialog>(nullptr, "Open Tool Path", data_->default_directory);
+    data_->open_dialog->setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+    data_->open_dialog->setModal(true);
+    data_->open_dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    data_->open_dialog->setNameFilters(data_->open_dialog_filters);
+
+    connect(data_->open_dialog.get(), SIGNAL(finished(int)), this, SLOT(onOpenFinished(int)));
+  }
+
+  {  // Setup save dialog
+    data_->save_dialog_filters.append("Tool Path XML (*.tpx)");
+    data_->save_dialog_filters.append("Tool Path Binary (*.tpb)");
+    data_->save_dialog_filters.append("Tool Path YAML (*.yaml)");
+
+    data_->save_dialog = std::make_unique<QFileDialog>(nullptr, "Save Tool Path", data_->default_directory);
+    data_->save_dialog->setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+    data_->save_dialog->setModal(true);
+    data_->save_dialog->setAcceptMode(QFileDialog::AcceptSave);
+    data_->save_dialog->setNameFilters(data_->save_dialog_filters);
+
+    connect(data_->save_dialog.get(), SIGNAL(finished(int)), this, SLOT(onSaveFinished(int)));
+  }
+
+  connect(data_->tree_view->selectionModel(),
+          SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
+          this,
+          SLOT(onCurrentRowChanged(QModelIndex, QModelIndex)));
+
+  // Install event filter for interactive view controller
+  qGuiApp->installEventFilter(this);
 }
-ToolPathWidget::~ToolPathWidget() = default;
+ToolPathWidget::~ToolPathWidget()
+{
+  QSettings ms;
+  ms.beginGroup("ToolPathWidget");
+  ms.setValue("default_directory", data_->default_directory);
+  ms.endGroup();
+}
 
 void ToolPathWidget::setComponentInfo(ComponentInfo component_info)
 {
@@ -86,4 +162,77 @@ std::shared_ptr<const ToolPathModel> ToolPathWidget::getModel() const { return d
 
 QItemSelectionModel& ToolPathWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
 const QItemSelectionModel& ToolPathWidget::getSelectionModel() const { return *data_->tree_view->selectionModel(); }
+
+// Documentation inherited
+bool ToolPathWidget::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() == events::ToolPathOpen::kType)
+  {
+    assert(dynamic_cast<events::ToolPathOpen*>(event) != nullptr);
+    auto* e = static_cast<events::ToolPathOpen*>(event);
+    if (e->getComponentInfo() == data_->model->getComponentInfo())
+    {
+      data_->open_dialog->show();
+      data_->open_dialog->raise();
+      data_->open_dialog->activateWindow();
+    }
+  }
+  else if (event->type() == events::ToolPathSave::kType)
+  {
+    assert(dynamic_cast<events::ToolPathSave*>(event) != nullptr);
+    auto* e = static_cast<events::ToolPathSave*>(event);
+    if (e->getComponentInfo() == data_->model->getComponentInfo())
+    {
+      if (data_->selected_item != nullptr &&
+          data_->selected_item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH))
+      {
+        setDisabled(true);
+        data_->save_dialog->show();
+        data_->save_dialog->raise();
+        data_->save_dialog->activateWindow();
+      }
+    }
+  }
+
+  // Standard event processing
+  return QObject::eventFilter(obj, event);
+}
+
+void ToolPathWidget::onSaveFinished(int results)
+{
+  if (results == 1)
+  {
+    tesseract_common::Toolpath tp = dynamic_cast<ToolPathStandardItem*>(data_->selected_item)->getCommonToolPath();
+    data_->default_directory = QFileInfo(data_->save_dialog->selectedFiles()[0]).absoluteDir().path();
+    QString suffix;
+    if (data_->save_dialog->selectedNameFilter() == data_->save_dialog_filters[0])
+      suffix = "tpx";
+    else if (data_->save_dialog->selectedNameFilter() == data_->save_dialog_filters[1])
+      suffix = "tpb";
+    else if (data_->save_dialog->selectedNameFilter() == data_->save_dialog_filters[2])
+      suffix = "yaml";
+    else
+      throw std::runtime_error("ToolPathWidget, save has invalid extension!");
+
+    saveToolPath(tp, data_->save_dialog->selectedFiles()[0], suffix);
+  }
+
+  setEnabled(true);
+}
+
+void ToolPathWidget::onOpenFinished(int results)
+{
+  if (results == 1)
+  {
+    int idx = data_->open_dialog_filters.indexOf(data_->open_dialog->selectedNameFilter());
+    data_->default_directory = QFileInfo(data_->open_dialog->selectedFiles()[0]).absoluteDir().path();
+    openToolPath(data_->model->getComponentInfo(), data_->open_dialog->selectedFiles()[0], data_->open_dialog_ext[idx]);
+  }
+}
+
+void ToolPathWidget::onCurrentRowChanged(const QModelIndex& current, const QModelIndex& /*previous*/)
+{
+  QModelIndex current_index = current;  // This appears to be changing so copy
+  data_->selected_item = data_->model->itemFromIndex(current_index);
+}
 }  // namespace tesseract_gui
