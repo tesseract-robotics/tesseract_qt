@@ -153,4 +153,17 @@ ToolPathShowAll::ToolPathShowAll(ComponentInfo component_info) : ComponentEvent(
 ToolPathShowAll::ToolPathShowAll(const ToolPathShowAll& other) : ToolPathShowAll(other.getComponentInfo()) {}
 ToolPathShowAll::~ToolPathShowAll() = default;
 
+//////////////////////////////////////////
+
+ToolPathOpen::ToolPathOpen(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
+ToolPathOpen::ToolPathOpen(const ToolPathOpen& other) : ToolPathOpen(other.getComponentInfo()) {}
+ToolPathOpen::~ToolPathOpen() = default;
+
+//////////////////////////////////////////
+
+ToolPathSave::ToolPathSave(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
+ToolPathSave::ToolPathSave(const ToolPathSave& other) : ToolPathSave(other.getComponentInfo()) {}
+ToolPathSave::~ToolPathSave() = default;
+
+//////////////////////////////////////////
 }  // namespace tesseract_gui::events

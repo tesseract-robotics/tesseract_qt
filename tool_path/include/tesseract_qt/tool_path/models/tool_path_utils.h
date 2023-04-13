@@ -24,6 +24,7 @@
 #define TOOL_PATH_TOOL_PATH_UTILS_H
 
 #include <Qt>
+#include <tesseract_common/types.h>
 
 class QStandardItem;
 
@@ -32,6 +33,7 @@ namespace tesseract_gui
 class TransformStandardItem;
 class ToolPathSegmentStandardItem;
 class ToolPathStandardItem;
+class ComponentInfo;
 
 /**
  * @brief Find upstream parent transform item given item
@@ -63,6 +65,23 @@ ToolPathStandardItem* findToolPathItem(QStandardItem* item);
  * @param st The state to assign
  */
 void setCheckedStateRecursive(QStandardItem* item, Qt::CheckState st);
+
+/**
+ * @brief Open the provided tool path
+ * @param component_info The component info the tool path is associated with
+ * @param filename The tool path file location
+ * @param suffix A suffix
+ * @return True if successful, otherwise false
+ */
+bool openToolPath(const ComponentInfo& component_info, const QString& filename, const QString& suffix);
+
+/**
+ * @brief Save the provided tool path
+ * @param filename The tool path file location
+ * @param suffix A suffix
+ * @return True if successful, otherwise false
+ */
+bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename, const QString& suffix);
 
 }  // namespace tesseract_gui
 

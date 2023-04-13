@@ -37,6 +37,8 @@ struct ToolPathToolBar::Implementation
   QAction* remove_selected;
   QAction* hide_all;
   QAction* show_all;
+  QAction* open_action;
+  QAction* save_action;
 };
 
 ToolPathToolBar::ToolPathToolBar(QWidget* parent) : ToolPathToolBar(ComponentInfo(), parent) {}
@@ -57,6 +59,13 @@ ToolPathToolBar::ToolPathToolBar(ComponentInfo component_info, QWidget* parent)
   });
   data_->show_all = addAction(icons::getToolPathShowIcon(), "Show All", [component_info]() {
     QApplication::sendEvent(qApp, new events::ToolPathShowAll(component_info));
+  });
+  addSeparator();
+  data_->open_action = addAction(icons::getImportIcon(), "Open", [component_info]() {
+    QApplication::sendEvent(qApp, new events::ToolPathOpen(component_info));
+  });
+  data_->save_action = addAction(icons::getSaveIcon(), "Save", [component_info]() {
+    QApplication::sendEvent(qApp, new events::ToolPathSave(component_info));
   });
 }
 

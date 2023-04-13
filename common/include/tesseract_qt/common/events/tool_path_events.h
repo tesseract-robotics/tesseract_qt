@@ -167,6 +167,30 @@ public:
   static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SHOW_ALL);
 };
 
+/** @brief Event called to open a tool path for a given scene */
+class ToolPathOpen : public ComponentEvent
+{
+public:
+  ToolPathOpen(ComponentInfo component_info);
+  ToolPathOpen(const ToolPathOpen& other);
+  ~ToolPathOpen() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_OPEN);
+};
+
+/** @brief Event called to save a tool path for a given scene */
+class ToolPathSave : public ComponentEvent
+{
+public:
+  ToolPathSave(ComponentInfo component_info);
+  ToolPathSave(const ToolPathSave& other);
+  ~ToolPathSave() override;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::TOOL_PATH_SAVE);
+};
+
 }  // namespace tesseract_gui::events
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_EVENTS_H

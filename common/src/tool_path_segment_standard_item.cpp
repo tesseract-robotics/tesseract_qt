@@ -77,6 +77,18 @@ ToolPathSegment ToolPathSegmentStandardItem::getToolPathSegment() const
   return segment;
 }
 
+tesseract_common::VectorIsometry3d ToolPathSegmentStandardItem::getCommonToolPathSegment() const
+{
+  tesseract_common::VectorIsometry3d segment;
+  segment.reserve(rowCount());
+  for (std::size_t i = 0; i < rowCount(); ++i)
+  {
+    if (child(i, 0)->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
+      segment.push_back(dynamic_cast<TransformStandardItem*>(child(i, 0))->getTransfrom());
+  }
+  return segment;
+}
+
 void ToolPathSegmentStandardItem::ctor(const ToolPathSegment& segment)
 {
   setCheckable(true);

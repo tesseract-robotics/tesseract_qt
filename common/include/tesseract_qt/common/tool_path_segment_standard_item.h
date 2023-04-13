@@ -39,6 +39,7 @@ public:
   const boost::uuids::uuid& getUUID() const;
   const boost::uuids::uuid& getParentUUID() const;
   ToolPathSegment getToolPathSegment() const;
+  tesseract_common::VectorIsometry3d getCommonToolPathSegment() const;
 
 private:
   void ctor(const ToolPathSegment& segment);
