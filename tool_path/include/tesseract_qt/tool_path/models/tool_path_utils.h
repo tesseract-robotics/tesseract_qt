@@ -70,18 +70,17 @@ void setCheckedStateRecursive(QStandardItem* item, Qt::CheckState st);
  * @brief Open the provided tool path
  * @param component_info The component info the tool path is associated with
  * @param filename The tool path file location
- * @param suffix A suffix
+ * @param link_name The link name the tool path is associated with
  * @return True if successful, otherwise false
  */
-bool openToolPath(const ComponentInfo& component_info, const QString& filename, const QString& suffix);
+bool openToolPath(const ComponentInfo& component_info, const QString& filename, const QString& link_name);
 
 /**
  * @brief Save the provided tool path
  * @param filename The tool path file location
- * @param suffix A suffix
  * @return True if successful, otherwise false
  */
-bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename, const QString& suffix);
+bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename);
 
 }  // namespace tesseract_gui
 

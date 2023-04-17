@@ -28,11 +28,15 @@
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <ignition/rendering/Scene.hh>
 #include <ignition/rendering/AxisVisual.hh>
 #include <ignition/rendering/ArrowVisual.hh>
 #include <ignition/math/eigen3/Conversions.hh>
+
+#include <tesseract_environment/environment.h>
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -42,6 +46,7 @@
 
 const std::string USER_VISIBILITY = "user_visibility";
 const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
+const std::string USER_WORKING_FRAME = "user_working_frame";
 
 namespace tesseract_gui
 {
@@ -49,6 +54,7 @@ struct IgnToolPathRenderManager::Implementation
 {
   EntityManager::Ptr entity_manager;
   std::map<boost::uuids::uuid, EntityContainer::Ptr> entity_containers;
+  std::map<boost::uuids::uuid, std::pair<ignition::rendering::VisualPtr, std::string>> working_frames;
 
   void clear(ignition::rendering::Scene& scene, EntityContainer& container)
   {
@@ -72,6 +78,9 @@ struct IgnToolPathRenderManager::Implementation
     auto it = entity_containers.find(uuid);
     if (it != entity_containers.end())
       clear(scene, *(it->second));
+
+    entity_containers.erase(uuid);
+    working_frames.erase(uuid);
   }
 
   void clearAll(const std::string& scene_name)
@@ -83,6 +92,7 @@ struct IgnToolPathRenderManager::Implementation
         clear(*scene, *container.second);
 
       entity_containers.clear();
+      working_frames.clear();
     }
   }
 
@@ -184,7 +194,10 @@ IgnToolPathRenderManager::~IgnToolPathRenderManager() { data_->clearAll(componen
 void IgnToolPathRenderManager::render()
 {
   if (events_.empty())
+  {
+    updateWorkingFrameTransforms();
     return;
+  }
 
   static const boost::uuids::uuid nil_uuid{};
   ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->scene_name);
@@ -207,6 +220,10 @@ void IgnToolPathRenderManager::render()
           scene->CreateVisual(tool_path_entity.id, tool_path_entity.unique_name);
       ign_tool_path->SetUserData(USER_VISIBILITY, true);
       ign_tool_path->SetUserData(USER_PARENT_VISIBILITY, true);
+
+      data_->working_frames[e.getToolPath().getUUID()] =
+          std::make_pair(ign_tool_path, e.getToolPath().getWorkingFrame());
+
       for (const auto& segment : e.getToolPath())
       {
         std::string segment_name = boost::uuids::to_string(segment.getUUID());
@@ -266,5 +283,27 @@ void IgnToolPathRenderManager::render()
   }
 
   events_.clear();
+
+  // Update tool path based on working frame
+  updateWorkingFrameTransforms();
+}
+
+void IgnToolPathRenderManager::updateWorkingFrameTransforms()
+{
+  // Update tool path based on working frame
+  if (!data_->working_frames.empty())
+  {
+    auto env_wrapper = EnvironmentManager::get(*component_info_);
+    if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+    {
+      tesseract_scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();
+      for (auto& working_frame : data_->working_frames)
+      {
+        auto it = state.link_transforms.find(working_frame.second.second);
+        if (it != state.link_transforms.end())
+          working_frame.second.first->SetLocalPose(ignition::math::eigen3::convert(it->second));
+      }
+    }
+  }
 }
 }  // namespace tesseract_gui

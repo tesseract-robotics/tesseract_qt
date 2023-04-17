@@ -39,6 +39,7 @@ public:
   const boost::uuids::uuid& getUUID() const;
   const boost::uuids::uuid& getParentUUID() const;
   ToolPath getToolPath() const;
+  const std::string& getWorkingFrame() const;
   tesseract_common::Toolpath getCommonToolPath() const;
 
 private:
@@ -46,6 +47,7 @@ private:
   boost::uuids::uuid uuid_{};
   boost::uuids::uuid parent_uuid_{};
   std::string description_;
+  std::string working_frame_;
 };
 }  // namespace tesseract_gui
 

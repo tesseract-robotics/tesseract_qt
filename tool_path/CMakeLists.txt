@@ -28,15 +28,15 @@ qt5_wrap_cpp(
   TOOL_PATH_WIDGET_headers_MOC
   include/tesseract_qt/tool_path/widgets/tool_path_widget.h
   include/tesseract_qt/tool_path/widgets/tool_path_tool_bar.h
-  include/tesseract_qt/tool_path/widgets/load_tool_path_dialog.h)
+  include/tesseract_qt/tool_path/widgets/tool_path_file_dialog.h)
 
-qt5_wrap_ui(TOOL_PATH_WIDGET_headers_UI include/tesseract_qt/tool_path/widgets/load_tool_path_dialog.ui)
+qt5_wrap_ui(TOOL_PATH_WIDGET_headers_UI include/tesseract_qt/tool_path/widgets/tool_path_file_dialog.ui)
 
 add_library(
   ${PROJECT_NAME}_tool_path_widgets SHARED
   ${TOOL_PATH_WIDGET_headers_MOC}
   ${TOOL_PATH_WIDGET_headers_UI}
-  src/widgets/load_tool_path_dialog.cpp
+  src/widgets/tool_path_file_dialog.cpp
   src/widgets/tool_path_tool_bar.cpp
   src/widgets/tool_path_widget.cpp)
 

@@ -56,6 +56,7 @@ const boost::uuids::uuid& ToolPathStandardItem::getParentUUID() const { return p
 ToolPath ToolPathStandardItem::getToolPath() const
 {
   ToolPath tool_path(uuid_, description_);
+  tool_path.setWorkingFrame(working_frame_);
   if (!parent_uuid_.is_nil())
     tool_path.setParentUUID(parent_uuid_);
 
@@ -67,6 +68,8 @@ ToolPath ToolPathStandardItem::getToolPath() const
   }
   return tool_path;
 }
+
+const std::string& ToolPathStandardItem::getWorkingFrame() const { return working_frame_; }
 
 tesseract_common::Toolpath ToolPathStandardItem::getCommonToolPath() const
 {
@@ -95,5 +98,6 @@ void ToolPathStandardItem::ctor(const ToolPath& tool_path)
   uuid_ = tool_path.getUUID();
   parent_uuid_ = tool_path.getParentUUID();
   description_ = tool_path.getDescription();
+  working_frame_ = tool_path.getWorkingFrame();
 }
 }  // namespace tesseract_gui

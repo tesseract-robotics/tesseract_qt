@@ -74,66 +74,59 @@ void setCheckedStateRecursive(QStandardItem* item, Qt::CheckState st)
     setCheckedStateRecursive(item->child(i), st);
 }
 
-bool openToolPath(const ComponentInfo& component_info, const QString& filename, const QString& suffix)
+bool openToolPath(const ComponentInfo& component_info, const QString& filename, const QString& link_name)
 {
   QFileInfo file_info(filename);
-  if (suffix == "tpx" && file_info.suffix() == "tpx")
+  if (file_info.suffix() == "tpx")
   {
     auto tool_path =
         tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::Toolpath>(filename.toStdString());
-    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(tool_path)));
+    ToolPath qt_tool_path(tool_path, link_name.toStdString());
+    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(qt_tool_path)));
     return true;
   }
 
-  if (suffix == "tpb" && file_info.suffix() == "tpb")
+  if (file_info.suffix() == "tpb")
   {
     auto tool_path =
         tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::Toolpath>(filename.toStdString());
-    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(tool_path)));
+    ToolPath qt_tool_path(tool_path, link_name.toStdString());
+    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(qt_tool_path)));
     return true;
   }
 
-  if ((suffix == "yaml" && file_info.suffix() == "yaml") || suffix == "json" && file_info.suffix() == "json")
+  if (file_info.suffix() == "yaml" || file_info.suffix() == "json")
   {
     YAML::Node node = YAML::LoadFile(filename.toStdString());
     auto tool_path = node.as<tesseract_common::Toolpath>();
-    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(tool_path)));
+    ToolPath qt_tool_path(tool_path, link_name.toStdString());
+    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(qt_tool_path)));
     return true;
   }
 
   return false;
 }
 
-bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename, const QString& suffix)
+bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename)
 {
   QFileInfo file_info(filename);
-  if (suffix == "tpx")
+  if (file_info.suffix() == "tpx")
   {
-    if (file_info.suffix() != "tpx")
-      filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".tpx";
-
     tesseract_common::Serialization::toArchiveFileXML<tesseract_common::Toolpath>(tool_path, filename.toStdString());
     return true;
   }
 
-  if (suffix == "tpb")
+  if (file_info.suffix() == "tpb")
   {
-    if (file_info.suffix() != "tpb")
-      filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".tpb";
-
     tesseract_common::Serialization::toArchiveFileBinary<tesseract_common::Toolpath>(tool_path, filename.toStdString());
     return true;
   }
 
-  if (suffix == "yaml")
+  if (file_info.suffix() == "yaml")
   {
-    if (file_info.suffix() != "yaml")
-      filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".yaml";
-
     YAML::Node node{ tool_path };
     std::ofstream fout(filename.toStdString());
     fout << node;
-
     return true;
   }
 

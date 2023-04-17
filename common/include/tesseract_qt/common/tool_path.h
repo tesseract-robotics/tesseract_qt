@@ -43,7 +43,7 @@ public:
 
   ToolPath(std::string description = "");
   ToolPath(boost::uuids::uuid uuid, std::string description = "");
-  ToolPath(const tesseract_common::Toolpath& tool_path, std::string description = "");
+  ToolPath(const tesseract_common::Toolpath& tool_path, std::string working_frame = "", std::string description = "");
   virtual ~ToolPath() = default;
 
   /** @brief Get the uuid */
@@ -84,6 +84,18 @@ public:
    * @return The namespace
    */
   const std::string& getNamespace() const;
+
+  /**
+   * @brief Set the frame the tool path is associated with
+   * @param working_frame The frame the tool path is associated with.
+   */
+  void setWorkingFrame(std::string working_frame);
+
+  /**
+   * @brief Get the frame the tool path is associated with
+   * @return The working frame
+   */
+  const std::string& getWorkingFrame() const;
 
   bool operator==(const ToolPath& rhs) const;
   bool operator!=(const ToolPath& rhs) const;
@@ -248,6 +260,9 @@ protected:
 
   /** @brief The container */
   tesseract_common::AlignedVector<ToolPathSegment> container_;
+
+  /** @brief The frame the tool path is associated with */
+  std::string working_frame_;
 
   /** @brief The namespace associated with the tool path */
   std::string ns_{ "general" };
