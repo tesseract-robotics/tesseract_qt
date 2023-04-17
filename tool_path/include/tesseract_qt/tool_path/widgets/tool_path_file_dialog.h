@@ -20,35 +20,49 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_TOOL_PATH_LOAD_TOOL_PATH_DIALOG_H
-#define TESSERACT_QT_TOOL_PATH_LOAD_TOOL_PATH_DIALOG_H
+#ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_FILE_DIALOG_H
+#define TESSERACT_QT_TOOL_PATH_TOOL_PATH_FILE_DIALOG_H
 
 #include <QDialog>
+#include <QFileDialog>
 #include <memory>
 
 namespace Ui
 {
-class LoadToolPathDialog;
+class ToolPathFileDialog;
 }
 
 namespace tesseract_gui
 {
 struct ComponentInfo;
-class LoadToolPathDialog : public QDialog
+class ToolPathFileDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit LoadToolPathDialog(QWidget* parent = nullptr);
-  explicit LoadToolPathDialog(ComponentInfo component_info, QWidget* parent = nullptr);
-  ~LoadToolPathDialog();
+  explicit ToolPathFileDialog(QFileDialog::AcceptMode accept_mode = QFileDialog::AcceptOpen, QWidget* parent = nullptr);
+  explicit ToolPathFileDialog(ComponentInfo component_info,
+                              QFileDialog::AcceptMode accept_mode = QFileDialog::AcceptOpen,
+                              QWidget* parent = nullptr);
+  ~ToolPathFileDialog();
 
+  void setComponentInfo(ComponentInfo component_info);
+  const ComponentInfo& getComponentInfo() const;
+
+  void setAcceptMode(QFileDialog::AcceptMode accept_mode);
   QString getLinkName() const;
   QString getFilePath() const;
 
+public Q_SLOTS:
+  void onBrowseClicked();
+
 private:
-  std::unique_ptr<Ui::LoadToolPathDialog> ui_;
+  std::unique_ptr<Ui::ToolPathFileDialog> ui_;
   std::unique_ptr<ComponentInfo> component_info_;
+  QFileDialog::AcceptMode accept_mode_;
+  QString default_directory_;
+
+  void showEvent(QShowEvent* e) override;
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_TOOL_PATH_LOAD_TOOL_PATH_DIALOG_H
+#endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_FILE_DIALOG_H

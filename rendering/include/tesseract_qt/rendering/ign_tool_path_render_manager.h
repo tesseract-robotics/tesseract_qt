@@ -41,6 +41,7 @@ private:
   std::unique_ptr<Implementation> data_;
 
   void render() override;
+  void updateWorkingFrameTransforms();
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_RENDERING_IGN_TOOL_PATH_RENDER_MANAGER_H

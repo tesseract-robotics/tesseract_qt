@@ -47,8 +47,10 @@ ToolPath::ToolPath(boost::uuids::uuid uuid, std::string description) : uuid_(uui
 {
 }
 
-ToolPath::ToolPath(const tesseract_common::Toolpath& tool_path, std::string description)
-  : uuid_(boost::uuids::random_generator()()), description_(std::move(description))
+ToolPath::ToolPath(const tesseract_common::Toolpath& tool_path, std::string working_frame, std::string description)
+  : uuid_(boost::uuids::random_generator()())
+  , description_(std::move(description))
+  , working_frame_(std::move(working_frame))
 {
   long cnt{ 0 };
   for (const auto& seg : tool_path)
@@ -80,12 +82,17 @@ bool ToolPath::operator==(const ToolPath& rhs) const
   equal &= (parent_uuid_ == rhs.parent_uuid_);  // NOLINT
   equal &= (description_ == rhs.description_);  // NOLINT
   equal &= (container_ == rhs.container_);
+  equal &= (working_frame_ == rhs.working_frame_);
   return equal;
 }
 
 void ToolPath::setNamespace(std::string ns) { ns_ = std::move(ns); }
 
 const std::string& ToolPath::getNamespace() const { return ns_; }
+
+void ToolPath::setWorkingFrame(std::string working_frame) { working_frame_ = std::move(working_frame); }
+
+const std::string& ToolPath::getWorkingFrame() const { return working_frame_; }
 
 bool ToolPath::operator!=(const ToolPath& rhs) const { return !operator==(rhs); }
 
@@ -96,6 +103,7 @@ void ToolPath::serialize(Archive& ar, const unsigned int /*version*/)
   ar& BOOST_SERIALIZATION_NVP(parent_uuid_);
   ar& BOOST_SERIALIZATION_NVP(description_);
   ar& BOOST_SERIALIZATION_NVP(container_);
+  ar& BOOST_SERIALIZATION_NVP(working_frame_);
   ar& BOOST_SERIALIZATION_NVP(ns_);
 }
 
