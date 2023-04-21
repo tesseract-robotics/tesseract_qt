@@ -370,6 +370,10 @@ std::shared_ptr<const tesseract_environment::Environment> DefaultEnvironmentWrap
   return env_;
 }
 
+std::shared_ptr<tesseract_environment::Environment> DefaultEnvironmentWrapper::getEnvironment() { return env_; }
+
+const tesseract_environment::Environment& DefaultEnvironmentWrapper::environment() const { return *env_; }
+
 tesseract_environment::Environment& DefaultEnvironmentWrapper::environment() { return *env_; }
 
 bool DefaultEnvironmentWrapper::eventFilter(QObject* obj, QEvent* event)
@@ -404,6 +408,16 @@ MonitorEnvironmentWrapper::~MonitorEnvironmentWrapper()
 std::shared_ptr<const tesseract_environment::Environment> MonitorEnvironmentWrapper::getEnvironment() const
 {
   return env_monitor_->getEnvironment();
+}
+
+std::shared_ptr<tesseract_environment::Environment> MonitorEnvironmentWrapper::getEnvironment()
+{
+  return env_monitor_->getEnvironment();
+}
+
+const tesseract_environment::Environment& MonitorEnvironmentWrapper::environment() const
+{
+  return env_monitor_->environment();
 }
 
 tesseract_environment::Environment& MonitorEnvironmentWrapper::environment() { return env_monitor_->environment(); }

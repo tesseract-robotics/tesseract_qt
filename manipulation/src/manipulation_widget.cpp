@@ -27,7 +27,7 @@ struct ManipulationWidget::Implementation
 
   tesseract_kinematics::KinematicGroup::UPtr kin_group;
   QStringList state_names;
-  std::unordered_map<std::string, tesseract_scene_graph::StateSolver::UPtr> state_solvers;
+  tesseract_environment::Environment::Ptr environment;
   std::unordered_map<std::string, std::unordered_map<std::string, double>> states;
   std::unordered_map<std::string, std::shared_ptr<SceneStateModel>> state_models;
 
@@ -109,7 +109,6 @@ void ManipulationWidget::addStateHelper(const std::string& state_name)
 {
   data_->state_names.push_back(state_name.c_str());
   data_->state_names.removeDuplicates();
-  data_->state_solvers[state_name] = nullptr;
   data_->states[state_name] = std::unordered_map<std::string, double>{};
   if (data_->use_parent_component_info)
     data_->state_models[state_name] = std::make_shared<SceneStateModel>(data_->parent_component_info);
@@ -150,6 +149,7 @@ void ManipulationWidget::addStateHelper(const std::string& state_name)
       auto child_env_wrapper =
           std::make_shared<DefaultEnvironmentWrapper>(it->second->getComponentInfo(), env->clone());
       EnvironmentManager::set(child_env_wrapper);
+      data_->environment = child_env_wrapper->getEnvironment();
     }
   }
 }
@@ -166,7 +166,6 @@ void ManipulationWidget::removeStateHelper(const std::string& state_name)
   const QString current_state_name = ui->state_combo_box->currentText();
 
   data_->state_names.removeAll(state_name.c_str());
-  data_->state_solvers.erase(state_name);
   data_->states.erase(state_name);
   data_->state_models.erase(state_name);
 
@@ -220,12 +219,6 @@ bool ManipulationWidget::isValid() const
   auto env = env_wrapper->getEnvironment();
   if (env == nullptr || !env->isInitialized())
     return false;
-
-  for (const auto& state_solver : data_->state_solvers)
-  {
-    if (state_solver.second == nullptr)
-      return false;
-  }
 
   for (const auto& state : data_->states)
   {
@@ -282,7 +275,7 @@ void ManipulationWidget::setActiveCartesianTransform(const Eigen::Isometry3d& tr
 
 tesseract_scene_graph::SceneState ManipulationWidget::getState(const std::string& state_name) const
 {
-  return data_->state_solvers.at(state_name)->getState(data_->states.at(state_name));
+  return data_->environment->getState(data_->states.at(state_name));
 }
 
 void ManipulationWidget::onGroupNameChanged()
@@ -299,87 +292,86 @@ void ManipulationWidget::onGroupNameChanged()
   if (env == nullptr || !env->isInitialized())
     return;
 
-  auto lock = env->lockRead();
-  auto group_names = env->getGroupNames();
-  auto group_name = ui->group_combo_box->currentText().toStdString();
-  auto it = group_names.find(group_name);
-  if (it != group_names.end())
-  {
-    ui->group_combo_box->blockSignals(true);
-    ui->working_frame_combo_box->blockSignals(true);
-    ui->tcp_combo_box->blockSignals(true);
-    ui->tcp_offset_combo_box->blockSignals(true);
-
-    data_->kin_group = env->getKinematicGroup(group_name);
-
-    for (const auto& state_name : data_->state_names)
+  std::vector<tesseract_scene_graph::Joint::ConstPtr> joints;
+  {  // Scope for lock read
+    std::shared_lock<std::shared_mutex> lock = env->lockRead();
+    auto group_names = env->getGroupNames();
+    auto group_name = ui->group_combo_box->currentText().toStdString();
+    auto it = group_names.find(group_name);
+    if (it != group_names.end())
     {
-      data_->state_solvers[state_name.toStdString()] = env->getStateSolver();
-      QApplication::sendEvent(
-          qApp,
-          new events::SceneStateChanged(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
-                                        tesseract_scene_graph::SceneState()));
-      data_->states[state_name.toStdString()].clear();
+      ui->group_combo_box->blockSignals(true);
+      ui->working_frame_combo_box->blockSignals(true);
+      ui->tcp_combo_box->blockSignals(true);
+      ui->tcp_offset_combo_box->blockSignals(true);
+
+      data_->kin_group = env->getKinematicGroup(group_name);
+
+      for (const auto& state_name : data_->state_names)
+      {
+        QApplication::sendEvent(
+            qApp,
+            new events::SceneStateChanged(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
+                                          env->getState()));
+        data_->states[state_name.toStdString()].clear();
+      }
+
+      // Update working frames
+      std::vector<std::string> working_frames = data_->kin_group->getAllValidWorkingFrames();
+      QStringList wf_sl;
+      for (const auto& working_frame : working_frames)
+        wf_sl.append(working_frame.c_str());
+      data_->working_frames_model.setStringList(wf_sl);
+
+      if (!working_frames.empty())
+        ui->working_frame_combo_box->setCurrentIndex(0);
+
+      // Update TCP Names
+      std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
+      QStringList tcp_sl;
+      for (const auto& tcp_name : tcp_names)
+        tcp_sl.append(tcp_name.c_str());
+      data_->tcp_names_model.setStringList(tcp_sl);
+
+      if (!tcp_names.empty())
+        ui->tcp_combo_box->setCurrentIndex(0);
+
+      // Update TCP Offset Names
+      QStringList tcp_offset_sl;
+      tcp_offset_sl.append("None");
+      data_->tcp_offsets.clear();
+      auto group_tcp_offsets = env->getKinematicsInformation().group_tcps;
+      auto it = group_tcp_offsets.find(group_name);
+      if (it != group_tcp_offsets.end())
+      {
+        data_->tcp_offsets = it->second;
+        for (const auto& tcp_offset : data_->tcp_offsets)
+          tcp_offset_sl.append(tcp_offset.first.c_str());
+      }
+      data_->tcp_offset_names_model.setStringList(tcp_offset_sl);
+      ui->tcp_offset_combo_box->setCurrentIndex(0);
+
+      // Update joint sliders
+      std::vector<std::string> joint_names = data_->kin_group->getJointNames();
+
+      joints.reserve(joint_names.size());
+      for (const auto& joint_name : joint_names)
+        joints.push_back(env->getJoint(joint_name));
+
+      ui->group_combo_box->blockSignals(false);
+      ui->working_frame_combo_box->blockSignals(false);
+      ui->tcp_combo_box->blockSignals(false);
+      ui->tcp_offset_combo_box->blockSignals(false);
     }
+  }
 
-    // Update working frames
-    std::vector<std::string> working_frames = data_->kin_group->getAllValidWorkingFrames();
-    QStringList wf_sl;
-    for (const auto& working_frame : working_frames)
-      wf_sl.append(working_frame.c_str());
-    data_->working_frames_model.setStringList(wf_sl);
+  ui->joint_state_slider->setJoints(joints);
 
-    if (!working_frames.empty())
-      ui->working_frame_combo_box->setCurrentIndex(0);
+  for (const auto& state_name : data_->state_names)
+    data_->states[state_name.toStdString()] = ui->joint_state_slider->getJointState();
 
-    // Update TCP Names
-    std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
-    QStringList tcp_sl;
-    for (const auto& tcp_name : tcp_names)
-      tcp_sl.append(tcp_name.c_str());
-    data_->tcp_names_model.setStringList(tcp_sl);
-
-    if (!tcp_names.empty())
-      ui->tcp_combo_box->setCurrentIndex(0);
-
-    // Update TCP Offset Names
-    QStringList tcp_offset_sl;
-    tcp_offset_sl.append("None");
-    data_->tcp_offsets.clear();
-    auto group_tcp_offsets = env->getKinematicsInformation().group_tcps;
-    auto it = group_tcp_offsets.find(group_name);
-    if (it != group_tcp_offsets.end())
-    {
-      data_->tcp_offsets = it->second;
-      for (const auto& tcp_offset : data_->tcp_offsets)
-        tcp_offset_sl.append(tcp_offset.first.c_str());
-    }
-    data_->tcp_offset_names_model.setStringList(tcp_offset_sl);
-    ui->tcp_offset_combo_box->setCurrentIndex(0);
-
-    ui->group_combo_box->blockSignals(false);
-    ui->working_frame_combo_box->blockSignals(false);
-    ui->tcp_combo_box->blockSignals(false);
-    ui->tcp_offset_combo_box->blockSignals(false);
-
-    // Update joint sliders
-    std::vector<std::string> joint_names = data_->kin_group->getJointNames();
-    std::vector<tesseract_scene_graph::Joint::ConstPtr> joints;
-    joints.reserve(joint_names.size());
-    for (const auto& joint_name : joint_names)
-      joints.push_back(env->getJoint(joint_name));
-
-    ui->joint_state_slider->setJoints(joints);
-
-    for (const auto& state_name : data_->state_names)
-      data_->states[state_name.toStdString()] = ui->joint_state_slider->getJointState();
-
+  if (!joints.empty())
     ui->cartesian_widget->setTransform(getActiveCartesianTransform());
-  }
-  else
-  {
-    ui->joint_state_slider->setJoints(std::vector<tesseract_scene_graph::Joint::ConstPtr>());
-  }
 
   onJointStateSliderChanged(ui->joint_state_slider->getJointState());
 
@@ -438,12 +430,10 @@ void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::strin
   if (isValid())
   {
     const std::string state_name = ui->state_combo_box->currentText().toStdString();
-    data_->state_solvers[state_name]->setState(state);
     data_->states[state_name] = state;
-    tesseract_scene_graph::SceneState scene_state = data_->state_solvers[state_name]->getState();
+    data_->environment->setState(state);
+    tesseract_scene_graph::SceneState scene_state = data_->environment->getState();
     tesseract_scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
-    QApplication::sendEvent(
-        qApp, new events::SceneStateChanged(data_->state_models[state_name]->getComponentInfo(), reduced_scene_state));
 
     // Update the cartesian transform details
     if (ui->mode_combo_box->currentIndex() == 0)
@@ -547,16 +537,6 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
 
 void ManipulationWidget::onReset()
 {
-  for (const auto& state_name : data_->state_names)
-  {
-    data_->state_solvers[state_name.toStdString()] = nullptr;
-    QApplication::sendEvent(
-        qApp,
-        new events::SceneStateChanged(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
-                                      tesseract_scene_graph::SceneState()));
-    data_->states[state_name.toStdString()].clear();
-  }
-
   QString current_group_name = ui->group_combo_box->currentText();
 
   std::shared_ptr<EnvironmentWrapper> env_wrapper = EnvironmentManager::find(data_->parent_component_info);
@@ -576,6 +556,14 @@ void ManipulationWidget::onReset()
     return;
   }
 
+  for (const auto& state_name : data_->state_names)
+  {
+    QApplication::sendEvent(qApp,
+                            new events::SceneStateChanged(
+                                data_->state_models.at(state_name.toStdString())->getComponentInfo(), env->getState()));
+    data_->states[state_name.toStdString()].clear();
+  }
+
   if (!data_->use_parent_component_info)
   {
     for (const auto& state_name : data_->state_names)
@@ -585,27 +573,34 @@ void ManipulationWidget::onReset()
       EnvironmentManager::set(child_env_wrapper);
     }
   }
-
-  auto lock = env->lockRead();
-
-  auto gn = env->getGroupNames();
-  std::vector<std::string> gn_v(gn.begin(), gn.end());
+  else
+  {
+    data_->environment = env;
+  }
 
   QStringList group_names;
-  for (const auto& group_name : env->getGroupNames())
-  {
-    tesseract_kinematics::KinematicGroup::UPtr kin_group;
-    try
-    {
-      kin_group = env->getKinematicGroup(group_name);
-    }
-    catch (...)
-    {
-      CONSOLE_BRIDGE_logDebug("ManipulationWidget, Group '%s' is not supported!", group_name.c_str());
-    }
+  std::vector<std::string> gn_v;
+  {  // Scope the lock
+    auto lock = env->lockRead();
 
-    if (kin_group != nullptr)
-      group_names.append(group_name.c_str());
+    auto gn = env->getGroupNames();
+    gn_v.insert(gn_v.begin(), gn.begin(), gn.end());
+
+    for (const auto& group_name : env->getGroupNames())
+    {
+      tesseract_kinematics::KinematicGroup::UPtr kin_group;
+      try
+      {
+        kin_group = env->getKinematicGroup(group_name);
+      }
+      catch (...)
+      {
+        CONSOLE_BRIDGE_logDebug("ManipulationWidget, Group '%s' is not supported!", group_name.c_str());
+      }
+
+      if (kin_group != nullptr)
+        group_names.append(group_name.c_str());
+    }
   }
 
   ui->group_combo_box->blockSignals(true);

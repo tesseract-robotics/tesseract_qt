@@ -96,20 +96,5 @@ private:
   bool reset_;
 };
 
-class EnvironmentSetState : public ComponentEvent
-{
-public:
-  EnvironmentSetState(ComponentInfo component_info, const std::unordered_map<std::string, double>& joint_values);
-  ~EnvironmentSetState() override;
-
-  const std::unordered_map<std::string, double>& getJointValues() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::ENVIRONMENT_SET_STATE);
-
-private:
-  std::unordered_map<std::string, double> joint_values_;
-};
-
 }  // namespace tesseract_gui::events
 #endif  // TESSERACT_QT_COMMON_ENVIRONMENT_EVENTS_H

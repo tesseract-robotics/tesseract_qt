@@ -45,7 +45,6 @@
 
 #include <tesseract_common/joint_state.h>
 #include <tesseract_visualization/trajectory_player.h>
-#include <tesseract_state_solver/state_solver.h>
 
 #include <QTimer>
 #include <QFileDialog>
@@ -73,9 +72,7 @@ struct JointTrajectoryWidget::Implementation
 
   double current_duration{ 0 };
   tesseract_common::JointTrajectoryInfo current_trajectory;
-  tesseract_environment::Environment::ConstPtr current_environment;
-
-  tesseract_scene_graph::StateSolver::UPtr state_solver;
+  tesseract_environment::Environment::Ptr current_environment;
 
   // Store the selected item
   QStandardItem* selected_item{ nullptr };
@@ -280,7 +277,6 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
           jts.getEnvironment()->isInitialized())
       {
         data_->current_environment = jts.getEnvironment();
-        data_->state_solver = jts.getEnvironment()->getStateSolver();
 
         // If no parent then it using the top most so no need to overwrite existing environment
         if (data_->model->getComponentInfo().getParent() != nullptr)
@@ -312,7 +308,6 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
           jts.getEnvironment()->isInitialized())
       {
         data_->current_environment = jts.getEnvironment();
-        data_->state_solver = jts.getEnvironment()->getStateSolver();
 
         // If no parent then it using the top most so no need to overwrite existing environment
         if (data_->model->getComponentInfo().getParent() != nullptr)
@@ -358,9 +353,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         }
 
         data_->current_environment = jts.getEnvironment();
-        data_->state_solver = jts.getEnvironment()->getStateSolver();
-        auto scene_state = data_->state_solver->getState(state.joint_names, state.position);
-        QApplication::sendEvent(qApp, new events::SceneStateChanged(data_->model->getComponentInfo(), scene_state));
+        data_->current_environment->setState(state.joint_names, state.position);
       }
 
       break;
@@ -398,9 +391,7 @@ void JointTrajectoryWidget::onSliderValueChanged(int value)
   data_->current_duration = value * SLIDER_RESOLUTION;
   tesseract_common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
-
-  auto scene_state = data_->state_solver->getState(state.joint_names, state.position);
-  QApplication::sendEvent(qApp, new events::SceneStateChanged(data_->model->getComponentInfo(), scene_state));
+  data_->current_environment->setState(state.joint_names, state.position);
 }
 
 void JointTrajectoryWidget::onEnablePlayer()

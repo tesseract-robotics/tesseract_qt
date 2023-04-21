@@ -72,16 +72,4 @@ const tesseract_environment::Commands& EnvironmentApplyCommand::getCommands() co
 
 //////////////////////////////////////////
 
-EnvironmentSetState::EnvironmentSetState(ComponentInfo component_info,
-                                         const std::unordered_map<std::string, double>& joint_values)
-  : ComponentEvent(std::move(component_info), kType), joint_values_(joint_values)
-{
-}
-
-EnvironmentSetState::~EnvironmentSetState() = default;
-
-const std::unordered_map<std::string, double>& EnvironmentSetState::getJointValues() const { return joint_values_; }
-
-//////////////////////////////////////////
-
 }  // namespace tesseract_gui::events

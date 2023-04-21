@@ -44,7 +44,12 @@ public:
   virtual ~EnvironmentWrapper();
 
   const ComponentInfo& getComponentInfo() const;
+
   virtual std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const = 0;
+  virtual std::shared_ptr<tesseract_environment::Environment> getEnvironment() = 0;
+
+  virtual const tesseract_environment::Environment& environment() const = 0;
+  virtual tesseract_environment::Environment& environment() = 0;
 
   /** @brief This broadcast events with associated data for models */
   void broadcast() const;
@@ -55,8 +60,6 @@ protected:
   std::unique_ptr<ComponentInfo> component_info_;
   bool initialized_{ false };
   int revision_{ 0 };
-
-  virtual tesseract_environment::Environment& environment() = 0;
 
   /** @brief This function is called when added to the environment manager */
   void init();
@@ -71,6 +74,9 @@ public:
   ~DefaultEnvironmentWrapper() override;
 
   std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
+  std::shared_ptr<tesseract_environment::Environment> getEnvironment() override;
+
+  const tesseract_environment::Environment& environment() const override;
   tesseract_environment::Environment& environment() override;
 
 private:
@@ -90,6 +96,9 @@ public:
   ~MonitorEnvironmentWrapper() override;
 
   std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
+  std::shared_ptr<tesseract_environment::Environment> getEnvironment() override;
+
+  const tesseract_environment::Environment& environment() const override;
   tesseract_environment::Environment& environment() override;
 
   std::shared_ptr<tesseract_environment::EnvironmentMonitor> getEnvironmentMonitor();
