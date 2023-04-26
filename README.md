@@ -8,7 +8,14 @@ Linux (Unstable)     | [![Build Status](https://github.com/tesseract-robotics/te
 Lint  (Clang-Format) | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/workflows/Clang-Format/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions)
 Lint  (CMake-Format) | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/workflows/CMake-Format/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions)
 
-## Screenshots
+## Application Screenshots
+
+Below are screenshots to highlight some of the applications within this repository and does not incude everything.
+
+### Tesseract Studio
+![Tesseract Studio](docs/images/tesseract_qt_studio_application.png)
+
+## Widget Screenshots
 
 Below are screenshots to highlight some of the widgets within this repository and does not incude everything.
 

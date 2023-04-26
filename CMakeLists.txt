@@ -27,6 +27,7 @@ add_subdirectory(planning)
 add_subdirectory(srdf)
 add_subdirectory(tool_path)
 add_subdirectory(workbench)
+add_subdirectory(studio)
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGraphviz.cmake"
         DESTINATION lib/cmake/${PROJECT_NAME})

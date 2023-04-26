@@ -30,6 +30,8 @@
 #include <tesseract_common/resource_locator.h>
 #include <tesseract_environment/environment.h>
 
+#include <QMessageBox>
+
 namespace tesseract_gui
 {
 struct LoadEnvironmentDialog::Implementation
@@ -70,7 +72,14 @@ void LoadEnvironmentDialog::onAccepted()
   if (urdf_filepath_exists && srdf_filepath_exists)
   {
     auto env = std::make_shared<tesseract_environment::Environment>();
-    env->init(urdf_filepath, srdf_filepath, data_->resource_locator);
+    if (!env->init(urdf_filepath, srdf_filepath, data_->resource_locator) || !env->isInitialized())
+    {
+      QMessageBox messageBox;
+      messageBox.critical(0, "Error", "Failed to load environment!");
+      messageBox.setFixedSize(500, 200);
+      messageBox.show();
+      return;
+    }
     auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(data_->component_info, env);
     EnvironmentManager::set(env_wrapper);
   }
@@ -78,7 +87,14 @@ void LoadEnvironmentDialog::onAccepted()
   if (urdf_filepath_exists && !srdf_filepath_exists)
   {
     auto env = std::make_shared<tesseract_environment::Environment>();
-    env->init(urdf_filepath, data_->resource_locator);
+    if (!env->init(urdf_filepath, data_->resource_locator) || !env->isInitialized())
+    {
+      QMessageBox messageBox;
+      messageBox.critical(0, "Error", "Failed to load environment!");
+      messageBox.setFixedSize(500, 200);
+      messageBox.show();
+      return;
+    }
     auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(data_->component_info, env);
     EnvironmentManager::set(env_wrapper);
   }
