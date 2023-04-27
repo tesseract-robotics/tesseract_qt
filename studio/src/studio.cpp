@@ -182,42 +182,40 @@ Studio::Studio(QWidget* parent)
           data_->dock_manager,
           SLOT(openPerspective(const QString&)));
 
-  addToolBar(new tesseract_gui::SceneGraphToolBar(data_->component_info));
-  addToolBar(new tesseract_gui::ToolPathToolBar(data_->component_info));
-  addToolBar(new tesseract_gui::JointTrajectoryToolBar(data_->jt_component_info));
-  addToolBar(new tesseract_gui::ManipulationToolBar(data_->component_info));
-
   auto render_widget = new tesseract_gui::RenderWidget(data_->component_info.scene_name);
   render_widget->setSkyEnabled(true);
   auto* render_dock_widget = new ads::CDockWidget("Scene");
   render_dock_widget->setWidget(render_widget);
   render_dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
-  auto* central_dock_area = data_->dock_manager->setCentralWidget(render_dock_widget);
-  central_dock_area->setAllowedAreas(ads::DockWidgetArea::OuterDockAreas);
+  auto* central_area = data_->dock_manager->setCentralWidget(render_dock_widget);
+  central_area->setAllowedAreas(ads::DockWidgetArea::OuterDockAreas);
 
-  auto* env_widget = new tesseract_gui::EnvironmentWidget(data_->component_info);
   auto* env_dock_widget = new ads::CDockWidget("Environment");
-  env_dock_widget->setWidget(env_widget);
-  data_->dock_manager->addDockWidget(ads::LeftDockWidgetArea, env_dock_widget, central_dock_area);
+  env_dock_widget->setWidget(new tesseract_gui::EnvironmentWidget(data_->component_info));
+  env_dock_widget->setToolBar(new tesseract_gui::SceneGraphToolBar(data_->component_info));
+  env_dock_widget->toolBar()->setIconSize(QSize(25, 25));
+  data_->dock_manager->addDockWidget(ads::LeftDockWidgetArea, env_dock_widget, central_area);
   ui->menuView->addAction(env_dock_widget->toggleViewAction());
 
-  auto* tool_path_widget = new tesseract_gui::ToolPathWidget(data_->component_info);
   auto* tool_path_dock_widget = new ads::CDockWidget("Tool Paths");
-  tool_path_dock_widget->setWidget(tool_path_widget);
-  auto* right_dock_area =
-      data_->dock_manager->addDockWidget(ads::RightDockWidgetArea, tool_path_dock_widget, central_dock_area);
+  tool_path_dock_widget->setWidget(new tesseract_gui::ToolPathWidget(data_->component_info));
+  tool_path_dock_widget->setToolBar(new tesseract_gui::ToolPathToolBar(data_->component_info));
+  tool_path_dock_widget->toolBar()->setIconSize(QSize(25, 25));
+  auto* right_area = data_->dock_manager->addDockWidget(ads::RightDockWidgetArea, tool_path_dock_widget, central_area);
   ui->menuView->addAction(tool_path_dock_widget->toggleViewAction());
 
-  auto* joint_traj_widget = new tesseract_gui::JointTrajectoryWidget(data_->jt_component_info);
   auto* joint_traj_dock_widget = new ads::CDockWidget("Joint Trajectories");
-  joint_traj_dock_widget->setWidget(joint_traj_widget);
-  data_->dock_manager->addDockWidgetTabToArea(joint_traj_dock_widget, right_dock_area);
+  joint_traj_dock_widget->setWidget(new tesseract_gui::JointTrajectoryWidget(data_->jt_component_info));
+  joint_traj_dock_widget->setToolBar(new tesseract_gui::JointTrajectoryToolBar(data_->jt_component_info));
+  joint_traj_dock_widget->toolBar()->setIconSize(QSize(25, 25));
+  data_->dock_manager->addDockWidgetTabToArea(joint_traj_dock_widget, right_area);
   ui->menuView->addAction(joint_traj_dock_widget->toggleViewAction());
 
-  auto* manipulation_widget = new tesseract_gui::ManipulationWidget(data_->component_info, true);
   auto* manipulation_dock_widget = new ads::CDockWidget("Manipulation");
-  manipulation_dock_widget->setWidget(manipulation_widget);
-  data_->dock_manager->addDockWidgetTabToArea(manipulation_dock_widget, right_dock_area);
+  manipulation_dock_widget->setWidget(new tesseract_gui::ManipulationWidget(data_->component_info, true));
+  manipulation_dock_widget->setToolBar(new tesseract_gui::ManipulationToolBar(data_->component_info));
+  manipulation_dock_widget->toolBar()->setIconSize(QSize(25, 25));
+  data_->dock_manager->addDockWidgetTabToArea(manipulation_dock_widget, right_area);
   ui->menuView->addAction(manipulation_dock_widget->toggleViewAction());
 
   //  data_->restoreState(); If this is enabled widgets do not show up if name change
