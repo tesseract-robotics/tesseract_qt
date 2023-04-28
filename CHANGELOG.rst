@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.16.2 (2023-04-28)
+-------------------
 * Update depends
 * Add waypoint name to waypoint standard items
 * Move toolbars to the dock widgets
