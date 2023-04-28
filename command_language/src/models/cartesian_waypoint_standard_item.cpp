@@ -62,6 +62,7 @@ int CartesianWaypointStandardItem::type() const { return static_cast<int>(Standa
 
 void CartesianWaypointStandardItem::ctor(const tesseract_planning::CartesianWaypointPoly& cwp)
 {
+  appendRow(createStandardItemString("name", cwp.getName()));
   appendRow(new TransformStandardItem("waypoint", cwp.getTransform()));
   appendRow(new VectorDoubleStandardItem("lower_tolerance", cwp.getLowerTolerance()));
   appendRow(new VectorDoubleStandardItem("upper_tolerance", cwp.getUpperTolerance()));

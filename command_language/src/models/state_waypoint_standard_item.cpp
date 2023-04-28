@@ -57,6 +57,7 @@ int StateWaypointStandardItem::type() const { return static_cast<int>(StandardIt
 void StateWaypointStandardItem::ctor(const tesseract_planning::StateWaypointPoly& swp)
 {
   // Add State Joint Names
+  appendRow(createStandardItemString("name", swp.getName()));
   appendRow(new VectorStringStandardItem("joint_names", swp.getNames()));
   appendRow(new VectorDoubleStandardItem("position", swp.getPosition()));
   appendRow(new VectorDoubleStandardItem("velocity", swp.getVelocity()));

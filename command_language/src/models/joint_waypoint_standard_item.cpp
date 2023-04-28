@@ -56,6 +56,7 @@ int JointWaypointStandardItem::type() const { return static_cast<int>(StandardIt
 
 void JointWaypointStandardItem::ctor(const tesseract_planning::JointWaypointPoly& jwp)
 {
+  appendRow(createStandardItemString("name", jwp.getName()));
   appendRow(new VectorStringStandardItem("joint_names", jwp.getNames()));
   appendRow(new VectorDoubleStandardItem("waypoint", jwp.getPosition()));
   appendRow(new VectorDoubleStandardItem("lower_tolerance", jwp.getLowerTolerance()));
