@@ -398,6 +398,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
           mesh_geom->SetMaterial(ign_material);
 
         mesh->AddGeometry(mesh_geom);
+        mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
         return mesh;
       }
 
@@ -424,6 +425,7 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
           mesh_geom->SetMaterial(ign_material);
 
         mesh->AddGeometry(mesh_geom);
+        mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
         return mesh;
       }
 
