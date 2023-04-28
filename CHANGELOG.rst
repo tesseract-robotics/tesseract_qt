@@ -2,6 +2,17 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update depends
+* Add waypoint name to waypoint standard items
+* Move toolbars to the dock widgets
+* Add studio application
+* Set the environment state instead of using scene state
+* Add working frame to tool path
+* Add ability to load and save tool path
+* Contributors: Levi Armstrong
+
 0.16.1 (2023-04-11)
 -------------------
 * Update depends
