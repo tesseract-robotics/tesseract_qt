@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.16.3 (2023-05-03)
+-------------------
 * Update dependencies.rosinstall
 * Update ign converter to scale mesh
 * Contributors: Levi Armstrong
