@@ -17,7 +17,7 @@
 #ifndef TESSERACT_QT_RENDERING_UTILS_H
 #define TESSERACT_QT_RENDERING_UTILS_H
 
-#include <ignition/rendering/Scene.hh>
+#include <gz/rendering/Scene.hh>
 
 namespace tesseract_gui
 {
@@ -26,7 +26,7 @@ namespace tesseract_gui
  * @param scene_name The scene name to retrieve
  * @return The scene
  */
-ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scene_name);
+gz::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scene_name);
 
 /**
  * @brief Get the scene from render engine
@@ -34,7 +34,7 @@ ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scen
  * @param scene_name The scene name to retrieve
  * @return The scene
  */
-ignition::rendering::ScenePtr sceneFromRenderEngine(const std::string& engine_name, const std::string& scene_name);
+gz::rendering::ScenePtr sceneFromRenderEngine(const std::string& engine_name, const std::string& scene_name);
 
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_RENDERING_UTILS_H

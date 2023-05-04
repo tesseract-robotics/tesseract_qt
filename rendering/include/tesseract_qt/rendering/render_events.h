@@ -29,10 +29,10 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/render_events.h>
 
-#include <ignition/common/KeyEvent.hh>
-#include <ignition/common/MouseEvent.hh>
-#include <ignition/math/Vector2.hh>
-#include <ignition/math/Vector3.hh>
+#include <gz/common/KeyEvent.hh>
+#include <gz/common/MouseEvent.hh>
+#include <gz/math/Vector2.hh>
+#include <gz/math/Vector3.hh>
 
 /** @brief Namespace for all events. Refer to the EventManager class for more information about events. */
 namespace tesseract_gui::events
@@ -48,9 +48,9 @@ public:
   /// \param[in] _xyz XYZ snapping values.
   /// \param[in] _rpy RPY snapping values.
   /// \param[in] _scale Scale snapping values.
-  SnapIntervals(const ignition::math::Vector3d& _xyz,
-                const ignition::math::Vector3d& _rpy,
-                const ignition::math::Vector3d& _scale,
+  SnapIntervals(const gz::math::Vector3d& _xyz,
+                const gz::math::Vector3d& _rpy,
+                const gz::math::Vector3d& _scale,
                 std::string scene_name);
 
   ~SnapIntervals() override;
@@ -59,19 +59,19 @@ public:
    * @brief Get the XYZ snapping values.
    * @return The XYZ snapping values.
    */
-  ignition::math::Vector3d getPosition() const;
+  gz::math::Vector3d getPosition() const;
 
   /**
    * @brief Get the RPY snapping values.
    * @return The RPY snapping values.
    */
-  ignition::math::Vector3d getRotation() const;
+  gz::math::Vector3d getRotation() const;
 
   /**
    * @brief Get the scale snapping values.
    * @return The scale snapping values.
    */
-  ignition::math::Vector3d getScale() const;
+  gz::math::Vector3d getScale() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::SNAP_INTERVALS);
@@ -145,14 +145,14 @@ public:
    * @param point The point at which the mouse is hovering within
    * @param scene_name Then scene name
    */
-  explicit HoverToScene(const ignition::math::Vector3d& point, std::string scene_name);
+  explicit HoverToScene(const gz::math::Vector3d& point, std::string scene_name);
   ~HoverToScene() override;
 
   /**
    * @brief Get the point within the scene over which the user is hovering.
    * @return The 3D point
    */
-  ignition::math::Vector3d getPoint() const;
+  gz::math::Vector3d getPoint() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::HOVER_TO_SCENE);
@@ -173,14 +173,14 @@ public:
    * @param point The point which the user has left clicked within
    * @param scene_name The scene name
    */
-  explicit LeftClickToScene(const ignition::math::Vector3d& point, std::string scene_name);
+  explicit LeftClickToScene(const gz::math::Vector3d& point, std::string scene_name);
   ~LeftClickToScene() override;
 
   /**
    * @brief Get the point within the scene that the user clicked.
    * @return The 3D point.
    */
-  ignition::math::Vector3d getPoint() const;
+  gz::math::Vector3d getPoint() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::LEFT_CLICK_TO_SCENE);
@@ -200,14 +200,14 @@ public:
    * @brief Constructor
    * @param point The point which the user has right clicked within the scene
    */
-  explicit RightClickToScene(const ignition::math::Vector3d& point, std::string scene_name);
+  explicit RightClickToScene(const gz::math::Vector3d& point, std::string scene_name);
   ~RightClickToScene() override;
 
   /**
    * @brief Get the point within the scene that the user clicked.
    * @return The 3D point.
    */
-  ignition::math::Vector3d getPoint() const;
+  gz::math::Vector3d getPoint() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::RIGHT_CLICK_TO_SCENE);
@@ -258,14 +258,14 @@ public:
    * @param key The key released event within the scene
    * @param scene_name The scene name
    */
-  explicit KeyReleaseOnScene(const ignition::common::KeyEvent& key, std::string scene_name);
+  explicit KeyReleaseOnScene(const gz::common::KeyEvent& key, std::string scene_name);
   ~KeyReleaseOnScene() override;
 
   /**
    * @brief Get the released key within the scene that the user released.
    * @return The key code.
    */
-  ignition::common::KeyEvent getKey() const;
+  gz::common::KeyEvent getKey() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::KEY_RELEASE_ON_SCENE);
@@ -285,14 +285,14 @@ public:
    * @param key The pressed key within the scene
    * @param scene_name The scene name
    */
-  explicit KeyPressOnScene(const ignition::common::KeyEvent& key, std::string scene_name);
+  explicit KeyPressOnScene(const gz::common::KeyEvent& key, std::string scene_name);
   ~KeyPressOnScene() override;
 
   /**
    * @brief Get the key within the scene that the user pressed
    * @return The key code.
    */
-  ignition::common::KeyEvent getKey() const;
+  gz::common::KeyEvent getKey() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::KEY_PRESS_ON_SCENE);
@@ -316,11 +316,11 @@ public:
    * @param mouse The left mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit LeftClickOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
+  explicit LeftClickOnScene(const gz::common::MouseEvent& mouse, std::string scene_name);
   ~LeftClickOnScene() override;
 
   /** @brief Return the left mouse event */
-  const ignition::common::MouseEvent& getMouse() const;
+  const gz::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::LEFT_CLICK_ON_SCENE);
@@ -344,11 +344,11 @@ public:
    * @param mouse The right mouse event on the scene
    * @param scene_name The scene name
    */
-  RightClickOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
+  RightClickOnScene(const gz::common::MouseEvent& mouse, std::string scene_name);
   ~RightClickOnScene() override;
 
   /** @brief Return the right mouse event */
-  const ignition::common::MouseEvent& getMouse() const;
+  const gz::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::RIGHT_CLICK_ON_SCENE);
@@ -398,11 +398,11 @@ public:
    * @param mouse he hover mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit HoverOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
+  explicit HoverOnScene(const gz::common::MouseEvent& mouse, std::string scene_name);
   ~HoverOnScene() override;
 
   /** @brief Get the point within the scene over which the user is hovering. */
-  ignition::common::MouseEvent getMouse() const;
+  gz::common::MouseEvent getMouse() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::HOVER_ON_SCENE);
@@ -450,9 +450,7 @@ public:
    * @param drop_mouse x and y  coordinate of mouse position.
    * @param scene_name The scene name
    */
-  explicit DropOnScene(const std::string& drop_text,
-                       const ignition::math::Vector2i& drop_mouse,
-                       std::string scene_name);
+  explicit DropOnScene(const std::string& drop_text, const gz::math::Vector2i& drop_mouse, std::string scene_name);
   ~DropOnScene() override;
 
   /**
@@ -465,7 +463,7 @@ public:
    * @brief Get X and Y position
    * @return Get X and Y position
    */
-  const ignition::math::Vector2i& getMouse() const;
+  const gz::math::Vector2i& getMouse() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::DROP_ON_SCENE);
@@ -485,11 +483,11 @@ public:
    * @param mouse The scroll mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit ScrollOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
+  explicit ScrollOnScene(const gz::common::MouseEvent& mouse, std::string scene_name);
   ~ScrollOnScene() override;
 
   /** @brief Return the scroll mouse event */
-  const ignition::common::MouseEvent& getMouse() const;
+  const gz::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::SCROLL_ON_SCENE);
@@ -509,11 +507,11 @@ public:
    * @param mouse The drag mouse event on the scene
    * @param scene_name The scene name
    */
-  explicit DragOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
+  explicit DragOnScene(const gz::common::MouseEvent& mouse, std::string scene_name);
   ~DragOnScene() override;
 
   /** @brief Return the drag on mouse event */
-  ignition::common::MouseEvent getMouse() const;
+  gz::common::MouseEvent getMouse() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::DRAG_ON_SCENE);
@@ -534,11 +532,11 @@ public:
    * @param mouse The mouse event on the scene
    * @param scene_name The scene name
    */
-  MousePressOnScene(const ignition::common::MouseEvent& mouse, std::string scene_name);
+  MousePressOnScene(const gz::common::MouseEvent& mouse, std::string scene_name);
   ~MousePressOnScene() override;
 
   /** @brief Return the button press mouse event */
-  const ignition::common::MouseEvent& getMouse() const;
+  const gz::common::MouseEvent& getMouse() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::MOUSE_PRESS_ON_SCENE);
@@ -555,11 +553,11 @@ private:
 //  public:
 //    /// \brief Constructor
 //    /// \param[in] _worldControl The WorldControl information
-//    explicit WorldControl(const ignition::msgs::WorldControl &_worldControl);
+//    explicit WorldControl(const gz::msgs::WorldControl &_worldControl);
 
 //    /// \brief Get the WorldControl information
 //    /// \return The WorldControl information
-//    const ignition::msgs::WorldControl &WorldControlInfo() const;
+//    const gz::msgs::WorldControl &WorldControlInfo() const;
 
 //    /// \brief Unique type for this event.
 //    static const QEvent::Type kType = QEvent::Type(QEvent::MaxUser - 19);

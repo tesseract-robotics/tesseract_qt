@@ -36,7 +36,7 @@
 
 #include <QApplication>
 
-#include <ignition/math/eigen3/Conversions.hh>
+#include <gz/math/eigen3/Conversions.hh>
 
 #include <tesseract_scene_graph/scene_state.h>
 
@@ -55,7 +55,7 @@ struct IgnSceneGraphRenderManager::Implementation
 
   void clear()
   {
-    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
+    gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
     for (const auto& entity_container : entity_containers)
     {
       for (const auto& ns : entity_container.second->getTrackedEntities())
@@ -84,7 +84,7 @@ struct IgnSceneGraphRenderManager::Implementation
     auto it = entity_containers.find(ci);
     if (it != entity_containers.end())
     {
-      ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
+      gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
       for (const auto& ns : it->second->getTrackedEntities())
       {
         for (const auto& entity : ns.second)
@@ -120,7 +120,7 @@ void IgnSceneGraphRenderManager::render()
   if (events_.empty())
     return;
 
-  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
+  gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
 
   auto getEntityContainer = [this](const ComponentInfo& component_info) -> EntityContainer::Ptr {
     auto it = data_->entity_containers.find(component_info);
@@ -301,7 +301,7 @@ void IgnSceneGraphRenderManager::render()
         if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, pair.first))
         {
           Entity entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, pair.first);
-          scene->VisualById(entity.id)->SetWorldPose(ignition::math::eigen3::convert(pair.second));
+          scene->VisualById(entity.id)->SetWorldPose(gz::math::eigen3::convert(pair.second));
         }
       }
     }

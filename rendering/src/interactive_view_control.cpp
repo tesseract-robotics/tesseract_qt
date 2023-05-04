@@ -19,15 +19,15 @@
 #include <mutex>
 #include <QGuiApplication>
 
-#include <ignition/common/MouseEvent.hh>
-#include <ignition/common/Console.hh>
+#include <gz/common/MouseEvent.hh>
+#include <gz/common/Console.hh>
 
-#include <ignition/rendering/Camera.hh>
-#include <ignition/rendering/OrbitViewController.hh>
-#include <ignition/rendering/OrthoViewController.hh>
-#include <ignition/rendering/RenderingIface.hh>
-#include <ignition/rendering/RayQuery.hh>
-#include <ignition/rendering/Utils.hh>
+#include <gz/rendering/Camera.hh>
+#include <gz/rendering/OrbitViewController.hh>
+#include <gz/rendering/OrthoViewController.hh>
+#include <gz/rendering/RenderingIface.hh>
+#include <gz/rendering/RayQuery.hh>
+#include <gz/rendering/Utils.hh>
 
 #include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/utils.h>
@@ -60,25 +60,25 @@ public:
   bool block_orbit = false;
 
   /** @brief Mouse event */
-  ignition::common::MouseEvent mouse_event;
+  gz::common::MouseEvent mouse_event;
 
   /** @brief Mouse move distance since last event */
-  ignition::math::Vector2d drag;
+  gz::math::Vector2d drag;
 
   /** @brief User camera */
-  ignition::rendering::CameraPtr camera{ nullptr };
+  gz::rendering::CameraPtr camera{ nullptr };
 
   /** @brief View control focus target */
-  ignition::math::Vector3d target;
+  gz::math::Vector3d target;
 
   /** @brief Orbit view controller */
-  ignition::rendering::OrbitViewController orbit_view_control;
+  gz::rendering::OrbitViewController orbit_view_control;
 
   /** @brief Ortho view controller */
-  ignition::rendering::OrthoViewController ortho_view_control;
+  gz::rendering::OrthoViewController ortho_view_control;
 
   /** @brief Camera view controller */
-  ignition::rendering::ViewController* view_control{ nullptr };
+  gz::rendering::ViewController* view_control{ nullptr };
 
   /** @brief View controller */
   ViewControlType view_control_type{ ViewControlType::ORBIT };
@@ -87,13 +87,13 @@ public:
   bool enable_ref_visual{ true };
 
   /** @brief Reference visual for visualizing the target point */
-  ignition::rendering::VisualPtr ref_visual{ nullptr };
+  gz::rendering::VisualPtr ref_visual{ nullptr };
 
   /** @brief Ray query for mouse clicks */
-  ignition::rendering::RayQueryPtr ray_query{ nullptr };
+  gz::rendering::RayQueryPtr ray_query{ nullptr };
 
   /** @brief Pointer to the rendering scene */
-  ignition::rendering::ScenePtr scene{ nullptr };
+  gz::rendering::ScenePtr scene{ nullptr };
 
   /** @brief Mutex to protect View Controllers */
   std::mutex mutex;
@@ -112,7 +112,7 @@ void InteractiveViewControlPrivate::onRender()
 
     for (unsigned int i = 0; i < scene->NodeCount(); ++i)
     {
-      auto cam = std::dynamic_pointer_cast<ignition::rendering::Camera>(scene->NodeByIndex(i));
+      auto cam = std::dynamic_pointer_cast<gz::rendering::Camera>(scene->NodeByIndex(i));
       if (cam)
       {
         bool isUserCamera = false;
@@ -176,16 +176,16 @@ void InteractiveViewControlPrivate::onRender()
     {
       // create ref visual
       ref_visual = scene->CreateVisual();
-      ignition::rendering::GeometryPtr sphere = scene->CreateSphere();
+      gz::rendering::GeometryPtr sphere = scene->CreateSphere();
       ref_visual->AddGeometry(sphere);
-      ref_visual->SetLocalScale(ignition::math::Vector3d(0.2, 0.2, 0.1));
-      ref_visual->SetVisibilityFlags(IGN_VISIBILITY_GUI & ~IGN_VISIBILITY_SELECTABLE);
+      ref_visual->SetLocalScale(gz::math::Vector3d(0.2, 0.2, 0.1));
+      ref_visual->SetVisibilityFlags(GZ_VISIBILITY_GUI & ~GZ_VISIBILITY_SELECTABLE);
 
       // create material
-      ignition::math::Color diffuse(1.0f, 1.0f, 0.0f, 1.0f);
-      ignition::math::Color specular(1.0f, 1.0f, 0.0f, 1.0f);
+      gz::math::Color diffuse(1.0f, 1.0f, 0.0f, 1.0f);
+      gz::math::Color specular(1.0f, 1.0f, 0.0f, 1.0f);
       double transparency = 0.3;
-      ignition::rendering::MaterialPtr material = scene->CreateMaterial();
+      gz::rendering::MaterialPtr material = scene->CreateMaterial();
       material->SetDiffuse(diffuse);
       material->SetSpecular(specular);
       material->SetTransparency(transparency);
@@ -196,9 +196,9 @@ void InteractiveViewControlPrivate::onRender()
     ref_visual->SetVisible(true);
   }
 
-  if (mouse_event.Type() == ignition::common::MouseEvent::SCROLL)
+  if (mouse_event.Type() == gz::common::MouseEvent::SCROLL)
   {
-    target = ignition::rendering::screenToScene(mouse_event.Pos(), camera, ray_query);
+    target = gz::rendering::screenToScene(mouse_event.Pos(), camera, ray_query);
 
     view_control->SetTarget(target);
     const double distance = camera->WorldPosition().Distance(target);
@@ -206,12 +206,12 @@ void InteractiveViewControlPrivate::onRender()
     view_control->Zoom(amount);
     updateReferenceVisual();
   }
-  else if (mouse_event.Type() == ignition::common::MouseEvent::PRESS)
+  else if (mouse_event.Type() == gz::common::MouseEvent::PRESS)
   {
     // Do not updated reference target on middle button because it is annoying when trying to orbit around an object
-    if (mouse_event.Button() != ignition::common::MouseEvent::MIDDLE)
+    if (mouse_event.Button() != gz::common::MouseEvent::MIDDLE)
     {
-      target = ignition::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);
+      target = gz::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);
       view_control->SetTarget(target);
       updateReferenceVisual();
     }
@@ -220,7 +220,7 @@ void InteractiveViewControlPrivate::onRender()
   else
   {
     // Pan with left button
-    if (mouse_event.Buttons() & ignition::common::MouseEvent::LEFT)
+    if (mouse_event.Buttons() & gz::common::MouseEvent::LEFT)
     {
       if (Qt::ShiftModifier == QGuiApplication::queryKeyboardModifiers())
         view_control->Orbit(drag);
@@ -230,13 +230,13 @@ void InteractiveViewControlPrivate::onRender()
       updateReferenceVisual();
     }
     // Orbit with middle button
-    else if (mouse_event.Buttons() & ignition::common::MouseEvent::MIDDLE)
+    else if (mouse_event.Buttons() & gz::common::MouseEvent::MIDDLE)
     {
       view_control->Orbit(drag);
       updateReferenceVisual();
     }
     // Zoom with right button
-    else if (mouse_event.Buttons() & ignition::common::MouseEvent::RIGHT)
+    else if (mouse_event.Buttons() & gz::common::MouseEvent::RIGHT)
     {
       double hfov = camera->HFOV().Radian();
       double vfov = 2.0f * atan(tan(hfov / 2.0F) / camera->AspectRatio());
@@ -258,8 +258,8 @@ void InteractiveViewControlPrivate::updateReferenceVisual()
   ref_visual->SetWorldPosition(this->target);
   // Update the size of the reference visual based on the distance to the target point.
   double distance = camera->WorldPosition().Distance(this->target);
-  double scale = distance * atan(IGN_DTOR(1.0));
-  ref_visual->SetLocalScale(ignition::math::Vector3d(scale, scale, scale * 0.5));
+  double scale = distance * atan(GZ_DTOR(1.0));
+  ref_visual->SetLocalScale(gz::math::Vector3d(scale, scale, scale * 0.5));
 }
 
 /////////////////////////////////////////////////
@@ -302,7 +302,7 @@ bool InteractiveViewControl::eventFilter(QObject* obj, QEvent* event)
     if (e->getSceneName() == data_->scene_name)
     {
       data_->mouse_dirty = true;
-      data_->drag = ignition::math::Vector2d::Zero;
+      data_->drag = gz::math::Vector2d::Zero;
       data_->mouse_event = e->getMouse();
     }
   }
@@ -314,7 +314,7 @@ bool InteractiveViewControl::eventFilter(QObject* obj, QEvent* event)
     {
       data_->mouse_dirty = true;
       data_->mouse_press_dirty = true;
-      data_->drag = ignition::math::Vector2d::Zero;
+      data_->drag = gz::math::Vector2d::Zero;
       data_->mouse_event = e->getMouse();
     }
   }
@@ -331,7 +331,7 @@ bool InteractiveViewControl::eventFilter(QObject* obj, QEvent* event)
 
       auto dragStart = data_->mouse_event.Pos();
       auto dragInt = e->getMouse().Pos() - dragStart;
-      auto dragDistance = ignition::math::Vector2d(dragInt.X(), dragInt.Y());
+      auto dragDistance = gz::math::Vector2d(dragInt.X(), dragInt.Y());
 
       data_->drag += dragDistance;
 
@@ -345,7 +345,7 @@ bool InteractiveViewControl::eventFilter(QObject* obj, QEvent* event)
     if (e->getSceneName() == data_->scene_name)
     {
       data_->mouse_dirty = true;
-      data_->drag += ignition::math::Vector2d(e->getMouse().Scroll().X(), e->getMouse().Scroll().Y());
+      data_->drag += gz::math::Vector2d(e->getMouse().Scroll().X(), e->getMouse().Scroll().Y());
       data_->mouse_event = e->getMouse();
     }
   }

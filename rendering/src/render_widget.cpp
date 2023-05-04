@@ -33,14 +33,14 @@
 #pragma warning(push, 0)
 #endif
 
-#include <ignition/rendering/Camera.hh>
-#include <ignition/rendering/RayQuery.hh>
-#include <ignition/rendering/RenderEngine.hh>
-#include <ignition/rendering/RenderingIface.hh>
-#include <ignition/rendering/Scene.hh>
-#include <ignition/rendering/Grid.hh>
-#include <ignition/rendering/AxisVisual.hh>
-#include <ignition/common/Console.hh>
+#include <gz/rendering/Camera.hh>
+#include <gz/rendering/RayQuery.hh>
+#include <gz/rendering/RenderEngine.hh>
+#include <gz/rendering/RenderingIface.hh>
+#include <gz/rendering/Scene.hh>
+#include <gz/rendering/Grid.hh>
+#include <gz/rendering/AxisVisual.hh>
+#include <gz/common/Console.hh>
 
 #include <QOpenGLTextureBlitter>
 #include <QOffscreenSurface>
@@ -67,13 +67,13 @@ public:
   bool drop_dirty{ false };
 
   /** @brief Mouse event */
-  ignition::common::MouseEvent mouse_event;
+  gz::common::MouseEvent mouse_event;
 
   /** @brief A list of mouse events */
-  std::list<ignition::common::MouseEvent> mouse_events;
+  std::list<gz::common::MouseEvent> mouse_events;
 
   /** @brief Key event */
-  ignition::common::KeyEvent key_event;
+  gz::common::KeyEvent key_event;
 
   /**
    * @brief Max number of mouse events to store in the queue.
@@ -89,22 +89,22 @@ public:
   std::mutex mutex;
 
   /** @brief User camera */
-  ignition::rendering::CameraPtr camera{ nullptr };
+  gz::rendering::CameraPtr camera{ nullptr };
 
   /** @brief User light */
-  ignition::rendering::DirectionalLightPtr light{ nullptr };
+  gz::rendering::DirectionalLightPtr light{ nullptr };
 
   /** @brief The currently hovered mouse position in screen coordinates */
-  ignition::math::Vector2i mouse_hover_pos{ ignition::math::Vector2i::Zero };
+  gz::math::Vector2i mouse_hover_pos{ gz::math::Vector2i::Zero };
 
   /** @brief The currently drop mouse position in screen coordinates */
-  ignition::math::Vector2i mouse_drop_pos{ ignition::math::Vector2i::Zero };
+  gz::math::Vector2i mouse_drop_pos{ gz::math::Vector2i::Zero };
 
   /** @brief The dropped text in the scene */
   std::string drop_text;
 
   /** @brief Ray query for mouse clicks */
-  ignition::rendering::RayQueryPtr ray_query{ nullptr };
+  gz::rendering::RayQueryPtr ray_query{ nullptr };
 };
 
 /////////////////////////////////////////////////
@@ -182,7 +182,7 @@ void Renderer::handleMouseEvent()
 }
 
 ////////////////////////////////////////////////
-void Renderer::handleKeyPress(const ignition::common::KeyEvent& event)
+void Renderer::handleKeyPress(const gz::common::KeyEvent& event)
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
 
@@ -194,7 +194,7 @@ void Renderer::handleKeyPress(const ignition::common::KeyEvent& event)
 }
 
 ////////////////////////////////////////////////
-void Renderer::handleKeyRelease(const ignition::common::KeyEvent& event)
+void Renderer::handleKeyRelease(const gz::common::KeyEvent& event)
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
 
@@ -226,10 +226,10 @@ void Renderer::broadcastHoverPos()
   events::HoverToScene hoverToSceneEvent(pos, scene_name);
   QApplication::sendEvent(qApp, &hoverToSceneEvent);
 
-  ignition::common::MouseEvent hoverMouseEvent = data_->mouse_event;
+  gz::common::MouseEvent hoverMouseEvent = data_->mouse_event;
   hoverMouseEvent.SetPos(data_->mouse_hover_pos);
   hoverMouseEvent.SetDragging(false);
-  hoverMouseEvent.SetType(ignition::common::MouseEvent::MOVE);
+  hoverMouseEvent.SetType(gz::common::MouseEvent::MOVE);
   events::HoverOnScene hoverOnSceneEvent(hoverMouseEvent, scene_name);
   QApplication::sendEvent(qApp, &hoverOnSceneEvent);
 
@@ -256,8 +256,8 @@ void Renderer::broadcastLeftClick()
   if (!data_->mouse_dirty)
     return;
 
-  if (data_->mouse_event.Button() != ignition::common::MouseEvent::LEFT ||
-      data_->mouse_event.Type() != ignition::common::MouseEvent::RELEASE)
+  if (data_->mouse_event.Button() != gz::common::MouseEvent::LEFT ||
+      data_->mouse_event.Type() != gz::common::MouseEvent::RELEASE)
     return;
 
   auto pos = screenToScene(data_->mouse_event.Pos());
@@ -275,8 +275,8 @@ void Renderer::broadcastRightClick()
   if (!data_->mouse_dirty)
     return;
 
-  if (data_->mouse_event.Button() != ignition::common::MouseEvent::RIGHT ||
-      data_->mouse_event.Type() != ignition::common::MouseEvent::RELEASE)
+  if (data_->mouse_event.Button() != gz::common::MouseEvent::RIGHT ||
+      data_->mouse_event.Type() != gz::common::MouseEvent::RELEASE)
     return;
 
   auto pos = screenToScene(data_->mouse_event.Pos());
@@ -294,7 +294,7 @@ void Renderer::broadcastMousePress()
   if (!data_->mouse_dirty)
     return;
 
-  if (data_->mouse_event.Type() != ignition::common::MouseEvent::PRESS)
+  if (data_->mouse_event.Type() != gz::common::MouseEvent::PRESS)
     return;
 
   events::MousePressOnScene event(data_->mouse_event, scene_name);
@@ -307,7 +307,7 @@ void Renderer::broadcastScroll()
   if (!data_->mouse_dirty)
     return;
 
-  if (data_->mouse_event.Type() != ignition::common::MouseEvent::SCROLL)
+  if (data_->mouse_event.Type() != gz::common::MouseEvent::SCROLL)
     return;
 
   events::ScrollOnScene scrollOnSceneEvent(data_->mouse_event, scene_name);
@@ -317,25 +317,25 @@ void Renderer::broadcastScroll()
 /////////////////////////////////////////////////
 void Renderer::broadcastKeyRelease()
 {
-  if (data_->key_event.Type() != ignition::common::KeyEvent::RELEASE)
+  if (data_->key_event.Type() != gz::common::KeyEvent::RELEASE)
     return;
 
   events::KeyReleaseOnScene keyRelease(data_->key_event, scene_name);
   QApplication::sendEvent(qApp, &keyRelease);
 
-  data_->key_event.SetType(ignition::common::KeyEvent::NO_EVENT);
+  data_->key_event.SetType(gz::common::KeyEvent::NO_EVENT);
 }
 
 /////////////////////////////////////////////////
 void Renderer::broadcastKeyPress()
 {
-  if (data_->key_event.Type() != ignition::common::KeyEvent::PRESS)
+  if (data_->key_event.Type() != gz::common::KeyEvent::PRESS)
     return;
 
   events::KeyPressOnScene keyPress(data_->key_event, scene_name);
   QApplication::sendEvent(qApp, &keyPress);
 
-  data_->key_event.SetType(ignition::common::KeyEvent::NO_EVENT);
+  data_->key_event.SetType(gz::common::KeyEvent::NO_EVENT);
 }
 
 /////////////////////////////////////////////////
@@ -347,7 +347,7 @@ void Renderer::initialize()
   std::lock_guard<std::mutex> lock(data_->mutex);
   std::map<std::string, std::string> params;
   params["useCurrentGLContext"] = "1";
-  auto* engine = ignition::rendering::engine(engine_name, params);
+  auto* engine = gz::rendering::engine(engine_name, params);
   if (engine == nullptr)
   {
     ignerr << "Engine [" << engine_name << "] is not supported" << std::endl;
@@ -371,21 +371,21 @@ void Renderer::initialize()
 
   if (grid_enable)
   {
-    ignition::rendering::VisualPtr visual = scene->VisualByName("tesseract_grid");
+    gz::rendering::VisualPtr visual = scene->VisualByName("tesseract_grid");
     if (visual == nullptr)
     {
-      ignition::rendering::VisualPtr root = scene->RootVisual();
+      gz::rendering::VisualPtr root = scene->RootVisual();
 
       // create gray material
-      ignition::rendering::MaterialPtr gray = scene->CreateMaterial();
+      gz::rendering::MaterialPtr gray = scene->CreateMaterial();
       gray->SetAmbient(0.7, 0.7, 0.7);
       gray->SetDiffuse(0.7, 0.7, 0.7);
       gray->SetSpecular(0.7, 0.7, 0.7);
 
       // create grid visual
       unsigned id = 1000;  // static_cast<unsigned>(dataPtr->entity_manager.addVisual("tesseract_grid"));
-      ignition::rendering::VisualPtr visual = scene->CreateVisual(id, "tesseract_grid");
-      ignition::rendering::GridPtr gridGeom = scene->CreateGrid();
+      gz::rendering::VisualPtr visual = scene->CreateVisual(id, "tesseract_grid");
+      gz::rendering::GridPtr gridGeom = scene->CreateGrid();
       if (!gridGeom)
       {
         ignwarn << "Failed to create grid for scene [" << scene->Name() << "] on engine [" << scene->Engine()->Name()
@@ -443,7 +443,7 @@ void Renderer::initialize()
 /////////////////////////////////////////////////
 void Renderer::destroy()
 {
-  auto* engine = ignition::rendering::engine(engine_name);
+  auto* engine = gz::rendering::engine(engine_name);
   if (engine == nullptr)
     return;
   auto scene = engine->SceneByName(scene_name);
@@ -462,7 +462,7 @@ void Renderer::destroy()
 }
 
 /////////////////////////////////////////////////
-void Renderer::newHoverEvent(const ignition::math::Vector2i& hover_pos)
+void Renderer::newHoverEvent(const gz::math::Vector2i& hover_pos)
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
   if (hover_event_enable)
@@ -473,7 +473,7 @@ void Renderer::newHoverEvent(const ignition::math::Vector2i& hover_pos)
 }
 
 /////////////////////////////////////////////////
-void Renderer::newDropEvent(const std::string& drop_text, const ignition::math::Vector2i& drop_pos)
+void Renderer::newDropEvent(const std::string& drop_text, const gz::math::Vector2i& drop_pos)
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
   data_->drop_text = drop_text;
@@ -482,7 +482,7 @@ void Renderer::newDropEvent(const std::string& drop_text, const ignition::math::
 }
 
 /////////////////////////////////////////////////
-void Renderer::newMouseEvent(const ignition::common::MouseEvent& event)
+void Renderer::newMouseEvent(const gz::common::MouseEvent& event)
 {
   std::lock_guard<std::mutex> lock(data_->mutex);
   if (data_->mouse_events.size() >= data_->kMaxMouseEventSize)
@@ -493,7 +493,7 @@ void Renderer::newMouseEvent(const ignition::common::MouseEvent& event)
 }
 
 /////////////////////////////////////////////////
-ignition::math::Vector3d Renderer::screenToScene(const ignition::math::Vector2i& screen_pos) const
+gz::math::Vector3d Renderer::screenToScene(const gz::math::Vector2i& screen_pos) const
 {
   // TODO(ahcorde): Replace this code with function in ign-rendering
   // Require this commit
@@ -508,7 +508,7 @@ ignition::math::Vector3d Renderer::screenToScene(const ignition::math::Vector2i&
   double ny = 1.0 - 2.0 * screen_pos.Y() / height;
 
   // Make a ray query
-  data_->ray_query->SetFromCamera(data_->camera, ignition::math::Vector2d(nx, ny));
+  data_->ray_query->SetFromCamera(data_->camera, gz::math::Vector2d(nx, ny));
 
   auto result = data_->ray_query->ClosestPoint();
   if (result)
@@ -523,7 +523,7 @@ class RenderWidgetImpl
 {
 public:
   /** @brief Keep latest mouse event */
-  ignition::common::MouseEvent mouseEvent;
+  gz::common::MouseEvent mouseEvent;
 
   /** @brief The rendering renderer */
   Renderer renderer;
@@ -651,10 +651,10 @@ void RenderWidget::paintGL()
 }
 
 /////////////////////////////////////////////////
-void RenderWidget::setBackgroundColor(const ignition::math::Color& color) { data_->renderer.background_color = color; }
+void RenderWidget::setBackgroundColor(const gz::math::Color& color) { data_->renderer.background_color = color; }
 
 /////////////////////////////////////////////////
-void RenderWidget::setAmbientLight(const ignition::math::Color& ambient) { data_->renderer.ambient_light = ambient; }
+void RenderWidget::setAmbientLight(const gz::math::Color& ambient) { data_->renderer.ambient_light = ambient; }
 
 /////////////////////////////////////////////////
 void RenderWidget::setEngineName(const std::string& name) { data_->renderer.engine_name = name; }
@@ -663,7 +663,7 @@ void RenderWidget::setEngineName(const std::string& name) { data_->renderer.engi
 void RenderWidget::setSceneName(const std::string& name) { data_->renderer.scene_name = name; }
 
 /////////////////////////////////////////////////
-void RenderWidget::setCameraPose(const ignition::math::Pose3d& pose) { data_->renderer.camera_pose = pose; }
+void RenderWidget::setCameraPose(const gz::math::Pose3d& pose) { data_->renderer.camera_pose = pose; }
 
 /////////////////////////////////////////////////
 void RenderWidget::setCameraNearClip(double near) { data_->renderer.camera_near_clip = near; }
@@ -692,7 +692,7 @@ void RenderWidget::setGridEnabled(bool enabled) { data_->renderer.grid_enable = 
 //  if (title.empty())
 //    title = "3D Scene";
 
-//  std::string cmdRenderEngine = ignition::gui::renderEngineName();
+//  std::string cmdRenderEngine = gz::gui::renderEngineName();
 //  // Custom parameters
 //  if (_pluginElem)
 //  {
@@ -884,12 +884,9 @@ void RenderWidget::wheelEvent(QWheelEvent* event)
 }
 
 ////////////////////////////////////////////////
-void RenderWidget::handleKeyPress(const ignition::common::KeyEvent& event) { data_->renderer.handleKeyPress(event); }
+void RenderWidget::handleKeyPress(const gz::common::KeyEvent& event) { data_->renderer.handleKeyPress(event); }
 
 ////////////////////////////////////////////////
-void RenderWidget::handleKeyRelease(const ignition::common::KeyEvent& event)
-{
-  data_->renderer.handleKeyRelease(event);
-}
+void RenderWidget::handleKeyRelease(const gz::common::KeyEvent& event) { data_->renderer.handleKeyRelease(event); }
 
 }  // namespace tesseract_gui

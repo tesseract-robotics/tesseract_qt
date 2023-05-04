@@ -29,9 +29,9 @@
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/component_info.h>
 
-#include <ignition/rendering/Scene.hh>
-#include <ignition/rendering/ArrowVisual.hh>
-#include <ignition/math/eigen3/Conversions.hh>
+#include <gz/rendering/Scene.hh>
+#include <gz/rendering/ArrowVisual.hh>
+#include <gz/math/eigen3/Conversions.hh>
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -52,7 +52,7 @@ struct IgnContactResultsRenderManager::Implementation
   std::string scene_name;
   std::unordered_map<tesseract_gui::ComponentInfo, tesseract_gui::EntityManager::Ptr> entity_managers;
 
-  void clear(ignition::rendering::Scene& scene, EntityContainer& container)
+  void clear(gz::rendering::Scene& scene, EntityContainer& container)
   {
     for (const auto& ns : container.getTrackedEntities())
     {
@@ -69,7 +69,7 @@ struct IgnContactResultsRenderManager::Implementation
     container.clear();
   }
 
-  void clear(ignition::rendering::Scene& scene, tesseract_gui::EntityManager& entity_manager)
+  void clear(gz::rendering::Scene& scene, tesseract_gui::EntityManager& entity_manager)
   {
     for (auto& entity_container : entity_manager.getEntityContainers())
     {
@@ -81,7 +81,7 @@ struct IgnContactResultsRenderManager::Implementation
 
   void clearAll()
   {
-    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
+    gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
     if (scene != nullptr)
     {
       for (auto& container : entity_managers)
@@ -116,7 +116,7 @@ void IgnContactResultsRenderManager::render()
     return entity_manager;
   };
 
-  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
+  gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
 
   for (const auto& event : events_)
   {
@@ -156,7 +156,7 @@ void IgnContactResultsRenderManager::render()
 
         tesseract_gui::EntityContainer::Ptr entity_container = entity_manager->getEntityContainer(parent_key);
         auto entity = entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, parent_key);
-        ignition::rendering::VisualPtr ign_contact_results = scene->CreateVisual(entity.id, entity.unique_name);
+        gz::rendering::VisualPtr ign_contact_results = scene->CreateVisual(entity.id, entity.unique_name);
         ign_contact_results->SetUserData(USER_VISIBILITY, false);
 
         for (const auto& crt : crv())
@@ -173,8 +173,7 @@ void IgnContactResultsRenderManager::render()
           const std::string arrow_key_name = boost::uuids::to_string(crt.getUUID());
           auto arrow_entity =
               entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name);
-          ignition::rendering::ArrowVisualPtr arrow =
-              scene->CreateArrowVisual(arrow_entity.id, arrow_entity.unique_name);
+          gz::rendering::ArrowVisualPtr arrow = scene->CreateArrowVisual(arrow_entity.id, arrow_entity.unique_name);
 
           auto ign_material = scene->Material("TesseractContactResultsColor");
           if (ign_material == nullptr)
@@ -186,7 +185,7 @@ void IgnContactResultsRenderManager::render()
           }
 
           arrow->SetMaterial(ign_material);
-          arrow->SetLocalPose(ignition::math::eigen3::convert(pose));
+          arrow->SetLocalPose(gz::math::eigen3::convert(pose));
           arrow->SetInheritScale(false);
           arrow->SetLocalScale(0.1, 0.1, direction.norm());
           arrow->SetUserData(USER_VISIBILITY, true);
@@ -204,7 +203,7 @@ void IgnContactResultsRenderManager::render()
           const std::string parent_key = boost::uuids::to_string(pair.second.getUUID());
           tesseract_gui::EntityContainer::Ptr entity_container = entity_manager->getEntityContainer(parent_key);
           auto entity = entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, parent_key);
-          ignition::rendering::VisualPtr ign_contact_results = scene->CreateVisual(entity.id, entity.unique_name);
+          gz::rendering::VisualPtr ign_contact_results = scene->CreateVisual(entity.id, entity.unique_name);
           ign_contact_results->SetUserData(USER_VISIBILITY, false);
 
           for (const auto& crt : pair.second())
@@ -220,8 +219,7 @@ void IgnContactResultsRenderManager::render()
             std::string arrow_key_name = boost::uuids::to_string(crt.getUUID());
             auto arrow_entity =
                 entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name);
-            ignition::rendering::ArrowVisualPtr arrow =
-                scene->CreateArrowVisual(arrow_entity.id, arrow_entity.unique_name);
+            gz::rendering::ArrowVisualPtr arrow = scene->CreateArrowVisual(arrow_entity.id, arrow_entity.unique_name);
 
             auto ign_material = scene->Material("TesseractContactResultsColor");
             if (ign_material == nullptr)
@@ -233,7 +231,7 @@ void IgnContactResultsRenderManager::render()
             }
 
             arrow->SetMaterial(ign_material);
-            arrow->SetLocalPose(ignition::math::eigen3::convert(pose));
+            arrow->SetLocalPose(gz::math::eigen3::convert(pose));
             arrow->SetInheritScale(false);
             arrow->SetLocalScale(0.1, 0.1, direction.norm());
             arrow->SetUserData(USER_VISIBILITY, true);
