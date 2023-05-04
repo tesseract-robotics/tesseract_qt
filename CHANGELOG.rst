@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.16.4 (2023-05-04)
+-------------------
 * Upgrade gazebo version (`#44 <https://github.com/tesseract-robotics/tesseract_qt/issues/44>`_)
 * Contributors: Levi Armstrong
 
