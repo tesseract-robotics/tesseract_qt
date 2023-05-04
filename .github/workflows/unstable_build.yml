@@ -22,7 +22,8 @@ jobs:
       ROS_DISTRO: noetic
       ROS_REPO: main
       UPSTREAM_WORKSPACE: 'dependencies_unstable.rosinstall'
-      ROSDEP_SKIP_KEYS: "bullet bullet-extras fcl iwyu"
+      ROSDEP_SKIP_KEYS: "bullet bullet-extras fcl iwyu gz-rendering7 gz-common5 gz-math7"
+      ADDITIONAL_DEBS: "libgz-rendering7-dev libgz-common5-dev libgz-math7-dev"
       DOCKER_IMAGE: "rosindustrial/tesseract:noetic"
       PARALLEL_TESTS: false
       NOT_TEST_BUILD: true
