@@ -1,11 +1,11 @@
 #ifndef TESSERACT_QT_RENDERING_SIMPLE_RENDER_WIDGET_H
 #define TESSERACT_QT_RENDERING_SIMPLE_RENDER_WIDGET_H
 
-#include <ignition/common/KeyEvent.hh>
-#include <ignition/common/MouseEvent.hh>
-#include <ignition/math/Color.hh>
-#include <ignition/math/Pose3.hh>
-#include <ignition/math/Vector2.hh>
+#include <gz/common/KeyEvent.hh>
+#include <gz/common/MouseEvent.hh>
+#include <gz/math/Color.hh>
+#include <gz/math/Pose3.hh>
+#include <gz/math/Vector2.hh>
 
 #include <QWidget>
 #include <QOpenGLWidget>
@@ -52,32 +52,32 @@ public:
    * @brief New mouse event triggered
    * @param event New mouse event
    */
-  void newMouseEvent(const ignition::common::MouseEvent& event);
+  void newMouseEvent(const gz::common::MouseEvent& event);
 
   /**
    * @brief New hover event triggered.
    * @param hover_pos Mouse hover screen position
    */
-  void newHoverEvent(const ignition::math::Vector2i& hover_pos);
+  void newHoverEvent(const gz::math::Vector2i& hover_pos);
 
   /**
    * @brief New hover event triggered.
    * @param drop_text Text dropped on the scene
    * @param drop_pos Mouse drop screen position
    */
-  void newDropEvent(const std::string& drop_text, const ignition::math::Vector2i& drop_pos);
+  void newDropEvent(const std::string& drop_text, const gz::math::Vector2i& drop_pos);
 
   /**
    * @brief Handle key release event for snapping
    * @param event The key event to process.
    */
-  void handleKeyPress(const ignition::common::KeyEvent& event);
+  void handleKeyPress(const gz::common::KeyEvent& event);
 
   /**
    * @brief Handle key release event for snapping
    * @param event The key event to process.
    */
-  void handleKeyRelease(const ignition::common::KeyEvent& event);
+  void handleKeyRelease(const gz::common::KeyEvent& event);
 
   /** @brief Render engine to use */
   std::string engine_name{ "ogre2" };
@@ -86,7 +86,7 @@ public:
   std::string scene_name{ "scene" };
 
   /** @brief Initial Camera pose */
-  ignition::math::Pose3d camera_pose{ -6, 0, 6, 0, 0.5, 0 };
+  gz::math::Pose3d camera_pose{ -6, 0, 6, 0, 0.5, 0 };
 
   /** @briefDefault camera near clipping plane distance */
   double camera_near_clip{ 0.01 };
@@ -102,10 +102,10 @@ public:
   unsigned int camera_anti_aliasing{ 8 };
 
   /** @brief Scene background color */
-  ignition::math::Color background_color{ 0.8f, 0.8f, 0.8f, 1.0f };
+  gz::math::Color background_color{ 0.8f, 0.8f, 0.8f, 1.0f };
 
   /** @brief Ambient color */
-  ignition::math::Color ambient_light{ 0.4f, 0.4f, 0.4f, 1.0f };
+  gz::math::Color ambient_light{ 0.4f, 0.4f, 0.4f, 1.0f };
 
   /** @brief True if engine has been initialized */
   bool initialized{ false };
@@ -174,7 +174,7 @@ private:
    * @param screen_pos 2D coordinates on the screen, in pixels.
    * @return 3D coordinates of a point in the 3D scene.
    */
-  ignition::math::Vector3d screenToScene(const ignition::math::Vector2i& screen_pos) const;
+  gz::math::Vector3d screenToScene(const gz::math::Vector2i& screen_pos) const;
 
   /** @brief Pointer to private data */
   std::unique_ptr<RendererImpl> data_;
@@ -199,13 +199,13 @@ public:
    * @brief Set background color of render window
    * @param color olor of render window background
    */
-  void setBackgroundColor(const ignition::math::Color& color);
+  void setBackgroundColor(const gz::math::Color& color);
 
   /**
    * @brief Set ambient light of render window
    * @param ambient Color of ambient light
    */
-  void setAmbientLight(const ignition::math::Color& ambient);
+  void setAmbientLight(const gz::math::Color& ambient);
 
   /**
    * @brief Set engine name used to create the render window
@@ -223,7 +223,7 @@ public:
    * @brief Set the initial pose the render window camera
    * @param pose Initial camera pose
    */
-  void setCameraPose(const ignition::math::Pose3d& pose);
+  void setCameraPose(const gz::math::Pose3d& pose);
 
   /**
    * @brief Set the render window camera's near clipping plane distance
@@ -268,13 +268,13 @@ public:
    * @brief Handle key press event for snapping
    * @param event The key event to process
    */
-  void handleKeyPress(const ignition::common::KeyEvent& event);
+  void handleKeyPress(const gz::common::KeyEvent& event);
 
   /**
    * @brief Handle key release event for snapping
    * @param event The key event to process
    */
-  void handleKeyRelease(const ignition::common::KeyEvent& event);
+  void handleKeyRelease(const gz::common::KeyEvent& event);
 
 private Q_SLOTS:
   void onFrameSwapped();

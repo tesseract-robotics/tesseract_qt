@@ -15,15 +15,15 @@
  *
  */
 #include <tesseract_qt/rendering/utils.h>
-#include <ignition/rendering/RenderingIface.hh>
-#include <ignition/rendering/RenderEngine.hh>
+#include <gz/rendering/RenderingIface.hh>
+#include <gz/rendering/RenderEngine.hh>
 #include <console_bridge/console.h>
 
 namespace tesseract_gui
 {
-ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scene_name)
+gz::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scene_name)
 {
-  auto loaded_eng_names = ignition::rendering::loadedEngines();
+  auto loaded_eng_names = gz::rendering::loadedEngines();
   if (loaded_eng_names.empty())
   {
     CONSOLE_BRIDGE_logDebug("No rendering engine is loaded yet");
@@ -36,7 +36,7 @@ ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scen
     CONSOLE_BRIDGE_logWarn("More than one engine is available. Using engine [%s]", engine_name);
   }
 
-  auto* engine = ignition::rendering::engine(engine_name);
+  auto* engine = gz::rendering::engine(engine_name);
   if (!engine)
   {
     CONSOLE_BRIDGE_logError("Internal error: failed to load engine [%s]", engine_name);
@@ -59,9 +59,9 @@ ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& scen
   return scene;
 }
 
-ignition::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& engine_name, const std::string& scene_name)
+gz::rendering::ScenePtr sceneFromFirstRenderEngine(const std::string& engine_name, const std::string& scene_name)
 {
-  auto* engine = ignition::rendering::engine(engine_name);
+  auto* engine = gz::rendering::engine(engine_name);
   if (!engine)
   {
     CONSOLE_BRIDGE_logError("Internal error: failed to load engine [%s]", engine_name);

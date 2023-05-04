@@ -17,10 +17,10 @@
 
 #include <tesseract_qt/rendering/conversions.h>
 #include <tesseract_geometry/geometries.h>
-#include <ignition/math/eigen3/Conversions.hh>
-#include <ignition/common/MeshManager.hh>
-#include <ignition/rendering/WireBox.hh>
-#include <ignition/rendering/AxisVisual.hh>
+#include <gz/math/eigen3/Conversions.hh>
+#include <gz/common/MeshManager.hh>
+#include <gz/rendering/WireBox.hh>
+#include <gz/rendering/AxisVisual.hh>
 
 const std::string USER_VISIBILITY = "user_visibility";
 const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
@@ -28,61 +28,61 @@ const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
 namespace tesseract_gui
 {
 //////////////////////////////////////////////////
-QColor convert(const ignition::math::Color& color)
+QColor convert(const gz::math::Color& color)
 {
   return QColor(color.R() * 255.0, color.G() * 255.0, color.B() * 255.0, color.A() * 255.0);
 }
 
 //////////////////////////////////////////////////
-ignition::math::Color convert(const QColor& color)
+gz::math::Color convert(const QColor& color)
 {
-  return ignition::math::Color(color.red() / 255.0, color.green() / 255.0, color.blue() / 255.0, color.alpha() / 255.0);
+  return gz::math::Color(color.red() / 255.0, color.green() / 255.0, color.blue() / 255.0, color.alpha() / 255.0);
 }
 
 //////////////////////////////////////////////////
-QPointF convert(const ignition::math::Vector2d& pt) { return QPointF(pt.X(), pt.Y()); }
+QPointF convert(const gz::math::Vector2d& pt) { return QPointF(pt.X(), pt.Y()); }
 
 //////////////////////////////////////////////////
-ignition::math::Vector2d convert(const QPointF& pt) { return ignition::math::Vector2d(pt.x(), pt.y()); }
+gz::math::Vector2d convert(const QPointF& pt) { return gz::math::Vector2d(pt.x(), pt.y()); }
 
 //////////////////////////////////////////////////
-QVector3D convert(const ignition::math::Vector3d& vec) { return QVector3D(vec.X(), vec.Y(), vec.Z()); }
+QVector3D convert(const gz::math::Vector3d& vec) { return QVector3D(vec.X(), vec.Y(), vec.Z()); }
 
 //////////////////////////////////////////////////
-ignition::math::Vector3d convert(const QVector3D& vec) { return ignition::math::Vector3d(vec.x(), vec.y(), vec.z()); }
+gz::math::Vector3d convert(const QVector3D& vec) { return gz::math::Vector3d(vec.x(), vec.y(), vec.z()); }
 
 //////////////////////////////////////////////////
-ignition::common::MouseEvent convert(const QMouseEvent& e)
+gz::common::MouseEvent convert(const QMouseEvent& e)
 {
-  ignition::common::MouseEvent event;
+  gz::common::MouseEvent event;
   event.SetPos(e.pos().x(), e.pos().y());
 
   // Button
   if (e.button() == Qt::LeftButton)
-    event.SetButton(ignition::common::MouseEvent::LEFT);
+    event.SetButton(gz::common::MouseEvent::LEFT);
   else if (e.button() == Qt::RightButton)
-    event.SetButton(ignition::common::MouseEvent::RIGHT);
+    event.SetButton(gz::common::MouseEvent::RIGHT);
   else if (e.button() == Qt::MiddleButton)
-    event.SetButton(ignition::common::MouseEvent::MIDDLE);
+    event.SetButton(gz::common::MouseEvent::MIDDLE);
 
   // Buttons
   if (e.buttons() & Qt::LeftButton)
-    event.SetButtons(event.Buttons() | ignition::common::MouseEvent::LEFT);
+    event.SetButtons(event.Buttons() | gz::common::MouseEvent::LEFT);
 
   if (e.buttons() & Qt::RightButton)
-    event.SetButtons(event.Buttons() | ignition::common::MouseEvent::RIGHT);
+    event.SetButtons(event.Buttons() | gz::common::MouseEvent::RIGHT);
 
   if (e.buttons() & Qt::MiddleButton)
-    event.SetButtons(event.Buttons() | ignition::common::MouseEvent::MIDDLE);
+    event.SetButtons(event.Buttons() | gz::common::MouseEvent::MIDDLE);
 
   // Type
   if (e.type() == QEvent::MouseButtonPress)
-    event.SetType(ignition::common::MouseEvent::PRESS);
+    event.SetType(gz::common::MouseEvent::PRESS);
   else if (e.type() == QEvent::MouseButtonRelease)
-    event.SetType(ignition::common::MouseEvent::RELEASE);
+    event.SetType(gz::common::MouseEvent::RELEASE);
   else if (e.type() == QEvent::MouseMove)
   {
-    event.SetType(ignition::common::MouseEvent::MOVE);
+    event.SetType(gz::common::MouseEvent::MOVE);
 
     // Dragging
     if (e.buttons() || e.button())
@@ -103,11 +103,11 @@ ignition::common::MouseEvent convert(const QMouseEvent& e)
 }
 
 //////////////////////////////////////////////////
-ignition::common::MouseEvent convert(const QWheelEvent& e)
+gz::common::MouseEvent convert(const QWheelEvent& e)
 {
-  ignition::common::MouseEvent event;
+  gz::common::MouseEvent event;
 
-  event.SetType(ignition::common::MouseEvent::SCROLL);
+  event.SetType(gz::common::MouseEvent::SCROLL);
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
   event.SetPos(e.x(), e.y());
 #else
@@ -118,13 +118,13 @@ ignition::common::MouseEvent convert(const QWheelEvent& e)
 
   // Buttons
   if (e.buttons() & Qt::LeftButton)
-    event.SetButtons(event.Buttons() | ignition::common::MouseEvent::LEFT);
+    event.SetButtons(event.Buttons() | gz::common::MouseEvent::LEFT);
 
   if (e.buttons() & Qt::RightButton)
-    event.SetButtons(event.Buttons() | ignition::common::MouseEvent::RIGHT);
+    event.SetButtons(event.Buttons() | gz::common::MouseEvent::RIGHT);
 
   if (e.buttons() & Qt::MiddleButton)
-    event.SetButtons(event.Buttons() | ignition::common::MouseEvent::MIDDLE);
+    event.SetButtons(event.Buttons() | gz::common::MouseEvent::MIDDLE);
 
   // Modifiers
   if (e.modifiers() & Qt::ShiftModifier)
@@ -140,23 +140,23 @@ ignition::common::MouseEvent convert(const QWheelEvent& e)
 }
 
 //////////////////////////////////////////////////
-ignition::common::KeyEvent convert(const QKeyEvent& e)
+gz::common::KeyEvent convert(const QKeyEvent& e)
 {
-  ignition::common::KeyEvent event;
+  gz::common::KeyEvent event;
   event.SetKey(e.key());
   event.SetText(e.text().toStdString());
 
   if (e.type() == QEvent::KeyPress)
   {
-    event.SetType(ignition::common::KeyEvent::PRESS);
+    event.SetType(gz::common::KeyEvent::PRESS);
   }
   else if (e.type() == QEvent::KeyRelease)
   {
-    event.SetType(ignition::common::KeyEvent::RELEASE);
+    event.SetType(gz::common::KeyEvent::RELEASE);
   }
   else
   {
-    event.SetType(ignition::common::KeyEvent::NO_EVENT);
+    event.SetType(gz::common::KeyEvent::NO_EVENT);
   }
 
   event.SetControl(e.modifiers() & Qt::ControlModifier);
@@ -180,13 +180,13 @@ bool isMeshWithColor(const std::string& file_path)
   return false;
 }
 
-std::vector<std::string> loadSceneGraph(ignition::rendering::Scene& scene,
+std::vector<std::string> loadSceneGraph(gz::rendering::Scene& scene,
                                         tesseract_gui::EntityContainer& entity_container,
                                         const tesseract_scene_graph::SceneGraph& scene_graph,
                                         const std::string& prefix)
 {
   std::vector<std::string> link_names;
-  ignition::rendering::VisualPtr root = scene.RootVisual();
+  gz::rendering::VisualPtr root = scene.RootVisual();
   if (prefix.empty())
   {
     for (const auto& link : scene_graph.getLinks())
@@ -207,19 +207,19 @@ std::vector<std::string> loadSceneGraph(ignition::rendering::Scene& scene,
   return link_names;
 }
 
-ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
-                                        tesseract_gui::EntityContainer& entity_container,
-                                        const tesseract_scene_graph::Link& link)
+gz::rendering::VisualPtr loadLink(gz::rendering::Scene& scene,
+                                  tesseract_gui::EntityContainer& entity_container,
+                                  const tesseract_scene_graph::Link& link)
 {
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, link.getName());
-  ignition::rendering::VisualPtr ign_link = scene.CreateVisual(entity.id, entity.unique_name);
+  gz::rendering::VisualPtr ign_link = scene.CreateVisual(entity.id, entity.unique_name);
   ign_link->SetUserData(USER_VISIBILITY, true);
 
-  ignition::rendering::VisualPtr ign_link_visuals = loadLinkVisuals(scene, entity_container, link);
+  gz::rendering::VisualPtr ign_link_visuals = loadLinkVisuals(scene, entity_container, link);
   ign_link_visuals->SetUserData(USER_VISIBILITY, true);
   ign_link->AddChild(ign_link_visuals);
 
-  ignition::rendering::VisualPtr ign_link_collisions = loadLinkCollisions(scene, entity_container, link);
+  gz::rendering::VisualPtr ign_link_collisions = loadLinkCollisions(scene, entity_container, link);
   ign_link_collisions->SetUserData(USER_VISIBILITY, false);
   ign_link->AddChild(ign_link_collisions);
 
@@ -238,13 +238,13 @@ ignition::rendering::VisualPtr loadLink(ignition::rendering::Scene& scene,
   return ign_link;
 }
 
-ignition::rendering::VisualPtr loadLinkVisuals(ignition::rendering::Scene& scene,
-                                               EntityContainer& entity_container,
-                                               const tesseract_scene_graph::Link& link)
+gz::rendering::VisualPtr loadLinkVisuals(gz::rendering::Scene& scene,
+                                         EntityContainer& entity_container,
+                                         const tesseract_scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Visuals";
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
-  ignition::rendering::VisualPtr ign_link_visuals = scene.CreateVisual(entity.id, entity.unique_name);
+  gz::rendering::VisualPtr ign_link_visuals = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& visual : link.visual)
     ign_link_visuals->AddChild(loadLinkGeometry(
@@ -253,13 +253,13 @@ ignition::rendering::VisualPtr loadLinkVisuals(ignition::rendering::Scene& scene
   return ign_link_visuals;
 }
 
-ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& scene,
-                                                  EntityContainer& entity_container,
-                                                  const tesseract_scene_graph::Link& link)
+gz::rendering::VisualPtr loadLinkCollisions(gz::rendering::Scene& scene,
+                                            EntityContainer& entity_container,
+                                            const tesseract_scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Collisions";
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
-  ignition::rendering::VisualPtr ign_link_collisions = scene.CreateVisual(entity.id, entity.unique_name);
+  gz::rendering::VisualPtr ign_link_collisions = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& collision : link.collision)
     ign_link_collisions->AddChild(loadLinkGeometry(
@@ -269,10 +269,10 @@ ignition::rendering::VisualPtr loadLinkCollisions(ignition::rendering::Scene& sc
   return ign_link_collisions;
 }
 
-ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene,
-                                               EntityContainer& entity_container,
-                                               const tesseract_scene_graph::Link& link,
-                                               const ignition::math::v6::AxisAlignedBox& aabb)
+gz::rendering::VisualPtr loadLinkWireBox(gz::rendering::Scene& scene,
+                                         EntityContainer& entity_container,
+                                         const tesseract_scene_graph::Link& link,
+                                         const gz::math::AxisAlignedBox& aabb)
 {
   std::string name = link.getName() + "::WireBox";
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
@@ -287,11 +287,11 @@ ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene
     white->SetEmissive(1.0, 1.0, 1.0);
   }
 
-  ignition::rendering::WireBoxPtr wire_box = scene.CreateWireBox();
+  gz::rendering::WireBoxPtr wire_box = scene.CreateWireBox();
   wire_box->SetBox(aabb);
 
   // Create visual and add wire box
-  ignition::rendering::VisualPtr wire_box_vis = scene.CreateVisual(entity.id, entity.unique_name);
+  gz::rendering::VisualPtr wire_box_vis = scene.CreateVisual(entity.id, entity.unique_name);
   wire_box_vis->SetInheritScale(false);
   wire_box_vis->AddGeometry(wire_box);
   wire_box_vis->SetMaterial(white, false);
@@ -300,14 +300,14 @@ ignition::rendering::VisualPtr loadLinkWireBox(ignition::rendering::Scene& scene
   return wire_box_vis;
 }
 
-ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
-                                            EntityContainer& entity_container,
-                                            const tesseract_scene_graph::Link& link)
+gz::rendering::VisualPtr loadLinkAxis(gz::rendering::Scene& scene,
+                                      EntityContainer& entity_container,
+                                      const tesseract_scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Axis";
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
 
-  ignition::rendering::AxisVisualPtr axis = scene.CreateAxisVisual(entity.id, entity.unique_name);
+  gz::rendering::AxisVisualPtr axis = scene.CreateAxisVisual(entity.id, entity.unique_name);
   axis->SetInheritScale(false);
   axis->Scale(0.1, 0.1, 0.1);
   axis->SetVisible(true);
@@ -315,21 +315,21 @@ ignition::rendering::VisualPtr loadLinkAxis(ignition::rendering::Scene& scene,
   return axis;
 }
 
-ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scene,
-                                                tesseract_gui::EntityContainer& entity_container,
-                                                const tesseract_geometry::Geometry& geometry,
-                                                const Eigen::Vector3d& scale,
-                                                const Eigen::Isometry3d& local_pose,
-                                                const tesseract_scene_graph::Material::ConstPtr& material)
+gz::rendering::VisualPtr loadLinkGeometry(gz::rendering::Scene& scene,
+                                          tesseract_gui::EntityContainer& entity_container,
+                                          const tesseract_geometry::Geometry& geometry,
+                                          const Eigen::Vector3d& scale,
+                                          const Eigen::Isometry3d& local_pose,
+                                          const tesseract_scene_graph::Material::ConstPtr& material)
 {
-  ignition::rendering::MaterialPtr ign_material = loadMaterial(scene, material);
+  gz::rendering::MaterialPtr ign_material = loadMaterial(scene, material);
   switch (geometry.getType())
   {
     case tesseract_geometry::GeometryType::BOX:
     {
       auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-      ignition::rendering::VisualPtr box = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-      box->SetLocalPose(ignition::math::eigen3::convert(local_pose));
+      gz::rendering::VisualPtr box = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      box->SetLocalPose(gz::math::eigen3::convert(local_pose));
       box->AddGeometry(scene.CreateBox());
 
       const auto& shape = static_cast<const tesseract_geometry::Box&>(geometry);
@@ -340,8 +340,8 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
     case tesseract_geometry::GeometryType::SPHERE:
     {
       auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-      ignition::rendering::VisualPtr sphere = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-      sphere->SetLocalPose(ignition::math::eigen3::convert(local_pose));
+      gz::rendering::VisualPtr sphere = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      sphere->SetLocalPose(gz::math::eigen3::convert(local_pose));
       sphere->AddGeometry(scene.CreateSphere());
 
       const auto& shape = static_cast<const tesseract_geometry::Sphere&>(geometry);
@@ -352,8 +352,8 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
     case tesseract_geometry::GeometryType::CYLINDER:
     {
       auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-      ignition::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-      cylinder->SetLocalPose(ignition::math::eigen3::convert(local_pose));
+      gz::rendering::VisualPtr cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      cylinder->SetLocalPose(gz::math::eigen3::convert(local_pose));
       cylinder->AddGeometry(scene.CreateCylinder());
 
       const auto& shape = static_cast<const tesseract_geometry::Cylinder&>(geometry);
@@ -365,8 +365,8 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
     case tesseract_geometry::GeometryType::CONE:
     {
       auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-      ignition::rendering::VisualPtr cone = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-      cone->SetLocalPose(ignition::math::eigen3::convert(local_pose));
+      gz::rendering::VisualPtr cone = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      cone->SetLocalPose(gz::math::eigen3::convert(local_pose));
       cone->AddGeometry(scene.CreateCone());
 
       const auto& shape = static_cast<const tesseract_geometry::Cone&>(geometry);
@@ -385,14 +385,14 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
       if (resource)
       {
         auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-        ignition::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-        mesh->SetLocalPose(ignition::math::eigen3::convert(local_pose));
+        gz::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+        mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
 
-        ignition::rendering::MeshDescriptor descriptor;
+        gz::rendering::MeshDescriptor descriptor;
         descriptor.meshName = resource->getFilePath();
-        ignition::common::MeshManager* mesh_manager = ignition::common::MeshManager::Instance();
+        gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
         descriptor.mesh = mesh_manager->Load(descriptor.meshName);
-        ignition::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+        gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
 
         if (!isMeshWithColor(resource->getFilePath()))
           mesh_geom->SetMaterial(ign_material);
@@ -412,14 +412,14 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
       if (resource)
       {
         auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-        ignition::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-        mesh->SetLocalPose(ignition::math::eigen3::convert(local_pose));
+        gz::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+        mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
 
-        ignition::rendering::MeshDescriptor descriptor;
+        gz::rendering::MeshDescriptor descriptor;
         descriptor.meshName = resource->getFilePath();
-        ignition::common::MeshManager* mesh_manager = ignition::common::MeshManager::Instance();
+        gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
         descriptor.mesh = mesh_manager->Load(descriptor.meshName);
-        ignition::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+        gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
 
         if (!isMeshWithColor(resource->getFilePath()))
           mesh_geom->SetMaterial(ign_material);
@@ -449,8 +449,8 @@ ignition::rendering::VisualPtr loadLinkGeometry(ignition::rendering::Scene& scen
   }
 }
 
-ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
-                                              const tesseract_scene_graph::Material::ConstPtr& material)
+gz::rendering::MaterialPtr loadMaterial(gz::rendering::Scene& scene,
+                                        const tesseract_scene_graph::Material::ConstPtr& material)
 {
   if (material == nullptr)
   {
@@ -483,13 +483,13 @@ ignition::rendering::MaterialPtr loadMaterial(ignition::rendering::Scene& scene,
   return nullptr;
 }
 
-ignition::rendering::VisualPtr loadContactResults(ignition::rendering::Scene& scene,
-                                                  EntityContainer& entity_container,
-                                                  const tesseract_collision::ContactResultVector& contact_results)
+gz::rendering::VisualPtr loadContactResults(gz::rendering::Scene& scene,
+                                            EntityContainer& entity_container,
+                                            const tesseract_collision::ContactResultVector& contact_results)
 {
   std::string name = "ContactResults";
   auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
-  ignition::rendering::VisualPtr ign_visual = scene.CreateVisual(entity.id, entity.unique_name);
+  gz::rendering::VisualPtr ign_visual = scene.CreateVisual(entity.id, entity.unique_name);
   for (const auto& cr : contact_results)
   {
     // For some reason the ignition arrow default length is 0.75m
@@ -541,7 +541,7 @@ ignition::rendering::VisualPtr loadContactResults(ignition::rendering::Scene& sc
     rot.col(2) = z;
     pose.linear() = rot;
     pose.translation() = cr.nearest_points[0];
-    arrow->SetLocalPose(ignition::math::eigen3::convert(pose));
+    arrow->SetLocalPose(gz::math::eigen3::convert(pose));
 
     // Assign material
     if (cr.distance > 0)

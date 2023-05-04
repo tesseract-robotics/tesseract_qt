@@ -7,9 +7,9 @@ find_package(
              OpenGL
   REQUIRED)
 
-find_package(ignition-rendering6 REQUIRED)
-find_package(ignition-common4 COMPONENTS profiler events av REQUIRED)
-find_package(ignition-math6-eigen3 REQUIRED)
+find_package(gz-rendering7 REQUIRED)
+find_package(gz-common5 COMPONENTS profiler events av REQUIRED)
+find_package(gz-math7-eigen3 REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
@@ -35,11 +35,11 @@ add_library(
 target_link_libraries(
   ${PROJECT_NAME}_render_widgets
   PUBLIC tesseract::tesseract_common
-         ignition-common4::ignition-common4-profiler
-         ignition-common4::ignition-common4-events
-         ignition-common4::ignition-common4-av
-         ignition-rendering6::ignition-rendering6
-         ignition-math6::ignition-math6-eigen3
+         gz-common5::gz-common5-profiler
+         gz-common5::gz-common5-events
+         gz-common5::gz-common5-av
+         gz-rendering7::gz-rendering7
+         gz-math7::gz-math7-eigen3
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets

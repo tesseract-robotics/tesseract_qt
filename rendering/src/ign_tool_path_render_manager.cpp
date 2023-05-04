@@ -31,10 +31,10 @@
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 
-#include <ignition/rendering/Scene.hh>
-#include <ignition/rendering/AxisVisual.hh>
-#include <ignition/rendering/ArrowVisual.hh>
-#include <ignition/math/eigen3/Conversions.hh>
+#include <gz/rendering/Scene.hh>
+#include <gz/rendering/AxisVisual.hh>
+#include <gz/rendering/ArrowVisual.hh>
+#include <gz/math/eigen3/Conversions.hh>
 
 #include <tesseract_environment/environment.h>
 
@@ -54,9 +54,9 @@ struct IgnToolPathRenderManager::Implementation
 {
   EntityManager::Ptr entity_manager;
   std::map<boost::uuids::uuid, EntityContainer::Ptr> entity_containers;
-  std::map<boost::uuids::uuid, std::pair<ignition::rendering::VisualPtr, std::string>> working_frames;
+  std::map<boost::uuids::uuid, std::pair<gz::rendering::VisualPtr, std::string>> working_frames;
 
-  void clear(ignition::rendering::Scene& scene, EntityContainer& container)
+  void clear(gz::rendering::Scene& scene, EntityContainer& container)
   {
     for (const auto& ns : container.getTrackedEntities())
     {
@@ -73,7 +73,7 @@ struct IgnToolPathRenderManager::Implementation
     container.clear();
   }
 
-  void clear(ignition::rendering::Scene& scene, const boost::uuids::uuid& uuid)
+  void clear(gz::rendering::Scene& scene, const boost::uuids::uuid& uuid)
   {
     auto it = entity_containers.find(uuid);
     if (it != entity_containers.end())
@@ -85,7 +85,7 @@ struct IgnToolPathRenderManager::Implementation
 
   void clearAll(const std::string& scene_name)
   {
-    ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
+    gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
     if (scene != nullptr)
     {
       for (auto& container : entity_containers)
@@ -101,12 +101,12 @@ struct IgnToolPathRenderManager::Implementation
    * solve the issue until a long term fix is introduced.
    * @details https://github.com/gazebosim/gz-rendering/issues/771
    */
-  void updateVisibility(const ignition::rendering::NodePtr& node, bool parent_visibility, bool recursive)
+  void updateVisibility(const gz::rendering::NodePtr& node, bool parent_visibility, bool recursive)
   {
     for (std::size_t i = 0; i < node->ChildCount(); ++i)
     {
       auto child_node = node->ChildByIndex(i);
-      auto axis = std::dynamic_pointer_cast<ignition::rendering::AxisVisual>(child_node);
+      auto axis = std::dynamic_pointer_cast<gz::rendering::AxisVisual>(child_node);
       if (axis != nullptr)
       {
         if (recursive)
@@ -124,7 +124,7 @@ struct IgnToolPathRenderManager::Implementation
       }
       else
       {
-        auto visual = std::dynamic_pointer_cast<ignition::rendering::Visual>(child_node);
+        auto visual = std::dynamic_pointer_cast<gz::rendering::Visual>(child_node);
         if (visual != nullptr)
         {
           if (recursive)
@@ -150,7 +150,7 @@ struct IgnToolPathRenderManager::Implementation
     }
   }
 
-  void setVisibility(ignition::rendering::Scene& scene,
+  void setVisibility(gz::rendering::Scene& scene,
                      const boost::uuids::uuid& uuid,
                      const boost::uuids::uuid& child_uuid,
                      bool visible,
@@ -172,7 +172,7 @@ struct IgnToolPathRenderManager::Implementation
           bool parent_visibility = std::get<bool>(visual_node->UserData(USER_PARENT_VISIBILITY));
           visual_node->SetVisible(parent_visibility & visible);
           visual_node->SetUserData(USER_VISIBILITY, visible);
-          auto axis = std::dynamic_pointer_cast<ignition::rendering::AxisVisual>(visual_node);
+          auto axis = std::dynamic_pointer_cast<gz::rendering::AxisVisual>(visual_node);
           // There is a bug in the axis visual object which shows the rings so must hide
           if (axis == nullptr)
             updateVisibility(visual_node, visible, recursive);
@@ -200,7 +200,7 @@ void IgnToolPathRenderManager::render()
   }
 
   static const boost::uuids::uuid nil_uuid{};
-  ignition::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->scene_name);
+  gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->scene_name);
 
   for (const auto& event : events_)
   {
@@ -216,8 +216,7 @@ void IgnToolPathRenderManager::render()
       std::string tool_path_name = boost::uuids::to_string(e.getToolPath().getUUID());
       auto tool_path_entity =
           tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, tool_path_name);
-      ignition::rendering::VisualPtr ign_tool_path =
-          scene->CreateVisual(tool_path_entity.id, tool_path_entity.unique_name);
+      gz::rendering::VisualPtr ign_tool_path = scene->CreateVisual(tool_path_entity.id, tool_path_entity.unique_name);
       ign_tool_path->SetUserData(USER_VISIBILITY, true);
       ign_tool_path->SetUserData(USER_PARENT_VISIBILITY, true);
 
@@ -229,7 +228,7 @@ void IgnToolPathRenderManager::render()
         std::string segment_name = boost::uuids::to_string(segment.getUUID());
         auto segment_entity =
             tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, segment_name);
-        ignition::rendering::VisualPtr ign_segment = scene->CreateVisual(segment_entity.id, segment_entity.unique_name);
+        gz::rendering::VisualPtr ign_segment = scene->CreateVisual(segment_entity.id, segment_entity.unique_name);
         ign_segment->SetUserData(USER_VISIBILITY, true);
         ign_segment->SetUserData(USER_PARENT_VISIBILITY, true);
         for (const auto& pose : segment)
@@ -237,8 +236,8 @@ void IgnToolPathRenderManager::render()
           std::string pose_name = boost::uuids::to_string(pose.getUUID());
           auto pose_entity =
               tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pose_name);
-          ignition::rendering::AxisVisualPtr axis = scene->CreateAxisVisual(pose_entity.id, pose_entity.unique_name);
-          axis->SetLocalPose(ignition::math::eigen3::convert(pose.getTransform()));
+          gz::rendering::AxisVisualPtr axis = scene->CreateAxisVisual(pose_entity.id, pose_entity.unique_name);
+          axis->SetLocalPose(gz::math::eigen3::convert(pose.getTransform()));
           axis->SetInheritScale(false);
           axis->SetLocalScale(0.05, 0.05, 0.05);
           axis->SetUserData(USER_VISIBILITY, true);
@@ -301,7 +300,7 @@ void IgnToolPathRenderManager::updateWorkingFrameTransforms()
       {
         auto it = state.link_transforms.find(working_frame.second.second);
         if (it != state.link_transforms.end())
-          working_frame.second.first->SetLocalPose(ignition::math::eigen3::convert(it->second));
+          working_frame.second.first->SetLocalPose(gz::math::eigen3::convert(it->second));
       }
     }
   }

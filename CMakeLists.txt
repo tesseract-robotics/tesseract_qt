@@ -50,8 +50,8 @@ configure_package(
             tesseract_motion_planners
             tesseract_task_composer
             qtadvanceddocking
-            ignition-rendering6
-            ignition-math6-eigen3
-            "ignition-common4 COMPONENTS profiler events av"
+            gz-rendering7
+            gz-math7-eigen3
+            "gz-common5 COMPONENTS profiler events av"
             CFG_EXTRAS
             tesseract_qt-extras.cmake)
