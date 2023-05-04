@@ -21,7 +21,7 @@ jobs:
       OS_CODE_NAME: focal
       ROS_DISTRO: noetic
       ROS_REPO: main
-      AFTER_INIT_SCRIPT: "sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add - && sudo apt-get update"
+      AFTER_INIT_SCRIPT: 'sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add - && sudo apt-get update`
       UPSTREAM_WORKSPACE: 'dependencies.rosinstall'
       ROSDEP_SKIP_KEYS: "bullet bullet-extras fcl iwyu gz-rendering7 gz-common5 gz-math7"
       ADDITIONAL_DEBS: "libgz-rendering7-dev libgz-common5-dev libgz-math7-dev"
