@@ -37,8 +37,15 @@
      <string>View</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionLoad_Plugins"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
+   <addaction name="menuTools"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -73,6 +80,11 @@
   <action name="actionCreate_Perspective">
    <property name="text">
     <string>Create Perspective</string>
+   </property>
+  </action>
+  <action name="actionLoad_Plugins">
+   <property name="text">
+    <string>Load Plugins</string>
    </property>
   </action>
  </widget>

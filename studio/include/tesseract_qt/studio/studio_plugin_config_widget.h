@@ -20,31 +20,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_H
-#define TESSERACT_QT_STUDIO_STUDIO_H
+#ifndef TESSERACT_QT_STUDIO_STUDIO_PLUGIN_CONFIG_WIDGET_H
+#define TESSERACT_QT_STUDIO_STUDIO_PLUGIN_CONFIG_WIDGET_H
 
-#include <QMainWindow>
-#include <memory>
+#include <tesseract_common/macros.h>
+TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+#include <yaml-cpp/yaml.h>
+TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-namespace Ui
-{
-class Studio;
-}
-
+#include <QWidget>
 namespace tesseract_gui
 {
-class Studio : public QMainWindow
+class StudioPluginConfigWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit Studio(QWidget* parent = nullptr);
-  ~Studio();
+  explicit StudioPluginConfigWidget(QWidget* parent = nullptr);
+  ~StudioPluginConfigWidget();
 
-private:
-  struct Implementation;
-  std::unique_ptr<Ui::Studio> ui;
-  std::unique_ptr<Implementation> data_;
+  virtual YAML::Node getPluginConfig() const = 0;
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_STUDIO_STUDIO_H
+
+#endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_CONFIG_WIDGET_H

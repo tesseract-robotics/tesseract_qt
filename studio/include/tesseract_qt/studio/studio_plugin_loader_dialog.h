@@ -20,31 +20,41 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_H
-#define TESSERACT_QT_STUDIO_STUDIO_H
+#ifndef TESSERACT_QT_STUDIO_STUDIO_PLUGIN_LOADER_WIDGET_H
+#define TESSERACT_QT_STUDIO_STUDIO_PLUGIN_LOADER_WIDGET_H
 
-#include <QMainWindow>
+#include <QDialog>
 #include <memory>
 
 namespace Ui
 {
-class Studio;
+class StudioPluginLoaderDialog;
 }
 
 namespace tesseract_gui
 {
-class Studio : public QMainWindow
+class StudioPluginFactory;
+
+class StudioPluginLoaderDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit Studio(QWidget* parent = nullptr);
-  ~Studio();
+  explicit StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
+                                    QWidget* parent = nullptr);
+  ~StudioPluginLoaderDialog();
+
+protected:
+  void showEvent(QShowEvent* event) override;
+
+private Q_SLOTS:
+  void showContextMenu(const QPoint& pos);
 
 private:
   struct Implementation;
-  std::unique_ptr<Ui::Studio> ui;
+  std::unique_ptr<Ui::StudioPluginLoaderDialog> ui;
   std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_STUDIO_STUDIO_H
+
+#endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_LOADER_WIDGET_H

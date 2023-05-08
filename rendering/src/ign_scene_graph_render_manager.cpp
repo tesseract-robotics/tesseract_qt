@@ -70,7 +70,7 @@ struct IgnSceneGraphRenderManager::Implementation
           scene->DestroyNodeById(entity.id);
       }
 
-      entity_manager->removeEntityContainer(boost::uuids::to_string(entity_container.first.ns));
+      entity_manager->removeEntityContainer(entity_container.first.ns);
       entity_container.second->clear();
     }
 
@@ -100,7 +100,7 @@ struct IgnSceneGraphRenderManager::Implementation
       it->second->clear();
 
       entity_containers.erase(it);
-      entity_manager->removeEntityContainer(boost::uuids::to_string(ci.ns));
+      entity_manager->removeEntityContainer(ci.ns);
     }
   }
 };
@@ -127,7 +127,7 @@ void IgnSceneGraphRenderManager::render()
     if (it != data_->entity_containers.end())
       return it->second;
 
-    auto entity_container = data_->entity_manager->getEntityContainer(boost::uuids::to_string(component_info.ns));
+    auto entity_container = data_->entity_manager->getEntityContainer(component_info.ns);
     data_->entity_containers[component_info] = entity_container;
     return entity_container;
   };

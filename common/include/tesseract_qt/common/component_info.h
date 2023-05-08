@@ -25,8 +25,8 @@
 
 #include <string>
 #include <functional>
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_hash.hpp>
+#include <memory>
+#include <boost/serialization/access.hpp>
 
 namespace tesseract_gui
 {
@@ -41,11 +41,17 @@ struct ComponentInfo
   /** @brief Assigns provided scene name and generates random namespace */
   explicit ComponentInfo(std::string scene_name, std::string description = "");
 
+  /** @brief Assigns provided scene name and use namespace string generates namespace uuid */
+  explicit ComponentInfo(std::string scene_name, std::string ns, std::string description = "");
+
   /** @brief The associated render scene */
   std::string scene_name{ "tesseract_default" };
 
-  /** @brief The associated namespace */
-  boost::uuids::uuid ns{};
+  /**
+   * @brief The associated namespace
+   * @details Depending on the constructor this is generated using boost uuid converted to string
+   */
+  std::string ns;
 
   /**
    * @brief A description
@@ -56,7 +62,7 @@ struct ComponentInfo
   /** @brief Check if it has a parent component */
   bool hasParent() const;
 
-  /** @brief Get the parent hash */
+  /** @brief Get the parent component info */
   std::shared_ptr<const ComponentInfo> getParent() const;
 
   /** @brief Create child component info object */
@@ -64,15 +70,17 @@ struct ComponentInfo
 
   /**
    * @brief Check if the provided ComponentInfo is the objects parent
+   * @note A parent and child should have different namespaces
    * @param other The object to check if parent
-   * @return True if the scene_name is equal and the provided objects ns equals this objects parent_ns, otherwise false
+   * @return True if the scene_name is equal and internally stored parent is the provided object, otherwise false
    */
   bool isParent(const ComponentInfo& other) const;
 
   /**
    * @brief Check if the provided ComponentInfo a child of this object
+   * @note A parent and child should have different namespaces
    * @param other The object to check if child
-   * @return True if the scene_name is equal and the provided objects parent_ns equals this objects ns, otherwise false
+   * @return True if the scene_name is equal and internally stored parent is the provided object, otherwise false
    */
   bool isChild(const ComponentInfo& other) const;
 
@@ -80,6 +88,10 @@ struct ComponentInfo
   bool operator!=(const ComponentInfo& rhs) const;
 
 private:
+  friend class boost::serialization::access;
+  template <class Archive>
+  void serialize(Archive& ar, const unsigned int version);  // NOLINT
+
   /** @brief The associated parent ns */
   std::shared_ptr<const ComponentInfo> parent_;
 };
@@ -93,7 +105,7 @@ struct hash<tesseract_gui::ComponentInfo>
 {
   auto operator()(const tesseract_gui::ComponentInfo& obj) const -> size_t
   {
-    return (hash<std::string>{}(obj.scene_name) ^ hash<boost::uuids::uuid>{}(obj.ns) ^
+    return (hash<std::string>{}(obj.scene_name) ^ hash<std::string>{}(obj.ns) ^
             hash<std::shared_ptr<const tesseract_gui::ComponentInfo>>{}(obj.getParent()));
   }
 };

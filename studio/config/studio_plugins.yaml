@@ -1,0 +1,43 @@
+studio_plugins:
+  search_paths:
+    - /usr/local/lib
+  search_libraries:
+    - tesseract_qt_studio_factories
+  component_infos:
+    default:
+      scene_name: default_scene
+      namespace: main # optional
+      description: the default scene # optional
+    default_child:
+      parent: default
+      namespace: main # optional
+      description: the default scene child # optional
+  components:
+    plugins:
+      RenderScene:
+        class: IgnitionRenderWidgetFactory
+        config:
+          component_info: default
+          show_grid: true    # optional
+          show_sky: true     # optional
+          show_shadows: true # optional
+      Environment:
+        class: EnvironmentWidgetFactory
+        config:
+          component_info: default
+      Manipulation:
+        class: ManipulationWidgetFactory
+        config:
+          component_info: default
+      ToolPath:
+        class: ToolPathWidgetFactory
+        config:
+          component_info: default
+      JointTrajectory:
+        class: JointTrajectoryWidgetFactory
+        config:
+          component_info: default_child
+
+
+
+

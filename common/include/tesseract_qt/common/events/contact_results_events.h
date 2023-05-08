@@ -24,6 +24,7 @@
 #define TESSERACT_QT_COMMON_CONTACT_RESULTS_EVENTS_H
 
 #include <memory>
+#include <variant>
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 #include <tesseract_qt/common/contact_results_types.h>

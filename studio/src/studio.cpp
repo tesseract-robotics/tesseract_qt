@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2023 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -52,6 +52,8 @@
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/widgets/load_environment_dialog.h>
+#include <tesseract_qt/studio/studio_plugin_loader_dialog.h>
+#include <tesseract_qt/studio/studio_plugin_factory.h>
 
 #include <DockManager.h>
 #include <DockAreaWidget.h>
@@ -81,6 +83,9 @@ struct Studio::Implementation
 
   LoadEnvironmentDialog open_dialog;
 
+  std::shared_ptr<StudioPluginFactory> plugin_factory;
+  StudioPluginLoaderDialog plugin_loader_dialog;
+
   /** @brief Saves the dock manager state and the main window geometry */
   void saveState();
 
@@ -105,6 +110,8 @@ Studio::Implementation::Implementation(Studio* app)
   , tool_path_manager(component_info, entity_manager)
   , contact_results_manager(component_info)
   , open_dialog(component_info, app)
+  , plugin_factory(std::make_shared<StudioPluginFactory>())
+  , plugin_loader_dialog(plugin_factory, app)
 {
 }
 
@@ -167,10 +174,12 @@ Studio::Studio(QWidget* parent)
   ui->actionSave_State->setIcon(icons::getSaveIcon());
   ui->actionRestore_State->setIcon(icons::getRestoreIcon());
   ui->actionCreate_Perspective->setIcon(icons::getLayoutIcon());
+  ui->actionLoad_Plugins->setIcon(icons::getPluginIcon());
   connect(ui->actionOpen, &QAction::triggered, [this]() { data_->open_dialog.show(); });
   connect(ui->actionSave_State, &QAction::triggered, [this]() { data_->saveState(); });
   connect(ui->actionRestore_State, &QAction::triggered, [this]() { data_->restoreState(); });
   connect(ui->actionCreate_Perspective, &QAction::triggered, [this]() { data_->createPerspective(); });
+  connect(ui->actionLoad_Plugins, &QAction::triggered, [this]() { data_->plugin_loader_dialog.show(); });
   data_->perspective_list_action = new QWidgetAction(this);
   data_->perspective_comboBox = new QComboBox(this);
   data_->perspective_comboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);

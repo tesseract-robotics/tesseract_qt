@@ -20,31 +20,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_H
-#define TESSERACT_QT_STUDIO_STUDIO_H
 
-#include <QMainWindow>
-#include <memory>
-
-namespace Ui
-{
-class Studio;
-}
+#include <tesseract_qt/studio/studio_plugin_config_widget.h>
 
 namespace tesseract_gui
 {
-class Studio : public QMainWindow
-{
-  Q_OBJECT
+StudioPluginConfigWidget::StudioPluginConfigWidget(QWidget* parent) : QWidget(parent) {}
+StudioPluginConfigWidget::~StudioPluginConfigWidget() = default;
 
-public:
-  explicit Studio(QWidget* parent = nullptr);
-  ~Studio();
-
-private:
-  struct Implementation;
-  std::unique_ptr<Ui::Studio> ui;
-  std::unique_ptr<Implementation> data_;
-};
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_STUDIO_STUDIO_H
