@@ -33,11 +33,28 @@ StudioRenderPluginConfigWidget::StudioRenderPluginConfigWidget(QWidget* parent)
 
 StudioRenderPluginConfigWidget::~StudioRenderPluginConfigWidget() = default;
 
-YAML::Node StudioRenderPluginConfigWidget::getPluginConfig() const
-{
-  // Get Name
-  const std::string name = ui->name_line_edit->text().toStdString();
+std::string StudioRenderPluginConfigWidget::getClassName() const { return "StudioRenderPluginWidgetFactory"; }
 
+void StudioRenderPluginConfigWidget::setName(const std::string& name) { ui->name_line_edit->setText(name.c_str()); }
+
+std::string StudioRenderPluginConfigWidget::getName() const { return ui->name_line_edit->text().toStdString(); }
+
+void StudioRenderPluginConfigWidget::setConfig(const YAML::Node& config)
+{
+  if (config["component_info"])  // NOLINT
+  {
+    const YAML::Node& component_info = config["component_info"];
+  }
+
+  if (config["show_sky"])  // NOLINT
+    ui->show_sky_check_box->setChecked(config["show_sky"].as<bool>());
+
+  if (config["show_grid"])  // NOLINT
+    ui->show_grid_check_box->setChecked(config["show_grid"].as<bool>());
+}
+
+YAML::Node StudioRenderPluginConfigWidget::getConfig() const
+{
   // Component Info
   YAML::Node component_info;
   component_info["scene_name"] = "scene_name_test";
@@ -50,11 +67,6 @@ YAML::Node StudioRenderPluginConfigWidget::getPluginConfig() const
   config_node["show_sky"] = ui->show_sky_check_box->isChecked();
   config_node["show_grid"] = ui->show_grid_check_box->isChecked();
 
-  // Plugin Entry
-  YAML::Node node;
-  node[name]["class"] = "StudioRenderPluginWidgetFactory";
-  node[name]["config"] = config_node;
-
-  return node;
+  return config_node;
 }
 }  // namespace tesseract_gui

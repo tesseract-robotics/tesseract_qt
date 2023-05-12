@@ -20,37 +20,39 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_RENDER_PLUGIN_CONFIG_WIDGET_H
-#define TESSERACT_QT_STUDIO_STUDIO_RENDER_PLUGIN_CONFIG_WIDGET_H
+#ifndef TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
+#define TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
 
-#include <tesseract_qt/studio/studio_plugin_config_widget.h>
+#include <QWidget>
+#include <QStringListModel>
 #include <memory>
 
 namespace Ui
 {
-class StudioRenderPluginConfigWidget;
+class ComponentInfoWidget;
 }
 
 namespace tesseract_gui
 {
-class StudioRenderPluginConfigWidget : public StudioPluginConfigWidget
+class ComponentInfo;
+class ComponentInfoWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit StudioRenderPluginConfigWidget(QWidget* parent = nullptr);
-  ~StudioRenderPluginConfigWidget();
+  explicit ComponentInfoWidget(QWidget* parent = nullptr);
+  ~ComponentInfoWidget();
 
-  std::string getClassName() const override;
+  void setSceneNameModel(QStringListModel* scene_name_model);
+  void setParentNamespaceModel(QStringListModel* parent_ns_model);
 
-  void setName(const std::string& name) override;
-  std::string getName() const override;
-
-  void setConfig(const YAML::Node& config) override;
-  YAML::Node getConfig() const override;
+  void setComponentInfo(const ComponentInfo& component_info);
+  ComponentInfo getComponentInfo() const;
 
 private:
-  std::unique_ptr<Ui::StudioRenderPluginConfigWidget> ui;
+  std::unique_ptr<Ui::ComponentInfoWidget> ui;
 };
+
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_STUDIO_STUDIO_RENDER_PLUGIN_CONFIG_WIDGET_H
+
+#endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H

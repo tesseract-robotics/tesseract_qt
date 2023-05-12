@@ -36,9 +36,9 @@ const std::string StudioConfigWidgetFactory::SECTION_NAME = "StdConf";
 
 const std::string& StudioConfigWidgetFactory::getSectionName() { return StudioConfigWidgetFactory::SECTION_NAME; }
 
-const std::string StudioFactory::SECTION_NAME = "Studio";
+// const std::string StudioFactory::SECTION_NAME = "Studio";
 
-const std::string& StudioFactory::getSectionName() { return StudioFactory::SECTION_NAME; }
+// const std::string& StudioFactory::getSectionName() { return StudioFactory::SECTION_NAME; }
 
 StudioPluginFactory::StudioPluginFactory()
 {
@@ -124,43 +124,44 @@ void StudioPluginFactory::removeStudioPlugin(const std::string& name)
     plugin_info_.default_plugin.clear();
 }
 
-StudioFactoryResult::UPtr StudioPluginFactory::createStudioObject(const std::string& name) const
+StudioPluginConfigWidget* StudioPluginFactory::createStudioConfigWidget(const std::string& name) const
 {
   auto cm_it = plugin_info_.plugins.find(name);
   if (cm_it == plugin_info_.plugins.end())
   {
-    CONSOLE_BRIDGE_logWarn("StudioPluginFactory, tried to get studio object '%s' that does not "
+    CONSOLE_BRIDGE_logWarn("StudioPluginFactory, tried to get studio config widget '%s' that does not "
                            "exist!",
                            name.c_str());
     return nullptr;
   }
 
-  return createStudioObject(name, cm_it->second);
+  return createStudioConfigWidget(name, cm_it->second);
 }
 
-StudioFactoryResult::UPtr StudioPluginFactory::createStudioObject(const std::string& name,
-                                                                  const tesseract_common::PluginInfo& plugin_info) const
+StudioPluginConfigWidget*
+StudioPluginFactory::createStudioConfigWidget(const std::string& name,
+                                              const tesseract_common::PluginInfo& plugin_info) const
 {
-  //  try
-  //  {
-  //    auto it = factories_.find(plugin_info.class_name);
-  //    if (it != factories_.end())
-  //      return it->second->create(name, plugin_info.config);
+  try
+  {
+    auto it = factories_.find(plugin_info.class_name);
+    if (it != factories_.end())
+      return it->second->create(name, plugin_info.config);
 
-  //    auto plugin = plugin_loader_.instantiate<StudioFactory>(plugin_info.class_name);
-  //    if (plugin == nullptr)
-  //    {
-  //      CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s'", plugin_info.class_name.c_str());
-  //      return nullptr;
-  //    }
-  //    factories_[plugin_info.class_name] = plugin;
-  //    return plugin->create(name, plugin_info.config);
-  //  }
-  //  catch (const std::exception& e)
-  //  {
-  //    CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s', Details: %s", plugin_info.class_name.c_str(), e.what());
-  //    return nullptr;
-  //  }
+    auto plugin = plugin_loader_.instantiate<StudioConfigWidgetFactory>(plugin_info.class_name);
+    if (plugin == nullptr)
+    {
+      CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s'", plugin_info.class_name.c_str());
+      return nullptr;
+    }
+    factories_[plugin_info.class_name] = plugin;
+    return plugin->create(name, plugin_info.config);
+  }
+  catch (const std::exception& e)
+  {
+    CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s', Details: %s", plugin_info.class_name.c_str(), e.what());
+    return nullptr;
+  }
 }
 
 void StudioPluginFactory::saveConfig(const tesseract_common::fs::path& file_path) const

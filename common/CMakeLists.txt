@@ -23,6 +23,7 @@ qt5_wrap_cpp(
   include/tesseract_qt/common/environment_manager.h
   include/tesseract_qt/common/environment_wrapper.h
   include/tesseract_qt/common/tree_view.h
+  include/tesseract_qt/common/widgets/component_info_widget.h
   include/tesseract_qt/common/widgets/load_environment_widget.h
   include/tesseract_qt/common/widgets/load_environment_dialog.h)
 
@@ -30,6 +31,7 @@ qt5_wrap_ui(
   COMMON_WIDGETS_headers_UI
   include/tesseract_qt/common/cartesian_editor_widget.ui
   include/tesseract_qt/common/image_viewer_widget.ui
+  include/tesseract_qt/common/widgets/component_info_widget.ui
   include/tesseract_qt/common/widgets/load_environment_widget.ui
   include/tesseract_qt/common/widgets/load_environment_dialog.ui)
 
@@ -61,6 +63,7 @@ add_library(
   src/events/scene_graph_render_manager.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
+  src/widgets/component_info_widget.cpp
   src/widgets/load_environment_widget.cpp
   src/widgets/load_environment_dialog.cpp
   src/calibration_info_standard_item.cpp

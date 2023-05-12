@@ -64,7 +64,7 @@ public:
 
   virtual ~StudioConfigWidgetFactory() = default;
 
-  virtual StudioPluginConfigWidget* create() const = 0;
+  virtual StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const = 0;
 
   static const std::string& getSectionName();
 
@@ -83,23 +83,23 @@ struct StudioFactoryResult
   QMenu* menu{ nullptr };
 };
 
-/** @brief Studio Factory class used by the Tesseract Studio for loading objects */
-class StudioFactory
-{
-public:
-  using Ptr = std::shared_ptr<StudioFactory>;
-  using ConstPtr = std::shared_ptr<const StudioFactory>;
+///** @brief Studio Factory class used by the Tesseract Studio for loading objects */
+// class StudioFactory
+//{
+// public:
+//  using Ptr = std::shared_ptr<StudioFactory>;
+//  using ConstPtr = std::shared_ptr<const StudioFactory>;
 
-  virtual ~StudioFactory() = default;
+//  virtual ~StudioFactory() = default;
 
-  virtual StudioFactoryResult::UPtr create(const std::string& name) const = 0;
+//  virtual StudioFactoryResult::UPtr create(const std::string& name) const = 0;
 
-  static const std::string& getSectionName();
+//  static const std::string& getSectionName();
 
-protected:
-  static const std::string SECTION_NAME;
-  friend class PluginLoader;
-};
+// protected:
+//  static const std::string SECTION_NAME;
+//  friend class PluginLoader;
+//};
 
 class StudioPluginFactory
 {
@@ -215,20 +215,20 @@ public:
   void removeStudioPlugin(const std::string& name);
 
   /**
-   * @brief Get studio object given name
+   * @brief Get studio config widget given name
    * @details This looks for studio plugin info. If not found nullptr is returned.
    * @param name The name
    */
-  StudioFactoryResult::UPtr createStudioObject(const std::string& name) const;
+  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name) const;
 
   /**
-   * @brief Get studio object given name
+   * @brief Get studio config widget given name and plugin info
    * @details This looks for studio plugin info. If not found nullptr is returned.
    * @param name The name
    * @param plugin_info The plugin information to create task composer executor object
    */
-  StudioFactoryResult::UPtr createStudioObject(const std::string& name,
-                                               const tesseract_common::PluginInfo& plugin_info) const;
+  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name,
+                                                     const tesseract_common::PluginInfo& plugin_info) const;
 
   /**
    * @brief Save the plugin information to a yaml config file
@@ -247,7 +247,7 @@ public:
   const tesseract_common::PluginLoader& getPluginLoader() const;
 
 private:
-  mutable std::map<std::string, StudioFactory::Ptr> factories_;
+  mutable std::map<std::string, StudioConfigWidgetFactory::Ptr> factories_;
   tesseract_common::PluginInfoContainer plugin_info_;
   tesseract_common::PluginLoader plugin_loader_;
 };

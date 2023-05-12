@@ -134,7 +134,10 @@ std::shared_ptr<EnvironmentWrapper> EnvironmentManager::findHelper(const Compone
     return env_wrapper;
 
   if (component_info.hasParent())
-    return findHelper(*component_info.getParent());
+  {
+    ComponentInfo parent_component_info = component_info.getParentComponentInfo();
+    return findHelper(parent_component_info);
+  }
 
   return nullptr;
 }

@@ -279,7 +279,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         data_->current_environment = jts.getEnvironment();
 
         // If no parent then it using the top most so no need to overwrite existing environment
-        if (data_->model->getComponentInfo().getParent() != nullptr)
+        if (data_->model->getComponentInfo().hasParent())
         {
           auto env_wrapper =
               std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
@@ -310,7 +310,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         data_->current_environment = jts.getEnvironment();
 
         // If no parent then it using the top most so no need to overwrite existing environment
-        if (data_->model->getComponentInfo().getParent() != nullptr)
+        if (data_->model->getComponentInfo().hasParent())
         {
           auto env_wrapper =
               std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
@@ -344,8 +344,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
       {
-        if (data_->model->getComponentInfo().getParent() != nullptr &&
-            data_->current_environment != jts.getEnvironment())
+        if (data_->model->getComponentInfo().hasParent() && data_->current_environment != jts.getEnvironment())
         {
           auto env_wrapper =
               std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());

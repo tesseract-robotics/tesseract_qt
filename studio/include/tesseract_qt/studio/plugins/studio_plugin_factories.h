@@ -30,7 +30,13 @@ template <typename StudioConfigWidgetType>
 class StudioConfigWidgetFactoryImpl : public StudioConfigWidgetFactory
 {
 public:
-  StudioPluginConfigWidget* create() const override { return new StudioConfigWidgetType(); }
+  StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const override
+  {
+    auto widget = new StudioConfigWidgetType();
+    widget->setName(name);
+    widget->setConfig(config);
+    return widget;
+  }
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H

@@ -39,7 +39,35 @@ public:
   explicit StudioPluginConfigWidget(QWidget* parent = nullptr);
   ~StudioPluginConfigWidget();
 
-  virtual YAML::Node getPluginConfig() const = 0;
+  /**
+   * @brief Get the class name
+   * @return The class name
+   */
+  virtual std::string getClassName() const = 0;
+
+  /**
+   * @brief Set name associated with the plugin
+   * @param name The name to assign to the plugin
+   */
+  virtual void setName(const std::string& name) = 0;
+
+  /**
+   * @brief Get name associated with the plugin
+   * @return The name assigned to the plugin
+   */
+  virtual std::string getName() const = 0;
+
+  /**
+   * @brief Set the plugin config
+   * @param config The yaml config
+   */
+  virtual void setConfig(const YAML::Node& config) = 0;
+
+  /**
+   * @brief Get the plugin config
+   * @return The yaml config
+   */
+  virtual YAML::Node getConfig() const = 0;
 };
 }  // namespace tesseract_gui
 

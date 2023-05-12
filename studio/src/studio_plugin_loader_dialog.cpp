@@ -27,6 +27,9 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_common/plugin_loader.h>
 
+#include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/uuid_hash.hpp>
+
 #include <QMenu>
 #include <QStringListModel>
 
@@ -177,7 +180,17 @@ void StudioPluginLoaderDialog::showSearchLibraryContextMenu(const QPoint& pos)
 
 void StudioPluginLoaderDialog::addPluginWidget()
 {
-  // data_->plugin_factory->cre
+  std::string name = "StudioPlugin" + std::to_string(boost::uuids::hash_value(boost::uuids::random_generator()()));
+  tesseract_common::PluginInfo plugin_info;
+  plugin_info.class_name = ui->combo_box->currentText().toStdString();
+
+  StudioPluginConfigWidget* widget = data_->plugin_factory->createStudioConfigWidget(name, plugin_info);
+
+  if (widget == nullptr)
+    return;
+
+  QString title = (plugin_info.class_name + "(" + name + ")").c_str();
+  ui->tool_box->addItem(widget, title);
 }
 
 void StudioPluginLoaderDialog::refreshSearchPathsAndLibraries()

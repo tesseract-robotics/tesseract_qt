@@ -34,6 +34,48 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 namespace YAML
 {
 template <>
+struct convert<tesseract_gui::ComponentInfo>
+{
+  static Node encode(const tesseract_gui::ComponentInfo& rhs)
+  {
+    YAML::Node component_info;
+    component_info["scene_name"] = rhs.scene_name;
+    component_info["ns"] = rhs.ns;
+    component_info["description"] = rhs.description;
+    if (rhs.hasParent())
+    {
+      component_info["parent"]["ns"] = rhs.parent_info.first;
+      if (!rhs.parent_info.second.empty())
+        component_info["parent"]["data"] = rhs.parent_info.second;
+    }
+
+    return component_info;
+  }
+
+  static bool decode(const Node& node, tesseract_gui::ComponentInfo& rhs)
+  {
+    tesseract_gui::ComponentInfo component_info;
+    if (node["scene_name"])
+      component_info.scene_name = node["scene_name"].as<std::string>();
+
+    if (node["ns"])
+      component_info.ns = node["ns"].as<std::string>();
+
+    if (node["description"])
+      component_info.description = node["description"].as<std::string>();
+
+    if (node["parent"])
+    {
+      component_info.parent_info.first = node["parent"]["ns"].as<std::string>();
+      if (node["parent"]["data"])
+        component_info.parent_info.second = node["parent"]["data"].as<std::string>();
+    }
+
+    return true;
+  }
+};
+
+template <>
 struct convert<tesseract_gui::StudioPluginInfo>
 {
   static Node encode(const tesseract_gui::StudioPluginInfo& rhs)

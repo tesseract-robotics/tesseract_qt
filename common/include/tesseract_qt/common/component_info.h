@@ -59,11 +59,17 @@ struct ComponentInfo
    */
   std::string description;
 
+  /**
+   * @brief The associated parent ns
+   * @details Every time a child is created the parent namespace is prepended separated by ::
+   */
+  std::pair<std::string, std::string> parent_info;
+
   /** @brief Check if it has a parent component */
   bool hasParent() const;
 
-  /** @brief Get the parent component info */
-  std::shared_ptr<const ComponentInfo> getParent() const;
+  /** @brief Create parent component info using parent info */
+  ComponentInfo getParentComponentInfo() const;
 
   /** @brief Create child component info object */
   ComponentInfo createChild() const;
@@ -87,13 +93,13 @@ struct ComponentInfo
   bool operator==(const ComponentInfo& rhs) const;
   bool operator!=(const ComponentInfo& rhs) const;
 
+  // These are helper functions
+  static std::pair<std::string, std::string> createParentInfo(const ComponentInfo& component_info);
+
 private:
   friend class boost::serialization::access;
   template <class Archive>
   void serialize(Archive& ar, const unsigned int version);  // NOLINT
-
-  /** @brief The associated parent ns */
-  std::shared_ptr<const ComponentInfo> parent_;
 };
 
 }  // namespace tesseract_gui
@@ -106,7 +112,7 @@ struct hash<tesseract_gui::ComponentInfo>
   auto operator()(const tesseract_gui::ComponentInfo& obj) const -> size_t
   {
     return (hash<std::string>{}(obj.scene_name) ^ hash<std::string>{}(obj.ns) ^
-            hash<std::shared_ptr<const tesseract_gui::ComponentInfo>>{}(obj.getParent()));
+            hash<std::string>{}(obj.parent_info.first) ^ hash<std::string>{}(obj.parent_info.second));
   }
 };
 
