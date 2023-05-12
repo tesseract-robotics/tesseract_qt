@@ -48,7 +48,11 @@ protected:
   void showEvent(QShowEvent* event) override;
 
 private Q_SLOTS:
-  void showContextMenu(const QPoint& pos);
+  void showPluginContextMenu(const QPoint& pos);
+  void showSearchPathContextMenu(const QPoint& pos);
+  void showSearchLibraryContextMenu(const QPoint& pos);
+  void addPluginWidget();
+  void refreshSearchPathsAndLibraries();
 
 private:
   struct Implementation;

@@ -85,6 +85,8 @@ void StudioPluginFactory::addSearchPath(const std::string& path) { plugin_loader
 
 std::set<std::string> StudioPluginFactory::getSearchPaths() const { return plugin_loader_.search_paths; }
 
+void StudioPluginFactory::setSearchPaths(const std::set<std::string>& paths) { plugin_loader_.search_paths = paths; }
+
 void StudioPluginFactory::clearSearchPaths() { plugin_loader_.search_paths.clear(); }
 
 void StudioPluginFactory::addSearchLibrary(const std::string& library_name)
@@ -93,6 +95,11 @@ void StudioPluginFactory::addSearchLibrary(const std::string& library_name)
 }
 
 std::set<std::string> StudioPluginFactory::getSearchLibraries() const { return plugin_loader_.search_libraries; }
+
+void StudioPluginFactory::setSearchLibraries(const std::set<std::string>& library_names)
+{
+  plugin_loader_.search_libraries = library_names;
+}
 
 void StudioPluginFactory::clearSearchLibraries() { plugin_loader_.search_libraries.clear(); }
 

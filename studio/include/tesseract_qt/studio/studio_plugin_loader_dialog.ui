@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>369</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,13 +36,78 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QComboBox" name="combo_box"/>
+       <widget class="QComboBox" name="combo_box">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="add_push_button">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Add</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Search Paths:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListView" name="search_paths_list_view">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Search Libraries</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListView" name="search_libraries_list_view">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Plugins:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolBox" name="tool_box">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
@@ -60,19 +125,6 @@
       </property>
       <attribute name="label">
        <string>Page 1</string>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="page_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>382</width>
-        <height>68</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Page 2</string>
       </attribute>
      </widget>
     </widget>
@@ -94,6 +146,26 @@
   <action name="actionRemove_Plugin">
    <property name="text">
     <string>Remove Plugin</string>
+   </property>
+  </action>
+  <action name="actionRemove_Search_Path">
+   <property name="text">
+    <string>Remove Search_Path</string>
+   </property>
+  </action>
+  <action name="actionRemove_Search_Library">
+   <property name="text">
+    <string>Remove Search Library</string>
+   </property>
+  </action>
+  <action name="actionAdd_Search_Path">
+   <property name="text">
+    <string>Add Search Path</string>
+   </property>
+  </action>
+  <action name="actionAdd_Search_Library">
+   <property name="text">
+    <string>Add Search Library</string>
    </property>
   </action>
  </widget>

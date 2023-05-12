@@ -159,6 +159,12 @@ public:
    */
   std::set<std::string> getSearchPaths() const;
 
+  /**
+   * @brief Set locations for the plugin loader to search
+   * @param paths A set of full path to the directories
+   */
+  void setSearchPaths(const std::set<std::string>& paths);
+
   /** @brief Clear the search paths */
   void clearSearchPaths();
 
@@ -173,6 +179,12 @@ public:
    * @return The search libraries
    */
   std::set<std::string> getSearchLibraries() const;
+
+  /**
+   * @brief Add a libraries to search for plugin name
+   * @param library_names The library names without the prefix or suffix
+   */
+  void setSearchLibraries(const std::set<std::string>& library_names);
 
   /** @brief Clean the search libraries */
   void clearSearchLibraries();
