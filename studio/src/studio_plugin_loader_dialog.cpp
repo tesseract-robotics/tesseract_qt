@@ -24,7 +24,11 @@
 #include <tesseract_qt/studio/studio_plugin_factory.h>
 #include "ui_studio_plugin_loader_dialog.h"
 
+#include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/component_info_model.h>
+
 #include <tesseract_common/plugin_loader.h>
 
 #include <boost/uuid/random_generator.hpp>
@@ -37,12 +41,20 @@ namespace tesseract_gui
 {
 struct StudioPluginLoaderDialog::Implementation
 {
-  QMenu plugin_contect_menu;
-  QMenu search_path_contect_menu;
-  QMenu search_library_contect_menu;
+  // Plugin factory
   std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory;
+
+  // Menus
+  QMenu plugin_context_menu;
+  QMenu search_path_context_menu;
+  QMenu search_library_context_menu;
+  QMenu component_info_context_menu;
+
+  // Models
   QStringListModel search_paths_model;
   QStringListModel search_libraries_model;
+  QStringListModel component_info_keys;
+  ComponentInfoModel component_info_model;
 };
 
 StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
@@ -53,20 +65,35 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   ui->tool_box->removeItem(0);
   ui->search_paths_list_view->setModel(&data_->search_paths_model);
   ui->search_libraries_list_view->setModel(&data_->search_libraries_model);
+  ui->component_infos_tree_view->setModel(&data_->component_info_model);
+
+  // Tests remove next line
+  data_->component_info_model.add("test", ComponentInfo());
 
   setWindowIcon(icons::getPluginIcon());
   setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
   setModal(true);
 
   data_->plugin_factory = std::move(plugin_factory);
-  data_->plugin_contect_menu.addAction(ui->actionRemove_Plugin);
-  data_->plugin_contect_menu.setWindowModality(Qt::ApplicationModal);
-  data_->search_path_contect_menu.addAction(ui->actionAdd_Search_Path);
-  data_->search_path_contect_menu.addAction(ui->actionRemove_Search_Path);
-  data_->search_path_contect_menu.setWindowModality(Qt::ApplicationModal);
-  data_->search_library_contect_menu.addAction(ui->actionAdd_Search_Library);
-  data_->search_library_contect_menu.addAction(ui->actionRemove_Search_Library);
-  data_->search_library_contect_menu.setWindowModality(Qt::ApplicationModal);
+
+  data_->plugin_context_menu.addAction(ui->actionRemove_Plugin);
+  data_->plugin_context_menu.setWindowModality(Qt::ApplicationModal);
+
+  data_->search_path_context_menu.addAction(ui->actionAdd_Search_Path);
+  data_->search_path_context_menu.addSeparator();
+  data_->search_path_context_menu.addAction(ui->actionRemove_Search_Path);
+  data_->search_path_context_menu.setWindowModality(Qt::ApplicationModal);
+
+  data_->search_library_context_menu.addAction(ui->actionAdd_Search_Library);
+  data_->search_library_context_menu.addSeparator();
+  data_->search_library_context_menu.addAction(ui->actionRemove_Search_Library);
+  data_->search_library_context_menu.setWindowModality(Qt::ApplicationModal);
+
+  data_->component_info_context_menu.addAction(ui->actionAdd_Component_Info);
+  data_->component_info_context_menu.addAction(ui->actionCreate_Child_Component_Info);
+  data_->component_info_context_menu.addSeparator();
+  data_->component_info_context_menu.addAction(ui->actionRemove_Component_Info);
+  data_->component_info_context_menu.setWindowModality(Qt::ApplicationModal);
 
   ui->actionRemove_Plugin->setIcon(icons::getTrashIcon());
   connect(ui->actionRemove_Plugin, &QAction::triggered, [this]() {
@@ -101,14 +128,39 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
     refreshSearchPathsAndLibraries();
   });
 
+  ui->actionAdd_Component_Info->setIcon(icons::getTextIcon());
+  connect(ui->actionAdd_Component_Info, &QAction::triggered, [this]() {
+    //    QStringList list = data_->search_libraries_model.stringList();
+    //    list.append("<add_new_search_library>");
+    //    data_->search_libraries_model.setStringList(list);
+  });
+
+  ui->actionCreate_Child_Component_Info->setIcon(icons::getTextIcon());
+  connect(ui->actionCreate_Child_Component_Info, &QAction::triggered, [this]() {
+    //    QStringList list = data_->search_libraries_model.stringList();
+    //    list.append("<add_new_search_library>");
+    //    data_->search_libraries_model.setStringList(list);
+  });
+
+  ui->actionRemove_Component_Info->setIcon(icons::getTrashIcon());
+  connect(ui->actionRemove_Component_Info, &QAction::triggered, [this]() {
+    //    data_->search_paths_model.removeRow(ui->search_paths_list_view->currentIndex().row());
+    //    refreshSearchPathsAndLibraries();
+  });
+
   connect(ui->tool_box,
           SIGNAL(customContextMenuRequested(const QPoint&)),
           this,
           SLOT(showPluginContextMenu(const QPoint&)));
+  connect(ui->component_infos_tree_view,
+          SIGNAL(customContextMenuRequested(const QPoint&)),
+          this,
+          SLOT(showComponentInfoContextMenu(const QPoint&)));
   connect(ui->search_paths_list_view,
           SIGNAL(customContextMenuRequested(const QPoint&)),
           this,
           SLOT(showSearchPathContextMenu(const QPoint&)));
+
   connect(ui->search_paths_list_view->itemDelegate(), &QAbstractItemDelegate::closeEditor, [this]() {
     refreshSearchPathsAndLibraries();
   });
@@ -162,20 +214,35 @@ void StudioPluginLoaderDialog::showPluginContextMenu(const QPoint& pos)
     QRect rect = ui->tool_box->currentWidget()->rect();
     rect.setTop(-30);  // Account for page header
     if (rect.contains(local_pos))
-      data_->plugin_contect_menu.exec(global_pos);
+      data_->plugin_context_menu.exec(global_pos);
   }
+}
+
+void StudioPluginLoaderDialog::showComponentInfoContextMenu(const QPoint& pos)
+{
+  QPoint global_pos = ui->component_infos_tree_view->mapToGlobal(pos);
+  QModelIndex cmi = ui->component_infos_tree_view->selectionModel()->currentIndex();
+  QStandardItem* item = data_->component_info_model.itemFromIndex(cmi);
+  if (item != nullptr)
+  {
+    const bool enabled{ item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO) };
+    ui->actionCreate_Child_Component_Info->setEnabled(enabled);
+    ui->actionRemove_Component_Info->setEnabled(enabled);
+  }
+
+  data_->component_info_context_menu.exec(global_pos);
 }
 
 void StudioPluginLoaderDialog::showSearchPathContextMenu(const QPoint& pos)
 {
   QPoint global_pos = ui->search_paths_list_view->mapToGlobal(pos);
-  data_->search_path_contect_menu.exec(global_pos);
+  data_->search_path_context_menu.exec(global_pos);
 }
 
 void StudioPluginLoaderDialog::showSearchLibraryContextMenu(const QPoint& pos)
 {
   QPoint global_pos = ui->search_libraries_list_view->mapToGlobal(pos);
-  data_->search_library_contect_menu.exec(global_pos);
+  data_->search_library_context_menu.exec(global_pos);
 }
 
 void StudioPluginLoaderDialog::addPluginWidget()

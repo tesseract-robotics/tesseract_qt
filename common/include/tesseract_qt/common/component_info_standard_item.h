@@ -20,46 +20,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_PLUGIN_LOADER_WIDGET_H
-#define TESSERACT_QT_STUDIO_STUDIO_PLUGIN_LOADER_WIDGET_H
+#ifndef TESSERACT_QT_COMMON_COMPONENT_INFO_STANDARD_ITEM_H
+#define TESSERACT_QT_COMMON_COMPONENT_INFO_STANDARD_ITEM_H
 
-#include <QDialog>
 #include <memory>
-
-namespace Ui
-{
-class StudioPluginLoaderDialog;
-}
+#include <QStandardItem>
 
 namespace tesseract_gui
 {
-class StudioPluginFactory;
-
-class StudioPluginLoaderDialog : public QDialog
+class ComponentInfo;
+class ComponentInfoStandardItem : public QStandardItem
 {
-  Q_OBJECT
-
 public:
-  explicit StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
-                                    QWidget* parent = nullptr);
-  ~StudioPluginLoaderDialog();
+  ComponentInfoStandardItem(ComponentInfo component_info);
+  explicit ComponentInfoStandardItem(const QString& text, ComponentInfo component_info);
+  ComponentInfoStandardItem(const QIcon& icon, const QString& text, ComponentInfo component_info);
 
-protected:
-  void showEvent(QShowEvent* event) override;
+  int type() const override;
 
-private Q_SLOTS:
-  void showPluginContextMenu(const QPoint& pos);
-  void showComponentInfoContextMenu(const QPoint& pos);
-  void showSearchPathContextMenu(const QPoint& pos);
-  void showSearchLibraryContextMenu(const QPoint& pos);
-  void addPluginWidget();
-  void refreshSearchPathsAndLibraries();
-
-private:
-  struct Implementation;
-  std::unique_ptr<Ui::StudioPluginLoaderDialog> ui;
-  std::unique_ptr<Implementation> data_;
+  std::unique_ptr<ComponentInfo> component_info;
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_LOADER_WIDGET_H
+#endif  // TESSERACT_QT_COMMON_COMPONENT_INFO_STANDARD_ITEM_H
