@@ -27,7 +27,10 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/component_info_standard_item.h>
 #include <tesseract_qt/common/models/component_info_model.h>
+#include <tesseract_qt/common/widgets/create_component_info_dialog.h>
+#include <tesseract_qt/common/widgets/create_child_component_info_dialog.h>
 
 #include <tesseract_common/plugin_loader.h>
 
@@ -55,6 +58,10 @@ struct StudioPluginLoaderDialog::Implementation
   QStringListModel search_libraries_model;
   QStringListModel component_info_keys;
   ComponentInfoModel component_info_model;
+
+  // Dialogs
+  CreateComponentInfoDialog create_component_info_dialog;
+  CreateChildComponentInfoDialog create_child_component_info_dialog;
 };
 
 StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
@@ -68,7 +75,7 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   ui->component_infos_tree_view->setModel(&data_->component_info_model);
 
   // Tests remove next line
-  data_->component_info_model.add("test", ComponentInfo());
+  data_->component_info_model.add(ComponentInfo());
 
   setWindowIcon(icons::getPluginIcon());
   setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
@@ -130,22 +137,36 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
 
   ui->actionAdd_Component_Info->setIcon(icons::getTextIcon());
   connect(ui->actionAdd_Component_Info, &QAction::triggered, [this]() {
-    //    QStringList list = data_->search_libraries_model.stringList();
-    //    list.append("<add_new_search_library>");
-    //    data_->search_libraries_model.setStringList(list);
+    data_->create_component_info_dialog.reset();
+    if (data_->create_component_info_dialog.exec() == 1)
+      data_->component_info_model.add(data_->create_component_info_dialog.getComponentInfo());
   });
 
   ui->actionCreate_Child_Component_Info->setIcon(icons::getTextIcon());
   connect(ui->actionCreate_Child_Component_Info, &QAction::triggered, [this]() {
-    //    QStringList list = data_->search_libraries_model.stringList();
-    //    list.append("<add_new_search_library>");
-    //    data_->search_libraries_model.setStringList(list);
+    QModelIndex cmi = ui->component_infos_tree_view->currentIndex();
+    QStandardItem* item = data_->component_info_model.itemFromIndex(cmi);
+
+    if (item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO))
+    {
+      auto* cci_type = static_cast<ComponentInfoStandardItem*>(item);
+      data_->create_child_component_info_dialog.reset(*cci_type->component_info);
+      if (data_->create_child_component_info_dialog.exec() == 1)
+        data_->component_info_model.add(data_->create_child_component_info_dialog.getComponentInfo());
+    }
   });
 
   ui->actionRemove_Component_Info->setIcon(icons::getTrashIcon());
   connect(ui->actionRemove_Component_Info, &QAction::triggered, [this]() {
-    //    data_->search_paths_model.removeRow(ui->search_paths_list_view->currentIndex().row());
-    //    refreshSearchPathsAndLibraries();
+    QModelIndex cmi = ui->component_infos_tree_view->currentIndex();
+    QStandardItem* item = data_->component_info_model.itemFromIndex(cmi);
+
+    if (item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO))
+    {
+      // Make copy of namespace
+      std::string ns = static_cast<ComponentInfoStandardItem*>(item)->component_info->getNamespace();
+      data_->component_info_model.remove(ns);
+    }
   });
 
   connect(ui->tool_box,

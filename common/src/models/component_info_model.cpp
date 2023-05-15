@@ -34,12 +34,12 @@ struct ComponentInfoModel::Implementation
   std::unordered_map<std::string, ComponentInfoStandardItem*> items;
 };
 
-ComponentInfoModel::ComponentInfoModel(QObject* parent) : ComponentInfoModel(ComponentInfoMap(), parent) {}
+ComponentInfoModel::ComponentInfoModel(QObject* parent) : ComponentInfoModel(ComponentInfoVector(), parent) {}
 
-ComponentInfoModel::ComponentInfoModel(const ComponentInfoMap& component_infos, QObject* parent)
+ComponentInfoModel::ComponentInfoModel(const ComponentInfoVector& component_infos, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
-  clear();
+  set(component_infos);
 }
 
 ComponentInfoModel::ComponentInfoModel(const ComponentInfoModel& other)
@@ -51,76 +51,83 @@ ComponentInfoModel::~ComponentInfoModel() = default;
 
 ComponentInfoModel& ComponentInfoModel::operator=(const ComponentInfoModel& other) { return *this; }
 
-std::vector<std::string> ComponentInfoModel::getKeys() const
+std::vector<std::string> ComponentInfoModel::getNamespaces() const
 {
-  std::vector<std::string> keys;
-  keys.reserve(data_->items.size());
+  std::vector<std::string> ns;
+  ns.reserve(data_->items.size());
   for (const auto& pair : data_->items)
-    keys.push_back(pair.first);
+    ns.push_back(pair.first);
 
-  return keys;
+  return ns;
 }
 
-const ComponentInfo& ComponentInfoModel::getComponentInfo(const std::string& key) const
+const ComponentInfo& ComponentInfoModel::getComponentInfo(const std::string& ns) const
 {
-  auto it = data_->items.find(key);
+  auto it = data_->items.find(ns);
   if (it == data_->items.end())
-    throw std::runtime_error("ComponentInfoModel, does not have ComponentInfo under key: '" + key + "'");
+    throw std::runtime_error("ComponentInfoModel, does not have ComponentInfo under namespace: '" + ns + "'");
 
   return *(it->second->component_info);
 }
 
-ComponentInfoMap ComponentInfoModel::getComponentInfos() const
+ComponentInfoVector ComponentInfoModel::getComponentInfos() const
 {
-  ComponentInfoMap component_infos;
+  ComponentInfoVector component_infos;
+  component_infos.reserve(data_->items.size());
   for (const auto& pair : data_->items)
-    component_infos[pair.first] = *(pair.second->component_info);
+    component_infos.push_back(*(pair.second->component_info));
 
   return component_infos;
 }
 
-void ComponentInfoModel::set(const ComponentInfoMap& component_infos)
+void ComponentInfoModel::set(const ComponentInfoVector& component_infos)
 {
   clear();
 
-  for (const auto& pair : component_infos)
-    add(pair.first, pair.second);
-
-  sort(0);
+  for (const auto& component_info : component_infos)
+    add(component_info);
 }
 
-void ComponentInfoModel::add(const std::string& key, const ComponentInfo& component_info)
+void ComponentInfoModel::add(const ComponentInfo& component_info)
 {
-  if (data_->items.find(key) != data_->items.end())
-    remove(key);
+  if (data_->items.find(component_info.getNamespace()) != data_->items.end())
+    remove(component_info.getNamespace());
 
-  auto* item = new ComponentInfoStandardItem(QString::fromStdString(key), component_info);
+  auto* item = new ComponentInfoStandardItem(QString::fromStdString(component_info.getNamespace()), component_info);
   appendRow(item);
-  data_->items[key] = item;
-
-  sort(0);
+  data_->items[component_info.getNamespace()] = item;
 }
 
-void ComponentInfoModel::remove(const std::string& key)
+void ComponentInfoModel::remove(const std::string& ns)
 {
-  auto it = data_->items.find(key);
+  auto it = data_->items.find(ns);
   if (it == data_->items.end())
     return;
 
-  QModelIndex mi = QStandardItemModel::indexFromItem(it->second);
-  QStandardItemModel::removeRow(mi.row(), mi.parent());
-  data_->items.erase(key);
+  std::vector<ComponentInfoStandardItem*> remove_items;
+  remove_items.push_back(it->second);
+  ComponentInfo ci = *(it->second->component_info);
+  for (const auto& pair : data_->items)
+  {
+    if (pair.first != ns && ci.isChild(*(pair.second->component_info)))
+      remove_items.push_back(pair.second);
+  }
 
-  /** @todo should probably remove all children */
-
-  sort(0);
+  // Remove item and all of its children
+  for (const auto& ri : remove_items)
+  {
+    std::string rns = ri->component_info->getNamespace();
+    QModelIndex mi = QStandardItemModel::indexFromItem(ri);
+    QStandardItemModel::removeRow(mi.row(), mi.parent());
+    data_->items.erase(rns);
+  }
 }
 
 void ComponentInfoModel::clear()
 {
   QStandardItemModel::clear();
   setColumnCount(2);
-  setHorizontalHeaderLabels({ "Name", "Values" });
+  setHorizontalHeaderLabels({ "Namespace", "Component Info" });
   data_->items.clear();
 }
 

@@ -20,46 +20,36 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_COMPONENT_INFO_MODEL_H
-#define TESSERACT_QT_COMMON_COMPONENT_INFO_MODEL_H
+#ifndef TESSERACT_GUI_COMMON_CREATE_CHILD_COMPONENT_INFO_DIALOG_H
+#define TESSERACT_GUI_COMMON_CREATE_CHILD_COMPONENT_INFO_DIALOG_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
 #include <memory>
-#include <unordered_map>
-#include <vector>
-#include <QStandardItemModel>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <QDialog>
+
+namespace Ui
+{
+class CreateChildComponentInfoDialog;
+}
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
-using ComponentInfoVector = std::vector<ComponentInfo>;
-class ComponentInfoModel : public QStandardItemModel
+class ComponentInfo;
+class CreateChildComponentInfoDialog : public QDialog
 {
   Q_OBJECT
+
 public:
-  ComponentInfoModel(QObject* parent = nullptr);
-  explicit ComponentInfoModel(const ComponentInfoVector& component_infos, QObject* parent = nullptr);
-  ComponentInfoModel(const ComponentInfoModel& other);
-  ComponentInfoModel& operator=(const ComponentInfoModel& other);
-  ~ComponentInfoModel() override;
+  explicit CreateChildComponentInfoDialog(QWidget* parent = nullptr);
+  ~CreateChildComponentInfoDialog();
 
-  std::vector<std::string> getNamespaces() const;
-  const ComponentInfo& getComponentInfo(const std::string& ns) const;
-  ComponentInfoVector getComponentInfos() const;
+  ComponentInfo getComponentInfo() const;
 
-  void set(const ComponentInfoVector& component_infos);
-  void add(const ComponentInfo& component_info);
-  void remove(const std::string& ns);
-  void clear();
+  void reset(const ComponentInfo& parent_component_info);
 
 private:
   struct Implementation;
+  std::unique_ptr<Ui::CreateChildComponentInfoDialog> ui;
   std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
-
-#endif  // TESSERACT_QT_COMMON_COMPONENT_INFO_MODEL_H
+#endif  // TESSERACT_GUI_COMMON_CREATE_CHILD_COMPONENT_INFO_DIALOG_H

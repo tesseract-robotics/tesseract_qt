@@ -45,6 +45,7 @@ ComponentInfoStandardItem::ComponentInfoStandardItem(const QIcon& icon,
 {
   appendRow(createStandardItemString("Scene Name", this->component_info->getSceneName()));
   appendRow(createStandardItemString("Namespace", this->component_info->getNamespace()));
+  appendRow(createStandardItemString("Description", this->component_info->getDescription()));
   if (this->component_info->hasParent())
   {
     auto* item = new QStandardItem("Lineage");
