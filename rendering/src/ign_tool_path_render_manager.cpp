@@ -189,7 +189,7 @@ IgnToolPathRenderManager::IgnToolPathRenderManager(ComponentInfo component_info,
   data_->entity_manager = std::move(entity_manager);
 }
 
-IgnToolPathRenderManager::~IgnToolPathRenderManager() { data_->clearAll(component_info_->scene_name); }
+IgnToolPathRenderManager::~IgnToolPathRenderManager() { data_->clearAll(component_info_->getSceneName()); }
 
 void IgnToolPathRenderManager::render()
 {
@@ -200,7 +200,7 @@ void IgnToolPathRenderManager::render()
   }
 
   static const boost::uuids::uuid nil_uuid{};
-  gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->scene_name);
+  gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->getSceneName());
 
   for (const auto& event : events_)
   {
@@ -257,7 +257,7 @@ void IgnToolPathRenderManager::render()
     else if (event->type() == events::ToolPathRemoveAll::kType)
     {
       auto& e = static_cast<events::ToolPathRemoveAll&>(*event);
-      data_->clearAll(component_info_->scene_name);
+      data_->clearAll(component_info_->getSceneName());
     }
     else if (event->type() == events::ToolPathHideAll::kType)
     {

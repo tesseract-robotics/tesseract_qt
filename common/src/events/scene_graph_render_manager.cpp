@@ -145,7 +145,7 @@ bool SceneGraphRenderManager::eventFilter(QObject* obj, QEvent* event)
   else if (event->type() == events::PreRender::kType)
   {
     assert(dynamic_cast<events::PreRender*>(event) != nullptr);
-    if (static_cast<events::PreRender*>(event)->getSceneName() == component_info_->scene_name)
+    if (static_cast<events::PreRender*>(event)->getSceneName() == component_info_->getSceneName())
       render();
   }
 

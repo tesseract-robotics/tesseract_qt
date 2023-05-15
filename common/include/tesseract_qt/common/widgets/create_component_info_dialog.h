@@ -20,35 +20,36 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
-#define TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
+#ifndef TESSERACT_GUI_COMMON_CREATE_COMPONENT_INFO_DIALOG_H
+#define TESSERACT_GUI_COMMON_CREATE_COMPONENT_INFO_DIALOG_H
 
-#include <QWidget>
-#include <QStringListModel>
 #include <memory>
+#include <QDialog>
 
 namespace Ui
 {
-class ComponentInfoWidget;
+class CreateComponentInfoDialog;
 }
 
 namespace tesseract_gui
 {
 class ComponentInfo;
-class ComponentInfoWidget : public QWidget
+class CreateComponentInfoDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit ComponentInfoWidget(QWidget* parent = nullptr);
-  ~ComponentInfoWidget();
+  explicit CreateComponentInfoDialog(QWidget* parent = nullptr);
+  ~CreateComponentInfoDialog();
+
+  void setSceneNames(const QStringList& scene_names);
 
   ComponentInfo getComponentInfo() const;
 
+  void reset();
+
 private:
-  std::unique_ptr<Ui::ComponentInfoWidget> ui;
+  std::unique_ptr<Ui::CreateComponentInfoDialog> ui;
 };
-
 }  // namespace tesseract_gui
-
-#endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
+#endif  // TESSERACT_GUI_COMMON_CREATE_COMPONENT_INFO_DIALOG_H

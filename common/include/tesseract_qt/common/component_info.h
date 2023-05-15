@@ -24,6 +24,7 @@
 #define TESSERACT_GUI_COMMON_COMPONENT_INFO_H
 
 #include <string>
+#include <list>
 #include <functional>
 #include <memory>
 #include <boost/serialization/access.hpp>
@@ -36,34 +37,35 @@ struct ComponentInfo;
 struct ComponentInfo
 {
   /** @breif Default Construction */
-  ComponentInfo() = default;
+  ComponentInfo();
 
   /** @brief Assigns provided scene name and generates random namespace */
   explicit ComponentInfo(std::string scene_name, std::string description = "");
 
   /** @brief Assigns provided scene name and use namespace string generates namespace uuid */
-  explicit ComponentInfo(std::string scene_name, std::string ns, std::string description = "");
+  explicit ComponentInfo(std::string scene_name, std::list<std::string> ns, std::string description = "");
 
-  /** @brief The associated render scene */
-  std::string scene_name{ "tesseract_default" };
+  /** @brief Get the scene name */
+  const std::string& getSceneName() const;
 
   /**
-   * @brief The associated namespace
-   * @details Depending on the constructor this is generated using boost uuid converted to string
+   * @brief Get this component infos namespace
+   * @return The namespace
    */
-  std::string ns;
+  const std::string& getNamespace() const;
+
+  /**
+   * @brief Get the component infos lineage
+   * @return The lineage
+   */
+  std::list<std::string> getLineage() const;
 
   /**
    * @brief A description
    * @details This is not used for comparision
    */
-  std::string description;
-
-  /**
-   * @brief The associated parent ns
-   * @details Every time a child is created the parent namespace is prepended separated by ::
-   */
-  std::pair<std::string, std::string> parent_info;
+  const std::string& getDescription() const;
+  void setDescription(const std::string& description);
 
   /** @brief Check if it has a parent component */
   bool hasParent() const;
@@ -76,30 +78,43 @@ struct ComponentInfo
 
   /**
    * @brief Check if the provided ComponentInfo is the objects parent
-   * @note A parent and child should have different namespaces
+   * @details It check if this component info ever derived from the provided info
    * @param other The object to check if parent
-   * @return True if the scene_name is equal and internally stored parent is the provided object, otherwise false
+   * @return True if the scene_name is equal and this object is derived from the provided object, otherwise false
    */
   bool isParent(const ComponentInfo& other) const;
 
   /**
-   * @brief Check if the provided ComponentInfo a child of this object
-   * @note A parent and child should have different namespaces
+   * @brief Check if the provided ComponentInfo is a child of this object
+   * @details It check if the provided component info ever derived from this object
    * @param other The object to check if child
-   * @return True if the scene_name is equal and internally stored parent is the provided object, otherwise false
+   * @return True if the scene_name is equal and the provided object derived from this object, otherwise false
    */
   bool isChild(const ComponentInfo& other) const;
 
   bool operator==(const ComponentInfo& rhs) const;
   bool operator!=(const ComponentInfo& rhs) const;
 
-  // These are helper functions
-  static std::pair<std::string, std::string> createParentInfo(const ComponentInfo& component_info);
-
 private:
   friend class boost::serialization::access;
   template <class Archive>
   void serialize(Archive& ar, const unsigned int version);  // NOLINT
+
+  /** @brief The associated render scene */
+  std::string scene_name_{ "tesseract_default" };
+
+  /**
+   * @brief The associated namespace
+   * @details Every time a child is created the new namespace is prepended to the list
+   * @details Depending on the constructor this is generated using boost uuid converted to string
+   */
+  std::list<std::string> ns_;
+
+  /**
+   * @brief A description
+   * @details This is not used for comparision
+   */
+  std::string description_;
 };
 
 }  // namespace tesseract_gui
@@ -111,8 +126,7 @@ struct hash<tesseract_gui::ComponentInfo>
 {
   auto operator()(const tesseract_gui::ComponentInfo& obj) const -> size_t
   {
-    return (hash<std::string>{}(obj.scene_name) ^ hash<std::string>{}(obj.ns) ^
-            hash<std::string>{}(obj.parent_info.first) ^ hash<std::string>{}(obj.parent_info.second));
+    return hash<std::string>{}(obj.getSceneName()) ^ hash<std::string>{}(obj.getNamespace());
   }
 };
 

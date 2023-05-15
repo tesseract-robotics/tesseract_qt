@@ -39,38 +39,36 @@ struct convert<tesseract_gui::ComponentInfo>
   static Node encode(const tesseract_gui::ComponentInfo& rhs)
   {
     YAML::Node component_info;
-    component_info["scene_name"] = rhs.scene_name;
-    component_info["ns"] = rhs.ns;
-    component_info["description"] = rhs.description;
+    component_info["scene_name"] = rhs.getSceneName();
+    component_info["description"] = rhs.getDescription();
+    component_info["ns"] = rhs.getNamespace();
     if (rhs.hasParent())
-    {
-      component_info["parent"]["ns"] = rhs.parent_info.first;
-      if (!rhs.parent_info.second.empty())
-        component_info["parent"]["data"] = rhs.parent_info.second;
-    }
+      component_info["lineage"]["ns"] = rhs.getLineage();
 
     return component_info;
   }
 
   static bool decode(const Node& node, tesseract_gui::ComponentInfo& rhs)
   {
-    tesseract_gui::ComponentInfo component_info;
+    std::string scene_name{ "tesseract_default" };
     if (node["scene_name"])
-      component_info.scene_name = node["scene_name"].as<std::string>();
+      scene_name = node["scene_name"].as<std::string>();
 
-    if (node["ns"])
-      component_info.ns = node["ns"].as<std::string>();
-
+    std::string description;
     if (node["description"])
-      component_info.description = node["description"].as<std::string>();
+      description = node["description"].as<std::string>();
 
-    if (node["parent"])
+    std::list<std::string> ns;
+    if (node["ns"])
+      ns.push_back(node["ns"].as<std::string>());
+
+    if (node["lineage"])
     {
-      component_info.parent_info.first = node["parent"]["ns"].as<std::string>();
-      if (node["parent"]["data"])
-        component_info.parent_info.second = node["parent"]["data"].as<std::string>();
+      auto lineage = node["lineage"].as<std::list<std::string>>();
+      ns.insert(ns.end(), lineage.begin(), lineage.end());
     }
 
+    rhs = tesseract_gui::ComponentInfo{ scene_name, ns, description };
     return true;
   }
 };

@@ -14,29 +14,29 @@ ComponentInfoWidget::ComponentInfoWidget(QWidget* parent)
 
 ComponentInfoWidget::~ComponentInfoWidget() = default;
 
-void ComponentInfoWidget::setSceneNameModel(QStringListModel* scene_name_model) {}
+// void ComponentInfoWidget::setSceneNameModel(QStringListModel* scene_name_model) {}
 
-void ComponentInfoWidget::setParentNamespaceModel(QStringListModel* parent_ns_model) {}
+// void ComponentInfoWidget::setParentNamespaceModel(QStringListModel* parent_ns_model) {}
 
-void ComponentInfoWidget::setComponentInfo(const ComponentInfo& component_info)
-{
-  //  if (component_info.hasParent())
-  //  {
-  //    auto parent = component_info.getParent();
-  //    ui->scene_name_line_edit->setText(parent->scene_name.c_str());
-  //    ui->ns_line_edit->setText(parent->ns.c_str());
-  //    ui->description_line_edit->setText(parent->description.c_str());
-  //    ui->create_child_check_box->setEnabled(true);
-  //    ui->child_desc_line_edit->setText(component_info.description);
-  //  }
-  //  else
-  //  {
-  //    ui->scene_name_line_edit->setText(component_info.scene_name.c_str());
-  //    ui->ns_line_edit->setText(component_info.ns.c_str());
-  //    ui->description_line_edit->setText(component_info.description.c_str());
-  //    ui->create_child_check_box->setEnabled(false);
-  //  }
-}
+// void ComponentInfoWidget::setComponentInfo(const ComponentInfo& component_info)
+//{
+//  //  if (component_info.hasParent())
+//  //  {
+//  //    auto parent = component_info.getParent();
+//  //    ui->scene_name_line_edit->setText(parent->scene_name.c_str());
+//  //    ui->ns_line_edit->setText(parent->ns.c_str());
+//  //    ui->description_line_edit->setText(parent->description.c_str());
+//  //    ui->create_child_check_box->setEnabled(true);
+//  //    ui->child_desc_line_edit->setText(component_info.description);
+//  //  }
+//  //  else
+//  //  {
+//  //    ui->scene_name_line_edit->setText(component_info.scene_name.c_str());
+//  //    ui->ns_line_edit->setText(component_info.ns.c_str());
+//  //    ui->description_line_edit->setText(component_info.description.c_str());
+//  //    ui->create_child_check_box->setEnabled(false);
+//  //  }
+//}
 
 ComponentInfo ComponentInfoWidget::getComponentInfo() const
 {

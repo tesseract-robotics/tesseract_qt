@@ -26,30 +26,46 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/utility.hpp>
+#include <boost/serialization/list.hpp>
 #include <boost/uuid/uuid_serialize.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/random_generator.hpp>
-#include <boost/uuid/string_generator.hpp>
-#include <boost/algorithm/string.hpp>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/component_info.h>
 
 namespace tesseract_gui
 {
+ComponentInfo::ComponentInfo() : ComponentInfo("tesseract_default") {}
+
 ComponentInfo::ComponentInfo(std::string scene_name, std::string description)
-  : scene_name(std::move(scene_name))
-  , ns(boost::uuids::to_string(boost::uuids::random_generator()()))
-  , description(std::move(description))
+  : ComponentInfo(std::move(scene_name),
+                  { boost::uuids::to_string(boost::uuids::random_generator()()) },
+                  std::move(description))
 {
 }
 
-ComponentInfo::ComponentInfo(std::string scene_name, std::string ns, std::string description)
-  : scene_name(std::move(scene_name)), ns(std::move(ns)), description(std::move(description))
+ComponentInfo::ComponentInfo(std::string scene_name, std::list<std::string> ns, std::string description)
+  : scene_name_(std::move(scene_name)), description_(std::move(description)), ns_({ std::move(ns) })
 {
 }
 
-bool ComponentInfo::hasParent() const { return (!parent_info.first.empty()); }
+const std::string& ComponentInfo::getSceneName() const { return scene_name_; }
+
+const std::string& ComponentInfo::getDescription() const { return description_; }
+void ComponentInfo::setDescription(const std::string& description) { description_ = description; }
+
+const std::string& ComponentInfo::getNamespace() const { return ns_.front(); }
+
+std::list<std::string> ComponentInfo::getLineage() const
+{
+  if (!hasParent())
+    return {};
+
+  return std::list<std::string>{ std::next(ns_.begin(), 1), ns_.end() };
+}
+
+bool ComponentInfo::hasParent() const { return (ns_.size() > 1); }
 
 ComponentInfo ComponentInfo::getParentComponentInfo() const
 {
@@ -57,50 +73,17 @@ ComponentInfo ComponentInfo::getParentComponentInfo() const
     throw std::runtime_error("Tried to get parent component info when not a child");
 
   ComponentInfo component_info;
-  component_info.scene_name = scene_name;
-  component_info.ns = parent_info.first;
-
-  std::vector<std::string> tokens;
-  boost::split(tokens, parent_info.second, boost::is_any_of("::"));
-  if (tokens.size() == 0)
-    throw std::runtime_error("Tried to extract parent info");
-
-  component_info.parent_info.first = tokens.front();
-
-  if (tokens.size() == 1)
-    return component_info;
-
-  std::string temp;
-  for (std::size_t i = 1; i < tokens.size(); ++i)
-  {
-    if (i == 1)
-      temp = tokens.at(i);
-    else
-      temp += ("::" + tokens.at(i));
-  }
-  component_info.parent_info.second = temp;
+  component_info.scene_name_ = scene_name_;
+  component_info.ns_ = std::list<std::string>{ std::next(ns_.begin(), 1), ns_.end() };
 
   return component_info;
 }
 
 ComponentInfo ComponentInfo::createChild() const
 {
-  ComponentInfo child{ scene_name };
-  child.parent_info = createParentInfo(*this);
+  ComponentInfo child{ *this };
+  child.ns_.push_front(boost::uuids::to_string(boost::uuids::random_generator()()));
   return child;
-}
-
-std::pair<std::string, std::string> ComponentInfo::createParentInfo(const ComponentInfo& component_info)
-{
-  const std::pair<std::string, std::string>& parent_info = component_info.parent_info;
-
-  if (parent_info.first.empty() && parent_info.second.empty())
-    return std::make_pair(component_info.ns, "");
-
-  if (!parent_info.first.empty() && parent_info.second.empty())
-    return std::make_pair(component_info.ns, parent_info.first);
-
-  return std::make_pair(component_info.ns, parent_info.first + "::" + parent_info.second);
 }
 
 bool ComponentInfo::isParent(const ComponentInfo& other) const
@@ -108,7 +91,11 @@ bool ComponentInfo::isParent(const ComponentInfo& other) const
   if (!hasParent())
     return false;
 
-  return (scene_name == other.scene_name && parent_info == createParentInfo(other));
+  if (other.ns_.size() >= ns_.size())
+    return false;
+
+  std::list<std::string> parent_ns(std::prev(ns_.end(), other.ns_.size()), ns_.end());
+  return (scene_name_ == other.scene_name_ && parent_ns == other.ns_);
 }
 
 bool ComponentInfo::isChild(const ComponentInfo& other) const
@@ -116,12 +103,16 @@ bool ComponentInfo::isChild(const ComponentInfo& other) const
   if (!other.hasParent())
     return false;
 
-  return (scene_name == other.scene_name && other.parent_info == createParentInfo(*this));
+  if (ns_.size() >= other.ns_.size())
+    return false;
+
+  std::list<std::string> parent_ns(std::prev(other.ns_.end(), ns_.size()), other.ns_.end());
+  return (scene_name_ == other.scene_name_ && parent_ns == ns_);
 }
 
 bool ComponentInfo::operator==(const ComponentInfo& rhs) const
 {
-  return (scene_name == rhs.scene_name && ns == rhs.ns && parent_info == rhs.parent_info);
+  return (scene_name_ == rhs.scene_name_ && ns_ == rhs.ns_);
 }
 
 bool ComponentInfo::operator!=(const ComponentInfo& rhs) const { return !operator==(rhs); }
@@ -129,10 +120,9 @@ bool ComponentInfo::operator!=(const ComponentInfo& rhs) const { return !operato
 template <class Archive>
 void ComponentInfo::serialize(Archive& ar, const unsigned int /*version*/)
 {
-  ar& BOOST_SERIALIZATION_NVP(scene_name);
-  ar& BOOST_SERIALIZATION_NVP(ns);
-  ar& BOOST_SERIALIZATION_NVP(description);
-  ar& BOOST_SERIALIZATION_NVP(parent_info);
+  ar& BOOST_SERIALIZATION_NVP(scene_name_);
+  ar& BOOST_SERIALIZATION_NVP(ns_);
+  ar& BOOST_SERIALIZATION_NVP(description_);
 }
 
 }  // namespace tesseract_gui

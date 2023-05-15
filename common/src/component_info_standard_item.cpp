@@ -43,13 +43,17 @@ ComponentInfoStandardItem::ComponentInfoStandardItem(const QIcon& icon,
                                                      ComponentInfo component_info)
   : QStandardItem(icon, text), component_info(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
-  appendRow(createStandardItemString("Scene Name", this->component_info->scene_name));
-  appendRow(createStandardItemString("Namespace", this->component_info->ns));
+  appendRow(createStandardItemString("Scene Name", this->component_info->getSceneName()));
+  appendRow(createStandardItemString("Namespace", this->component_info->getNamespace()));
   if (this->component_info->hasParent())
   {
-    auto item = new QStandardItem("Parent Info");
-    item->appendRow(createStandardItemString("Namespace", this->component_info->parent_info.first));
-    item->appendRow(createStandardItemString("Lineage", this->component_info->parent_info.second));
+    auto* item = new QStandardItem("Lineage");
+    std::list<std::string> lineage = this->component_info->getLineage();
+    std::size_t i{ 0 };
+    for (const auto& n : lineage)
+      item->appendRow(createStandardItemString(QString("[%1]").arg(i++).toStdString(), n));
+
+    appendRow(item);
   }
 }
 

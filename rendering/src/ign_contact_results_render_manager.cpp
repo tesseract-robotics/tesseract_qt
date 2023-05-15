@@ -95,7 +95,7 @@ struct IgnContactResultsRenderManager::Implementation
 IgnContactResultsRenderManager::IgnContactResultsRenderManager(ComponentInfo component_info)
   : ContactResultsRenderManager(std::move(component_info)), data_(std::make_unique<Implementation>())
 {
-  data_->scene_name = component_info_->scene_name;
+  data_->scene_name = component_info_->getSceneName();
 }
 
 IgnContactResultsRenderManager::~IgnContactResultsRenderManager() { data_->clearAll(); }

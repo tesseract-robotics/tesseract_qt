@@ -61,7 +61,7 @@ int main(int argc, char** argv)
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
   auto* srdf_widget = new tesseract_gui::SRDFEditorWidget(component_info, locator);
   auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
-  auto* render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
+  auto* render_widget = new tesseract_gui::RenderWidget(component_info.getSceneName());
 
   tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager{ component_info, entity_manager };
 

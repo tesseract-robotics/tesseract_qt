@@ -143,7 +143,7 @@ int main(int argc, char** argv)
   window.addToolBar(new tesseract_gui::JointTrajectoryToolBar(jt_component_info));
   window.addToolBar(new tesseract_gui::ManipulationToolBar(component_info));
 
-  auto render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
+  auto render_widget = new tesseract_gui::RenderWidget(component_info.getSceneName());
   render_widget->setSkyEnabled(true);
   window.setCentralWidget(render_widget);
 

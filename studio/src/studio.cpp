@@ -191,7 +191,7 @@ Studio::Studio(QWidget* parent)
           data_->dock_manager,
           SLOT(openPerspective(const QString&)));
 
-  auto render_widget = new tesseract_gui::RenderWidget(data_->component_info.scene_name);
+  auto render_widget = new tesseract_gui::RenderWidget(data_->component_info.getSceneName());
   render_widget->setSkyEnabled(true);
   auto* render_dock_widget = new ads::CDockWidget("Scene");
   render_dock_widget->setWidget(render_widget);
