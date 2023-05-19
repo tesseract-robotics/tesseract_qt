@@ -26,7 +26,9 @@
 #include <tesseract_qt/common/component_info.h>
 
 #include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace tesseract_gui
 {
@@ -48,7 +50,7 @@ void CreateComponentInfoDialog::setSceneNames(const QStringList& scene_names)
 ComponentInfo CreateComponentInfoDialog::getComponentInfo() const
 {
   const std::string scene_name = ui->scene_name_combo_box->currentText().toStdString();
-  const std::string ns = ui->ns_line_edit->text().toStdString();
+  const boost::uuids::uuid ns = boost::lexical_cast<boost::uuids::uuid>(ui->ns_line_edit->text().toStdString());
   const std::string description = ui->description_line_edit->text().toStdString();
   return ComponentInfo(scene_name, { ns }, description);
 }

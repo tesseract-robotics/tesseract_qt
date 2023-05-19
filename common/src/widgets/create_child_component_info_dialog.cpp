@@ -24,6 +24,7 @@
 #include "ui_create_child_component_info_dialog.h"
 
 #include <tesseract_qt/common/component_info.h>
+#include <boost/uuid/uuid_io.hpp>
 
 #include <QStringListModel>
 
@@ -57,11 +58,11 @@ void CreateChildComponentInfoDialog::reset(const ComponentInfo& parent_component
 {
   data_->component_info = parent_component_info.createChild();
   ui->scene_name_line_edit->setText(QString::fromStdString(data_->component_info.getSceneName()));
-  ui->ns_line_edit->setText(QString::fromStdString(data_->component_info.getNamespace()));
+  ui->ns_line_edit->setText(QString::fromStdString(boost::uuids::to_string(data_->component_info.getNamespace())));
   ui->description_line_edit->setText(QString::fromStdString(data_->component_info.getDescription()));
   QStringList lineage;
   for (const auto& l : data_->component_info.getLineage())
-    lineage.append(QString::fromStdString(l));
+    lineage.append(QString::fromStdString(boost::uuids::to_string(l)));
 
   data_->lineage_model.setStringList(lineage);
 }

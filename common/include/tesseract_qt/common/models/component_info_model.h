@@ -30,6 +30,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <unordered_map>
 #include <vector>
 #include <QStandardItemModel>
+#include <boost/uuid/uuid.hpp>
 #endif
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
@@ -47,13 +48,13 @@ public:
   ComponentInfoModel& operator=(const ComponentInfoModel& other);
   ~ComponentInfoModel() override;
 
-  std::vector<std::string> getNamespaces() const;
-  const ComponentInfo& getComponentInfo(const std::string& ns) const;
+  QStringList getNamespaces() const;
+  const ComponentInfo& getComponentInfo(const boost::uuids::uuid& ns) const;
   ComponentInfoVector getComponentInfos() const;
 
   void set(const ComponentInfoVector& component_infos);
   void add(const ComponentInfo& component_info);
-  void remove(const std::string& ns);
+  void remove(const boost::uuids::uuid& ns);
   void clear();
 
 private:

@@ -39,13 +39,11 @@ namespace tesseract_gui
 ComponentInfo::ComponentInfo() : ComponentInfo("tesseract_default") {}
 
 ComponentInfo::ComponentInfo(std::string scene_name, std::string description)
-  : ComponentInfo(std::move(scene_name),
-                  { boost::uuids::to_string(boost::uuids::random_generator()()) },
-                  std::move(description))
+  : ComponentInfo(std::move(scene_name), { boost::uuids::random_generator()() }, std::move(description))
 {
 }
 
-ComponentInfo::ComponentInfo(std::string scene_name, std::list<std::string> ns, std::string description)
+ComponentInfo::ComponentInfo(std::string scene_name, std::list<boost::uuids::uuid> ns, std::string description)
   : scene_name_(std::move(scene_name)), description_(std::move(description)), ns_({ std::move(ns) })
 {
 }
@@ -55,14 +53,14 @@ const std::string& ComponentInfo::getSceneName() const { return scene_name_; }
 const std::string& ComponentInfo::getDescription() const { return description_; }
 void ComponentInfo::setDescription(const std::string& description) { description_ = description; }
 
-const std::string& ComponentInfo::getNamespace() const { return ns_.front(); }
+const boost::uuids::uuid& ComponentInfo::getNamespace() const { return ns_.front(); }
 
-std::list<std::string> ComponentInfo::getLineage() const
+std::list<boost::uuids::uuid> ComponentInfo::getLineage() const
 {
   if (!hasParent())
     return {};
 
-  return std::list<std::string>{ std::next(ns_.begin(), 1), ns_.end() };
+  return std::list<boost::uuids::uuid>{ std::next(ns_.begin(), 1), ns_.end() };
 }
 
 bool ComponentInfo::hasParent() const { return (ns_.size() > 1); }
@@ -74,7 +72,7 @@ ComponentInfo ComponentInfo::getParentComponentInfo() const
 
   ComponentInfo component_info;
   component_info.scene_name_ = scene_name_;
-  component_info.ns_ = std::list<std::string>{ std::next(ns_.begin(), 1), ns_.end() };
+  component_info.ns_ = std::list<boost::uuids::uuid>{ std::next(ns_.begin(), 1), ns_.end() };
 
   return component_info;
 }
@@ -82,7 +80,7 @@ ComponentInfo ComponentInfo::getParentComponentInfo() const
 ComponentInfo ComponentInfo::createChild() const
 {
   ComponentInfo child{ *this };
-  child.ns_.push_front(boost::uuids::to_string(boost::uuids::random_generator()()));
+  child.ns_.push_front(boost::uuids::random_generator()());
   return child;
 }
 
@@ -94,7 +92,7 @@ bool ComponentInfo::isParent(const ComponentInfo& other) const
   if (other.ns_.size() >= ns_.size())
     return false;
 
-  std::list<std::string> parent_ns(std::prev(ns_.end(), other.ns_.size()), ns_.end());
+  std::list<boost::uuids::uuid> parent_ns(std::prev(ns_.end(), other.ns_.size()), ns_.end());
   return (scene_name_ == other.scene_name_ && parent_ns == other.ns_);
 }
 
@@ -106,7 +104,7 @@ bool ComponentInfo::isChild(const ComponentInfo& other) const
   if (ns_.size() >= other.ns_.size())
     return false;
 
-  std::list<std::string> parent_ns(std::prev(other.ns_.end(), ns_.size()), other.ns_.end());
+  std::list<boost::uuids::uuid> parent_ns(std::prev(other.ns_.end(), ns_.size()), other.ns_.end());
   return (scene_name_ == other.scene_name_ && parent_ns == ns_);
 }
 

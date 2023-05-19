@@ -36,13 +36,10 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/studio/studio_plugin_config_widget.h>
 
 // clang-format off
-#define TESSERACT_ADD_STUDIO_PLUGIN(DERIVED_CLASS, ALIAS)                                                  \
-  TESSERACT_ADD_PLUGIN_SECTIONED(DERIVED_CLASS, ALIAS, Studio)
 #define TESSERACT_ADD_STUDIO_CONFIG_PLUGIN(DERIVED_CLASS, ALIAS)                                           \
-  TESSERACT_ADD_PLUGIN_SECTIONED(DERIVED_CLASS, ALIAS, StdConf)
+  TESSERACT_ADD_PLUGIN_SECTIONED(DERIVED_CLASS, ALIAS, Studio)
 // clang-format on
 
-#include <QMenu>
 class QToolBar;
 class QMenu;
 
@@ -54,6 +51,7 @@ class CDockWidget;
 namespace tesseract_gui
 {
 class StudioPluginFactory;
+class ComponentInfoModel;
 
 /** @brief Studio Factory class used by the Tesseract Studio for loading objects */
 class StudioConfigWidgetFactory
@@ -64,7 +62,9 @@ public:
 
   virtual ~StudioConfigWidgetFactory() = default;
 
-  virtual StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const = 0;
+  virtual StudioPluginConfigWidget* create(const std::string& name,
+                                           const YAML::Node& config,
+                                           std::shared_ptr<const ComponentInfoModel> component_info_model) const = 0;
 
   static const std::string& getSectionName();
 
@@ -82,24 +82,6 @@ struct StudioFactoryResult
   QToolBar* toolbar{ nullptr };
   QMenu* menu{ nullptr };
 };
-
-///** @brief Studio Factory class used by the Tesseract Studio for loading objects */
-// class StudioFactory
-//{
-// public:
-//  using Ptr = std::shared_ptr<StudioFactory>;
-//  using ConstPtr = std::shared_ptr<const StudioFactory>;
-
-//  virtual ~StudioFactory() = default;
-
-//  virtual StudioFactoryResult::UPtr create(const std::string& name) const = 0;
-
-//  static const std::string& getSectionName();
-
-// protected:
-//  static const std::string SECTION_NAME;
-//  friend class PluginLoader;
-//};
 
 class StudioPluginFactory
 {
@@ -242,12 +224,20 @@ public:
    */
   YAML::Node getConfig() const;
 
+  /**
+   * @brief Get the component info model
+   * @return The component info model
+   */
+  std::shared_ptr<ComponentInfoModel> getComponentInfoModel();
+  std::shared_ptr<const ComponentInfoModel> getComponentInfoModel() const;
+
   /** @brief Get the internal plugin loader */
   tesseract_common::PluginLoader& getPluginLoader();
   const tesseract_common::PluginLoader& getPluginLoader() const;
 
 private:
   mutable std::map<std::string, StudioConfigWidgetFactory::Ptr> factories_;
+  std::shared_ptr<ComponentInfoModel> component_info_model_;
   tesseract_common::PluginInfoContainer plugin_info_;
   tesseract_common::PluginLoader plugin_loader_;
 };

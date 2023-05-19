@@ -25,6 +25,7 @@
 #include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <boost/uuid/uuid_io.hpp>
 
 namespace tesseract_gui
 {
@@ -44,15 +45,15 @@ ComponentInfoStandardItem::ComponentInfoStandardItem(const QIcon& icon,
   : QStandardItem(icon, text), component_info(std::make_unique<ComponentInfo>(std::move(component_info)))
 {
   appendRow(createStandardItemString("Scene Name", this->component_info->getSceneName()));
-  appendRow(createStandardItemString("Namespace", this->component_info->getNamespace()));
+  appendRow(createStandardItemString("Namespace", boost::uuids::to_string(this->component_info->getNamespace())));
   appendRow(createStandardItemString("Description", this->component_info->getDescription()));
   if (this->component_info->hasParent())
   {
     auto* item = new QStandardItem("Lineage");
-    std::list<std::string> lineage = this->component_info->getLineage();
+    std::list<boost::uuids::uuid> lineage = this->component_info->getLineage();
     std::size_t i{ 0 };
     for (const auto& n : lineage)
-      item->appendRow(createStandardItemString(QString("[%1]").arg(i++).toStdString(), n));
+      item->appendRow(createStandardItemString(QString("[%1]").arg(i++).toStdString(), boost::uuids::to_string(n)));
 
     appendRow(item);
   }

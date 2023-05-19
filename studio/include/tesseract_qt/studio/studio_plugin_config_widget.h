@@ -25,12 +25,18 @@
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+#include <memory>
 #include <yaml-cpp/yaml.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QWidget>
+
+class QStringListModel;
+
 namespace tesseract_gui
 {
+class ComponentInfoModel;
+
 class StudioPluginConfigWidget : public QWidget
 {
   Q_OBJECT
@@ -68,6 +74,26 @@ public:
    * @return The yaml config
    */
   virtual YAML::Node getConfig() const = 0;
+
+  /**
+   * @brief Set the component info model
+   * @param model The component info model
+   */
+  virtual void setComponentInfoModel(std::shared_ptr<const ComponentInfoModel> model);
+
+  /**
+   * @brief Get the component info model
+   * @return The component info model
+   */
+  virtual std::shared_ptr<const ComponentInfoModel> getComponentInfoModel() const;
+
+protected Q_SLOTS:
+  void onComponentInfoModelRowsRemoved();
+  void onComponentInfoModelRowsInserted();
+
+protected:
+  std::shared_ptr<const ComponentInfoModel> model_;
+  std::unique_ptr<QStringListModel> component_info_ns_;
 };
 }  // namespace tesseract_gui
 

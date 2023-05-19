@@ -26,6 +26,9 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <yaml-cpp/yaml.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/lexical_cast.hpp>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/plugin_infos.h>
@@ -41,9 +44,12 @@ struct convert<tesseract_gui::ComponentInfo>
     YAML::Node component_info;
     component_info["scene_name"] = rhs.getSceneName();
     component_info["description"] = rhs.getDescription();
-    component_info["ns"] = rhs.getNamespace();
+    component_info["ns"] = boost::uuids::to_string(rhs.getNamespace());
     if (rhs.hasParent())
-      component_info["lineage"]["ns"] = rhs.getLineage();
+    {
+      for (const auto& n : rhs.getLineage())
+        component_info["lineage"]["ns"].push_back(boost::uuids::to_string(n));
+    }
 
     return component_info;
   }
@@ -58,14 +64,15 @@ struct convert<tesseract_gui::ComponentInfo>
     if (node["description"])
       description = node["description"].as<std::string>();
 
-    std::list<std::string> ns;
+    std::list<boost::uuids::uuid> ns;
     if (node["ns"])
-      ns.push_back(node["ns"].as<std::string>());
+      ns.push_back(boost::lexical_cast<boost::uuids::uuid>(node["ns"].as<std::string>()));
 
     if (node["lineage"])
     {
       auto lineage = node["lineage"].as<std::list<std::string>>();
-      ns.insert(ns.end(), lineage.begin(), lineage.end());
+      for (const auto& n : lineage)
+        ns.push_back(boost::lexical_cast<boost::uuids::uuid>(n));
     }
 
     rhs = tesseract_gui::ComponentInfo{ scene_name, ns, description };

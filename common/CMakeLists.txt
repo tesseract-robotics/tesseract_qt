@@ -88,6 +88,7 @@ add_library(
   src/quaternion_standard_item.cpp
   src/rgba_standard_item.cpp
   src/component_info.cpp
+  src/component_info_manager.cpp
   src/component_info_standard_item.cpp
   src/standard_item_utils.cpp
   src/plugin_info_container_standard_item.cpp

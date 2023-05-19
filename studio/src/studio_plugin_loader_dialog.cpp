@@ -56,12 +56,13 @@ struct StudioPluginLoaderDialog::Implementation
   // Models
   QStringListModel search_paths_model;
   QStringListModel search_libraries_model;
-  QStringListModel component_info_keys;
-  ComponentInfoModel component_info_model;
 
   // Dialogs
   CreateComponentInfoDialog create_component_info_dialog;
   CreateChildComponentInfoDialog create_child_component_info_dialog;
+
+  // Shared Models
+  std::shared_ptr<QStringListModel> component_info_namespaces;
 };
 
 StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
@@ -72,10 +73,7 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   ui->tool_box->removeItem(0);
   ui->search_paths_list_view->setModel(&data_->search_paths_model);
   ui->search_libraries_list_view->setModel(&data_->search_libraries_model);
-  ui->component_infos_tree_view->setModel(&data_->component_info_model);
-
-  // Tests remove next line
-  data_->component_info_model.add(ComponentInfo());
+  ui->component_infos_tree_view->setModel(plugin_factory->getComponentInfoModel().get());
 
   setWindowIcon(icons::getPluginIcon());
   setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
@@ -139,33 +137,34 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   connect(ui->actionAdd_Component_Info, &QAction::triggered, [this]() {
     data_->create_component_info_dialog.reset();
     if (data_->create_component_info_dialog.exec() == 1)
-      data_->component_info_model.add(data_->create_component_info_dialog.getComponentInfo());
+      data_->plugin_factory->getComponentInfoModel()->add(data_->create_component_info_dialog.getComponentInfo());
   });
 
   ui->actionCreate_Child_Component_Info->setIcon(icons::getTextIcon());
   connect(ui->actionCreate_Child_Component_Info, &QAction::triggered, [this]() {
     QModelIndex cmi = ui->component_infos_tree_view->currentIndex();
-    QStandardItem* item = data_->component_info_model.itemFromIndex(cmi);
+    QStandardItem* item = data_->plugin_factory->getComponentInfoModel()->itemFromIndex(cmi);
 
     if (item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO))
     {
       auto* cci_type = static_cast<ComponentInfoStandardItem*>(item);
       data_->create_child_component_info_dialog.reset(*cci_type->component_info);
       if (data_->create_child_component_info_dialog.exec() == 1)
-        data_->component_info_model.add(data_->create_child_component_info_dialog.getComponentInfo());
+        data_->plugin_factory->getComponentInfoModel()->add(
+            data_->create_child_component_info_dialog.getComponentInfo());
     }
   });
 
   ui->actionRemove_Component_Info->setIcon(icons::getTrashIcon());
   connect(ui->actionRemove_Component_Info, &QAction::triggered, [this]() {
     QModelIndex cmi = ui->component_infos_tree_view->currentIndex();
-    QStandardItem* item = data_->component_info_model.itemFromIndex(cmi);
+    QStandardItem* item = data_->plugin_factory->getComponentInfoModel()->itemFromIndex(cmi);
 
     if (item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO))
     {
       // Make copy of namespace
-      std::string ns = static_cast<ComponentInfoStandardItem*>(item)->component_info->getNamespace();
-      data_->component_info_model.remove(ns);
+      boost::uuids::uuid ns = static_cast<ComponentInfoStandardItem*>(item)->component_info->getNamespace();
+      data_->plugin_factory->getComponentInfoModel()->remove(ns);
     }
   });
 
@@ -243,7 +242,7 @@ void StudioPluginLoaderDialog::showComponentInfoContextMenu(const QPoint& pos)
 {
   QPoint global_pos = ui->component_infos_tree_view->mapToGlobal(pos);
   QModelIndex cmi = ui->component_infos_tree_view->selectionModel()->currentIndex();
-  QStandardItem* item = data_->component_info_model.itemFromIndex(cmi);
+  QStandardItem* item = data_->plugin_factory->getComponentInfoModel()->itemFromIndex(cmi);
   if (item != nullptr)
   {
     const bool enabled{ item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO) };

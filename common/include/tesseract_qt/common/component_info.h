@@ -28,6 +28,8 @@
 #include <functional>
 #include <memory>
 #include <boost/serialization/access.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_hash.hpp>
 
 namespace tesseract_gui
 {
@@ -43,7 +45,7 @@ struct ComponentInfo
   explicit ComponentInfo(std::string scene_name, std::string description = "");
 
   /** @brief Assigns provided scene name and use namespace string generates namespace uuid */
-  explicit ComponentInfo(std::string scene_name, std::list<std::string> ns, std::string description = "");
+  explicit ComponentInfo(std::string scene_name, std::list<boost::uuids::uuid> ns, std::string description = "");
 
   /** @brief Get the scene name */
   const std::string& getSceneName() const;
@@ -52,13 +54,13 @@ struct ComponentInfo
    * @brief Get this component infos namespace
    * @return The namespace
    */
-  const std::string& getNamespace() const;
+  const boost::uuids::uuid& getNamespace() const;
 
   /**
    * @brief Get the component infos lineage
    * @return The lineage
    */
-  std::list<std::string> getLineage() const;
+  std::list<boost::uuids::uuid> getLineage() const;
 
   /**
    * @brief A description
@@ -108,7 +110,7 @@ private:
    * @details Every time a child is created the new namespace is prepended to the list
    * @details Depending on the constructor this is generated using boost uuid converted to string
    */
-  std::list<std::string> ns_;
+  std::list<boost::uuids::uuid> ns_;
 
   /**
    * @brief A description
@@ -126,7 +128,7 @@ struct hash<tesseract_gui::ComponentInfo>
 {
   auto operator()(const tesseract_gui::ComponentInfo& obj) const -> size_t
   {
-    return hash<std::string>{}(obj.getSceneName()) ^ hash<std::string>{}(obj.getNamespace());
+    return hash<std::string>{}(obj.getSceneName()) ^ hash<boost::uuids::uuid>{}(obj.getNamespace());
   }
 };
 

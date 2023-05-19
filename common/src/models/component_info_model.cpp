@@ -24,6 +24,8 @@
 #include <tesseract_qt/common/models/component_info_model.h>
 #include <tesseract_qt/common/component_info_standard_item.h>
 #include <tesseract_qt/common/component_info.h>
+#include <boost/uuid/uuid_hash.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 #include <QApplication>
 
@@ -31,7 +33,7 @@ namespace tesseract_gui
 {
 struct ComponentInfoModel::Implementation
 {
-  std::unordered_map<std::string, ComponentInfoStandardItem*> items;
+  std::unordered_map<boost::uuids::uuid, ComponentInfoStandardItem*> items;
 };
 
 ComponentInfoModel::ComponentInfoModel(QObject* parent) : ComponentInfoModel(ComponentInfoVector(), parent) {}
@@ -51,21 +53,22 @@ ComponentInfoModel::~ComponentInfoModel() = default;
 
 ComponentInfoModel& ComponentInfoModel::operator=(const ComponentInfoModel& other) { return *this; }
 
-std::vector<std::string> ComponentInfoModel::getNamespaces() const
+QStringList ComponentInfoModel::getNamespaces() const
 {
-  std::vector<std::string> ns;
+  QStringList ns;
   ns.reserve(data_->items.size());
   for (const auto& pair : data_->items)
-    ns.push_back(pair.first);
+    ns.push_back(QString::fromStdString(boost::uuids::to_string(pair.first)));
 
   return ns;
 }
 
-const ComponentInfo& ComponentInfoModel::getComponentInfo(const std::string& ns) const
+const ComponentInfo& ComponentInfoModel::getComponentInfo(const boost::uuids::uuid& ns) const
 {
   auto it = data_->items.find(ns);
   if (it == data_->items.end())
-    throw std::runtime_error("ComponentInfoModel, does not have ComponentInfo under namespace: '" + ns + "'");
+    throw std::runtime_error("ComponentInfoModel, does not have ComponentInfo under namespace: '" +
+                             boost::uuids::to_string(ns) + "'");
 
   return *(it->second->component_info);
 }
@@ -93,12 +96,13 @@ void ComponentInfoModel::add(const ComponentInfo& component_info)
   if (data_->items.find(component_info.getNamespace()) != data_->items.end())
     remove(component_info.getNamespace());
 
-  auto* item = new ComponentInfoStandardItem(QString::fromStdString(component_info.getNamespace()), component_info);
-  appendRow(item);
+  auto* item = new ComponentInfoStandardItem(
+      QString::fromStdString(boost::uuids::to_string(component_info.getNamespace())), component_info);
   data_->items[component_info.getNamespace()] = item;
+  appendRow(item);
 }
 
-void ComponentInfoModel::remove(const std::string& ns)
+void ComponentInfoModel::remove(const boost::uuids::uuid& ns)
 {
   auto it = data_->items.find(ns);
   if (it == data_->items.end())
@@ -116,10 +120,10 @@ void ComponentInfoModel::remove(const std::string& ns)
   // Remove item and all of its children
   for (const auto& ri : remove_items)
   {
-    std::string rns = ri->component_info->getNamespace();
+    boost::uuids::uuid rns = ri->component_info->getNamespace();
     QModelIndex mi = QStandardItemModel::indexFromItem(ri);
-    QStandardItemModel::removeRow(mi.row(), mi.parent());
     data_->items.erase(rns);
+    QStandardItemModel::removeRow(mi.row(), mi.parent());
   }
 }
 

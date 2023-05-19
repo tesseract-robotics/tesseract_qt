@@ -26,19 +26,16 @@
 #include <tesseract_qt/studio/studio_plugin_factory.h>
 #include <tesseract_qt/common/plugin_infos.h>
 #include <tesseract_qt/common/yaml_utils.h>
+#include <tesseract_qt/common/models/component_info_model.h>
 
 static const std::string TESSERACT_STUDIO_PLUGIN_DIRECTORIES_ENV = "TESSERACT_STUDIO_PLUGIN_DIRECTORIES";
 static const std::string TESSERACT_STUDIO_PLUGINS_ENV = "TESSERACT_STUDIO_PLUGINS";
 
 namespace tesseract_gui
 {
-const std::string StudioConfigWidgetFactory::SECTION_NAME = "StdConf";
+const std::string StudioConfigWidgetFactory::SECTION_NAME = "Studio";
 
 const std::string& StudioConfigWidgetFactory::getSectionName() { return StudioConfigWidgetFactory::SECTION_NAME; }
-
-// const std::string StudioFactory::SECTION_NAME = "Studio";
-
-// const std::string& StudioFactory::getSectionName() { return StudioFactory::SECTION_NAME; }
 
 StudioPluginFactory::StudioPluginFactory()
 {
@@ -47,6 +44,8 @@ StudioPluginFactory::StudioPluginFactory()
   plugin_loader_.search_paths.insert(TESSERACT_STUDIO_PLUGIN_PATH);
   boost::split(
       plugin_loader_.search_libraries, TESSERACT_STUDIO_PLUGINS, boost::is_any_of(":"), boost::token_compress_on);
+
+  component_info_model_ = std::make_shared<ComponentInfoModel>();
 }
 
 StudioPluginFactory::StudioPluginFactory(const YAML::Node& config) : StudioPluginFactory() { loadConfig(config); }
@@ -146,7 +145,7 @@ StudioPluginFactory::createStudioConfigWidget(const std::string& name,
   {
     auto it = factories_.find(plugin_info.class_name);
     if (it != factories_.end())
-      return it->second->create(name, plugin_info.config);
+      return it->second->create(name, plugin_info.config, component_info_model_);
 
     auto plugin = plugin_loader_.instantiate<StudioConfigWidgetFactory>(plugin_info.class_name);
     if (plugin == nullptr)
@@ -155,7 +154,7 @@ StudioPluginFactory::createStudioConfigWidget(const std::string& name,
       return nullptr;
     }
     factories_[plugin_info.class_name] = plugin;
-    return plugin->create(name, plugin_info.config);
+    return plugin->create(name, plugin_info.config, component_info_model_);
   }
   catch (const std::exception& e)
   {
@@ -186,4 +185,10 @@ YAML::Node StudioPluginFactory::getConfig() const
 
 tesseract_common::PluginLoader& StudioPluginFactory::getPluginLoader() { return plugin_loader_; }
 const tesseract_common::PluginLoader& StudioPluginFactory::getPluginLoader() const { return plugin_loader_; }
+
+std::shared_ptr<ComponentInfoModel> StudioPluginFactory::getComponentInfoModel() { return component_info_model_; }
+std::shared_ptr<const ComponentInfoModel> StudioPluginFactory::getComponentInfoModel() const
+{
+  return component_info_model_;
+}
 }  // namespace tesseract_gui

@@ -23,12 +23,15 @@
 #include <tesseract_qt/studio/plugins/render/studio_render_plugin_config_widget.h>
 #include "ui_studio_render_plugin_config_widget.h"
 
+#include <QStringListModel>
+
 namespace tesseract_gui
 {
 StudioRenderPluginConfigWidget::StudioRenderPluginConfigWidget(QWidget* parent)
   : StudioPluginConfigWidget(parent), ui(std::make_unique<Ui::StudioRenderPluginConfigWidget>())
 {
   ui->setupUi(this);
+  ui->component_info_combo_box->setModel(component_info_ns_.get());
 }
 
 StudioRenderPluginConfigWidget::~StudioRenderPluginConfigWidget() = default;
@@ -69,4 +72,5 @@ YAML::Node StudioRenderPluginConfigWidget::getConfig() const
 
   return config_node;
 }
+
 }  // namespace tesseract_gui
