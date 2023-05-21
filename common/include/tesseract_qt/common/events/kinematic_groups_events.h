@@ -32,7 +32,7 @@ namespace tesseract_gui::events
 class KinematicGroupsClear : public ComponentEvent
 {
 public:
-  KinematicGroupsClear(ComponentInfo component_info);
+  KinematicGroupsClear(std::shared_ptr<const ComponentInfo> component_info);
   ~KinematicGroupsClear() override;
 
   /** @brief Unique type for this event. */
@@ -42,7 +42,7 @@ public:
 class KinematicGroupsSet : public ComponentEvent
 {
 public:
-  KinematicGroupsSet(ComponentInfo component_info,
+  KinematicGroupsSet(std::shared_ptr<const ComponentInfo> component_info,
                      const tesseract_srdf::ChainGroups& chain_groups,
                      const tesseract_srdf::JointGroups& joint_groups,
                      const tesseract_srdf::LinkGroups& link_groups);
@@ -64,7 +64,9 @@ private:
 class KinematicGroupsAddChain : public ComponentEvent
 {
 public:
-  KinematicGroupsAddChain(ComponentInfo component_info, std::string group_name, tesseract_srdf::ChainGroup group);
+  KinematicGroupsAddChain(std::shared_ptr<const ComponentInfo> component_info,
+                          std::string group_name,
+                          tesseract_srdf::ChainGroup group);
   ~KinematicGroupsAddChain() override;
 
   const std::string& getGroupName() const;
@@ -81,7 +83,9 @@ private:
 class KinematicGroupsAddJoint : public ComponentEvent
 {
 public:
-  KinematicGroupsAddJoint(ComponentInfo component_info, std::string group_name, tesseract_srdf::JointGroup group);
+  KinematicGroupsAddJoint(std::shared_ptr<const ComponentInfo> component_info,
+                          std::string group_name,
+                          tesseract_srdf::JointGroup group);
   ~KinematicGroupsAddJoint() override;
 
   const std::string& getGroupName() const;
@@ -98,7 +102,9 @@ private:
 class KinematicGroupsAddLink : public ComponentEvent
 {
 public:
-  KinematicGroupsAddLink(ComponentInfo component_info, std::string group_name, tesseract_srdf::JointGroup group);
+  KinematicGroupsAddLink(std::shared_ptr<const ComponentInfo> component_info,
+                         std::string group_name,
+                         tesseract_srdf::JointGroup group);
   ~KinematicGroupsAddLink() override;
 
   const std::string& getGroupName() const;
@@ -115,7 +121,8 @@ private:
 class KinematicGroupsRemove : public ComponentEvent
 {
 public:
-  KinematicGroupsRemove(ComponentInfo component_info, const std::vector<std::string>& group_names);
+  KinematicGroupsRemove(std::shared_ptr<const ComponentInfo> component_info,
+                        const std::vector<std::string>& group_names);
   ~KinematicGroupsRemove() override;
 
   const std::vector<std::string>& getGroupNames() const;

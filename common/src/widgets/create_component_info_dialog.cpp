@@ -47,12 +47,13 @@ void CreateComponentInfoDialog::setSceneNames(const QStringList& scene_names)
   ui->scene_name_combo_box->addItems(scene_names);
 }
 
-ComponentInfo CreateComponentInfoDialog::getComponentInfo() const
+std::shared_ptr<ComponentInfo> CreateComponentInfoDialog::getComponentInfo() const
 {
-  const std::string scene_name = ui->scene_name_combo_box->currentText().toStdString();
-  const boost::uuids::uuid ns = boost::lexical_cast<boost::uuids::uuid>(ui->ns_line_edit->text().toStdString());
-  const std::string description = ui->description_line_edit->text().toStdString();
-  return ComponentInfo(scene_name, { ns }, description);
+  //  const std::string scene_name = ui->scene_name_combo_box->currentText().toStdString();
+  //  const boost::uuids::uuid ns = boost::lexical_cast<boost::uuids::uuid>(ui->ns_line_edit->text().toStdString());
+  //  const std::string description = ui->description_line_edit->text().toStdString();
+  //  return ComponentInfo(scene_name, { ns }, description);
+  return nullptr;
 }
 
 void CreateComponentInfoDialog::reset()

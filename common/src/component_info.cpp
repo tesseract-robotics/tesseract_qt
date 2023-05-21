@@ -33,79 +33,105 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 
 namespace tesseract_gui
 {
-ComponentInfo::ComponentInfo() : ComponentInfo("tesseract_default") {}
+ComponentInfo::ComponentInfo() {}
 
-ComponentInfo::ComponentInfo(std::string scene_name, std::string description)
-  : ComponentInfo(std::move(scene_name), { boost::uuids::random_generator()() }, std::move(description))
+ComponentInfo::ComponentInfo(std::string scene_name, std::string name, std::string description)
+  : ComponentInfo(std::move(scene_name),
+                  std::move(name),
+                  boost::uuids::random_generator()(),
+                  nullptr,
+                  std::move(description))
 {
 }
 
-ComponentInfo::ComponentInfo(std::string scene_name, std::list<boost::uuids::uuid> ns, std::string description)
-  : scene_name_(std::move(scene_name)), description_(std::move(description)), ns_({ std::move(ns) })
+ComponentInfo::ComponentInfo(std::string scene_name,
+                             std::string name,
+                             std::shared_ptr<const ComponentInfo> parent,
+                             std::string description)
+  : ComponentInfo(std::move(scene_name),
+                  std::move(name),
+                  boost::uuids::random_generator()(),
+                  std::move(parent),
+                  std::move(description))
 {
 }
+
+ComponentInfo::ComponentInfo(std::string scene_name,
+                             std::string name,
+                             const boost::uuids::uuid& ns,
+                             std::shared_ptr<const ComponentInfo> parent,
+                             std::string description)
+  : scene_name_(std::move(scene_name))
+  , name_(std::move(name))
+  , description_(std::move(description))
+  , ns_(std::move(ns))
+  , parent_({ std::move(parent) })
+{
+}
+
+const std::string& ComponentInfo::getName() const { return name_; }
 
 const std::string& ComponentInfo::getSceneName() const { return scene_name_; }
 
 const std::string& ComponentInfo::getDescription() const { return description_; }
 void ComponentInfo::setDescription(const std::string& description) { description_ = description; }
 
-const boost::uuids::uuid& ComponentInfo::getNamespace() const { return ns_.front(); }
+const boost::uuids::uuid& ComponentInfo::getNamespace() const { return ns_; }
 
+void getLineageRecursive(std::list<boost::uuids::uuid>& lineage, const tesseract_gui::ComponentInfo& component_info)
+{
+  lineage.push_back(component_info.getNamespace());
+
+  if (!component_info.hasParent())
+    return;
+
+  getLineageRecursive(lineage, *component_info.getParentComponentInfo());
+}
 std::list<boost::uuids::uuid> ComponentInfo::getLineage() const
 {
   if (!hasParent())
     return {};
 
-  return std::list<boost::uuids::uuid>{ std::next(ns_.begin(), 1), ns_.end() };
+  std::list<boost::uuids::uuid> lineage;
+  getLineageRecursive(lineage, *this);
+  return lineage;
 }
 
-bool ComponentInfo::hasParent() const { return (ns_.size() > 1); }
+bool ComponentInfo::hasParent() const { return (parent_ != nullptr); }
 
-ComponentInfo ComponentInfo::getParentComponentInfo() const
+std::shared_ptr<const ComponentInfo> ComponentInfo::getParentComponentInfo() const { return parent_; }
+
+std::shared_ptr<ComponentInfo> ComponentInfo::createChild() const { return ComponentInfoManager::createChild(name_); }
+
+bool isParentRecursive(const ComponentInfo* check, const ComponentInfo* provided)
 {
-  if (!hasParent())
-    throw std::runtime_error("Tried to get parent component info when not a child");
+  if (check == provided)
+    return true;
 
-  ComponentInfo component_info;
-  component_info.scene_name_ = scene_name_;
-  component_info.ns_ = std::list<boost::uuids::uuid>{ std::next(ns_.begin(), 1), ns_.end() };
+  if (!check->hasParent())
+    return false;
 
-  return component_info;
+  return isParentRecursive(check->getParentComponentInfo().get(), provided);
 }
 
-ComponentInfo ComponentInfo::createChild() const
+bool ComponentInfo::isParent(const std::shared_ptr<const ComponentInfo>& other) const
 {
-  ComponentInfo child{ *this };
-  child.ns_.push_front(boost::uuids::random_generator()());
-  return child;
+  if (!hasParent() || other == nullptr)
+    return false;
+
+  return isParentRecursive(parent_.get(), other.get());
 }
 
-bool ComponentInfo::isParent(const ComponentInfo& other) const
+bool ComponentInfo::isChild(const std::shared_ptr<const ComponentInfo>& other) const
 {
-  if (!hasParent())
+  if (!other->hasParent() || other == nullptr)
     return false;
 
-  if (other.ns_.size() >= ns_.size())
-    return false;
-
-  std::list<boost::uuids::uuid> parent_ns(std::prev(ns_.end(), other.ns_.size()), ns_.end());
-  return (scene_name_ == other.scene_name_ && parent_ns == other.ns_);
-}
-
-bool ComponentInfo::isChild(const ComponentInfo& other) const
-{
-  if (!other.hasParent())
-    return false;
-
-  if (ns_.size() >= other.ns_.size())
-    return false;
-
-  std::list<boost::uuids::uuid> parent_ns(std::prev(other.ns_.end(), ns_.size()), other.ns_.end());
-  return (scene_name_ == other.scene_name_ && parent_ns == ns_);
+  return isParentRecursive(other.get(), this);
 }
 
 bool ComponentInfo::operator==(const ComponentInfo& rhs) const
@@ -120,6 +146,7 @@ void ComponentInfo::serialize(Archive& ar, const unsigned int /*version*/)
 {
   ar& BOOST_SERIALIZATION_NVP(scene_name_);
   ar& BOOST_SERIALIZATION_NVP(ns_);
+  ar& BOOST_SERIALIZATION_NVP(parent_);
   ar& BOOST_SERIALIZATION_NVP(description_);
 }
 

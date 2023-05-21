@@ -38,7 +38,7 @@ ComponentInfoWidget::~ComponentInfoWidget() = default;
 //  //  }
 //}
 
-ComponentInfo ComponentInfoWidget::getComponentInfo() const
+std::shared_ptr<ComponentInfo> ComponentInfoWidget::getComponentInfo() const
 {
   //  ComponentInfo component_info;
   //  component_info.scene_name = ui->scene_name_line_edit->text().toStdString();

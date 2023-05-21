@@ -75,7 +75,7 @@ struct convert<tesseract_gui::ComponentInfo>
         ns.push_back(boost::lexical_cast<boost::uuids::uuid>(n));
     }
 
-    rhs = tesseract_gui::ComponentInfo{ scene_name, ns, description };
+    //    rhs = tesseract_gui::ComponentInfo{ scene_name, ns, description };
     return true;
   }
 };

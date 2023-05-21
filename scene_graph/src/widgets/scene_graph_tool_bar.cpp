@@ -32,7 +32,7 @@ namespace tesseract_gui
 {
 struct SceneGraphToolBar::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
 
   QAction* show_all_links_action;
   QAction* hide_all_links_action;
@@ -52,12 +52,12 @@ struct SceneGraphToolBar::Implementation
   QAction* plot_scene_graph_action;
 };
 
-SceneGraphToolBar::SceneGraphToolBar(QWidget* parent) : SceneGraphToolBar(ComponentInfo(), parent) {}
+SceneGraphToolBar::SceneGraphToolBar(QWidget* parent) : SceneGraphToolBar(nullptr, parent) {}
 
-SceneGraphToolBar::SceneGraphToolBar(ComponentInfo component_info, QWidget* parent)
+SceneGraphToolBar::SceneGraphToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
-  data_->component_info = component_info;
+  data_->component_info = std::move(component_info);
   data_->show_all_links_action = addAction(icons::getShowAllLinksIcon(), "Show All Links", [this]() {
     QApplication::sendEvent(
         qApp, new events::SceneGraphModifyLinkVisibilityALL(data_->component_info, LinkVisibilityFlags::LINK, true));
@@ -119,7 +119,10 @@ SceneGraphToolBar::SceneGraphToolBar(ComponentInfo component_info, QWidget* pare
 
 SceneGraphToolBar::~SceneGraphToolBar() = default;
 
-void SceneGraphToolBar::setComponentInfo(ComponentInfo component_info) { data_->component_info = component_info; }
-const ComponentInfo& SceneGraphToolBar::getComponentInfo() const { return data_->component_info; }
+void SceneGraphToolBar::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
+{
+  data_->component_info = component_info;
+}
+std::shared_ptr<const ComponentInfo> SceneGraphToolBar::getComponentInfo() const { return data_->component_info; }
 
 }  // namespace tesseract_gui

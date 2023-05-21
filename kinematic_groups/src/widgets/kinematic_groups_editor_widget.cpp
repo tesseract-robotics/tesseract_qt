@@ -45,12 +45,12 @@ struct KinematicGroupsEditorWidget::Implementation
   QStringListModel joint_names_model;
 };
 
-KinematicGroupsEditorWidget::KinematicGroupsEditorWidget(QWidget* parent)
-  : KinematicGroupsEditorWidget(ComponentInfo(), parent)
+KinematicGroupsEditorWidget::KinematicGroupsEditorWidget(QWidget* parent) : KinematicGroupsEditorWidget(nullptr, parent)
 {
 }
 
-KinematicGroupsEditorWidget::KinematicGroupsEditorWidget(ComponentInfo component_info, QWidget* parent)
+KinematicGroupsEditorWidget::KinematicGroupsEditorWidget(std::shared_ptr<const ComponentInfo> component_info,
+                                                         QWidget* parent)
   : QWidget(parent), ui_(std::make_unique<Ui::KinematicGroupsEditorWidget>()), data_(std::make_unique<Implementation>())
 {
   ui_->setupUi(this);
@@ -79,14 +79,14 @@ KinematicGroupsEditorWidget::KinematicGroupsEditorWidget(ComponentInfo component
 
 KinematicGroupsEditorWidget::~KinematicGroupsEditorWidget() = default;
 
-void KinematicGroupsEditorWidget::setComponentInfo(ComponentInfo component_info)
+void KinematicGroupsEditorWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
-  ui_->kinGroupsWidget->setComponentInfo(component_info);
+  ui_->kinGroupsWidget->setComponentInfo(std::move(component_info));
   onUpdateJointNamesModel();
   onUpdateLinkNamesModel();
 }
 
-const ComponentInfo& KinematicGroupsEditorWidget::getComponentInfo() const
+std::shared_ptr<const ComponentInfo> KinematicGroupsEditorWidget::getComponentInfo() const
 {
   return ui_->kinGroupsWidget->getComponentInfo();
 }

@@ -44,11 +44,11 @@ class WorkbenchWidget : public QWidget
 
 public:
   explicit WorkbenchWidget(QWidget* parent = nullptr);
-  explicit WorkbenchWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit WorkbenchWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~WorkbenchWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   EnvironmentWidget& getEnvironmentWidget();
   const EnvironmentWidget& getEnvironmentWidget() const;

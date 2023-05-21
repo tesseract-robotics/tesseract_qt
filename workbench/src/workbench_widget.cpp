@@ -35,8 +35,8 @@ namespace tesseract_gui
 {
 struct WorkbenchWidget::Implementation
 {
-  ComponentInfo component_info;
-  ComponentInfo jt_component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
+  std::shared_ptr<const ComponentInfo> jt_component_info;
 
   SceneGraphToolBar* env_toolbar;
   SceneGraphToolBar* jt_env_toolbar;
@@ -44,9 +44,9 @@ struct WorkbenchWidget::Implementation
   ManipulationToolBar* manip_toolbar;
 };
 
-WorkbenchWidget::WorkbenchWidget(QWidget* parent) : WorkbenchWidget(ComponentInfo(), parent) {}
+WorkbenchWidget::WorkbenchWidget(QWidget* parent) : WorkbenchWidget(nullptr, parent) {}
 
-WorkbenchWidget::WorkbenchWidget(ComponentInfo component_info, QWidget* parent)
+WorkbenchWidget::WorkbenchWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::WorkbenchWidget>()), data_(std::make_unique<Implementation>())
 {
   ui->setupUi(this);
@@ -69,10 +69,10 @@ WorkbenchWidget::WorkbenchWidget(ComponentInfo component_info, QWidget* parent)
 
 WorkbenchWidget::~WorkbenchWidget() = default;
 
-void WorkbenchWidget::setComponentInfo(ComponentInfo component_info)
+void WorkbenchWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   data_->component_info = std::move(component_info);
-  data_->jt_component_info = data_->component_info.createChild();
+  data_->jt_component_info = data_->component_info->createChild();
 
   ui->environment_widget->setComponentInfo(data_->component_info);
   data_->env_toolbar->setComponentInfo(data_->component_info);
@@ -84,7 +84,7 @@ void WorkbenchWidget::setComponentInfo(ComponentInfo component_info)
   data_->jt_env_toolbar->setComponentInfo(data_->jt_component_info);
 }
 
-const ComponentInfo& WorkbenchWidget::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> WorkbenchWidget::getComponentInfo() const { return data_->component_info; }
 
 EnvironmentWidget& WorkbenchWidget::getEnvironmentWidget() { return *ui->environment_widget; }
 const EnvironmentWidget& WorkbenchWidget::getEnvironmentWidget() const { return *ui->environment_widget; }

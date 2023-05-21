@@ -51,7 +51,7 @@ struct IgnSceneGraphRenderManager::Implementation
 {
   std::string scene_name;
   EntityManager::Ptr entity_manager;
-  std::unordered_map<ComponentInfo, EntityContainer::Ptr> entity_containers;
+  std::map<std::shared_ptr<const ComponentInfo>, EntityContainer::Ptr> entity_containers;
 
   void clear()
   {
@@ -70,16 +70,16 @@ struct IgnSceneGraphRenderManager::Implementation
           scene->DestroyNodeById(entity.id);
       }
 
-      entity_manager->removeEntityContainer(boost::uuids::to_string(entity_container.first.getNamespace()));
+      entity_manager->removeEntityContainer(boost::uuids::to_string(entity_container.first->getNamespace()));
       entity_container.second->clear();
     }
 
     entity_containers.clear();
   }
 
-  void clear(const ComponentInfo& ci)
+  void clear(const std::shared_ptr<const ComponentInfo>& ci)
   {
-    assert(ci.getSceneName() == scene_name);
+    assert(ci->getSceneName() == scene_name);
 
     auto it = entity_containers.find(ci);
     if (it != entity_containers.end())
@@ -100,12 +100,12 @@ struct IgnSceneGraphRenderManager::Implementation
       it->second->clear();
 
       entity_containers.erase(it);
-      entity_manager->removeEntityContainer(boost::uuids::to_string(ci.getNamespace()));
+      entity_manager->removeEntityContainer(boost::uuids::to_string(ci->getNamespace()));
     }
   }
 };
 
-IgnSceneGraphRenderManager::IgnSceneGraphRenderManager(ComponentInfo component_info,
+IgnSceneGraphRenderManager::IgnSceneGraphRenderManager(std::shared_ptr<const ComponentInfo> component_info,
                                                        std::shared_ptr<EntityManager> entity_manager)
   : SceneGraphRenderManager(std::move(component_info)), data_(std::make_unique<Implementation>())
 {
@@ -122,13 +122,13 @@ void IgnSceneGraphRenderManager::render()
 
   gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(data_->scene_name);
 
-  auto getEntityContainer = [this](const ComponentInfo& component_info) -> EntityContainer::Ptr {
+  auto getEntityContainer = [this](const std::shared_ptr<const ComponentInfo>& component_info) -> EntityContainer::Ptr {
     auto it = data_->entity_containers.find(component_info);
     if (it != data_->entity_containers.end())
       return it->second;
 
     auto entity_container =
-        data_->entity_manager->getEntityContainer(boost::uuids::to_string(component_info.getNamespace()));
+        data_->entity_manager->getEntityContainer(boost::uuids::to_string(component_info->getNamespace()));
     data_->entity_containers[component_info] = entity_container;
     return entity_container;
   };

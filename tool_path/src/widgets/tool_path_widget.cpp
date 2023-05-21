@@ -56,13 +56,13 @@ struct ToolPathWidget::Implementation
   QStandardItem* selected_item{ nullptr };
 };
 
-ToolPathWidget::ToolPathWidget(QWidget* parent) : ToolPathWidget(ComponentInfo(), parent) {}
+ToolPathWidget::ToolPathWidget(QWidget* parent) : ToolPathWidget(nullptr, parent) {}
 
-ToolPathWidget::ToolPathWidget(ComponentInfo component_info, QWidget* parent)
+ToolPathWidget::ToolPathWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
-  data_->model = std::make_shared<ToolPathModel>(component_info);
+  data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
   data_->selection_model = std::make_shared<ToolPathSelectionModel>(data_->model.get(), component_info);
 
   // Create tree widget
@@ -103,7 +103,7 @@ ToolPathWidget::ToolPathWidget(ComponentInfo component_info, QWidget* parent)
 
 ToolPathWidget::~ToolPathWidget() = default;
 
-void ToolPathWidget::setComponentInfo(ComponentInfo component_info)
+void ToolPathWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
@@ -116,7 +116,10 @@ void ToolPathWidget::setComponentInfo(ComponentInfo component_info)
   data_->save_dialog->setComponentInfo(component_info);
 }
 
-const ComponentInfo& ToolPathWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> ToolPathWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void ToolPathWidget::setModel(std::shared_ptr<ToolPathModel> model)
 {

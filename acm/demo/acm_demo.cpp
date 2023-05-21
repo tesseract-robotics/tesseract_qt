@@ -30,12 +30,16 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.h>
 #include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
-  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  std::shared_ptr<const tesseract_gui::ComponentInfo> component_info = tesseract_gui::ComponentInfoManager::create("sce"
+                                                                                                                   "ne_"
+                                                                                                                   "nam"
+                                                                                                                   "e");
 
   tesseract_gui::AllowedCollisionMatrixEditorWidget widget(component_info);
   widget.show();

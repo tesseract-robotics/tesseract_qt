@@ -32,6 +32,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/tree_view.h>
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
@@ -47,7 +48,10 @@ int main(int argc, char** argv)
   tesseract_common::TesseractSupportResourceLocator locator;
   auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
 
-  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  std::shared_ptr<const tesseract_gui::ComponentInfo> component_info = tesseract_gui::ComponentInfoManager::create("sce"
+                                                                                                                   "ne_"
+                                                                                                                   "nam"
+                                                                                                                   "e");
 
   QWidget widget;
   auto layout = new QVBoxLayout();

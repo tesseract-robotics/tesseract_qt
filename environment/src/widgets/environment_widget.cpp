@@ -31,11 +31,11 @@ namespace tesseract_gui
 {
 struct EnvironmentWidget::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
 };
 
-EnvironmentWidget::EnvironmentWidget(QWidget* parent) : EnvironmentWidget(ComponentInfo(), parent) {}
-EnvironmentWidget::EnvironmentWidget(ComponentInfo component_info, QWidget* parent)
+EnvironmentWidget::EnvironmentWidget(QWidget* parent) : EnvironmentWidget(nullptr, parent) {}
+EnvironmentWidget::EnvironmentWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::EnvironmentWidget>()), data_(std::make_unique<Implementation>())
 {
   ui->setupUi(this);
@@ -46,7 +46,7 @@ EnvironmentWidget::EnvironmentWidget(ComponentInfo component_info, QWidget* pare
 
 EnvironmentWidget::~EnvironmentWidget() = default;
 
-void EnvironmentWidget::setComponentInfo(ComponentInfo component_info)
+void EnvironmentWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   data_->component_info = std::move(component_info);
 
@@ -60,7 +60,7 @@ void EnvironmentWidget::setComponentInfo(ComponentInfo component_info)
   ui->contacts_widget->setComponentInfo(data_->component_info);
 }
 
-const ComponentInfo& EnvironmentWidget::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> EnvironmentWidget::getComponentInfo() const { return data_->component_info; }
 
 void EnvironmentWidget::onPlotSceneGraph()
 {

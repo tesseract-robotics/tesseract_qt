@@ -54,6 +54,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 
@@ -129,8 +130,8 @@ int main(int argc, char** argv)
   auto env = std::make_shared<tesseract_environment::Environment>();
   env->init(urdf_path, srdf_path, locator);
 
-  tesseract_gui::ComponentInfo component_info(env->getName());
-  tesseract_gui::ComponentInfo jt_component_info = component_info.createChild();
+  auto component_info = tesseract_gui::ComponentInfoManager::create(env->getName());
+  auto jt_component_info = component_info->createChild();
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
 
   tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager(component_info, entity_manager);
@@ -143,7 +144,7 @@ int main(int argc, char** argv)
   window.addToolBar(new tesseract_gui::JointTrajectoryToolBar(jt_component_info));
   window.addToolBar(new tesseract_gui::ManipulationToolBar(component_info));
 
-  auto render_widget = new tesseract_gui::RenderWidget(component_info.getSceneName());
+  auto render_widget = new tesseract_gui::RenderWidget(component_info->getSceneName());
   render_widget->setSkyEnabled(true);
   window.setCentralWidget(render_widget);
 

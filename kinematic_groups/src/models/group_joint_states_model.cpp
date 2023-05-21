@@ -37,15 +37,15 @@
 
 namespace tesseract_gui
 {
-GroupJointStatesModel::GroupJointStatesModel(QObject* parent) : GroupJointStatesModel(ComponentInfo(), parent) {}
+GroupJointStatesModel::GroupJointStatesModel(QObject* parent) : GroupJointStatesModel(nullptr, parent) {}
 
-GroupJointStatesModel::GroupJointStatesModel(ComponentInfo component_info, QObject* parent)
-  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+GroupJointStatesModel::GroupJointStatesModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::move(component_info))
 {
   clear();
 
   // If an environment has already been assigned load the data
-  auto env_wrapper = EnvironmentManager::get(*component_info_);
+  auto env_wrapper = EnvironmentManager::get(component_info_);
   if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
     set(env_wrapper->getEnvironment()->getKinematicsInformation().group_states);
 
@@ -62,7 +62,7 @@ GroupJointStatesModel& GroupJointStatesModel::operator=(const GroupJointStatesMo
 
 GroupJointStatesModel::~GroupJointStatesModel() = default;
 
-const ComponentInfo& GroupJointStatesModel::getComponentInfo() const { return *component_info_; }
+std::shared_ptr<const ComponentInfo> GroupJointStatesModel::getComponentInfo() const { return component_info_; }
 
 bool GroupJointStatesModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
@@ -80,7 +80,7 @@ bool GroupJointStatesModel::setData(const QModelIndex& index, const QVariant& va
       if (value.value<Qt::CheckState>() == Qt::Checked)
       {
         QApplication::sendEvent(qApp,
-                                new events::GroupJointStatesShow(*component_info_,
+                                new events::GroupJointStatesShow(component_info_,
                                                                  parent_item->text().toStdString(),
                                                                  derived_item->getName().toStdString(),
                                                                  derived_item->getState()));
@@ -88,7 +88,7 @@ bool GroupJointStatesModel::setData(const QModelIndex& index, const QVariant& va
       else
       {
         QApplication::sendEvent(qApp,
-                                new events::GroupJointStatesHide(*component_info_,
+                                new events::GroupJointStatesHide(component_info_,
                                                                  parent_item->text().toStdString(),
                                                                  derived_item->getName().toStdString()));
       }
@@ -182,28 +182,28 @@ bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupJointStatesSet*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesSet*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       set(e->getGroupJointStates());
   }
   else if (event->type() == events::GroupJointStatesAdd::kType)
   {
     assert(dynamic_cast<events::GroupJointStatesAdd*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesAdd*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       add(e->getGroupName(), e->getStateName(), e->getJointState());
   }
   else if (event->type() == events::GroupJointStatesClear::kType)
   {
     assert(dynamic_cast<events::GroupJointStatesClear*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesClear*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       clear();
   }
   else if (event->type() == events::GroupJointStatesRemove::kType)
   {
     assert(dynamic_cast<events::GroupJointStatesRemove*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesRemove*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
     {
       for (const auto& entry : e->getEntries())
         remove(entry[0], entry[1]);
@@ -213,7 +213,7 @@ bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupJointStatesRemoveGroup*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesRemoveGroup*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
     {
       for (const auto& link_name : e->getGroupNames())
         remove(link_name);

@@ -28,13 +28,13 @@ class ManipulationChanged::Implementation
 {
 public:
   std::string state_name;
-  std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+  std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
 };
 
 ManipulationChanged::ManipulationChanged(
-    ComponentInfo component_info,
+    std::shared_ptr<const ComponentInfo> component_info,
     std::string state_name,
-    std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos)
+    std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos)
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   assert((state_component_infos.empty() ? true : !state_name.empty()));
@@ -49,7 +49,8 @@ ManipulationChanged::ManipulationChanged(const ManipulationChanged& other)
 ManipulationChanged::~ManipulationChanged() = default;
 
 const std::string& ManipulationChanged::getStateName() const { return data_->state_name; }
-const std::unordered_map<std::string, tesseract_gui::ComponentInfo>& ManipulationChanged::getStateComponentInfos() const
+const std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>>&
+ManipulationChanged::getStateComponentInfos() const
 {
   return data_->state_component_infos;
 }

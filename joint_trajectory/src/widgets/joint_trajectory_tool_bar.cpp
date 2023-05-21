@@ -31,7 +31,7 @@ namespace tesseract_gui
 {
 struct JointTrajectoryToolBar::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
 
   QAction* remove_all_action;
   QAction* remove_action;
@@ -40,12 +40,12 @@ struct JointTrajectoryToolBar::Implementation
   QAction* plot_action;
 };
 
-JointTrajectoryToolBar::JointTrajectoryToolBar(QWidget* parent) : JointTrajectoryToolBar(ComponentInfo(), parent) {}
+JointTrajectoryToolBar::JointTrajectoryToolBar(QWidget* parent) : JointTrajectoryToolBar(nullptr, parent) {}
 
-JointTrajectoryToolBar::JointTrajectoryToolBar(ComponentInfo component_info, QWidget* parent)
+JointTrajectoryToolBar::JointTrajectoryToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
-  data_->component_info = component_info;
+  data_->component_info = std::move(component_info);
   data_->remove_all_action = addAction(icons::getClearIcon(), "Remove All", [this]() {
     QApplication::sendEvent(qApp, new events::JointTrajectoryRemoveAll(data_->component_info));
   });
@@ -74,8 +74,11 @@ JointTrajectoryToolBar::JointTrajectoryToolBar(ComponentInfo component_info, QWi
 
 JointTrajectoryToolBar::~JointTrajectoryToolBar() = default;
 
-void JointTrajectoryToolBar::setComponentInfo(ComponentInfo component_info) { data_->component_info = component_info; }
-const ComponentInfo& JointTrajectoryToolBar::getComponentInfo() const { return data_->component_info; }
+void JointTrajectoryToolBar::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
+{
+  data_->component_info = std::move(component_info);
+}
+std::shared_ptr<const ComponentInfo> JointTrajectoryToolBar::getComponentInfo() const { return data_->component_info; }
 
 bool JointTrajectoryToolBar::eventFilter(QObject* obj, QEvent* event)
 {

@@ -74,7 +74,9 @@ void setCheckedStateRecursive(QStandardItem* item, Qt::CheckState st)
     setCheckedStateRecursive(item->child(i), st);
 }
 
-bool openToolPath(const ComponentInfo& component_info, const QString& filename, const QString& link_name)
+bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
+                  const QString& filename,
+                  const QString& link_name)
 {
   QFileInfo file_info(filename);
   if (file_info.suffix() == "tpx")

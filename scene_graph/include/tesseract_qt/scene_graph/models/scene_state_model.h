@@ -40,14 +40,14 @@ class SceneStateModel : public QStandardItemModel
 
 public:
   explicit SceneStateModel(QObject* parent = nullptr);
-  explicit SceneStateModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit SceneStateModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   ~SceneStateModel() override;
   SceneStateModel(const SceneStateModel& other);
   SceneStateModel& operator=(const SceneStateModel& other);
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   // Caution when using methods below. In most cases you should use application events.
   void setState(const tesseract_scene_graph::SceneState& scene_state);

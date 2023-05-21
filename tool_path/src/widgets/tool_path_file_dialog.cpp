@@ -15,16 +15,16 @@
 namespace tesseract_gui
 {
 ToolPathFileDialog::ToolPathFileDialog(QFileDialog::AcceptMode accept_mode, QWidget* parent)
-  : ToolPathFileDialog(ComponentInfo(), accept_mode, parent)
+  : ToolPathFileDialog(nullptr, accept_mode, parent)
 {
 }
 
-ToolPathFileDialog::ToolPathFileDialog(ComponentInfo component_info,
+ToolPathFileDialog::ToolPathFileDialog(std::shared_ptr<const ComponentInfo> component_info,
                                        QFileDialog::AcceptMode accept_mode,
                                        QWidget* parent)
   : QDialog(parent)
   , ui_(std::make_unique<Ui::ToolPathFileDialog>())
-  , component_info_(std::make_unique<ComponentInfo>(component_info))
+  , component_info_(std::move(component_info))
   , accept_mode_(accept_mode)
 {
   ui_->setupUi(this);
@@ -45,11 +45,11 @@ ToolPathFileDialog::~ToolPathFileDialog()
   ms.setValue("default_directory", default_directory_);
   ms.endGroup();
 }
-void ToolPathFileDialog::setComponentInfo(ComponentInfo component_info)
+void ToolPathFileDialog::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
-  component_info_ = std::make_unique<ComponentInfo>(component_info);
+  component_info_ = std::move(component_info);
 }
-const ComponentInfo& ToolPathFileDialog::getComponentInfo() const { return *component_info_; }
+std::shared_ptr<const ComponentInfo> ToolPathFileDialog::getComponentInfo() const { return component_info_; }
 
 void ToolPathFileDialog::setAcceptMode(QFileDialog::AcceptMode accept_mode) { accept_mode_ = accept_mode; }
 
@@ -59,7 +59,7 @@ QString ToolPathFileDialog::getFilePath() const { return ui_->file_path_line_edi
 void ToolPathFileDialog::showEvent(QShowEvent* e)
 {
   // If an environment has already been assigned load the data
-  auto env_wrapper = EnvironmentManager::get(*component_info_);
+  auto env_wrapper = EnvironmentManager::get(component_info_);
   if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
   {
     QStringList list;

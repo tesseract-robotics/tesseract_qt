@@ -31,6 +31,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/command_language/widgets/composite_instruction_widget.h>
 #include <tesseract_qt/common/events/command_language_events.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/tree_view.h>
 
 #include <tesseract_command_language/composite_instruction.h>
@@ -97,7 +98,10 @@ int main(int argc, char** argv)
   program.appendMoveInstruction(plan_c0);
   program.appendMoveInstruction(plan_f1);
 
-  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  std::shared_ptr<const tesseract_gui::ComponentInfo> component_info = tesseract_gui::ComponentInfoManager::create("sce"
+                                                                                                                   "ne_"
+                                                                                                                   "nam"
+                                                                                                                   "e");
   tesseract_gui::CompositeInstructionWidget widget(component_info);
   widget.show();
 

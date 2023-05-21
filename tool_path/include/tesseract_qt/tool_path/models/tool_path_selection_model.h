@@ -42,12 +42,12 @@ public:
   ToolPathSelectionModel();
   explicit ToolPathSelectionModel(QAbstractItemModel* model);
 
-  explicit ToolPathSelectionModel(ComponentInfo component_info);
-  ToolPathSelectionModel(QAbstractItemModel* model, ComponentInfo component_info);
+  explicit ToolPathSelectionModel(std::shared_ptr<const ComponentInfo> component_info);
+  ToolPathSelectionModel(QAbstractItemModel* model, std::shared_ptr<const ComponentInfo> component_info);
   ~ToolPathSelectionModel() override;
 
 private:
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;

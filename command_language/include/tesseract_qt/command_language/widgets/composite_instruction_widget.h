@@ -38,11 +38,11 @@ class CompositeInstructionWidget : public QWidget
 
 public:
   explicit CompositeInstructionWidget(QWidget* parent = nullptr);
-  explicit CompositeInstructionWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit CompositeInstructionWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~CompositeInstructionWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<CompositeInstructionModel> model);
   std::shared_ptr<CompositeInstructionModel> getModel();

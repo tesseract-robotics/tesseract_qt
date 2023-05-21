@@ -25,7 +25,7 @@
 
 namespace tesseract_gui::events
 {
-AllowedCollisionMatrixClear::AllowedCollisionMatrixClear(ComponentInfo component_info)
+AllowedCollisionMatrixClear::AllowedCollisionMatrixClear(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }
@@ -39,7 +39,7 @@ struct AllowedCollisionMatrixSet::Implementation
   tesseract_common::AllowedCollisionMatrix acm;
 };
 
-AllowedCollisionMatrixSet::AllowedCollisionMatrixSet(ComponentInfo component_info,
+AllowedCollisionMatrixSet::AllowedCollisionMatrixSet(std::shared_ptr<const ComponentInfo> component_info,
                                                      const tesseract_common::AllowedCollisionMatrix& acm)
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
@@ -52,7 +52,7 @@ const tesseract_common::AllowedCollisionMatrix& AllowedCollisionMatrixSet::getAC
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixAdd::AllowedCollisionMatrixAdd(ComponentInfo component_info,
+AllowedCollisionMatrixAdd::AllowedCollisionMatrixAdd(std::shared_ptr<const ComponentInfo> component_info,
                                                      const std::vector<std::array<std::string, 3>>& entries)
   : ComponentEvent(std::move(component_info), kType), entries_(entries)
 {
@@ -64,7 +64,7 @@ const std::vector<std::array<std::string, 3>>& AllowedCollisionMatrixAdd::getEnt
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixRemove::AllowedCollisionMatrixRemove(ComponentInfo component_info,
+AllowedCollisionMatrixRemove::AllowedCollisionMatrixRemove(std::shared_ptr<const ComponentInfo> component_info,
                                                            const std::vector<std::array<std::string, 2>>& entries)
   : ComponentEvent(std::move(component_info), kType), entries_(entries)
 {
@@ -76,7 +76,7 @@ const std::vector<std::array<std::string, 2>>& AllowedCollisionMatrixRemove::get
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixRemoveLink::AllowedCollisionMatrixRemoveLink(ComponentInfo component_info,
+AllowedCollisionMatrixRemoveLink::AllowedCollisionMatrixRemoveLink(std::shared_ptr<const ComponentInfo> component_info,
                                                                    const std::vector<std::string>& link_names)
   : ComponentEvent(std::move(component_info), kType), link_names_(link_names)
 {
@@ -88,7 +88,8 @@ const std::vector<std::string>& AllowedCollisionMatrixRemoveLink::getLinkNames()
 
 //////////////////////////////////////////
 
-AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(ComponentInfo component_info, long resolution)
+AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(std::shared_ptr<const ComponentInfo> component_info,
+                                                               long resolution)
   : ComponentEvent(std::move(component_info), kType), resolution_(resolution)
 {
 }

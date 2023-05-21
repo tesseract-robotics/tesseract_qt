@@ -37,9 +37,9 @@ struct SceneStateWidget::Implementation
   TreeView* tree_view;
 };
 
-SceneStateWidget::SceneStateWidget(QWidget* parent) : SceneStateWidget(ComponentInfo(), parent) {}
+SceneStateWidget::SceneStateWidget(QWidget* parent) : SceneStateWidget(nullptr, parent) {}
 
-SceneStateWidget::SceneStateWidget(ComponentInfo component_info, QWidget* parent)
+SceneStateWidget::SceneStateWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -61,14 +61,17 @@ SceneStateWidget::SceneStateWidget(ComponentInfo component_info, QWidget* parent
 }
 SceneStateWidget::~SceneStateWidget() = default;
 
-void SceneStateWidget::setComponentInfo(ComponentInfo component_info)
+void SceneStateWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<SceneStateModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& SceneStateWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> SceneStateWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void SceneStateWidget::setModel(std::shared_ptr<SceneStateModel> model)
 {

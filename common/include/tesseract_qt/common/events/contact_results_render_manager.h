@@ -43,11 +43,11 @@ public:
   using UPtr = std::unique_ptr<ContactResultsRenderManager>;
   using ConstUPtr = std::unique_ptr<const ContactResultsRenderManager>;
 
-  ContactResultsRenderManager(ComponentInfo component_info);
+  ContactResultsRenderManager(std::shared_ptr<const ComponentInfo> component_info);
   ~ContactResultsRenderManager();
 
 protected:
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
   std::vector<std::unique_ptr<events::ComponentEvent>> events_;
 
   // Documentation inherited

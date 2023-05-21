@@ -35,8 +35,8 @@
 
 namespace tesseract_gui
 {
-ContactResultsRenderManager::ContactResultsRenderManager(ComponentInfo component_info)
-  : component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+ContactResultsRenderManager::ContactResultsRenderManager(std::shared_ptr<const ComponentInfo> component_info)
+  : component_info_(std::move(component_info))
 {
   qApp->installEventFilter(this);
 }
@@ -49,35 +49,35 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ContactResultsClear*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsClear*>(event);
-    if (e->getComponentInfo() == *component_info_ || e->getComponentInfo().isParent(*component_info_))
+    if (e->getComponentInfo() == component_info_ || e->getComponentInfo()->isParent(component_info_))
       events_.push_back(std::make_unique<events::ContactResultsClear>(*e));
   }
   else if (event->type() == events::ContactResultsSet::kType)
   {
     assert(dynamic_cast<events::ContactResultsSet*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsSet*>(event);
-    if (e->getComponentInfo() == *component_info_ || e->getComponentInfo().isParent(*component_info_))
+    if (e->getComponentInfo() == component_info_ || e->getComponentInfo()->isParent(component_info_))
       events_.push_back(std::make_unique<events::ContactResultsSet>(*e));
   }
   else if (event->type() == events::ContactResultsRemove::kType)
   {
     assert(dynamic_cast<events::ContactResultsRemove*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsRemove*>(event);
-    if (e->getComponentInfo() == *component_info_ || e->getComponentInfo().isParent(*component_info_))
+    if (e->getComponentInfo() == component_info_ || e->getComponentInfo()->isParent(component_info_))
       events_.push_back(std::make_unique<events::ContactResultsRemove>(*e));
   }
   else if (event->type() == events::ContactResultsVisbility::kType)
   {
     assert(dynamic_cast<events::ContactResultsVisbility*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsVisbility*>(event);
-    if (e->getComponentInfo() == *component_info_ || e->getComponentInfo().isParent(*component_info_))
+    if (e->getComponentInfo() == component_info_ || e->getComponentInfo()->isParent(component_info_))
       events_.push_back(std::make_unique<events::ContactResultsVisbility>(*e));
   }
   else if (event->type() == events::ContactResultsVisbilityAll::kType)
   {
     assert(dynamic_cast<events::ContactResultsVisbilityAll*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsVisbilityAll*>(event);
-    if (e->getComponentInfo() == *component_info_ || e->getComponentInfo().isParent(*component_info_))
+    if (e->getComponentInfo() == component_info_ || e->getComponentInfo()->isParent(component_info_))
       events_.push_back(std::make_unique<events::ContactResultsVisbilityAll>(*e));
   }
   else if (event->type() == events::PreRender::kType)

@@ -40,7 +40,7 @@ namespace tesseract_gui
 {
 struct SceneStateModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
 
   std::vector<std::string> link_names;
   std::vector<std::string> joint_names_tf;
@@ -77,7 +77,7 @@ SceneStateModel::SceneStateModel(QObject* parent)
   qGuiApp->installEventFilter(this);
 }
 
-SceneStateModel::SceneStateModel(ComponentInfo component_info, QObject* parent)
+SceneStateModel::SceneStateModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
@@ -101,7 +101,7 @@ SceneStateModel::SceneStateModel(const SceneStateModel& other)
 
 SceneStateModel& SceneStateModel::operator=(const SceneStateModel& other) { return *this; }
 
-const ComponentInfo& SceneStateModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> SceneStateModel::getComponentInfo() const { return data_->component_info; }
 
 void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_state)
 {

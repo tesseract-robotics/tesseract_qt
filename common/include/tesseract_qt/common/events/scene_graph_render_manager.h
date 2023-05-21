@@ -43,11 +43,11 @@ public:
   using UPtr = std::unique_ptr<SceneGraphRenderManager>;
   using ConstUPtr = std::unique_ptr<const SceneGraphRenderManager>;
 
-  SceneGraphRenderManager(ComponentInfo component_info);
+  SceneGraphRenderManager(std::shared_ptr<const ComponentInfo> component_info);
   ~SceneGraphRenderManager();
 
 protected:
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
   std::vector<std::unique_ptr<events::ComponentEvent>> events_;
 
   // Documentation inherited

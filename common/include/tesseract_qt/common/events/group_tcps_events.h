@@ -32,7 +32,7 @@ namespace tesseract_gui::events
 class GroupTCPsClear : public ComponentEvent
 {
 public:
-  GroupTCPsClear(ComponentInfo component_info);
+  GroupTCPsClear(std::shared_ptr<const ComponentInfo> component_info);
   ~GroupTCPsClear() override;
 
   /** @brief Unique type for this event. */
@@ -42,7 +42,7 @@ public:
 class GroupTCPsSet : public ComponentEvent
 {
 public:
-  GroupTCPsSet(ComponentInfo component_info, const tesseract_srdf::GroupTCPs& group_tcps);
+  GroupTCPsSet(std::shared_ptr<const ComponentInfo> component_info, const tesseract_srdf::GroupTCPs& group_tcps);
   ~GroupTCPsSet() override;
 
   const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
@@ -61,7 +61,7 @@ public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   // LCOV_EXCL_STOP
 
-  GroupTCPsAdd(ComponentInfo component_info,
+  GroupTCPsAdd(std::shared_ptr<const ComponentInfo> component_info,
                std::string group_name,
                std::string tcp_name,
                const Eigen::Isometry3d& tcp);
@@ -83,7 +83,8 @@ private:
 class GroupTCPsRemove : public ComponentEvent
 {
 public:
-  GroupTCPsRemove(ComponentInfo component_info, const std::vector<std::array<std::string, 2>>& entries);
+  GroupTCPsRemove(std::shared_ptr<const ComponentInfo> component_info,
+                  const std::vector<std::array<std::string, 2>>& entries);
   ~GroupTCPsRemove() override;
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
@@ -98,7 +99,8 @@ private:
 class GroupTCPsRemoveGroup : public ComponentEvent
 {
 public:
-  GroupTCPsRemoveGroup(ComponentInfo component_info, const std::vector<std::string>& group_names);
+  GroupTCPsRemoveGroup(std::shared_ptr<const ComponentInfo> component_info,
+                       const std::vector<std::string>& group_names);
   ~GroupTCPsRemoveGroup() override;
 
   const std::vector<std::string>& getGroupNames() const;

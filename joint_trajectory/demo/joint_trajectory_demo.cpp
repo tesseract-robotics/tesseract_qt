@@ -34,6 +34,8 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h>
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
 
+#include <tesseract_qt/common/component_info_manager.h>
+
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
@@ -82,7 +84,7 @@ int main(int argc, char** argv)
   trajectory_set3.setDescription("Demo Tool Path 3");
   trajectory_set3.regenerateUUID();
 
-  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  auto component_info = tesseract_gui::ComponentInfoManager::create("scene_name");
 
   QMainWindow window;
   window.addToolBar(new tesseract_gui::JointTrajectoryToolBar(component_info));

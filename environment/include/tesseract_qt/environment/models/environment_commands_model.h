@@ -43,17 +43,17 @@ class EnvironmentCommandsModel : public QStandardItemModel
 
 public:
   explicit EnvironmentCommandsModel(QObject* parent = nullptr);
-  explicit EnvironmentCommandsModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit EnvironmentCommandsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   EnvironmentCommandsModel(const EnvironmentCommandsModel& other);
   EnvironmentCommandsModel& operator=(const EnvironmentCommandsModel& other);
   ~EnvironmentCommandsModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   const tesseract_environment::Commands& getCommands() const;
 
 private:
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
 
   EnvironmentCommandsStandardItem* getRoot();
   const EnvironmentCommandsStandardItem* getRoot() const;

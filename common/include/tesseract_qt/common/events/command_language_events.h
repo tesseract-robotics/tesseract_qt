@@ -37,7 +37,7 @@ namespace tesseract_gui::events
 class CompositeInstructionClear : public ComponentEvent
 {
 public:
-  CompositeInstructionClear(ComponentInfo component_info, const std::string& ns = "");
+  CompositeInstructionClear(std::shared_ptr<const ComponentInfo> component_info, const std::string& ns = "");
   ~CompositeInstructionClear() override;
 
   const std::string& getNamespace() const;
@@ -52,7 +52,7 @@ private:
 class CompositeInstructionSet : public ComponentEvent
 {
 public:
-  CompositeInstructionSet(ComponentInfo component_info,
+  CompositeInstructionSet(std::shared_ptr<const ComponentInfo> component_info,
                           const tesseract_planning::CompositeInstruction& composite_instruction,
                           const std::string& ns = "");
   ~CompositeInstructionSet() override;
@@ -71,8 +71,10 @@ private:
 class CompositeInstructionRemove : public ComponentEventUUID
 {
 public:
-  CompositeInstructionRemove(ComponentInfo component_info, boost::uuids::uuid uuid);
-  CompositeInstructionRemove(ComponentInfo component_info, boost::uuids::uuid uuid, boost::uuids::uuid child_uuid);
+  CompositeInstructionRemove(std::shared_ptr<const ComponentInfo> component_info, boost::uuids::uuid uuid);
+  CompositeInstructionRemove(std::shared_ptr<const ComponentInfo> component_info,
+                             boost::uuids::uuid uuid,
+                             boost::uuids::uuid child_uuid);
   ~CompositeInstructionRemove() override;
 
   /** @brief Unique type for this event. */

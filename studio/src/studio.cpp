@@ -49,6 +49,7 @@
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/widgets/load_environment_dialog.h>
@@ -74,8 +75,8 @@ struct Studio::Implementation
   ads::CDockManager* dock_manager{ nullptr };
   QWidgetAction* perspective_list_action{ nullptr };
   QComboBox* perspective_comboBox{ nullptr };
-  ComponentInfo component_info{ "studio_environment" };
-  ComponentInfo jt_component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
+  std::shared_ptr<const ComponentInfo> jt_component_info;
   EntityManager::Ptr entity_manager;
   IgnSceneGraphRenderManager scene_graph_manager;
   IgnToolPathRenderManager tool_path_manager;
@@ -104,7 +105,8 @@ struct Studio::Implementation
 
 Studio::Implementation::Implementation(Studio* app)
   : app(app)
-  , jt_component_info(component_info.createChild())
+  , component_info(ComponentInfoManager::create("studio_environment"))
+  , jt_component_info(component_info->createChild())
   , entity_manager(std::make_shared<EntityManager>())
   , scene_graph_manager(component_info, entity_manager)
   , tool_path_manager(component_info, entity_manager)
@@ -191,7 +193,7 @@ Studio::Studio(QWidget* parent)
           data_->dock_manager,
           SLOT(openPerspective(const QString&)));
 
-  auto render_widget = new tesseract_gui::RenderWidget(data_->component_info.getSceneName());
+  auto render_widget = new tesseract_gui::RenderWidget(data_->component_info->getSceneName());
   render_widget->setSkyEnabled(true);
   auto* render_dock_widget = new ads::CDockWidget("Scene");
   render_dock_widget->setWidget(render_widget);

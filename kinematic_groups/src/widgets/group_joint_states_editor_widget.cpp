@@ -45,18 +45,19 @@ struct GroupJointStatesEditorWidget::Implementation
 };
 
 GroupJointStatesEditorWidget::GroupJointStatesEditorWidget(QWidget* parent)
-  : GroupJointStatesEditorWidget(ComponentInfo(), parent)
+  : GroupJointStatesEditorWidget(nullptr, parent)
 {
 }
 
-GroupJointStatesEditorWidget::GroupJointStatesEditorWidget(ComponentInfo component_info, QWidget* parent)
+GroupJointStatesEditorWidget::GroupJointStatesEditorWidget(std::shared_ptr<const ComponentInfo> component_info,
+                                                           QWidget* parent)
   : QWidget(parent)
   , ui_(std::make_unique<Ui::GroupJointStatesEditorWidget>())
   , data_(std::make_unique<Implementation>())
 {
   ui_->setupUi(this);
 
-  ui_->groupJointStatesWidget->setComponentInfo(component_info);
+  ui_->groupJointStatesWidget->setComponentInfo(std::move(component_info));
 
   connect(ui_->groupNamesComboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui_->groupNamesComboBox, SIGNAL(aboutToShowPopup()), this, SLOT(onUpdateModels()));
@@ -74,13 +75,13 @@ GroupJointStatesEditorWidget::GroupJointStatesEditorWidget(ComponentInfo compone
 
 GroupJointStatesEditorWidget::~GroupJointStatesEditorWidget() = default;
 
-void GroupJointStatesEditorWidget::setComponentInfo(ComponentInfo component_info)
+void GroupJointStatesEditorWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
-  ui_->groupJointStatesWidget->setComponentInfo(component_info);
+  ui_->groupJointStatesWidget->setComponentInfo(std::move(component_info));
   onUpdateModels();
 }
 
-const ComponentInfo& GroupJointStatesEditorWidget::getComponentInfo() const
+std::shared_ptr<const ComponentInfo> GroupJointStatesEditorWidget::getComponentInfo() const
 {
   return ui_->groupJointStatesWidget->getComponentInfo();
 }
@@ -110,7 +111,7 @@ const QItemSelectionModel& GroupJointStatesEditorWidget::getSelectionModel() con
 
 void GroupJointStatesEditorWidget::onGroupNameChanged()
 {
-  auto env_wrapper = EnvironmentManager::get(ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(nullptr);
   if (env_wrapper == nullptr)
     return;
 
@@ -177,7 +178,7 @@ void GroupJointStatesEditorWidget::onUpdateModels()
   QStringList list;
   data_->group_names_model.setStringList(list);
 
-  auto env_wrapper = EnvironmentManager::get(tesseract_gui::ComponentInfo());
+  auto env_wrapper = EnvironmentManager::get(ui_->groupJointStatesWidget->getComponentInfo());
   if (env_wrapper == nullptr)
     return;
 

@@ -42,11 +42,13 @@ struct AllowedCollisionMatrixEditorWidget::Implementation
 };
 
 AllowedCollisionMatrixEditorWidget::AllowedCollisionMatrixEditorWidget(QWidget* parent)
-  : AllowedCollisionMatrixEditorWidget(ComponentInfo(), parent)
+  : AllowedCollisionMatrixEditorWidget(nullptr, parent)
 {
 }
 
-AllowedCollisionMatrixEditorWidget::AllowedCollisionMatrixEditorWidget(ComponentInfo component_info, QWidget* parent)
+AllowedCollisionMatrixEditorWidget::AllowedCollisionMatrixEditorWidget(
+    std::shared_ptr<const ComponentInfo> component_info,
+    QWidget* parent)
   : QWidget(parent)
   , ui_(std::make_unique<Ui::AllowedCollisionMatrixEditorWidget>())
   , data_(std::make_unique<Implementation>())
@@ -64,13 +66,13 @@ AllowedCollisionMatrixEditorWidget::AllowedCollisionMatrixEditorWidget(Component
 
 AllowedCollisionMatrixEditorWidget::~AllowedCollisionMatrixEditorWidget() = default;
 
-void AllowedCollisionMatrixEditorWidget::setComponentInfo(ComponentInfo component_info)
+void AllowedCollisionMatrixEditorWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   ui_->acm_widget->setComponentInfo(component_info);
   data_->dialog = std::make_unique<AddAllowedCollisionEntryDialog>(component_info);
 }
 
-const ComponentInfo& AllowedCollisionMatrixEditorWidget::getComponentInfo() const
+std::shared_ptr<const ComponentInfo> AllowedCollisionMatrixEditorWidget::getComponentInfo() const
 {
   return ui_->acm_widget->getComponentInfo();
 }

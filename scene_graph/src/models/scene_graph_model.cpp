@@ -42,16 +42,16 @@ namespace tesseract_gui
 {
 struct SceneGraphModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
 
   SceneGraphStandardItem* scene_graph_item;
 
   void clear() { scene_graph_item->clear(); }
 };
 
-SceneGraphModel::SceneGraphModel(QObject* parent) : SceneGraphModel(ComponentInfo(), parent) {}
+SceneGraphModel::SceneGraphModel(QObject* parent) : SceneGraphModel(nullptr, parent) {}
 
-SceneGraphModel::SceneGraphModel(ComponentInfo component_info, QObject* parent)
+SceneGraphModel::SceneGraphModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   setColumnCount(2);
@@ -81,7 +81,7 @@ SceneGraphModel::SceneGraphModel(const SceneGraphModel& other)
 
 SceneGraphModel& SceneGraphModel::operator=(const SceneGraphModel& other) { return *this; }
 
-const ComponentInfo& SceneGraphModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> SceneGraphModel::getComponentInfo() const { return data_->component_info; }
 
 void SceneGraphModel::setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph)
 {

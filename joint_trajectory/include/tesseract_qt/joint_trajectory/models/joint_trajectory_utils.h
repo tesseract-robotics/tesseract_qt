@@ -23,6 +23,8 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_UTILS_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_UTILS_H
 
+#include <memory>
+
 class QString;
 class QWidget;
 
@@ -34,7 +36,9 @@ namespace tesseract_gui
 {
 class ComponentInfo;
 
-bool openJointTrajectorySet(const ComponentInfo& component_info, const QString& filename, const QString& suffix);
+bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& component_info,
+                            const QString& filename,
+                            const QString& suffix);
 bool saveJointTrajectorySet(const tesseract_common::JointTrajectorySet& jts, QString filename, const QString& suffix);
 }  // namespace tesseract_gui
 

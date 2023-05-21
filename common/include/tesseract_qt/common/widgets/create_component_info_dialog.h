@@ -44,7 +44,7 @@ public:
 
   void setSceneNames(const QStringList& scene_names);
 
-  ComponentInfo getComponentInfo() const;
+  std::shared_ptr<ComponentInfo> getComponentInfo() const;
 
   void reset();
 

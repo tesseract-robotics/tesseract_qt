@@ -34,11 +34,11 @@ class SceneGraphToolBar : public QToolBar
   Q_OBJECT
 public:
   SceneGraphToolBar(QWidget* parent = nullptr);
-  explicit SceneGraphToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit SceneGraphToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~SceneGraphToolBar();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
 private:
   class Implementation;

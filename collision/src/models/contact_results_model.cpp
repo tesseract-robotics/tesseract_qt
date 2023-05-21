@@ -36,7 +36,7 @@ namespace tesseract_gui
 {
 struct ContactResultsModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
   std::unordered_map<std::string, QStandardItem*> namespace_map;
 };
 
@@ -49,7 +49,7 @@ ContactResultsModel::ContactResultsModel(QObject* parent)
   qGuiApp->installEventFilter(this);
 }
 
-ContactResultsModel::ContactResultsModel(ComponentInfo component_info, QObject* parent)
+ContactResultsModel::ContactResultsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
@@ -62,7 +62,7 @@ ContactResultsModel::ContactResultsModel(ComponentInfo component_info, QObject* 
 
 ContactResultsModel::~ContactResultsModel() = default;
 
-const ComponentInfo& ContactResultsModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> ContactResultsModel::getComponentInfo() const { return data_->component_info; }
 
 bool ContactResultsModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {

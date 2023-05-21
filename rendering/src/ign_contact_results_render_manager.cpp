@@ -50,7 +50,7 @@ namespace tesseract_gui
 struct IgnContactResultsRenderManager::Implementation
 {
   std::string scene_name;
-  std::unordered_map<tesseract_gui::ComponentInfo, tesseract_gui::EntityManager::Ptr> entity_managers;
+  std::map<std::shared_ptr<const ComponentInfo>, tesseract_gui::EntityManager::Ptr> entity_managers;
 
   void clear(gz::rendering::Scene& scene, EntityContainer& container)
   {
@@ -92,7 +92,7 @@ struct IgnContactResultsRenderManager::Implementation
   }
 };
 
-IgnContactResultsRenderManager::IgnContactResultsRenderManager(ComponentInfo component_info)
+IgnContactResultsRenderManager::IgnContactResultsRenderManager(std::shared_ptr<const ComponentInfo> component_info)
   : ContactResultsRenderManager(std::move(component_info)), data_(std::make_unique<Implementation>())
 {
   data_->scene_name = component_info_->getSceneName();
@@ -106,7 +106,7 @@ void IgnContactResultsRenderManager::render()
     return;
 
   auto getEntityManager =
-      [this](const tesseract_gui::ComponentInfo& component_info) -> tesseract_gui::EntityManager::Ptr {
+      [this](const std::shared_ptr<const ComponentInfo>& component_info) -> tesseract_gui::EntityManager::Ptr {
     auto it = data_->entity_managers.find(component_info);
     if (it != data_->entity_managers.end())
       return it->second;

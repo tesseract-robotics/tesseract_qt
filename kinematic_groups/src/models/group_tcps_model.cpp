@@ -34,15 +34,15 @@
 
 namespace tesseract_gui
 {
-GroupTCPsModel::GroupTCPsModel(QObject* parent) : GroupTCPsModel(ComponentInfo(), parent) {}
+GroupTCPsModel::GroupTCPsModel(QObject* parent) : GroupTCPsModel(nullptr, parent) {}
 
-GroupTCPsModel::GroupTCPsModel(ComponentInfo component_info, QObject* parent)
-  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+GroupTCPsModel::GroupTCPsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::move(component_info))
 {
   clear();
 
   // If an environment has already been assigned load the data
-  auto env_wrapper = EnvironmentManager::get(*component_info_);
+  auto env_wrapper = EnvironmentManager::get(component_info_);
   if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
     set(env_wrapper->getEnvironment()->getKinematicsInformation().group_tcps);
 
@@ -55,7 +55,7 @@ GroupTCPsModel& GroupTCPsModel::operator=(const GroupTCPsModel& /*other*/) { ret
 
 GroupTCPsModel::~GroupTCPsModel() = default;
 
-const ComponentInfo& GroupTCPsModel::getComponentInfo() const { return *component_info_; }
+std::shared_ptr<const ComponentInfo> GroupTCPsModel::getComponentInfo() const { return component_info_; }
 
 void GroupTCPsModel::clear()
 {
@@ -103,28 +103,28 @@ bool GroupTCPsModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupTCPsSet*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsSet*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       set(e->getGroupTCPs());
   }
   else if (event->type() == events::GroupTCPsAdd::kType)
   {
     assert(dynamic_cast<events::GroupTCPsAdd*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsAdd*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       add(e->getGroupName(), e->getTCPName(), e->getTCP());
   }
   else if (event->type() == events::GroupTCPsClear::kType)
   {
     assert(dynamic_cast<events::GroupTCPsClear*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsClear*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       clear();
   }
   else if (event->type() == events::GroupTCPsRemove::kType)
   {
     assert(dynamic_cast<events::GroupTCPsRemove*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsRemove*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
     {
       for (const auto& entry : e->getEntries())
         remove(entry[0], entry[1]);
@@ -134,7 +134,7 @@ bool GroupTCPsModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::GroupTCPsRemoveGroup*>(event) != nullptr);
     auto* e = static_cast<events::GroupTCPsRemoveGroup*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
     {
       for (const auto& link_name : e->getGroupNames())
         remove(link_name);

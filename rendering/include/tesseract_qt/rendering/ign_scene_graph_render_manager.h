@@ -33,7 +33,8 @@ struct ComponentInfo;
 class IgnSceneGraphRenderManager : public SceneGraphRenderManager
 {
 public:
-  IgnSceneGraphRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
+  IgnSceneGraphRenderManager(std::shared_ptr<const ComponentInfo> component_info,
+                             std::shared_ptr<EntityManager> entity_manager);
   ~IgnSceneGraphRenderManager();
 
 private:

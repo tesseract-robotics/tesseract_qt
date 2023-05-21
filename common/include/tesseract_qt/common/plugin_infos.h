@@ -40,7 +40,7 @@ struct StudioPluginInfo
   std::set<std::string> search_libraries;
 
   /** @brief A map of name to component infos */
-  std::map<std::string, ComponentInfo> component_infos;
+  std::map<std::string, std::shared_ptr<const ComponentInfo>> component_infos;
 
   /** @brief A map of name to studio plugin information */
   tesseract_common::PluginInfoContainer plugin_infos;

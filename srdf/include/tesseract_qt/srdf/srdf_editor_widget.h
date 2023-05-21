@@ -55,7 +55,7 @@ class SRDFEditorWidget : public QWidget
 
 public:
   explicit SRDFEditorWidget(std::shared_ptr<tesseract_common::ResourceLocator> locator, QWidget* parent = nullptr);
-  explicit SRDFEditorWidget(ComponentInfo component_info,
+  explicit SRDFEditorWidget(std::shared_ptr<const ComponentInfo> component_info,
                             std::shared_ptr<tesseract_common::ResourceLocator> locator,
                             QWidget* parent = nullptr);
   ~SRDFEditorWidget();

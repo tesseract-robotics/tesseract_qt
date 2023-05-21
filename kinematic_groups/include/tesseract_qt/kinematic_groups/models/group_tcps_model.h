@@ -42,17 +42,17 @@ class GroupTCPsModel : public QStandardItemModel
 
 public:
   explicit GroupTCPsModel(QObject* parent = nullptr);
-  explicit GroupTCPsModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit GroupTCPsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   GroupTCPsModel(const GroupTCPsModel& other);
   GroupTCPsModel& operator=(const GroupTCPsModel& other);
   ~GroupTCPsModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
 
 private:
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
 
   GroupTCPsStandardItem* getRoot();
   const GroupTCPsStandardItem* getRoot() const;

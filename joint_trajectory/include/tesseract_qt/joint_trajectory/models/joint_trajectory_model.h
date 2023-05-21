@@ -53,10 +53,10 @@ class JointTrajectoryModel : public QStandardItemModel
 
 public:
   explicit JointTrajectoryModel(QObject* parent = nullptr);
-  explicit JointTrajectoryModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit JointTrajectoryModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   ~JointTrajectoryModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   tesseract_common::JointState getJointState(const QModelIndex& row) const;
   tesseract_common::JointTrajectoryInfo getJointTrajectory(const QModelIndex& row) const;

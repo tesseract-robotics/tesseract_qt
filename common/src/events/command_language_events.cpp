@@ -25,7 +25,8 @@
 
 namespace tesseract_gui::events
 {
-CompositeInstructionClear::CompositeInstructionClear(ComponentInfo component_info, const std::string& ns)
+CompositeInstructionClear::CompositeInstructionClear(std::shared_ptr<const ComponentInfo> component_info,
+                                                     const std::string& ns)
   : ComponentEvent(std::move(component_info), kType), ns_(ns)
 {
 }
@@ -42,7 +43,7 @@ struct CompositeInstructionSet::Implementation
   tesseract_planning::CompositeInstruction composite_instruction;
 };
 
-CompositeInstructionSet::CompositeInstructionSet(ComponentInfo component_info,
+CompositeInstructionSet::CompositeInstructionSet(std::shared_ptr<const ComponentInfo> component_info,
                                                  const tesseract_planning::CompositeInstruction& composite_instruction,
                                                  const std::string& ns)
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
@@ -61,11 +62,12 @@ const tesseract_planning::CompositeInstruction& CompositeInstructionSet::getComp
 
 //////////////////////////////////////////
 
-CompositeInstructionRemove::CompositeInstructionRemove(ComponentInfo component_info, boost::uuids::uuid uuid)
+CompositeInstructionRemove::CompositeInstructionRemove(std::shared_ptr<const ComponentInfo> component_info,
+                                                       boost::uuids::uuid uuid)
   : ComponentEventUUID(std::move(component_info), uuid, kType)
 {
 }
-CompositeInstructionRemove::CompositeInstructionRemove(ComponentInfo component_info,
+CompositeInstructionRemove::CompositeInstructionRemove(std::shared_ptr<const ComponentInfo> component_info,
                                                        boost::uuids::uuid uuid,
                                                        boost::uuids::uuid child_uuid)
   : ComponentEventUUID(std::move(component_info), uuid, child_uuid, kType)

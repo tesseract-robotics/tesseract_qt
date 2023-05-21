@@ -34,17 +34,15 @@
 
 namespace tesseract_gui
 {
-EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent) : EnvironmentCommandsModel(ComponentInfo(), parent)
-{
-}
+EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent) : EnvironmentCommandsModel(nullptr, parent) {}
 
-EnvironmentCommandsModel::EnvironmentCommandsModel(ComponentInfo component_info, QObject* parent)
-  : QStandardItemModel(parent), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+EnvironmentCommandsModel::EnvironmentCommandsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
+  : QStandardItemModel(parent), component_info_(std::move(component_info))
 {
   clear();
 
   // If an environment has already been assigned load the data
-  auto env_wrapper = EnvironmentManager::get(*component_info_);
+  auto env_wrapper = EnvironmentManager::get(component_info_);
   if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
     set(env_wrapper->getEnvironment()->getCommandHistory());
 
@@ -64,7 +62,7 @@ EnvironmentCommandsModel& EnvironmentCommandsModel::operator=(const EnvironmentC
 
 EnvironmentCommandsModel::~EnvironmentCommandsModel() = default;
 
-const ComponentInfo& EnvironmentCommandsModel::getComponentInfo() const { return *component_info_; }
+std::shared_ptr<const ComponentInfo> EnvironmentCommandsModel::getComponentInfo() const { return component_info_; }
 
 void EnvironmentCommandsModel::clear()
 {
@@ -108,14 +106,14 @@ bool EnvironmentCommandsModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::EnvironmentCommandsSet*>(event) != nullptr);
     auto* e = static_cast<events::EnvironmentCommandsSet*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       set(e->getCommands());
   }
   else if (event->type() == events::EnvironmentCommandsAppend::kType)
   {
     assert(dynamic_cast<events::EnvironmentCommandsAppend*>(event) != nullptr);
     auto* e = static_cast<events::EnvironmentCommandsAppend*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
     {
       for (const auto& command : e->getCommands())
         appendCommand(command);

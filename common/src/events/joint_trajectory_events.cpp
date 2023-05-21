@@ -37,7 +37,7 @@ public:
   tesseract_common::JointTrajectorySet joint_trajectory_set;
 };
 
-JointTrajectoryAdd::JointTrajectoryAdd(ComponentInfo component_info,
+JointTrajectoryAdd::JointTrajectoryAdd(std::shared_ptr<const ComponentInfo> component_info,
                                        const tesseract_common::JointTrajectorySet& joint_trajectory_set)
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
@@ -56,7 +56,8 @@ const tesseract_common::JointTrajectorySet& JointTrajectoryAdd::getJointTrajecto
 
 //////////////////////////////////////////
 
-JointTrajectoryRemove::JointTrajectoryRemove(ComponentInfo component_info, const boost::uuids::uuid& uuid)
+JointTrajectoryRemove::JointTrajectoryRemove(std::shared_ptr<const ComponentInfo> component_info,
+                                             const boost::uuids::uuid& uuid)
   : ComponentEventUUID(std::move(component_info), uuid, kType)
 {
 }
@@ -68,7 +69,7 @@ JointTrajectoryRemove::~JointTrajectoryRemove() = default;
 
 //////////////////////////////////////////
 
-JointTrajectoryRemoveAll::JointTrajectoryRemoveAll(ComponentInfo component_info)
+JointTrajectoryRemoveAll::JointTrajectoryRemoveAll(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }
@@ -80,7 +81,7 @@ JointTrajectoryRemoveAll::~JointTrajectoryRemoveAll() = default;
 
 //////////////////////////////////////////
 
-JointTrajectoryRemoveSelected::JointTrajectoryRemoveSelected(ComponentInfo component_info)
+JointTrajectoryRemoveSelected::JointTrajectoryRemoveSelected(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }
@@ -92,7 +93,7 @@ JointTrajectoryRemoveSelected::~JointTrajectoryRemoveSelected() = default;
 
 //////////////////////////////////////////
 
-JointTrajectoryOpen::JointTrajectoryOpen(ComponentInfo component_info)
+JointTrajectoryOpen::JointTrajectoryOpen(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }
@@ -104,7 +105,7 @@ JointTrajectoryOpen::~JointTrajectoryOpen() = default;
 
 //////////////////////////////////////////
 
-JointTrajectorySave::JointTrajectorySave(ComponentInfo component_info)
+JointTrajectorySave::JointTrajectorySave(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }
@@ -116,7 +117,7 @@ JointTrajectorySave::~JointTrajectorySave() = default;
 
 //////////////////////////////////////////
 
-JointTrajectoryPlot::JointTrajectoryPlot(ComponentInfo component_info)
+JointTrajectoryPlot::JointTrajectoryPlot(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }
@@ -128,7 +129,7 @@ JointTrajectoryPlot::~JointTrajectoryPlot() = default;
 
 //////////////////////////////////////////
 
-JointTrajectoryToolbarState::JointTrajectoryToolbarState(ComponentInfo component_info)
+JointTrajectoryToolbarState::JointTrajectoryToolbarState(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }

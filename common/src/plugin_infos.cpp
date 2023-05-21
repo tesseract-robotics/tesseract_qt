@@ -8,6 +8,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/unordered_map.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 #include <memory>
 #include <string>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP

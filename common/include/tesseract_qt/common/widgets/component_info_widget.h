@@ -43,7 +43,7 @@ public:
   explicit ComponentInfoWidget(QWidget* parent = nullptr);
   ~ComponentInfoWidget();
 
-  ComponentInfo getComponentInfo() const;
+  std::shared_ptr<ComponentInfo> getComponentInfo() const;
 
 private:
   std::unique_ptr<Ui::ComponentInfoWidget> ui;

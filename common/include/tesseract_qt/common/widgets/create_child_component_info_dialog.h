@@ -42,7 +42,7 @@ public:
   explicit CreateChildComponentInfoDialog(QWidget* parent = nullptr);
   ~CreateChildComponentInfoDialog();
 
-  ComponentInfo getComponentInfo() const;
+  std::shared_ptr<ComponentInfo> getComponentInfo() const;
 
   void reset(const ComponentInfo& parent_component_info);
 

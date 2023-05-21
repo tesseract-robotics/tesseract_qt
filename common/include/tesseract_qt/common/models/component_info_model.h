@@ -37,7 +37,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 namespace tesseract_gui
 {
 struct ComponentInfo;
-using ComponentInfoVector = std::vector<ComponentInfo>;
+using ComponentInfoVector = std::vector<std::shared_ptr<ComponentInfo>>;
 class ComponentInfoModel : public QStandardItemModel
 {
   Q_OBJECT
@@ -49,11 +49,11 @@ public:
   ~ComponentInfoModel() override;
 
   QStringList getNamespaces() const;
-  const ComponentInfo& getComponentInfo(const boost::uuids::uuid& ns) const;
+  std::shared_ptr<ComponentInfo> getComponentInfo(const boost::uuids::uuid& ns) const;
   ComponentInfoVector getComponentInfos() const;
 
   void set(const ComponentInfoVector& component_infos);
-  void add(const ComponentInfo& component_info);
+  void add(std::shared_ptr<ComponentInfo> component_info);
   void remove(const boost::uuids::uuid& ns);
   void clear();
 

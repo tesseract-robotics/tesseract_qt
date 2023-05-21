@@ -37,14 +37,14 @@ namespace tesseract_gui::events
 class ManipulationChanged : public ComponentEvent
 {
 public:
-  ManipulationChanged(ComponentInfo component_info,
+  ManipulationChanged(std::shared_ptr<const ComponentInfo> component_info,
                       std::string state_name,
-                      std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos);
+                      std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos);
   ManipulationChanged(const ManipulationChanged& other);
   ~ManipulationChanged() override;
 
   const std::string& getStateName() const;
-  const std::unordered_map<std::string, tesseract_gui::ComponentInfo>& getStateComponentInfos() const;
+  const std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>>& getStateComponentInfos() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::MANIPULATION_CHANGED);

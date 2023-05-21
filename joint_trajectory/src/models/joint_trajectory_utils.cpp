@@ -39,7 +39,9 @@
 
 namespace tesseract_gui
 {
-bool openJointTrajectorySet(const ComponentInfo& component_info, const QString& filename, const QString& suffix)
+bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& component_info,
+                            const QString& filename,
+                            const QString& suffix)
 {
   QFileInfo file_info(filename);
   tesseract_common::JointTrajectorySet joint_trajectory_set;

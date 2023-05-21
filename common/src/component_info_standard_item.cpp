@@ -29,20 +29,20 @@
 
 namespace tesseract_gui
 {
-ComponentInfoStandardItem::ComponentInfoStandardItem(ComponentInfo component_info)
+ComponentInfoStandardItem::ComponentInfoStandardItem(std::shared_ptr<ComponentInfo> component_info)
   : ComponentInfoStandardItem(icons::getConvexMeshIcon(), "Component Info", std::move(component_info))
 {
 }
 
-ComponentInfoStandardItem::ComponentInfoStandardItem(const QString& text, ComponentInfo component_info)
+ComponentInfoStandardItem::ComponentInfoStandardItem(const QString& text, std::shared_ptr<ComponentInfo> component_info)
   : ComponentInfoStandardItem(icons::getConvexMeshIcon(), text, std::move(component_info))
 {
 }
 
 ComponentInfoStandardItem::ComponentInfoStandardItem(const QIcon& icon,
                                                      const QString& text,
-                                                     ComponentInfo component_info)
-  : QStandardItem(icon, text), component_info(std::make_unique<ComponentInfo>(std::move(component_info)))
+                                                     std::shared_ptr<ComponentInfo> component_info)
+  : QStandardItem(icon, text), component_info(std::move(component_info))
 {
   appendRow(createStandardItemString("Scene Name", this->component_info->getSceneName()));
   appendRow(createStandardItemString("Namespace", boost::uuids::to_string(this->component_info->getNamespace())));

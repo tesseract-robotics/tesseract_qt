@@ -38,14 +38,8 @@ struct ComponentInfo;
 /** @brief All modesl will have this object to allow associating disconnected object together. */
 struct ComponentInfo
 {
-  /** @breif Default Construction */
-  ComponentInfo();
-
-  /** @brief Assigns provided scene name and generates random namespace */
-  explicit ComponentInfo(std::string scene_name, std::string description = "");
-
-  /** @brief Assigns provided scene name and use namespace string generates namespace uuid */
-  explicit ComponentInfo(std::string scene_name, std::list<boost::uuids::uuid> ns, std::string description = "");
+  /** @brief Get the unique name */
+  const std::string& getName() const;
 
   /** @brief Get the scene name */
   const std::string& getSceneName() const;
@@ -73,10 +67,10 @@ struct ComponentInfo
   bool hasParent() const;
 
   /** @brief Create parent component info using parent info */
-  ComponentInfo getParentComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getParentComponentInfo() const;
 
   /** @brief Create child component info object */
-  ComponentInfo createChild() const;
+  std::shared_ptr<ComponentInfo> createChild() const;
 
   /**
    * @brief Check if the provided ComponentInfo is the objects parent
@@ -84,7 +78,7 @@ struct ComponentInfo
    * @param other The object to check if parent
    * @return True if the scene_name is equal and this object is derived from the provided object, otherwise false
    */
-  bool isParent(const ComponentInfo& other) const;
+  bool isParent(const std::shared_ptr<const ComponentInfo>& other) const;
 
   /**
    * @brief Check if the provided ComponentInfo is a child of this object
@@ -92,31 +86,54 @@ struct ComponentInfo
    * @param other The object to check if child
    * @return True if the scene_name is equal and the provided object derived from this object, otherwise false
    */
-  bool isChild(const ComponentInfo& other) const;
+  bool isChild(const std::shared_ptr<const ComponentInfo>& other) const;
 
   bool operator==(const ComponentInfo& rhs) const;
   bool operator!=(const ComponentInfo& rhs) const;
 
 private:
   friend class boost::serialization::access;
+  friend class ComponentInfoManager;
+
   template <class Archive>
   void serialize(Archive& ar, const unsigned int version);  // NOLINT
 
   /** @brief The associated render scene */
   std::string scene_name_{ "tesseract_default" };
 
-  /**
-   * @brief The associated namespace
-   * @details Every time a child is created the new namespace is prepended to the list
-   * @details Depending on the constructor this is generated using boost uuid converted to string
-   */
-  std::list<boost::uuids::uuid> ns_;
+  /** @brief A unique name associated with the namespace */
+  std::string name_;
+
+  /** @brief The namespace */
+  boost::uuids::uuid ns_{};
+
+  /** @brief The parent if a child otherwise nullptr */
+  std::shared_ptr<const ComponentInfo> parent_{ nullptr };
 
   /**
    * @brief A description
    * @details This is not used for comparision
    */
   std::string description_;
+
+  /** @breif Default Construction */
+  ComponentInfo();
+
+  /** @brief Assigns provided scene name and generates random namespace */
+  explicit ComponentInfo(std::string scene_name, std::string name, std::string description = "");
+
+  /** @brief Constructor used when creating a child */
+  explicit ComponentInfo(std::string scene_name,
+                         std::string name,
+                         std::shared_ptr<const ComponentInfo> parent,
+                         std::string description = "");
+
+  /** @brief Assigns provided scene name and use namespace string generates namespace uuid */
+  explicit ComponentInfo(std::string scene_name,
+                         std::string name,
+                         const boost::uuids::uuid& ns,
+                         std::shared_ptr<const ComponentInfo> parent = nullptr,
+                         std::string description = "");
 };
 
 }  // namespace tesseract_gui

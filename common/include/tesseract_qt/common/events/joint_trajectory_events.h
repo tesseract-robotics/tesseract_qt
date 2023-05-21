@@ -38,7 +38,8 @@ namespace tesseract_gui::events
 class JointTrajectoryAdd : public ComponentEvent
 {
 public:
-  JointTrajectoryAdd(ComponentInfo component_info, const tesseract_common::JointTrajectorySet& joint_trajectory);
+  JointTrajectoryAdd(std::shared_ptr<const ComponentInfo> component_info,
+                     const tesseract_common::JointTrajectorySet& joint_trajectory);
   JointTrajectoryAdd(const JointTrajectoryAdd& other);
   ~JointTrajectoryAdd() override;
 
@@ -57,7 +58,7 @@ private:
 class JointTrajectoryRemove : public ComponentEventUUID
 {
 public:
-  JointTrajectoryRemove(ComponentInfo component_info, const boost::uuids::uuid& uuid);
+  JointTrajectoryRemove(std::shared_ptr<const ComponentInfo> component_info, const boost::uuids::uuid& uuid);
   JointTrajectoryRemove(const JointTrajectoryRemove& other);
   ~JointTrajectoryRemove() override;
 
@@ -69,7 +70,7 @@ public:
 class JointTrajectoryRemoveAll : public ComponentEvent
 {
 public:
-  JointTrajectoryRemoveAll(ComponentInfo component_info);
+  JointTrajectoryRemoveAll(std::shared_ptr<const ComponentInfo> component_info);
   JointTrajectoryRemoveAll(const JointTrajectoryRemoveAll& other);
   ~JointTrajectoryRemoveAll() override;
 
@@ -81,7 +82,7 @@ public:
 class JointTrajectoryRemoveSelected : public ComponentEvent
 {
 public:
-  JointTrajectoryRemoveSelected(ComponentInfo component_info);
+  JointTrajectoryRemoveSelected(std::shared_ptr<const ComponentInfo> component_info);
   JointTrajectoryRemoveSelected(const JointTrajectoryRemoveSelected& other);
   ~JointTrajectoryRemoveSelected() override;
 
@@ -93,7 +94,7 @@ public:
 class JointTrajectoryOpen : public ComponentEvent
 {
 public:
-  JointTrajectoryOpen(ComponentInfo component_info);
+  JointTrajectoryOpen(std::shared_ptr<const ComponentInfo> component_info);
   JointTrajectoryOpen(const JointTrajectoryOpen& other);
   ~JointTrajectoryOpen() override;
 
@@ -105,7 +106,7 @@ public:
 class JointTrajectorySave : public ComponentEvent
 {
 public:
-  JointTrajectorySave(ComponentInfo component_info);
+  JointTrajectorySave(std::shared_ptr<const ComponentInfo> component_info);
   JointTrajectorySave(const JointTrajectorySave& other);
   ~JointTrajectorySave() override;
 
@@ -117,7 +118,7 @@ public:
 class JointTrajectoryPlot : public ComponentEvent
 {
 public:
-  JointTrajectoryPlot(ComponentInfo component_info);
+  JointTrajectoryPlot(std::shared_ptr<const ComponentInfo> component_info);
   JointTrajectoryPlot(const JointTrajectoryPlot& other);
   ~JointTrajectoryPlot() override;
 
@@ -129,7 +130,7 @@ public:
 class JointTrajectoryToolbarState : public ComponentEvent
 {
 public:
-  JointTrajectoryToolbarState(ComponentInfo component_info);
+  JointTrajectoryToolbarState(std::shared_ptr<const ComponentInfo> component_info);
   JointTrajectoryToolbarState(const JointTrajectoryToolbarState& other);
   ~JointTrajectoryToolbarState() override;
 

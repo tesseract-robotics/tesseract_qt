@@ -33,6 +33,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/tree_view.h>
 
 int main(int argc, char** argv)
@@ -73,7 +74,7 @@ int main(int argc, char** argv)
   tool_path4.setDescription("Demo Tool Path 4");
   tool_path4.regenerateUUID();
 
-  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  auto component_info = tesseract_gui::ComponentInfoManager::create("scene_name");
 
   QWidget widget;
   auto layout = new QVBoxLayout();

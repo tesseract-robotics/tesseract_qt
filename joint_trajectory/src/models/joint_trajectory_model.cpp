@@ -46,13 +46,13 @@ namespace tesseract_gui
 {
 struct JointTrajectoryModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
   std::map<boost::uuids::uuid, QStandardItem*> trajectory_sets;
 };
 
-JointTrajectoryModel::JointTrajectoryModel(QObject* parent) : JointTrajectoryModel(ComponentInfo(), parent) {}
+JointTrajectoryModel::JointTrajectoryModel(QObject* parent) : JointTrajectoryModel(nullptr, parent) {}
 
-JointTrajectoryModel::JointTrajectoryModel(ComponentInfo component_info, QObject* parent)
+JointTrajectoryModel::JointTrajectoryModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
@@ -64,7 +64,7 @@ JointTrajectoryModel::JointTrajectoryModel(ComponentInfo component_info, QObject
 }
 JointTrajectoryModel::~JointTrajectoryModel() = default;
 
-const ComponentInfo& JointTrajectoryModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> JointTrajectoryModel::getComponentInfo() const { return data_->component_info; }
 
 void JointTrajectoryModel::clear()
 {

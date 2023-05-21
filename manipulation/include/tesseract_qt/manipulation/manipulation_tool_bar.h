@@ -34,11 +34,11 @@ class ManipulationToolBar : public QToolBar
   Q_OBJECT
 public:
   ManipulationToolBar(QWidget* parent = nullptr);
-  explicit ManipulationToolBar(ComponentInfo parent_component_info, QWidget* parent = nullptr);
+  explicit ManipulationToolBar(std::shared_ptr<const ComponentInfo> parent_component_info, QWidget* parent = nullptr);
   ~ManipulationToolBar();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
 private Q_SLOTS:
   void onStateNameChanged(const QString& text);

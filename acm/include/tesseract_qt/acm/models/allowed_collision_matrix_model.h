@@ -44,12 +44,12 @@ class AllowedCollisionMatrixModel : public QStandardItemModel
   Q_OBJECT
 public:
   AllowedCollisionMatrixModel(QObject* parent = nullptr);
-  explicit AllowedCollisionMatrixModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit AllowedCollisionMatrixModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   AllowedCollisionMatrixModel(const AllowedCollisionMatrixModel& other);
   AllowedCollisionMatrixModel& operator=(const AllowedCollisionMatrixModel& other);
   ~AllowedCollisionMatrixModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 

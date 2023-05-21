@@ -37,9 +37,9 @@ struct GroupTCPsWidget::Implementation
   TreeView* tree_view;
 };
 
-GroupTCPsWidget::GroupTCPsWidget(QWidget* parent) : GroupTCPsWidget(ComponentInfo(), parent) {}
+GroupTCPsWidget::GroupTCPsWidget(QWidget* parent) : GroupTCPsWidget(nullptr, parent) {}
 
-GroupTCPsWidget::GroupTCPsWidget(ComponentInfo component_info, QWidget* parent)
+GroupTCPsWidget::GroupTCPsWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -61,14 +61,17 @@ GroupTCPsWidget::GroupTCPsWidget(ComponentInfo component_info, QWidget* parent)
 }
 GroupTCPsWidget::~GroupTCPsWidget() = default;
 
-void GroupTCPsWidget::setComponentInfo(ComponentInfo component_info)
+void GroupTCPsWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<GroupTCPsModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& GroupTCPsWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> GroupTCPsWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void GroupTCPsWidget::setModel(std::shared_ptr<GroupTCPsModel> model)
 {

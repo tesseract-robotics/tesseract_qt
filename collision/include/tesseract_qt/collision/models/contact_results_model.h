@@ -42,10 +42,10 @@ class ContactResultsModel : public QStandardItemModel
   Q_OBJECT
 public:
   ContactResultsModel(QObject* parent = nullptr);
-  ContactResultsModel(ComponentInfo component_info, QObject* parent = nullptr);
+  ContactResultsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   ~ContactResultsModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
 protected:

@@ -41,12 +41,12 @@ class KinematicGroupsModel : public QStandardItemModel
 
 public:
   explicit KinematicGroupsModel(QObject* parent = nullptr);
-  explicit KinematicGroupsModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit KinematicGroupsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   KinematicGroupsModel(const KinematicGroupsModel& other);
   KinematicGroupsModel& operator=(const KinematicGroupsModel& other);
   ~KinematicGroupsModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   const tesseract_srdf::GroupNames& getGroupNames() const;
   const tesseract_srdf::ChainGroups& getChainGroups() const;

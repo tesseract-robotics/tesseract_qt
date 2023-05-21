@@ -37,9 +37,9 @@ struct KinematicGroupsWidget::Implementation
   TreeView* tree_view;
 };
 
-KinematicGroupsWidget::KinematicGroupsWidget(QWidget* parent) : KinematicGroupsWidget(ComponentInfo(), parent) {}
+KinematicGroupsWidget::KinematicGroupsWidget(QWidget* parent) : KinematicGroupsWidget(nullptr, parent) {}
 
-KinematicGroupsWidget::KinematicGroupsWidget(ComponentInfo component_info, QWidget* parent)
+KinematicGroupsWidget::KinematicGroupsWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -61,14 +61,17 @@ KinematicGroupsWidget::KinematicGroupsWidget(ComponentInfo component_info, QWidg
 }
 KinematicGroupsWidget::~KinematicGroupsWidget() = default;
 
-void KinematicGroupsWidget::setComponentInfo(ComponentInfo component_info)
+void KinematicGroupsWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<KinematicGroupsModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& KinematicGroupsWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> KinematicGroupsWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void KinematicGroupsWidget::setModel(std::shared_ptr<KinematicGroupsModel> model)
 {

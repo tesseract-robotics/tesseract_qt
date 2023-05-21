@@ -37,9 +37,9 @@ struct SceneGraphWidget::Implementation
   TreeView* tree_view;
 };
 
-SceneGraphWidget::SceneGraphWidget(QWidget* parent) : SceneGraphWidget(ComponentInfo(), parent) {}
+SceneGraphWidget::SceneGraphWidget(QWidget* parent) : SceneGraphWidget(nullptr, parent) {}
 
-SceneGraphWidget::SceneGraphWidget(ComponentInfo component_info, QWidget* parent)
+SceneGraphWidget::SceneGraphWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -61,14 +61,17 @@ SceneGraphWidget::SceneGraphWidget(ComponentInfo component_info, QWidget* parent
 }
 SceneGraphWidget::~SceneGraphWidget() = default;
 
-void SceneGraphWidget::setComponentInfo(ComponentInfo component_info)
+void SceneGraphWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<SceneGraphModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& SceneGraphWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> SceneGraphWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void SceneGraphWidget::setModel(std::shared_ptr<SceneGraphModel> model)
 {

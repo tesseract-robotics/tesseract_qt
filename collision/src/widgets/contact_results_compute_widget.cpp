@@ -10,10 +10,11 @@ namespace tesseract_gui
 ContactResultsComputeWidget::ContactResultsComputeWidget(QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::ContactResultsComputeWidget>())
 {
-  ctor(ComponentInfo());
+  ctor(nullptr);
 }
 
-ContactResultsComputeWidget::ContactResultsComputeWidget(ComponentInfo component_info, QWidget* parent)
+ContactResultsComputeWidget::ContactResultsComputeWidget(std::shared_ptr<const ComponentInfo> component_info,
+                                                         QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::ContactResultsComputeWidget>())
 {
   ctor(std::move(component_info));
@@ -21,12 +22,12 @@ ContactResultsComputeWidget::ContactResultsComputeWidget(ComponentInfo component
 
 ContactResultsComputeWidget::~ContactResultsComputeWidget() = default;
 
-void ContactResultsComputeWidget::setComponentInfo(ComponentInfo component_info)
+void ContactResultsComputeWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   ui->contact_results_widget->setComponentInfo(component_info);
 }
 
-const ComponentInfo& ContactResultsComputeWidget::getComponentInfo() const
+std::shared_ptr<const ComponentInfo> ContactResultsComputeWidget::getComponentInfo() const
 {
   return ui->contact_results_widget->getComponentInfo();
 }
@@ -68,11 +69,11 @@ void ContactResultsComputeWidget::onComputeClicked()
           getComponentInfo(), config, events::ContactResultsCompute::StateType::CURRENT_STATE, "Contact Results"));
 }
 
-void ContactResultsComputeWidget::ctor(ComponentInfo component_info)
+void ContactResultsComputeWidget::ctor(std::shared_ptr<const ComponentInfo> component_info)
 {
   ui->setupUi(this);
 
-  ui->contact_results_widget->setComponentInfo(component_info);
+  ui->contact_results_widget->setComponentInfo(std::move(component_info));
 
   connect(ui->compute_push_button, SIGNAL(clicked()), this, SLOT(onComputeClicked()));
 }

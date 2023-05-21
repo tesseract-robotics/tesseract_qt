@@ -33,7 +33,7 @@ struct ComponentInfo;
 class IgnContactResultsRenderManager : public ContactResultsRenderManager
 {
 public:
-  IgnContactResultsRenderManager(ComponentInfo component_info);
+  IgnContactResultsRenderManager(std::shared_ptr<const ComponentInfo> component_info);
   ~IgnContactResultsRenderManager();
 
 private:

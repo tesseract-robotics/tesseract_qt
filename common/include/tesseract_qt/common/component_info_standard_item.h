@@ -32,13 +32,13 @@ class ComponentInfo;
 class ComponentInfoStandardItem : public QStandardItem
 {
 public:
-  ComponentInfoStandardItem(ComponentInfo component_info);
-  explicit ComponentInfoStandardItem(const QString& text, ComponentInfo component_info);
-  ComponentInfoStandardItem(const QIcon& icon, const QString& text, ComponentInfo component_info);
+  ComponentInfoStandardItem(std::shared_ptr<ComponentInfo> component_info);
+  explicit ComponentInfoStandardItem(const QString& text, std::shared_ptr<ComponentInfo> component_info);
+  ComponentInfoStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<ComponentInfo> component_info);
 
   int type() const override;
 
-  std::unique_ptr<ComponentInfo> component_info;
+  std::shared_ptr<ComponentInfo> component_info;
 };
 }  // namespace tesseract_gui
 

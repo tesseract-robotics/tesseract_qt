@@ -39,10 +39,10 @@ class CompositeInstructionModel : public QStandardItemModel
   Q_OBJECT
 public:
   CompositeInstructionModel(QObject* parent = nullptr);
-  CompositeInstructionModel(ComponentInfo component_info, QObject* parent = nullptr);
+  CompositeInstructionModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   ~CompositeInstructionModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
