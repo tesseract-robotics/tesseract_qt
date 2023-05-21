@@ -97,7 +97,7 @@ std::list<boost::uuids::uuid> ComponentInfo::getLineage() const
     return {};
 
   std::list<boost::uuids::uuid> lineage;
-  getLineageRecursive(lineage, *this);
+  getLineageRecursive(lineage, *parent_);
   return lineage;
 }
 
@@ -106,6 +106,11 @@ bool ComponentInfo::hasParent() const { return (parent_ != nullptr); }
 std::shared_ptr<const ComponentInfo> ComponentInfo::getParentComponentInfo() const { return parent_; }
 
 std::shared_ptr<ComponentInfo> ComponentInfo::createChild() const { return ComponentInfoManager::createChild(name_); }
+
+std::shared_ptr<ComponentInfo> ComponentInfo::createChild(const std::string& name) const
+{
+  return ComponentInfoManager::createChild(name_, name);
+}
 
 bool isParentRecursive(const ComponentInfo* check, const ComponentInfo* provided)
 {
@@ -145,6 +150,7 @@ template <class Archive>
 void ComponentInfo::serialize(Archive& ar, const unsigned int /*version*/)
 {
   ar& BOOST_SERIALIZATION_NVP(scene_name_);
+  ar& BOOST_SERIALIZATION_NVP(name_);
   ar& BOOST_SERIALIZATION_NVP(ns_);
   ar& BOOST_SERIALIZATION_NVP(parent_);
   ar& BOOST_SERIALIZATION_NVP(description_);

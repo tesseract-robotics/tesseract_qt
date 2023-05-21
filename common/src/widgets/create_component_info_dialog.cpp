@@ -24,6 +24,7 @@
 #include "ui_create_component_info_dialog.h"
 
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 
 #include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid.hpp>
@@ -49,17 +50,25 @@ void CreateComponentInfoDialog::setSceneNames(const QStringList& scene_names)
 
 std::shared_ptr<ComponentInfo> CreateComponentInfoDialog::getComponentInfo() const
 {
-  //  const std::string scene_name = ui->scene_name_combo_box->currentText().toStdString();
-  //  const boost::uuids::uuid ns = boost::lexical_cast<boost::uuids::uuid>(ui->ns_line_edit->text().toStdString());
-  //  const std::string description = ui->description_line_edit->text().toStdString();
-  //  return ComponentInfo(scene_name, { ns }, description);
-  return nullptr;
+  const std::string name = ui->name_line_edit->text().toStdString();
+  const std::string scene_name = ui->scene_name_combo_box->currentText().toStdString();
+  const std::string description = ui->description_line_edit->text().toStdString();
+
+  std::shared_ptr<ComponentInfo> component_info;
+  if (name.empty())
+    component_info = ComponentInfoManager::create(scene_name);
+  else
+    component_info = ComponentInfoManager::create(scene_name, name);
+
+  if (component_info != nullptr)
+    component_info->setDescription(description);
+
+  return component_info;
 }
 
 void CreateComponentInfoDialog::reset()
 {
   ui->scene_name_combo_box->setCurrentText("tesseract_default");
-  ui->ns_line_edit->setText(QString::fromStdString(boost::uuids::to_string(boost::uuids::random_generator()())));
   ui->description_line_edit->setText("");
 }
 }  // namespace tesseract_gui

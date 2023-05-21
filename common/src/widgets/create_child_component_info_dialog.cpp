@@ -32,7 +32,7 @@ namespace tesseract_gui
 {
 struct CreateChildComponentInfoDialog::Implementation
 {
-  std::shared_ptr<ComponentInfo> component_info;
+  std::shared_ptr<const ComponentInfo> parent_component_info;
 
   QStringListModel lineage_model;
 };
@@ -50,18 +50,26 @@ CreateChildComponentInfoDialog::~CreateChildComponentInfoDialog() = default;
 
 std::shared_ptr<ComponentInfo> CreateChildComponentInfoDialog::getComponentInfo() const
 {
-  data_->component_info->setDescription(ui->description_line_edit->text().toStdString());
-  return data_->component_info;
+  std::string name = ui->name_line_edit->text().toStdString();
+
+  std::shared_ptr<ComponentInfo> child;
+  if (name.empty())
+    child = data_->parent_component_info->createChild();
+  else
+    child = data_->parent_component_info->createChild(name);
+
+  child->setDescription(ui->description_line_edit->text().toStdString());
+  return child;
 }
 
-void CreateChildComponentInfoDialog::reset(const ComponentInfo& parent_component_info)
+void CreateChildComponentInfoDialog::reset(std::shared_ptr<const ComponentInfo> parent_component_info)
 {
-  data_->component_info = parent_component_info.createChild();
-  ui->scene_name_line_edit->setText(QString::fromStdString(data_->component_info->getSceneName()));
-  ui->ns_line_edit->setText(QString::fromStdString(boost::uuids::to_string(data_->component_info->getNamespace())));
-  ui->description_line_edit->setText(QString::fromStdString(data_->component_info->getDescription()));
+  data_->parent_component_info = std::move(parent_component_info);
+  ui->scene_name_line_edit->setText(QString::fromStdString(data_->parent_component_info->getSceneName()));
+  ui->description_line_edit->setText(QString::fromStdString(data_->parent_component_info->getDescription()));
   QStringList lineage;
-  for (const auto& l : data_->component_info->getLineage())
+  lineage.append(QString::fromStdString(boost::uuids::to_string(data_->parent_component_info->getNamespace())));
+  for (const auto& l : data_->parent_component_info->getLineage())
     lineage.append(QString::fromStdString(boost::uuids::to_string(l)));
 
   data_->lineage_model.setStringList(lineage);

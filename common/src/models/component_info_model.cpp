@@ -96,8 +96,7 @@ void ComponentInfoModel::add(std::shared_ptr<ComponentInfo> component_info)
   if (data_->items.find(component_info->getNamespace()) != data_->items.end())
     remove(component_info->getNamespace());
 
-  auto* item = new ComponentInfoStandardItem(
-      QString::fromStdString(boost::uuids::to_string(component_info->getNamespace())), component_info);
+  auto* item = new ComponentInfoStandardItem(QString::fromStdString(component_info->getName()), component_info);
   data_->items[component_info->getNamespace()] = item;
   appendRow(item);
 }
@@ -131,7 +130,7 @@ void ComponentInfoModel::clear()
 {
   QStandardItemModel::clear();
   setColumnCount(2);
-  setHorizontalHeaderLabels({ "Namespace", "Component Info" });
+  setHorizontalHeaderLabels({ "Name", "Component Info" });
   data_->items.clear();
 }
 

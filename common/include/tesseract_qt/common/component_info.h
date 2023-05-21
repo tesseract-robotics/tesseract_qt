@@ -73,6 +73,12 @@ struct ComponentInfo
   std::shared_ptr<ComponentInfo> createChild() const;
 
   /**
+   * @brief Create child component info object
+   * @param name The name assigned to the child; if name is not unique then nullptr is returned
+   */
+  std::shared_ptr<ComponentInfo> createChild(const std::string& name) const;
+
+  /**
    * @brief Check if the provided ComponentInfo is the objects parent
    * @details It check if this component info ever derived from the provided info
    * @param other The object to check if parent

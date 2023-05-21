@@ -44,7 +44,7 @@ public:
 
   std::shared_ptr<ComponentInfo> getComponentInfo() const;
 
-  void reset(const ComponentInfo& parent_component_info);
+  void reset(std::shared_ptr<const ComponentInfo> parent_component_info);
 
 private:
   struct Implementation;

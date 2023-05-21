@@ -148,7 +148,7 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
     if (item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO))
     {
       auto* cci_type = static_cast<ComponentInfoStandardItem*>(item);
-      data_->create_child_component_info_dialog.reset(*cci_type->component_info);
+      data_->create_child_component_info_dialog.reset(cci_type->component_info);
       if (data_->create_child_component_info_dialog.exec() == 1)
         data_->plugin_factory->getComponentInfoModel()->add(
             data_->create_child_component_info_dialog.getComponentInfo());
