@@ -24,7 +24,7 @@
 #define TESSERACT_GUI_COMMON_COMPONENT_INFO_MANAGER_H
 
 #include <memory>
-#include <unordered_map>
+#include <vector>
 #include <boost/uuid/uuid.hpp>
 
 namespace tesseract_gui
@@ -106,6 +106,12 @@ public:
   static std::shared_ptr<ComponentInfo> get(const std::string& name);
 
   /**
+   * @brief Get all component infos
+   * @return A vector of all component infos
+   */
+  static std::vector<std::shared_ptr<ComponentInfo>> get();
+
+  /**
    * @brief Remove unused component infos
    * @details This leverages the reference counter to determine if anything is using a component info.
    */
@@ -131,6 +137,7 @@ private:
 
   std::shared_ptr<ComponentInfo> getHelper(const boost::uuids::uuid& ns) const;
   std::shared_ptr<ComponentInfo> getHelper(const std::string& name) const;
+  std::vector<std::shared_ptr<ComponentInfo>> getHelper() const;
 };
 }  // namespace tesseract_gui
 

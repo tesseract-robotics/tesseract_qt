@@ -28,7 +28,7 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/component_info_standard_item.h>
-#include <tesseract_qt/common/models/component_info_model.h>
+#include <tesseract_qt/common/models/component_info_manager_model.h>
 #include <tesseract_qt/common/widgets/create_component_info_dialog.h>
 #include <tesseract_qt/common/widgets/create_child_component_info_dialog.h>
 
@@ -51,18 +51,10 @@ struct StudioPluginLoaderDialog::Implementation
   QMenu plugin_context_menu;
   QMenu search_path_context_menu;
   QMenu search_library_context_menu;
-  QMenu component_info_context_menu;
 
   // Models
   QStringListModel search_paths_model;
   QStringListModel search_libraries_model;
-
-  // Dialogs
-  CreateComponentInfoDialog create_component_info_dialog;
-  CreateChildComponentInfoDialog create_child_component_info_dialog;
-
-  // Shared Models
-  std::shared_ptr<QStringListModel> component_info_namespaces;
 };
 
 StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
@@ -73,7 +65,6 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   ui->tool_box->removeItem(0);
   ui->search_paths_list_view->setModel(&data_->search_paths_model);
   ui->search_libraries_list_view->setModel(&data_->search_libraries_model);
-  ui->component_infos_tree_view->setModel(plugin_factory->getComponentInfoModel().get());
 
   setWindowIcon(icons::getPluginIcon());
   setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
@@ -93,12 +84,6 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   data_->search_library_context_menu.addSeparator();
   data_->search_library_context_menu.addAction(ui->actionRemove_Search_Library);
   data_->search_library_context_menu.setWindowModality(Qt::ApplicationModal);
-
-  data_->component_info_context_menu.addAction(ui->actionAdd_Component_Info);
-  data_->component_info_context_menu.addAction(ui->actionCreate_Child_Component_Info);
-  data_->component_info_context_menu.addSeparator();
-  data_->component_info_context_menu.addAction(ui->actionRemove_Component_Info);
-  data_->component_info_context_menu.setWindowModality(Qt::ApplicationModal);
 
   ui->actionRemove_Plugin->setIcon(icons::getTrashIcon());
   connect(ui->actionRemove_Plugin, &QAction::triggered, [this]() {
@@ -133,49 +118,10 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
     refreshSearchPathsAndLibraries();
   });
 
-  ui->actionAdd_Component_Info->setIcon(icons::getTextIcon());
-  connect(ui->actionAdd_Component_Info, &QAction::triggered, [this]() {
-    data_->create_component_info_dialog.reset();
-    if (data_->create_component_info_dialog.exec() == 1)
-      data_->plugin_factory->getComponentInfoModel()->add(data_->create_component_info_dialog.getComponentInfo());
-  });
-
-  ui->actionCreate_Child_Component_Info->setIcon(icons::getTextIcon());
-  connect(ui->actionCreate_Child_Component_Info, &QAction::triggered, [this]() {
-    QModelIndex cmi = ui->component_infos_tree_view->currentIndex();
-    QStandardItem* item = data_->plugin_factory->getComponentInfoModel()->itemFromIndex(cmi);
-
-    if (item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO))
-    {
-      auto* cci_type = static_cast<ComponentInfoStandardItem*>(item);
-      data_->create_child_component_info_dialog.reset(cci_type->component_info);
-      if (data_->create_child_component_info_dialog.exec() == 1)
-        data_->plugin_factory->getComponentInfoModel()->add(
-            data_->create_child_component_info_dialog.getComponentInfo());
-    }
-  });
-
-  ui->actionRemove_Component_Info->setIcon(icons::getTrashIcon());
-  connect(ui->actionRemove_Component_Info, &QAction::triggered, [this]() {
-    QModelIndex cmi = ui->component_infos_tree_view->currentIndex();
-    QStandardItem* item = data_->plugin_factory->getComponentInfoModel()->itemFromIndex(cmi);
-
-    if (item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO))
-    {
-      // Make copy of namespace
-      boost::uuids::uuid ns = static_cast<ComponentInfoStandardItem*>(item)->component_info->getNamespace();
-      data_->plugin_factory->getComponentInfoModel()->remove(ns);
-    }
-  });
-
   connect(ui->tool_box,
           SIGNAL(customContextMenuRequested(const QPoint&)),
           this,
           SLOT(showPluginContextMenu(const QPoint&)));
-  connect(ui->component_infos_tree_view,
-          SIGNAL(customContextMenuRequested(const QPoint&)),
-          this,
-          SLOT(showComponentInfoContextMenu(const QPoint&)));
   connect(ui->search_paths_list_view,
           SIGNAL(customContextMenuRequested(const QPoint&)),
           this,
@@ -236,21 +182,6 @@ void StudioPluginLoaderDialog::showPluginContextMenu(const QPoint& pos)
     if (rect.contains(local_pos))
       data_->plugin_context_menu.exec(global_pos);
   }
-}
-
-void StudioPluginLoaderDialog::showComponentInfoContextMenu(const QPoint& pos)
-{
-  QPoint global_pos = ui->component_infos_tree_view->mapToGlobal(pos);
-  QModelIndex cmi = ui->component_infos_tree_view->selectionModel()->currentIndex();
-  QStandardItem* item = data_->plugin_factory->getComponentInfoModel()->itemFromIndex(cmi);
-  if (item != nullptr)
-  {
-    const bool enabled{ item->type() == static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO) };
-    ui->actionCreate_Child_Component_Info->setEnabled(enabled);
-    ui->actionRemove_Component_Info->setEnabled(enabled);
-  }
-
-  data_->component_info_context_menu.exec(global_pos);
 }
 
 void StudioPluginLoaderDialog::showSearchPathContextMenu(const QPoint& pos)

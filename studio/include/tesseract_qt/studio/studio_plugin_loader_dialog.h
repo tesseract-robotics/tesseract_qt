@@ -49,7 +49,6 @@ protected:
 
 private Q_SLOTS:
   void showPluginContextMenu(const QPoint& pos);
-  void showComponentInfoContextMenu(const QPoint& pos);
   void showSearchPathContextMenu(const QPoint& pos);
   void showSearchLibraryContextMenu(const QPoint& pos);
   void addPluginWidget();

@@ -51,7 +51,6 @@ class CDockWidget;
 namespace tesseract_gui
 {
 class StudioPluginFactory;
-class ComponentInfoModel;
 
 /** @brief Studio Factory class used by the Tesseract Studio for loading objects */
 class StudioConfigWidgetFactory
@@ -62,9 +61,7 @@ public:
 
   virtual ~StudioConfigWidgetFactory() = default;
 
-  virtual StudioPluginConfigWidget* create(const std::string& name,
-                                           const YAML::Node& config,
-                                           std::shared_ptr<const ComponentInfoModel> component_info_model) const = 0;
+  virtual StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const = 0;
 
   static const std::string& getSectionName();
 
@@ -224,20 +221,12 @@ public:
    */
   YAML::Node getConfig() const;
 
-  /**
-   * @brief Get the component info model
-   * @return The component info model
-   */
-  std::shared_ptr<ComponentInfoModel> getComponentInfoModel();
-  std::shared_ptr<const ComponentInfoModel> getComponentInfoModel() const;
-
   /** @brief Get the internal plugin loader */
   tesseract_common::PluginLoader& getPluginLoader();
   const tesseract_common::PluginLoader& getPluginLoader() const;
 
 private:
   mutable std::map<std::string, StudioConfigWidgetFactory::Ptr> factories_;
-  std::shared_ptr<ComponentInfoModel> component_info_model_;
   tesseract_common::PluginInfoContainer plugin_info_;
   tesseract_common::PluginLoader plugin_loader_;
 };

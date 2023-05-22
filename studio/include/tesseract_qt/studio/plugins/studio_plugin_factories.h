@@ -30,14 +30,11 @@ template <typename StudioConfigWidgetType>
 class StudioConfigWidgetFactoryImpl : public StudioConfigWidgetFactory
 {
 public:
-  StudioPluginConfigWidget* create(const std::string& name,
-                                   const YAML::Node& config,
-                                   std::shared_ptr<const ComponentInfoModel> component_info_model) const override
+  StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const override
   {
     auto widget = new StudioConfigWidgetType();
     widget->setName(name);
     widget->setConfig(config);
-    widget->setComponentInfoModel(component_info_model);
     return widget;
   }
 };

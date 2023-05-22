@@ -31,7 +31,6 @@ StudioRenderPluginConfigWidget::StudioRenderPluginConfigWidget(QWidget* parent)
   : StudioPluginConfigWidget(parent), ui(std::make_unique<Ui::StudioRenderPluginConfigWidget>())
 {
   ui->setupUi(this);
-  ui->component_info_combo_box->setModel(component_info_ns_.get());
 }
 
 StudioRenderPluginConfigWidget::~StudioRenderPluginConfigWidget() = default;

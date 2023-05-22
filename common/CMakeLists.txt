@@ -23,8 +23,8 @@ qt5_wrap_cpp(
   include/tesseract_qt/common/environment_manager.h
   include/tesseract_qt/common/environment_wrapper.h
   include/tesseract_qt/common/tree_view.h
-  include/tesseract_qt/common/models/component_info_model.h
-  include/tesseract_qt/common/widgets/component_info_widget.h
+  include/tesseract_qt/common/models/component_info_manager_model.h
+  include/tesseract_qt/common/widgets/component_info_manager_widget.h
   include/tesseract_qt/common/widgets/create_child_component_info_dialog.h
   include/tesseract_qt/common/widgets/create_component_info_dialog.h
   include/tesseract_qt/common/widgets/load_environment_widget.h
@@ -34,7 +34,7 @@ qt5_wrap_ui(
   COMMON_WIDGETS_headers_UI
   include/tesseract_qt/common/cartesian_editor_widget.ui
   include/tesseract_qt/common/image_viewer_widget.ui
-  include/tesseract_qt/common/widgets/component_info_widget.ui
+  include/tesseract_qt/common/widgets/component_info_manager_widget.ui
   include/tesseract_qt/common/widgets/create_child_component_info_dialog.ui
   include/tesseract_qt/common/widgets/create_component_info_dialog.ui
   include/tesseract_qt/common/widgets/load_environment_widget.ui
@@ -68,8 +68,8 @@ add_library(
   src/events/scene_graph_render_manager.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
-  src/models/component_info_model.cpp
-  src/widgets/component_info_widget.cpp
+  src/models/component_info_manager_model.cpp
+  src/widgets/component_info_manager_widget.cpp
   src/widgets/create_child_component_info_dialog.cpp
   src/widgets/create_component_info_dialog.cpp
   src/widgets/load_environment_widget.cpp

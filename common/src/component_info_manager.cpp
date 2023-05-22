@@ -115,6 +115,13 @@ std::shared_ptr<ComponentInfo> ComponentInfoManager::get(const std::string& name
   return obj->getHelper(name);
 }
 
+std::vector<std::shared_ptr<ComponentInfo>> ComponentInfoManager::get()
+{
+  std::shared_ptr<ComponentInfoManager> obj = instance();
+  std::shared_lock lock(obj->data_->mutex);
+  return obj->getHelper();
+}
+
 void ComponentInfoManager::removeUnused()
 {
   std::shared_ptr<ComponentInfoManager> obj = instance();
@@ -248,6 +255,17 @@ std::shared_ptr<ComponentInfo> ComponentInfoManager::getHelper(const std::string
     return nullptr;
 
   return it->second;
+}
+
+std::vector<std::shared_ptr<ComponentInfo>> ComponentInfoManager::getHelper() const
+{
+  std::vector<std::shared_ptr<ComponentInfo>> component_infos;
+  component_infos.reserve(data_->component_infos_by_ns.size());
+
+  for (const auto& component_info : data_->component_infos_by_ns)
+    component_infos.push_back(component_info.second);
+
+  return component_infos;
 }
 
 }  // namespace tesseract_gui

@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMON_COMPONENT_INFO_MODEL_H
-#define TESSERACT_QT_COMMON_COMPONENT_INFO_MODEL_H
+#ifndef TESSERACT_QT_COMMON_COMPONENT_INFO_MANAGER_MODEL_H
+#define TESSERACT_QT_COMMON_COMPONENT_INFO_MANAGER_MODEL_H
 
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
@@ -36,31 +36,24 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
-using ComponentInfoVector = std::vector<std::shared_ptr<ComponentInfo>>;
-class ComponentInfoModel : public QStandardItemModel
+class ComponentInfoManagerModel : public QStandardItemModel
 {
   Q_OBJECT
 public:
-  ComponentInfoModel(QObject* parent = nullptr);
-  explicit ComponentInfoModel(const ComponentInfoVector& component_infos, QObject* parent = nullptr);
-  ComponentInfoModel(const ComponentInfoModel& other);
-  ComponentInfoModel& operator=(const ComponentInfoModel& other);
-  ~ComponentInfoModel() override;
+  ComponentInfoManagerModel(QObject* parent = nullptr);
+  ComponentInfoManagerModel(const ComponentInfoManagerModel& other);
+  ComponentInfoManagerModel& operator=(const ComponentInfoManagerModel& other);
+  ~ComponentInfoManagerModel() override;
 
-  QStringList getNamespaces() const;
-  std::shared_ptr<ComponentInfo> getComponentInfo(const boost::uuids::uuid& ns) const;
-  ComponentInfoVector getComponentInfos() const;
-
-  void set(const ComponentInfoVector& component_infos);
-  void add(std::shared_ptr<ComponentInfo> component_info);
-  void remove(const boost::uuids::uuid& ns);
-  void clear();
+  /** @brief Refresh the model by extracting data from ComponentInfoManager */
+  void refresh();
 
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
+
+  void clear();
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COMMON_COMPONENT_INFO_MODEL_H
+#endif  // TESSERACT_QT_COMMON_COMPONENT_INFO_MANAGER_MODEL_H

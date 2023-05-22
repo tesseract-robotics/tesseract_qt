@@ -74,26 +74,6 @@ public:
    * @return The yaml config
    */
   virtual YAML::Node getConfig() const = 0;
-
-  /**
-   * @brief Set the component info model
-   * @param model The component info model
-   */
-  virtual void setComponentInfoModel(std::shared_ptr<const ComponentInfoModel> model);
-
-  /**
-   * @brief Get the component info model
-   * @return The component info model
-   */
-  virtual std::shared_ptr<const ComponentInfoModel> getComponentInfoModel() const;
-
-protected Q_SLOTS:
-  void onComponentInfoModelRowsRemoved();
-  void onComponentInfoModelRowsInserted();
-
-protected:
-  std::shared_ptr<const ComponentInfoModel> model_;
-  std::unique_ptr<QStringListModel> component_info_ns_;
 };
 }  // namespace tesseract_gui
 

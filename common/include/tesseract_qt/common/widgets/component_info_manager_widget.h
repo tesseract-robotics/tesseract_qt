@@ -20,35 +20,45 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
-#define TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
+#ifndef TESSERACT_GUI_COMMON_COMPONENT_INFO_MANAGER_WIDGET_H
+#define TESSERACT_GUI_COMMON_COMPONENT_INFO_MANAGER_WIDGET_H
 
 #include <QWidget>
-#include <QStringListModel>
 #include <memory>
 
 namespace Ui
 {
-class ComponentInfoWidget;
+class ComponentInfoManagerWidget;
 }
 
 namespace tesseract_gui
 {
-class ComponentInfo;
-class ComponentInfoWidget : public QWidget
+class ComponentInfoManagerWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ComponentInfoWidget(QWidget* parent = nullptr);
-  ~ComponentInfoWidget();
+  explicit ComponentInfoManagerWidget(QWidget* parent = nullptr);
+  ~ComponentInfoManagerWidget();
 
-  std::shared_ptr<ComponentInfo> getComponentInfo() const;
+  /**
+   * @brief Enable edit mode to allow user to add and remove component infos
+   * @param enable If true user can add and remove component infos
+   */
+  void enableEditMode(bool enable);
+
+  /** @brief Refresh the model by extracting data from ComponentInfoManager */
+  void refresh();
+
+private Q_SLOTS:
+  void showContextMenu(const QPoint& pos);
 
 private:
-  std::unique_ptr<Ui::ComponentInfoWidget> ui;
+  struct Implementation;
+  std::unique_ptr<Ui::ComponentInfoManagerWidget> ui;
+  std::unique_ptr<Implementation> data_;
 };
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H
+#endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_MANAGER_WIDGET_H
