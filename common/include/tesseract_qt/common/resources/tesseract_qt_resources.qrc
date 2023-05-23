@@ -105,5 +105,6 @@
         <file>svg/tool_path_show.svg</file>
         <file>svg/tool_path_hide.svg</file>
         <file>svg/open.svg</file>
+        <file>svg/pencil-edit.svg</file>
     </qresource>
 </RCC>

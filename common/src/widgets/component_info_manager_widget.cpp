@@ -45,6 +45,7 @@ ComponentInfoManagerWidget::ComponentInfoManagerWidget(QWidget* parent)
   data_->context_menu.addAction(ui->actionRemove);
   data_->context_menu.setWindowModality(Qt::ApplicationModal);
 
+  // Connect Actions
   ui->actionCreate->setIcon(icons::getTextIcon());
   connect(ui->actionCreate, &QAction::triggered, [this]() {
     data_->create_dialog.reset();
@@ -85,6 +86,7 @@ ComponentInfoManagerWidget::ComponentInfoManagerWidget(QWidget* parent)
     //    }
   });
 
+  // Connect context menu
   connect(ui->tree_view, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenu(const QPoint&)));
 }
 

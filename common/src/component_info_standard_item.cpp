@@ -55,7 +55,7 @@ ComponentInfoStandardItem::ComponentInfoStandardItem(const QIcon& icon,
     for (const auto& n : lineage)
       item->appendRow(createStandardItemString(QString("[%1]").arg(i++).toStdString(), boost::uuids::to_string(n)));
 
-    appendRow(item);
+    appendRow({ item, new QStandardItem(boost::uuids::to_string(this->component_info->getNamespace()).c_str()) });
   }
 }
 
