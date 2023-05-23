@@ -25,7 +25,8 @@
 #include <unordered_map>
 #include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/component_info.h>
-#include <boost/uuid/uuid_hash.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/lexical_cast.hpp>
 #include <shared_mutex>
 
 namespace tesseract_gui
@@ -41,6 +42,20 @@ struct ComponentInfoManager::Implementation
 ComponentInfoManager::ComponentInfoManager() : data_(std::make_unique<Implementation>()) {}
 
 ComponentInfoManager::~ComponentInfoManager() = default;
+
+void ComponentInfoManager::loadConfig(const YAML::Node& config)
+{
+  std::shared_ptr<ComponentInfoManager> obj = instance();
+  std::unique_lock lock(obj->data_->mutex);
+  obj->loadConfigHelper(config);
+}
+
+YAML::Node ComponentInfoManager::getConfig()
+{
+  std::shared_ptr<ComponentInfoManager> obj = instance();
+  std::shared_lock lock(obj->data_->mutex);
+  return obj->getConfigHelper();
+}
 
 std::shared_ptr<ComponentInfo> ComponentInfoManager::create(const std::string& scene_name)
 {
@@ -136,6 +151,87 @@ std::shared_ptr<ComponentInfoManager> ComponentInfoManager::instance()
     singleton = std::make_shared<ComponentInfoManager>();
 
   return singleton;
+}
+
+void ComponentInfoManager::loadConfigHelper(const YAML::Node& config)
+{
+  data_->component_infos_by_name.clear();
+  data_->component_infos_by_ns.clear();
+
+  // Create component infos
+  std::map<boost::uuids::uuid, boost::uuids::uuid> parent_mapping;
+  for (auto it = config.begin(); it != config.end(); ++it)
+  {
+    YAML::Node node = it->second;
+    std::string name = it->first.as<std::string>();
+
+    std::string scene_name;
+    if (YAML::Node n = node["scene_name"])
+      scene_name = n.as<std::string>();
+    else
+      throw std::runtime_error("ComponentInfoManager::loadConfig, ComponentInfo '" + name + "' is missing scene_name.");
+
+    std::string description;
+    if (YAML::Node n = node["description"])
+      description = n.as<std::string>();
+
+    boost::uuids::uuid ns{};
+    if (YAML::Node n = node["ns"])
+      ns = boost::lexical_cast<boost::uuids::uuid>(n.as<std::string>());
+    else
+      throw std::runtime_error("ComponentInfoManager::loadConfig, ComponentInfo '" + name + "' is missing ns.");
+
+    boost::uuids::uuid parent_ns{};
+    if (YAML::Node n = node["parent"])
+    {
+      parent_ns = boost::lexical_cast<boost::uuids::uuid>(n.as<std::string>());
+      parent_mapping[ns] = parent_ns;
+    }
+
+    auto it1 = data_->component_infos_by_name.find(name);
+    if (it1 != data_->component_infos_by_name.end())
+      throw std::runtime_error("ComponentInfoManager::loadConfig, config had duplicate names.");
+
+    auto it2 = data_->component_infos_by_ns.find(ns);
+    if (it2 != data_->component_infos_by_ns.end())
+      throw std::runtime_error("ComponentInfoManager::loadConfig, config had duplicate namespaces.");
+
+    auto ci = std::shared_ptr<ComponentInfo>(new ComponentInfo(scene_name, name, ns, nullptr, description));
+    data_->component_infos_by_ns[ns] = ci;
+    data_->component_infos_by_name[name] = ci;
+  }
+
+  // Now update parents
+  for (const auto& pair : parent_mapping)
+  {
+    auto child_it = data_->component_infos_by_ns.find(pair.first);
+    if (child_it == data_->component_infos_by_ns.end())
+      throw std::runtime_error("ComponentInfoManager::loadConfig, failed to update parent.");
+
+    auto parent_it = data_->component_infos_by_ns.find(pair.second);
+    if (parent_it == data_->component_infos_by_ns.end())
+      throw std::runtime_error("ComponentInfoManager::loadConfig, failed to find parent.");
+
+    child_it->second->parent_ = parent_it->second;
+  }
+}
+
+YAML::Node ComponentInfoManager::getConfigHelper() const
+{
+  YAML::Node component_infos;
+  for (const auto& pair : data_->component_infos_by_name)
+  {
+    YAML::Node component_info_node;
+    component_info_node["scene_name"] = pair.second->getSceneName();
+    component_info_node["description"] = pair.second->getDescription();
+    component_info_node["ns"] = boost::uuids::to_string(pair.second->getNamespace());
+    if (pair.second->hasParent())
+      component_info_node["parent"] = boost::uuids::to_string(pair.second->getParentComponentInfo()->getNamespace());
+
+    component_infos[pair.second->getName()] = component_info_node;
+  }
+
+  return component_infos;
 }
 
 std::shared_ptr<ComponentInfo> ComponentInfoManager::createHelper(const std::string& scene_name)

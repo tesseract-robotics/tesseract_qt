@@ -26,6 +26,7 @@
 #include <memory>
 #include <vector>
 #include <boost/uuid/uuid.hpp>
+#include <yaml-cpp/yaml.h>
 
 namespace tesseract_gui
 {
@@ -41,6 +42,19 @@ public:
   ComponentInfoManager& operator=(const ComponentInfoManager&) = delete;
   ComponentInfoManager(ComponentInfoManager&&) = delete;
   ComponentInfoManager& operator=(ComponentInfoManager&&) = delete;
+
+  /**
+   * @brief Construct manager from yaml config
+   * @details This will clear the manager then load the config
+   * @param config The yaml config
+   */
+  static void loadConfig(const YAML::Node& config);
+
+  /**
+   * @brief Generate a config based on the contents of the manager
+   * @return A yaml node representing the contents of the manager
+   */
+  static YAML::Node getConfig();
 
   /**
    * @brief Create a unique component info
@@ -122,6 +136,10 @@ private:
   std::unique_ptr<Implementation> data_;
 
   static std::shared_ptr<ComponentInfoManager> instance();
+
+  void loadConfigHelper(const YAML::Node& config);
+  YAML::Node getConfigHelper() const;
+
   std::shared_ptr<ComponentInfo> createHelper(const std::string& scene_name);
   std::shared_ptr<ComponentInfo> createHelper(const std::string& scene_name, const std::string& name);
   std::shared_ptr<ComponentInfo> createChildHelper(std::shared_ptr<const ComponentInfo> parent);
