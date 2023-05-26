@@ -25,6 +25,7 @@
 
 #include <QWidget>
 #include <memory>
+#include <boost/uuid/uuid.hpp>
 
 namespace Ui
 {
@@ -42,6 +43,7 @@ public:
   explicit ComponentInfoWidget(QWidget* parent = nullptr);
   ~ComponentInfoWidget();
 
+  void setComponentInfo(const boost::uuids::uuid& ns);
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
 public Q_SLOTS:

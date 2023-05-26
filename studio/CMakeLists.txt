@@ -14,10 +14,15 @@ endif()
 # Variable for task composer plugins
 set(TESSERACT_STUDIO_PLUGINS "")
 
-qt5_wrap_cpp(STUDIO_PLUGIN_FACTORY_headers_MOC include/tesseract_qt/studio/studio_plugin_config_widget.h)
+qt5_wrap_cpp(STUDIO_PLUGIN_FACTORY_headers_MOC include/tesseract_qt/studio/studio_dock_widget.h
+             include/tesseract_qt/studio/studio_plugin_config_widget.h)
 
-add_library(${PROJECT_NAME}_studio_plugin_factory ${STUDIO_PLUGIN_FACTORY_headers_MOC} src/studio_plugin_factory.cpp
-                                                  src/studio_plugin_config_widget.cpp)
+add_library(
+  ${PROJECT_NAME}_studio_plugin_factory
+  ${STUDIO_PLUGIN_FACTORY_headers_MOC}
+  src/studio_plugin_factory.cpp
+  src/studio_dock_widget.cpp
+  src/studio_plugin_config_widget.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_studio_plugin_factory
@@ -33,13 +38,20 @@ target_include_directories(
 target_compile_definitions(${PROJECT_NAME}_studio_plugin_factory
                            PRIVATE TESSERACT_STUDIO_PLUGIN_PATH="${TESSERACT_STUDIO_PLUGIN_PATH}")
 
-qt5_wrap_cpp(STUDIO_PLUGINS_headers_MOC include/tesseract_qt/studio/plugins/render/studio_render_plugin_config_widget.h)
-qt5_wrap_ui(STUDIO_PLUGINS_headers_UI include/tesseract_qt/studio/plugins/render/studio_render_plugin_config_widget.ui)
+qt5_wrap_cpp(
+  STUDIO_PLUGINS_headers_MOC
+  include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.h
+  include/tesseract_qt/studio/plugins/render/studio_render_dock_widget.h
+  include/tesseract_qt/studio/plugins/render/studio_render_plugin_config_widget.h)
+qt5_wrap_ui(STUDIO_PLUGINS_headers_UI include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.ui
+            include/tesseract_qt/studio/plugins/render/studio_render_plugin_config_widget.ui)
 
 add_library(
   ${PROJECT_NAME}_studio_plugins
   ${STUDIO_PLUGINS_headers_MOC}
   ${STUDIO_PLUGINS_headers_UI}
+  src/plugins/render/studio_render_config_dialog.cpp
+  src/plugins/render/studio_render_dock_widget.cpp
   src/plugins/render/studio_render_plugin_config_widget.cpp
   src/plugins/studio_plugin_factories.cpp)
 

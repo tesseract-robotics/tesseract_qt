@@ -26,17 +26,24 @@
 #include <tesseract_qt/studio/studio_plugin_factory.h>
 namespace tesseract_gui
 {
-template <typename StudioConfigWidgetType>
-class StudioConfigWidgetFactoryImpl : public StudioConfigWidgetFactory
+// template <typename StudioConfigWidgetType>
+// class StudioConfigWidgetFactoryImpl : public StudioConfigWidgetFactory
+//{
+// public:
+//  StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const override
+//  {
+//    auto widget = new StudioConfigWidgetType();
+//    widget->setName(name);
+//    widget->setConfig(config);
+//    return widget;
+//  }
+//};
+
+template <typename StudioDockWidgetType>
+class StudioDockWidgetFactoryImpl : public StudioDockWidgetFactory
 {
 public:
-  StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const override
-  {
-    auto widget = new StudioConfigWidgetType();
-    widget->setName(name);
-    widget->setConfig(config);
-    return widget;
-  }
+  StudioDockWidget* create(const QString& name) const override { return new StudioDockWidgetType(name); }
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H

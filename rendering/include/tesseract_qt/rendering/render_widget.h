@@ -250,6 +250,12 @@ public:
   void setGridEnabled(bool enabled);
 
   /**
+   * @brief Show shadows view in the scene
+   * @param enabled True to enable shadows view, false otherwise.
+   */
+  void setShadowsEnabled(bool enabled);
+
+  /**
    * @brief Called when the mouse hovers to a new position.
    * @param mouse_x The hovered mouse x position on the render window.
    * @param mouse_y The hovered mouse y position on the render window.

@@ -22,12 +22,20 @@
  */
 
 #include <tesseract_qt/studio/plugins/studio_plugin_factories.h>
-#include <tesseract_qt/studio/plugins/render/studio_render_plugin_config_widget.h>
+#include <tesseract_qt/studio/plugins/render/studio_render_dock_widget.h>
+
+// namespace tesseract_gui
+//{
+// using StudioRenderConfigWidgetFactory = StudioConfigWidgetFactoryImpl<StudioRenderPluginConfigWidget>;
+//}
+
+//// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+// TESSERACT_ADD_STUDIO_CONFIG_PLUGIN(tesseract_gui::StudioRenderConfigWidgetFactory, StudioRenderConfigWidgetFactory)
 
 namespace tesseract_gui
 {
-using StudioRenderConfigWidgetFactory = StudioConfigWidgetFactoryImpl<StudioRenderPluginConfigWidget>;
+using StudioRenderDockWidgetFactory = StudioDockWidgetFactoryImpl<StudioRenderDockWidget>;
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-TESSERACT_ADD_STUDIO_CONFIG_PLUGIN(tesseract_gui::StudioRenderConfigWidgetFactory, StudioRenderConfigWidgetFactory)
+TESSERACT_ADD_STUDIO_PLUGIN(tesseract_gui::StudioRenderDockWidgetFactory, StudioRenderDockWidgetFactory)

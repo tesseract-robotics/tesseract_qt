@@ -131,6 +131,9 @@ public:
    */
   static void removeUnused();
 
+  /** @brief Check if empty */
+  static bool empty();
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
@@ -156,6 +159,8 @@ private:
   std::shared_ptr<ComponentInfo> getHelper(const boost::uuids::uuid& ns) const;
   std::shared_ptr<ComponentInfo> getHelper(const std::string& name) const;
   std::vector<std::shared_ptr<ComponentInfo>> getHelper() const;
+
+  bool emptyHelper() const;
 };
 }  // namespace tesseract_gui
 

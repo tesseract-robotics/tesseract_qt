@@ -30,54 +30,53 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <yaml-cpp/yaml.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <ads_globals.h>
 #include <tesseract_common/types.h>
 #include <tesseract_common/plugin_loader.h>
 #include <tesseract_qt/studio/studio_plugin_config_widget.h>
+#include <tesseract_qt/studio/studio_dock_widget.h>
 
 // clang-format off
-#define TESSERACT_ADD_STUDIO_CONFIG_PLUGIN(DERIVED_CLASS, ALIAS)                                           \
+#define TESSERACT_ADD_STUDIO_PLUGIN(DERIVED_CLASS, ALIAS)                                           \
   TESSERACT_ADD_PLUGIN_SECTIONED(DERIVED_CLASS, ALIAS, Studio)
 // clang-format on
 
-class QToolBar;
-class QMenu;
-
-namespace ads
-{
-class CDockWidget;
-}
-
 namespace tesseract_gui
 {
-class StudioPluginFactory;
+// class StudioPluginFactory;
 
-/** @brief Studio Factory class used by the Tesseract Studio for loading objects */
-class StudioConfigWidgetFactory
+///** @brief Studio Factory class used by the Tesseract Studio for loading objects */
+// class StudioConfigWidgetFactory
+//{
+// public:
+//  using Ptr = std::shared_ptr<StudioConfigWidgetFactory>;
+//  using ConstPtr = std::shared_ptr<const StudioConfigWidgetFactory>;
+
+//  virtual ~StudioConfigWidgetFactory() = default;
+
+//  virtual StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const = 0;
+
+//  static const std::string& getSectionName();
+
+// protected:
+//  static const std::string SECTION_NAME;
+//  friend class PluginLoader;
+//};
+
+class StudioDockWidgetFactory
 {
 public:
-  using Ptr = std::shared_ptr<StudioConfigWidgetFactory>;
-  using ConstPtr = std::shared_ptr<const StudioConfigWidgetFactory>;
+  using Ptr = std::shared_ptr<StudioDockWidgetFactory>;
+  using ConstPtr = std::shared_ptr<const StudioDockWidgetFactory>;
 
-  virtual ~StudioConfigWidgetFactory() = default;
+  virtual ~StudioDockWidgetFactory() = default;
 
-  virtual StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const = 0;
+  virtual StudioDockWidget* create(const QString& name) const = 0;
 
   static const std::string& getSectionName();
 
 protected:
   static const std::string SECTION_NAME;
   friend class PluginLoader;
-};
-
-struct StudioFactoryResult
-{
-  using UPtr = std::unique_ptr<StudioFactoryResult>;
-
-  ads::CDockWidget* dock_widget{ nullptr };
-  ads::DockWidgetArea dock_area{ ads::LeftDockWidgetArea };
-  QToolBar* toolbar{ nullptr };
-  QMenu* menu{ nullptr };
 };
 
 class StudioPluginFactory
@@ -193,21 +192,29 @@ public:
    */
   void removeStudioPlugin(const std::string& name);
 
-  /**
-   * @brief Get studio config widget given name
-   * @details This looks for studio plugin info. If not found nullptr is returned.
-   * @param name The name
-   */
-  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name) const;
+  //  /**
+  //   * @brief Get studio config widget given name
+  //   * @details This looks for studio plugin info. If not found nullptr is returned.
+  //   * @param name The name
+  //   */
+  //  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name) const;
+
+  //  /**
+  //   * @brief Get studio config widget given name and plugin info
+  //   * @details This looks for studio plugin info. If not found nullptr is returned.
+  //   * @param name The name
+  //   * @param plugin_info The plugin information to create task composer executor object
+  //   */
+  //  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name,
+  //                                                     const tesseract_common::PluginInfo& plugin_info) const;
 
   /**
-   * @brief Get studio config widget given name and plugin info
+   * @brief Get studio dock widget given name and plugin info
    * @details This looks for studio plugin info. If not found nullptr is returned.
    * @param name The name
    * @param plugin_info The plugin information to create task composer executor object
    */
-  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name,
-                                                     const tesseract_common::PluginInfo& plugin_info) const;
+  StudioDockWidget* createStudioDockWidget(const QString& name, const tesseract_common::PluginInfo& plugin_info) const;
 
   /**
    * @brief Save the plugin information to a yaml config file
@@ -226,7 +233,7 @@ public:
   const tesseract_common::PluginLoader& getPluginLoader() const;
 
 private:
-  mutable std::map<std::string, StudioConfigWidgetFactory::Ptr> factories_;
+  mutable std::map<std::string, StudioDockWidgetFactory::Ptr> factories_;
   tesseract_common::PluginInfoContainer plugin_info_;
   tesseract_common::PluginLoader plugin_loader_;
 };

@@ -87,6 +87,8 @@ struct Studio::Implementation
   std::shared_ptr<StudioPluginFactory> plugin_factory;
   StudioPluginLoaderDialog plugin_loader_dialog;
 
+  std::map<ads::DockWidgetArea, ads::CDockAreaWidget*> dock_areas;
+
   /** @brief Saves the dock manager state and the main window geometry */
   void saveState();
 
@@ -113,7 +115,7 @@ Studio::Implementation::Implementation(Studio* app)
   , contact_results_manager(component_info)
   , open_dialog(component_info, app)
   , plugin_factory(std::make_shared<StudioPluginFactory>())
-  , plugin_loader_dialog(plugin_factory, app)
+  , plugin_loader_dialog(app)
 {
 }
 
@@ -234,4 +236,51 @@ Studio::Studio(QWidget* parent)
 }
 
 Studio::~Studio() = default;
+
+StudioPluginFactory& Studio::getPluginFactory() { return *data_->plugin_factory; }
+const StudioPluginFactory& Studio::getPluginFactory() const { return *data_->plugin_factory; }
+
+void Studio::addDockWidget(StudioDockWidget* dock_widget)
+{
+  if (!dock_widget->isInitialized())
+  {
+    dock_widget->onInitialize();
+    if (!dock_widget->isInitialized())
+    {
+      delete dock_widget;
+      return;
+    }
+  }
+
+  if (dock_widget->assignAsCentralWidget())
+  {
+    auto it = data_->dock_areas.find(ads::DockWidgetArea::CenterDockWidgetArea);
+    if (it != data_->dock_areas.end())
+      throw std::runtime_error("Only able to have one central widget!");
+
+    auto* central_area = data_->dock_manager->setCentralWidget(dock_widget);
+    central_area->setAllowedAreas(ads::DockWidgetArea::OuterDockAreas);
+    data_->dock_areas[ads::DockWidgetArea::CenterDockWidgetArea] = central_area;
+  }
+  else
+  {
+    auto it = data_->dock_areas.find(dock_widget->getDesiredDockArea());
+    if (it != data_->dock_areas.end())
+    {
+      data_->dock_manager->addDockWidgetTabToArea(dock_widget, it->second);
+    }
+    else
+    {
+      ads::CDockAreaWidget* dock_area{ nullptr };
+      auto it = data_->dock_areas.find(ads::DockWidgetArea::CenterDockWidgetArea);
+      if (it != data_->dock_areas.end())
+        dock_area = data_->dock_manager->addDockWidget(dock_widget->getDesiredDockArea(), dock_widget, it->second);
+      else
+        dock_area = data_->dock_manager->addDockWidget(dock_widget->getDesiredDockArea(), dock_widget);
+
+      data_->dock_areas[dock_widget->getDesiredDockArea()] = dock_area;
+    }
+    ui->menuView->addAction(dock_widget->toggleViewAction());
+  }
+}
 }  // namespace tesseract_gui

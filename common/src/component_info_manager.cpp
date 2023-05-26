@@ -144,6 +144,13 @@ void ComponentInfoManager::removeUnused()
   obj->removeUnusedHelper();
 }
 
+bool ComponentInfoManager::empty()
+{
+  std::shared_ptr<ComponentInfoManager> obj = instance();
+  std::shared_lock lock(obj->data_->mutex);
+  return obj->emptyHelper();
+}
+
 std::shared_ptr<ComponentInfoManager> ComponentInfoManager::instance()
 {
   static std::shared_ptr<ComponentInfoManager> singleton = nullptr;
@@ -162,27 +169,27 @@ void ComponentInfoManager::loadConfigHelper(const YAML::Node& config)
   std::map<boost::uuids::uuid, boost::uuids::uuid> parent_mapping;
   for (auto it = config.begin(); it != config.end(); ++it)
   {
-    YAML::Node node = it->second;
+    const YAML::Node& node = it->second;
     std::string name = it->first.as<std::string>();
 
     std::string scene_name;
-    if (YAML::Node n = node["scene_name"])
+    if (const YAML::Node& n = node["scene_name"])
       scene_name = n.as<std::string>();
     else
       throw std::runtime_error("ComponentInfoManager::loadConfig, ComponentInfo '" + name + "' is missing scene_name.");
 
     std::string description;
-    if (YAML::Node n = node["description"])
+    if (const YAML::Node& n = node["description"])
       description = n.as<std::string>();
 
     boost::uuids::uuid ns{};
-    if (YAML::Node n = node["ns"])
+    if (const YAML::Node& n = node["ns"])
       ns = boost::lexical_cast<boost::uuids::uuid>(n.as<std::string>());
     else
       throw std::runtime_error("ComponentInfoManager::loadConfig, ComponentInfo '" + name + "' is missing ns.");
 
     boost::uuids::uuid parent_ns{};
-    if (YAML::Node n = node["parent"])
+    if (const YAML::Node& n = node["parent"])
     {
       parent_ns = boost::lexical_cast<boost::uuids::uuid>(n.as<std::string>());
       parent_mapping[ns] = parent_ns;
@@ -363,5 +370,7 @@ std::vector<std::shared_ptr<ComponentInfo>> ComponentInfoManager::getHelper() co
 
   return component_infos;
 }
+
+bool ComponentInfoManager::emptyHelper() const { return data_->component_infos_by_ns.empty(); }
 
 }  // namespace tesseract_gui

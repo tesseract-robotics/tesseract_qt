@@ -22,6 +22,8 @@
  */
 #include <tesseract_qt/studio/studio_plugin_loader_dialog.h>
 #include <tesseract_qt/studio/studio_plugin_factory.h>
+#include <tesseract_qt/studio/studio.h>
+
 #include "ui_studio_plugin_loader_dialog.h"
 
 #include <tesseract_qt/common/component_info.h>
@@ -44,11 +46,10 @@ namespace tesseract_gui
 {
 struct StudioPluginLoaderDialog::Implementation
 {
-  // Plugin factory
-  std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory;
+  // Application
+  Studio* app;
 
   // Menus
-  QMenu plugin_context_menu;
   QMenu search_path_context_menu;
   QMenu search_library_context_menu;
 
@@ -57,12 +58,10 @@ struct StudioPluginLoaderDialog::Implementation
   QStringListModel search_libraries_model;
 };
 
-StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
-                                                   QWidget* parent)
-  : QDialog(parent), ui(std::make_unique<Ui::StudioPluginLoaderDialog>()), data_(std::make_unique<Implementation>())
+StudioPluginLoaderDialog::StudioPluginLoaderDialog(Studio* app)
+  : QDialog(app), ui(std::make_unique<Ui::StudioPluginLoaderDialog>()), data_(std::make_unique<Implementation>())
 {
   ui->setupUi(this);
-  ui->tool_box->removeItem(0);
   ui->search_paths_list_view->setModel(&data_->search_paths_model);
   ui->search_libraries_list_view->setModel(&data_->search_libraries_model);
 
@@ -70,10 +69,7 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
   setModal(true);
 
-  data_->plugin_factory = std::move(plugin_factory);
-
-  data_->plugin_context_menu.addAction(ui->actionRemove_Plugin);
-  data_->plugin_context_menu.setWindowModality(Qt::ApplicationModal);
+  data_->app = app;
 
   data_->search_path_context_menu.addAction(ui->actionAdd_Search_Path);
   data_->search_path_context_menu.addSeparator();
@@ -84,13 +80,6 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
   data_->search_library_context_menu.addSeparator();
   data_->search_library_context_menu.addAction(ui->actionRemove_Search_Library);
   data_->search_library_context_menu.setWindowModality(Qt::ApplicationModal);
-
-  ui->actionRemove_Plugin->setIcon(icons::getTrashIcon());
-  connect(ui->actionRemove_Plugin, &QAction::triggered, [this]() {
-    int current_index = ui->tool_box->currentIndex();
-    if (current_index >= 0)
-      ui->tool_box->removeItem(current_index);
-  });
 
   ui->actionAdd_Search_Path->setIcon(icons::getTextIcon());
   connect(ui->actionAdd_Search_Path, &QAction::triggered, [this]() {
@@ -118,15 +107,6 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
     refreshSearchPathsAndLibraries();
   });
 
-  connect(ui->tool_box,
-          SIGNAL(customContextMenuRequested(const QPoint&)),
-          this,
-          SLOT(showPluginContextMenu(const QPoint&)));
-  connect(ui->search_paths_list_view,
-          SIGNAL(customContextMenuRequested(const QPoint&)),
-          this,
-          SLOT(showSearchPathContextMenu(const QPoint&)));
-
   connect(ui->search_paths_list_view->itemDelegate(), &QAbstractItemDelegate::closeEditor, [this]() {
     refreshSearchPathsAndLibraries();
   });
@@ -138,6 +118,7 @@ StudioPluginLoaderDialog::StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui
     refreshSearchPathsAndLibraries();
   });
   connect(ui->add_push_button, SIGNAL(clicked()), this, SLOT(addPluginWidget()));
+  connect(ui->plugin_combo_box, SIGNAL(currentIndexChanged(int)), this, SLOT(generateUniqueName()));
 }
 
 StudioPluginLoaderDialog::~StudioPluginLoaderDialog() = default;
@@ -145,7 +126,7 @@ StudioPluginLoaderDialog::~StudioPluginLoaderDialog() = default;
 void StudioPluginLoaderDialog::showEvent(QShowEvent* event)
 {
   // Load search paths into widget
-  std::set<std::string> search_paths = data_->plugin_factory->getSearchPaths();
+  std::set<std::string> search_paths = data_->app->getPluginFactory().getSearchPaths();
   QStringList qlist_search_paths;
   for (const auto& search_path : search_paths)
     qlist_search_paths.append(search_path.c_str());
@@ -153,7 +134,7 @@ void StudioPluginLoaderDialog::showEvent(QShowEvent* event)
   data_->search_paths_model.setStringList(qlist_search_paths);
 
   // Load search libraries into widget
-  std::set<std::string> search_libraries = data_->plugin_factory->getSearchLibraries();
+  std::set<std::string> search_libraries = data_->app->getPluginFactory().getSearchLibraries();
   QStringList qlist_search_libraries;
   for (const auto& search_library : search_libraries)
     qlist_search_libraries.append(search_library.c_str());
@@ -161,27 +142,17 @@ void StudioPluginLoaderDialog::showEvent(QShowEvent* event)
   data_->search_libraries_model.setStringList(qlist_search_libraries);
 
   std::vector<std::string> plugins =
-      data_->plugin_factory->getPluginLoader().getAvailablePlugins(StudioConfigWidgetFactory::getSectionName());
-  ui->combo_box->clear();
+      data_->app->getPluginFactory().getPluginLoader().getAvailablePlugins(StudioDockWidgetFactory::getSectionName());
+  ui->plugin_combo_box->clear();
   for (const auto& plugin : plugins)
-    ui->combo_box->addItem(QString::fromStdString(plugin));
+    ui->plugin_combo_box->addItem(QString::fromStdString(plugin));
 
   ui->add_push_button->setEnabled(!plugins.empty());
 
-  QDialog::showEvent(event);
-}
+  // Generate new unique name
+  generateUniqueName();
 
-void StudioPluginLoaderDialog::showPluginContextMenu(const QPoint& pos)
-{
-  QPoint global_pos = ui->tool_box->mapToGlobal(pos);
-  if (ui->tool_box->currentWidget() != nullptr)
-  {
-    QPoint local_pos = ui->tool_box->currentWidget()->mapFromGlobal(global_pos);
-    QRect rect = ui->tool_box->currentWidget()->rect();
-    rect.setTop(-30);  // Account for page header
-    if (rect.contains(local_pos))
-      data_->plugin_context_menu.exec(global_pos);
-  }
+  QDialog::showEvent(event);
 }
 
 void StudioPluginLoaderDialog::showSearchPathContextMenu(const QPoint& pos)
@@ -198,17 +169,18 @@ void StudioPluginLoaderDialog::showSearchLibraryContextMenu(const QPoint& pos)
 
 void StudioPluginLoaderDialog::addPluginWidget()
 {
-  std::string name = "StudioPlugin" + std::to_string(boost::uuids::hash_value(boost::uuids::random_generator()()));
+  QString name = ui->plugin_name_line_edit->text();
   tesseract_common::PluginInfo plugin_info;
-  plugin_info.class_name = ui->combo_box->currentText().toStdString();
+  plugin_info.class_name = ui->plugin_combo_box->currentText().toStdString();
 
-  StudioPluginConfigWidget* widget = data_->plugin_factory->createStudioConfigWidget(name, plugin_info);
+  StudioDockWidget* dock_widget = data_->app->getPluginFactory().createStudioDockWidget(name, plugin_info);
 
-  if (widget == nullptr)
+  if (dock_widget == nullptr)
     return;
 
-  QString title = (plugin_info.class_name + "(" + name + ")").c_str();
-  ui->tool_box->addItem(widget, title);
+  data_->app->addDockWidget(dock_widget);
+
+  generateUniqueName();
 }
 
 void StudioPluginLoaderDialog::refreshSearchPathsAndLibraries()
@@ -218,22 +190,28 @@ void StudioPluginLoaderDialog::refreshSearchPathsAndLibraries()
   for (const auto& entry : qlist_search_paths)
     search_paths.insert(entry.toStdString());
 
-  data_->plugin_factory->setSearchPaths(search_paths);
+  data_->app->getPluginFactory().setSearchPaths(search_paths);
 
   QStringList qlist_search_libraries = data_->search_libraries_model.stringList();
   std::set<std::string> search_libraries;
   for (const auto& entry : qlist_search_libraries)
     search_libraries.insert(entry.toStdString());
 
-  data_->plugin_factory->setSearchLibraries(search_libraries);
+  data_->app->getPluginFactory().setSearchLibraries(search_libraries);
 
   std::vector<std::string> plugins =
-      data_->plugin_factory->getPluginLoader().getAvailablePlugins(StudioConfigWidgetFactory::getSectionName());
-  ui->combo_box->clear();
+      data_->app->getPluginFactory().getPluginLoader().getAvailablePlugins(StudioDockWidgetFactory::getSectionName());
+  ui->plugin_combo_box->clear();
   for (const auto& plugin : plugins)
-    ui->combo_box->addItem(QString::fromStdString(plugin));
+    ui->plugin_combo_box->addItem(QString::fromStdString(plugin));
 
   ui->add_push_button->setEnabled(!plugins.empty());
+}
+
+void StudioPluginLoaderDialog::generateUniqueName()
+{
+  std::string name = "StudioPlugin" + std::to_string(boost::uuids::hash_value(boost::uuids::random_generator()()));
+  ui->plugin_name_line_edit->setText(QString::fromStdString(name));
 }
 
 }  // namespace tesseract_gui

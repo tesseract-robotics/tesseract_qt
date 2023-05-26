@@ -26,7 +26,6 @@
 #include <set>
 #include <string>
 #include <tesseract_common/types.h>
-#include <tesseract_qt/common/component_info.h>
 
 namespace tesseract_gui
 {
@@ -39,14 +38,8 @@ struct StudioPluginInfo
   /** @brief A list of library names without the prefix or suffix that contain plugins*/
   std::set<std::string> search_libraries;
 
-  /** @brief A map of name to component infos */
-  std::map<std::string, std::shared_ptr<const ComponentInfo>> component_infos;
-
   /** @brief A map of name to studio plugin information */
   tesseract_common::PluginInfoContainer plugin_infos;
-
-  /** @brief Insert the content of an other StudioPluginInfo */
-  void insert(const StudioPluginInfo& other);
 
   /** @brief Clear the contents */
   void clear();

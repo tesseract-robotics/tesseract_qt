@@ -33,6 +33,9 @@ class Studio;
 
 namespace tesseract_gui
 {
+class StudioPluginFactory;
+class StudioDockWidget;
+
 class Studio : public QMainWindow
 {
   Q_OBJECT
@@ -42,9 +45,15 @@ public:
   ~Studio();
 
 private:
+  friend class StudioPluginLoaderDialog;
   struct Implementation;
   std::unique_ptr<Ui::Studio> ui;
   std::unique_ptr<Implementation> data_;
+
+  StudioPluginFactory& getPluginFactory();
+  const StudioPluginFactory& getPluginFactory() const;
+
+  void addDockWidget(StudioDockWidget* dock_widget);
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_STUDIO_STUDIO_H

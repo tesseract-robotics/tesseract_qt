@@ -33,53 +33,10 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/plugin_infos.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 
 namespace YAML
 {
-template <>
-struct convert<tesseract_gui::ComponentInfo>
-{
-  static Node encode(const tesseract_gui::ComponentInfo& rhs)
-  {
-    YAML::Node component_info;
-    component_info["scene_name"] = rhs.getSceneName();
-    component_info["description"] = rhs.getDescription();
-    component_info["ns"] = boost::uuids::to_string(rhs.getNamespace());
-    if (rhs.hasParent())
-    {
-      for (const auto& n : rhs.getLineage())
-        component_info["lineage"]["ns"].push_back(boost::uuids::to_string(n));
-    }
-
-    return component_info;
-  }
-
-  static bool decode(const Node& node, tesseract_gui::ComponentInfo& rhs)
-  {
-    std::string scene_name{ "tesseract_default" };
-    if (node["scene_name"])
-      scene_name = node["scene_name"].as<std::string>();
-
-    std::string description;
-    if (node["description"])
-      description = node["description"].as<std::string>();
-
-    std::list<boost::uuids::uuid> ns;
-    if (node["ns"])
-      ns.push_back(boost::lexical_cast<boost::uuids::uuid>(node["ns"].as<std::string>()));
-
-    if (node["lineage"])
-    {
-      auto lineage = node["lineage"].as<std::list<std::string>>();
-      for (const auto& n : lineage)
-        ns.push_back(boost::lexical_cast<boost::uuids::uuid>(n));
-    }
-
-    //    rhs = tesseract_gui::ComponentInfo{ scene_name, ns, description };
-    return true;
-  }
-};
-
 template <>
 struct convert<tesseract_gui::StudioPluginInfo>
 {
@@ -97,8 +54,8 @@ struct convert<tesseract_gui::StudioPluginInfo>
     if (!rhs.search_libraries.empty())
       studio_plugins[SEARCH_LIBRARIES_KEY] = rhs.search_libraries;
 
-    //    if (!rhs.component_infos.empty())
-    //      studio_plugins[COMPONENT_INFOS_KEY] = rhs.component_infos;
+    if (!tesseract_gui::ComponentInfoManager::empty())
+      studio_plugins[COMPONENT_INFOS_KEY] = tesseract_gui::ComponentInfoManager::getConfig();
 
     if (!rhs.plugin_infos.plugins.empty())
       studio_plugins[PLUGINS_KEY] = rhs.plugin_infos;
@@ -155,7 +112,7 @@ struct convert<tesseract_gui::StudioPluginInfo>
 
       try
       {
-        //        rhs.component_infos = component_infos.as<std::map<std::string, tesseract_gui::ComponentInfo>>();
+        tesseract_gui::ComponentInfoManager::loadConfig(component_infos);
       }
       catch (const std::exception& e)
       {

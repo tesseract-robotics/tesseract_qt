@@ -678,6 +678,9 @@ void RenderWidget::setSkyEnabled(bool enabled) { data_->renderer.sky_enable = en
 void RenderWidget::setGridEnabled(bool enabled) { data_->renderer.grid_enable = enabled; }
 
 /////////////////////////////////////////////////
+void RenderWidget::setShadowsEnabled(bool enabled) { data_->renderer.shadows_enable = enabled; }
+
+/////////////////////////////////////////////////
 // void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
 //{
 //  RenderWindowItem *renderWindow =

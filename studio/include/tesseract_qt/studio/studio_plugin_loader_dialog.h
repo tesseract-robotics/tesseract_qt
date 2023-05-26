@@ -34,25 +34,26 @@ class StudioPluginLoaderDialog;
 namespace tesseract_gui
 {
 class StudioPluginFactory;
+class StudioPluginConfigWidget;
+class Studio;
 
 class StudioPluginLoaderDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit StudioPluginLoaderDialog(std::shared_ptr<tesseract_gui::StudioPluginFactory> plugin_factory,
-                                    QWidget* parent = nullptr);
+  explicit StudioPluginLoaderDialog(Studio* app);
   ~StudioPluginLoaderDialog();
 
 protected:
   void showEvent(QShowEvent* event) override;
 
 private Q_SLOTS:
-  void showPluginContextMenu(const QPoint& pos);
   void showSearchPathContextMenu(const QPoint& pos);
   void showSearchLibraryContextMenu(const QPoint& pos);
   void addPluginWidget();
   void refreshSearchPathsAndLibraries();
+  void generateUniqueName();
 
 private:
   struct Implementation;

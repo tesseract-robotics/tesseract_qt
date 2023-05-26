@@ -27,15 +27,37 @@
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <memory>
 #include <yaml-cpp/yaml.h>
+#include <ads_globals.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QWidget>
 
+class QToolBar;
+class QMenu;
 class QStringListModel;
+
+namespace ads
+{
+class CDockWidget;
+}
 
 namespace tesseract_gui
 {
 class ComponentInfoModel;
+
+struct StudioFactoryResult
+{
+  using UPtr = std::unique_ptr<StudioFactoryResult>;
+
+  QMenu* menu{ nullptr };
+  /** @brief This toolbar will be added to the application toolbar */
+  QToolBar* toolbar{ nullptr };
+  ads::CDockWidget* dock_widget{ nullptr };
+  ads::DockWidgetArea dock_area{ ads::LeftDockWidgetArea };
+
+  /** @brief Only one widget can be the central widget */
+  bool central_widget{ false };
+};
 
 class StudioPluginConfigWidget : public QWidget
 {
@@ -74,6 +96,12 @@ public:
    * @return The yaml config
    */
   virtual YAML::Node getConfig() const = 0;
+
+  /**
+   * @brief Create studio object
+   * @return
+   */
+  virtual StudioFactoryResult::UPtr create() = 0;
 };
 }  // namespace tesseract_gui
 

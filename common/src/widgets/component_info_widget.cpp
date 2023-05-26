@@ -44,14 +44,19 @@ struct ComponentInfoWidget::Implementation
 
   ComponentInfoManagerWidget* manager_widget;
 
+  QString getKey(const ComponentInfo& component_info)
+  {
+    return QString("%1::%2").arg(component_info.getName().c_str(),
+                                 boost::uuids::to_string(component_info.getNamespace()).c_str());
+  }
+
   void updateModel()
   {
     auto component_infos = ComponentInfoManager::get();
 
     QStringList list;
     for (const auto& component_info : component_infos)
-      list.append(QString("%1::%2").arg(component_info->getName().c_str(),
-                                        boost::uuids::to_string(component_info->getNamespace()).c_str()));
+      list.append(getKey(*component_info));
 
     model.setStringList(list);
   }
@@ -77,6 +82,16 @@ ComponentInfoWidget::ComponentInfoWidget(QWidget* parent)
 }
 
 ComponentInfoWidget::~ComponentInfoWidget() = default;
+
+void ComponentInfoWidget::setComponentInfo(const boost::uuids::uuid& ns)
+{
+  auto component_info = ComponentInfoManager::get(ns);
+  if (component_info == nullptr)
+    return;
+
+  QString key = data_->getKey(*component_info);
+  ui->combo_box->setCurrentText(key);
+}
 
 std::shared_ptr<const ComponentInfo> ComponentInfoWidget::getComponentInfo() const
 {

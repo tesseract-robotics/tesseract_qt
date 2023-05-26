@@ -18,35 +18,16 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-/*********************************************************/
-/******          StudioPluginInfo           *****/
-/*********************************************************/
-void StudioPluginInfo::insert(const StudioPluginInfo& other)
-{
-  search_paths.insert(other.search_paths.begin(), other.search_paths.end());
-  search_libraries.insert(other.search_libraries.begin(), other.search_libraries.end());
-
-  if (!other.plugin_infos.default_plugin.empty())
-    plugin_infos.default_plugin = other.plugin_infos.default_plugin;
-
-  for (const auto& plugin_info : other.plugin_infos.plugins)
-    plugin_infos.plugins[plugin_info.first] = plugin_info.second;
-
-  for (const auto& component_info : other.component_infos)
-    component_infos[component_info.first] = component_info.second;
-}
-
 void StudioPluginInfo::clear()
 {
   search_paths.clear();
   search_libraries.clear();
-  component_infos.clear();
   plugin_infos.clear();
 }
 
 bool StudioPluginInfo::empty() const
 {
-  return (search_paths.empty() && search_libraries.empty() && component_infos.empty() && plugin_infos.plugins.empty());
+  return (search_paths.empty() && search_libraries.empty() && plugin_infos.plugins.empty());
 }
 
 bool StudioPluginInfo::operator==(const StudioPluginInfo& rhs) const
@@ -54,7 +35,6 @@ bool StudioPluginInfo::operator==(const StudioPluginInfo& rhs) const
   bool equal = true;
   equal &= tesseract_common::isIdenticalSet<std::string>(search_paths, rhs.search_paths);
   equal &= tesseract_common::isIdenticalSet<std::string>(search_libraries, rhs.search_libraries);
-  equal &= (component_infos == rhs.component_infos);
   equal &= (plugin_infos == rhs.plugin_infos);
   return equal;
 }
@@ -65,7 +45,7 @@ void StudioPluginInfo::serialize(Archive& ar, const unsigned int /*version*/)
 {
   ar& BOOST_SERIALIZATION_NVP(search_paths);
   ar& BOOST_SERIALIZATION_NVP(search_libraries);
-  ar& BOOST_SERIALIZATION_NVP(component_infos);
+  //  ar& BOOST_SERIALIZATION_NVP(component_infos);
   ar& BOOST_SERIALIZATION_NVP(plugin_infos);
 }
 

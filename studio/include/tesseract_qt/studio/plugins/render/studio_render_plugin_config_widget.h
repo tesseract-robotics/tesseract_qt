@@ -49,6 +49,8 @@ public:
   void setConfig(const YAML::Node& config) override;
   YAML::Node getConfig() const override;
 
+  StudioFactoryResult::UPtr create() override;
+
 private:
   std::unique_ptr<Ui::StudioRenderPluginConfigWidget> ui;
 };
