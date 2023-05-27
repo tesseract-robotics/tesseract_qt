@@ -35,7 +35,7 @@ QString StudioDockWidget::getName() const { return objectName(); }
 ads::DockWidgetArea StudioDockWidget::getDesiredDockArea() const { return desired_dock_area_; }
 bool StudioDockWidget::assignAsCentralWidget() const { return assign_as_central_widget_; }
 
-bool StudioDockWidget::isInitialized() const { return true; }
+bool StudioDockWidget::isInitialized() const { return (widget() != nullptr); }
 void StudioDockWidget::onInitialize() {}
 
 }  // namespace tesseract_gui

@@ -44,6 +44,7 @@ public:
   ~StudioRenderConfigDialog();
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
+  bool assignAsCentralWidget() const;
   bool skyEnabled() const;
   bool gridEnabled() const;
   bool shadowsEnabled() const;

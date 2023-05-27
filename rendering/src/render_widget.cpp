@@ -94,6 +94,9 @@ public:
   /** @brief User light */
   gz::rendering::DirectionalLightPtr light{ nullptr };
 
+  /** @brief User grid */
+  gz::rendering::VisualPtr grid{ nullptr };
+
   /** @brief The currently hovered mouse position in screen coordinates */
   gz::math::Vector2i mouse_hover_pos{ gz::math::Vector2i::Zero };
 
@@ -109,6 +112,44 @@ public:
 
 /////////////////////////////////////////////////
 Renderer::Renderer() : data_(std::make_unique<RendererImpl>()) {}
+
+void Renderer::setSkyEnabled(bool enabled)
+{
+  sky_enable = enabled;
+
+  if (!initialized)
+    return;
+
+  auto* engine = gz::rendering::engine(engine_name);
+  if (engine == nullptr)
+    return;
+
+  auto scene = engine->SceneByName(scene_name);
+  if (!scene)
+    return;
+
+  scene->SetSkyEnabled(enabled);
+}
+
+void Renderer::setGridEnabled(bool enabled)
+{
+  grid_enable = enabled;
+
+  if (!initialized)
+    return;
+
+  data_->grid->SetVisible(enabled);
+}
+
+void Renderer::setShadowsEnabled(bool enabled)
+{
+  shadows_enable = enabled;
+
+  if (!initialized)
+    return;
+
+  data_->light->SetCastShadows(enabled);
+}
 
 /////////////////////////////////////////////////
 void Renderer::render()
@@ -364,47 +405,39 @@ void Renderer::initialize()
     scene->SetBackgroundColor(background_color);
   }
 
-  if (sky_enable)
+  scene->SetSkyEnabled(sky_enable);
+
+  data_->grid = scene->VisualByName("tesseract_grid");
+  if (data_->grid == nullptr)
   {
-    scene->SetSkyEnabled(true);
+    gz::rendering::VisualPtr root = scene->RootVisual();
+
+    // create gray material
+    gz::rendering::MaterialPtr gray = scene->CreateMaterial();
+    gray->SetAmbient(0.7, 0.7, 0.7);
+    gray->SetDiffuse(0.7, 0.7, 0.7);
+    gray->SetSpecular(0.7, 0.7, 0.7);
+
+    // create grid visual
+    unsigned id = 1000;  // static_cast<unsigned>(dataPtr->entity_manager.addVisual("tesseract_grid"));
+    data_->grid = scene->CreateVisual(id, "tesseract_grid");
+    gz::rendering::GridPtr gridGeom = scene->CreateGrid();
+    if (!gridGeom)
+    {
+      ignwarn << "Failed to create grid for scene [" << scene->Name() << "] on engine [" << scene->Engine()->Name()
+              << "]" << std::endl;
+      return;
+    }
+    gridGeom->SetCellCount(20);
+    gridGeom->SetCellLength(1);
+    gridGeom->SetVerticalCellCount(0);
+    data_->grid->AddGeometry(gridGeom);
+    data_->grid->SetLocalPosition(0, 0, 0.015);
+    data_->grid->SetMaterial(gray);
+    root->AddChild(data_->grid);
   }
 
-  if (grid_enable)
-  {
-    gz::rendering::VisualPtr visual = scene->VisualByName("tesseract_grid");
-    if (visual == nullptr)
-    {
-      gz::rendering::VisualPtr root = scene->RootVisual();
-
-      // create gray material
-      gz::rendering::MaterialPtr gray = scene->CreateMaterial();
-      gray->SetAmbient(0.7, 0.7, 0.7);
-      gray->SetDiffuse(0.7, 0.7, 0.7);
-      gray->SetSpecular(0.7, 0.7, 0.7);
-
-      // create grid visual
-      unsigned id = 1000;  // static_cast<unsigned>(dataPtr->entity_manager.addVisual("tesseract_grid"));
-      gz::rendering::VisualPtr visual = scene->CreateVisual(id, "tesseract_grid");
-      gz::rendering::GridPtr gridGeom = scene->CreateGrid();
-      if (!gridGeom)
-      {
-        ignwarn << "Failed to create grid for scene [" << scene->Name() << "] on engine [" << scene->Engine()->Name()
-                << "]" << std::endl;
-        return;
-      }
-      gridGeom->SetCellCount(20);
-      gridGeom->SetCellLength(1);
-      gridGeom->SetVerticalCellCount(0);
-      visual->AddGeometry(gridGeom);
-      visual->SetLocalPosition(0, 0, 0.015);
-      visual->SetMaterial(gray);
-      root->AddChild(visual);
-    }
-    else
-    {
-      visual->SetVisible(true);
-    }
-  }
+  data_->grid->SetVisible(grid_enable);
 
   auto root = scene->RootVisual();
 
@@ -672,13 +705,13 @@ void RenderWidget::setCameraNearClip(double near) { data_->renderer.camera_near_
 void RenderWidget::setCameraFarClip(double far) { data_->renderer.camera_far_clip = far; }
 
 /////////////////////////////////////////////////
-void RenderWidget::setSkyEnabled(bool enabled) { data_->renderer.sky_enable = enabled; }
+void RenderWidget::setSkyEnabled(bool enabled) { data_->renderer.setSkyEnabled(enabled); }
 
 /////////////////////////////////////////////////
-void RenderWidget::setGridEnabled(bool enabled) { data_->renderer.grid_enable = enabled; }
+void RenderWidget::setGridEnabled(bool enabled) { data_->renderer.setGridEnabled(enabled); }
 
 /////////////////////////////////////////////////
-void RenderWidget::setShadowsEnabled(bool enabled) { data_->renderer.shadows_enable = enabled; }
+void RenderWidget::setShadowsEnabled(bool enabled) { data_->renderer.setShadowsEnabled(enabled); }
 
 /////////////////////////////////////////////////
 // void MinimalScene::LoadConfig(const tinyxml2::XMLElement *_pluginElem)

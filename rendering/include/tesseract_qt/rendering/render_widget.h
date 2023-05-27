@@ -79,6 +79,12 @@ public:
    */
   void handleKeyRelease(const gz::common::KeyEvent& event);
 
+  void setSkyEnabled(bool enabled);
+
+  void setGridEnabled(bool enabled);
+
+  void setShadowsEnabled(bool enabled);
+
   /** @brief Render engine to use */
   std::string engine_name{ "ogre2" };
 

@@ -41,8 +41,6 @@ public:
 
   YAML::Node getConfig() const override;
 
-  bool isInitialized() const override;
-
 public Q_SLOTS:
   void onInitialize() override;
 };

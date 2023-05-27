@@ -15,6 +15,7 @@ std::shared_ptr<const ComponentInfo> StudioRenderConfigDialog::getComponentInfo(
 {
   return ui->component_info_widget->getComponentInfo();
 }
+bool StudioRenderConfigDialog::assignAsCentralWidget() const { return ui->central_widget_check_box->isChecked(); }
 bool StudioRenderConfigDialog::skyEnabled() const { return ui->sky_check_box->isChecked(); }
 bool StudioRenderConfigDialog::gridEnabled() const { return ui->grid_check_box->isChecked(); }
 bool StudioRenderConfigDialog::shadowsEnabled() const { return ui->shadows_check_box->isChecked(); }

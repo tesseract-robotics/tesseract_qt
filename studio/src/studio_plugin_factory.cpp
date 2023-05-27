@@ -32,10 +32,6 @@ static const std::string TESSERACT_STUDIO_PLUGINS_ENV = "TESSERACT_STUDIO_PLUGIN
 
 namespace tesseract_gui
 {
-// const std::string StudioConfigWidgetFactory::SECTION_NAME = "Studio";
-
-// const std::string& StudioConfigWidgetFactory::getSectionName() { return StudioConfigWidgetFactory::SECTION_NAME; }
-
 const std::string StudioDockWidgetFactory::SECTION_NAME = "Studio";
 
 const std::string& StudioDockWidgetFactory::getSectionName() { return StudioDockWidgetFactory::SECTION_NAME; }
@@ -123,60 +119,6 @@ void StudioPluginFactory::removeStudioPlugin(const std::string& name)
   if (plugin_info_.default_plugin == name)
     plugin_info_.default_plugin.clear();
 }
-
-// StudioPluginConfigWidget* StudioPluginFactory::createStudioConfigWidget(const std::string& name) const
-//{
-//  auto cm_it = plugin_info_.plugins.find(name);
-//  if (cm_it == plugin_info_.plugins.end())
-//  {
-//    CONSOLE_BRIDGE_logWarn("StudioPluginFactory, tried to get studio config widget '%s' that does not "
-//                           "exist!",
-//                           name.c_str());
-//    return nullptr;
-//  }
-
-//  return createStudioConfigWidget(name, cm_it->second);
-//}
-
-// StudioPluginConfigWidget*
-// StudioPluginFactory::createStudioConfigWidget(const std::string& name,
-//                                              const tesseract_common::PluginInfo& plugin_info) const
-//{
-//  try
-//  {
-//    auto it = factories_.find(plugin_info.class_name);
-//    if (it != factories_.end())
-//      return it->second->create(name, plugin_info.config);
-
-//    auto plugin = plugin_loader_.instantiate<StudioConfigWidgetFactory>(plugin_info.class_name);
-//    if (plugin == nullptr)
-//    {
-//      CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s'", plugin_info.class_name.c_str());
-//      return nullptr;
-//    }
-//    factories_[plugin_info.class_name] = plugin;
-//    return plugin->create(name, plugin_info.config);
-//  }
-//  catch (const std::exception& e)
-//  {
-//    CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s', Details: %s", plugin_info.class_name.c_str(), e.what());
-//    return nullptr;
-//  }
-//}
-
-// StudioDockWidget* StudioPluginFactory::createStudioDockWidget(const std::string& name) const
-//{
-//  auto cm_it = plugin_info_.plugins.find(name);
-//  if (cm_it == plugin_info_.plugins.end())
-//  {
-//    CONSOLE_BRIDGE_logWarn("StudioPluginFactory, tried to get studio dock widget '%s' that does not "
-//                           "exist!",
-//                           name.c_str());
-//    return nullptr;
-//  }
-
-//  return createStudioDockWidget(name, cm_it->second);
-//}
 
 StudioDockWidget* StudioPluginFactory::createStudioDockWidget(const QString& name,
                                                               const tesseract_common::PluginInfo& plugin_info) const

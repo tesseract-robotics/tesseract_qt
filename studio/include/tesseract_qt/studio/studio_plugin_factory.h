@@ -42,26 +42,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-// class StudioPluginFactory;
-
-///** @brief Studio Factory class used by the Tesseract Studio for loading objects */
-// class StudioConfigWidgetFactory
-//{
-// public:
-//  using Ptr = std::shared_ptr<StudioConfigWidgetFactory>;
-//  using ConstPtr = std::shared_ptr<const StudioConfigWidgetFactory>;
-
-//  virtual ~StudioConfigWidgetFactory() = default;
-
-//  virtual StudioPluginConfigWidget* create(const std::string& name, const YAML::Node& config) const = 0;
-
-//  static const std::string& getSectionName();
-
-// protected:
-//  static const std::string SECTION_NAME;
-//  friend class PluginLoader;
-//};
-
 class StudioDockWidgetFactory
 {
 public:
@@ -191,22 +171,6 @@ public:
    * @param name The name of the plugin to remove
    */
   void removeStudioPlugin(const std::string& name);
-
-  //  /**
-  //   * @brief Get studio config widget given name
-  //   * @details This looks for studio plugin info. If not found nullptr is returned.
-  //   * @param name The name
-  //   */
-  //  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name) const;
-
-  //  /**
-  //   * @brief Get studio config widget given name and plugin info
-  //   * @details This looks for studio plugin info. If not found nullptr is returned.
-  //   * @param name The name
-  //   * @param plugin_info The plugin information to create task composer executor object
-  //   */
-  //  StudioPluginConfigWidget* createStudioConfigWidget(const std::string& name,
-  //                                                     const tesseract_common::PluginInfo& plugin_info) const;
 
   /**
    * @brief Get studio dock widget given name and plugin info

@@ -70,16 +70,16 @@ YAML::Node StudioRenderDockWidget::getConfig() const
   //  return config_node;
 }
 
-bool StudioRenderDockWidget::isInitialized() const { return (widget() != nullptr); }
-
 void StudioRenderDockWidget::onInitialize()
 {
   if (isInitialized())
     return;
 
-  StudioRenderConfigDialog dialog(widget());
+  StudioRenderConfigDialog dialog(this);
   if (dialog.exec())
   {
+    assign_as_central_widget_ = dialog.assignAsCentralWidget();
+
     auto component_info = dialog.getComponentInfo();
     if (component_info == nullptr)
       return;
