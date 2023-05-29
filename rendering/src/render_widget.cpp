@@ -773,9 +773,10 @@ public:
 };
 
 /////////////////////////////////////////////////
-RenderWidget::RenderWidget(const std::string& scene_name, QWidget* parent)
+RenderWidget::RenderWidget(const std::string& scene_name, const std::string& engine_name, QWidget* parent)
   : QOpenGLWidget(parent), data_(std::make_unique<Implementation>())
 {
+  data_->renderer.setEngineName(engine_name);
   data_->renderer.setSceneName(scene_name);
   data_->view_controller = std::make_shared<InteractiveViewControl>(scene_name);
 

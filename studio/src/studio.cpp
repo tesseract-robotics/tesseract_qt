@@ -23,38 +23,15 @@
 #include <tesseract_qt/studio/studio.h>
 #include "ui_studio.h"
 
-#include <tesseract_qt/rendering/render_widget.h>
-#include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>
-#include <tesseract_qt/rendering/ign_tool_path_render_manager.h>
-#include <tesseract_qt/rendering/ign_contact_results_render_manager.h>
-
-#include <tesseract_qt/environment/widgets/environment_widget.h>
-
-#include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
-
-#include <tesseract_qt/tool_path/widgets/tool_path_tool_bar.h>
-#include <tesseract_qt/tool_path/widgets/tool_path_widget.h>
-
-#include <tesseract_qt/manipulation/manipulation_widget.h>
-#include <tesseract_qt/manipulation/manipulation_tool_bar.h>
-
-#include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
-#include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h>
-
-#include <tesseract_qt/common/events/tool_path_events.h>
-#include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_common/plugin_loader.hpp>
+#include <tesseract_common/yaml_utils.h>
 
 #include <tesseract_qt/common/icon_utils.h>
-#include <tesseract_qt/common/environment_manager.h>
-#include <tesseract_qt/common/tool_path.h>
-#include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
-#include <tesseract_qt/common/entity_manager.h>
-#include <tesseract_qt/common/environment_wrapper.h>
-#include <tesseract_qt/common/widgets/load_environment_dialog.h>
+
 #include <tesseract_qt/studio/studio_plugin_loader_dialog.h>
-#include <tesseract_qt/studio/studio_plugin_factory.h>
+#include <tesseract_qt/studio/studio_dock_widget_factory.h>
 
 #include <DockManager.h>
 #include <DockAreaWidget.h>
@@ -64,30 +41,42 @@
 #include <QComboBox>
 #include <QInputDialog>
 #include <QDialog>
+#include <QFileDialog>
+#include <QStandardPaths>
+
+static const std::string TESSERACT_STUDIO_PLUGIN_DIRECTORIES_ENV = "TESSERACT_STUDIO_PLUGIN_DIRECTORIES";
+static const std::string TESSERACT_STUDIO_PLUGINS_ENV = "TESSERACT_STUDIO_PLUGINS";
+static const std::string STUDIO_CONFIG_KEY{ "studio_config" };
+static const std::string SEARCH_PATHS_KEY{ "search_paths" };
+static const std::string SEARCH_LIBRARIES_KEY{ "search_libraries" };
+static const std::string COMPONENT_INFOS_KEY{ "component_infos" };
+static const std::string DOCK_WIDGETS_KEY{ "dock_widgets" };
 
 namespace tesseract_gui
 {
 struct Studio::Implementation
 {
   Implementation(Studio* app);
+  ~Implementation();
 
   Studio* app;
   ads::CDockManager* dock_manager{ nullptr };
   QWidgetAction* perspective_list_action{ nullptr };
   QComboBox* perspective_comboBox{ nullptr };
-  std::shared_ptr<const ComponentInfo> component_info;
-  std::shared_ptr<const ComponentInfo> jt_component_info;
-  EntityManager::Ptr entity_manager;
-  IgnSceneGraphRenderManager scene_graph_manager;
-  IgnToolPathRenderManager tool_path_manager;
-  IgnContactResultsRenderManager contact_results_manager;
+  QString default_directory;
 
-  LoadEnvironmentDialog open_dialog;
-
-  std::shared_ptr<StudioPluginFactory> plugin_factory;
+  std::map<std::string, StudioDockWidgetFactory::Ptr> factories;
+  tesseract_common::PluginLoader plugin_loader;
   StudioPluginLoaderDialog plugin_loader_dialog;
 
   std::map<ads::DockWidgetArea, ads::CDockAreaWidget*> dock_areas;
+  std::vector<StudioDockWidget*> dock_widgets;
+
+  /** @brief Load a config */
+  void loadConfig();
+
+  /** @brief Save the current state to config */
+  void saveConfig();
 
   /** @brief Saves the dock manager state and the main window geometry */
   void saveState();
@@ -103,20 +92,190 @@ struct Studio::Implementation
 
   /** @brief Restore the perspective list of the dock manager */
   void restorePerspectives();
+
+  /**
+   * @brief This function is called when a dock widget is removed from the application.
+   * @param dock_widget The dock widget removed
+   */
+  void dockWidgetRemoved(ads::CDockWidget* dock_widget);
 };
 
-Studio::Implementation::Implementation(Studio* app)
-  : app(app)
-  , component_info(ComponentInfoManager::create("studio_environment"))
-  , jt_component_info(component_info->createChild())
-  , entity_manager(std::make_shared<EntityManager>())
-  , scene_graph_manager(component_info, entity_manager)
-  , tool_path_manager(component_info, entity_manager)
-  , contact_results_manager(component_info)
-  , open_dialog(component_info, app)
-  , plugin_factory(std::make_shared<StudioPluginFactory>())
-  , plugin_loader_dialog(app)
+Studio::Implementation::Implementation(Studio* app) : app(app), plugin_loader_dialog(app)
 {
+  // Config plugin loader
+  plugin_loader.search_libraries_env = TESSERACT_STUDIO_PLUGINS_ENV;
+  plugin_loader.search_paths_env = TESSERACT_STUDIO_PLUGIN_DIRECTORIES_ENV;
+  plugin_loader.search_paths.insert(TESSERACT_STUDIO_PLUGIN_PATH);
+  boost::split(
+      plugin_loader.search_libraries, TESSERACT_STUDIO_PLUGINS, boost::is_any_of(":"), boost::token_compress_on);
+
+  // Load settings
+  QSettings ms;
+  ms.beginGroup("TesseractQtStudio");
+  default_directory =
+      ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
+  ms.endGroup();
+}
+
+Studio::Implementation::~Implementation()
+{
+  // Save settings
+  QSettings ms;
+  ms.beginGroup("TesseractQtStudio");
+  ms.setValue("default_directory", default_directory);
+  ms.endGroup();
+}
+
+void Studio::Implementation::loadConfig()
+{
+  QStringList filters;
+  filters.append("Tesseract Studio Config (*.studio)");
+
+  QFileDialog dialog(app, "Open Tesseract Studio Config", default_directory);
+  dialog.setAcceptMode(QFileDialog::AcceptOpen);
+  dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+  dialog.setModal(true);
+  dialog.setNameFilters(filters);
+  if (dialog.exec() != 1)
+    return;
+
+  QString config_filepath = dialog.selectedFiles().first();
+  if (QFileInfo(config_filepath).exists())
+    default_directory = QFileInfo(config_filepath).absoluteDir().path();
+
+  YAML::Node config = YAML::LoadFile(config_filepath.toStdString());
+  if (const YAML::Node& config_node = config[STUDIO_CONFIG_KEY])
+  {
+    if (const YAML::Node& search_paths = config_node[SEARCH_PATHS_KEY])
+    {
+      std::set<std::string> sp;
+      try
+      {
+        sp = search_paths.as<std::set<std::string>>();
+      }
+      catch (const std::exception& e)
+      {
+        throw std::runtime_error("Studio::loadConfig: Constructor failed to cast '" + SEARCH_PATHS_KEY +
+                                 "' to std::set<std::string>! "
+                                 "Details: " +
+                                 e.what());
+      }
+      plugin_loader.search_paths.insert(sp.begin(), sp.end());
+    }
+
+    if (const YAML::Node& search_libraries = config_node[SEARCH_LIBRARIES_KEY])
+    {
+      std::set<std::string> sl;
+      try
+      {
+        sl = search_libraries.as<std::set<std::string>>();
+      }
+      catch (const std::exception& e)
+      {
+        throw std::runtime_error("Studio::loadConfig: Constructor failed to cast '" + SEARCH_LIBRARIES_KEY +
+                                 "' to std::set<std::string>! "
+                                 "Details: " +
+                                 e.what());
+      }
+      plugin_loader.search_libraries.insert(sl.begin(), sl.end());
+    }
+
+    if (const YAML::Node& component_infos = config_node[COMPONENT_INFOS_KEY])
+    {
+      if (!component_infos.IsMap())
+        throw std::runtime_error(COMPONENT_INFOS_KEY + ", should contain a map of component info names to component "
+                                                       "info!");
+
+      try
+      {
+        tesseract_gui::ComponentInfoManager::loadConfig(component_infos);
+      }
+      catch (const std::exception& e)
+      {
+        throw std::runtime_error(
+            "Studio::loadConfig: Constructor failed to cast '" + COMPONENT_INFOS_KEY +
+            "' to std::unordered_map<std::string, tesseract_gui::ComponentInfo>! Details: " + e.what());
+      }
+    }
+
+    if (const YAML::Node& plugins = config_node[DOCK_WIDGETS_KEY])
+    {
+      if (!plugins.IsMap())
+        throw std::runtime_error(DOCK_WIDGETS_KEY + ", should contain a map of studio plugin names to "
+                                                    "plugins!");
+
+      try
+      {
+        auto plugin_infos = plugins.as<tesseract_common::PluginInfoMap>();
+
+        for (const auto& plugin_info : plugin_infos)
+        {
+          QString name = QString::fromStdString(plugin_info.first);
+          StudioDockWidget* dock_widget = app->createDockWidget(name, plugin_info.second);
+          if (dock_widget == nullptr)
+          {
+            CONSOLE_BRIDGE_logError("Studio::loadConfig: Failed to load dock widget '%s' from config.",
+                                    plugin_info.first.c_str());
+            continue;
+          }
+
+          app->addDockWidget(dock_widget);
+        }
+      }
+      catch (const std::exception& e)
+      {
+        throw std::runtime_error("Studio::loadConfig: Constructor failed to cast '" + DOCK_WIDGETS_KEY +
+                                 "' to tesseract_common::PluginInfoContainer! Details: " + e.what());
+      }
+    }
+  }
+}
+
+void Studio::Implementation::saveConfig()
+{
+  QStringList filters;
+  filters.append("Tesseract Studio Config (*.studio)");
+
+  QFileDialog dialog(app, "Save Tesseract Studio Config", default_directory);
+  dialog.setAcceptMode(QFileDialog::AcceptSave);
+  dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+  dialog.setModal(true);
+  dialog.setNameFilters(filters);
+  dialog.setDefaultSuffix(".studio");
+  if (dialog.exec() != 1)
+    return;
+
+  QString config_filepath = dialog.selectedFiles().first();
+  if (QFileInfo(config_filepath).exists())
+    default_directory = QFileInfo(config_filepath).absoluteDir().path();
+
+  YAML::Node studio_plugins;
+  if (!plugin_loader.search_paths.empty())
+    studio_plugins[SEARCH_PATHS_KEY] = plugin_loader.search_paths;
+
+  if (!plugin_loader.search_libraries.empty())
+    studio_plugins[SEARCH_LIBRARIES_KEY] = plugin_loader.search_libraries;
+
+  if (!tesseract_gui::ComponentInfoManager::empty())
+    studio_plugins[COMPONENT_INFOS_KEY] = tesseract_gui::ComponentInfoManager::getConfig();
+
+  tesseract_common::PluginInfoMap plugins;
+  for (const auto& dock_widget : dock_widgets)
+  {
+    tesseract_common::PluginInfo plugin_info;
+    plugin_info.class_name = dock_widget->getFactoryClassName();
+    plugin_info.config = dock_widget->getConfig();
+    plugins[dock_widget->getName().toStdString()] = plugin_info;
+  }
+
+  if (!plugins.empty())
+    studio_plugins[DOCK_WIDGETS_KEY] = plugins;
+
+  YAML::Node config;
+  config[STUDIO_CONFIG_KEY] = studio_plugins;
+
+  std::ofstream fout(config_filepath.toStdString());
+  fout << config;
 }
 
 void Studio::Implementation::saveState()
@@ -164,6 +323,11 @@ void Studio::Implementation::restorePerspectives()
   perspective_comboBox->addItems(dock_manager->perspectiveNames());
 }
 
+void Studio::Implementation::dockWidgetRemoved(ads::CDockWidget* dock_widget)
+{
+  dock_widgets.erase(std::remove(dock_widgets.begin(), dock_widgets.end(), dock_widget), dock_widgets.end());
+}
+
 Studio::Studio(QWidget* parent)
   : QMainWindow(parent), ui(std::make_unique<Ui::Studio>()), data_(std::make_unique<Implementation>(this))
 {
@@ -174,12 +338,14 @@ Studio::Studio(QWidget* parent)
   data_->dock_manager->setStyleSheet("");
 
   // Setup actions
-  ui->actionOpen->setIcon(icons::getOpenIcon());
+  ui->actionLoad_Config->setIcon(icons::getOpenIcon());
+  ui->actionSave_Config->setIcon(icons::getSaveIcon());
   ui->actionSave_State->setIcon(icons::getSaveIcon());
   ui->actionRestore_State->setIcon(icons::getRestoreIcon());
   ui->actionCreate_Perspective->setIcon(icons::getLayoutIcon());
   ui->actionLoad_Plugins->setIcon(icons::getPluginIcon());
-  connect(ui->actionOpen, &QAction::triggered, [this]() { data_->open_dialog.show(); });
+  connect(ui->actionLoad_Config, &QAction::triggered, [this]() { data_->loadConfig(); });
+  connect(ui->actionSave_Config, &QAction::triggered, [this]() { data_->saveConfig(); });
   connect(ui->actionSave_State, &QAction::triggered, [this]() { data_->saveState(); });
   connect(ui->actionRestore_State, &QAction::triggered, [this]() { data_->restoreState(); });
   connect(ui->actionCreate_Perspective, &QAction::triggered, [this]() { data_->createPerspective(); });
@@ -194,6 +360,10 @@ Studio::Studio(QWidget* parent)
           SIGNAL(activated(const QString&)),
           data_->dock_manager,
           SLOT(openPerspective(const QString&)));
+
+  connect(data_->dock_manager, &ads::CDockManager::dockWidgetRemoved, [this](ads::CDockWidget* w) {
+    data_->dockWidgetRemoved(w);
+  });
 
   //  auto render_widget = new tesseract_gui::RenderWidget(data_->component_info->getSceneName());
   //  render_widget->setSkyEnabled(true);
@@ -237,8 +407,47 @@ Studio::Studio(QWidget* parent)
 
 Studio::~Studio() = default;
 
-StudioPluginFactory& Studio::getPluginFactory() { return *data_->plugin_factory; }
-const StudioPluginFactory& Studio::getPluginFactory() const { return *data_->plugin_factory; }
+tesseract_common::PluginLoader& Studio::getPluginLoader() { return data_->plugin_loader; }
+const tesseract_common::PluginLoader& Studio::getPluginLoader() const { return data_->plugin_loader; }
+
+StudioDockWidget* Studio::createDockWidget(const QString& name, const tesseract_common::PluginInfo& plugin_info)
+{
+  try
+  {
+    auto it = data_->factories.find(plugin_info.class_name);
+    if (it != data_->factories.end())
+    {
+      StudioDockWidget* dock_widget = it->second->create(name);
+      if (dock_widget != nullptr)
+      {
+        if (!plugin_info.config.IsNull())
+          dock_widget->loadConfig(plugin_info.config);
+      }
+      return dock_widget;
+    }
+
+    auto plugin = data_->plugin_loader.instantiate<StudioDockWidgetFactory>(plugin_info.class_name);
+    if (plugin == nullptr)
+    {
+      CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s'", plugin_info.class_name.c_str());
+      return nullptr;
+    }
+    data_->factories[plugin_info.class_name] = plugin;
+
+    StudioDockWidget* dock_widget = plugin->create(name);
+    if (dock_widget != nullptr)
+    {
+      if (!plugin_info.config.IsNull())
+        dock_widget->loadConfig(plugin_info.config);
+    }
+    return dock_widget;
+  }
+  catch (const std::exception& e)
+  {
+    CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s', Details: %s", plugin_info.class_name.c_str(), e.what());
+    return nullptr;
+  }
+}
 
 void Studio::addDockWidget(StudioDockWidget* dock_widget)
 {
@@ -282,5 +491,7 @@ void Studio::addDockWidget(StudioDockWidget* dock_widget)
     }
     ui->menuView->addAction(dock_widget->toggleViewAction());
   }
+
+  data_->dock_widgets.push_back(dock_widget);
 }
 }  // namespace tesseract_gui

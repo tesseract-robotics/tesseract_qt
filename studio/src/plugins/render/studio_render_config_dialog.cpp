@@ -7,6 +7,7 @@ StudioRenderConfigDialog::StudioRenderConfigDialog(QWidget* parent)
   : QDialog(parent), ui(std::make_unique<Ui::StudioRenderConfigDialog>())
 {
   ui->setupUi(this);
+  setWindowTitle("Studio Render Config");
 }
 
 StudioRenderConfigDialog::~StudioRenderConfigDialog() = default;

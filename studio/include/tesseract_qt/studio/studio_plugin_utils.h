@@ -20,17 +20,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H
-#define TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H
+#ifndef TESSERACT_QT_STUDIO_STUDIO_PLUGIN_UTILS_H
+#define TESSERACT_QT_STUDIO_STUDIO_PLUGIN_UTILS_H
 
-#include <tesseract_qt/studio/studio_dock_widget_factory.h>
+class QMainWindow;
+class QMenuBar;
+class QMenu;
+class QStatusBar;
+class QAction;
+class QString;
+
 namespace tesseract_gui
 {
-template <typename StudioDockWidgetType>
-class StudioDockWidgetFactoryImpl : public StudioDockWidgetFactory
-{
-public:
-  StudioDockWidget* create(const QString& name) const override { return new StudioDockWidgetType(name); }
-};
+QMainWindow* getStudioMainWindow();
+QMenuBar* getStudioMenuBar();
+QStatusBar* getStudioStatusBar();
+
+/**
+ * @brief Find menu given text
+ * @param text The menue text
+ * @return If not found nullptr, otherwise menu item
+ */
+QMenu* getStudioMenu(const QString& text);
+
+/**
+ * @brief Find menu action given text
+ * @param text The menue action text
+ * @return If not found nullptr, otherwise menu action item
+ */
+QAction* getStudioMenuAction(QMenu* menu, const QString& text);
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H
+#endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_UTILS_H

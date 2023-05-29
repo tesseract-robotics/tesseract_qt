@@ -207,7 +207,9 @@ public:
    * @param scene_name The name of the scene to render
    * @param parent Parent item
    */
-  explicit RenderWidget(const std::string& scene_name, QWidget* parent = nullptr);
+  explicit RenderWidget(const std::string& scene_name,
+                        const std::string& engine_name = "ogre2",
+                        QWidget* parent = nullptr);
 
   ~RenderWidget();
 

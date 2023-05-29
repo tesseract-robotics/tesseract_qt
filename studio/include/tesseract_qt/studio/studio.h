@@ -31,6 +31,12 @@ namespace Ui
 class Studio;
 }
 
+namespace tesseract_common
+{
+class PluginLoader;
+struct PluginInfo;
+}  // namespace tesseract_common
+
 namespace tesseract_gui
 {
 class StudioPluginFactory;
@@ -50,9 +56,21 @@ private:
   std::unique_ptr<Ui::Studio> ui;
   std::unique_ptr<Implementation> data_;
 
-  StudioPluginFactory& getPluginFactory();
-  const StudioPluginFactory& getPluginFactory() const;
+  tesseract_common::PluginLoader& getPluginLoader();
+  const tesseract_common::PluginLoader& getPluginLoader() const;
 
+  /**
+   * @brief Get studio dock widget given name and plugin info
+   * @details This looks for studio plugin info. If not found nullptr is returned.
+   * @param name The name
+   * @param plugin_info The plugin information to create task composer executor object
+   */
+  StudioDockWidget* createDockWidget(const QString& name, const tesseract_common::PluginInfo& plugin_info);
+
+  /**
+   * @brief Add the dock widget to the manager
+   * @param dock_widget The dock widget to add
+   */
   void addDockWidget(StudioDockWidget* dock_widget);
 };
 }  // namespace tesseract_gui

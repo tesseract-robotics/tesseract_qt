@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2023 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -20,17 +20,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H
-#define TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H
 
 #include <tesseract_qt/studio/studio_dock_widget_factory.h>
+
 namespace tesseract_gui
 {
-template <typename StudioDockWidgetType>
-class StudioDockWidgetFactoryImpl : public StudioDockWidgetFactory
-{
-public:
-  StudioDockWidget* create(const QString& name) const override { return new StudioDockWidgetType(name); }
-};
+const std::string StudioDockWidgetFactory::SECTION_NAME = "Studio";
+
+const std::string& StudioDockWidgetFactory::getSectionName() { return StudioDockWidgetFactory::SECTION_NAME; }
+
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_FACTORIES_H

@@ -95,7 +95,6 @@ add_library(
   src/component_info_standard_item.cpp
   src/standard_item_utils.cpp
   src/plugin_info_container_standard_item.cpp
-  src/plugin_infos.cpp
   src/entity_manager.cpp
   src/entity_container.cpp
   src/environment_manager.cpp

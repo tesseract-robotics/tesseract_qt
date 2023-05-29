@@ -16,8 +16,12 @@ set(TESSERACT_STUDIO_PLUGINS "")
 
 qt5_wrap_cpp(STUDIO_PLUGIN_FACTORY_headers_MOC include/tesseract_qt/studio/studio_dock_widget.h)
 
-add_library(${PROJECT_NAME}_studio_plugin_factory ${STUDIO_PLUGIN_FACTORY_headers_MOC} src/studio_plugin_factory.cpp
-                                                  src/studio_dock_widget.cpp)
+add_library(
+  ${PROJECT_NAME}_studio_plugin_factory
+  ${STUDIO_PLUGIN_FACTORY_headers_MOC}
+  src/studio_dock_widget_factory.cpp
+  src/studio_dock_widget.cpp
+  src/studio_plugin_utils.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_studio_plugin_factory
@@ -67,8 +71,6 @@ string(
           ":"
           TESSERACT_STUDIO_PLUGINS_STRING
           "${TESSERACT_STUDIO_PLUGINS}")
-target_compile_definitions(${PROJECT_NAME}_studio_plugin_factory
-                           PRIVATE TESSERACT_STUDIO_PLUGINS="${TESSERACT_STUDIO_PLUGINS_STRING}")
 
 qt5_wrap_cpp(STUDIO_WIDGET_headers_MOC include/tesseract_qt/studio/studio.h
              include/tesseract_qt/studio/studio_plugin_loader_dialog.h)
@@ -99,6 +101,9 @@ target_link_libraries(
 target_include_directories(
   ${PROJECT_NAME}_studio PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                  "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
+target_compile_definitions(${PROJECT_NAME}_studio
+                           PRIVATE TESSERACT_STUDIO_PLUGIN_PATH="${TESSERACT_STUDIO_PLUGIN_PATH}")
+target_compile_definitions(${PROJECT_NAME}_studio PRIVATE TESSERACT_STUDIO_PLUGINS="${TESSERACT_STUDIO_PLUGINS_STRING}")
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)

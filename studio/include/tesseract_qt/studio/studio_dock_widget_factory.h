@@ -20,34 +20,43 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_STUDIO_STUDIO_RENDER_DOCK_WIDGET_H
-#define TESSERACT_QT_STUDIO_STUDIO_RENDER_DOCK_WIDGET_H
+#ifndef TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_FACTORY_H
+#define TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_FACTORY_H
 
+#include <tesseract_common/macros.h>
+TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+#include <string>
+#include <map>
+#include <yaml-cpp/yaml.h>
+TESSERACT_COMMON_IGNORE_WARNINGS_POP
+
+#include <tesseract_common/plugin_loader.h>
 #include <tesseract_qt/studio/studio_dock_widget.h>
+
+// clang-format off
+#define TESSERACT_ADD_STUDIO_PLUGIN(DERIVED_CLASS, ALIAS)                                           \
+  TESSERACT_ADD_PLUGIN_SECTIONED(DERIVED_CLASS, ALIAS, Studio)
+// clang-format on
 
 namespace tesseract_gui
 {
-class StudioRenderDockWidget : public StudioDockWidget
+class StudioDockWidgetFactory
 {
-  Q_OBJECT
 public:
-  StudioRenderDockWidget(const QString& title, QWidget* parent = nullptr);
+  using Ptr = std::shared_ptr<StudioDockWidgetFactory>;
+  using ConstPtr = std::shared_ptr<const StudioDockWidgetFactory>;
 
-  ~StudioRenderDockWidget() override;
+  virtual ~StudioDockWidgetFactory() = default;
 
-  std::string getFactoryClassName() const override;
+  virtual StudioDockWidget* create(const QString& name) const = 0;
 
-  void loadConfig(const YAML::Node& config) override;
+  static const std::string& getSectionName();
 
-  YAML::Node getConfig() const override;
-
-public Q_SLOTS:
-  void onInitialize() override;
-
-private:
-  struct Implementation;
-  std::unique_ptr<Implementation> data_;
+protected:
+  static const std::string SECTION_NAME;
+  friend class PluginLoader;
 };
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_STUDIO_STUDIO_RENDER_DOCK_WIDGET_H
+
+#endif  // TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_FACTORY_H
