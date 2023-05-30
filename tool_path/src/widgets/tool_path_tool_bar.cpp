@@ -31,7 +31,7 @@ namespace tesseract_gui
 {
 struct ToolPathToolBar::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
 
   QAction* remove_all;
   QAction* remove_selected;
@@ -41,9 +41,9 @@ struct ToolPathToolBar::Implementation
   QAction* save_action;
 };
 
-ToolPathToolBar::ToolPathToolBar(QWidget* parent) : ToolPathToolBar(ComponentInfo(), parent) {}
+ToolPathToolBar::ToolPathToolBar(QWidget* parent) : ToolPathToolBar(nullptr, parent) {}
 
-ToolPathToolBar::ToolPathToolBar(ComponentInfo component_info, QWidget* parent)
+ToolPathToolBar::ToolPathToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
   data_->component_info = component_info;

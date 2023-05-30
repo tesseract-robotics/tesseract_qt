@@ -41,13 +41,13 @@ class ToolPathFileDialog : public QDialog
 
 public:
   explicit ToolPathFileDialog(QFileDialog::AcceptMode accept_mode = QFileDialog::AcceptOpen, QWidget* parent = nullptr);
-  explicit ToolPathFileDialog(ComponentInfo component_info,
+  explicit ToolPathFileDialog(std::shared_ptr<const ComponentInfo> component_info,
                               QFileDialog::AcceptMode accept_mode = QFileDialog::AcceptOpen,
                               QWidget* parent = nullptr);
   ~ToolPathFileDialog();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setAcceptMode(QFileDialog::AcceptMode accept_mode);
   QString getLinkName() const;
@@ -58,7 +58,7 @@ public Q_SLOTS:
 
 private:
   std::unique_ptr<Ui::ToolPathFileDialog> ui_;
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
   QFileDialog::AcceptMode accept_mode_;
   QString default_directory_;
 

@@ -43,11 +43,11 @@ public:
   using UPtr = std::unique_ptr<ToolPathRenderManager>;
   using ConstUPtr = std::unique_ptr<const ToolPathRenderManager>;
 
-  ToolPathRenderManager(ComponentInfo component_info);
+  ToolPathRenderManager(std::shared_ptr<const ComponentInfo> component_info);
   ~ToolPathRenderManager();
 
 protected:
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
   std::vector<std::unique_ptr<events::ComponentEvent>> events_;
 
   // Documentation inherited

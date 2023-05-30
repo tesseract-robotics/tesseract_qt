@@ -34,11 +34,11 @@ class JointTrajectoryToolBar : public QToolBar
   Q_OBJECT
 public:
   explicit JointTrajectoryToolBar(QWidget* parent = nullptr);
-  explicit JointTrajectoryToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit JointTrajectoryToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~JointTrajectoryToolBar();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
 private:
   struct Implementation;

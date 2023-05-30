@@ -37,9 +37,9 @@ namespace tesseract_gui
 {
 struct ManipulationToolBar::Implementation
 {
-  ComponentInfo parent_component_info;
+  std::shared_ptr<const ComponentInfo> parent_component_info;
   std::string state_name;
-  std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+  std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
 
   QStringListModel state_names_model;
   QComboBox* state_names_combo_box;
@@ -60,9 +60,9 @@ struct ManipulationToolBar::Implementation
   QAction* hide_axis_all_links_action;
 };
 
-ManipulationToolBar::ManipulationToolBar(QWidget* parent) : ManipulationToolBar(ComponentInfo(), parent) {}
+ManipulationToolBar::ManipulationToolBar(QWidget* parent) : ManipulationToolBar(nullptr, parent) {}
 
-ManipulationToolBar::ManipulationToolBar(ComponentInfo parent_component_info, QWidget* parent)
+ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> parent_component_info, QWidget* parent)
   : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
   data_->parent_component_info = parent_component_info;
@@ -170,14 +170,17 @@ ManipulationToolBar::ManipulationToolBar(ComponentInfo parent_component_info, QW
 
 ManipulationToolBar::~ManipulationToolBar() = default;
 
-void ManipulationToolBar::setComponentInfo(ComponentInfo component_info)
+void ManipulationToolBar::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
-  data_->parent_component_info = component_info;
+  data_->parent_component_info = std::move(component_info);
   data_->state_name.clear();
   data_->state_names_model.setStringList(QStringList());
   data_->state_names_combo_box->clear();
 }
-const ComponentInfo& ManipulationToolBar::getComponentInfo() const { return data_->parent_component_info; }
+std::shared_ptr<const ComponentInfo> ManipulationToolBar::getComponentInfo() const
+{
+  return data_->parent_component_info;
+}
 
 void ManipulationToolBar::onStateNameChanged(const QString& text) { data_->state_name = text.toStdString(); }
 

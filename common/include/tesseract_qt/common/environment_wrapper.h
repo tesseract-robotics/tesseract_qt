@@ -40,10 +40,10 @@ class EnvironmentWrapper : public QObject
 {
   Q_OBJECT
 public:
-  EnvironmentWrapper(ComponentInfo component_info);
+  EnvironmentWrapper(std::shared_ptr<const ComponentInfo> component_info);
   virtual ~EnvironmentWrapper();
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   virtual std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const = 0;
   virtual std::shared_ptr<tesseract_environment::Environment> getEnvironment() = 0;
@@ -57,7 +57,7 @@ public:
 protected:
   friend class EnvironmentManager;
 
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
   bool initialized_{ false };
   int revision_{ 0 };
 
@@ -70,7 +70,8 @@ class DefaultEnvironmentWrapper : public EnvironmentWrapper
   Q_OBJECT
 public:
   DefaultEnvironmentWrapper(std::shared_ptr<tesseract_environment::Environment> env);
-  DefaultEnvironmentWrapper(ComponentInfo component_info, std::shared_ptr<tesseract_environment::Environment> env);
+  DefaultEnvironmentWrapper(std::shared_ptr<const ComponentInfo> component_info,
+                            std::shared_ptr<tesseract_environment::Environment> env);
   ~DefaultEnvironmentWrapper() override;
 
   std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
@@ -91,7 +92,7 @@ class MonitorEnvironmentWrapper : public EnvironmentWrapper
   Q_OBJECT
 public:
   MonitorEnvironmentWrapper(std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor);
-  MonitorEnvironmentWrapper(ComponentInfo component_info,
+  MonitorEnvironmentWrapper(std::shared_ptr<const ComponentInfo> component_info,
                             std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor);
   ~MonitorEnvironmentWrapper() override;
 

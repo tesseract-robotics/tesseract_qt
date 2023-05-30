@@ -13,8 +13,6 @@
 
 namespace tesseract_gui
 {
-class RendererImpl;
-
 /**
  *  @brief Tesseract Simple renderer.
  *  @details All rendering calls should be performed inside this class as it makes
@@ -44,6 +42,9 @@ public:
 
   /** @brief Initialize the render engine */
   void initialize();
+
+  /** @brief Check if initialized */
+  bool isInitialized() const;
 
   /** @brief Destroy camera associated with this renderer */
   void destroy();
@@ -79,63 +80,79 @@ public:
    */
   void handleKeyRelease(const gz::common::KeyEvent& event);
 
-  /** @brief Render engine to use */
-  std::string engine_name{ "ogre2" };
+  /**
+   * @brief Set engine name used to create the render window
+   * @param name Name of render engine
+   */
+  void setEngineName(const std::string& name);
+  const std::string& getEngineName() const;
 
-  /** @brief Unique scene name */
-  std::string scene_name{ "scene" };
+  /**
+   * @brief Set name of scene created inside the render window
+   * @param name Name of scene
+   */
+  void setSceneName(const std::string& name);
+  const std::string& getSceneName() const;
+
+  /**
+   * @brief Set background color of render window
+   * @param color olor of render window background
+   */
+  void setBackgroundColor(const gz::math::Color& color);
+  gz::math::Color getBackgroundColor() const;
+
+  /**
+   * @brief Set ambient light of render window
+   * @param ambient Color of ambient light
+   */
+  void setAmbientLight(const gz::math::Color& color);
+  gz::math::Color getAmbientLight() const;
 
   /** @brief Initial Camera pose */
-  gz::math::Pose3d camera_pose{ -6, 0, 6, 0, 0.5, 0 };
+  void setInitialCameraPose(const gz::math::Pose3d& camera_pose);
+  gz::math::Pose3d getInitialCameraPose() const;
+  gz::math::Pose3d getCameraPose() const;
 
   /** @briefDefault camera near clipping plane distance */
-  double camera_near_clip{ 0.01 };
+  void setCameraNearClipDistance(double near);
+  double getCameraNearClipDistance() const;
 
   /** @brief Default camera far clipping plane distance */
-  double camera_far_clip{ 1000.0 };
+  void setCameraFarClipDistance(double far);
+  double getCameraFarClipDistance() const;
 
   /**
    * @brief Set the level of anti-aliasing used during rendering.
    * @details If a value of 0 is given, no anti-aliasing will be performed. Higher values can significantly
    * slow-down rendering times, depending on the underlying render engine.
    */
-  unsigned int camera_anti_aliasing{ 8 };
+  void setCameraAntiAliasing(unsigned int value);
+  unsigned int getCameraAntiAliasing() const;
 
-  /** @brief Scene background color */
-  gz::math::Color background_color{ 0.8f, 0.8f, 0.8f, 1.0f };
+  /** @brief Control sky is enabled */
+  void setSkyEnabled(bool enabled);
+  bool skyEnabled() const;
 
-  /** @brief Ambient color */
-  gz::math::Color ambient_light{ 0.4f, 0.4f, 0.4f, 1.0f };
+  /** @brief Control grid is enabled */
+  void setGridEnabled(bool enabled);
+  bool gridEnabled() const;
 
-  /** @brief True if engine has been initialized */
-  bool initialized{ false };
-
-  /** @brief Render texture size */
-  QSize texture_size{ 1920, 1200 };
-
-  /** @brief Render texture opengl id */
-  unsigned int texture_id{ 0 };
-
-  /** @brief Flag to indicate texture size has changed. */
-  bool texture_dirty{ false };
-
-  /** @brief True if sky is enabled */
-  bool sky_enable{ false };
-
-  /** @brief True if grid is enabled */
-  bool grid_enable{ true };
-
-  /** @brief True if shadows is enabled */
-  bool shadows_enable{ false };
+  /** @brief Control shadows is enabled */
+  void setShadowsEnabled(bool enabled);
+  bool shadowsEnabled() const;
 
   /**
    * @brief True if hover event is enabled
    * @details This is an expensive operation so only enable if needed
    */
-  bool hover_event_enable{ false };
+  void setHoverEventEnabled(bool enabled);
+  bool hoverEventEnabled() const;
 
-  /** @brief The desired update frequency for rendering, default is 60hz */
-  int update_frequency{ 60 };
+  /** @brief Render texture size */
+  const QSize& getTextureSize() const;
+
+  /** @brief Render texture opengl id */
+  unsigned int getTextureId() const;
 
 private:
   /** @brief Handle mouse event for view control */
@@ -177,10 +194,9 @@ private:
   gz::math::Vector3d screenToScene(const gz::math::Vector2i& screen_pos) const;
 
   /** @brief Pointer to private data */
-  std::unique_ptr<RendererImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 };
-
-class RenderWidgetImpl;
 
 class RenderWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -191,7 +207,9 @@ public:
    * @param scene_name The name of the scene to render
    * @param parent Parent item
    */
-  explicit RenderWidget(const std::string& scene_name, QWidget* parent = nullptr);
+  explicit RenderWidget(const std::string& scene_name,
+                        const std::string& engine_name = "ogre2",
+                        QWidget* parent = nullptr);
 
   ~RenderWidget();
 
@@ -200,54 +218,82 @@ public:
    * @param color olor of render window background
    */
   void setBackgroundColor(const gz::math::Color& color);
+  gz::math::Color getBackgroundColor() const;
 
   /**
    * @brief Set ambient light of render window
    * @param ambient Color of ambient light
    */
   void setAmbientLight(const gz::math::Color& ambient);
+  gz::math::Color getAmbientLight() const;
 
   /**
    * @brief Set engine name used to create the render window
    * @param name Name of render engine
    */
   void setEngineName(const std::string& name);
+  const std::string& getEngineName() const;
 
   /**
    * @brief Set name of scene created inside the render window
    * @param name Name of scene
    */
   void setSceneName(const std::string& name);
+  const std::string& getSceneName() const;
 
   /**
    * @brief Set the initial pose the render window camera
    * @param pose Initial camera pose
    */
-  void setCameraPose(const gz::math::Pose3d& pose);
+  void setInitialCameraPose(const gz::math::Pose3d& pose);
+  gz::math::Pose3d getInitialCameraPose() const;
 
   /**
    * @brief Set the render window camera's near clipping plane distance
    * @param near Near clipping plane distance
    */
   void setCameraNearClip(double near);
+  double getCameraNearClip() const;
 
   /**
    * @brief Set the render window camera's far clipping plane distance
    * @param far Far clipping plane distance
    */
   void setCameraFarClip(double far);
+  double getCameraFarClip() const;
+
+  /**
+   * @brief Set the level of anti-aliasing used during rendering.
+   * @details If a value of 0 is given, no anti-aliasing will be performed. Higher values can significantly
+   * slow-down rendering times, depending on the underlying render engine.
+   */
+  void setCameraAntiAliasing(unsigned int value);
+  unsigned int getCameraAntiAliasing() const;
 
   /**
    * @brief Set if sky is enabled
    * @param True to enable the sky, false otherwise.
    */
   void setSkyEnabled(bool enabled);
+  bool skyEnabled() const;
 
   /**
    * @brief Show grid view in the scene
    * @param enabled True to enable grid view, false otherwise.
    */
   void setGridEnabled(bool enabled);
+  bool gridEnabled() const;
+
+  /**
+   * @brief Show shadows view in the scene
+   * @param enabled True to enable shadows view, false otherwise.
+   */
+  void setShadowsEnabled(bool enabled);
+  bool shadowsEnabled() const;
+
+  /** @brief The desired update frequency for rendering, default is 60hz */
+  void setUpdateFrequency(double hz);
+  double getUpdateFrequency() const;
 
   /**
    * @brief Called when the mouse hovers to a new position.
@@ -308,7 +354,8 @@ protected:
   void paintGL() override;
 
   /** @brief Pointer to private data */
-  std::unique_ptr<RenderWidgetImpl> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_RENDERING_SIMPLE_RENDER_WIDGET_H

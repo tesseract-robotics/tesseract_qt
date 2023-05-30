@@ -38,11 +38,11 @@ class EnvironmentCommandsWidget : public QWidget
 
 public:
   explicit EnvironmentCommandsWidget(QWidget* parent = nullptr);
-  explicit EnvironmentCommandsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit EnvironmentCommandsWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~EnvironmentCommandsWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<EnvironmentCommandsModel> model);
   std::shared_ptr<EnvironmentCommandsModel> getModel();
@@ -55,7 +55,7 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
-  void ctor(ComponentInfo component_info);
+  void ctor(std::shared_ptr<const ComponentInfo> component_info);
 };
 
 }  // namespace tesseract_gui

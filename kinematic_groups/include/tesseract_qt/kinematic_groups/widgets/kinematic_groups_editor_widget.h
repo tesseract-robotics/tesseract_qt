@@ -53,11 +53,11 @@ class KinematicGroupsEditorWidget : public QWidget
 
 public:
   explicit KinematicGroupsEditorWidget(QWidget* parent = nullptr);
-  explicit KinematicGroupsEditorWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit KinematicGroupsEditorWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~KinematicGroupsEditorWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<KinematicGroupsModel> model);
   std::shared_ptr<KinematicGroupsModel> getModel();

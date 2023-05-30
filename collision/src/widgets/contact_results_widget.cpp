@@ -37,9 +37,9 @@ struct ContactResultsWidget::Implementation
   TreeView* tree_view;
 };
 
-ContactResultsWidget::ContactResultsWidget(QWidget* parent) : ContactResultsWidget(ComponentInfo(), parent) {}
+ContactResultsWidget::ContactResultsWidget(QWidget* parent) : ContactResultsWidget(nullptr, parent) {}
 
-ContactResultsWidget::ContactResultsWidget(ComponentInfo component_info, QWidget* parent)
+ContactResultsWidget::ContactResultsWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -61,14 +61,17 @@ ContactResultsWidget::ContactResultsWidget(ComponentInfo component_info, QWidget
 }
 ContactResultsWidget::~ContactResultsWidget() = default;
 
-void ContactResultsWidget::setComponentInfo(ComponentInfo component_info)
+void ContactResultsWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<ContactResultsModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& ContactResultsWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> ContactResultsWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void ContactResultsWidget::setModel(std::shared_ptr<ContactResultsModel> model)
 {

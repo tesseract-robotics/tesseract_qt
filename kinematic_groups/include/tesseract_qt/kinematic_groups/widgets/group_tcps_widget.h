@@ -38,11 +38,11 @@ class GroupTCPsWidget : public QWidget
 
 public:
   explicit GroupTCPsWidget(QWidget* parent = nullptr);
-  explicit GroupTCPsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit GroupTCPsWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~GroupTCPsWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<GroupTCPsModel> model);
   std::shared_ptr<GroupTCPsModel> getModel();

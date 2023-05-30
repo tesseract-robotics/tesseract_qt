@@ -40,16 +40,16 @@ namespace tesseract_gui
 {
 struct AllowedCollisionMatrixModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
   std::unordered_map<std::string, QStandardItem*> items;
 };
 
-AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject* parent)
-  : AllowedCollisionMatrixModel(ComponentInfo(), parent)
+AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(QObject* parent) : AllowedCollisionMatrixModel(nullptr, parent)
 {
 }
 
-AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(ComponentInfo component_info, QObject* parent)
+AllowedCollisionMatrixModel::AllowedCollisionMatrixModel(std::shared_ptr<const ComponentInfo> component_info,
+                                                         QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
@@ -82,7 +82,10 @@ AllowedCollisionMatrixModel& AllowedCollisionMatrixModel::operator=(const Allowe
   return *this;
 }
 
-const ComponentInfo& AllowedCollisionMatrixModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> AllowedCollisionMatrixModel::getComponentInfo() const
+{
+  return data_->component_info;
+}
 
 void AllowedCollisionMatrixModel::set(const tesseract_common::AllowedCollisionMatrix& acm)
 {

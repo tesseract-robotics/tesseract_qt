@@ -38,7 +38,7 @@ namespace tesseract_gui::events
 class EnvironmentCommandsClear : public ComponentEvent
 {
 public:
-  EnvironmentCommandsClear(ComponentInfo component_info);
+  EnvironmentCommandsClear(std::shared_ptr<const ComponentInfo> component_info);
   ~EnvironmentCommandsClear() override;
 
   /** @brief Unique type for this event. */
@@ -48,7 +48,7 @@ public:
 class EnvironmentCommandsSet : public ComponentEvent
 {
 public:
-  EnvironmentCommandsSet(ComponentInfo component_info,
+  EnvironmentCommandsSet(std::shared_ptr<const ComponentInfo> component_info,
                          const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands);
   ~EnvironmentCommandsSet() override;
 
@@ -64,7 +64,7 @@ private:
 class EnvironmentCommandsAppend : public ComponentEvent
 {
 public:
-  EnvironmentCommandsAppend(ComponentInfo component_info,
+  EnvironmentCommandsAppend(std::shared_ptr<const ComponentInfo> component_info,
                             const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands);
   ~EnvironmentCommandsAppend() override;
 
@@ -80,7 +80,7 @@ private:
 class EnvironmentApplyCommand : public ComponentEvent
 {
 public:
-  EnvironmentApplyCommand(ComponentInfo component_info,
+  EnvironmentApplyCommand(std::shared_ptr<const ComponentInfo> component_info,
                           const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands,
                           bool reset = false);
   ~EnvironmentApplyCommand() override;

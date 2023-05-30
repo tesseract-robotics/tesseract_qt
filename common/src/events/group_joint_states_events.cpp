@@ -24,7 +24,7 @@
 
 namespace tesseract_gui::events
 {
-GroupJointStatesClear::GroupJointStatesClear(ComponentInfo component_info)
+GroupJointStatesClear::GroupJointStatesClear(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {
 }
@@ -33,7 +33,7 @@ GroupJointStatesClear::~GroupJointStatesClear() = default;
 
 //////////////////////////////////////////
 
-GroupJointStatesSet::GroupJointStatesSet(ComponentInfo component_info,
+GroupJointStatesSet::GroupJointStatesSet(std::shared_ptr<const ComponentInfo> component_info,
                                          const tesseract_srdf::GroupJointStates& group_joint_states)
   : ComponentEvent(std::move(component_info), kType), group_joint_states_(group_joint_states)
 {
@@ -45,7 +45,7 @@ const tesseract_srdf::GroupJointStates& GroupJointStatesSet::getGroupJointStates
 
 //////////////////////////////////////////
 
-GroupJointStatesAdd::GroupJointStatesAdd(ComponentInfo component_info,
+GroupJointStatesAdd::GroupJointStatesAdd(std::shared_ptr<const ComponentInfo> component_info,
                                          std::string group_name,
                                          std::string state_name,
                                          tesseract_srdf::GroupsJointState state)
@@ -64,7 +64,7 @@ const tesseract_srdf::GroupsJointState& GroupJointStatesAdd::getJointState() con
 
 //////////////////////////////////////////
 
-GroupJointStatesRemove::GroupJointStatesRemove(ComponentInfo component_info,
+GroupJointStatesRemove::GroupJointStatesRemove(std::shared_ptr<const ComponentInfo> component_info,
                                                const std::vector<std::array<std::string, 2>>& entries)
   : ComponentEvent(std::move(component_info), kType), entries_(entries)
 {
@@ -76,7 +76,7 @@ const std::vector<std::array<std::string, 2>>& GroupJointStatesRemove::getEntrie
 
 //////////////////////////////////////////
 
-GroupJointStatesRemoveGroup::GroupJointStatesRemoveGroup(ComponentInfo component_info,
+GroupJointStatesRemoveGroup::GroupJointStatesRemoveGroup(std::shared_ptr<const ComponentInfo> component_info,
                                                          const std::vector<std::string>& group_names)
   : ComponentEvent(std::move(component_info), kType), group_names_(group_names)
 {
@@ -88,7 +88,7 @@ const std::vector<std::string>& GroupJointStatesRemoveGroup::getGroupNames() con
 
 //////////////////////////////////////////
 
-GroupJointStatesShow::GroupJointStatesShow(ComponentInfo component_info,
+GroupJointStatesShow::GroupJointStatesShow(std::shared_ptr<const ComponentInfo> component_info,
                                            std::string group_name,
                                            std::string state_name,
                                            tesseract_srdf::GroupsJointState state)
@@ -107,7 +107,9 @@ const tesseract_srdf::GroupsJointState& GroupJointStatesShow::getJointState() co
 
 //////////////////////////////////////////
 
-GroupJointStatesHide::GroupJointStatesHide(ComponentInfo component_info, std::string group_name, std::string state_name)
+GroupJointStatesHide::GroupJointStatesHide(std::shared_ptr<const ComponentInfo> component_info,
+                                           std::string group_name,
+                                           std::string state_name)
   : ComponentEvent(std::move(component_info), kType)
   , group_name_(std::move(group_name))
   , state_name_(std::move(state_name))

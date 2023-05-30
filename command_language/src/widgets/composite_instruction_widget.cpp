@@ -37,12 +37,10 @@ struct CompositeInstructionWidget::Implementation
   TreeView* tree_view;
 };
 
-CompositeInstructionWidget::CompositeInstructionWidget(QWidget* parent)
-  : CompositeInstructionWidget(ComponentInfo(), parent)
-{
-}
+CompositeInstructionWidget::CompositeInstructionWidget(QWidget* parent) : CompositeInstructionWidget(nullptr, parent) {}
 
-CompositeInstructionWidget::CompositeInstructionWidget(ComponentInfo component_info, QWidget* parent)
+CompositeInstructionWidget::CompositeInstructionWidget(std::shared_ptr<const ComponentInfo> component_info,
+                                                       QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -64,14 +62,17 @@ CompositeInstructionWidget::CompositeInstructionWidget(ComponentInfo component_i
 }
 CompositeInstructionWidget::~CompositeInstructionWidget() = default;
 
-void CompositeInstructionWidget::setComponentInfo(ComponentInfo component_info)
+void CompositeInstructionWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<CompositeInstructionModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& CompositeInstructionWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> CompositeInstructionWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void CompositeInstructionWidget::setModel(std::shared_ptr<CompositeInstructionModel> model)
 {

@@ -40,6 +40,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/theme_utils.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
@@ -57,11 +58,11 @@ int main(int argc, char** argv)
   app.setApplicationName("Tesseract SRDF Editor");
 
   auto locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
-  tesseract_gui::ComponentInfo component_info{ "srdf_scene" };
+  auto component_info = tesseract_gui::ComponentInfoManager::create("srdf_scene");
   auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
   auto* srdf_widget = new tesseract_gui::SRDFEditorWidget(component_info, locator);
   auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
-  auto* render_widget = new tesseract_gui::RenderWidget(component_info.scene_name);
+  auto* render_widget = new tesseract_gui::RenderWidget(component_info->getSceneName());
 
   tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager{ component_info, entity_manager };
 

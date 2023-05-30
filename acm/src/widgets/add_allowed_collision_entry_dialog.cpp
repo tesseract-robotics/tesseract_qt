@@ -30,14 +30,15 @@
 namespace tesseract_gui
 {
 AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget* parent)
-  : AddAllowedCollisionEntryDialog(ComponentInfo(), parent)
+  : AddAllowedCollisionEntryDialog(nullptr, parent)
 {
 }
 
-AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(ComponentInfo component_info, QWidget* parent)
+AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(std::shared_ptr<const ComponentInfo> component_info,
+                                                               QWidget* parent)
   : QDialog(parent)
   , ui_(std::make_unique<Ui::AddAllowedCollisionEntryDialog>())
-  , component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+  , component_info_(std::move(component_info))
 {
   ui_->setupUi(this);
   ui_->linkName1LineEdit->setValidator(new QRegExpValidator(QRegExp("\\S*")));
@@ -63,7 +64,7 @@ void AddAllowedCollisionEntryDialog::accept()
   entry[2] = ui_->reasonLineEdit->text().toStdString();
   data.push_back(entry);
 
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixAdd(*component_info_, data));
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixAdd(component_info_, data));
 }
 
 }  // namespace tesseract_gui

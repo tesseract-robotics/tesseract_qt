@@ -44,11 +44,11 @@ class ContactResultsComputeWidget : public QWidget
 
 public:
   explicit ContactResultsComputeWidget(QWidget* parent = nullptr);
-  explicit ContactResultsComputeWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit ContactResultsComputeWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~ContactResultsComputeWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<ContactResultsModel> model);
   std::shared_ptr<ContactResultsModel> getModel();
@@ -63,7 +63,7 @@ protected Q_SLOTS:
 private:
   std::unique_ptr<Ui::ContactResultsComputeWidget> ui;
 
-  void ctor(ComponentInfo component_info);
+  void ctor(std::shared_ptr<const ComponentInfo> component_info);
 };
 }  // namespace tesseract_gui
 

@@ -29,6 +29,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/component_info.h>
+#include <tesseract_qt/common/component_info_manager.h>
 
 #include <tesseract_environment/environment.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
@@ -46,7 +47,7 @@ int main(int argc, char** argv)
   auto env = std::make_shared<tesseract_environment::Environment>();
   env->init(urdf_path, srdf_path, locator);
 
-  tesseract_gui::ComponentInfo component_info{ "scene_name" };
+  auto component_info = tesseract_gui::ComponentInfoManager::create("scene_name");
 
   tesseract_gui::WorkbenchWidget widget(component_info);
   widget.show();

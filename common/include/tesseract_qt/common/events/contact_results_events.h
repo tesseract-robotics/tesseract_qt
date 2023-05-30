@@ -24,6 +24,7 @@
 #define TESSERACT_QT_COMMON_CONTACT_RESULTS_EVENTS_H
 
 #include <memory>
+#include <variant>
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 #include <tesseract_qt/common/contact_results_types.h>
@@ -38,7 +39,7 @@ namespace tesseract_gui::events
 class ContactResultsClear : public ComponentEvent
 {
 public:
-  ContactResultsClear(ComponentInfo component_info, const std::string& ns = "");
+  ContactResultsClear(std::shared_ptr<const ComponentInfo> component_info, const std::string& ns = "");
   ~ContactResultsClear() override;
 
   const std::string& getNamespace() const;
@@ -53,7 +54,7 @@ private:
 class ContactResultsSet : public ComponentEvent
 {
 public:
-  ContactResultsSet(ComponentInfo component_info,
+  ContactResultsSet(std::shared_ptr<const ComponentInfo> component_info,
                     const std::variant<ContactResultVector, ContactResultMap>& contact_results,
                     const std::string& ns = "");
   ~ContactResultsSet() override;
@@ -72,8 +73,10 @@ private:
 class ContactResultsRemove : public ComponentEventUUID
 {
 public:
-  ContactResultsRemove(ComponentInfo component_info, boost::uuids::uuid uuid);
-  ContactResultsRemove(ComponentInfo component_info, boost::uuids::uuid uuid, boost::uuids::uuid child_uuid);
+  ContactResultsRemove(std::shared_ptr<const ComponentInfo> component_info, boost::uuids::uuid uuid);
+  ContactResultsRemove(std::shared_ptr<const ComponentInfo> component_info,
+                       boost::uuids::uuid uuid,
+                       boost::uuids::uuid child_uuid);
   ~ContactResultsRemove() override;
 
   /** @brief Unique type for this event. */
@@ -83,8 +86,8 @@ public:
 class ContactResultsVisbility : public ComponentEventVisibility
 {
 public:
-  ContactResultsVisbility(ComponentInfo component_info, boost::uuids::uuid uuid, bool visible);
-  ContactResultsVisbility(ComponentInfo component_info,
+  ContactResultsVisbility(std::shared_ptr<const ComponentInfo> component_info, boost::uuids::uuid uuid, bool visible);
+  ContactResultsVisbility(std::shared_ptr<const ComponentInfo> component_info,
                           boost::uuids::uuid uuid,
                           boost::uuids::uuid child_uuid,
                           bool visible);
@@ -97,7 +100,7 @@ public:
 class ContactResultsVisbilityAll : public ComponentEventVisibilityAll
 {
 public:
-  ContactResultsVisbilityAll(ComponentInfo component_info, bool visible);
+  ContactResultsVisbilityAll(std::shared_ptr<const ComponentInfo> component_info, bool visible);
   ~ContactResultsVisbilityAll() override;
 
   /** @brief Unique type for this event. */
@@ -114,7 +117,7 @@ public:
     USER_DEFINED_STATE
   };
 
-  ContactResultsCompute(ComponentInfo component_info,
+  ContactResultsCompute(std::shared_ptr<const ComponentInfo> component_info,
                         tesseract_collision::CollisionCheckConfig config,
                         StateType state_type = CURRENT_STATE,
                         std::string ns = "");

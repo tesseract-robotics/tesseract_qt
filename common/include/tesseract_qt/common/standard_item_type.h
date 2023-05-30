@@ -47,7 +47,8 @@ enum class StandardItemType : int
   COMMON_JOINT_STATE                  = QStandardItem::UserType + 14,
   COMMON_JOINT_TRAJECTORY             = QStandardItem::UserType + 15,
   COMMON_MANIPULATOR_INFO             = QStandardItem::UserType + 16,
-  COMMON_TYPES_END                    = QStandardItem::UserType + 17,
+  COMMON_COMPONENT_INFO               = QStandardItem::UserType + 17,
+  COMMON_TYPES_END                    = QStandardItem::UserType + 18,
 
   // Tool Path Types
   COMMON_TOOL_PATH         = COMMON_TYPES_END + 1,

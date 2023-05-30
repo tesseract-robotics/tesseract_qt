@@ -45,14 +45,14 @@ class SceneGraphModel : public QStandardItemModel
 
 public:
   explicit SceneGraphModel(QObject* parent = nullptr);
-  explicit SceneGraphModel(ComponentInfo component_inf, QObject* parent = nullptr);
+  explicit SceneGraphModel(std::shared_ptr<const ComponentInfo> component_inf, QObject* parent = nullptr);
   ~SceneGraphModel() override;
   SceneGraphModel(const SceneGraphModel& other);
   SceneGraphModel& operator=(const SceneGraphModel& other);
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
 private:
   struct Implementation;

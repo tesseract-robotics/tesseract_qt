@@ -39,21 +39,21 @@ namespace tesseract_gui::events
 class ComponentEvent : public QEvent
 {
 public:
-  ComponentEvent(ComponentInfo component_info, QEvent::Type type);
+  ComponentEvent(std::shared_ptr<const ComponentInfo> component_info, QEvent::Type type);
   ~ComponentEvent() override;
 
   /** @brief Get the scene name the event is associated with */
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
 private:
-  ComponentInfo component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
 };
 
 class ComponentEventUUID : public ComponentEvent
 {
 public:
-  ComponentEventUUID(ComponentInfo component_info, boost::uuids::uuid uuid, QEvent::Type type);
-  ComponentEventUUID(ComponentInfo component_info,
+  ComponentEventUUID(std::shared_ptr<const ComponentInfo> component_info, boost::uuids::uuid uuid, QEvent::Type type);
+  ComponentEventUUID(std::shared_ptr<const ComponentInfo> component_info,
                      boost::uuids::uuid uuid,
                      boost::uuids::uuid child_uuid,
                      QEvent::Type type);
@@ -75,8 +75,11 @@ private:
 class ComponentEventVisibility : public ComponentEventUUID
 {
 public:
-  ComponentEventVisibility(ComponentInfo component_info, boost::uuids::uuid uuid, bool visible, QEvent::Type type);
-  ComponentEventVisibility(ComponentInfo component_info,
+  ComponentEventVisibility(std::shared_ptr<const ComponentInfo> component_info,
+                           boost::uuids::uuid uuid,
+                           bool visible,
+                           QEvent::Type type);
+  ComponentEventVisibility(std::shared_ptr<const ComponentInfo> component_info,
                            boost::uuids::uuid uuid,
                            boost::uuids::uuid child_uuid,
                            bool visible,
@@ -93,7 +96,7 @@ private:
 class ComponentEventVisibilityAll : public ComponentEvent
 {
 public:
-  ComponentEventVisibilityAll(ComponentInfo component_info, bool visible, QEvent::Type type);
+  ComponentEventVisibilityAll(std::shared_ptr<const ComponentInfo> component_info, bool visible, QEvent::Type type);
   ~ComponentEventVisibilityAll() override;
 
   /** @brief Get the visibility */

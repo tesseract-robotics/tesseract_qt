@@ -30,8 +30,8 @@
 
 namespace tesseract_gui
 {
-ToolPathRenderManager::ToolPathRenderManager(ComponentInfo component_info)
-  : component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+ToolPathRenderManager::ToolPathRenderManager(std::shared_ptr<const ComponentInfo> component_info)
+  : component_info_(std::move(component_info))
 {
   qApp->installEventFilter(this);
 }
@@ -44,55 +44,55 @@ bool ToolPathRenderManager::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathAdd*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathAdd*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       events_.push_back(std::make_unique<events::ToolPathAdd>(*e));
   }
   else if (event->type() == events::ToolPathRemove::kType)
   {
     assert(dynamic_cast<events::ToolPathRemove*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemove*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       events_.push_back(std::make_unique<events::ToolPathRemove>(*e));
   }
   else if (event->type() == events::ToolPathRemoveAll::kType)
   {
     assert(dynamic_cast<events::ToolPathRemoveAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemoveAll*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       events_.push_back(std::make_unique<events::ToolPathRemoveAll>(*e));
   }
   else if (event->type() == events::ToolPathHideAll::kType)
   {
     assert(dynamic_cast<events::ToolPathHideAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathHideAll*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       events_.push_back(std::make_unique<events::ToolPathHideAll>(*e));
   }
   else if (event->type() == events::ToolPathShowAll::kType)
   {
     assert(dynamic_cast<events::ToolPathShowAll*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathShowAll*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       events_.push_back(std::make_unique<events::ToolPathShowAll>(*e));
   }
   else if (event->type() == events::ToolPathHide::kType)
   {
     assert(dynamic_cast<events::ToolPathHide*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathHide*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       events_.push_back(std::make_unique<events::ToolPathHide>(*e));
   }
   else if (event->type() == events::ToolPathShow::kType)
   {
     assert(dynamic_cast<events::ToolPathShow*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathShow*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
       events_.push_back(std::make_unique<events::ToolPathShow>(*e));
   }
   else if (event->type() == events::PreRender::kType)
   {
     assert(dynamic_cast<events::PreRender*>(event) != nullptr);
-    if (static_cast<events::PreRender*>(event)->getSceneName() == component_info_->scene_name)
+    if (static_cast<events::PreRender*>(event)->getSceneName() == component_info_->getSceneName())
       render();
   }
 

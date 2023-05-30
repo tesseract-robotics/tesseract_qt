@@ -73,7 +73,9 @@ void setCheckedStateRecursive(QStandardItem* item, Qt::CheckState st);
  * @param link_name The link name the tool path is associated with
  * @return True if successful, otherwise false
  */
-bool openToolPath(const ComponentInfo& component_info, const QString& filename, const QString& link_name);
+bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
+                  const QString& filename,
+                  const QString& link_name);
 
 /**
  * @brief Save the provided tool path

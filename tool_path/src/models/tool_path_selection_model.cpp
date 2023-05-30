@@ -33,28 +33,29 @@
 
 namespace tesseract_gui
 {
-ToolPathSelectionModel::ToolPathSelectionModel() : component_info_(std::make_unique<ComponentInfo>())
+ToolPathSelectionModel::ToolPathSelectionModel() : component_info_(nullptr)
 {
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }
 
 ToolPathSelectionModel::ToolPathSelectionModel(QAbstractItemModel* model)
-  : QItemSelectionModel(model), component_info_(std::make_unique<ComponentInfo>())
+  : QItemSelectionModel(model), component_info_(nullptr)
 {
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }
 
-ToolPathSelectionModel::ToolPathSelectionModel(ComponentInfo component_info)
-  : component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+ToolPathSelectionModel::ToolPathSelectionModel(std::shared_ptr<const ComponentInfo> component_info)
+  : component_info_(std::move(component_info))
 {
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
 }
 
-ToolPathSelectionModel::ToolPathSelectionModel(QAbstractItemModel* model, ComponentInfo component_info)
-  : QItemSelectionModel(model), component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+ToolPathSelectionModel::ToolPathSelectionModel(QAbstractItemModel* model,
+                                               std::shared_ptr<const ComponentInfo> component_info)
+  : QItemSelectionModel(model), component_info_(std::move(component_info))
 {
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
@@ -73,7 +74,7 @@ bool ToolPathSelectionModel::eventFilter(QObject* obj, QEvent* event)
   {
     assert(dynamic_cast<events::ToolPathRemoveSelected*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemoveSelected*>(event);
-    if (e->getComponentInfo() == *component_info_)
+    if (e->getComponentInfo() == component_info_)
     {
       if (selected_rows.size() == 1)
       {
@@ -82,7 +83,7 @@ bool ToolPathSelectionModel::eventFilter(QObject* obj, QEvent* event)
         {
           assert(dynamic_cast<ToolPathStandardItem*>(item) != nullptr);
           auto* derived_item = static_cast<ToolPathStandardItem*>(item);
-          QGuiApplication::sendEvent(qApp, new events::ToolPathRemove(*component_info_, derived_item->getUUID()));
+          QGuiApplication::sendEvent(qApp, new events::ToolPathRemove(component_info_, derived_item->getUUID()));
         }
         else if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
         {

@@ -492,4 +492,10 @@ QIcon getToolPathHideIcon()
   return icon;
 }
 
+QIcon getPencilEditIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/pencil-edit.svg"));
+  return icon;
+}
+
 }  // namespace tesseract_gui::icons

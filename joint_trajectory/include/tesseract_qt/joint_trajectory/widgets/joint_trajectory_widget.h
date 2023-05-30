@@ -67,11 +67,11 @@ class JointTrajectoryWidget : public QWidget
 
 public:
   explicit JointTrajectoryWidget(QWidget* parent = nullptr);
-  explicit JointTrajectoryWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit JointTrajectoryWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~JointTrajectoryWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<JointTrajectoryModel> model);
   std::shared_ptr<JointTrajectoryModel> getModel();

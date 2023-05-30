@@ -40,23 +40,27 @@ struct EnvironmentCommandsWidget::Implementation
 EnvironmentCommandsWidget::EnvironmentCommandsWidget(QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
-  ctor(ComponentInfo());
+  ctor(nullptr);
 }
-EnvironmentCommandsWidget::EnvironmentCommandsWidget(ComponentInfo component_info, QWidget* parent)
+EnvironmentCommandsWidget::EnvironmentCommandsWidget(std::shared_ptr<const ComponentInfo> component_info,
+                                                     QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   ctor(std::move(component_info));
 }
 EnvironmentCommandsWidget::~EnvironmentCommandsWidget() = default;
 
-void EnvironmentCommandsWidget::setComponentInfo(ComponentInfo component_info)
+void EnvironmentCommandsWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<EnvironmentCommandsModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& EnvironmentCommandsWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> EnvironmentCommandsWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void EnvironmentCommandsWidget::setModel(std::shared_ptr<EnvironmentCommandsModel> model)
 {
@@ -72,7 +76,7 @@ const QItemSelectionModel& EnvironmentCommandsWidget::getSelectionModel() const
   return *data_->tree_view->selectionModel();
 }
 
-void EnvironmentCommandsWidget::ctor(ComponentInfo component_info)
+void EnvironmentCommandsWidget::ctor(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<EnvironmentCommandsModel>(std::move(component_info));

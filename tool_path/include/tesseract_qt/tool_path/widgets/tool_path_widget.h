@@ -38,11 +38,11 @@ class ToolPathWidget : public QWidget
 
 public:
   explicit ToolPathWidget(QWidget* parent = nullptr);
-  explicit ToolPathWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit ToolPathWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~ToolPathWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<ToolPathModel> model);
   std::shared_ptr<ToolPathModel> getModel();

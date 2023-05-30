@@ -154,5 +154,7 @@ QIcon getToolPathIcon();
 QIcon getToolPathShowIcon();
 QIcon getToolPathHideIcon();
 
+QIcon getPencilEditIcon();
+
 }  // namespace tesseract_gui::icons
 #endif  // TESSERACT_QT_COMMON_ICON_UTILS_H

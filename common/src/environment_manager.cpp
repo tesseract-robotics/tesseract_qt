@@ -33,8 +33,8 @@ namespace tesseract_gui
 {
 struct EnvironmentManager::Implementation
 {
-  std::unordered_map<ComponentInfo, std::shared_ptr<EnvironmentWrapper>> environments;
-  ComponentInfo default_component_info;
+  std::map<std::shared_ptr<const ComponentInfo>, std::shared_ptr<EnvironmentWrapper>> environments;
+  std::shared_ptr<const ComponentInfo> default_component_info;
   std::shared_mutex mutex;
 };
 
@@ -49,21 +49,21 @@ void EnvironmentManager::set(std::shared_ptr<EnvironmentWrapper> env, bool set_d
   obj->setHelper(env, set_default);
 }
 
-std::shared_ptr<EnvironmentWrapper> EnvironmentManager::get(const ComponentInfo& component_info)
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::get(const std::shared_ptr<const ComponentInfo>& component_info)
 {
   std::shared_ptr<EnvironmentManager> obj = instance();
   std::shared_lock lock(obj->data_->mutex);
   return obj->getHelper(component_info);
 }
 
-std::unordered_map<ComponentInfo, std::shared_ptr<EnvironmentWrapper>> EnvironmentManager::getAll()
+std::map<std::shared_ptr<const ComponentInfo>, std::shared_ptr<EnvironmentWrapper>> EnvironmentManager::getAll()
 {
   std::shared_ptr<EnvironmentManager> obj = instance();
   std::shared_lock lock(obj->data_->mutex);
   return obj->data_->environments;
 }
 
-std::shared_ptr<EnvironmentWrapper> EnvironmentManager::find(const ComponentInfo& component_info)
+std::shared_ptr<EnvironmentWrapper> EnvironmentManager::find(const std::shared_ptr<const ComponentInfo>& component_info)
 {
   std::shared_ptr<EnvironmentManager> obj = instance();
   std::shared_lock lock(obj->data_->mutex);
@@ -77,14 +77,14 @@ std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getDefault()
   return obj->getDefaultHelper();
 }
 
-void EnvironmentManager::setDefault(const ComponentInfo& component_info)
+void EnvironmentManager::setDefault(std::shared_ptr<const ComponentInfo> component_info)
 {
   std::shared_ptr<EnvironmentManager> obj = instance();
   std::unique_lock lock(obj->data_->mutex);
   obj->setDefaultHelper(component_info);
 }
 
-void EnvironmentManager::remove(const ComponentInfo& component_info)
+void EnvironmentManager::remove(const std::shared_ptr<const ComponentInfo>& component_info)
 {
   std::shared_ptr<EnvironmentManager> obj = instance();
   std::unique_lock lock(obj->data_->mutex);
@@ -102,7 +102,7 @@ std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
 
 void EnvironmentManager::setHelper(std::shared_ptr<EnvironmentWrapper> env, bool set_default)
 {
-  ComponentInfo component_info = env->getComponentInfo();
+  std::shared_ptr<const ComponentInfo> component_info = env->getComponentInfo();
 
   // Remove any existing wrappers associated with component info
   removeHelper(component_info);
@@ -118,7 +118,8 @@ void EnvironmentManager::setHelper(std::shared_ptr<EnvironmentWrapper> env, bool
   data_->environments[component_info] = env;
 }
 
-std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getHelper(const ComponentInfo& component_info) const
+std::shared_ptr<EnvironmentWrapper>
+EnvironmentManager::getHelper(const std::shared_ptr<const ComponentInfo>& component_info) const
 {
   auto it = data_->environments.find(component_info);
   if (it == data_->environments.end())
@@ -127,19 +128,20 @@ std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getHelper(const Componen
   return it->second;
 }
 
-std::shared_ptr<EnvironmentWrapper> EnvironmentManager::findHelper(const ComponentInfo& component_info) const
+std::shared_ptr<EnvironmentWrapper>
+EnvironmentManager::findHelper(const std::shared_ptr<const ComponentInfo>& component_info) const
 {
   auto env_wrapper = getHelper(component_info);
   if (env_wrapper != nullptr)
     return env_wrapper;
 
-  if (component_info.hasParent())
-    return findHelper(*component_info.getParent());
+  if (component_info->hasParent())
+    return findHelper(component_info->getParentComponentInfo());
 
   return nullptr;
 }
 
-void EnvironmentManager::setDefaultHelper(const ComponentInfo& component_info)
+void EnvironmentManager::setDefaultHelper(const std::shared_ptr<const ComponentInfo>& component_info)
 {
   auto it = data_->environments.find(component_info);
   if (it == data_->environments.end())
@@ -153,13 +155,13 @@ std::shared_ptr<EnvironmentWrapper> EnvironmentManager::getDefaultHelper() const
   return getHelper(data_->default_component_info);
 }
 
-void EnvironmentManager::removeHelper(const ComponentInfo& component_info)
+void EnvironmentManager::removeHelper(const std::shared_ptr<const ComponentInfo>& component_info)
 {
   bool update_default{ false };
-  std::vector<ComponentInfo> remove_component_infos;
+  std::vector<std::shared_ptr<const ComponentInfo>> remove_component_infos;
   for (auto& env : data_->environments)
   {
-    if (component_info == env.first || env.first.isParent(component_info))
+    if (component_info == env.first || env.first->isParent(component_info))
     {
       remove_component_infos.push_back(env.first);
 
@@ -173,7 +175,7 @@ void EnvironmentManager::removeHelper(const ComponentInfo& component_info)
 
   if (update_default)
   {
-    data_->default_component_info = ComponentInfo();
+    data_->default_component_info = nullptr;
     if (!data_->environments.empty())
       data_->default_component_info = data_->environments.begin()->first;
   }

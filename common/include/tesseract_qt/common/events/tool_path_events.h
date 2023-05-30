@@ -43,7 +43,7 @@ namespace tesseract_gui::events
 class ToolPathAdd : public ComponentEvent
 {
 public:
-  ToolPathAdd(ComponentInfo component_info, const tesseract_gui::ToolPath& tool_path);
+  ToolPathAdd(std::shared_ptr<const ComponentInfo> component_info, const tesseract_gui::ToolPath& tool_path);
   ToolPathAdd(const ToolPathAdd& other);
   ~ToolPathAdd() override;
 
@@ -62,7 +62,7 @@ private:
 class ToolPathRemove : public ComponentEvent
 {
 public:
-  ToolPathRemove(ComponentInfo component_info, const boost::uuids::uuid& uuid);
+  ToolPathRemove(std::shared_ptr<const ComponentInfo> component_info, const boost::uuids::uuid& uuid);
   ToolPathRemove(const ToolPathRemove& other);
   ~ToolPathRemove() override;
 
@@ -81,7 +81,7 @@ private:
 class ToolPathRemoveAll : public ComponentEvent
 {
 public:
-  ToolPathRemoveAll(ComponentInfo component_info);
+  ToolPathRemoveAll(std::shared_ptr<const ComponentInfo> component_info);
   ToolPathRemoveAll(const ToolPathRemoveAll& other);
   ~ToolPathRemoveAll() override;
 
@@ -93,7 +93,7 @@ public:
 class ToolPathRemoveSelected : public ComponentEvent
 {
 public:
-  ToolPathRemoveSelected(ComponentInfo component_info);
+  ToolPathRemoveSelected(std::shared_ptr<const ComponentInfo> component_info);
   ToolPathRemoveSelected(const ToolPathRemoveSelected& other);
   ~ToolPathRemoveSelected() override;
 
@@ -105,8 +105,10 @@ public:
 class ToolPathHide : public ComponentEvent
 {
 public:
-  ToolPathHide(ComponentInfo component_info, const boost::uuids::uuid& uuid);
-  ToolPathHide(ComponentInfo component_info, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
+  ToolPathHide(std::shared_ptr<const ComponentInfo> component_info, const boost::uuids::uuid& uuid);
+  ToolPathHide(std::shared_ptr<const ComponentInfo> component_info,
+               const boost::uuids::uuid& uuid,
+               const boost::uuids::uuid& child_uuid);
   ToolPathHide(const ToolPathHide& other);
   ~ToolPathHide() override;
 
@@ -126,7 +128,7 @@ private:
 class ToolPathHideAll : public ComponentEvent
 {
 public:
-  ToolPathHideAll(ComponentInfo component_info);
+  ToolPathHideAll(std::shared_ptr<const ComponentInfo> component_info);
   ToolPathHideAll(const ToolPathHideAll& other);
   ~ToolPathHideAll() override;
 
@@ -138,8 +140,10 @@ public:
 class ToolPathShow : public ComponentEvent
 {
 public:
-  ToolPathShow(ComponentInfo component_info, const boost::uuids::uuid& uuid);
-  ToolPathShow(ComponentInfo component_info, const boost::uuids::uuid& uuid, const boost::uuids::uuid& child_uuid);
+  ToolPathShow(std::shared_ptr<const ComponentInfo> component_info, const boost::uuids::uuid& uuid);
+  ToolPathShow(std::shared_ptr<const ComponentInfo> component_info,
+               const boost::uuids::uuid& uuid,
+               const boost::uuids::uuid& child_uuid);
   ToolPathShow(const ToolPathShow& other);
   ~ToolPathShow() override;
 
@@ -159,7 +163,7 @@ private:
 class ToolPathShowAll : public ComponentEvent
 {
 public:
-  ToolPathShowAll(ComponentInfo component_info);
+  ToolPathShowAll(std::shared_ptr<const ComponentInfo> component_info);
   ToolPathShowAll(const ToolPathShowAll& other);
   ~ToolPathShowAll() override;
 
@@ -171,7 +175,7 @@ public:
 class ToolPathOpen : public ComponentEvent
 {
 public:
-  ToolPathOpen(ComponentInfo component_info);
+  ToolPathOpen(std::shared_ptr<const ComponentInfo> component_info);
   ToolPathOpen(const ToolPathOpen& other);
   ~ToolPathOpen() override;
 
@@ -183,7 +187,7 @@ public:
 class ToolPathSave : public ComponentEvent
 {
 public:
-  ToolPathSave(ComponentInfo component_info);
+  ToolPathSave(std::shared_ptr<const ComponentInfo> component_info);
   ToolPathSave(const ToolPathSave& other);
   ~ToolPathSave() override;
 

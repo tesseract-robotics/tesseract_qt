@@ -38,11 +38,11 @@ class SceneStateWidget : public QWidget
 
 public:
   explicit SceneStateWidget(QWidget* parent = nullptr);
-  explicit SceneStateWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit SceneStateWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~SceneStateWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<SceneStateModel> model);
   std::shared_ptr<SceneStateModel> getModel();

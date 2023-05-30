@@ -32,7 +32,7 @@ namespace tesseract_gui::events
 class GroupJointStatesClear : public ComponentEvent
 {
 public:
-  GroupJointStatesClear(ComponentInfo component_info);
+  GroupJointStatesClear(std::shared_ptr<const ComponentInfo> component_info);
   ~GroupJointStatesClear() override;
 
   /** @brief Unique type for this event. */
@@ -42,7 +42,8 @@ public:
 class GroupJointStatesSet : public ComponentEvent
 {
 public:
-  GroupJointStatesSet(ComponentInfo component_info, const tesseract_srdf::GroupJointStates& group_joint_states);
+  GroupJointStatesSet(std::shared_ptr<const ComponentInfo> component_info,
+                      const tesseract_srdf::GroupJointStates& group_joint_states);
   ~GroupJointStatesSet() override;
 
   const tesseract_srdf::GroupJointStates& getGroupJointStates() const;
@@ -57,7 +58,7 @@ private:
 class GroupJointStatesAdd : public ComponentEvent
 {
 public:
-  GroupJointStatesAdd(ComponentInfo component_info,
+  GroupJointStatesAdd(std::shared_ptr<const ComponentInfo> component_info,
                       std::string group_name,
                       std::string state_name,
                       tesseract_srdf::GroupsJointState state);
@@ -79,7 +80,8 @@ private:
 class GroupJointStatesRemove : public ComponentEvent
 {
 public:
-  GroupJointStatesRemove(ComponentInfo component_info, const std::vector<std::array<std::string, 2>>& entries);
+  GroupJointStatesRemove(std::shared_ptr<const ComponentInfo> component_info,
+                         const std::vector<std::array<std::string, 2>>& entries);
   ~GroupJointStatesRemove() override;
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
@@ -94,7 +96,8 @@ private:
 class GroupJointStatesRemoveGroup : public ComponentEvent
 {
 public:
-  GroupJointStatesRemoveGroup(ComponentInfo component_info, const std::vector<std::string>& group_names);
+  GroupJointStatesRemoveGroup(std::shared_ptr<const ComponentInfo> component_info,
+                              const std::vector<std::string>& group_names);
   ~GroupJointStatesRemoveGroup() override;
 
   const std::vector<std::string>& getGroupNames() const;
@@ -109,7 +112,7 @@ private:
 class GroupJointStatesShow : public ComponentEvent
 {
 public:
-  GroupJointStatesShow(ComponentInfo component_info,
+  GroupJointStatesShow(std::shared_ptr<const ComponentInfo> component_info,
                        std::string group_name,
                        std::string state_name,
                        tesseract_srdf::GroupsJointState state);
@@ -132,7 +135,9 @@ private:
 class GroupJointStatesHide : public ComponentEvent
 {
 public:
-  GroupJointStatesHide(ComponentInfo component_info, std::string group_name, std::string state_name);
+  GroupJointStatesHide(std::shared_ptr<const ComponentInfo> component_info,
+                       std::string group_name,
+                       std::string state_name);
 
   ~GroupJointStatesHide() override;
 

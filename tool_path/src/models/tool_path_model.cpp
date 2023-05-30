@@ -41,13 +41,13 @@ namespace tesseract_gui
 {
 struct ToolPathModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
   std::map<boost::uuids::uuid, QStandardItem*> tool_paths;
 };
 
-ToolPathModel::ToolPathModel(QObject* parent) : ToolPathModel(ComponentInfo(), parent) {}
+ToolPathModel::ToolPathModel(QObject* parent) : ToolPathModel(nullptr, parent) {}
 
-ToolPathModel::ToolPathModel(ComponentInfo component_info, QObject* parent)
+ToolPathModel::ToolPathModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
@@ -68,7 +68,7 @@ void ToolPathModel::clear()
   data_->tool_paths.clear();
 }
 
-const ComponentInfo& ToolPathModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> ToolPathModel::getComponentInfo() const { return data_->component_info; }
 
 void ToolPathModel::addToolPath(const ToolPath& tool_path)
 {

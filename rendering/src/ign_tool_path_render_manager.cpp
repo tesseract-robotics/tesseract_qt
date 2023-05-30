@@ -182,14 +182,14 @@ struct IgnToolPathRenderManager::Implementation
   }
 };
 
-IgnToolPathRenderManager::IgnToolPathRenderManager(ComponentInfo component_info,
+IgnToolPathRenderManager::IgnToolPathRenderManager(std::shared_ptr<const ComponentInfo> component_info,
                                                    std::shared_ptr<EntityManager> entity_manager)
   : ToolPathRenderManager(std::move(component_info)), data_(std::make_unique<Implementation>())
 {
   data_->entity_manager = std::move(entity_manager);
 }
 
-IgnToolPathRenderManager::~IgnToolPathRenderManager() { data_->clearAll(component_info_->scene_name); }
+IgnToolPathRenderManager::~IgnToolPathRenderManager() { data_->clearAll(component_info_->getSceneName()); }
 
 void IgnToolPathRenderManager::render()
 {
@@ -200,7 +200,7 @@ void IgnToolPathRenderManager::render()
   }
 
   static const boost::uuids::uuid nil_uuid{};
-  gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->scene_name);
+  gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(component_info_->getSceneName());
 
   for (const auto& event : events_)
   {
@@ -257,7 +257,7 @@ void IgnToolPathRenderManager::render()
     else if (event->type() == events::ToolPathRemoveAll::kType)
     {
       auto& e = static_cast<events::ToolPathRemoveAll&>(*event);
-      data_->clearAll(component_info_->scene_name);
+      data_->clearAll(component_info_->getSceneName());
     }
     else if (event->type() == events::ToolPathHideAll::kType)
     {
@@ -292,7 +292,7 @@ void IgnToolPathRenderManager::updateWorkingFrameTransforms()
   // Update tool path based on working frame
   if (!data_->working_frames.empty())
   {
-    auto env_wrapper = EnvironmentManager::get(*component_info_);
+    auto env_wrapper = EnvironmentManager::get(component_info_);
     if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
     {
       tesseract_scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();

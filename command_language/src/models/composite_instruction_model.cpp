@@ -37,17 +37,15 @@ namespace tesseract_gui
 {
 struct CompositeInstructionModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
   std::unordered_map<std::string, std::pair<QStandardItem*, tesseract_planning::CompositeInstruction>>
       composite_instructions;
 };
 
-CompositeInstructionModel::CompositeInstructionModel(QObject* parent)
-  : CompositeInstructionModel(ComponentInfo(), parent)
-{
-}
+CompositeInstructionModel::CompositeInstructionModel(QObject* parent) : CompositeInstructionModel(nullptr, parent) {}
 
-CompositeInstructionModel::CompositeInstructionModel(ComponentInfo component_info, QObject* parent)
+CompositeInstructionModel::CompositeInstructionModel(std::shared_ptr<const ComponentInfo> component_info,
+                                                     QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
@@ -60,7 +58,10 @@ CompositeInstructionModel::CompositeInstructionModel(ComponentInfo component_inf
 
 CompositeInstructionModel::~CompositeInstructionModel() = default;
 
-const ComponentInfo& CompositeInstructionModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> CompositeInstructionModel::getComponentInfo() const
+{
+  return data_->component_info;
+}
 
 bool CompositeInstructionModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {

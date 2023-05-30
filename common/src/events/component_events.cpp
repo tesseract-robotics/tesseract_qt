@@ -26,12 +26,12 @@
 
 namespace tesseract_gui::events
 {
-ComponentEvent::ComponentEvent(ComponentInfo component_info, QEvent::Type type)
+ComponentEvent::ComponentEvent(std::shared_ptr<const ComponentInfo> component_info, QEvent::Type type)
   : QEvent(type), component_info_(std::move(component_info))
 {
 }
 ComponentEvent::~ComponentEvent() = default;
-const ComponentInfo& ComponentEvent::getComponentInfo() const { return component_info_; }
+std::shared_ptr<const ComponentInfo> ComponentEvent::getComponentInfo() const { return component_info_; }
 
 //////////////////////////////////////////
 
@@ -42,13 +42,15 @@ public:
   boost::uuids::uuid child_uuid{};
 };
 
-ComponentEventUUID::ComponentEventUUID(ComponentInfo component_info, boost::uuids::uuid uuid, QEvent::Type type)
+ComponentEventUUID::ComponentEventUUID(std::shared_ptr<const ComponentInfo> component_info,
+                                       boost::uuids::uuid uuid,
+                                       QEvent::Type type)
   : ComponentEvent(std::move(component_info), type), data_(std::make_unique<Implementation>())
 {
   data_->uuid = uuid;
 }
 
-ComponentEventUUID::ComponentEventUUID(ComponentInfo component_info,
+ComponentEventUUID::ComponentEventUUID(std::shared_ptr<const ComponentInfo> component_info,
                                        boost::uuids::uuid uuid,
                                        boost::uuids::uuid child_uuid,
                                        QEvent::Type type)
@@ -71,7 +73,7 @@ const boost::uuids::uuid& ComponentEventUUID::getChildUUID() const { return data
 
 //////////////////////////////////////////
 
-ComponentEventVisibility::ComponentEventVisibility(ComponentInfo component_info,
+ComponentEventVisibility::ComponentEventVisibility(std::shared_ptr<const ComponentInfo> component_info,
                                                    boost::uuids::uuid uuid,
                                                    bool visible,
                                                    QEvent::Type type)
@@ -79,7 +81,7 @@ ComponentEventVisibility::ComponentEventVisibility(ComponentInfo component_info,
 {
 }
 
-ComponentEventVisibility::ComponentEventVisibility(ComponentInfo component_info,
+ComponentEventVisibility::ComponentEventVisibility(std::shared_ptr<const ComponentInfo> component_info,
                                                    boost::uuids::uuid uuid,
                                                    boost::uuids::uuid child_uuid,
                                                    bool visible,
@@ -93,7 +95,9 @@ bool ComponentEventVisibility::getVisibility() const { return visible_; }
 
 //////////////////////////////////////////
 
-ComponentEventVisibilityAll::ComponentEventVisibilityAll(ComponentInfo component_info, bool visible, QEvent::Type type)
+ComponentEventVisibilityAll::ComponentEventVisibilityAll(std::shared_ptr<const ComponentInfo> component_info,
+                                                         bool visible,
+                                                         QEvent::Type type)
   : ComponentEvent(std::move(component_info), type), visible_(visible)
 {
 }

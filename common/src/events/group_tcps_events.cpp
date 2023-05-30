@@ -24,13 +24,17 @@
 
 namespace tesseract_gui::events
 {
-GroupTCPsClear::GroupTCPsClear(ComponentInfo component_info) : ComponentEvent(std::move(component_info), kType) {}
+GroupTCPsClear::GroupTCPsClear(std::shared_ptr<const ComponentInfo> component_info)
+  : ComponentEvent(std::move(component_info), kType)
+{
+}
 
 GroupTCPsClear::~GroupTCPsClear() = default;
 
 //////////////////////////////////////////
 
-GroupTCPsSet::GroupTCPsSet(ComponentInfo component_info, const tesseract_srdf::GroupTCPs& group_tcps)
+GroupTCPsSet::GroupTCPsSet(std::shared_ptr<const ComponentInfo> component_info,
+                           const tesseract_srdf::GroupTCPs& group_tcps)
   : ComponentEvent(std::move(component_info), kType), group_tcps_(group_tcps)
 {
 }
@@ -41,7 +45,7 @@ const tesseract_srdf::GroupTCPs& GroupTCPsSet::getGroupTCPs() const { return gro
 
 //////////////////////////////////////////
 
-GroupTCPsAdd::GroupTCPsAdd(ComponentInfo component_info,
+GroupTCPsAdd::GroupTCPsAdd(std::shared_ptr<const ComponentInfo> component_info,
                            std::string group_name,
                            std::string tcp_name,
                            const Eigen::Isometry3d& tcp)
@@ -60,7 +64,8 @@ const Eigen::Isometry3d& GroupTCPsAdd::getTCP() const { return tcp_; }
 
 //////////////////////////////////////////
 
-GroupTCPsRemove::GroupTCPsRemove(ComponentInfo component_info, const std::vector<std::array<std::string, 2>>& entries)
+GroupTCPsRemove::GroupTCPsRemove(std::shared_ptr<const ComponentInfo> component_info,
+                                 const std::vector<std::array<std::string, 2>>& entries)
   : ComponentEvent(std::move(component_info), kType), entries_(entries)
 {
 }
@@ -71,7 +76,8 @@ const std::vector<std::array<std::string, 2>>& GroupTCPsRemove::getEntries() con
 
 //////////////////////////////////////////
 
-GroupTCPsRemoveGroup::GroupTCPsRemoveGroup(ComponentInfo component_info, const std::vector<std::string>& group_names)
+GroupTCPsRemoveGroup::GroupTCPsRemoveGroup(std::shared_ptr<const ComponentInfo> component_info,
+                                           const std::vector<std::string>& group_names)
   : ComponentEvent(std::move(component_info), kType), group_names_(group_names)
 {
 }

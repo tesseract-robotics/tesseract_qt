@@ -42,16 +42,16 @@ namespace tesseract_gui
 {
 struct KinematicGroupsModel::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
   tesseract_srdf::GroupNames group_names;
   tesseract_srdf::ChainGroups chain_groups;
   tesseract_srdf::JointGroups joint_groups;
   tesseract_srdf::LinkGroups link_groups;
 };
 
-KinematicGroupsModel::KinematicGroupsModel(QObject* parent) : KinematicGroupsModel(ComponentInfo(), parent) {}
+KinematicGroupsModel::KinematicGroupsModel(QObject* parent) : KinematicGroupsModel(nullptr, parent) {}
 
-KinematicGroupsModel::KinematicGroupsModel(ComponentInfo component_info, QObject* parent)
+KinematicGroupsModel::KinematicGroupsModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent)
   : QStandardItemModel(parent), data_(std::make_unique<Implementation>())
 {
   clear();
@@ -82,7 +82,7 @@ KinematicGroupsModel& KinematicGroupsModel::operator=(const KinematicGroupsModel
 
 KinematicGroupsModel::~KinematicGroupsModel() = default;
 
-const ComponentInfo& KinematicGroupsModel::getComponentInfo() const { return data_->component_info; }
+std::shared_ptr<const ComponentInfo> KinematicGroupsModel::getComponentInfo() const { return data_->component_info; }
 
 void KinematicGroupsModel::clear()
 {

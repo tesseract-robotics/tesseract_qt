@@ -44,21 +44,21 @@ class GroupJointStatesModel : public QStandardItemModel
 
 public:
   explicit GroupJointStatesModel(QObject* parent = nullptr);
-  explicit GroupJointStatesModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit GroupJointStatesModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   GroupJointStatesModel(const GroupJointStatesModel& other);
   GroupJointStatesModel& operator=(const GroupJointStatesModel& other);
   ~GroupJointStatesModel() override;
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   tesseract_srdf::GroupJointStates getGroupsJointStates() const;
 
   tesseract_srdf::GroupsJointState getGroupsJointState(const QModelIndex& row) const;
 
 private:
-  std::unique_ptr<ComponentInfo> component_info_;
+  std::shared_ptr<const ComponentInfo> component_info_;
 
   GroupJointStatesStandardItem* getRoot();
   const GroupJointStatesStandardItem* getRoot() const;

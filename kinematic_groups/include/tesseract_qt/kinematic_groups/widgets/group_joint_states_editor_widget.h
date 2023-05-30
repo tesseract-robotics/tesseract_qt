@@ -53,11 +53,11 @@ class GroupJointStatesEditorWidget : public QWidget
 
 public:
   explicit GroupJointStatesEditorWidget(QWidget* parent = nullptr);
-  explicit GroupJointStatesEditorWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit GroupJointStatesEditorWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~GroupJointStatesEditorWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<GroupJointStatesModel> model);
   std::shared_ptr<GroupJointStatesModel> getModel();

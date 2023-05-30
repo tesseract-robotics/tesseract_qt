@@ -38,11 +38,11 @@ class SceneGraphWidget : public QWidget
 
 public:
   explicit SceneGraphWidget(QWidget* parent = nullptr);
-  explicit SceneGraphWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit SceneGraphWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~SceneGraphWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<SceneGraphModel> model);
   std::shared_ptr<SceneGraphModel> getModel();

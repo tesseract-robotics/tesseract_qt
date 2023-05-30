@@ -36,13 +36,13 @@ namespace tesseract_gui
 {
 struct LoadEnvironmentDialog::Implementation
 {
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
   tesseract_common::ResourceLocator::Ptr resource_locator;
 };
 
-LoadEnvironmentDialog::LoadEnvironmentDialog(QWidget* parent) : LoadEnvironmentDialog(ComponentInfo(), parent) {}
+LoadEnvironmentDialog::LoadEnvironmentDialog(QWidget* parent) : LoadEnvironmentDialog(nullptr, parent) {}
 
-LoadEnvironmentDialog::LoadEnvironmentDialog(ComponentInfo component_info, QWidget* parent)
+LoadEnvironmentDialog::LoadEnvironmentDialog(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QDialog(parent), ui_(std::make_unique<Ui::LoadEnvironmentDialog>()), data_(std::make_unique<Implementation>())
 {
   ui_->setupUi(this);

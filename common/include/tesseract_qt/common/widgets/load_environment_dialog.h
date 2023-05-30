@@ -44,7 +44,7 @@ class LoadEnvironmentDialog : public QDialog
 
 public:
   explicit LoadEnvironmentDialog(QWidget* parent = nullptr);
-  explicit LoadEnvironmentDialog(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit LoadEnvironmentDialog(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~LoadEnvironmentDialog();
 
   void setResourceLocator(std::shared_ptr<tesseract_common::ResourceLocator> resource_locator);

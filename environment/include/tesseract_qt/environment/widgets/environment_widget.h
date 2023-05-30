@@ -44,11 +44,11 @@ class EnvironmentWidget : public QWidget
 
 public:
   explicit EnvironmentWidget(QWidget* parent = nullptr);
-  explicit EnvironmentWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit EnvironmentWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~EnvironmentWidget() override;
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
 public Q_SLOTS:
   virtual void onPlotSceneGraph();

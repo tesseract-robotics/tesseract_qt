@@ -34,7 +34,7 @@ class ToolPathToolBar : public QToolBar
   Q_OBJECT
 public:
   explicit ToolPathToolBar(QWidget* parent = nullptr);
-  explicit ToolPathToolBar(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit ToolPathToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~ToolPathToolBar();
 
 private:

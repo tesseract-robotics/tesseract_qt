@@ -38,11 +38,12 @@ struct AllowedCollisionMatrixWidget::Implementation
 };
 
 AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(QWidget* parent)
-  : AllowedCollisionMatrixWidget(ComponentInfo(), parent)
+  : AllowedCollisionMatrixWidget(nullptr, parent)
 {
 }
 
-AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(ComponentInfo component_info, QWidget* parent)
+AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(std::shared_ptr<const ComponentInfo> component_info,
+                                                           QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -64,14 +65,17 @@ AllowedCollisionMatrixWidget::AllowedCollisionMatrixWidget(ComponentInfo compone
 }
 AllowedCollisionMatrixWidget::~AllowedCollisionMatrixWidget() = default;
 
-void AllowedCollisionMatrixWidget::setComponentInfo(ComponentInfo component_info)
+void AllowedCollisionMatrixWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<AllowedCollisionMatrixModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& AllowedCollisionMatrixWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> AllowedCollisionMatrixWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void AllowedCollisionMatrixWidget::setModel(std::shared_ptr<AllowedCollisionMatrixModel> model)
 {

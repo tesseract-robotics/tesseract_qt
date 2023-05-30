@@ -38,7 +38,7 @@ namespace tesseract_gui::events
 class AllowedCollisionMatrixClear : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixClear(ComponentInfo component_info);
+  AllowedCollisionMatrixClear(std::shared_ptr<const ComponentInfo> component_info);
   ~AllowedCollisionMatrixClear() override;
 
   /** @brief Unique type for this event. */
@@ -48,7 +48,8 @@ public:
 class AllowedCollisionMatrixSet : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixSet(ComponentInfo component_info, const tesseract_common::AllowedCollisionMatrix& acm);
+  AllowedCollisionMatrixSet(std::shared_ptr<const ComponentInfo> component_info,
+                            const tesseract_common::AllowedCollisionMatrix& acm);
   ~AllowedCollisionMatrixSet() override;
 
   const tesseract_common::AllowedCollisionMatrix& getACM() const;
@@ -64,7 +65,8 @@ private:
 class AllowedCollisionMatrixAdd : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixAdd(ComponentInfo component_info, const std::vector<std::array<std::string, 3>>& entries);
+  AllowedCollisionMatrixAdd(std::shared_ptr<const ComponentInfo> component_info,
+                            const std::vector<std::array<std::string, 3>>& entries);
   ~AllowedCollisionMatrixAdd() override;
 
   const std::vector<std::array<std::string, 3>>& getEntries() const;
@@ -79,7 +81,8 @@ private:
 class AllowedCollisionMatrixRemove : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixRemove(ComponentInfo component_info, const std::vector<std::array<std::string, 2>>& entries);
+  AllowedCollisionMatrixRemove(std::shared_ptr<const ComponentInfo> component_info,
+                               const std::vector<std::array<std::string, 2>>& entries);
   ~AllowedCollisionMatrixRemove() override;
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
@@ -94,7 +97,8 @@ private:
 class AllowedCollisionMatrixRemoveLink : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixRemoveLink(ComponentInfo component_info, const std::vector<std::string>& link_names);
+  AllowedCollisionMatrixRemoveLink(std::shared_ptr<const ComponentInfo> component_info,
+                                   const std::vector<std::string>& link_names);
   ~AllowedCollisionMatrixRemoveLink() override;
 
   const std::vector<std::string>& getLinkNames() const;
@@ -109,7 +113,7 @@ private:
 class AllowedCollisionMatrixGenerate : public ComponentEvent
 {
 public:
-  AllowedCollisionMatrixGenerate(ComponentInfo component_info, long resolution);
+  AllowedCollisionMatrixGenerate(std::shared_ptr<const ComponentInfo> component_info, long resolution);
   ~AllowedCollisionMatrixGenerate() override;
 
   long getResolution() const;

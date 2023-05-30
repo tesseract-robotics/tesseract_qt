@@ -52,7 +52,7 @@ namespace tesseract_gui
 struct SRDFEditorWidget::Implementation
 {
   /** @brief The component information */
-  ComponentInfo component_info;
+  std::shared_ptr<const ComponentInfo> component_info;
 
   /** @brief URDF file path */
   QString urdf_filepath;
@@ -71,11 +71,11 @@ struct SRDFEditorWidget::Implementation
 };
 
 SRDFEditorWidget::SRDFEditorWidget(std::shared_ptr<tesseract_common::ResourceLocator> locator, QWidget* parent)
-  : SRDFEditorWidget(ComponentInfo(), std::move(locator), parent)
+  : SRDFEditorWidget(nullptr, std::move(locator), parent)
 {
 }
 
-SRDFEditorWidget::SRDFEditorWidget(ComponentInfo component_info,
+SRDFEditorWidget::SRDFEditorWidget(std::shared_ptr<const ComponentInfo> component_info,
                                    std::shared_ptr<tesseract_common::ResourceLocator> locator,
                                    QWidget* parent)
   : QWidget(parent), ui_(std::make_unique<Ui::SRDFEditorWidget>()), data_(std::make_unique<Implementation>())

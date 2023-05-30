@@ -20,7 +20,7 @@ namespace tesseract_gui
 {
 struct ManipulationWidget::Implementation
 {
-  ComponentInfo parent_component_info;
+  std::shared_ptr<const ComponentInfo> parent_component_info;
 
   /** @brief If true adding and removing states is disabled */
   bool use_parent_component_info{ false };
@@ -39,13 +39,13 @@ struct ManipulationWidget::Implementation
   tesseract_common::TransformMap tcp_offsets;
 };
 
-ManipulationWidget::ManipulationWidget(QWidget* parent) : ManipulationWidget(ComponentInfo(), false, parent) {}
+ManipulationWidget::ManipulationWidget(QWidget* parent) : ManipulationWidget(nullptr, false, parent) {}
 ManipulationWidget::ManipulationWidget(bool use_parent_component_info, QWidget* parent)
-  : ManipulationWidget(ComponentInfo(), use_parent_component_info, parent)
+  : ManipulationWidget(nullptr, use_parent_component_info, parent)
 {
 }
 
-ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info,
+ManipulationWidget::ManipulationWidget(std::shared_ptr<const ComponentInfo> parent_component_info,
                                        bool use_parent_component_info,
                                        QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::ManipulationWidget>()), data_(std::make_unique<Implementation>())
@@ -55,14 +55,13 @@ ManipulationWidget::ManipulationWidget(ComponentInfo parent_component_info,
   data_->parent_component_info = std::move(parent_component_info);
   data_->use_parent_component_info = use_parent_component_info;
 
-  addStateHelper("default");
-  ui->state_widget->setModel(data_->state_models["default"]);
-
   ui->group_combo_box->setModel(&data_->group_names_model);
   ui->working_frame_combo_box->setModel(&data_->working_frames_model);
   ui->tcp_combo_box->setModel(&data_->tcp_names_model);
   ui->tcp_offset_combo_box->setModel(&data_->tcp_offset_names_model);
   ui->state_combo_box->setModel(&data_->state_names_model);
+  ui->state_label->setEnabled(!data_->use_parent_component_info);
+  ui->state_combo_box->setEnabled(!data_->use_parent_component_info);
 
   connect(ui->group_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui->working_frame_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onWorkingFrameChanged()));
@@ -113,7 +112,7 @@ void ManipulationWidget::addStateHelper(const std::string& state_name)
   if (data_->use_parent_component_info)
     data_->state_models[state_name] = std::make_shared<SceneStateModel>(data_->parent_component_info);
   else
-    data_->state_models[state_name] = std::make_shared<SceneStateModel>(data_->parent_component_info.createChild());
+    data_->state_models[state_name] = std::make_shared<SceneStateModel>(data_->parent_component_info->createChild());
 
   const bool is_empty = data_->state_names_model.stringList().isEmpty();
   const QString current_state_name =
@@ -122,7 +121,7 @@ void ManipulationWidget::addStateHelper(const std::string& state_name)
   ui->state_combo_box->setCurrentText(current_state_name);
 
   {  // Update toolbar if one exists
-    std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+    std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
     for (const auto& it : data_->state_models)
       state_component_infos[it.first] = it.second->getComponentInfo();
     QApplication::sendEvent(qApp,
@@ -176,7 +175,7 @@ void ManipulationWidget::removeStateHelper(const std::string& state_name)
     ui->state_combo_box->setCurrentText(current_state_name);
 
   // Update toolbar if one exists
-  std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+  std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
   for (const auto& it : data_->state_models)
     state_component_infos[it.first] = it.second->getComponentInfo();
   QApplication::sendEvent(qApp,
@@ -185,7 +184,7 @@ void ManipulationWidget::removeStateHelper(const std::string& state_name)
                                                           state_component_infos));
 }
 
-void ManipulationWidget::setComponentInfo(ComponentInfo component_info)
+void ManipulationWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   data_->parent_component_info = std::move(component_info);
 
@@ -204,7 +203,10 @@ void ManipulationWidget::setComponentInfo(ComponentInfo component_info)
   onReset();
 }
 
-const ComponentInfo& ManipulationWidget::getComponentInfo() const { return data_->parent_component_info; }
+std::shared_ptr<const ComponentInfo> ManipulationWidget::getComponentInfo() const
+{
+  return data_->parent_component_info;
+}
 
 bool ManipulationWidget::isValid() const
 {
@@ -616,7 +618,7 @@ void ManipulationWidget::onReset()
   onGroupNameChanged();
 
   // Update toolbar if one exists
-  std::unordered_map<std::string, tesseract_gui::ComponentInfo> state_component_infos;
+  std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
   for (const auto& it : data_->state_models)
     state_component_infos[it.first] = it.second->getComponentInfo();
   QApplication::sendEvent(qApp,

@@ -56,13 +56,13 @@ class ManipulationWidget : public QWidget
 public:
   explicit ManipulationWidget(QWidget* parent = nullptr);
   explicit ManipulationWidget(bool use_parent_component_info, QWidget* parent = nullptr);
-  explicit ManipulationWidget(ComponentInfo parent_component_info,
+  explicit ManipulationWidget(std::shared_ptr<const ComponentInfo> parent_component_info,
                               bool use_parent_component_info = false,
                               QWidget* parent = nullptr);
   ~ManipulationWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   /**
    * @brief Add state to manipulation widget

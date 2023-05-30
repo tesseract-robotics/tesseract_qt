@@ -38,11 +38,11 @@ class ContactResultsWidget : public QWidget
 
 public:
   explicit ContactResultsWidget(QWidget* parent = nullptr);
-  explicit ContactResultsWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit ContactResultsWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~ContactResultsWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<ContactResultsModel> model);
   std::shared_ptr<ContactResultsModel> getModel();

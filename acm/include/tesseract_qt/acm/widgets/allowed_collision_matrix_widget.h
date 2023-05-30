@@ -38,11 +38,11 @@ class AllowedCollisionMatrixWidget : public QWidget
 
 public:
   explicit AllowedCollisionMatrixWidget(QWidget* parent = nullptr);
-  explicit AllowedCollisionMatrixWidget(ComponentInfo component_info, QWidget* parent = nullptr);
+  explicit AllowedCollisionMatrixWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~AllowedCollisionMatrixWidget();
 
-  void setComponentInfo(ComponentInfo component_info);
-  const ComponentInfo& getComponentInfo() const;
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   void setModel(std::shared_ptr<AllowedCollisionMatrixModel> model);
   std::shared_ptr<AllowedCollisionMatrixModel> getModel();

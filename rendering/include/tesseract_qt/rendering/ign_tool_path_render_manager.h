@@ -33,7 +33,8 @@ struct ComponentInfo;
 class IgnToolPathRenderManager : public ToolPathRenderManager
 {
 public:
-  IgnToolPathRenderManager(ComponentInfo component_info, std::shared_ptr<EntityManager> entity_manager);
+  IgnToolPathRenderManager(std::shared_ptr<const ComponentInfo> component_info,
+                           std::shared_ptr<EntityManager> entity_manager);
   ~IgnToolPathRenderManager();
 
 private:

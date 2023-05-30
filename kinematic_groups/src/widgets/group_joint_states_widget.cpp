@@ -37,9 +37,9 @@ struct GroupJointStatesWidget::Implementation
   TreeView* tree_view;
 };
 
-GroupJointStatesWidget::GroupJointStatesWidget(QWidget* parent) : GroupJointStatesWidget(ComponentInfo(), parent) {}
+GroupJointStatesWidget::GroupJointStatesWidget(QWidget* parent) : GroupJointStatesWidget(nullptr, parent) {}
 
-GroupJointStatesWidget::GroupJointStatesWidget(ComponentInfo component_info, QWidget* parent)
+GroupJointStatesWidget::GroupJointStatesWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
@@ -61,14 +61,17 @@ GroupJointStatesWidget::GroupJointStatesWidget(ComponentInfo component_info, QWi
 }
 GroupJointStatesWidget::~GroupJointStatesWidget() = default;
 
-void GroupJointStatesWidget::setComponentInfo(ComponentInfo component_info)
+void GroupJointStatesWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
   data_->model = std::make_shared<GroupJointStatesModel>(std::move(component_info));
   data_->tree_view->setModel(data_->model.get());
 }
 
-const ComponentInfo& GroupJointStatesWidget::getComponentInfo() const { return data_->model->getComponentInfo(); }
+std::shared_ptr<const ComponentInfo> GroupJointStatesWidget::getComponentInfo() const
+{
+  return data_->model->getComponentInfo();
+}
 
 void GroupJointStatesWidget::setModel(std::shared_ptr<GroupJointStatesModel> model)
 {

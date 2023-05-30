@@ -156,7 +156,7 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
 
 void eventFilterHelper(QObject* /*obj*/,
                        QEvent* event,
-                       const tesseract_gui::ComponentInfo& component_info,
+                       const std::shared_ptr<const tesseract_gui::ComponentInfo>& component_info,
                        tesseract_environment::Environment& env)
 {
   if (event->type() == tesseract_gui::events::ContactResultsCompute::kType)
@@ -282,7 +282,8 @@ void eventFilterHelper(QObject* /*obj*/,
   }
 }
 
-void broadcastHelper(const tesseract_gui::ComponentInfo& component_info, const tesseract_environment::Environment& env)
+void broadcastHelper(const std::shared_ptr<const tesseract_gui::ComponentInfo>& component_info,
+                     const tesseract_environment::Environment& env)
 {
   auto lock = env.lockRead();
 
@@ -307,23 +308,23 @@ void broadcastHelper(const tesseract_gui::ComponentInfo& component_info, const t
 
 namespace tesseract_gui
 {
-EnvironmentWrapper::EnvironmentWrapper(ComponentInfo component_info)
-  : component_info_(std::make_unique<ComponentInfo>(std::move(component_info)))
+EnvironmentWrapper::EnvironmentWrapper(std::shared_ptr<const ComponentInfo> component_info)
+  : component_info_(std::move(component_info))
 {
 }
 
 EnvironmentWrapper::~EnvironmentWrapper()
 {
   // clear environment data
-  QApplication::sendEvent(qApp, new events::SceneGraphClear(*component_info_));
-  QApplication::sendEvent(qApp, new events::EnvironmentCommandsClear(*component_info_));
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(*component_info_));
-  QApplication::sendEvent(qApp, new events::KinematicGroupsClear(*component_info_));
-  QApplication::sendEvent(qApp, new events::GroupJointStatesClear(*component_info_));
-  QApplication::sendEvent(qApp, new events::GroupTCPsClear(*component_info_));
+  QApplication::sendEvent(qApp, new events::SceneGraphClear(component_info_));
+  QApplication::sendEvent(qApp, new events::EnvironmentCommandsClear(component_info_));
+  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(component_info_));
+  QApplication::sendEvent(qApp, new events::KinematicGroupsClear(component_info_));
+  QApplication::sendEvent(qApp, new events::GroupJointStatesClear(component_info_));
+  QApplication::sendEvent(qApp, new events::GroupTCPsClear(component_info_));
 }
 
-const ComponentInfo& EnvironmentWrapper::getComponentInfo() const { return *component_info_; }
+std::shared_ptr<const ComponentInfo> EnvironmentWrapper::getComponentInfo() const { return component_info_; }
 
 void EnvironmentWrapper::broadcast() const { broadcastHelper(getComponentInfo(), *getEnvironment()); }
 
@@ -347,11 +348,11 @@ void EnvironmentWrapper::init()
 }
 
 DefaultEnvironmentWrapper::DefaultEnvironmentWrapper(std::shared_ptr<tesseract_environment::Environment> env)
-  : DefaultEnvironmentWrapper(ComponentInfo(), std::move(env))
+  : DefaultEnvironmentWrapper(nullptr, std::move(env))
 {
 }
 
-DefaultEnvironmentWrapper::DefaultEnvironmentWrapper(ComponentInfo component_info,
+DefaultEnvironmentWrapper::DefaultEnvironmentWrapper(std::shared_ptr<const ComponentInfo> component_info,
                                                      std::shared_ptr<tesseract_environment::Environment> env)
   : EnvironmentWrapper(std::move(component_info)), env_(std::move(env))
 {
@@ -386,12 +387,12 @@ bool DefaultEnvironmentWrapper::eventFilter(QObject* obj, QEvent* event)
 
 MonitorEnvironmentWrapper::MonitorEnvironmentWrapper(
     std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor)
-  : MonitorEnvironmentWrapper(ComponentInfo(), std::move(env_monitor))
+  : MonitorEnvironmentWrapper(nullptr, std::move(env_monitor))
 {
 }
 
 MonitorEnvironmentWrapper::MonitorEnvironmentWrapper(
-    ComponentInfo component_info,
+    std::shared_ptr<const ComponentInfo> component_info,
     std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor)
   : EnvironmentWrapper(std::move(component_info)), env_monitor_(std::move(env_monitor))
 {

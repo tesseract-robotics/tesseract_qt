@@ -49,10 +49,10 @@ class ToolPathModel : public QStandardItemModel
 
 public:
   explicit ToolPathModel(QObject* parent = nullptr);
-  explicit ToolPathModel(ComponentInfo component_info, QObject* parent = nullptr);
+  explicit ToolPathModel(std::shared_ptr<const ComponentInfo> component_info, QObject* parent = nullptr);
   ~ToolPathModel() override;
 
-  const ComponentInfo& getComponentInfo() const;
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
