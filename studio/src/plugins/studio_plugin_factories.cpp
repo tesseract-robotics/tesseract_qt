@@ -22,13 +22,19 @@
  */
 
 #include <tesseract_qt/studio/plugins/studio_plugin_factories.h>
+#include <tesseract_qt/studio/plugins/manipulation/studio_manipulation_dock_widget.h>
 #include <tesseract_qt/studio/plugins/render/studio_render_dock_widget.h>
 #include <tesseract_qt/studio/plugins/studio_environment_dock_widget.h>
+#include <tesseract_qt/studio/plugins/studio_joint_trajectory_dock_widget.h>
+#include <tesseract_qt/studio/plugins/studio_tool_path_dock_widget.h>
 
 namespace tesseract_gui
 {
 using StudioRenderDockWidgetFactory = StudioDockWidgetFactoryImpl<StudioRenderDockWidget>;
 using StudioEnvironmentDockWidgetFactory = StudioDockWidgetFactoryImpl<StudioEnvironmentDockWidget>;
+using StudioJointTrajectoryDockWidgetFactory = StudioDockWidgetFactoryImpl<StudioJointTrajectoryDockWidget>;
+using StudioManipulationDockWidgetFactory = StudioDockWidgetFactoryImpl<StudioManipulationDockWidget>;
+using StudioToolPathDockWidgetFactory = StudioDockWidgetFactoryImpl<StudioToolPathDockWidget>;
 }  // namespace tesseract_gui
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
@@ -36,3 +42,13 @@ TESSERACT_ADD_STUDIO_PLUGIN(tesseract_gui::StudioRenderDockWidgetFactory, Studio
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 TESSERACT_ADD_STUDIO_PLUGIN(tesseract_gui::StudioEnvironmentDockWidgetFactory, StudioEnvironmentDockWidgetFactory)
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+TESSERACT_ADD_STUDIO_PLUGIN(tesseract_gui::StudioJointTrajectoryDockWidgetFactory,
+                            StudioJointTrajectoryDockWidgetFactory)
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+TESSERACT_ADD_STUDIO_PLUGIN(tesseract_gui::StudioManipulationDockWidgetFactory, StudioManipulationDockWidgetFactory)
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+TESSERACT_ADD_STUDIO_PLUGIN(tesseract_gui::StudioToolPathDockWidgetFactory, StudioToolPathDockWidgetFactory)

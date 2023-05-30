@@ -40,18 +40,28 @@ target_compile_definitions(${PROJECT_NAME}_studio_plugin_factory
 
 qt5_wrap_cpp(
   STUDIO_PLUGINS_headers_MOC
+  include/tesseract_qt/studio/plugins/manipulation/studio_manipulation_config_dialog.h
+  include/tesseract_qt/studio/plugins/manipulation/studio_manipulation_dock_widget.h
   include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.h
   include/tesseract_qt/studio/plugins/render/studio_render_dock_widget.h
-  include/tesseract_qt/studio/plugins/studio_environment_dock_widget.h)
-qt5_wrap_ui(STUDIO_PLUGINS_headers_UI include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.ui)
+  include/tesseract_qt/studio/plugins/studio_environment_dock_widget.h
+  include/tesseract_qt/studio/plugins/studio_joint_trajectory_dock_widget.h
+  include/tesseract_qt/studio/plugins/studio_tool_path_dock_widget.h)
+qt5_wrap_ui(
+  STUDIO_PLUGINS_headers_UI include/tesseract_qt/studio/plugins/manipulation/studio_manipulation_config_dialog.ui
+  include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.ui)
 
 add_library(
   ${PROJECT_NAME}_studio_plugins
   ${STUDIO_PLUGINS_headers_MOC}
   ${STUDIO_PLUGINS_headers_UI}
+  src/plugins/manipulation/studio_manipulation_config_dialog.cpp
+  src/plugins/manipulation/studio_manipulation_dock_widget.cpp
   src/plugins/render/studio_render_config_dialog.cpp
   src/plugins/render/studio_render_dock_widget.cpp
   src/plugins/studio_environment_dock_widget.cpp
+  src/plugins/studio_joint_trajectory_dock_widget.cpp
+  src/plugins/studio_tool_path_dock_widget.cpp
   src/plugins/studio_plugin_factories.cpp)
 
 target_link_libraries(
@@ -64,7 +74,10 @@ target_link_libraries(
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_render_widgets
          ${PROJECT_NAME}_scene_graph_widgets
-         ${PROJECT_NAME}_environment_widgets)
+         ${PROJECT_NAME}_environment_widgets
+         ${PROJECT_NAME}_joint_trajectory_widgets
+         ${PROJECT_NAME}_manipulation_widgets
+         ${PROJECT_NAME}_tool_path_widgets)
 target_include_directories(
   ${PROJECT_NAME}_studio_plugins PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                         "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
@@ -110,6 +123,10 @@ target_compile_definitions(${PROJECT_NAME}_studio PRIVATE TESSERACT_STUDIO_PLUGI
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
+
+foreach(dir config)
+  install(DIRECTORY ${dir}/ DESTINATION share/${PROJECT_NAME}/studio/${dir})
+endforeach()
 
 # Install
 install_targets(

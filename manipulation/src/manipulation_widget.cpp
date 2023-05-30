@@ -63,6 +63,8 @@ ManipulationWidget::ManipulationWidget(std::shared_ptr<const ComponentInfo> pare
   ui->tcp_combo_box->setModel(&data_->tcp_names_model);
   ui->tcp_offset_combo_box->setModel(&data_->tcp_offset_names_model);
   ui->state_combo_box->setModel(&data_->state_names_model);
+  ui->state_label->setEnabled(!data_->use_parent_component_info);
+  ui->state_combo_box->setEnabled(!data_->use_parent_component_info);
 
   connect(ui->group_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onGroupNameChanged()));
   connect(ui->working_frame_combo_box, SIGNAL(currentTextChanged(QString)), this, SLOT(onWorkingFrameChanged()));

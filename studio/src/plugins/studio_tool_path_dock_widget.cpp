@@ -21,70 +21,60 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/studio/plugins/studio_environment_dock_widget.h>
-#include <tesseract_qt/studio/studio_plugin_utils.h>
+#include <tesseract_qt/studio/plugins/studio_tool_path_dock_widget.h>
 
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_qt/common/widgets/component_info_dialog.h>
-#include <tesseract_qt/common/widgets/load_environment_dialog.h>
 
-#include <tesseract_qt/environment/widgets/environment_widget.h>
-#include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
+#include <tesseract_qt/tool_path/widgets/tool_path_widget.h>
+#include <tesseract_qt/tool_path/widgets/tool_path_tool_bar.h>
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <QMenu>
-#include <QAction>
-
 namespace tesseract_gui
 {
-struct StudioEnvironmentDockWidget::Implementation
+struct StudioToolPathDockWidget::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
-  EnvironmentWidget* widget{ nullptr };
-  SceneGraphToolBar* tool_bar{ nullptr };
-
-  QMenu* file_menu{ nullptr };
-  QAction* open_action{ nullptr };
-
-  std::unique_ptr<LoadEnvironmentDialog> open_dialog;
+  ToolPathWidget* widget{ nullptr };
+  ToolPathToolBar* tool_bar{ nullptr };
 };
 
-StudioEnvironmentDockWidget::StudioEnvironmentDockWidget(const QString& title, QWidget* parent)
+StudioToolPathDockWidget::StudioToolPathDockWidget(const QString& title, QWidget* parent)
   : StudioDockWidget(title, parent), data_(std::make_unique<Implementation>())
 {
 }
 
-StudioEnvironmentDockWidget::~StudioEnvironmentDockWidget() = default;
+StudioToolPathDockWidget::~StudioToolPathDockWidget() = default;
 
-std::string StudioEnvironmentDockWidget::getFactoryClassName() const { return "StudioEnvironmentDockWidgetFactory"; }
+std::string StudioToolPathDockWidget::getFactoryClassName() const { return "StudioToolPathDockWidgetFactory"; }
 
-void StudioEnvironmentDockWidget::loadConfig(const YAML::Node& config)
+void StudioToolPathDockWidget::loadConfig(const YAML::Node& config)
 {
   if (const YAML::Node& n = config["component_info"])  // NOLINT
   {
     auto uuid = boost::lexical_cast<boost::uuids::uuid>(n.as<std::string>());
     if (uuid.is_nil())
-      throw std::runtime_error("StudioEnvironmentDockWidget, config component info is nil.");
+      throw std::runtime_error("StudioToolPathDockWidget, config component info is nil.");
 
     data_->component_info = ComponentInfoManager::get(uuid);
     if (data_->component_info == nullptr)
-      throw std::runtime_error("StudioEnvironmentDockWidget, config component info was not found.");
+      throw std::runtime_error("StudioToolPathDockWidget, config component info was not found.");
   }
   else
   {
-    throw std::runtime_error("StudioEnvironmentDockWidget, config is missing component info.");
+    throw std::runtime_error("StudioToolPathDockWidget, config is missing component info.");
   }
 
   setup();
 }
 
-YAML::Node StudioEnvironmentDockWidget::getConfig() const
+YAML::Node StudioToolPathDockWidget::getConfig() const
 {
   // Config
   YAML::Node config_node;
@@ -92,7 +82,7 @@ YAML::Node StudioEnvironmentDockWidget::getConfig() const
   return config_node;
 }
 
-void StudioEnvironmentDockWidget::onInitialize()
+void StudioToolPathDockWidget::onInitialize()
 {
   if (isInitialized())
     return;
@@ -108,16 +98,10 @@ void StudioEnvironmentDockWidget::onInitialize()
   }
 }
 
-void StudioEnvironmentDockWidget::setup()
+void StudioToolPathDockWidget::setup()
 {
-  data_->widget = new EnvironmentWidget(data_->component_info);
-  data_->tool_bar = new SceneGraphToolBar(data_->component_info);
-  QAction* separator = data_->tool_bar->insertSeparator(data_->tool_bar->actions().first());
-
-  data_->open_dialog = std::make_unique<LoadEnvironmentDialog>(data_->component_info);
-  data_->open_action = new QAction(icons::getOpenIcon(), "Load URDF/SRDF");
-  data_->tool_bar->insertAction(separator, data_->open_action);
-  connect(data_->open_action, &QAction::triggered, [this]() { data_->open_dialog->show(); });
+  data_->widget = new ToolPathWidget(data_->component_info);
+  data_->tool_bar = new ToolPathToolBar(data_->component_info);
 
   setWidget(data_->widget);
   setToolBar(data_->tool_bar);

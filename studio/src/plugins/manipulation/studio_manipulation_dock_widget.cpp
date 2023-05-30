@@ -21,103 +21,95 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/studio/plugins/studio_environment_dock_widget.h>
-#include <tesseract_qt/studio/studio_plugin_utils.h>
+#include <tesseract_qt/studio/plugins/manipulation/studio_manipulation_dock_widget.h>
+#include <tesseract_qt/studio/plugins/manipulation/studio_manipulation_config_dialog.h>
 
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_qt/common/widgets/component_info_dialog.h>
-#include <tesseract_qt/common/widgets/load_environment_dialog.h>
 
-#include <tesseract_qt/environment/widgets/environment_widget.h>
-#include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
+#include <tesseract_qt/manipulation/manipulation_widget.h>
+#include <tesseract_qt/manipulation/manipulation_tool_bar.h>
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <QMenu>
-#include <QAction>
-
 namespace tesseract_gui
 {
-struct StudioEnvironmentDockWidget::Implementation
+struct StudioManipulationDockWidget::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
-  EnvironmentWidget* widget{ nullptr };
-  SceneGraphToolBar* tool_bar{ nullptr };
-
-  QMenu* file_menu{ nullptr };
-  QAction* open_action{ nullptr };
-
-  std::unique_ptr<LoadEnvironmentDialog> open_dialog;
+  bool create_child_environment{ false };
+  ManipulationWidget* widget{ nullptr };
+  ManipulationToolBar* tool_bar{ nullptr };
 };
 
-StudioEnvironmentDockWidget::StudioEnvironmentDockWidget(const QString& title, QWidget* parent)
+StudioManipulationDockWidget::StudioManipulationDockWidget(const QString& title, QWidget* parent)
   : StudioDockWidget(title, parent), data_(std::make_unique<Implementation>())
 {
 }
 
-StudioEnvironmentDockWidget::~StudioEnvironmentDockWidget() = default;
+StudioManipulationDockWidget::~StudioManipulationDockWidget() = default;
 
-std::string StudioEnvironmentDockWidget::getFactoryClassName() const { return "StudioEnvironmentDockWidgetFactory"; }
+std::string StudioManipulationDockWidget::getFactoryClassName() const { return "StudioManipulationDockWidgetFactory"; }
 
-void StudioEnvironmentDockWidget::loadConfig(const YAML::Node& config)
+void StudioManipulationDockWidget::loadConfig(const YAML::Node& config)
 {
   if (const YAML::Node& n = config["component_info"])  // NOLINT
   {
     auto uuid = boost::lexical_cast<boost::uuids::uuid>(n.as<std::string>());
     if (uuid.is_nil())
-      throw std::runtime_error("StudioEnvironmentDockWidget, config component info is nil.");
+      throw std::runtime_error("StudioManipulationDockWidget, config component info is nil.");
 
     data_->component_info = ComponentInfoManager::get(uuid);
     if (data_->component_info == nullptr)
-      throw std::runtime_error("StudioEnvironmentDockWidget, config component info was not found.");
+      throw std::runtime_error("StudioManipulationDockWidget, config component info was not found.");
   }
   else
   {
-    throw std::runtime_error("StudioEnvironmentDockWidget, config is missing component info.");
+    throw std::runtime_error("StudioManipulationDockWidget, config is missing component info.");
   }
+
+  if (const YAML::Node& n = config["create_child_environment"])  // NOLINT
+    data_->create_child_environment = n.as<bool>();
 
   setup();
 }
 
-YAML::Node StudioEnvironmentDockWidget::getConfig() const
+YAML::Node StudioManipulationDockWidget::getConfig() const
 {
   // Config
   YAML::Node config_node;
   config_node["component_info"] = boost::uuids::to_string(data_->component_info->getNamespace());
+  config_node["create_child_environment"] = data_->create_child_environment;
   return config_node;
 }
 
-void StudioEnvironmentDockWidget::onInitialize()
+void StudioManipulationDockWidget::onInitialize()
 {
   if (isInitialized())
     return;
 
-  ComponentInfoDialog dialog(this);
+  StudioManipulationConfigDialog dialog(this);
   if (dialog.exec())
   {
     data_->component_info = dialog.getComponentInfo();
     if (data_->component_info == nullptr)
       return;
 
+    data_->create_child_environment = dialog.createChildEnvironment();
+
     setup();
   }
 }
 
-void StudioEnvironmentDockWidget::setup()
+void StudioManipulationDockWidget::setup()
 {
-  data_->widget = new EnvironmentWidget(data_->component_info);
-  data_->tool_bar = new SceneGraphToolBar(data_->component_info);
-  QAction* separator = data_->tool_bar->insertSeparator(data_->tool_bar->actions().first());
-
-  data_->open_dialog = std::make_unique<LoadEnvironmentDialog>(data_->component_info);
-  data_->open_action = new QAction(icons::getOpenIcon(), "Load URDF/SRDF");
-  data_->tool_bar->insertAction(separator, data_->open_action);
-  connect(data_->open_action, &QAction::triggered, [this]() { data_->open_dialog->show(); });
+  data_->widget = new ManipulationWidget(data_->component_info, !data_->create_child_environment);
+  data_->tool_bar = new ManipulationToolBar(data_->component_info);
 
   setWidget(data_->widget);
   setToolBar(data_->tool_bar);

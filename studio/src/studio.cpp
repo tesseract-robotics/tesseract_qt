@@ -78,6 +78,9 @@ struct Studio::Implementation
   /** @brief Load a config */
   void loadConfig();
 
+  /** @brief Load a config */
+  void loadConfigAs();
+
   /** @brief Save the current state to config */
   void saveConfig();
 
@@ -134,24 +137,6 @@ Studio::Implementation::~Implementation()
 
 void Studio::Implementation::loadConfig()
 {
-  QStringList filters;
-  filters.append("Tesseract Studio Config (*.studio)");
-
-  QFileDialog dialog(app, "Open Tesseract Studio Config", default_directory);
-  dialog.setAcceptMode(QFileDialog::AcceptOpen);
-  dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
-  dialog.setModal(true);
-  dialog.setNameFilters(filters);
-  if (dialog.exec() != 1)
-    return;
-
-  QString filepath = dialog.selectedFiles().first();
-  if (QFileInfo(filepath).exists())
-    default_directory = QFileInfo(filepath).absoluteDir().path();
-
-  config_filepath = filepath.toStdString();
-  settings_filepath = config_filepath.string() + ".ini";
-
   YAML::Node config = YAML::LoadFile(config_filepath.string());
   if (const YAML::Node& config_node = config[STUDIO_CONFIG_KEY])
   {
@@ -272,6 +257,29 @@ void Studio::Implementation::loadConfig()
   // Load settings
   restoreState();
   restorePerspectives();
+}
+
+void Studio::Implementation::loadConfigAs()
+{
+  QStringList filters;
+  filters.append("Tesseract Studio Config (*.studio)");
+
+  QFileDialog dialog(app, "Open Tesseract Studio Config", default_directory);
+  dialog.setAcceptMode(QFileDialog::AcceptOpen);
+  dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+  dialog.setModal(true);
+  dialog.setNameFilters(filters);
+  if (dialog.exec() != 1)
+    return;
+
+  QString filepath = dialog.selectedFiles().first();
+  if (QFileInfo(filepath).exists())
+    default_directory = QFileInfo(filepath).absoluteDir().path();
+
+  config_filepath = filepath.toStdString();
+  settings_filepath = config_filepath.string() + ".ini";
+
+  loadConfig();
 }
 
 void Studio::Implementation::saveConfig()
@@ -420,7 +428,7 @@ Studio::Studio(QWidget* parent)
   ui->actionCreate_Perspective->setIcon(icons::getLayoutIcon());
   ui->actionLoad_Plugins->setIcon(icons::getPluginIcon());
   connect(ui->actionLoad_Config, &QAction::triggered, [this]() {
-    data_->loadConfig();
+    data_->loadConfigAs();
     if (!data_->config_filepath.empty() && !data_->settings_filepath.empty())
       ui->actionSave_Config->setEnabled(true);
   });
@@ -448,30 +456,6 @@ Studio::Studio(QWidget* parent)
   connect(data_->dock_manager, &ads::CDockManager::dockWidgetRemoved, [this](ads::CDockWidget* w) {
     data_->dockWidgetRemoved(w);
   });
-
-  //  auto* tool_path_dock_widget = new ads::CDockWidget("Tool Paths");
-  //  tool_path_dock_widget->setWidget(new tesseract_gui::ToolPathWidget(data_->component_info));
-  //  tool_path_dock_widget->setToolBar(new tesseract_gui::ToolPathToolBar(data_->component_info));
-  //  tool_path_dock_widget->toolBar()->setIconSize(QSize(25, 25));
-  //  auto* right_area = data_->dock_manager->addDockWidget(ads::RightDockWidgetArea, tool_path_dock_widget,
-  //  central_area); ui->menuView->addAction(tool_path_dock_widget->toggleViewAction());
-
-  //  auto* joint_traj_dock_widget = new ads::CDockWidget("Joint Trajectories");
-  //  joint_traj_dock_widget->setWidget(new tesseract_gui::JointTrajectoryWidget(data_->jt_component_info));
-  //  joint_traj_dock_widget->setToolBar(new tesseract_gui::JointTrajectoryToolBar(data_->jt_component_info));
-  //  joint_traj_dock_widget->toolBar()->setIconSize(QSize(25, 25));
-  //  data_->dock_manager->addDockWidgetTabToArea(joint_traj_dock_widget, right_area);
-  //  ui->menuView->addAction(joint_traj_dock_widget->toggleViewAction());
-
-  //  auto* manipulation_dock_widget = new ads::CDockWidget("Manipulation");
-  //  manipulation_dock_widget->setWidget(new tesseract_gui::ManipulationWidget(data_->component_info, true));
-  //  manipulation_dock_widget->setToolBar(new tesseract_gui::ManipulationToolBar(data_->component_info));
-  //  manipulation_dock_widget->toolBar()->setIconSize(QSize(25, 25));
-  //  data_->dock_manager->addDockWidgetTabToArea(manipulation_dock_widget, right_area);
-  //  ui->menuView->addAction(manipulation_dock_widget->toggleViewAction());
-
-  //  data_->restoreState(); If this is enabled widgets do not show up if name change
-  //  data_->restorePerspectives();
 }
 
 Studio::~Studio() = default;
