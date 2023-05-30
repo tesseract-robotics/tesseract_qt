@@ -30,6 +30,7 @@
     <addaction name="separator"/>
     <addaction name="actionLoad_Config"/>
     <addaction name="actionSave_Config"/>
+    <addaction name="actionSave_Config_As"/>
     <addaction name="separator"/>
     <addaction name="actionRestore_State"/>
     <addaction name="actionSave_State"/>
@@ -88,10 +89,24 @@
    <property name="text">
     <string>Load Config</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSave_Config">
    <property name="text">
     <string>Save Config</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_Config_As">
+   <property name="text">
+    <string>Save Config As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
  </widget>

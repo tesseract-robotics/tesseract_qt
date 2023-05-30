@@ -72,11 +72,17 @@ struct Studio::Implementation
   std::map<ads::DockWidgetArea, ads::CDockAreaWidget*> dock_areas;
   std::vector<StudioDockWidget*> dock_widgets;
 
+  tesseract_common::fs::path config_filepath;
+  tesseract_common::fs::path settings_filepath;
+
   /** @brief Load a config */
   void loadConfig();
 
   /** @brief Save the current state to config */
   void saveConfig();
+
+  /** @brief Save the current state to config */
+  void saveConfigAs();
 
   /** @brief Saves the dock manager state and the main window geometry */
   void saveState();
@@ -139,11 +145,14 @@ void Studio::Implementation::loadConfig()
   if (dialog.exec() != 1)
     return;
 
-  QString config_filepath = dialog.selectedFiles().first();
-  if (QFileInfo(config_filepath).exists())
-    default_directory = QFileInfo(config_filepath).absoluteDir().path();
+  QString filepath = dialog.selectedFiles().first();
+  if (QFileInfo(filepath).exists())
+    default_directory = QFileInfo(filepath).absoluteDir().path();
 
-  YAML::Node config = YAML::LoadFile(config_filepath.toStdString());
+  config_filepath = filepath.toStdString();
+  settings_filepath = config_filepath.string() + ".ini";
+
+  YAML::Node config = YAML::LoadFile(config_filepath.string());
   if (const YAML::Node& config_node = config[STUDIO_CONFIG_KEY])
   {
     if (const YAML::Node& search_paths = config_node[SEARCH_PATHS_KEY])
@@ -229,25 +238,16 @@ void Studio::Implementation::loadConfig()
       }
     }
   }
+
+  // Load settings
+  restoreState();
+  restorePerspectives();
 }
 
 void Studio::Implementation::saveConfig()
 {
-  QStringList filters;
-  filters.append("Tesseract Studio Config (*.studio)");
-
-  QFileDialog dialog(app, "Save Tesseract Studio Config", default_directory);
-  dialog.setAcceptMode(QFileDialog::AcceptSave);
-  dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
-  dialog.setModal(true);
-  dialog.setNameFilters(filters);
-  dialog.setDefaultSuffix(".studio");
-  if (dialog.exec() != 1)
+  if (config_filepath.empty() || settings_filepath.empty())
     return;
-
-  QString config_filepath = dialog.selectedFiles().first();
-  if (QFileInfo(config_filepath).exists())
-    default_directory = QFileInfo(config_filepath).absoluteDir().path();
 
   YAML::Node studio_plugins;
   if (!plugin_loader.search_paths.empty())
@@ -274,16 +274,48 @@ void Studio::Implementation::saveConfig()
   YAML::Node config;
   config[STUDIO_CONFIG_KEY] = studio_plugins;
 
-  std::ofstream fout(config_filepath.toStdString());
+  // Save config
+  std::ofstream fout(config_filepath);
   fout << config;
+
+  // Save settings
+  saveState();
+  savePerspectives();
+}
+
+void Studio::Implementation::saveConfigAs()
+{
+  QStringList filters;
+  filters.append("Tesseract Studio Config (*.studio)");
+
+  QFileDialog dialog(app, "Save Tesseract Studio Config", default_directory);
+  dialog.setAcceptMode(QFileDialog::AcceptSave);
+  dialog.setWindowModality(Qt::ApplicationModal);  // Required, see RenderWidget::onFrameSwapped()
+  dialog.setModal(true);
+  dialog.setNameFilters(filters);
+  dialog.setDefaultSuffix(".studio");
+  if (dialog.exec() != 1)
+    return;
+
+  QString filepath = dialog.selectedFiles().first();
+  if (QFileInfo(filepath).exists())
+    default_directory = QFileInfo(filepath).absoluteDir().path();
+
+  config_filepath = filepath.toStdString();
+  settings_filepath = config_filepath.string() + ".ini";
+
+  saveConfig();
 }
 
 void Studio::Implementation::saveState()
 {
-  QSettings Settings("TesseractQtStudioSettings.ini", QSettings::IniFormat);
-  Settings.setValue("TesseractQtStudio/Geometry", app->saveGeometry());
-  Settings.setValue("TesseractQtStudio/State", app->saveState());
-  Settings.setValue("TesseractQtStudio/DockingState", dock_manager->saveState());
+  if (settings_filepath.empty())
+    return;
+
+  QSettings Settings(QString::fromStdString(settings_filepath.string()), QSettings::IniFormat);
+  Settings.setValue("TesseractStudio/Geometry", app->saveGeometry());
+  Settings.setValue("TesseractStudio/State", app->saveState());
+  Settings.setValue("TesseractStudio/DockingState", dock_manager->saveState());
 }
 
 void Studio::Implementation::createPerspective()
@@ -303,22 +335,31 @@ void Studio::Implementation::createPerspective()
 
 void Studio::Implementation::savePerspectives()
 {
-  QSettings Settings("TesseractQtStudioSettings.ini", QSettings::IniFormat);
-  dock_manager->savePerspectives(Settings);
+  if (settings_filepath.empty())
+    return;
+
+  QSettings settings(QString::fromStdString(settings_filepath.string()), QSettings::IniFormat);
+  dock_manager->savePerspectives(settings);
 }
 
 void Studio::Implementation::restoreState()
 {
-  QSettings Settings("TesseractQtStudioSettings.ini", QSettings::IniFormat);
-  app->restoreGeometry(Settings.value("TesseractQtStudio/Geometry").toByteArray());
-  app->restoreState(Settings.value("TesseractQtStudio/State").toByteArray());
-  dock_manager->restoreState(Settings.value("TesseractQtStudio/DockingState").toByteArray());
+  if (settings_filepath.empty())
+    return;
+
+  QSettings settings(QString::fromStdString(settings_filepath.string()), QSettings::IniFormat);
+  app->restoreGeometry(settings.value("TesseractStudio/Geometry").toByteArray());
+  app->restoreState(settings.value("TesseractStudio/State").toByteArray());
+  dock_manager->restoreState(settings.value("TesseractStudio/DockingState").toByteArray());
 }
 
 void Studio::Implementation::restorePerspectives()
 {
-  QSettings Settings("TesseractQtStudioSettings.ini", QSettings::IniFormat);
-  dock_manager->loadPerspectives(Settings);
+  if (settings_filepath.empty())
+    return;
+
+  QSettings settings(QString::fromStdString(settings_filepath.string()), QSettings::IniFormat);
+  dock_manager->loadPerspectives(settings);
   perspective_comboBox->clear();
   perspective_comboBox->addItems(dock_manager->perspectiveNames());
 }
@@ -340,12 +381,14 @@ Studio::Studio(QWidget* parent)
   // Setup actions
   ui->actionLoad_Config->setIcon(icons::getOpenIcon());
   ui->actionSave_Config->setIcon(icons::getSaveIcon());
+  ui->actionSave_Config_As->setIcon(icons::getSaveIcon());
   ui->actionSave_State->setIcon(icons::getSaveIcon());
   ui->actionRestore_State->setIcon(icons::getRestoreIcon());
   ui->actionCreate_Perspective->setIcon(icons::getLayoutIcon());
   ui->actionLoad_Plugins->setIcon(icons::getPluginIcon());
   connect(ui->actionLoad_Config, &QAction::triggered, [this]() { data_->loadConfig(); });
   connect(ui->actionSave_Config, &QAction::triggered, [this]() { data_->saveConfig(); });
+  connect(ui->actionSave_Config_As, &QAction::triggered, [this]() { data_->saveConfigAs(); });
   connect(ui->actionSave_State, &QAction::triggered, [this]() { data_->saveState(); });
   connect(ui->actionRestore_State, &QAction::triggered, [this]() { data_->restoreState(); });
   connect(ui->actionCreate_Perspective, &QAction::triggered, [this]() { data_->createPerspective(); });
@@ -402,7 +445,7 @@ Studio::Studio(QWidget* parent)
   //  ui->menuView->addAction(manipulation_dock_widget->toggleViewAction());
 
   //  data_->restoreState(); If this is enabled widgets do not show up if name change
-  data_->restorePerspectives();
+  //  data_->restorePerspectives();
 }
 
 Studio::~Studio() = default;
