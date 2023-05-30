@@ -69,7 +69,7 @@ struct Studio::Implementation
   tesseract_common::PluginLoader plugin_loader;
   StudioPluginLoaderDialog plugin_loader_dialog;
 
-  std::map<ads::DockWidgetArea, ads::CDockAreaWidget*> dock_areas;
+  std::string central_widget;
   std::vector<StudioDockWidget*> dock_widgets;
 
   tesseract_common::fs::path config_filepath;
@@ -207,34 +207,64 @@ void Studio::Implementation::loadConfig()
       }
     }
 
-    if (const YAML::Node& plugins = config_node[DOCK_WIDGETS_KEY])
+    if (const YAML::Node& dock_widgets_node = config_node[DOCK_WIDGETS_KEY])
     {
-      if (!plugins.IsMap())
-        throw std::runtime_error(DOCK_WIDGETS_KEY + ", should contain a map of studio plugin names to "
-                                                    "plugins!");
+      if (const YAML::Node& n = dock_widgets_node["central_widget"])
+        central_widget = n.as<std::string>();
 
-      try
+      if (const YAML::Node& plugins = dock_widgets_node["plugins"])
       {
-        auto plugin_infos = plugins.as<tesseract_common::PluginInfoMap>();
+        if (!plugins.IsMap())
+          throw std::runtime_error(DOCK_WIDGETS_KEY + "::plugins, should contain a map of studio plugin names to "
+                                                      "plugins!");
 
-        for (const auto& plugin_info : plugin_infos)
+        try
         {
-          QString name = QString::fromStdString(plugin_info.first);
-          StudioDockWidget* dock_widget = app->createDockWidget(name, plugin_info.second);
-          if (dock_widget == nullptr)
+          auto plugin_infos = plugins.as<tesseract_common::PluginInfoMap>();
+
+          // If central widget it must be added first
+          if (!central_widget.empty())
           {
-            CONSOLE_BRIDGE_logError("Studio::loadConfig: Failed to load dock widget '%s' from config.",
-                                    plugin_info.first.c_str());
-            continue;
+            auto it = plugin_infos.find(central_widget);
+            if (it == plugin_infos.end())
+              throw std::runtime_error("Studio::loadConfig: failed find central widget with name '" + central_widget +
+                                       "'");
+
+            QString name = QString::fromStdString(it->first);
+            StudioDockWidget* dock_widget = app->createDockWidget(name, it->second);
+            if (dock_widget == nullptr)
+            {
+              CONSOLE_BRIDGE_logError("Studio::loadConfig: Failed to load dock widget '%s' from config.",
+                                      it->first.c_str());
+            }
+            else
+            {
+              app->addDockWidget(dock_widget);
+            }
           }
 
-          app->addDockWidget(dock_widget);
+          for (const auto& plugin_info : plugin_infos)
+          {
+            if (!central_widget.empty() && plugin_info.first == central_widget)
+              continue;
+
+            QString name = QString::fromStdString(plugin_info.first);
+            StudioDockWidget* dock_widget = app->createDockWidget(name, plugin_info.second);
+            if (dock_widget == nullptr)
+            {
+              CONSOLE_BRIDGE_logError("Studio::loadConfig: Failed to load dock widget '%s' from config.",
+                                      plugin_info.first.c_str());
+              continue;
+            }
+
+            app->addDockWidget(dock_widget);
+          }
         }
-      }
-      catch (const std::exception& e)
-      {
-        throw std::runtime_error("Studio::loadConfig: Constructor failed to cast '" + DOCK_WIDGETS_KEY +
-                                 "' to tesseract_common::PluginInfoContainer! Details: " + e.what());
+        catch (const std::exception& e)
+        {
+          throw std::runtime_error("Studio::loadConfig: Constructor failed to cast '" + DOCK_WIDGETS_KEY +
+                                   "::plugins' to tesseract_common::PluginInfoMap! Details: " + e.what());
+        }
       }
     }
   }
@@ -259,6 +289,9 @@ void Studio::Implementation::saveConfig()
   if (!tesseract_gui::ComponentInfoManager::empty())
     studio_plugins[COMPONENT_INFOS_KEY] = tesseract_gui::ComponentInfoManager::getConfig();
 
+  if (!central_widget.empty())
+    studio_plugins[DOCK_WIDGETS_KEY]["central_widget"] = central_widget;
+
   tesseract_common::PluginInfoMap plugins;
   for (const auto& dock_widget : dock_widgets)
   {
@@ -269,7 +302,7 @@ void Studio::Implementation::saveConfig()
   }
 
   if (!plugins.empty())
-    studio_plugins[DOCK_WIDGETS_KEY] = plugins;
+    studio_plugins[DOCK_WIDGETS_KEY]["plugins"] = plugins;
 
   YAML::Node config;
   config[STUDIO_CONFIG_KEY] = studio_plugins;
@@ -408,21 +441,6 @@ Studio::Studio(QWidget* parent)
     data_->dockWidgetRemoved(w);
   });
 
-  //  auto render_widget = new tesseract_gui::RenderWidget(data_->component_info->getSceneName());
-  //  render_widget->setSkyEnabled(true);
-  //  auto* render_dock_widget = new ads::CDockWidget("Scene");
-  //  render_dock_widget->setWidget(render_widget);
-  //  render_dock_widget->setFeature(ads::CDockWidget::DockWidgetFocusable, true);
-  //  auto* central_area = data_->dock_manager->setCentralWidget(render_dock_widget);
-  //  central_area->setAllowedAreas(ads::DockWidgetArea::OuterDockAreas);
-
-  //  auto* env_dock_widget = new ads::CDockWidget("Environment");
-  //  env_dock_widget->setWidget(new tesseract_gui::EnvironmentWidget(data_->component_info));
-  //  env_dock_widget->setToolBar(new tesseract_gui::SceneGraphToolBar(data_->component_info));
-  //  env_dock_widget->toolBar()->setIconSize(QSize(25, 25));
-  //  data_->dock_manager->addDockWidget(ads::LeftDockWidgetArea, env_dock_widget, central_area);
-  //  ui->menuView->addAction(env_dock_widget->toggleViewAction());
-
   //  auto* tool_path_dock_widget = new ads::CDockWidget("Tool Paths");
   //  tool_path_dock_widget->setWidget(new tesseract_gui::ToolPathWidget(data_->component_info));
   //  tool_path_dock_widget->setToolBar(new tesseract_gui::ToolPathToolBar(data_->component_info));
@@ -506,32 +524,16 @@ void Studio::addDockWidget(StudioDockWidget* dock_widget)
 
   if (dock_widget->assignAsCentralWidget())
   {
-    auto it = data_->dock_areas.find(ads::DockWidgetArea::CenterDockWidgetArea);
-    if (it != data_->dock_areas.end())
+    if (data_->dock_manager->centralWidget() != nullptr)
       throw std::runtime_error("Only able to have one central widget!");
 
     auto* central_area = data_->dock_manager->setCentralWidget(dock_widget);
     central_area->setAllowedAreas(ads::DockWidgetArea::OuterDockAreas);
-    data_->dock_areas[ads::DockWidgetArea::CenterDockWidgetArea] = central_area;
+    data_->central_widget = dock_widget->getName().toStdString();
   }
   else
   {
-    auto it = data_->dock_areas.find(dock_widget->getDesiredDockArea());
-    if (it != data_->dock_areas.end())
-    {
-      data_->dock_manager->addDockWidgetTabToArea(dock_widget, it->second);
-    }
-    else
-    {
-      ads::CDockAreaWidget* dock_area{ nullptr };
-      auto it = data_->dock_areas.find(ads::DockWidgetArea::CenterDockWidgetArea);
-      if (it != data_->dock_areas.end())
-        dock_area = data_->dock_manager->addDockWidget(dock_widget->getDesiredDockArea(), dock_widget, it->second);
-      else
-        dock_area = data_->dock_manager->addDockWidget(dock_widget->getDesiredDockArea(), dock_widget);
-
-      data_->dock_areas[dock_widget->getDesiredDockArea()] = dock_area;
-    }
+    data_->dock_manager->addDockWidget(ads::DockWidgetArea::LeftDockWidgetArea, dock_widget);
     ui->menuView->addAction(dock_widget->toggleViewAction());
   }
 

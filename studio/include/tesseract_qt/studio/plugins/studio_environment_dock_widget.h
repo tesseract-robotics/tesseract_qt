@@ -20,22 +20,37 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef TESSERACT_QT_STUDIO_STUDIO_ENVIRONMENT_DOCK_WIDGET_H
+#define TESSERACT_QT_STUDIO_STUDIO_ENVIRONMENT_DOCK_WIDGET_H
 
 #include <tesseract_qt/studio/studio_dock_widget.h>
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/random_generator.hpp>
-#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
-StudioDockWidget::StudioDockWidget(const QString& title, QWidget* parent) : CDockWidget(title, parent) {}
+class StudioEnvironmentDockWidget : public StudioDockWidget
+{
+  Q_OBJECT
+public:
+  StudioEnvironmentDockWidget(const QString& title, QWidget* parent = nullptr);
 
-void StudioDockWidget::setName(const QString& name) { setObjectName(name); }
-QString StudioDockWidget::getName() const { return objectName(); }
+  ~StudioEnvironmentDockWidget() override;
 
-// ads::DockWidgetArea StudioDockWidget::getDesiredDockArea() const { return desired_dock_area_; }
-bool StudioDockWidget::assignAsCentralWidget() const { return assign_as_central_widget_; }
+  std::string getFactoryClassName() const override;
 
-bool StudioDockWidget::isInitialized() const { return (widget() != nullptr); }
-void StudioDockWidget::onInitialize() {}
+  void loadConfig(const YAML::Node& config) override;
+
+  YAML::Node getConfig() const override;
+
+public Q_SLOTS:
+  void onInitialize() override;
+
+private:
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
+
+  void setup();
+};
 
 }  // namespace tesseract_gui
+
+#endif  // TESSERACT_QT_STUDIO_STUDIO_ENVIRONMENT_DOCK_WIDGET_H

@@ -20,22 +20,40 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef TESSERACT_GUI_COMMON_COMPONENT_INFO_DIALOG_H
+#define TESSERACT_GUI_COMMON_COMPONENT_INFO_DIALOG_H
 
-#include <tesseract_qt/studio/studio_dock_widget.h>
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/random_generator.hpp>
-#include <boost/uuid/uuid_io.hpp>
+#include <memory>
+
+#include <QDialog>
+
+namespace Ui
+{
+class ComponentInfoDialog;
+}
+
 namespace tesseract_gui
 {
-StudioDockWidget::StudioDockWidget(const QString& title, QWidget* parent) : CDockWidget(title, parent) {}
+class ComponentInfo;
 
-void StudioDockWidget::setName(const QString& name) { setObjectName(name); }
-QString StudioDockWidget::getName() const { return objectName(); }
+class ComponentInfoDialog : public QDialog
+{
+  Q_OBJECT
 
-// ads::DockWidgetArea StudioDockWidget::getDesiredDockArea() const { return desired_dock_area_; }
-bool StudioDockWidget::assignAsCentralWidget() const { return assign_as_central_widget_; }
+public:
+  explicit ComponentInfoDialog(QWidget* parent = nullptr);
+  ~ComponentInfoDialog();
 
-bool StudioDockWidget::isInitialized() const { return (widget() != nullptr); }
-void StudioDockWidget::onInitialize() {}
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
+private Q_SLOTS:
+  void onRefreshed();
+
+private:
+  struct Implementation;
+  std::unique_ptr<Ui::ComponentInfoDialog> ui;
+  std::unique_ptr<Implementation> data_;
+};
 }  // namespace tesseract_gui
+
+#endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_DIALOG_H

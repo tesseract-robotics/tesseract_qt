@@ -101,7 +101,11 @@ void ComponentInfoManagerWidget::enableEditMode(bool enable)
     ui->tree_view->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 }
 
-void ComponentInfoManagerWidget::refresh() { data_->model.refresh(); }
+void ComponentInfoManagerWidget::refresh()
+{
+  data_->model.refresh();
+  Q_EMIT refreshed();
+}
 
 void ComponentInfoManagerWidget::showContextMenu(const QPoint& pos)
 {

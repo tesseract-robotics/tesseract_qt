@@ -113,23 +113,23 @@ void StudioRenderDockWidget::loadConfig(const YAML::Node& config)
   if (const YAML::Node& n = config["central_widget"])  // NOLINT
     assign_as_central_widget_ = n.as<bool>();
 
-  auto render_widget = new tesseract_gui::RenderWidget(data_->component_info->getSceneName(), engine_name);
+  data_->render_widget = new tesseract_gui::RenderWidget(data_->component_info->getSceneName(), engine_name);
 
   if (const YAML::Node& n = config["show_sky"])  // NOLINT
-    render_widget->setSkyEnabled(n.as<bool>());
+    data_->render_widget->setSkyEnabled(n.as<bool>());
 
   if (const YAML::Node& n = config["show_grid"])  // NOLINT
-    render_widget->setGridEnabled(n.as<bool>());
+    data_->render_widget->setGridEnabled(n.as<bool>());
 
   if (const YAML::Node& n = config["show_shadows"])  // NOLINT
-    render_widget->setShadowsEnabled(n.as<bool>());
+    data_->render_widget->setShadowsEnabled(n.as<bool>());
 
   data_->scene_graph_manager =
       std::make_unique<IgnSceneGraphRenderManager>(data_->component_info, data_->entity_manager);
   data_->tool_path_manager = std::make_unique<IgnToolPathRenderManager>(data_->component_info, data_->entity_manager);
   data_->contact_results_manager = std::make_unique<IgnContactResultsRenderManager>(data_->component_info);
 
-  setWidget(render_widget);
+  setWidget(data_->render_widget);
   setFeature(ads::CDockWidget::DockWidgetFocusable, true);
 
   // Add menu
@@ -138,15 +138,13 @@ void StudioRenderDockWidget::loadConfig(const YAML::Node& config)
 
 YAML::Node StudioRenderDockWidget::getConfig() const
 {
-  auto* render_widget = qobject_cast<tesseract_gui::RenderWidget*>(widget());
-
   // Config
   YAML::Node config_node;
   config_node["component_info"] = boost::uuids::to_string(data_->component_info->getNamespace());
-  config_node["engine_name"] = render_widget->getEngineName();
-  config_node["show_sky"] = render_widget->skyEnabled();
-  config_node["show_grid"] = render_widget->gridEnabled();
-  config_node["show_shadows"] = render_widget->shadowsEnabled();
+  config_node["engine_name"] = data_->render_widget->getEngineName();
+  config_node["show_sky"] = data_->render_widget->skyEnabled();
+  config_node["show_grid"] = data_->render_widget->gridEnabled();
+  config_node["show_shadows"] = data_->render_widget->shadowsEnabled();
   config_node["central_widget"] = assign_as_central_widget_;
 
   return config_node;

@@ -81,11 +81,11 @@ public:
    */
   virtual QString getName() const;
 
-  /**
-   * @brief Get the desired dock area
-   * @return The desired dock area
-   */
-  virtual ads::DockWidgetArea getDesiredDockArea() const;
+  //  /**
+  //   * @brief Get the desired dock area
+  //   * @return The desired dock area
+  //   */
+  //  virtual ads::DockWidgetArea getDesiredDockArea() const;
 
   /**
    * @brief Indicate if this widget should be assinged as the central widget
@@ -103,7 +103,7 @@ public Q_SLOTS:
   virtual void onInitialize();
 
 protected:
-  ads::DockWidgetArea desired_dock_area_{ ads::DockWidgetArea::LeftDockWidgetArea };
+  //  ads::DockWidgetArea desired_dock_area_{ ads::DockWidgetArea::LeftDockWidgetArea };
   bool assign_as_central_widget_{ false };
 };
 

@@ -1,5 +1,6 @@
 find_package(tesseract_common REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(qtadvanceddocking REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
@@ -37,8 +38,11 @@ target_include_directories(
 target_compile_definitions(${PROJECT_NAME}_studio_plugin_factory
                            PRIVATE TESSERACT_STUDIO_PLUGIN_PATH="${TESSERACT_STUDIO_PLUGIN_PATH}")
 
-qt5_wrap_cpp(STUDIO_PLUGINS_headers_MOC include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.h
-             include/tesseract_qt/studio/plugins/render/studio_render_dock_widget.h)
+qt5_wrap_cpp(
+  STUDIO_PLUGINS_headers_MOC
+  include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.h
+  include/tesseract_qt/studio/plugins/render/studio_render_dock_widget.h
+  include/tesseract_qt/studio/plugins/studio_environment_dock_widget.h)
 qt5_wrap_ui(STUDIO_PLUGINS_headers_UI include/tesseract_qt/studio/plugins/render/studio_render_config_dialog.ui)
 
 add_library(
@@ -47,6 +51,7 @@ add_library(
   ${STUDIO_PLUGINS_headers_UI}
   src/plugins/render/studio_render_config_dialog.cpp
   src/plugins/render/studio_render_dock_widget.cpp
+  src/plugins/studio_environment_dock_widget.cpp
   src/plugins/studio_plugin_factories.cpp)
 
 target_link_libraries(
@@ -57,7 +62,9 @@ target_link_libraries(
          Qt5::Widgets
          ${PROJECT_NAME}_studio_plugin_factory
          ${PROJECT_NAME}_common
-         ${PROJECT_NAME}_render_widgets)
+         ${PROJECT_NAME}_render_widgets
+         ${PROJECT_NAME}_scene_graph_widgets
+         ${PROJECT_NAME}_environment_widgets)
 target_include_directories(
   ${PROJECT_NAME}_studio_plugins PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                         "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
@@ -91,13 +98,9 @@ target_link_libraries(
           Qt5::Core
           Qt5::Gui
           Qt5::Widgets
+          ads::qtadvanceddocking
           ${PROJECT_NAME}_studio_plugin_factory
-          ${PROJECT_NAME}_common
-          ${PROJECT_NAME}_render_widgets
-          ${PROJECT_NAME}_environment_widgets
-          ${PROJECT_NAME}_joint_trajectory_widgets
-          ${PROJECT_NAME}_tool_path_widgets
-          ${PROJECT_NAME}_manipulation_widgets)
+          ${PROJECT_NAME}_common)
 target_include_directories(
   ${PROJECT_NAME}_studio PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                  "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")

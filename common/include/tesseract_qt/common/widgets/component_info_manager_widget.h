@@ -50,6 +50,9 @@ public:
   /** @brief Refresh the model by extracting data from ComponentInfoManager */
   void refresh();
 
+Q_SIGNALS:
+  void refreshed();
+
 private Q_SLOTS:
   void showContextMenu(const QPoint& pos);
 
