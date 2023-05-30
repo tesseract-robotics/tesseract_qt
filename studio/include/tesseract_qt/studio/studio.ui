@@ -94,6 +94,9 @@
    </property>
   </action>
   <action name="actionSave_Config">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save Config</string>
    </property>

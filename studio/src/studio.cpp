@@ -419,9 +419,17 @@ Studio::Studio(QWidget* parent)
   ui->actionRestore_State->setIcon(icons::getRestoreIcon());
   ui->actionCreate_Perspective->setIcon(icons::getLayoutIcon());
   ui->actionLoad_Plugins->setIcon(icons::getPluginIcon());
-  connect(ui->actionLoad_Config, &QAction::triggered, [this]() { data_->loadConfig(); });
+  connect(ui->actionLoad_Config, &QAction::triggered, [this]() {
+    data_->loadConfig();
+    if (!data_->config_filepath.empty() && !data_->settings_filepath.empty())
+      ui->actionSave_Config->setEnabled(true);
+  });
   connect(ui->actionSave_Config, &QAction::triggered, [this]() { data_->saveConfig(); });
-  connect(ui->actionSave_Config_As, &QAction::triggered, [this]() { data_->saveConfigAs(); });
+  connect(ui->actionSave_Config_As, &QAction::triggered, [this]() {
+    data_->saveConfigAs();
+    if (!data_->config_filepath.empty() && !data_->settings_filepath.empty())
+      ui->actionSave_Config->setEnabled(true);
+  });
   connect(ui->actionSave_State, &QAction::triggered, [this]() { data_->saveState(); });
   connect(ui->actionRestore_State, &QAction::triggered, [this]() { data_->restoreState(); });
   connect(ui->actionCreate_Perspective, &QAction::triggered, [this]() { data_->createPerspective(); });
