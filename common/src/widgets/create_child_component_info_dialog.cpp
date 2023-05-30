@@ -44,6 +44,7 @@ CreateChildComponentInfoDialog::CreateChildComponentInfoDialog(QWidget* parent)
 {
   ui->setupUi(this);
   ui->lineage_list_view->setModel(&data_->lineage_model);
+  setWindowTitle("Create Child Component Info");
 }
 
 CreateChildComponentInfoDialog::~CreateChildComponentInfoDialog() = default;

@@ -46,6 +46,7 @@ void CreateComponentInfoDialog::setSceneNames(const QStringList& scene_names)
 {
   ui->scene_name_combo_box->clear();
   ui->scene_name_combo_box->addItems(scene_names);
+  setWindowTitle("Create New Component Info");
 }
 
 std::shared_ptr<ComponentInfo> CreateComponentInfoDialog::getComponentInfo() const

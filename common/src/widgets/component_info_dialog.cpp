@@ -62,6 +62,7 @@ ComponentInfoDialog::ComponentInfoDialog(QWidget* parent)
   ui->component_info_manager_widget->enableEditMode(true);
   ui->component_info_combo_box->setModel(&data_->model);
 
+  setWindowTitle("Component Info Selector");
   connect(ui->component_info_manager_widget, SIGNAL(refreshed()), this, SLOT(onRefreshed()));
 
   ui->component_info_manager_widget->refresh();
@@ -82,6 +83,8 @@ std::shared_ptr<const ComponentInfo> ComponentInfoDialog::getComponentInfo() con
   auto uuid = boost::lexical_cast<boost::uuids::uuid>(list[1].toStdString());
   return ComponentInfoManager::get(uuid);
 }
+
+QStringListModel& ComponentInfoDialog::getModel() const { return data_->model; }
 
 void ComponentInfoDialog::onRefreshed()
 {

@@ -32,6 +32,8 @@ namespace Ui
 class ComponentInfoDialog;
 }
 
+class QStringListModel;
+
 namespace tesseract_gui
 {
 class ComponentInfo;
@@ -45,6 +47,7 @@ public:
   ~ComponentInfoDialog();
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
+  QStringListModel& getModel() const;
 
 private Q_SLOTS:
   void onRefreshed();

@@ -23,7 +23,7 @@
 #include <tesseract_qt/common/widgets/component_info_widget.h>
 #include "ui_component_info_widget.h"
 
-#include <tesseract_qt/common/widgets/component_info_manager_widget.h>
+#include <tesseract_qt/common/widgets/component_info_dialog.h>
 #include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/icon_utils.h>
@@ -39,26 +39,12 @@ namespace tesseract_gui
 {
 struct ComponentInfoWidget::Implementation
 {
-  QStringListModel model;
-  QDialog editor;
-
-  ComponentInfoManagerWidget* manager_widget;
+  ComponentInfoDialog editor;
 
   QString getKey(const ComponentInfo& component_info)
   {
     return QString("%1::%2").arg(component_info.getName().c_str(),
                                  boost::uuids::to_string(component_info.getNamespace()).c_str());
-  }
-
-  void updateModel()
-  {
-    auto component_infos = ComponentInfoManager::get();
-
-    QStringList list;
-    for (const auto& component_info : component_infos)
-      list.append(getKey(*component_info));
-
-    model.setStringList(list);
   }
 };
 
@@ -67,16 +53,7 @@ ComponentInfoWidget::ComponentInfoWidget(QWidget* parent)
 {
   ui->setupUi(this);
   ui->push_button->setIcon(icons::getPencilEditIcon());
-
-  data_->updateModel();
-  ui->combo_box->setModel(&data_->model);
-
-  data_->manager_widget = new ComponentInfoManagerWidget();
-  data_->manager_widget->enableEditMode(true);
-
-  auto layout = new QVBoxLayout();
-  layout->addWidget(data_->manager_widget);
-  data_->editor.setLayout(layout);
+  ui->combo_box->setModel(&data_->editor.getModel());
 
   connect(ui->push_button, SIGNAL(clicked()), this, SLOT(onShowEditor()));
 }
@@ -110,8 +87,16 @@ std::shared_ptr<const ComponentInfo> ComponentInfoWidget::getComponentInfo() con
 void ComponentInfoWidget::onShowEditor()
 {
   QString current_text = ui->combo_box->currentText();
-  data_->editor.exec();
-  data_->updateModel();
+  if (data_->editor.exec() == 1)
+  {
+    auto component_info = data_->editor.getComponentInfo();
+    if (component_info != nullptr)
+    {
+      ui->combo_box->setCurrentText(data_->getKey(*component_info));
+      return;
+    }
+  }
+
   if (!current_text.isEmpty())
   {
     QStringList list = current_text.split("::");

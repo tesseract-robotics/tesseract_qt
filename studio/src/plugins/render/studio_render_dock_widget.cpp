@@ -41,9 +41,6 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <QMenu>
-#include <QAction>
-
 namespace tesseract_gui
 {
 struct StudioRenderDockWidget::Implementation
@@ -54,28 +51,7 @@ struct StudioRenderDockWidget::Implementation
   std::unique_ptr<IgnSceneGraphRenderManager> scene_graph_manager;
   std::unique_ptr<IgnToolPathRenderManager> tool_path_manager;
   std::unique_ptr<IgnContactResultsRenderManager> contact_results_manager;
-
-  QMenu* file_menu{ nullptr };
-  QAction* open_action{ nullptr };
-
-  std::unique_ptr<LoadEnvironmentDialog> open_dialog;
-
-  void addMenu();
 };
-
-void StudioRenderDockWidget::Implementation::addMenu()
-{
-  open_dialog = std::make_unique<LoadEnvironmentDialog>(component_info);
-
-  // Add to open action to menu if it does not exist
-  file_menu = getStudioMenu("File");
-  QAction* action = getStudioMenuAction(file_menu, "Load URDF/SRDF");
-  if (action == nullptr)
-  {
-    file_menu->addSeparator();
-    open_action = file_menu->addAction(icons::getOpenIcon(), "Load URDF/SRDF", [this]() { open_dialog->show(); });
-  }
-}
 
 StudioRenderDockWidget::StudioRenderDockWidget(const QString& title, QWidget* parent)
   : StudioDockWidget(title, parent), data_(std::make_unique<Implementation>())
@@ -131,9 +107,6 @@ void StudioRenderDockWidget::loadConfig(const YAML::Node& config)
 
   setWidget(data_->render_widget);
   setFeature(ads::CDockWidget::DockWidgetFocusable, true);
-
-  // Add menu
-  data_->addMenu();
 }
 
 YAML::Node StudioRenderDockWidget::getConfig() const
@@ -176,9 +149,6 @@ void StudioRenderDockWidget::onInitialize()
 
     setWidget(data_->render_widget);
     setFeature(ads::CDockWidget::DockWidgetFocusable, true);
-
-    // Add menu
-    data_->addMenu();
   }
 }
 }  // namespace tesseract_gui
