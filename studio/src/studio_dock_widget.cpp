@@ -22,9 +22,7 @@
  */
 
 #include <tesseract_qt/studio/studio_dock_widget.h>
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/random_generator.hpp>
-#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
 StudioDockWidget::StudioDockWidget(const QString& title, QWidget* parent) : CDockWidget(title, parent) {}
@@ -32,7 +30,6 @@ StudioDockWidget::StudioDockWidget(const QString& title, QWidget* parent) : CDoc
 void StudioDockWidget::setName(const QString& name) { setObjectName(name); }
 QString StudioDockWidget::getName() const { return objectName(); }
 
-// ads::DockWidgetArea StudioDockWidget::getDesiredDockArea() const { return desired_dock_area_; }
 bool StudioDockWidget::assignAsCentralWidget() const { return assign_as_central_widget_; }
 
 bool StudioDockWidget::isInitialized() const { return (widget() != nullptr); }
