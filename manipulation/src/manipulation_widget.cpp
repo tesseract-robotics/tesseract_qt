@@ -55,9 +55,6 @@ ManipulationWidget::ManipulationWidget(std::shared_ptr<const ComponentInfo> pare
   data_->parent_component_info = std::move(parent_component_info);
   data_->use_parent_component_info = use_parent_component_info;
 
-  addStateHelper("default");
-  ui->state_widget->setModel(data_->state_models["default"]);
-
   ui->group_combo_box->setModel(&data_->group_names_model);
   ui->working_frame_combo_box->setModel(&data_->working_frames_model);
   ui->tcp_combo_box->setModel(&data_->tcp_names_model);
