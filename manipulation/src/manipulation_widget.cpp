@@ -613,7 +613,7 @@ void ManipulationWidget::onReset()
   if (it != gn_v.end())
     ui->group_combo_box->setCurrentText(current_group_name);
   else
-    ui->group_combo_box->setCurrentText("");
+    ui->group_combo_box->setCurrentText(group_names.first());
 
   onGroupNameChanged();
 
