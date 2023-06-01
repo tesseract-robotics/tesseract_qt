@@ -90,6 +90,107 @@ struct IgnContactResultsRenderManager::Implementation
       entity_managers.clear();
     }
   }
+
+  gz::rendering::MaterialPtr getRedMaterial(gz::rendering::Scene& scene)
+  {
+    auto ign_material = scene.Material("TesseractContactResultsRedColor");
+    if (ign_material == nullptr)
+    {
+      ign_material = scene.CreateMaterial("TesseractContactResultsRedColor");
+      ign_material->SetAmbient(1, 0, 0, 1);
+      ign_material->SetDiffuse(1, 0, 0, 1);
+      ign_material->SetSpecular(1, 0, 0, 1);
+    }
+    return ign_material;
+  }
+
+  gz::rendering::MaterialPtr getBlueMaterial(gz::rendering::Scene& scene)
+  {
+    auto ign_material = scene.Material("TesseractContactResultsBlueColor");
+    if (ign_material == nullptr)
+    {
+      ign_material = scene.CreateMaterial("TesseractContactResultsBlueColor");
+      ign_material->SetAmbient(0, 0, 1, 1);
+      ign_material->SetDiffuse(0, 0, 1, 1);
+      ign_material->SetSpecular(0, 0, 1, 1);
+    }
+    return ign_material;
+  }
+
+  gz::rendering::VisualPtr createArrow(const tesseract_collision::ContactResult& cr,
+                                       gz::rendering::Scene& scene,
+                                       Entity arrow_entity)
+  {
+    // Calculate Pose
+    Eigen::Vector3d direction = cr.nearest_points[1] - cr.nearest_points[0];
+    Eigen::Isometry3d pose{ Eigen::Isometry3d::Identity() };
+    pose.translation() = cr.nearest_points[0];
+    Eigen::Quaterniond q;
+    q.setFromTwoVectors(Eigen::Vector3d::UnitZ(), direction.normalized());
+    pose.linear() = q.toRotationMatrix();
+
+    const double length = direction.norm();
+    const double head_height = 0.025;
+    const double shaft_length = length - head_height;
+    const double shaft_diameter = 0.01;
+    const double point_diameter = 0.02;
+
+    // Create Head
+    Eigen::Isometry3d head_pose{ Eigen::Isometry3d::Identity() };
+    head_pose.translation() = Eigen::Vector3d(0, 0, length - (head_height / 2.0));
+    head_pose = pose * head_pose;
+
+    gz::rendering::VisualPtr ign_head = scene.CreateVisual();
+    ign_head->SetLocalPose(gz::math::eigen3::convert(head_pose));
+    ign_head->AddGeometry(scene.CreateCone());
+    ign_head->SetLocalScale(head_height, head_height, head_height);
+    ign_head->SetInheritScale(false);
+    ign_head->SetMaterial(getRedMaterial(scene));
+
+    // Create Shaft
+    Eigen::Isometry3d shaft_pose{ Eigen::Isometry3d::Identity() };
+    shaft_pose.translation() = Eigen::Vector3d(0, 0, shaft_length / 2.0);
+    shaft_pose = pose * shaft_pose;
+
+    gz::rendering::VisualPtr ign_shaft = scene.CreateVisual();
+    ign_shaft->SetLocalPose(gz::math::eigen3::convert(shaft_pose));
+    ign_shaft->AddGeometry(scene.CreateCylinder());
+    ign_shaft->SetLocalScale(shaft_diameter, shaft_diameter, shaft_length);
+    ign_shaft->SetInheritScale(false);
+    ign_shaft->SetMaterial(getRedMaterial(scene));
+
+    // Create contact point 0
+    gz::rendering::VisualPtr ign_point0 = scene.CreateVisual();
+    Eigen::Isometry3d point0{ Eigen::Isometry3d::Identity() };
+    point0.translation() = cr.nearest_points[0];
+
+    ign_point0->SetLocalPose(gz::math::eigen3::convert(point0));
+    ign_point0->AddGeometry(scene.CreateSphere());
+    ign_point0->SetLocalScale(point_diameter, point_diameter, point_diameter);
+    ign_point0->SetInheritScale(false);
+    ign_point0->SetMaterial(getBlueMaterial(scene));
+
+    // Create contact point 1
+    gz::rendering::VisualPtr ign_point1 = scene.CreateVisual();
+    Eigen::Isometry3d point1{ Eigen::Isometry3d::Identity() };
+    point1.translation() = cr.nearest_points[1];
+
+    ign_point1->SetLocalPose(gz::math::eigen3::convert(point1));
+    ign_point1->AddGeometry(scene.CreateSphere());
+    ign_point1->SetLocalScale(point_diameter, point_diameter, point_diameter);
+    ign_point1->SetInheritScale(false);
+    ign_point1->SetMaterial(getBlueMaterial(scene));
+
+    gz::rendering::VisualPtr ign_contact_result = scene.CreateVisual(arrow_entity.id, arrow_entity.unique_name);
+    ign_contact_result->AddChild(ign_head);
+    ign_contact_result->AddChild(ign_shaft);
+    ign_contact_result->AddChild(ign_point0);
+    ign_contact_result->AddChild(ign_point1);
+    ign_contact_result->SetUserData(USER_VISIBILITY, true);
+    ign_contact_result->SetVisible(false);
+
+    return ign_contact_result;
+  }
 };
 
 IgnContactResultsRenderManager::IgnContactResultsRenderManager(std::shared_ptr<const ComponentInfo> component_info)
@@ -163,34 +264,11 @@ void IgnContactResultsRenderManager::render()
         {
           const auto& cr = crt();
 
-          Eigen::Vector3d direction = cr.nearest_points[1] - cr.nearest_points[0];
-          Eigen::Isometry3d pose{ Eigen::Isometry3d::Identity() };
-          pose.translation() = cr.nearest_points[0];
-          Eigen::Quaterniond q;
-          q.setFromTwoVectors(Eigen::Vector3d::UnitZ(), direction.normalized());
-          pose.linear() = q.toRotationMatrix();
-
           const std::string arrow_key_name = boost::uuids::to_string(crt.getUUID());
           auto arrow_entity =
               entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name);
-          gz::rendering::ArrowVisualPtr arrow = scene->CreateArrowVisual(arrow_entity.id, arrow_entity.unique_name);
 
-          auto ign_material = scene->Material("TesseractContactResultsColor");
-          if (ign_material == nullptr)
-          {
-            ign_material = scene->CreateMaterial("TesseractContactResultsColor");
-            ign_material->SetAmbient(1, 0, 0, 1);
-            ign_material->SetDiffuse(1, 0, 0, 1);
-            ign_material->SetSpecular(1, 0, 0, 1);
-          }
-
-          arrow->SetMaterial(ign_material);
-          arrow->SetLocalPose(gz::math::eigen3::convert(pose));
-          arrow->SetInheritScale(false);
-          arrow->SetLocalScale(0.1, 0.1, direction.norm());
-          arrow->SetUserData(USER_VISIBILITY, true);
-          arrow->SetVisible(false);
-          ign_contact_results->AddChild(arrow);
+          ign_contact_results->AddChild(data_->createArrow(cr, *scene, arrow_entity));
         }
 
         scene->RootVisual()->AddChild(ign_contact_results);
@@ -209,35 +287,12 @@ void IgnContactResultsRenderManager::render()
           for (const auto& crt : pair.second())
           {
             const auto& cr = crt();
-            Eigen::Vector3d direction = cr.nearest_points[1] - cr.nearest_points[0];
-            Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
-            pose.translation() = cr.nearest_points[0];
-            Eigen::Quaterniond q;
-            q.setFromTwoVectors(Eigen::Vector3d::UnitZ(), direction.normalized());
-            pose.linear() = q.toRotationMatrix();
 
             std::string arrow_key_name = boost::uuids::to_string(crt.getUUID());
             auto arrow_entity =
                 entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name);
-            gz::rendering::ArrowVisualPtr arrow = scene->CreateArrowVisual(arrow_entity.id, arrow_entity.unique_name);
 
-            auto ign_material = scene->Material("TesseractContactResultsColor");
-            if (ign_material == nullptr)
-            {
-              ign_material = scene->CreateMaterial("TesseractContactResultsColor");
-              ign_material->SetAmbient(1, 0, 0, 1);
-              ign_material->SetDiffuse(1, 0, 0, 1);
-              ign_material->SetSpecular(1, 0, 0, 1);
-            }
-
-            arrow->SetMaterial(ign_material);
-            arrow->SetLocalPose(gz::math::eigen3::convert(pose));
-            arrow->SetInheritScale(false);
-            arrow->SetLocalScale(0.1, 0.1, direction.norm());
-            arrow->SetUserData(USER_VISIBILITY, true);
-            arrow->SetVisible(false);
-
-            ign_contact_results->AddChild(arrow);
+            ign_contact_results->AddChild(data_->createArrow(cr, *scene, arrow_entity));
           }
 
           scene->RootVisual()->AddChild(ign_contact_results);
