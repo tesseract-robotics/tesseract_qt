@@ -21,6 +21,7 @@
 #include <gz/common/MeshManager.hh>
 #include <gz/rendering/WireBox.hh>
 #include <gz/rendering/AxisVisual.hh>
+#include <gz/rendering/Capsule.hh>
 
 const std::string USER_VISIBILITY = "user_visibility";
 const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
@@ -345,7 +346,8 @@ gz::rendering::VisualPtr loadLinkGeometry(gz::rendering::Scene& scene,
       sphere->AddGeometry(scene.CreateSphere());
 
       const auto& shape = static_cast<const tesseract_geometry::Sphere&>(geometry);
-      sphere->Scale(shape.getRadius() * scale.x(), shape.getRadius() * scale.y(), shape.getRadius() * scale.z());
+      const double diameter = 2.0 * shape.getRadius();
+      sphere->Scale(diameter * scale.x(), diameter * scale.y(), diameter * scale.z());
       sphere->SetMaterial(ign_material);
       return sphere;
     }
@@ -370,13 +372,23 @@ gz::rendering::VisualPtr loadLinkGeometry(gz::rendering::Scene& scene,
       cone->AddGeometry(scene.CreateCone());
 
       const auto& shape = static_cast<const tesseract_geometry::Cone&>(geometry);
-      cone->Scale(shape.getRadius() * scale.x(), shape.getRadius() * scale.y(), shape.getLength() * scale.z());
+      const double diameter = 2.0 * shape.getRadius();
+      cone->Scale(diameter * scale.x(), diameter * scale.y(), shape.getLength() * scale.z());
       cone->SetMaterial(ign_material);
       return cone;
     }
     case tesseract_geometry::GeometryType::CAPSULE:
     {
-      return nullptr;
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      gz::rendering::VisualPtr capsule = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      capsule->SetLocalPose(gz::math::eigen3::convert(local_pose));
+      capsule->AddGeometry(scene.CreateCapsule());
+
+      const auto& shape = static_cast<const tesseract_geometry::Capsule&>(geometry);
+      const double diameter = 2.0 * shape.getRadius();
+      capsule->Scale(diameter * scale.x(), diameter * scale.y(), shape.getLength() * scale.z());
+      capsule->SetMaterial(ign_material);
+      return capsule;
     }
     case tesseract_geometry::GeometryType::MESH:
     {

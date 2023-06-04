@@ -26,6 +26,12 @@
 #include <boost/algorithm/string.hpp>
 #include <graphviz/gvc.h>
 
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QStatusBar>
+#include <QApplication>
+
 namespace tesseract_gui
 {
 std::vector<std::string> getNamespaces(const std::string& namespace_str, const std::string& separator)
@@ -64,6 +70,66 @@ bool saveDotImage(const tesseract_common::fs::path& dot_path,
   gvFreeLayout(gvc, g);
   agclose(g);
   return (gvFreeContext(gvc));
+}
+
+std::string getEnvNamespaceFromTopic(const std::string& topic)
+{
+  std::vector<std::string> tokens;
+  boost::split(tokens, topic, boost::is_any_of("/"), boost::token_compress_on);
+  tokens.erase(std::remove_if(tokens.begin(), tokens.end(), [](const std::string& token) { return token.empty(); }),
+               tokens.end());
+  if (!tokens.empty())
+    return tokens.at(0);
+
+  return std::string();
+}
+
+QMainWindow* getMainWindow()
+{
+  QWidgetList widgets = qApp->allWidgets();
+  for (auto* widget : widgets)
+  {
+    if (widget->windowTitle() == QApplication::applicationName())
+      return qobject_cast<QMainWindow*>(widget);
+  }
+  return nullptr;
+}
+
+QMenuBar* getMainWindowMenuBar()
+{
+  QMainWindow* main_window = getMainWindow();
+  return main_window->menuBar();
+}
+
+QStatusBar* getMainWindowStatusBar()
+{
+  QMainWindow* main_window = getMainWindow();
+  return main_window->statusBar();
+}
+
+QMenu* getMainWindowMenu(const QString& text)
+{
+  QMenuBar* menu_bar = getMainWindowMenuBar();
+  QList<QMenu*> menus = menu_bar->findChildren<QMenu*>();
+  for (auto* menu : menus)
+  {
+    if (menu->title() == text)
+      return menu;
+  }
+
+  return nullptr;
+}
+
+QAction* getMainWindowMenuAction(QMenu* menu, const QString& text)
+{
+  QList<QAction*> actions = menu->actions();
+  for (auto& action : actions)
+  {
+    if (action->text() == text)
+      return action;
+  }
+
+  return nullptr;
 }
 
 }  // namespace tesseract_gui

@@ -22,7 +22,6 @@
  */
 
 #include <tesseract_qt/studio/plugins/studio_environment_dock_widget.h>
-#include <tesseract_qt/studio/studio_plugin_utils.h>
 
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>

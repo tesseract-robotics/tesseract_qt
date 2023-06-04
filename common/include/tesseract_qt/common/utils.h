@@ -30,6 +30,13 @@
 #include <tesseract_common/allowed_collision_matrix.h>
 #include <tesseract_collision/core/discrete_contact_manager.h>
 
+class QMainWindow;
+class QMenuBar;
+class QMenu;
+class QStatusBar;
+class QAction;
+class QString;
+
 namespace tesseract_gui
 {
 /**
@@ -60,6 +67,44 @@ bool saveDotImage(const tesseract_common::fs::path& dot_path,
                   const tesseract_common::fs::path& save_path,
                   std::string format = "ps");
 
+/**
+ * @brief Get environment namespace from topic string
+ * @param topic The topic
+ * @return The environment namespace
+ */
+std::string getEnvNamespaceFromTopic(const std::string& topic);
+
+/**
+ * @brief Get the main window
+ * @return The main window
+ */
+QMainWindow* getMainWindow();
+
+/**
+ * @brief Get the MainWindow menu bar
+ * @return The studio menu bar
+ */
+QMenuBar* getMainWindowMenuBar();
+
+/**
+ * @brief Get MainWindow status bar
+ * @return The status bar
+ */
+QStatusBar* getMainWindowStatusBar();
+
+/**
+ * @brief Find menu given text
+ * @param text The menue text
+ * @return If not found nullptr, otherwise menu item
+ */
+QMenu* getMainWindowMenu(const QString& text);
+
+/**
+ * @brief Find menu action given text
+ * @param text The menue action text
+ * @return If not found nullptr, otherwise menu action item
+ */
+QAction* getMainWindowMenuAction(QMenu* menu, const QString& text);
 }  // namespace tesseract_gui
 
 #endif  // TESSERACT_QT_COMMON_UTILS_H

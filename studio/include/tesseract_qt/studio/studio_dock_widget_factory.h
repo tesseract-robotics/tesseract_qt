@@ -57,6 +57,13 @@ protected:
   friend class PluginLoader;
 };
 
+template <typename StudioDockWidgetType>
+class StudioDockWidgetFactoryImpl : public StudioDockWidgetFactory
+{
+public:
+  StudioDockWidget* create(const QString& name) const override { return new StudioDockWidgetType(name); }
+};
+
 }  // namespace tesseract_gui
 
 #endif  // TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_FACTORY_H

@@ -24,6 +24,7 @@
 #define TESSERACT_QT_COMMON_SCENE_GRAPH_RENDER_MANAGER_H
 
 #include <memory>
+#include <mutex>
 #include <QObject>
 
 namespace tesseract_gui::events
@@ -49,6 +50,7 @@ public:
 protected:
   std::shared_ptr<const ComponentInfo> component_info_;
   std::vector<std::unique_ptr<events::ComponentEvent>> events_;
+  std::mutex mutex_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
