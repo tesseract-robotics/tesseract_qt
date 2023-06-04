@@ -795,6 +795,11 @@ QToolButton#qt_toolbar_ext_button {
   image: url(":/qss_icons/light/rc/arrow_right.png");
 }
 
+QToolBar QLabel {
+  /* Fixes Spyder #9120, #9121 */
+  background: transparent;
+}
+
 /* QAbstractSpinBox -------------------------------------------------------
 
 --------------------------------------------------------------------------- */

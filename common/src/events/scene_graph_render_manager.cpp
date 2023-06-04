@@ -58,6 +58,7 @@ SceneGraphRenderManager::~SceneGraphRenderManager() = default;
 
 bool SceneGraphRenderManager::eventFilter(QObject* obj, QEvent* event)
 {
+  std::scoped_lock lock(mutex_);
   if (event->type() == events::SceneGraphClear::kType)
   {
     assert(dynamic_cast<events::SceneGraphClear*>(event) != nullptr);

@@ -45,6 +45,7 @@ ContactResultsRenderManager::~ContactResultsRenderManager() = default;
 
 bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
 {
+  std::scoped_lock lock(mutex_);
   if (event->type() == events::ContactResultsClear::kType)
   {
     assert(dynamic_cast<events::ContactResultsClear*>(event) != nullptr);

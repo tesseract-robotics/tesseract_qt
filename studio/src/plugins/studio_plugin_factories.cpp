@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/studio/plugins/studio_plugin_factories.h>
+#include <tesseract_qt/studio/studio_dock_widget_factory.h>
 #include <tesseract_qt/studio/plugins/manipulation/studio_manipulation_dock_widget.h>
 #include <tesseract_qt/studio/plugins/render/studio_render_dock_widget.h>
 #include <tesseract_qt/studio/plugins/studio_environment_dock_widget.h>

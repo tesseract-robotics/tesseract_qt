@@ -23,7 +23,6 @@
 
 #include <tesseract_qt/studio/plugins/render/studio_render_dock_widget.h>
 #include <tesseract_qt/studio/plugins/render/studio_render_config_dialog.h>
-#include <tesseract_qt/studio/studio_plugin_utils.h>
 
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>

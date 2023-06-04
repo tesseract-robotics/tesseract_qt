@@ -17,12 +17,8 @@ set(TESSERACT_STUDIO_PLUGINS "")
 
 qt5_wrap_cpp(STUDIO_PLUGIN_FACTORY_headers_MOC include/tesseract_qt/studio/studio_dock_widget.h)
 
-add_library(
-  ${PROJECT_NAME}_studio_plugin_factory
-  ${STUDIO_PLUGIN_FACTORY_headers_MOC}
-  src/studio_dock_widget_factory.cpp
-  src/studio_dock_widget.cpp
-  src/studio_plugin_utils.cpp)
+add_library(${PROJECT_NAME}_studio_plugin_factory ${STUDIO_PLUGIN_FACTORY_headers_MOC}
+                                                  src/studio_dock_widget_factory.cpp src/studio_dock_widget.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_studio_plugin_factory
