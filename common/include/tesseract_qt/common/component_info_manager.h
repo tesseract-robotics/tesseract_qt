@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <vector>
+#include <mutex>
 #include <boost/uuid/uuid.hpp>
 #include <yaml-cpp/yaml.h>
 
@@ -138,6 +139,9 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
+  static std::shared_ptr<ComponentInfoManager> singleton;
+  static std::once_flag init_instance_flag;
+  static void initSingleton();
   static std::shared_ptr<ComponentInfoManager> instance();
 
   void loadConfigHelper(const YAML::Node& config);

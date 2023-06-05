@@ -43,6 +43,10 @@ ComponentInfoManager::ComponentInfoManager() : data_(std::make_unique<Implementa
 
 ComponentInfoManager::~ComponentInfoManager() = default;
 
+std::shared_ptr<ComponentInfoManager> ComponentInfoManager::singleton = nullptr;
+std::once_flag ComponentInfoManager::init_instance_flag;
+void ComponentInfoManager::initSingleton() { singleton = std::make_shared<ComponentInfoManager>(); }
+
 void ComponentInfoManager::loadConfig(const YAML::Node& config)
 {
   std::shared_ptr<ComponentInfoManager> obj = instance();
@@ -153,10 +157,7 @@ bool ComponentInfoManager::empty()
 
 std::shared_ptr<ComponentInfoManager> ComponentInfoManager::instance()
 {
-  static std::shared_ptr<ComponentInfoManager> singleton = nullptr;
-  if (singleton == nullptr)
-    singleton = std::make_shared<ComponentInfoManager>();
-
+  std::call_once(init_instance_flag, &ComponentInfoManager::initSingleton);
   return singleton;
 }
 
