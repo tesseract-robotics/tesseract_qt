@@ -20,38 +20,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/common/rgba_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/type_standard_item.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui
 {
-RGBAStandardItem::RGBAStandardItem(const Eigen::Vector4d& rgba)
-  : QStandardItem(icons::getRGBIcon(), "Color"), rgba(rgba)
+TypeStandardItem::TypeStandardItem(int type) : QStandardItem(icons::getUnknownIcon(), "UserType"), type_(type) {}
+
+TypeStandardItem::TypeStandardItem(const QString& text, int type)
+  : QStandardItem(icons::getUnknownIcon(), text), type_(type)
 {
-  ctor();
 }
 
-RGBAStandardItem::RGBAStandardItem(const QString& text, const Eigen::Vector4d& rgba)
-  : QStandardItem(icons::getRGBIcon(), text), rgba(rgba)
+TypeStandardItem::TypeStandardItem(const QIcon& icon, const QString& text, int type)
+  : QStandardItem(icon, text), type_(type)
 {
-  ctor();
 }
 
-RGBAStandardItem::RGBAStandardItem(const QIcon& icon, const QString& text, const Eigen::Vector4d& rgba)
-  : QStandardItem(icon, text), rgba(rgba)
-{
-  ctor();
-}
+int TypeStandardItem::type() const { return type_; }
 
-int RGBAStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM); }
-
-void RGBAStandardItem::ctor()
-{
-  appendRow(createStandardItemFloat("r", rgba(0)));
-  appendRow(createStandardItemFloat("g", rgba(1)));
-  appendRow(createStandardItemFloat("b", rgba(2)));
-  appendRow(createStandardItemFloat("a", rgba(3)));
-}
 }  // namespace tesseract_gui

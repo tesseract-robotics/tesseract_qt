@@ -24,9 +24,9 @@
 #include <tesseract_qt/scene_graph/models/inertial_standard_item.h>
 #include <tesseract_qt/scene_graph/models/visual_standard_item.h>
 #include <tesseract_qt/scene_graph/models/collision_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/common/type_standard_item.h>
+#include <tesseract_qt/common/models/type_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

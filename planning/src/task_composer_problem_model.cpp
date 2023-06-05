@@ -22,9 +22,9 @@
  */
 #include <tesseract_qt/planning/task_composer_problem_model.h>
 #include <tesseract_qt/planning/task_composer_problem_standard_item.h>
-#include <tesseract_qt/common/namespace_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/models/namespace_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/utils.h>
 

@@ -23,8 +23,8 @@
 
 #include <tesseract_qt/acm/widgets/allowed_collision_matrix_widget.h>
 #include <tesseract_qt/acm/models/allowed_collision_matrix_model.h>
+#include <tesseract_qt/common/widgets/tree_view.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_qt/common/tree_view.h>
 
 #include <QVBoxLayout>
 

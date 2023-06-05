@@ -162,7 +162,7 @@
   <customwidget>
    <class>tesseract_gui::ComboBox</class>
    <extends>QComboBox</extends>
-   <header>tesseract_qt/common/combo_box.h</header>
+   <header>tesseract_qt/common/widgets/combo_box.h</header>
   </customwidget>
   <customwidget>
    <class>tesseract_gui::JointStateSliderWidget</class>

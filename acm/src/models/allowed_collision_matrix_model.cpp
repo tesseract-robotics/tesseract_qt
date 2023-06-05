@@ -24,7 +24,7 @@
 #include <tesseract_qt/acm/models/allowed_collision_matrix_model.h>
 #include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
-#include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/link_visibility.h>

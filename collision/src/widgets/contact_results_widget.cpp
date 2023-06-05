@@ -23,8 +23,8 @@
 
 #include <tesseract_qt/collision/widgets/contact_results_widget.h>
 #include <tesseract_qt/collision/models/contact_results_model.h>
+#include <tesseract_qt/common/widgets/tree_view.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_qt/common/tree_view.h>
 
 #include <QVBoxLayout>
 

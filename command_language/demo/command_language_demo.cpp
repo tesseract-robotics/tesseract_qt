@@ -30,9 +30,9 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/command_language/widgets/composite_instruction_widget.h>
 #include <tesseract_qt/common/events/command_language_events.h>
+#include <tesseract_qt/common/widgets/tree_view.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
-#include <tesseract_qt/common/tree_view.h>
 
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/cartesian_waypoint.h>

@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/environment/models/commands/add_kinematics_information_command_standard_item.h>
 #include <tesseract_qt/kinematic_groups/models/kinematics_info_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

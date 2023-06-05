@@ -20,17 +20,38 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/common/namespace_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/rgba_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui
 {
-NamespaceStandardItem::NamespaceStandardItem() : QStandardItem("Namespace") {}
+RGBAStandardItem::RGBAStandardItem(const Eigen::Vector4d& rgba)
+  : QStandardItem(icons::getRGBIcon(), "Color"), rgba(rgba)
+{
+  ctor();
+}
 
-NamespaceStandardItem::NamespaceStandardItem(const QString& text) : QStandardItem(text) {}
+RGBAStandardItem::RGBAStandardItem(const QString& text, const Eigen::Vector4d& rgba)
+  : QStandardItem(icons::getRGBIcon(), text), rgba(rgba)
+{
+  ctor();
+}
 
-NamespaceStandardItem::NamespaceStandardItem(const QIcon& icon, const QString& text) : QStandardItem(icon, text) {}
+RGBAStandardItem::RGBAStandardItem(const QIcon& icon, const QString& text, const Eigen::Vector4d& rgba)
+  : QStandardItem(icon, text), rgba(rgba)
+{
+  ctor();
+}
 
-int NamespaceStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_NAMESPACE); }
+int RGBAStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_TRANSFORM); }
 
+void RGBAStandardItem::ctor()
+{
+  appendRow(createStandardItemFloat("r", rgba(0)));
+  appendRow(createStandardItemFloat("g", rgba(1)));
+  appendRow(createStandardItemFloat("b", rgba(2)));
+  appendRow(createStandardItemFloat("a", rgba(3)));
+}
 }  // namespace tesseract_gui

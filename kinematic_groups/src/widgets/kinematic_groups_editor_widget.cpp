@@ -24,7 +24,7 @@
 #include <tesseract_qt/kinematic_groups/models/kinematic_groups_model.h>
 #include <tesseract_qt/common/events/kinematic_groups_events.h>
 #include <tesseract_qt/common/events/environment_events.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>

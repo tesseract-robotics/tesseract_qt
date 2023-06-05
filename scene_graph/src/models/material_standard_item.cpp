@@ -21,9 +21,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/scene_graph/models/material_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/rgba_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/rgba_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

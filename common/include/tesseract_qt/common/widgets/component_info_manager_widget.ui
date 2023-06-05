@@ -50,7 +50,7 @@
   <customwidget>
    <class>tesseract_gui::TreeView</class>
    <extends>QTreeView</extends>
-   <header>tesseract_qt/common/tree_view.h</header>
+   <header>tesseract_qt/common/widgets/tree_view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

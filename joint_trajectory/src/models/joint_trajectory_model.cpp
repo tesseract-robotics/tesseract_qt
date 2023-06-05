@@ -26,13 +26,13 @@
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_state_item.h>
 
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_qt/common/models/namespace_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
-#include <tesseract_qt/common/namespace_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/common/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/utils.h>
 

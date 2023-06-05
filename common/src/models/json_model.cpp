@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include <tesseract_qt/common/json_model.h>
+#include <tesseract_qt/common/models/json_model.h>
 #include <QDebug>
 #include <QFile>
 #include <QFont>

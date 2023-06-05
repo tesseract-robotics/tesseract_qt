@@ -23,8 +23,8 @@
 
 #include <tesseract_qt/command_language/widgets/composite_instruction_widget.h>
 #include <tesseract_qt/command_language/models/composite_instruction_model.h>
+#include <tesseract_qt/common/widgets/tree_view.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_qt/common/tree_view.h>
 
 #include <QVBoxLayout>
 

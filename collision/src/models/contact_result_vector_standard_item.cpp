@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/collision/models/contact_result_vector_standard_item.h>
 #include <tesseract_qt/collision/models/contact_result_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

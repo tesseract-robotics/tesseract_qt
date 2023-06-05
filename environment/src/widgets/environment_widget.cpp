@@ -23,9 +23,9 @@
 #include <tesseract_qt/environment/widgets/environment_widget.h>
 #include "ui_environment_widget.h"
 
+#include <tesseract_qt/common/widgets/image_viewer_widget.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/utils.h>
-#include <tesseract_qt/common/image_viewer_widget.h>
 
 namespace tesseract_gui
 {

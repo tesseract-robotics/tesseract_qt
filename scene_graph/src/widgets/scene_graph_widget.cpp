@@ -23,8 +23,8 @@
 
 #include <tesseract_qt/scene_graph/widgets/scene_graph_widget.h>
 #include <tesseract_qt/scene_graph/models/scene_graph_model.h>
+#include <tesseract_qt/common/widgets/tree_view.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_qt/common/tree_view.h>
 
 #include <QVBoxLayout>
 

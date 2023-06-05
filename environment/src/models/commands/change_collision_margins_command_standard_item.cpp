@@ -21,9 +21,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/environment/models/commands/change_collision_margins_command_standard_item.h>
-#include <tesseract_qt/common/collision_margin_data_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/collision_margin_data_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

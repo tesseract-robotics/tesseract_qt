@@ -24,11 +24,11 @@
 #include <tesseract_qt/command_language/models/joint_waypoint_standard_item.h>
 #include <tesseract_qt/command_language/models/state_waypoint_standard_item.h>
 #include <tesseract_qt/command_language/models/null_waypoint_standard_item.h>
-#include <tesseract_qt/common/transform_standard_item.h>
-#include <tesseract_qt/common/vector_double_standard_item.h>
-#include <tesseract_qt/common/joint_state_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/models/transform_standard_item.h>
+#include <tesseract_qt/common/models/vector_double_standard_item.h>
+#include <tesseract_qt/common/models/joint_state_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_command_language/poly/cartesian_waypoint_poly.h>

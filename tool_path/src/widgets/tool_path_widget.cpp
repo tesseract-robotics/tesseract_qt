@@ -26,13 +26,13 @@
 #include <tesseract_qt/tool_path/models/tool_path_model.h>
 #include <tesseract_qt/tool_path/models/tool_path_selection_model.h>
 #include <tesseract_qt/tool_path/models/tool_path_utils.h>
-#include <tesseract_qt/common/tool_path_standard_item.h>
+#include <tesseract_qt/common/models/tool_path_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/widgets/tree_view.h>
+#include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_qt/common/tree_view.h>
-#include <tesseract_qt/common/standard_item_type.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
-#include <tesseract_qt/common/events/tool_path_events.h>
 
 #include <tesseract_environment/environment.h>
 
