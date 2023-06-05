@@ -27,7 +27,6 @@
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/component_info.h>
 #include <shared_mutex>
-#include <mutex>
 
 namespace tesseract_gui
 {
@@ -41,6 +40,10 @@ struct EnvironmentManager::Implementation
 EnvironmentManager::EnvironmentManager() : data_(std::make_unique<Implementation>()) {}
 
 EnvironmentManager::~EnvironmentManager() = default;
+
+std::shared_ptr<EnvironmentManager> EnvironmentManager::singleton = nullptr;
+std::once_flag EnvironmentManager::init_instance_flag;
+void EnvironmentManager::initSingleton() { singleton = std::make_shared<EnvironmentManager>(); }
 
 void EnvironmentManager::set(std::shared_ptr<EnvironmentWrapper> env, bool set_default)
 {
@@ -93,10 +96,7 @@ void EnvironmentManager::remove(const std::shared_ptr<const ComponentInfo>& comp
 
 std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
 {
-  static std::shared_ptr<EnvironmentManager> singleton = nullptr;
-  if (singleton == nullptr)
-    singleton = std::make_shared<EnvironmentManager>();
-
+  std::call_once(init_instance_flag, &EnvironmentManager::initSingleton);
   return singleton;
 }
 

@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <mutex>
 
 namespace tesseract_gui
 {
@@ -94,7 +95,11 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
+  static std::shared_ptr<EnvironmentManager> singleton;
+  static std::once_flag init_instance_flag;
+  static void initSingleton();
   static std::shared_ptr<EnvironmentManager> instance();
+
   void setHelper(std::shared_ptr<EnvironmentWrapper> env, bool set_default);
   std::shared_ptr<EnvironmentWrapper> getHelper(const std::shared_ptr<const ComponentInfo>& component_info) const;
   std::shared_ptr<EnvironmentWrapper> findHelper(const std::shared_ptr<const ComponentInfo>& component_info) const;
