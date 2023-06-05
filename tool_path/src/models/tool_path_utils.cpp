@@ -22,10 +22,10 @@
  */
 
 #include <tesseract_qt/tool_path/models/tool_path_utils.h>
-#include <tesseract_qt/common/transform_standard_item.h>
-#include <tesseract_qt/common/tool_path_segment_standard_item.h>
-#include <tesseract_qt/common/tool_path_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/transform_standard_item.h>
+#include <tesseract_qt/common/models/tool_path_segment_standard_item.h>
+#include <tesseract_qt/common/models/tool_path_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/events/tool_path_events.h>
 
 #include <tesseract_common/yaml_utils.h>

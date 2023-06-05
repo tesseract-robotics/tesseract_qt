@@ -43,7 +43,7 @@
 #include <tesseract_qt/environment/models/commands/replace_joint_command_standard_item.h>
 #include <tesseract_qt/environment/models/commands/set_active_continuous_contact_manager_command_standard_item.h>
 #include <tesseract_qt/environment/models/commands/set_active_discrete_contact_manager_command_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

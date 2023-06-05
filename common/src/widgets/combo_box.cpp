@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/common/combo_box.h>
+#include <tesseract_qt/common/widgets/combo_box.h>
 
 namespace tesseract_gui
 {

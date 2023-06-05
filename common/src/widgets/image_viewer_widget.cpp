@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/common/image_viewer_widget.h>
+#include <tesseract_qt/common/widgets/image_viewer_widget.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include "ui_image_viewer_widget.h"
 

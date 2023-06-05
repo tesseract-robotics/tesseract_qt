@@ -26,9 +26,9 @@
 #include <tesseract_qt/kinematic_groups/models/link_group_standard_item.h>
 #include <tesseract_qt/kinematic_groups/models/group_joint_states_standard_item.h>
 #include <tesseract_qt/kinematic_groups/models/group_tcps_standard_item.h>
-#include <tesseract_qt/common/kinematics_plugin_info_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/kinematics_plugin_info_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

@@ -25,7 +25,7 @@
 
 #include <tesseract_qt/common/events/group_joint_states_events.h>
 #include <tesseract_qt/common/events/environment_events.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 

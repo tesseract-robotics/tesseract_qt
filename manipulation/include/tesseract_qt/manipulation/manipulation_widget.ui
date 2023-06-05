@@ -242,7 +242,7 @@
   <customwidget>
    <class>tesseract_gui::CartesianEditorWidget</class>
    <extends>QWidget</extends>
-   <header>tesseract_qt/common/cartesian_editor_widget.h</header>
+   <header>tesseract_qt/common/widgets/cartesian_editor_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

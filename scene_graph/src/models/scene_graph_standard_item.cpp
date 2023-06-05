@@ -23,8 +23,8 @@
 #include <tesseract_qt/scene_graph/models/scene_graph_standard_item.h>
 #include <tesseract_qt/scene_graph/models/link_standard_item.h>
 #include <tesseract_qt/scene_graph/models/joint_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_scene_graph/graph.h>
 

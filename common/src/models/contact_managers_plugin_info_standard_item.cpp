@@ -20,41 +20,44 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/common/kinematics_plugin_info_standard_item.h>
-#include <tesseract_qt/common/plugin_info_container_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/contact_managers_plugin_info_standard_item.h>
+#include <tesseract_qt/common/models/plugin_info_container_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui
 {
-KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(tesseract_common::KinematicsPluginInfo plugin_info)
-  : QStandardItem(icons::getCubeIcon(), "Kinematics Plugin Info"), plugin_info(std::move(plugin_info))
+ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
+    tesseract_common::ContactManagersPluginInfo plugin_info)
+  : QStandardItem(icons::getCubeIcon(), "Contact Managers Plugin Info"), plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
-KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(const QString& text,
-                                                                   tesseract_common::KinematicsPluginInfo plugin_info)
+ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
+    const QString& text,
+    tesseract_common::ContactManagersPluginInfo plugin_info)
   : QStandardItem(icons::getCubeIcon(), text), plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
-KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(const QIcon& icon,
-                                                                   const QString& text,
-                                                                   tesseract_common::KinematicsPluginInfo plugin_info)
+ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    tesseract_common::ContactManagersPluginInfo plugin_info)
   : QStandardItem(icon, text), plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
-int KinematicsPluginInfoStandardItem::type() const
+int ContactManagersPluginInfoStandardItem::type() const
 {
   return static_cast<int>(StandardItemType::COMMON_KINEMATICS_PLUGIN_INFO);
 }
 
-void KinematicsPluginInfoStandardItem::ctor()
+void ContactManagersPluginInfoStandardItem::ctor()
 {
   auto* search_paths = new QStandardItem("search paths");
   std::size_t cnt{ 0 };
@@ -70,18 +73,9 @@ void KinematicsPluginInfoStandardItem::ctor()
 
   appendRow({ search_libraries, new QStandardItem() });
 
-  auto* fwd_plugins = new QStandardItem("Fwd Kinematics Plugins");
-  for (const auto& group : plugin_info.fwd_plugin_infos)
-    fwd_plugins->appendRow(
-        new PluginInfoContainerStandardItem(icons::getRobotArmIcon(), group.first.c_str(), group.second));  // NOLIN
-
-  appendRow({ fwd_plugins, new QStandardItem() });
-
-  auto* inv_plugins = new QStandardItem("Inv Kinematics Plugins");
-  for (const auto& group : plugin_info.inv_plugin_infos)
-    inv_plugins->appendRow(
-        new PluginInfoContainerStandardItem(icons::getRobotArmIcon(), group.first.c_str(), group.second));  // NOLINT
-
-  appendRow({ inv_plugins, new QStandardItem() });
+  appendRow(new PluginInfoContainerStandardItem(
+      icons::getCollisionIcon(), "Discrete Plugins", plugin_info.discrete_plugin_infos));
+  appendRow(new PluginInfoContainerStandardItem(
+      icons::getCollisionIcon(), "Continuous Plugins", plugin_info.continuous_plugin_infos));
 }
 }  // namespace tesseract_gui

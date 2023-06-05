@@ -23,8 +23,8 @@
 
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_set_item.h>
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_info_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

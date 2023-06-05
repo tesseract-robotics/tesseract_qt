@@ -28,9 +28,9 @@
 
 #include <tesseract_qt/environment/models/environment_commands_standard_item.h>
 
-#include <tesseract_qt/common/manipulator_info_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/models/manipulator_info_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_task_composer/task_composer_problem.h>

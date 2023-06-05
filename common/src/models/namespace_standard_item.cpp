@@ -20,23 +20,17 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/common/type_standard_item.h>
-#include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/models/namespace_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 
 namespace tesseract_gui
 {
-TypeStandardItem::TypeStandardItem(int type) : QStandardItem(icons::getUnknownIcon(), "UserType"), type_(type) {}
+NamespaceStandardItem::NamespaceStandardItem() : QStandardItem("Namespace") {}
 
-TypeStandardItem::TypeStandardItem(const QString& text, int type)
-  : QStandardItem(icons::getUnknownIcon(), text), type_(type)
-{
-}
+NamespaceStandardItem::NamespaceStandardItem(const QString& text) : QStandardItem(text) {}
 
-TypeStandardItem::TypeStandardItem(const QIcon& icon, const QString& text, int type)
-  : QStandardItem(icon, text), type_(type)
-{
-}
+NamespaceStandardItem::NamespaceStandardItem(const QIcon& icon, const QString& text) : QStandardItem(icon, text) {}
 
-int TypeStandardItem::type() const { return type_; }
+int NamespaceStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_NAMESPACE); }
 
 }  // namespace tesseract_gui

@@ -29,9 +29,9 @@
 #include <tesseract_qt/scene_graph/models/sphere_standard_item.h>
 #include <tesseract_qt/scene_graph/models/polygon_mesh_standard_item.h>
 #include <tesseract_qt/scene_graph/models/octree_standard_item.h>
-#include <tesseract_qt/common/transform_standard_item.h>
-#include <tesseract_qt/common/standard_item_utils.h>
-#include <tesseract_qt/common/standard_item_type.h>
+#include <tesseract_qt/common/models/transform_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 namespace tesseract_gui

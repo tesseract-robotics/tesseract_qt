@@ -16,14 +16,14 @@ tesseract_variables()
 
 qt5_wrap_cpp(
   COMMON_WIDGETS_headers_MOC
-  include/tesseract_qt/common/cartesian_editor_widget.h
-  include/tesseract_qt/common/combo_box.h
-  include/tesseract_qt/common/image_viewer_widget.h
-  include/tesseract_qt/common/json_model.h
   include/tesseract_qt/common/environment_manager.h
   include/tesseract_qt/common/environment_wrapper.h
-  include/tesseract_qt/common/tree_view.h
+  include/tesseract_qt/common/models/json_model.h
   include/tesseract_qt/common/models/component_info_manager_model.h
+  include/tesseract_qt/common/widgets/cartesian_editor_widget.h
+  include/tesseract_qt/common/widgets/combo_box.h
+  include/tesseract_qt/common/widgets/image_viewer_widget.h
+  include/tesseract_qt/common/widgets/tree_view.h
   include/tesseract_qt/common/widgets/component_info_dialog.h
   include/tesseract_qt/common/widgets/component_info_manager_widget.h
   include/tesseract_qt/common/widgets/component_info_widget.h
@@ -34,8 +34,8 @@ qt5_wrap_cpp(
 
 qt5_wrap_ui(
   COMMON_WIDGETS_headers_UI
-  include/tesseract_qt/common/cartesian_editor_widget.ui
-  include/tesseract_qt/common/image_viewer_widget.ui
+  include/tesseract_qt/common/widgets/cartesian_editor_widget.ui
+  include/tesseract_qt/common/widgets/image_viewer_widget.ui
   include/tesseract_qt/common/widgets/component_info_dialog.ui
   include/tesseract_qt/common/widgets/component_info_manager_widget.ui
   include/tesseract_qt/common/widgets/component_info_widget.ui
@@ -72,7 +72,30 @@ add_library(
   src/events/scene_graph_render_manager.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
+  src/models/collision_margin_data_standard_item.cpp
   src/models/component_info_manager_model.cpp
+  src/models/component_info_standard_item.cpp
+  src/models/contact_managers_plugin_info_standard_item.cpp
+  src/models/kinematics_plugin_info_standard_item.cpp
+  src/models/namespace_standard_item.cpp
+  src/models/transform_standard_item.cpp
+  src/models/pairs_collision_margin_data_standard_item.cpp
+  src/models/plugin_info_standard_item.cpp
+  src/models/plugin_info_container_standard_item.cpp
+  src/models/position_standard_item.cpp
+  src/models/quaternion_standard_item.cpp
+  src/models/rgba_standard_item.cpp
+  src/models/tool_path_segment_standard_item.cpp
+  src/models/tool_path_standard_item.cpp
+  src/models/type_standard_item.cpp
+  src/models/vector_double_standard_item.cpp
+  src/models/vector_string_standard_item.cpp
+  src/models/joint_state_standard_item.cpp
+  src/models/joint_trajectory_standard_item.cpp
+  src/models/json_model.cpp
+  src/models/manipulator_info_standard_item.cpp
+  src/models/calibration_info_standard_item.cpp
+  src/models/standard_item_utils.cpp
   src/widgets/component_info_dialog.cpp
   src/widgets/component_info_manager_widget.cpp
   src/widgets/component_info_widget.cpp
@@ -80,24 +103,12 @@ add_library(
   src/widgets/create_component_info_dialog.cpp
   src/widgets/load_environment_widget.cpp
   src/widgets/load_environment_dialog.cpp
-  src/calibration_info_standard_item.cpp
-  src/cartesian_editor_widget.cpp
-  src/collision_margin_data_standard_item.cpp
-  src/combo_box.cpp
-  src/contact_managers_plugin_info_standard_item.cpp
-  src/kinematics_plugin_info_standard_item.cpp
-  src/namespace_standard_item.cpp
-  src/transform_standard_item.cpp
-  src/pairs_collision_margin_data_standard_item.cpp
-  src/plugin_info_standard_item.cpp
-  src/position_standard_item.cpp
-  src/quaternion_standard_item.cpp
-  src/rgba_standard_item.cpp
+  src/widgets/cartesian_editor_widget.cpp
+  src/widgets/combo_box.cpp
+  src/widgets/tree_view.cpp
+  src/widgets/image_viewer_widget.cpp
   src/component_info.cpp
   src/component_info_manager.cpp
-  src/component_info_standard_item.cpp
-  src/standard_item_utils.cpp
-  src/plugin_info_container_standard_item.cpp
   src/entity_manager.cpp
   src/entity_container.cpp
   src/environment_manager.cpp
@@ -108,18 +119,7 @@ add_library(
   src/tool_path.cpp
   src/tool_path_pose.cpp
   src/tool_path_segment.cpp
-  src/tool_path_segment_standard_item.cpp
-  src/tool_path_standard_item.cpp
   src/icon_utils.cpp
-  src/image_viewer_widget.cpp
-  src/tree_view.cpp
-  src/type_standard_item.cpp
-  src/vector_double_standard_item.cpp
-  src/vector_string_standard_item.cpp
-  src/joint_state_standard_item.cpp
-  src/joint_trajectory_standard_item.cpp
-  src/json_model.cpp
-  src/manipulator_info_standard_item.cpp
   src/utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common

@@ -23,8 +23,8 @@
 
 #include <tesseract_qt/environment/widgets/environment_commands_widget.h>
 #include <tesseract_qt/environment/models/environment_commands_model.h>
+#include <tesseract_qt/common/widgets/tree_view.h>
 #include <tesseract_qt/common/component_info.h>
-#include <tesseract_qt/common/tree_view.h>
 
 #include <QVBoxLayout>
 

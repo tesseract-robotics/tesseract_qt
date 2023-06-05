@@ -25,9 +25,9 @@
 #include <tesseract_qt/command_language/models/joint_waypoint_standard_item.h>
 #include <tesseract_qt/command_language/models/state_waypoint_standard_item.h>
 #include <tesseract_qt/command_language/models/null_waypoint_standard_item.h>
-#include <tesseract_qt/common/manipulator_info_standard_item.h>
-#include <tesseract_qt/common/standard_item_type.h>
-#include <tesseract_qt/common/standard_item_utils.h>
+#include <tesseract_qt/common/models/manipulator_info_standard_item.h>
+#include <tesseract_qt/common/models/standard_item_type.h>
+#include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_command_language/move_instruction.h>
