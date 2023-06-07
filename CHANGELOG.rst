@@ -2,6 +2,18 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update depends
+* Support loading config without having to close
+* Cleanup tesseract_qt common
+* Cleanup singleton classes
+* Minor fixes
+* Fix contact result arrow visualization
+* Fix manipulation widget reload
+* Add studio plugin support (`#46 <https://github.com/tesseract-robotics/tesseract_qt/issues/46>`_)
+* Contributors: Levi Armstrong
+
 0.16.4 (2023-05-04)
 -------------------
 * Upgrade gazebo version (`#44 <https://github.com/tesseract-robotics/tesseract_qt/issues/44>`_)
