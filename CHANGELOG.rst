@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.17.0 (2023-06-06)
+-------------------
 * Update depends
 * Support loading config without having to close
 * Cleanup tesseract_qt common
