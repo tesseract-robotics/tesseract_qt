@@ -50,6 +50,9 @@ public:
   explicit Studio(QWidget* parent = nullptr);
   ~Studio();
 
+protected:
+  virtual void closeEvent(QCloseEvent* event) override;
+
 private:
   friend class StudioPluginLoaderDialog;
   struct Implementation;

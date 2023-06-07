@@ -155,6 +155,15 @@ bool ComponentInfoManager::empty()
   return obj->emptyHelper();
 }
 
+void ComponentInfoManager::clear()
+{
+  std::shared_ptr<ComponentInfoManager> obj = instance();
+  std::unique_lock lock(obj->data_->mutex);
+  obj->data_->component_infos_by_ns.clear();
+  obj->data_->component_infos_by_name.clear();
+  obj->data_->cnt = 0;
+}
+
 std::shared_ptr<ComponentInfoManager> ComponentInfoManager::instance()
 {
   std::call_once(init_instance_flag, &ComponentInfoManager::initSingleton);

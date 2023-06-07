@@ -94,6 +94,14 @@ void EnvironmentManager::remove(const std::shared_ptr<const ComponentInfo>& comp
   obj->removeHelper(component_info);
 }
 
+void EnvironmentManager::clear()
+{
+  std::shared_ptr<EnvironmentManager> obj = instance();
+  std::unique_lock lock(obj->data_->mutex);
+  obj->data_->environments.clear();
+  obj->data_->default_component_info = nullptr;
+}
+
 std::shared_ptr<EnvironmentManager> EnvironmentManager::instance()
 {
   std::call_once(init_instance_flag, &EnvironmentManager::initSingleton);

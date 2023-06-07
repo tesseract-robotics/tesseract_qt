@@ -135,6 +135,12 @@ public:
   /** @brief Check if empty */
   static bool empty();
 
+  /**
+   * @brief Clear all environments
+   * @warning This should rarely be used, recommend using removeUnused
+   */
+  static void clear();
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
