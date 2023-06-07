@@ -29,6 +29,7 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
+#include <tesseract_qt/common/environment_manager.h>
 
 #include <tesseract_qt/studio/studio_plugin_loader_dialog.h>
 #include <tesseract_qt/studio/studio_dock_widget_factory.h>
@@ -102,6 +103,9 @@ struct Studio::Implementation
   /** @brief Restore the perspective list of the dock manager */
   void restorePerspectives();
 
+  /** @brief Removes all plugins, component infos, and environments */
+  void clear();
+
   /**
    * @brief This function is called when a dock widget is removed from the application.
    * @param dock_widget The dock widget removed
@@ -133,6 +137,34 @@ Studio::Implementation::~Implementation()
   ms.beginGroup("TesseractQtStudio");
   ms.setValue("default_directory", default_directory);
   ms.endGroup();
+}
+
+void Studio::Implementation::clear()
+{
+  perspective_comboBox->clear();
+
+  disconnect(dock_manager, &ads::CDockManager::dockWidgetRemoved, app, nullptr);
+
+  for (auto* dock_widget : dock_widgets)
+  {
+    dock_manager->removeDockWidget(dock_widget);
+    delete dock_widget;
+  }
+
+  delete dock_manager;
+  dock_manager = new ads::CDockManager(app);
+  dock_manager->setStyleSheet("");
+
+  central_widget.clear();
+  dock_widgets.clear();
+
+  config_filepath.clear();
+  settings_filepath.clear();
+
+  ComponentInfoManager::clear();
+  EnvironmentManager::clear();
+
+  connect(dock_manager, &ads::CDockManager::dockWidgetRemoved, [this](ads::CDockWidget* w) { dockWidgetRemoved(w); });
 }
 
 void Studio::Implementation::loadConfig()
@@ -275,6 +307,9 @@ void Studio::Implementation::loadConfigAs()
   QString filepath = dialog.selectedFiles().first();
   if (QFileInfo(filepath).exists())
     default_directory = QFileInfo(filepath).absoluteDir().path();
+
+  // Clear the current state to a blank slate
+  clear();
 
   config_filepath = filepath.toStdString();
   settings_filepath = config_filepath.string() + ".ini";
@@ -428,6 +463,7 @@ Studio::Studio(QWidget* parent)
   ui->actionCreate_Perspective->setIcon(icons::getLayoutIcon());
   ui->actionLoad_Plugins->setIcon(icons::getPluginIcon());
   connect(ui->actionLoad_Config, &QAction::triggered, [this]() {
+    ui->actionSave_Config->setEnabled(false);
     data_->loadConfigAs();
     if (!data_->config_filepath.empty() && !data_->settings_filepath.empty())
       ui->actionSave_Config->setEnabled(true);
@@ -459,6 +495,14 @@ Studio::Studio(QWidget* parent)
 }
 
 Studio::~Studio() = default;
+
+void Studio::closeEvent(QCloseEvent* event)
+{
+  // Delete dock manager here to delete all floating widgets. This ensures
+  // that all top level windows of the dock manager are properly closed
+  data_->dock_manager->deleteLater();
+  QMainWindow::closeEvent(event);
+}
 
 tesseract_common::PluginLoader& Studio::getPluginLoader() { return data_->plugin_loader; }
 const tesseract_common::PluginLoader& Studio::getPluginLoader() const { return data_->plugin_loader; }

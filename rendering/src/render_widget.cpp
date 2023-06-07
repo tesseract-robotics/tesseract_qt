@@ -573,6 +573,7 @@ void Renderer::initialize()
 
   std::lock_guard<std::mutex> lock(data_->mutex);
   std::map<std::string, std::string> params;
+  // Ensure that the Qt application and Ogre2 share an OpenGL context
   params["useCurrentGLContext"] = "1";
   auto* engine = gz::rendering::engine(data_->engine_name, params);
   if (engine == nullptr)
@@ -676,7 +677,9 @@ void Renderer::destroy()
     igndbg << "Destroy scene [" << scene->Name() << "]" << std::endl;
     engine->DestroyScene(scene);
 
-    // TODO(anyone) If that was the last scene, terminate engine?
+    // If that was the last scene, terminate engine
+    if (engine->SceneCount() == 0)
+      gz::rendering::unloadEngine(data_->engine_name);
   }
 }
 
@@ -793,8 +796,8 @@ RenderWidget::~RenderWidget()
 {
   data_->context->makeCurrent(data_->surface);
 
-  //  delete renderer;
-  //  renderer = nullptr;
+  // Destroy renderer
+  data_->renderer.destroy();
 
   data_->context->doneCurrent();
 

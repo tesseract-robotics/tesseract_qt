@@ -91,6 +91,12 @@ public:
   /** @brief Remove environment */
   static void remove(const std::shared_ptr<const ComponentInfo>& component_info);
 
+  /**
+   * @brief Clear all environments
+   * @warning This should rarely be used
+   */
+  static void clear();
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
