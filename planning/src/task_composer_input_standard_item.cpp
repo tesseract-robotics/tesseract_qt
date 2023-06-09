@@ -29,7 +29,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_task_composer/task_composer_input.h>
+#include <tesseract_task_composer/core/task_composer_input.h>
 
 namespace tesseract_gui
 {
@@ -58,7 +58,7 @@ int TaskComposerInputStandardItem::type() const { return static_cast<int>(Standa
 
 void TaskComposerInputStandardItem::ctor(const tesseract_planning::TaskComposerInput& input)
 {
-  appendRow(new TaskComposerProblemStandardItem("problem", input.problem));
+  appendRow(new TaskComposerProblemStandardItem("problem", *input.problem));
   appendRow(new TaskComposerDataStorageStandardItem("data_storage", input.data_storage));
   /** @todo Add profiles */
   appendRow(createStandardItemBool("successful", input.isSuccessful()));

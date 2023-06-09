@@ -26,7 +26,7 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_task_composer/task_composer_problem.h>
+#include <tesseract_task_composer/core/task_composer_problem.h>
 #include <QStandardItemModel>
 #include <memory>
 #endif

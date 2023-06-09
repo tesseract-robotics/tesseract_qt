@@ -33,7 +33,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_task_composer/task_composer_problem.h>
+#include <tesseract_task_composer/planning/planning_task_composer_problem.h>
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
 
@@ -68,18 +68,23 @@ int TaskComposerProblemStandardItem::type() const
 void TaskComposerProblemStandardItem::ctor(const tesseract_planning::TaskComposerProblem& problem)
 {
   appendRow(createStandardItemString("name", problem.name));
+  appendRow(new TaskComposerDataStorageStandardItem("input_data", problem.input_data));
+
+  // Get the problem
+  const auto* planning_problem = dynamic_cast<const tesseract_planning::PlanningTaskComposerProblem*>(&problem);
+  if (planning_problem == nullptr)
+    return;
 
   auto* environment = new QStandardItem(icons::getModelIcon(), "environment");
-  environment->appendRow(new EnvironmentCommandsStandardItem("commands", problem.env->getCommandHistory()));
-  environment->appendRow(new SceneStateStandardItem("state", problem.env->getState()));
+  environment->appendRow(new EnvironmentCommandsStandardItem("commands", planning_problem->env->getCommandHistory()));
+  environment->appendRow(new SceneStateStandardItem("state", planning_problem->env->getState()));
   appendRow(environment);
 
-  appendRow(new ManipulatorInfoStandardItem("global_manip_info", problem.manip_info));
+  appendRow(new ManipulatorInfoStandardItem("global_manip_info", planning_problem->manip_info));
 
-  appendRow(new PlannerProfileRemappingStandardItem("move_profile_remapping", problem.move_profile_remapping));
   appendRow(
-      new PlannerProfileRemappingStandardItem("composite_profile_remapping", problem.composite_profile_remapping));
-
-  appendRow(new TaskComposerDataStorageStandardItem("input_data", problem.input_data));
+      new PlannerProfileRemappingStandardItem("move_profile_remapping", planning_problem->move_profile_remapping));
+  appendRow(new PlannerProfileRemappingStandardItem("composite_profile_remapping",
+                                                    planning_problem->composite_profile_remapping));
 }
 }  // namespace tesseract_gui
