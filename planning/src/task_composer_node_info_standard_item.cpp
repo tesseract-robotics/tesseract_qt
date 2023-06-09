@@ -38,11 +38,11 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_task_composer/task_composer_node_info.h>
-#include <tesseract_task_composer/nodes/fix_state_collision_task.h>
-#include <tesseract_task_composer/nodes/discrete_contact_check_task.h>
-#include <tesseract_task_composer/nodes/continuous_contact_check_task.h>
-#include <tesseract_task_composer/nodes/time_optimal_parameterization_task.h>
+#include <tesseract_task_composer/core/task_composer_node_info.h>
+#include <tesseract_task_composer/planning/nodes/fix_state_collision_task.h>
+#include <tesseract_task_composer/planning/nodes/discrete_contact_check_task.h>
+#include <tesseract_task_composer/planning/nodes/continuous_contact_check_task.h>
+#include <tesseract_task_composer/planning/nodes/time_optimal_parameterization_task.h>
 
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
