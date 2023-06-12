@@ -24,6 +24,9 @@
 #include <tesseract_common/macros.h>
 TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/nvp.hpp>
+#if (BOOST_VERSION >= 107400) && (BOOST_VERSION < 107500)
+#include <boost/serialization/library_version_type.hpp>
+#endif
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>

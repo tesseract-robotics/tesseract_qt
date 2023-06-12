@@ -26,6 +26,7 @@ target_link_libraries(
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
+         ads::qtadvanceddocking
          ${PROJECT_NAME}_common)
 target_include_directories(
   ${PROJECT_NAME}_studio_plugin_factory
