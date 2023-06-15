@@ -382,11 +382,12 @@ gz::rendering::VisualPtr loadLinkGeometry(gz::rendering::Scene& scene,
       auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
       gz::rendering::VisualPtr capsule = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       capsule->SetLocalPose(gz::math::eigen3::convert(local_pose));
-      capsule->AddGeometry(scene.CreateCapsule());
-
+      // Capsule is a special shape and should not use scale to change the size of the shape
+      gz::rendering::CapsulePtr geom = scene.CreateCapsule();
       const auto& shape = static_cast<const tesseract_geometry::Capsule&>(geometry);
-      const double diameter = 2.0 * shape.getRadius();
-      capsule->Scale(diameter * scale.x(), diameter * scale.y(), shape.getLength() * scale.z());
+      geom->SetRadius(shape.getRadius());
+      geom->SetLength(shape.getLength());
+      capsule->AddGeometry(geom);
       capsule->SetMaterial(ign_material);
       return capsule;
     }
