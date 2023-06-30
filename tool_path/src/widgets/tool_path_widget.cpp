@@ -62,7 +62,7 @@ ToolPathWidget::ToolPathWidget(std::shared_ptr<const ComponentInfo> component_in
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
-  data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
+  data_->model = std::make_shared<ToolPathModel>(component_info);
   data_->selection_model = std::make_shared<ToolPathSelectionModel>(data_->model.get(), component_info);
 
   // Create tree widget
@@ -106,7 +106,7 @@ ToolPathWidget::~ToolPathWidget() = default;
 void ToolPathWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   // Create model
-  data_->model = std::make_shared<ToolPathModel>(std::move(component_info));
+  data_->model = std::make_shared<ToolPathModel>(component_info);
   data_->selection_model = std::make_shared<ToolPathSelectionModel>(data_->model.get(), component_info);
 
   data_->tree_view->setModel(data_->model.get());
