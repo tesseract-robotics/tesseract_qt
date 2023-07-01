@@ -18,6 +18,8 @@
 #include <tesseract_qt/rendering/conversions.h>
 #include <tesseract_geometry/geometries.h>
 #include <gz/math/eigen3/Conversions.hh>
+#include <gz/common/Mesh.hh>
+#include <gz/common/SubMesh.hh>
 #include <gz/common/MeshManager.hh>
 #include <gz/rendering/WireBox.hh>
 #include <gz/rendering/AxisVisual.hh>
@@ -51,6 +53,101 @@ QVector3D convert(const gz::math::Vector3d& vec) { return QVector3D(vec.X(), vec
 
 //////////////////////////////////////////////////
 gz::math::Vector3d convert(const QVector3D& vec) { return gz::math::Vector3d(vec.x(), vec.y(), vec.z()); }
+
+//////////////////////////////////////////////////
+gz::common::SubMesh convert(const tesseract_geometry::PolygonMesh& mesh)
+{
+  gz::common::SubMesh gz_submesh;
+  const std::shared_ptr<const tesseract_common::VectorVector3d>& verticies = mesh.getVertices();
+  const std::shared_ptr<const Eigen::VectorXi>& faces = mesh.getFaces();
+  const std::shared_ptr<const tesseract_common::VectorVector3d>& normals = mesh.getNormals();
+
+  if (normals == nullptr)
+  {
+    tesseract_common::VectorVector3d computed_normals;
+    computed_normals.reserve(verticies->size());
+    for (const Eigen::Vector3d& v : (*verticies))
+    {
+      computed_normals.push_back(Eigen::Vector3d(0, 0, 0));
+      gz_submesh.AddVertex(gz::math::Vector3d(v.x(), v.y(), v.z()));
+    }
+
+    for (long t = 0; t < faces->size(); ++t)
+    {
+      size_t num_verts = static_cast<size_t>((*faces)[t]);
+      Eigen::Vector3d side1 = (*verticies)[(*faces)[t + 1]] - (*verticies)[(*faces)[t + 2]];
+      Eigen::Vector3d side2 = (*verticies)[(*faces)[t + 2]] - (*verticies)[(*faces)[t + 3]];
+      Eigen::Vector3d normal = side1.cross(side2);
+      normal.normalize();
+
+      for (size_t k = 2; k < num_verts; ++k)
+      {
+        if (k == 2)
+        {
+          gz_submesh.AddIndex((*faces)[t + 1]);
+          gz_submesh.AddIndex((*faces)[t + 2]);
+          gz_submesh.AddIndex((*faces)[t + 3]);
+
+          computed_normals[(*faces)[t + 1]] += normal;
+          computed_normals[(*faces)[t + 2]] += normal;
+          computed_normals[(*faces)[t + 3]] += normal;
+        }
+        else
+        {
+          gz_submesh.AddIndex((*faces)[t + 1]);
+          gz_submesh.AddIndex((*faces)[t + k]);
+          gz_submesh.AddIndex((*faces)[t + (k + 1)]);
+
+          computed_normals[(*faces)[t + (k + 1)]] += normal;
+        }
+      }
+
+      t += num_verts;
+    }
+
+    for (size_t i = 0; i < verticies->size(); ++i)
+    {
+      auto& n = computed_normals[i];
+      n.normalize();
+      gz_submesh.AddNormal(gz::math::Vector3d(n.x(), n.y(), n.z()));
+    }
+  }
+  else
+  {
+    for (long t = 0; t < verticies->size(); ++t)
+    {
+      const Eigen::Vector3d& v = (*verticies)[t];
+      const Eigen::Vector3d& n = (*normals)[t];
+
+      gz_submesh.AddVertex(gz::math::Vector3d(v.x(), v.y(), v.z()));
+      gz_submesh.AddNormal(gz::math::Vector3d(n.x(), n.y(), n.z()));
+    }
+
+    for (long t = 0; t < faces->size(); ++t)
+    {
+      size_t num_verts = static_cast<size_t>((*faces)[t]);
+      for (size_t k = 2; k < num_verts; ++k)
+      {
+        if (k == 2)
+        {
+          gz_submesh.AddIndex((*faces)[t + 1]);
+          gz_submesh.AddIndex((*faces)[t + 2]);
+          gz_submesh.AddIndex((*faces)[t + 3]);
+        }
+        else
+        {
+          gz_submesh.AddIndex((*faces)[t + 1]);
+          gz_submesh.AddIndex((*faces)[t + k]);
+          gz_submesh.AddIndex((*faces)[t + (k + 1)]);
+        }
+      }
+
+      t += num_verts;
+    }
+  }
+
+  return gz_submesh;
+}
 
 //////////////////////////////////////////////////
 gz::common::MouseEvent convert(const QMouseEvent& e)
@@ -395,55 +492,100 @@ gz::rendering::VisualPtr loadLinkGeometry(gz::rendering::Scene& scene,
     {
       const auto& shape = static_cast<const tesseract_geometry::Mesh&>(geometry);
       auto resource = shape.getResource();
+
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      gz::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
+      gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
+      gz::rendering::MeshPtr mesh_geom;
       if (resource)
       {
-        auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-        gz::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-        mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
-
         gz::rendering::MeshDescriptor descriptor;
         descriptor.meshName = resource->getFilePath();
-        gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
         descriptor.mesh = mesh_manager->Load(descriptor.meshName);
-        gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+        mesh_geom = scene.CreateMesh(descriptor);
 
         if (!isMeshWithColor(resource->getFilePath()))
           mesh_geom->SetMaterial(ign_material);
+      }
+      else
+      {
+        std::string name = std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(&geometry));
 
-        mesh->AddGeometry(mesh_geom);
-        mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
-        return mesh;
+        const gz::common::Mesh* gz_mesh{ nullptr };
+        if (!mesh_manager->HasMesh(name))
+        {
+          auto* nm = new gz::common::Mesh();
+          nm->SetName(name);
+          nm->AddSubMesh(convert(shape));
+          mesh_manager->AddMesh(nm);
+          gz_mesh = nm;
+        }
+        else
+        {
+          gz_mesh = mesh_manager->MeshByName(name);
+        }
+
+        gz::rendering::MeshDescriptor descriptor;
+        descriptor.meshName = name;
+        descriptor.mesh = gz_mesh;
+        mesh_geom = scene.CreateMesh(descriptor);
+        mesh_geom->SetMaterial(ign_material);
       }
 
-      assert(false);
-      return nullptr;
+      mesh->AddGeometry(mesh_geom);
+      mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
+      return mesh;
     }
     case tesseract_geometry::GeometryType::CONVEX_MESH:
     {
       const auto& shape = static_cast<const tesseract_geometry::ConvexMesh&>(geometry);
       auto resource = shape.getResource();
-      if (resource)
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      gz::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
+      gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
+      gz::rendering::MeshPtr mesh_geom;
+      if (resource && shape.getCreationMethod() != tesseract_geometry::ConvexMesh::CreationMethod::CONVERTED)
       {
-        auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
-        gz::rendering::VisualPtr mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
-        mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
-
         gz::rendering::MeshDescriptor descriptor;
         descriptor.meshName = resource->getFilePath();
-        gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
         descriptor.mesh = mesh_manager->Load(descriptor.meshName);
-        gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+        mesh_geom = scene.CreateMesh(descriptor);
 
         if (!isMeshWithColor(resource->getFilePath()))
           mesh_geom->SetMaterial(ign_material);
+      }
+      else
+      {
+        std::string name = std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(&geometry));
+        if (resource)
+          name = resource->getFilePath() + "::CONVERTED_CONVEX_HULL";
 
-        mesh->AddGeometry(mesh_geom);
-        mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
-        return mesh;
+        const gz::common::Mesh* gz_mesh{ nullptr };
+        if (!mesh_manager->HasMesh(name))
+        {
+          auto* nm = new gz::common::Mesh();
+          nm->SetName(name);
+          nm->AddSubMesh(convert(shape));
+          mesh_manager->AddMesh(nm);
+          gz_mesh = nm;
+        }
+        else
+        {
+          gz_mesh = mesh_manager->MeshByName(name);
+        }
+
+        gz::rendering::MeshDescriptor descriptor;
+        descriptor.meshName = name;
+        descriptor.mesh = gz_mesh;
+        mesh_geom = scene.CreateMesh(descriptor);
+        mesh_geom->SetMaterial(ign_material);
       }
 
-      assert(false);
-      return nullptr;
+      mesh->AddGeometry(mesh_geom);
+      mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
+      return mesh;
     }
     case tesseract_geometry::GeometryType::OCTREE:
     {

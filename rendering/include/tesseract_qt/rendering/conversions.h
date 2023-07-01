@@ -14,6 +14,7 @@
 #include <tesseract_scene_graph/graph.h>
 #include <tesseract_scene_graph/link.h>
 #include <tesseract_geometry/geometry.h>
+#include <tesseract_geometry/impl/polygon_mesh.h>
 #include <tesseract_collision/core/types.h>
 
 #include <QtCore>
@@ -88,6 +89,13 @@ gz::common::MouseEvent convert(const QWheelEvent& e);
  * @return  Ignition key event
  */
 gz::common::KeyEvent convert(const QKeyEvent& e);
+
+/**
+ * @brief Convert polygon mesh to ignition SubMesh
+ * @param mesh The polygon mesh to convert
+ * @return A Ignition SubMesh
+ */
+gz::common::SubMesh convert(const tesseract_geometry::PolygonMesh& mesh);
 
 bool isMeshWithColor(const std::string& file_path);
 
