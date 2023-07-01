@@ -2,6 +2,16 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update depend to 0.18.X
+* Add conversion for polygon mesh to gz::common::SubMesh and leverage for collision mesh
+* Fix load tool path
+* Fix ignition rendering of capsule
+* Changes to support task composer restructure
+* Fixes build errors on Jammy/Humble
+* Contributors: Levi Armstrong, Roelof Oomen
+
 0.17.0 (2023-06-06)
 -------------------
 * Update depends
