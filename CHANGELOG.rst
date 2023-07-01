@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.18.0 (2023-07-01)
+-------------------
 * Update depend to 0.18.X
 * Add conversion for polygon mesh to gz::common::SubMesh and leverage for collision mesh
 * Fix load tool path
