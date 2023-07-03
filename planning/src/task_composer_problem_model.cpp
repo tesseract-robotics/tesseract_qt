@@ -35,7 +35,7 @@ namespace tesseract_gui
 struct TaskComposerProblemModelPrivate
 {
   std::map<QString, QStandardItem*> items;
-  std::map<QStandardItem*, tesseract_planning::TaskComposerProblem> problems;
+  std::map<QStandardItem*, tesseract_planning::TaskComposerProblem::UPtr> problems;
   std::map<QStandardItem*, QString> problems_ns;
   void clear()
   {
@@ -61,17 +61,17 @@ void TaskComposerProblemModel::clear()
   data_->clear();
 }
 
-QString TaskComposerProblemModel::addProblem(const tesseract_planning::TaskComposerProblem& problem, std::string ns)
+QString TaskComposerProblemModel::addProblem(tesseract_planning::TaskComposerProblem::UPtr problem, std::string ns)
 {
   QString key = QUuid::createUuid().toString();
   ns = (ns.empty()) ? "general" : ns;
   NamespaceStandardItem* item = createNamespaceItem(*invisibleRootItem(), ns);
 
-  auto* problem_item = new TaskComposerProblemStandardItem(key, problem);
-  auto* problem_description_item = new QStandardItem(QString::fromStdString(problem.name));
+  auto* problem_item = new TaskComposerProblemStandardItem(key, *problem);
+  auto* problem_description_item = new QStandardItem(QString::fromStdString(problem->name));
   item->appendRow({ problem_item, problem_description_item });
   data_->items[key] = problem_item;
-  data_->problems[problem_item] = problem;
+  data_->problems[problem_item] = std::move(problem);
   data_->problems_ns[problem_item] = ns.c_str();
   return key;
 }
@@ -105,14 +105,13 @@ TaskComposerProblemStandardItem* findTaskComposerProblemItem(QStandardItem* item
 const tesseract_planning::TaskComposerProblem& TaskComposerProblemModel::getProblem(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
-  return data_->problems[findTaskComposerProblemItem(item)];
+  return *(data_->problems.at(findTaskComposerProblemItem(item)));
 }
 
 const QString& TaskComposerProblemModel::getProblemNamespace(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
-
-  return data_->problems_ns[findTaskComposerProblemItem(item)];
+  return data_->problems_ns.at(findTaskComposerProblemItem(item));
 }
 
 }  // namespace tesseract_gui
