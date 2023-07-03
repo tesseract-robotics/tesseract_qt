@@ -49,7 +49,7 @@ public:
    * @param ns The namespace to store the problem under
    * @return The key associated with added problem for removal
    */
-  QString addProblem(const tesseract_planning::TaskComposerProblem& problem, std::string ns = "general");
+  QString addProblem(tesseract_planning::TaskComposerProblem::UPtr problem, std::string ns = "general");
 
   /**
    * @brief Remove the problem
