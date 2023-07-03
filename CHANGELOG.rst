@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix task composer problem model
+* Contributors: Levi Armstrong
+
 0.18.0 (2023-07-01)
 -------------------
 * Update depend to 0.18.X
