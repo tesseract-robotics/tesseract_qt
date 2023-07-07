@@ -38,6 +38,7 @@ configure_package(
   NAMESPACE tesseract
             DEPENDENCIES
             "Qt5 COMPONENTS Core Gui Widgets Svg OpenGL Xml"
+            "Boost COMPONENTS program_options"
             tesseract_environment
             tesseract_kinematics
             tesseract_scene_graph
