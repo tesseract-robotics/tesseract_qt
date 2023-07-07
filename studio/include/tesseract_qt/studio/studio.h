@@ -50,6 +50,12 @@ public:
   explicit Studio(QWidget* parent = nullptr);
   ~Studio();
 
+  /**
+   * @brief Load config
+   * @param The file path to config
+   */
+  void loadConfig(const QString& filepath);
+
 protected:
   virtual void closeEvent(QCloseEvent* event) override;
 

@@ -125,8 +125,8 @@ Studio::Implementation::Implementation(Studio* app) : app(app), plugin_loader_di
   // Load settings
   QSettings ms;
   ms.beginGroup("TesseractQtStudio");
-  default_directory =
-      ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
+  QStringList std_locations = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+  default_directory = ms.value("default_directory", std_locations[0]).toString();
   ms.endGroup();
 }
 
@@ -304,8 +304,9 @@ void Studio::Implementation::loadConfigAs()
   if (dialog.exec() != 1)
     return;
 
-  QString filepath = dialog.selectedFiles().first();
-  if (QFileInfo(filepath).exists())
+  QStringList selected_files = dialog.selectedFiles();
+  QString filepath = selected_files.first();
+  if (QFileInfo::exists(filepath))
     default_directory = QFileInfo(filepath).absoluteDir().path();
 
   // Clear the current state to a blank slate
@@ -373,8 +374,9 @@ void Studio::Implementation::saveConfigAs()
   if (dialog.exec() != 1)
     return;
 
-  QString filepath = dialog.selectedFiles().first();
-  if (QFileInfo(filepath).exists())
+  QStringList selected_files = dialog.selectedFiles();
+  QString filepath = selected_files.first();
+  if (QFileInfo::exists(filepath))
     default_directory = QFileInfo(filepath).absoluteDir().path();
 
   config_filepath = filepath.toStdString();
@@ -495,6 +497,20 @@ Studio::Studio(QWidget* parent)
 }
 
 Studio::~Studio() = default;
+
+void Studio::loadConfig(const QString& filepath)
+{
+  if (QFileInfo::exists(filepath))
+    data_->default_directory = QFileInfo(filepath).absoluteDir().path();
+
+  // Clear the current state to a blank slate
+  data_->clear();
+
+  data_->config_filepath = filepath.toStdString();
+  data_->settings_filepath = data_->config_filepath.string() + ".ini";
+
+  data_->loadConfig();
+}
 
 void Studio::closeEvent(QCloseEvent* event)
 {

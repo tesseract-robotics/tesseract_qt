@@ -39,6 +39,10 @@
   <build_export_depend>libboost-dev</build_export_depend>
   <exec_depend>libboost-dev</exec_depend>
 
+  <build_depend>libboost-program-options-dev</build_depend>
+  <build_export_depend>libboost-program-options-dev</build_export_depend>
+  <exec_depend>libboost-program-options</exec_depend>
+
   <export>
     <build_type>cmake</build_type>
   </export>
