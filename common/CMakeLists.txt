@@ -136,6 +136,8 @@ target_include_directories(
   ${PROJECT_NAME}_common PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                 "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/common>" "$<INSTALL_INTERFACE:include>")
 
+add_subdirectory(demo)
+
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
