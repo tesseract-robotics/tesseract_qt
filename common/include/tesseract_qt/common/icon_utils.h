@@ -155,6 +155,9 @@ QIcon getToolPathShowIcon();
 QIcon getToolPathHideIcon();
 
 QIcon getPencilEditIcon();
+QIcon getTrueFalseIcon();
+QIcon getArrayIcon();
+QIcon getKeyValueIcon();
 
 }  // namespace tesseract_gui::icons
 #endif  // TESSERACT_QT_COMMON_ICON_UTILS_H

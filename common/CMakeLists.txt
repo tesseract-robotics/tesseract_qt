@@ -19,6 +19,7 @@ qt5_wrap_cpp(
   include/tesseract_qt/common/environment_manager.h
   include/tesseract_qt/common/environment_wrapper.h
   include/tesseract_qt/common/models/json_model.h
+  include/tesseract_qt/common/models/yaml_model.h
   include/tesseract_qt/common/models/component_info_manager_model.h
   include/tesseract_qt/common/widgets/cartesian_editor_widget.h
   include/tesseract_qt/common/widgets/combo_box.h
@@ -93,6 +94,7 @@ add_library(
   src/models/joint_state_standard_item.cpp
   src/models/joint_trajectory_standard_item.cpp
   src/models/json_model.cpp
+  src/models/yaml_model.cpp
   src/models/manipulator_info_standard_item.cpp
   src/models/calibration_info_standard_item.cpp
   src/models/standard_item_utils.cpp
@@ -135,6 +137,8 @@ target_link_libraries(
 target_include_directories(
   ${PROJECT_NAME}_common PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                 "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/common>" "$<INSTALL_INTERFACE:include>")
+
+add_subdirectory(demo)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)

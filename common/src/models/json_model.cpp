@@ -261,7 +261,7 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const
   if (!index.isValid())
     return {};
 
-  QJsonTreeItem* item = static_cast<QJsonTreeItem*>(index.internalPointer());
+  auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
 
   if (role == Qt::DisplayRole)
   {
