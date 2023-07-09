@@ -498,4 +498,22 @@ QIcon getPencilEditIcon()
   return icon;
 }
 
+QIcon getTrueFalseIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/true-false.svg"));
+  return icon;
+}
+
+QIcon getArrayIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/array.svg"));
+  return icon;
+}
+
+QIcon getKeyValueIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/key-value.svg"));
+  return icon;
+}
+
 }  // namespace tesseract_gui::icons

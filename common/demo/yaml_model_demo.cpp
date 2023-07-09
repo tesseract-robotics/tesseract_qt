@@ -25,42 +25,35 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QApplication>
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
-#include <tesseract_qt/common/models/json_model.h>
+#include <tesseract_qt/common/models/yaml_model.h>
 #include <QTreeView>
-#include <QJsonDocument>
+#include <yaml-cpp/yaml.h>
+#include <iostream>
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
+  std::string str = R"(config:
+                         boolean: true
+                         string: "input_data"
+                         int: 100
+                         float: 100.5
+                         vector:
+                           - 1
+                           - 2
+                           - 3)";
 
-  std::string str = R"({
-                           "firstName": "John",
-                           "lastName": "Smith",
-                           "age": 25,
-                           "address": {
-                               "streetAddress": "21 2nd Street",
-                               "city": "New York",
-                               "state": "NY",
-                               "postalCode": "10021"
-                           },
-                           "phoneNumber": [
-                               {
-                                   "type": "home",
-                                   "number": "212 555-1234"
-                               },
-                               {
-                                   "type": "fax",
-                                   "number": "646 555-4567"
-                               }
-                           ]
-                       })";
+  YAML::Node node = YAML::Load(str);
+  tesseract_gui::QYamlModel model;
+  model.showIcons(true);
+  model.load(node);
 
-  QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(str).toUtf8());
-  assert(!doc.isNull());
-  tesseract_gui::QJsonModel model;
-  model.loadJson(doc.toBinaryData());
+  YAML::Emitter emitter;
+  emitter << model.yaml();
+  std::cout << emitter.c_str() << std::endl;
+
   QTreeView widget;
   widget.setModel(&model);
   widget.show();

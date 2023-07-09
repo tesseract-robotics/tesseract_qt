@@ -134,4 +134,7 @@ search: https://fonts.google.com/icons
 - zoom_in.svg
 - zoom_out.svg
 - data.svg
+- true-false.svg
+- key-value.svg
+- array.svg
 
