@@ -34,6 +34,8 @@
 #include <tesseract_qt/studio/studio_plugin_loader_dialog.h>
 #include <tesseract_qt/studio/studio_dock_widget_factory.h>
 
+#include <boost/program_options.hpp>
+
 #include <DockManager.h>
 #include <DockAreaWidget.h>
 
@@ -497,6 +499,46 @@ Studio::Studio(QWidget* parent)
 }
 
 Studio::~Studio() = default;
+
+bool Studio::init(int argc, char** argv)
+{
+  namespace po = boost::program_options;
+  std::string config;
+  po::options_description desc("Options");
+  desc.add_options()("help,h",
+                     "Print help messages")("config,c", po::value<std::string>(&config), "File path to config.");
+
+  po::variables_map vm;
+  try
+  {
+    po::store(po::parse_command_line(argc, argv, desc), vm);  // can throw
+
+    /** --help option */
+    if (vm.count("help") != 0U)
+    {
+      std::stringstream ss;
+      ss << "Basic Command Line Parameter App" << std::endl << desc << std::endl;
+      CONSOLE_BRIDGE_logInform(ss.str().c_str());
+      return false;
+    }
+
+    // throws on error, so do after help in case there are any problems
+    po::notify(vm);
+  }
+  catch (po::error& e)
+  {
+    std::stringstream ss;
+    ss << "ERROR: " << e.what() << std::endl << std::endl;
+    ss << desc << std::endl;
+    CONSOLE_BRIDGE_logError(ss.str().c_str());
+    return false;
+  }
+
+  if (!config.empty())
+    loadConfig(QString::fromStdString(config));
+
+  return true;
+}
 
 void Studio::loadConfig(const QString& filepath)
 {

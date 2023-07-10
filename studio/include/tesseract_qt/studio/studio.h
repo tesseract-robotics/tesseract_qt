@@ -51,6 +51,12 @@ public:
   ~Studio();
 
   /**
+   * @brief Intialize using commandline inputs
+   * @note Not required to call this method
+   */
+  bool init(int argc, char** argv);
+
+  /**
    * @brief Load config
    * @param The file path to config
    */
