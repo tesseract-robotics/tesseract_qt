@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.18.2 (2023-07-10)
+-------------------
 * Separate Studio App and MainWindow (`#66 <https://github.com/tesseract-robotics/tesseract_qt/issues/66>`_)
 * Remove invalid header from yaml model (`#65 <https://github.com/tesseract-robotics/tesseract_qt/issues/65>`_)
 * Add YAML Model (`#64 <https://github.com/tesseract-robotics/tesseract_qt/issues/64>`_)
