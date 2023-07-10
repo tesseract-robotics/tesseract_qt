@@ -2,6 +2,14 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Separate Studio App and MainWindow (`#66 <https://github.com/tesseract-robotics/tesseract_qt/issues/66>`_)
+* Remove invalid header from yaml model (`#65 <https://github.com/tesseract-robotics/tesseract_qt/issues/65>`_)
+* Add YAML Model (`#64 <https://github.com/tesseract-robotics/tesseract_qt/issues/64>`_)
+* Add command line argument support to studio
+* Contributors: Levi Armstrong
+
 0.18.1 (2023-07-03)
 -------------------
 * Fix task composer problem model
