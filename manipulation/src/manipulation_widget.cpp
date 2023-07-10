@@ -83,6 +83,14 @@ ManipulationWidget::ManipulationWidget(std::shared_ptr<const ComponentInfo> pare
 
   ui->tabWidget->setCurrentIndex(0);
 
+  if (!data_->use_parent_component_info)
+  {
+    data_->state_names.push_back("start");
+    ui->state_combo_box->blockSignals(true);
+    ui->state_combo_box->setCurrentText("start");
+    ui->state_combo_box->blockSignals(false);
+  }
+
   onModeChanged();
 }
 
@@ -187,7 +195,6 @@ void ManipulationWidget::removeStateHelper(const std::string& state_name)
 void ManipulationWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   data_->parent_component_info = std::move(component_info);
-
   const std::string current_state = ui->state_combo_box->currentText().toStdString();
   const QStringList state_names = data_->state_names;
   for (const auto& state_name : state_names)
@@ -417,14 +424,24 @@ void ManipulationWidget::onTCPOffsetNameChanged()
 void ManipulationWidget::onStateNameChanged()
 {
   const std::string current_state_name = ui->state_combo_box->currentText().toStdString();
-
-  auto it = data_->states.find(current_state_name);
-  if (it != data_->states.end())
-    ui->joint_state_slider->setJointState(it->second);
-
   auto it2 = data_->state_models.find(current_state_name);
   if (it2 != data_->state_models.end())
+  {
     ui->state_widget->setModel(it2->second);
+    if (!data_->use_parent_component_info)
+    {
+      std::shared_ptr<EnvironmentWrapper> env_wrapper = EnvironmentManager::find(it2->second->getComponentInfo());
+      if (env_wrapper != nullptr)
+        data_->environment = env_wrapper->getEnvironment();
+    }
+
+    if (data_->environment != nullptr)
+    {
+      auto it = data_->states.find(current_state_name);
+      if (it != data_->states.end())
+        ui->joint_state_slider->setJointState(it->second);
+    }
+  }
 }
 
 void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::string, double> state)
@@ -573,6 +590,8 @@ void ManipulationWidget::onReset()
       auto child_env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(
           data_->state_models.at(state_name.toStdString())->getComponentInfo(), env->clone());
       EnvironmentManager::set(child_env_wrapper);
+      if (data_->environment == nullptr)
+        data_->environment = child_env_wrapper->getEnvironment();
     }
   }
   else
