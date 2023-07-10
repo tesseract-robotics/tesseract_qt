@@ -95,30 +95,42 @@ qt5_wrap_cpp(STUDIO_WIDGET_headers_MOC include/tesseract_qt/studio/studio.h
 qt5_wrap_ui(STUDIO_WIDGET_headers_UI include/tesseract_qt/studio/studio.ui
             include/tesseract_qt/studio/studio_plugin_loader_dialog.ui)
 
-add_executable(
-  ${PROJECT_NAME}_studio
+add_library(
+  ${PROJECT_NAME}_studio_widgets
   ${STUDIO_WIDGET_headers_MOC}
   ${STUDIO_WIDGET_headers_UI}
   src/studio.cpp
-  src/studio_app.cpp
   src/studio_plugin_loader_dialog.cpp)
 
 target_link_libraries(
+  ${PROJECT_NAME}_studio_widgets
+  PUBLIC tesseract::tesseract_common
+         Qt5::Core
+         Qt5::Gui
+         Qt5::Widgets
+         ads::qtadvanceddocking
+         Boost::program_options
+         ${PROJECT_NAME}_studio_plugin_factory
+         ${PROJECT_NAME}_common)
+target_include_directories(
+  ${PROJECT_NAME}_studio_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                                        "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
+target_compile_definitions(${PROJECT_NAME}_studio_widgets
+                           PRIVATE TESSERACT_STUDIO_PLUGIN_PATH="${TESSERACT_STUDIO_PLUGIN_PATH}")
+target_compile_definitions(${PROJECT_NAME}_studio_widgets
+                           PRIVATE TESSERACT_STUDIO_PLUGINS="${TESSERACT_STUDIO_PLUGINS_STRING}")
+
+add_executable(${PROJECT_NAME}_studio src/studio_app.cpp)
+target_link_libraries(
   ${PROJECT_NAME}_studio
-  PRIVATE tesseract::tesseract_common
-          Qt5::Core
+  PRIVATE Qt5::Core
           Qt5::Gui
           Qt5::Widgets
-          ads::qtadvanceddocking
-          Boost::program_options
-          ${PROJECT_NAME}_studio_plugin_factory
+          ${PROJECT_NAME}_studio_widgets
           ${PROJECT_NAME}_common)
 target_include_directories(
   ${PROJECT_NAME}_studio PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                  "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
-target_compile_definitions(${PROJECT_NAME}_studio
-                           PRIVATE TESSERACT_STUDIO_PLUGIN_PATH="${TESSERACT_STUDIO_PLUGIN_PATH}")
-target_compile_definitions(${PROJECT_NAME}_studio PRIVATE TESSERACT_STUDIO_PLUGINS="${TESSERACT_STUDIO_PLUGINS_STRING}")
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
@@ -131,5 +143,6 @@ endforeach()
 install_targets(
   TARGETS
   ${PROJECT_NAME}_studio
+  ${PROJECT_NAME}_studio_widgets
   ${PROJECT_NAME}_studio_plugin_factory
   ${PROJECT_NAME}_studio_plugins)
