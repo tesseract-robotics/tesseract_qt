@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix manipulation widget when use_parent_component_info is false
+* Contributors: Levi Armstrong
+
 0.18.2 (2023-07-10)
 -------------------
 * Separate Studio App and MainWindow (`#66 <https://github.com/tesseract-robotics/tesseract_qt/issues/66>`_)
