@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.18.3 (2023-07-10)
+-------------------
 * Fix manipulation widget when use_parent_component_info is false
 * Contributors: Levi Armstrong
 
