@@ -67,7 +67,7 @@ public:
    * @param name The name to locate
    * @return The entity
    */
-  Entity getTrackedEntity(const std::string& ns, const std::string& name);
+  Entity getTrackedEntity(const std::string& ns, const std::string& name) const;
 
   /**
    * @brief Check if a tracked entity exists
@@ -75,7 +75,7 @@ public:
    * @param name The name to locate
    * @return True if it exists, otherwise false
    */
-  bool hasTrackedEntity(const std::string& ns, const std::string& name);
+  bool hasTrackedEntity(const std::string& ns, const std::string& name) const;
 
   /**
    * @brief Get the tracked entities under the provided namespace

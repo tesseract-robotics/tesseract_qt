@@ -44,7 +44,7 @@ Entity EntityContainer::addTrackedEntity(const std::string& ns, const std::strin
   return entity;
 }
 
-Entity EntityContainer::getTrackedEntity(const std::string& ns, const std::string& name)
+Entity EntityContainer::getTrackedEntity(const std::string& ns, const std::string& name) const
 {
   std::shared_lock<std::shared_mutex> lock(mutex_);
   auto ns_it = tracked_entity_map_.find(ns);
@@ -58,7 +58,7 @@ Entity EntityContainer::getTrackedEntity(const std::string& ns, const std::strin
   return it->second;
 }
 
-bool EntityContainer::hasTrackedEntity(const std::string& ns, const std::string& name)
+bool EntityContainer::hasTrackedEntity(const std::string& ns, const std::string& name) const
 {
   std::shared_lock<std::shared_mutex> lock(mutex_);
   auto ns_it = tracked_entity_map_.find(ns);
