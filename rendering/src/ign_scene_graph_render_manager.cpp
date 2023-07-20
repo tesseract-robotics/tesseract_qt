@@ -22,7 +22,7 @@
  */
 
 #include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>
-#include <tesseract_qt/rendering/utils.h>
+#include <tesseract_qt/rendering/gazebo_utils.h>
 #include <tesseract_qt/rendering/conversions.h>
 
 #include <tesseract_qt/common/utils.h>
@@ -58,18 +58,7 @@ struct IgnSceneGraphRenderManager::Implementation
     gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
     for (const auto& entity_container : entity_containers)
     {
-      for (const auto& ns : entity_container.second->getTrackedEntities())
-      {
-        for (const auto& entity : ns.second)
-          scene->DestroyNodeById(entity.second.id);
-      }
-
-      for (const auto& ns : entity_container.second->getUntrackedEntities())
-      {
-        for (const auto& entity : ns.second)
-          scene->DestroyNodeById(entity.id);
-      }
-
+      clearScene(*scene, *(entity_container.second));
       entity_manager->removeEntityContainer(boost::uuids::to_string(entity_container.first->getNamespace()));
       entity_container.second->clear();
     }
@@ -85,20 +74,8 @@ struct IgnSceneGraphRenderManager::Implementation
     if (it != entity_containers.end())
     {
       gz::rendering::ScenePtr scene = sceneFromFirstRenderEngine(scene_name);
-      for (const auto& ns : it->second->getTrackedEntities())
-      {
-        for (const auto& entity : ns.second)
-          scene->DestroyNodeById(entity.second.id);
-      }
-
-      for (const auto& ns : it->second->getUntrackedEntities())
-      {
-        for (const auto& entity : ns.second)
-          scene->DestroyNodeById(entity.id);
-      }
-
+      clearScene(*scene, *(it->second));
       it->second->clear();
-
       entity_containers.erase(it);
       entity_manager->removeEntityContainer(boost::uuids::to_string(ci->getNamespace()));
     }
@@ -297,14 +274,7 @@ void IgnSceneGraphRenderManager::render()
     {
       auto& e = static_cast<events::SceneStateChanged&>(*event);
       EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
-      for (const auto& pair : e.getState().link_transforms)
-      {
-        if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, pair.first))
-        {
-          Entity entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, pair.first);
-          scene->VisualById(entity.id)->SetWorldPose(gz::math::eigen3::convert(pair.second));
-        }
-      }
+      setSceneState(*scene, *entity_container, e.getState().link_transforms);
     }
   }
 

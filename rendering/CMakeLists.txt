@@ -14,6 +14,19 @@ find_package(gz-math7-eigen3 REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
+add_library(${PROJECT_NAME}_gazebo_utils SHARED src/gazebo_utils.cpp)
+target_link_libraries(
+  ${PROJECT_NAME}_gazebo_utils
+  PUBLIC tesseract::tesseract_common
+         gz-common5::gz-common5-profiler
+         gz-common5::gz-common5-events
+         gz-common5::gz-common5-av
+         gz-rendering7::gz-rendering7
+         gz-math7::gz-math7-eigen3
+         ${PROJECT_NAME}_common)
+target_include_directories(${PROJECT_NAME}_gazebo_utils PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                                                               "$<INSTALL_INTERFACE:include>")
+
 qt5_wrap_cpp(
   RENDERING_WIDGET_headers_MOC
   include/tesseract_qt/rendering/render_events.h
@@ -29,8 +42,7 @@ add_library(
   src/ign_scene_graph_render_manager.cpp
   src/ign_tool_path_render_manager.cpp
   src/render_events.cpp
-  src/render_widget.cpp
-  src/utils.cpp)
+  src/render_widget.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_render_widgets
@@ -44,6 +56,7 @@ target_link_libraries(
          Qt5::Gui
          Qt5::Widgets
          Qt5::OpenGL
+         ${PROJECT_NAME}_gazebo_utils
          ${PROJECT_NAME}_common)
 target_include_directories(
   ${PROJECT_NAME}_render_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
@@ -55,4 +68,4 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
-install_targets(TARGETS ${PROJECT_NAME}_render_widgets)
+install_targets(TARGETS ${PROJECT_NAME}_gazebo_utils ${PROJECT_NAME}_render_widgets)

@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/rendering/ign_contact_results_render_manager.h>
 #include <tesseract_qt/rendering/render_events.h>
-#include <tesseract_qt/rendering/utils.h>
+#include <tesseract_qt/rendering/gazebo_utils.h>
 
 #include <tesseract_qt/common/events/contact_results_events.h>
 #include <tesseract_qt/common/entity_manager.h>

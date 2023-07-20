@@ -24,8 +24,8 @@
 #define TESSERACT_GUI_COMMON_ENVIRONMENT_MANAGER_H
 
 #include <memory>
-#include <unordered_map>
 #include <mutex>
+#include <map>
 
 namespace tesseract_gui
 {

@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/rendering/ign_tool_path_render_manager.h>
-#include <tesseract_qt/rendering/utils.h>
+#include <tesseract_qt/rendering/gazebo_utils.h>
 
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>

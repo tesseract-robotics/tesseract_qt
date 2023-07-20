@@ -114,9 +114,6 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
             case tesseract_environment::CommandType::REPLACE_JOINT:
             case tesseract_environment::CommandType::CHANGE_JOINT_ORIGIN:
             case tesseract_environment::CommandType::CHANGE_LINK_ORIGIN:
-            {
-              break;
-            }
             case tesseract_environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
             case tesseract_environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
             case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:

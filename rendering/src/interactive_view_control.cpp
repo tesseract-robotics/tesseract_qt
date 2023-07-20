@@ -30,7 +30,7 @@
 #include <gz/rendering/Utils.hh>
 
 #include <tesseract_qt/rendering/render_events.h>
-#include <tesseract_qt/rendering/utils.h>
+#include <tesseract_qt/rendering/gazebo_utils.h>
 #include <tesseract_qt/rendering/interactive_view_control.h>
 
 /** @brief Private data class for InteractiveViewControl */

@@ -1,21 +1,11 @@
-#ifndef TESSERACT_IGNITION_CONVERSIONS_H
-#define TESSERACT_IGNITION_CONVERSIONS_H
+#ifndef TESSERACT_QT_RENDERING_CONVERSIONS_H
+#define TESSERACT_QT_RENDERING_CONVERSIONS_H
 
 #include <gz/common/KeyEvent.hh>
 #include <gz/common/MouseEvent.hh>
 #include <gz/math/Color.hh>
 #include <gz/math/Vector2.hh>
 #include <gz/math/Vector3.hh>
-#include <gz/rendering/Scene.hh>
-#include <gz/rendering/Visual.hh>
-#include <gz/rendering/Material.hh>
-
-#include <tesseract_qt/common/entity_container.h>
-#include <tesseract_scene_graph/graph.h>
-#include <tesseract_scene_graph/link.h>
-#include <tesseract_geometry/geometry.h>
-#include <tesseract_geometry/impl/polygon_mesh.h>
-#include <tesseract_collision/core/types.h>
 
 #include <QtCore>
 #include <QColor>
@@ -90,55 +80,6 @@ gz::common::MouseEvent convert(const QWheelEvent& e);
  */
 gz::common::KeyEvent convert(const QKeyEvent& e);
 
-/**
- * @brief Convert polygon mesh to ignition SubMesh
- * @param mesh The polygon mesh to convert
- * @return A Ignition SubMesh
- */
-gz::common::SubMesh convert(const tesseract_geometry::PolygonMesh& mesh);
-
-bool isMeshWithColor(const std::string& file_path);
-
-std::vector<std::string> loadSceneGraph(gz::rendering::Scene& scene,
-                                        EntityContainer& entity_container,
-                                        const tesseract_scene_graph::SceneGraph& scene_graph,
-                                        const std::string& prefix = "");
-
-gz::rendering::VisualPtr loadLink(gz::rendering::Scene& scene,
-                                  EntityContainer& entity_container,
-                                  const tesseract_scene_graph::Link& link);
-
-gz::rendering::VisualPtr loadLinkVisuals(gz::rendering::Scene& scene,
-                                         EntityContainer& entity_container,
-                                         const tesseract_scene_graph::Link& link);
-
-gz::rendering::VisualPtr loadLinkCollisions(gz::rendering::Scene& scene,
-                                            EntityContainer& entity_container,
-                                            const tesseract_scene_graph::Link& link);
-
-gz::rendering::VisualPtr loadLinkWireBox(gz::rendering::Scene& scene,
-                                         EntityContainer& entity_container,
-                                         const tesseract_scene_graph::Link& link,
-                                         const gz::math::AxisAlignedBox& aabb);
-
-gz::rendering::VisualPtr loadLinkAxis(gz::rendering::Scene& scene,
-                                      EntityContainer& entity_container,
-                                      const tesseract_scene_graph::Link& link);
-
-gz::rendering::VisualPtr loadLinkGeometry(gz::rendering::Scene& scene,
-                                          EntityContainer& entity_container,
-                                          const tesseract_geometry::Geometry& geometry,
-                                          const Eigen::Vector3d& scale,
-                                          const Eigen::Isometry3d& local_pose,
-                                          const tesseract_scene_graph::Material::ConstPtr& material);
-
-gz::rendering::MaterialPtr loadMaterial(gz::rendering::Scene& scene,
-                                        const tesseract_scene_graph::Material::ConstPtr& material);
-//  gz::rendering::LightPtr loadLight(gz::rendering::Scene& scene, const gz::msgs::Light &msg);
-
-gz::rendering::VisualPtr loadContactResults(gz::rendering::Scene& scene,
-                                            EntityContainer& entity_container,
-                                            const tesseract_collision::ContactResultVector& contact_results);
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_IGNITION_CONVERSIONS_H
+#endif  // TESSERACT_QT_RENDERING_CONVERSIONS_H
