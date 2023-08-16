@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/plot/plot_docker.h>
+#include <tesseract_qt/studio/plot_docker.h>
 #include <tesseract_qt/plot/plot_widget_editor.h>
 #include <tesseract_qt/common/svg_util.h>
 #include <DockSplitter.h>
