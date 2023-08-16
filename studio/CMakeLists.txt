@@ -16,10 +16,17 @@ endif()
 # Variable for task composer plugins
 set(TESSERACT_STUDIO_PLUGINS "")
 
-qt5_wrap_cpp(STUDIO_PLUGIN_FACTORY_headers_MOC include/tesseract_qt/studio/studio_dock_widget.h)
+qt5_wrap_ui(STUDIO_PLUGIN_FACTORY_headers_UI include/tesseract_qt/studio/plot_docker_toolbar.ui)
+qt5_wrap_cpp(STUDIO_PLUGIN_FACTORY_headers_MOC include/tesseract_qt/studio/studio_dock_widget.h
+             include/tesseract_qt/studio/plot_docker.h)
 
-add_library(${PROJECT_NAME}_studio_plugin_factory ${STUDIO_PLUGIN_FACTORY_headers_MOC}
-                                                  src/studio_dock_widget_factory.cpp src/studio_dock_widget.cpp)
+add_library(
+  ${PROJECT_NAME}_studio_plugin_factory
+  ${STUDIO_PLUGIN_FACTORY_headers_UI}
+  ${STUDIO_PLUGIN_FACTORY_headers_MOC}
+  src/studio_dock_widget_factory.cpp
+  src/studio_dock_widget.cpp
+  src/plot_docker.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_studio_plugin_factory
@@ -28,7 +35,8 @@ target_link_libraries(
          Qt5::Gui
          Qt5::Widgets
          ads::qtadvanceddocking
-         ${PROJECT_NAME}_common)
+         ${PROJECT_NAME}_common
+         ${PROJECT_NAME}_plot)
 target_include_directories(
   ${PROJECT_NAME}_studio_plugin_factory
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>"
@@ -131,6 +139,9 @@ target_link_libraries(
 target_include_directories(
   ${PROJECT_NAME}_studio PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                  "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
+
+# Add the demo subdirectory
+add_subdirectory(demo)
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)

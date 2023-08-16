@@ -8,7 +8,6 @@ find_package(
              Xml
   REQUIRED)
 find_package(Qwt REQUIRED)
-find_package(qtadvanceddocking REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
@@ -17,7 +16,6 @@ qt5_wrap_ui(
   PLOT_headers_UI
   include/tesseract_qt/plot/plot_widget_editor.ui
   include/tesseract_qt/plot/plot_widget_transforms.ui
-  include/tesseract_qt/plot/plot_docker_toolbar.ui
   include/tesseract_qt/plot/transforms/first_derivative.ui
   include/tesseract_qt/plot/transforms/integral_transform.ui
   include/tesseract_qt/plot/transforms/moving_average_filter.ui
@@ -25,7 +23,6 @@ qt5_wrap_ui(
   include/tesseract_qt/plot/transforms/outlier_removal.ui
   include/tesseract_qt/plot/transforms/scale_transform.ui
   include/tesseract_qt/plot/transforms/transform_selector.ui)
-
 qt5_wrap_cpp(
   PLOT_headers_MOC
   include/tesseract_qt/plot/custom_tracker.h
@@ -36,7 +33,6 @@ qt5_wrap_cpp(
   include/tesseract_qt/plot/plot_widget_editor.h
   include/tesseract_qt/plot/plot_widget_transforms.h
   include/tesseract_qt/plot/plot_zoomer.h
-  include/tesseract_qt/plot/plot_docker.h
   include/tesseract_qt/plot/plot_subplots.h
   include/tesseract_qt/plot/transform_function.h
   include/tesseract_qt/plot/transforms/transform_selector.h)
@@ -54,7 +50,6 @@ add_library(
   src/plot_widget_editor.cpp
   src/plot_widget_transforms.cpp
   src/plot_zoomer.cpp
-  src/plot_docker.cpp
   src/plot_subplots.cpp
   src/point_series_xy.cpp
   src/timeseries_qwt.cpp
@@ -76,7 +71,6 @@ target_link_libraries(
          Qt5::Xml
          Qwt::Qwt
          tesseract::tesseract_common
-         ads::qtadvanceddocking
          ${PROJECT_NAME}_common)
 target_include_directories(
   ${PROJECT_NAME}_plot PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
