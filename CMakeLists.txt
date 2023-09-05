@@ -72,4 +72,4 @@ configure_package(
             DEPENDENCIES
             ${DEPS}
             CFG_EXTRAS
-            tesseract_qt-extras.cmake)
+            cmake/tesseract_qt-extras.cmake)
