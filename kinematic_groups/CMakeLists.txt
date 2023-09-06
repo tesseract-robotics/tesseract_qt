@@ -1,5 +1,5 @@
 find_package(tesseract_common REQUIRED)
-find_package(tesseract_kinematics REQUIRED)
+find_package(tesseract_kinematics REQUIRED COMPONENTS core opw)
 find_package(tesseract_srdf REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 

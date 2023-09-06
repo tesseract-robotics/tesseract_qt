@@ -1,6 +1,5 @@
 find_package(tesseract_common REQUIRED)
-find_package(tesseract_motion_planners REQUIRED)
-find_package(tesseract_task_composer REQUIRED)
+find_package(tesseract_task_composer REQUIRED COMPONENTS core planning)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -24,6 +23,9 @@ target_link_libraries(
   ${PROJECT_NAME}_planning
   PUBLIC tesseract::tesseract_motion_planners_core
          tesseract::tesseract_task_composer
+         tesseract::tesseract_task_composer_nodes
+         tesseract::tesseract_task_composer_planning
+         tesseract::tesseract_task_composer_planning_nodes
          Qt5::Core
          Qt5::Widgets
          Qt5::Gui
