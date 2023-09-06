@@ -33,17 +33,17 @@ add_subdirectory(workbench)
 set(DEPS
     "Qt5 COMPONENTS Core Gui Widgets Svg OpenGL Xml"
     "Boost COMPONENTS program_options"
+    "tesseract_collision REQUIRED COMPONENTS core"
+    "tesseract_kinematics REQUIRED COMPONENTS core opw"
+    "tesseract_task_composer REQUIRED COMPONENTS core planning"
     tesseract_environment
-    tesseract_kinematics
     tesseract_scene_graph
     tesseract_common
     tesseract_support
     tesseract_urdf
     tesseract_srdf
     tesseract_visualization
-    tesseract_command_language
-    tesseract_motion_planners
-    tesseract_task_composer)
+    tesseract_command_language)
 
 if(${BUILD_RENDERING})
   message("Building rendering module")
@@ -65,11 +65,4 @@ endif()
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGraphviz.cmake"
         DESTINATION lib/cmake/${PROJECT_NAME})
 
-install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/tesseract_qt-extras.cmake" DESTINATION lib/cmake/${PROJECT_NAME})
-
-configure_package(
-  NAMESPACE tesseract
-            DEPENDENCIES
-            ${DEPS}
-            CFG_EXTRAS
-            cmake/tesseract_qt-extras.cmake)
+configure_package(NAMESPACE tesseract DEPENDENCIES ${DEPS} CFG_EXTRAS cmake/tesseract_qt-extras.cmake)

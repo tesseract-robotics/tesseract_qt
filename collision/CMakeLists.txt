@@ -1,5 +1,5 @@
 find_package(tesseract_common REQUIRED)
-find_package(tesseract_collision REQUIRED)
+find_package(tesseract_collision REQUIRED COMPONENTS core)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
