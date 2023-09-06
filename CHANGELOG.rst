@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.19.0 (2023-09-06)
+-------------------
 * Add RICB to rosinstall files
 * Update to latest tesseract and tesseract_planning
 * Fix build issue with configure_package
