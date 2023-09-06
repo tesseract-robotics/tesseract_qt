@@ -2,6 +2,16 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add RICB to rosinstall files
+* Update to latest tesseract and tesseract_planning
+* Fix build issue with configure_package
+* Made studio and rendering module builds optional
+* Moved plot docker to studio module
+* Create gazebo_utils target
+* Contributors: Levi Armstrong, Michael Ripperger, Roelof Oomen
+
 0.18.3 (2023-07-10)
 -------------------
 * Fix manipulation widget when use_parent_component_info is false
