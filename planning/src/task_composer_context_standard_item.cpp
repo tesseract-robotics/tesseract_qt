@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/planning/task_composer_input_standard_item.h>
+#include <tesseract_qt/planning/task_composer_context_standard_item.h>
 #include <tesseract_qt/planning/task_composer_problem_standard_item.h>
 #include <tesseract_qt/planning/task_composer_node_info_map_standard_item.h>
 #include <tesseract_qt/planning/task_composer_data_storage_standard_item.h>
@@ -29,37 +29,40 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_task_composer/core/task_composer_input.h>
+#include <tesseract_task_composer/core/task_composer_context.h>
 
 namespace tesseract_gui
 {
-TaskComposerInputStandardItem::TaskComposerInputStandardItem(const tesseract_planning::TaskComposerInput& input)
-  : QStandardItem(icons::getUnknownIcon(), "Task Composer Input")
+TaskComposerContextStandardItem::TaskComposerContextStandardItem(const tesseract_planning::TaskComposerContext& context)
+  : QStandardItem(icons::getUnknownIcon(), "Task Composer Context")
 {
-  ctor(input);
+  ctor(context);
 }
 
-TaskComposerInputStandardItem::TaskComposerInputStandardItem(const QString& text,
-                                                             const tesseract_planning::TaskComposerInput& input)
+TaskComposerContextStandardItem::TaskComposerContextStandardItem(const QString& text,
+                                                                 const tesseract_planning::TaskComposerContext& context)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
-  ctor(input);
+  ctor(context);
 }
 
-TaskComposerInputStandardItem::TaskComposerInputStandardItem(const QIcon& icon,
-                                                             const QString& text,
-                                                             const tesseract_planning::TaskComposerInput& input)
+TaskComposerContextStandardItem::TaskComposerContextStandardItem(const QIcon& icon,
+                                                                 const QString& text,
+                                                                 const tesseract_planning::TaskComposerContext& context)
   : QStandardItem(icon, text)
 {
-  ctor(input);
+  ctor(context);
 }
 
-int TaskComposerInputStandardItem::type() const { return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_INPUT); }
+int TaskComposerContextStandardItem::type() const
+{
+  return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_CONTEXT);
+}
 
-void TaskComposerInputStandardItem::ctor(const tesseract_planning::TaskComposerInput& input)
+void TaskComposerContextStandardItem::ctor(const tesseract_planning::TaskComposerContext& input)
 {
   appendRow(new TaskComposerProblemStandardItem("problem", *input.problem));
-  appendRow(new TaskComposerDataStorageStandardItem("data_storage", input.data_storage));
+  appendRow(new TaskComposerDataStorageStandardItem("data_storage", *input.data_storage));
   /** @todo Add profiles */
   appendRow(createStandardItemBool("successful", input.isSuccessful()));
   appendRow(createStandardItemBool("aborted", input.isAborted()));

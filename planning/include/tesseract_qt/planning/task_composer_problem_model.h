@@ -40,6 +40,19 @@ class TaskComposerProblemModel : public QStandardItemModel
   Q_OBJECT
 
 public:
+  struct ProblemData
+  {
+    ProblemData() = default;
+    ProblemData(tesseract_planning::TaskComposerProblem::UPtr problem,
+                tesseract_planning::TaskComposerDataStorage::UPtr data_storage)
+      : problem(std::move(problem)), data_storage(std::move(data_storage))
+    {
+    }
+
+    tesseract_planning::TaskComposerProblem::UPtr problem;
+    tesseract_planning::TaskComposerDataStorage::UPtr data_storage;
+  };
+
   explicit TaskComposerProblemModel(QObject* parent = nullptr);
   ~TaskComposerProblemModel() override;
 
@@ -49,7 +62,7 @@ public:
    * @param ns The namespace to store the problem under
    * @return The key associated with added problem for removal
    */
-  QString addProblem(tesseract_planning::TaskComposerProblem::UPtr problem, std::string ns = "general");
+  QString addProblem(ProblemData data, std::string ns = "general");
 
   /**
    * @brief Remove the problem
@@ -69,7 +82,7 @@ public:
    * @param row The row to get associated problem
    * @return The problem
    */
-  const tesseract_planning::TaskComposerProblem& getProblem(const QModelIndex& row) const;
+  const ProblemData& getProblem(const QModelIndex& row) const;
 
   /**
    * @brief Get the problem namespace associated with the row
