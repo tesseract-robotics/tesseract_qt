@@ -22,6 +22,7 @@
  */
 #include <tesseract_qt/planning/task_composer_problem_model.h>
 #include <tesseract_qt/planning/task_composer_problem_standard_item.h>
+#include <tesseract_qt/planning/task_composer_data_storage_standard_item.h>
 #include <tesseract_qt/common/models/namespace_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
@@ -105,7 +106,7 @@ TaskComposerProblemStandardItem* findTaskComposerProblemItem(QStandardItem* item
 const tesseract_planning::TaskComposerProblem& TaskComposerProblemModel::getProblem(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
-  return *(data_->problems.at(findTaskComposerProblemItem(item)));
+  return *data_->problems.at(findTaskComposerProblemItem(item));
 }
 
 const QString& TaskComposerProblemModel::getProblemNamespace(const QModelIndex& row) const

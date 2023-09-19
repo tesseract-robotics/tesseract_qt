@@ -20,31 +20,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_INPUT_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASK_COMPOSER_INPUT_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_CONTEXT_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_CONTEXT_STANDARD_ITEM_H
 
 #include <QStandardItem>
 
 namespace tesseract_planning
 {
-class TaskComposerInput;
+class TaskComposerContext;
 }
 
 namespace tesseract_gui
 {
-class TaskComposerInputStandardItem : public QStandardItem
+class TaskComposerContextStandardItem : public QStandardItem
 {
 public:
-  explicit TaskComposerInputStandardItem(const tesseract_planning::TaskComposerInput& input);
-  TaskComposerInputStandardItem(const QString& text, const tesseract_planning::TaskComposerInput& input);
-  TaskComposerInputStandardItem(const QIcon& icon,
-                                const QString& text,
-                                const tesseract_planning::TaskComposerInput& input);
+  explicit TaskComposerContextStandardItem(const tesseract_planning::TaskComposerContext& context);
+  TaskComposerContextStandardItem(const QString& text, const tesseract_planning::TaskComposerContext& context);
+  TaskComposerContextStandardItem(const QIcon& icon,
+                                  const QString& text,
+                                  const tesseract_planning::TaskComposerContext& context);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::TaskComposerInput& input);
+  void ctor(const tesseract_planning::TaskComposerContext& context);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_INPUT_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_CONTEXT_STANDARD_ITEM_H
