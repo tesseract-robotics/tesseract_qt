@@ -11,10 +11,10 @@ add_library(
   ${PROJECT_NAME}_planning SHARED
   ${PLANNING_headers_MOC}
   src/planning_profile_remapping_standard_item.cpp
+  src/task_composer_context_standard_item.cpp
   src/task_composer_data_storage_standard_item.cpp
   src/task_composer_problem_model.cpp
   src/task_composer_problem_standard_item.cpp
-  src/task_composer_input_standard_item.cpp
   src/task_composer_node_info_map_standard_item.cpp
   src/task_composer_node_info_standard_item.cpp
   src/task_composer_standard_item_utils.cpp)

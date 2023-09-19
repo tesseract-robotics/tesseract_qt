@@ -68,7 +68,6 @@ int TaskComposerProblemStandardItem::type() const
 void TaskComposerProblemStandardItem::ctor(const tesseract_planning::TaskComposerProblem& problem)
 {
   appendRow(createStandardItemString("name", problem.name));
-  appendRow(new TaskComposerDataStorageStandardItem("input_data", problem.input_data));
 
   // Get the problem
   const auto* planning_problem = dynamic_cast<const tesseract_planning::PlanningTaskComposerProblem*>(&problem);
