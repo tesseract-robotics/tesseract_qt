@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.20.0 (2023-09-29)
+-------------------
 * Update to Tesseract version 0.20.0 (`#79 <https://github.com/tesseract-robotics/tesseract_qt/issues/79>`_)
 * Update to use TaskComposerContext (`#74 <https://github.com/tesseract-robotics/tesseract_qt/issues/74>`_)
 * Contributors: Levi Armstrong
