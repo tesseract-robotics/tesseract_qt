@@ -36,7 +36,7 @@ namespace tesseract_gui
 struct TaskComposerProblemModelPrivate
 {
   std::map<QString, QStandardItem*> items;
-  std::map<QStandardItem*, TaskComposerProblemModel::ProblemData> problems;
+  std::map<QStandardItem*, tesseract_planning::TaskComposerProblem::UPtr> problems;
   std::map<QStandardItem*, QString> problems_ns;
   void clear()
   {
@@ -62,20 +62,17 @@ void TaskComposerProblemModel::clear()
   data_->clear();
 }
 
-QString TaskComposerProblemModel::addProblem(ProblemData data, std::string ns)
+QString TaskComposerProblemModel::addProblem(tesseract_planning::TaskComposerProblem::UPtr problem, std::string ns)
 {
   QString key = QUuid::createUuid().toString();
   ns = (ns.empty()) ? "general" : ns;
   NamespaceStandardItem* item = createNamespaceItem(*invisibleRootItem(), ns);
 
-  auto* problem_data_storage = new TaskComposerDataStorageStandardItem(key, *data.data_storage);
-  auto* problem_item = new TaskComposerProblemStandardItem(key, *data.problem);
-  problem_item->appendRow({ new QStandardItem("data_storage"), problem_data_storage });
-
-  auto* problem_description_item = new QStandardItem(QString::fromStdString(data.problem->name));
+  auto* problem_item = new TaskComposerProblemStandardItem(key, *problem);
+  auto* problem_description_item = new QStandardItem(QString::fromStdString(problem->name));
   item->appendRow({ problem_item, problem_description_item });
   data_->items[key] = problem_item;
-  data_->problems[problem_item] = std::move(data);
+  data_->problems[problem_item] = std::move(problem);
   data_->problems_ns[problem_item] = ns.c_str();
   return key;
 }
@@ -106,10 +103,10 @@ TaskComposerProblemStandardItem* findTaskComposerProblemItem(QStandardItem* item
   return findTaskComposerProblemItem(item->parent());
 }
 
-const TaskComposerProblemModel::ProblemData& TaskComposerProblemModel::getProblem(const QModelIndex& row) const
+const tesseract_planning::TaskComposerProblem& TaskComposerProblemModel::getProblem(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
-  return data_->problems.at(findTaskComposerProblemItem(item));
+  return *data_->problems.at(findTaskComposerProblemItem(item));
 }
 
 const QString& TaskComposerProblemModel::getProblemNamespace(const QModelIndex& row) const
