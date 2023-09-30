@@ -28,6 +28,10 @@
 
 #include <tesseract_qt/environment/models/environment_commands_standard_item.h>
 
+#include <tesseract_qt/command_language/models/null_instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
+
 #include <tesseract_qt/common/models/manipulator_info_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
@@ -80,6 +84,20 @@ void TaskComposerProblemStandardItem::ctor(const tesseract_planning::TaskCompose
   appendRow(environment);
 
   appendRow(new ManipulatorInfoStandardItem("global_manip_info", planning_problem->manip_info));
+
+  if (planning_problem->input_instruction.isNull())
+  {
+    appendRow(new NullInstructionStandardItem("input_instruction"));
+  }
+  else if (planning_problem->input_instruction.isCompositeInstruction())
+  {
+    appendRow(new CompositeInstructionStandardItem(
+        "input_instruction", planning_problem->input_instruction.as<tesseract_planning::CompositeInstruction>()));
+  }
+  else
+  {
+    appendRow(new InstructionStandardItem("input_instruction", planning_problem->input_instruction));
+  }
 
   appendRow(
       new PlannerProfileRemappingStandardItem("move_profile_remapping", planning_problem->move_profile_remapping));
