@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.20.1 (2023-10-13)
+-------------------
 * Fix usage of uninitialized members
 * Contributors: Roelof Oomen
 
