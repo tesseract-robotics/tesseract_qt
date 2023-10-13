@@ -95,7 +95,7 @@ SceneStateModel::SceneStateModel(std::shared_ptr<const ComponentInfo> component_
 SceneStateModel::~SceneStateModel() = default;
 
 SceneStateModel::SceneStateModel(const SceneStateModel& other)
-  : SceneStateModel(data_->component_info, other.d_ptr->parent)
+  : SceneStateModel(other.data_->component_info, other.d_ptr->parent)
 {
 }
 
