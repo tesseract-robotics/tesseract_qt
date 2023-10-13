@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix usage of uninitialized members
+* Contributors: Roelof Oomen
+
 0.20.0 (2023-09-29)
 -------------------
 * Update to Tesseract version 0.20.0 (`#79 <https://github.com/tesseract-robotics/tesseract_qt/issues/79>`_)
