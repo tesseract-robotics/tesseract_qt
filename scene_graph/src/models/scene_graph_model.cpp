@@ -73,7 +73,7 @@ SceneGraphModel::SceneGraphModel(std::shared_ptr<const ComponentInfo> component_
 SceneGraphModel::~SceneGraphModel() = default;
 
 SceneGraphModel::SceneGraphModel(const SceneGraphModel& other)
-  : SceneGraphModel(data_->component_info, other.d_ptr->parent)
+  : SceneGraphModel(other.data_->component_info, other.d_ptr->parent)
 {
   // Install event filter
   qGuiApp->installEventFilter(this);
