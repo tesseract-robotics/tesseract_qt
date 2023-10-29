@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix sendEvent calls
+* Contributors: Levi Armstrong
+
 0.20.1 (2023-10-13)
 -------------------
 * Fix usage of uninitialized members
