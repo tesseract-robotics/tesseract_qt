@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.20.2 (2023-10-29)
+-------------------
 * Fix sendEvent calls
 * Contributors: Levi Armstrong
 
