@@ -143,9 +143,14 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
     // Remove existing environment wrapper
     EnvironmentManager::remove(data_->component_info);
 
-    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(data_->component_info));
-    QApplication::sendEvent(qApp, new events::KinematicGroupsClear(data_->component_info));
-    QApplication::sendEvent(qApp, new events::GroupJointStatesClear(data_->component_info));
+    events::AllowedCollisionMatrixClear clear_acm_event(data_->component_info);
+    QApplication::sendEvent(qApp, &clear_acm_event);
+
+    events::KinematicGroupsClear clear_kin_groups_event(data_->component_info);
+    QApplication::sendEvent(qApp, &clear_kin_groups_event);
+
+    events::GroupJointStatesClear clear_group_joint_states_event(data_->component_info);
+    QApplication::sendEvent(qApp, &clear_group_joint_states_event);
     //    this->data_->user_tcp_model.clear();
     //    this->data_->opw_kinematics_model.clear();
 

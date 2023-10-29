@@ -132,9 +132,9 @@ void ManipulationWidget::addStateHelper(const std::string& state_name)
     std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
     for (const auto& it : data_->state_models)
       state_component_infos[it.first] = it.second->getComponentInfo();
-    QApplication::sendEvent(qApp,
-                            new events::ManipulationChanged(
-                                data_->parent_component_info, current_state_name.toStdString(), state_component_infos));
+    events::ManipulationChanged event(
+        data_->parent_component_info, current_state_name.toStdString(), state_component_infos);
+    QApplication::sendEvent(qApp, &event);
   }
 
   if (!data_->use_parent_component_info)
@@ -186,10 +186,9 @@ void ManipulationWidget::removeStateHelper(const std::string& state_name)
   std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
   for (const auto& it : data_->state_models)
     state_component_infos[it.first] = it.second->getComponentInfo();
-  QApplication::sendEvent(qApp,
-                          new events::ManipulationChanged(data_->parent_component_info,
-                                                          ui->state_combo_box->currentText().toStdString(),
-                                                          state_component_infos));
+  events::ManipulationChanged event(
+      data_->parent_component_info, ui->state_combo_box->currentText().toStdString(), state_component_infos);
+  QApplication::sendEvent(qApp, &event);
 }
 
 void ManipulationWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
@@ -318,10 +317,9 @@ void ManipulationWidget::onGroupNameChanged()
 
       for (const auto& state_name : data_->state_names)
       {
-        QApplication::sendEvent(
-            qApp,
-            new events::SceneStateChanged(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
-                                          env->getState()));
+        events::SceneStateChanged event(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
+                                        env->getState());
+        QApplication::sendEvent(qApp, &event);
         data_->states[state_name.toStdString()].clear();
       }
 
@@ -577,9 +575,9 @@ void ManipulationWidget::onReset()
 
   for (const auto& state_name : data_->state_names)
   {
-    QApplication::sendEvent(qApp,
-                            new events::SceneStateChanged(
-                                data_->state_models.at(state_name.toStdString())->getComponentInfo(), env->getState()));
+    events::SceneStateChanged event(data_->state_models.at(state_name.toStdString())->getComponentInfo(),
+                                    env->getState());
+    QApplication::sendEvent(qApp, &event);
     data_->states[state_name.toStdString()].clear();
   }
 
@@ -640,10 +638,9 @@ void ManipulationWidget::onReset()
   std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
   for (const auto& it : data_->state_models)
     state_component_infos[it.first] = it.second->getComponentInfo();
-  QApplication::sendEvent(qApp,
-                          new events::ManipulationChanged(data_->parent_component_info,
-                                                          ui->state_combo_box->currentText().toStdString(),
-                                                          state_component_infos));
+  events::ManipulationChanged event(
+      data_->parent_component_info, ui->state_combo_box->currentText().toStdString(), state_component_infos);
+  QApplication::sendEvent(qApp, &event);
 }
 
 }  // namespace tesseract_gui

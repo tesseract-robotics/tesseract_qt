@@ -133,7 +133,8 @@ void KinematicGroupsEditorWidget::onAddGroup()
 
     tesseract_srdf::ChainGroup group{ { base_link.toStdString(), tip_link.toStdString() } };
 
-    QApplication::sendEvent(qApp, new events::KinematicGroupsAddChain(getComponentInfo(), group_name, group));
+    events::KinematicGroupsAddChain event(getComponentInfo(), group_name, group);
+    QApplication::sendEvent(qApp, &event);
 
     ui_->groupNameLineEdit->clear();
     return;
@@ -151,7 +152,8 @@ void KinematicGroupsEditorWidget::onAddGroup()
     for (auto& joint : joints)
       group.push_back(joint.toStdString());
 
-    QApplication::sendEvent(qApp, new events::KinematicGroupsAddJoint(getComponentInfo(), group_name, group));
+    events::KinematicGroupsAddJoint event(getComponentInfo(), group_name, group);
+    QApplication::sendEvent(qApp, &event);
 
     ui_->groupNameLineEdit->clear();
     ui_->jointListWidget->clear();
@@ -170,7 +172,8 @@ void KinematicGroupsEditorWidget::onAddGroup()
     for (auto& link : links)
       group.push_back(link.toStdString());
 
-    QApplication::sendEvent(qApp, new events::KinematicGroupsAddLink(getComponentInfo(), group_name, group));
+    events::KinematicGroupsAddLink event(getComponentInfo(), group_name, group);
+    QApplication::sendEvent(qApp, &event);
 
     ui_->groupNameLineEdit->clear();
     ui_->linkListWidget->clear();
@@ -196,7 +199,8 @@ void KinematicGroupsEditorWidget::onRemoveGroup()
     }
   }
 
-  QApplication::sendEvent(qApp, new events::KinematicGroupsRemove(getComponentInfo(), remove_groups));
+  events::KinematicGroupsRemove event(getComponentInfo(), remove_groups);
+  QApplication::sendEvent(qApp, &event);
 }
 
 void KinematicGroupsEditorWidget::onAddJoint() { ui_->jointListWidget->addItem(ui_->jointComboBox->currentText()); }
@@ -232,7 +236,8 @@ void KinematicGroupsEditorWidget::onApply()
   info.link_groups = ui_->kinGroupsWidget->getModel()->getLinkGroups();
 
   auto cmd = std::make_shared<tesseract_environment::AddKinematicsInformationCommand>(info);
-  QApplication::sendEvent(qApp, new events::EnvironmentApplyCommand(getComponentInfo(), { cmd }));
+  events::EnvironmentApplyCommand event(getComponentInfo(), { cmd });
+  QApplication::sendEvent(qApp, &event);
 }
 
 void KinematicGroupsEditorWidget::onUpdateLinkNamesModel()

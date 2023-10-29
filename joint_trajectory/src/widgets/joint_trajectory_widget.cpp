@@ -230,7 +230,8 @@ void JointTrajectoryWidget::onRemove()
       data_->selected_item->type() == static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET))
   {
     boost::uuids::uuid uuid = dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->trajectory_set.getUUID();
-    QApplication::sendEvent(qApp, new events::JointTrajectoryRemove(data_->model->getComponentInfo(), uuid));
+    events::JointTrajectoryRemove event(data_->model->getComponentInfo(), uuid);
+    QApplication::sendEvent(qApp, &event);
     data_->selected_item = nullptr;
     onDisablePlayer();
   }
@@ -256,21 +257,21 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
   {
     case static_cast<int>(StandardItemType::COMMON_NAMESPACE):
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
-      event->save_enabled = false;
-      event->remove_enabled = false;
-      event->plot_enabled = false;
-      QApplication::sendEvent(qApp, event);
+      events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
+      event.save_enabled = false;
+      event.remove_enabled = false;
+      event.plot_enabled = false;
+      QApplication::sendEvent(qApp, &event);
 
       break;
     }
     case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
-      event->save_enabled = false;
-      event->remove_enabled = false;
-      event->plot_enabled = true;
-      QApplication::sendEvent(qApp, event);
+      events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
+      event.save_enabled = false;
+      event.remove_enabled = false;
+      event.plot_enabled = true;
+      QApplication::sendEvent(qApp, &event);
 
       data_->current_trajectory = data_->model->getJointTrajectory(current_index);
 
@@ -299,11 +300,11 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET):
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
-      event->save_enabled = true;
-      event->remove_enabled = true;
-      event->plot_enabled = true;
-      QApplication::sendEvent(qApp, event);
+      events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
+      event.save_enabled = true;
+      event.remove_enabled = true;
+      event.plot_enabled = true;
+      QApplication::sendEvent(qApp, &event);
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
 
@@ -336,11 +337,11 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     default:
     {
-      auto* event = new events::JointTrajectoryToolbarState(data_->model->getComponentInfo());
-      event->save_enabled = false;
-      event->remove_enabled = false;
-      event->plot_enabled = false;
-      QApplication::sendEvent(qApp, event);
+      events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
+      event.save_enabled = false;
+      event.remove_enabled = false;
+      event.plot_enabled = false;
+      QApplication::sendEvent(qApp, &event);
 
       const tesseract_common::JointState& state = data_->model->getJointState(current_index);
       auto jts = data_->model->getJointTrajectorySet(current_index);

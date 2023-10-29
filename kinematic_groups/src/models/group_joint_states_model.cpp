@@ -79,18 +79,17 @@ bool GroupJointStatesModel::setData(const QModelIndex& index, const QVariant& va
 
       if (value.value<Qt::CheckState>() == Qt::Checked)
       {
-        QApplication::sendEvent(qApp,
-                                new events::GroupJointStatesShow(component_info_,
-                                                                 parent_item->text().toStdString(),
-                                                                 derived_item->getName().toStdString(),
-                                                                 derived_item->getState()));
+        events::GroupJointStatesShow event(component_info_,
+                                           parent_item->text().toStdString(),
+                                           derived_item->getName().toStdString(),
+                                           derived_item->getState());
+        QApplication::sendEvent(qApp, &event);
       }
       else
       {
-        QApplication::sendEvent(qApp,
-                                new events::GroupJointStatesHide(component_info_,
-                                                                 parent_item->text().toStdString(),
-                                                                 derived_item->getName().toStdString()));
+        events::GroupJointStatesHide event(
+            component_info_, parent_item->text().toStdString(), derived_item->getName().toStdString());
+        QApplication::sendEvent(qApp, &event);
       }
     }
   }

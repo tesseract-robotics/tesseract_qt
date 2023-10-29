@@ -64,7 +64,8 @@ void AddAllowedCollisionEntryDialog::accept()
   entry[2] = ui_->reasonLineEdit->text().toStdString();
   data.push_back(entry);
 
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixAdd(component_info_, data));
+  events::AllowedCollisionMatrixAdd event(component_info_, data);
+  QApplication::sendEvent(qApp, &event);
 }
 
 }  // namespace tesseract_gui

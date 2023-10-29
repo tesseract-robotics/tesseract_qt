@@ -47,21 +47,26 @@ JointTrajectoryToolBar::JointTrajectoryToolBar(std::shared_ptr<const ComponentIn
 {
   data_->component_info = std::move(component_info);
   data_->remove_all_action = addAction(icons::getClearIcon(), "Remove All", [this]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryRemoveAll(data_->component_info));
+    events::JointTrajectoryRemoveAll event(data_->component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->remove_action = addAction(icons::getTrashIcon(), "Remove All", [this]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryRemoveSelected(data_->component_info));
+    events::JointTrajectoryRemoveSelected event(data_->component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
   data_->open_action = addAction(icons::getImportIcon(), "Open", [this]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryOpen(data_->component_info));
+    events::JointTrajectoryOpen event(data_->component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->save_action = addAction(icons::getSaveIcon(), "Save", [this]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectorySave(data_->component_info));
+    events::JointTrajectorySave event(data_->component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
   data_->plot_action = addAction(icons::getPlotIcon(), "Plot Joint Trajectory", [this]() {
-    QApplication::sendEvent(qApp, new events::JointTrajectoryPlot(data_->component_info));
+    events::JointTrajectoryPlot event(data_->component_info);
+    QApplication::sendEvent(qApp, &event);
   });
 
   data_->save_action->setDisabled(true);

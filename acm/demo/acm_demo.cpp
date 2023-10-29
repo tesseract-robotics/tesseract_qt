@@ -49,7 +49,8 @@ int main(int argc, char** argv)
   entries.push_back({ "link_2", "link_3", "Adjacent" });
   entries.push_back({ "link_3", "link_4", "Adjacent" });
 
-  QApplication::sendEvent(qApp, new tesseract_gui::events::AllowedCollisionMatrixAdd(component_info, entries));
+  tesseract_gui::events::AllowedCollisionMatrixAdd event(component_info, entries);
+  QApplication::sendEvent(qApp, &event);
 
   return QApplication::exec();
 }

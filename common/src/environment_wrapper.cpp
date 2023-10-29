@@ -144,8 +144,8 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
     case tesseract_environment::Events::SCENE_STATE_CHANGED:
     {
       const auto& e = static_cast<const tesseract_environment::SceneStateChangedEvent&>(event);
-      QApplication::sendEvent(qApp,
-                              new tesseract_gui::events::SceneStateChanged(env_wrapper.getComponentInfo(), e.state));
+      tesseract_gui::events::SceneStateChanged event(env_wrapper.getComponentInfo(), e.state);
+      QApplication::sendEvent(qApp, &event);
       break;
     }
   }
@@ -199,8 +199,8 @@ void eventFilterHelper(QObject* /*obj*/,
       tracked_object[contact.first] = crv;
     }
 
-    QApplication::sendEvent(
-        qApp, new tesseract_gui::events::ContactResultsSet(component_info, tracked_object, e->getNamespace()));
+    tesseract_gui::events::ContactResultsSet event(component_info, tracked_object, e->getNamespace());
+    QApplication::sendEvent(qApp, &event);
   }
   else if (event->type() == tesseract_gui::events::AllowedCollisionMatrixGenerate::kType)
   {
@@ -266,7 +266,8 @@ void eventFilterHelper(QObject* /*obj*/,
       }
     }
 
-    QApplication::sendEvent(qApp, new tesseract_gui::events::AllowedCollisionMatrixSet(component_info, acm));
+    tesseract_gui::events::AllowedCollisionMatrixSet event(component_info, acm);
+    QApplication::sendEvent(qApp, &event);
   }
   else if (event->type() == tesseract_gui::events::EnvironmentApplyCommand::kType)
   {
@@ -288,19 +289,28 @@ void broadcastHelper(const std::shared_ptr<const tesseract_gui::ComponentInfo>& 
     return;
 
   // Broadcast environment data
-  QApplication::sendEvent(qApp, new tesseract_gui::events::SceneGraphSet(component_info, env.getSceneGraph()->clone()));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::SceneStateChanged(component_info, env.getState()));
-  QApplication::sendEvent(qApp,
-                          new tesseract_gui::events::EnvironmentCommandsSet(component_info, env.getCommandHistory()));
-  QApplication::sendEvent(
-      qApp, new tesseract_gui::events::AllowedCollisionMatrixSet(component_info, *env.getAllowedCollisionMatrix()));
+  tesseract_gui::events::SceneGraphSet set_scene_graph_event(component_info, env.getSceneGraph()->clone());
+  QApplication::sendEvent(qApp, &set_scene_graph_event);
+
+  tesseract_gui::events::SceneStateChanged scene_state_changed_event(component_info, env.getState());
+  QApplication::sendEvent(qApp, &scene_state_changed_event);
+
+  tesseract_gui::events::EnvironmentCommandsSet set_environment_commands_event(component_info, env.getCommandHistory());
+  QApplication::sendEvent(qApp, &set_environment_commands_event);
+
+  tesseract_gui::events::AllowedCollisionMatrixSet set_acm_event(component_info, *env.getAllowedCollisionMatrix());
+  QApplication::sendEvent(qApp, &set_acm_event);
 
   auto kin_info = env.getKinematicsInformation();
-  QApplication::sendEvent(qApp,
-                          new tesseract_gui::events::KinematicGroupsSet(
-                              component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::GroupJointStatesSet(component_info, kin_info.group_states));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::GroupTCPsSet(component_info, kin_info.group_tcps));
+  tesseract_gui::events::KinematicGroupsSet set_kin_groups_event(
+      component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
+  QApplication::sendEvent(qApp, &set_kin_groups_event);
+
+  tesseract_gui::events::GroupJointStatesSet set_group_joint_states_event(component_info, kin_info.group_states);
+  QApplication::sendEvent(qApp, &set_group_joint_states_event);
+
+  tesseract_gui::events::GroupTCPsSet set_group_tcps_event(component_info, kin_info.group_tcps);
+  QApplication::sendEvent(qApp, &set_group_tcps_event);
 }
 
 namespace tesseract_gui
@@ -313,12 +323,23 @@ EnvironmentWrapper::EnvironmentWrapper(std::shared_ptr<const ComponentInfo> comp
 EnvironmentWrapper::~EnvironmentWrapper()
 {
   // clear environment data
-  QApplication::sendEvent(qApp, new events::SceneGraphClear(component_info_));
-  QApplication::sendEvent(qApp, new events::EnvironmentCommandsClear(component_info_));
-  QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixClear(component_info_));
-  QApplication::sendEvent(qApp, new events::KinematicGroupsClear(component_info_));
-  QApplication::sendEvent(qApp, new events::GroupJointStatesClear(component_info_));
-  QApplication::sendEvent(qApp, new events::GroupTCPsClear(component_info_));
+  events::SceneGraphClear clear_scene_graph_event(component_info_);
+  QApplication::sendEvent(qApp, &clear_scene_graph_event);
+
+  events::EnvironmentCommandsClear clear_environment_commands_event(component_info_);
+  QApplication::sendEvent(qApp, &clear_environment_commands_event);
+
+  events::AllowedCollisionMatrixClear clear_acm_event(component_info_);
+  QApplication::sendEvent(qApp, &clear_acm_event);
+
+  events::KinematicGroupsClear clear_kin_groups_event(component_info_);
+  QApplication::sendEvent(qApp, &clear_kin_groups_event);
+
+  events::GroupJointStatesClear clear_group_joint_states_event(component_info_);
+  QApplication::sendEvent(qApp, &clear_group_joint_states_event);
+
+  events::GroupTCPsClear clear_group_tcps_event(component_info_);
+  QApplication::sendEvent(qApp, &clear_group_tcps_event);
 }
 
 std::shared_ptr<const ComponentInfo> EnvironmentWrapper::getComponentInfo() const { return component_info_; }

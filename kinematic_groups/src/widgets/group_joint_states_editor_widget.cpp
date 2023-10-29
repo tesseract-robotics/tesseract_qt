@@ -134,12 +134,9 @@ void GroupJointStatesEditorWidget::onAddJointState()
   if (state_name.empty())
     return;
 
-  QApplication::sendEvent(
-      qApp,
-      new tesseract_gui::events::GroupJointStatesAdd(ui_->groupJointStatesWidget->getComponentInfo(),
-                                                     group_name,
-                                                     state_name,
-                                                     ui_->jointSliderWidget->getJointState()));
+  tesseract_gui::events::GroupJointStatesAdd event(
+      ui_->groupJointStatesWidget->getComponentInfo(), group_name, state_name, ui_->jointSliderWidget->getJointState());
+  QApplication::sendEvent(qApp, &event);
 
   ui_->jointStateNameLineEdit->clear();
 }
@@ -160,8 +157,10 @@ void GroupJointStatesEditorWidget::onRemoveJointState()
   }
 
   if (!remove_items.empty())
-    QApplication::sendEvent(qApp,
-                            new tesseract_gui::events::GroupJointStatesRemove(model->getComponentInfo(), remove_items));
+  {
+    tesseract_gui::events::GroupJointStatesRemove event(model->getComponentInfo(), remove_items);
+    QApplication::sendEvent(qApp, &event);
+  }
 }
 
 void GroupJointStatesEditorWidget::onApply()
@@ -170,7 +169,8 @@ void GroupJointStatesEditorWidget::onApply()
   info.group_states = ui_->groupJointStatesWidget->getModel()->getGroupsJointStates();
 
   auto cmd = std::make_shared<tesseract_environment::AddKinematicsInformationCommand>(info);
-  QApplication::sendEvent(qApp, new events::EnvironmentApplyCommand(getComponentInfo(), { cmd }));
+  events::EnvironmentApplyCommand event(getComponentInfo(), { cmd });
+  QApplication::sendEvent(qApp, &event);
 }
 
 void GroupJointStatesEditorWidget::onUpdateModels()

@@ -48,24 +48,30 @@ ToolPathToolBar::ToolPathToolBar(std::shared_ptr<const ComponentInfo> component_
 {
   data_->component_info = component_info;
   data_->remove_all = addAction(icons::getClearIcon(), "Remove All", [component_info]() {
-    QApplication::sendEvent(qApp, new events::ToolPathRemoveAll(component_info));
+    events::ToolPathRemoveAll event(component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->remove_selected = addAction(icons::getTrashIcon(), "Remove Selected", [component_info]() {
-    QApplication::sendEvent(qApp, new events::ToolPathRemoveSelected(component_info));
+    events::ToolPathRemoveSelected event(component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
   data_->hide_all = addAction(icons::getToolPathHideIcon(), "Hide All", [component_info]() {
-    QApplication::sendEvent(qApp, new events::ToolPathHideAll(component_info));
+    events::ToolPathHideAll event(component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->show_all = addAction(icons::getToolPathShowIcon(), "Show All", [component_info]() {
-    QApplication::sendEvent(qApp, new events::ToolPathShowAll(component_info));
+    events::ToolPathShowAll event(component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
   data_->open_action = addAction(icons::getImportIcon(), "Open", [component_info]() {
-    QApplication::sendEvent(qApp, new events::ToolPathOpen(component_info));
+    events::ToolPathOpen event(component_info);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->save_action = addAction(icons::getSaveIcon(), "Save", [component_info]() {
-    QApplication::sendEvent(qApp, new events::ToolPathSave(component_info));
+    events::ToolPathSave event(component_info);
+    QApplication::sendEvent(qApp, &event);
   });
 }
 

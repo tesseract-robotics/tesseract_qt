@@ -105,7 +105,8 @@ int main(int argc, char** argv)
   tesseract_gui::CompositeInstructionWidget widget(component_info);
   widget.show();
 
-  QApplication::sendEvent(qApp, new tesseract_gui::events::CompositeInstructionSet(component_info, program, "general"));
+  tesseract_gui::events::CompositeInstructionSet event(component_info, program, "general");
+  QApplication::sendEvent(qApp, &event);
 
   return QApplication::exec();
 }

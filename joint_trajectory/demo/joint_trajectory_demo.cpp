@@ -91,12 +91,20 @@ int main(int argc, char** argv)
   window.setCentralWidget(new tesseract_gui::JointTrajectoryWidget(component_info));
   window.show();
 
-  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set1));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set2));
-  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(component_info, trajectory_set3));
-  QApplication::sendEvent(qApp,
-                          new tesseract_gui::events::JointTrajectoryRemove(component_info, trajectory_set2.getUUID()));
+  tesseract_gui::events::JointTrajectoryAdd event(component_info, trajectory_set);
+  QApplication::sendEvent(qApp, &event);
+
+  tesseract_gui::events::JointTrajectoryAdd event1(component_info, trajectory_set1);
+  QApplication::sendEvent(qApp, &event1);
+
+  tesseract_gui::events::JointTrajectoryAdd event2(component_info, trajectory_set2);
+  QApplication::sendEvent(qApp, &event2);
+
+  tesseract_gui::events::JointTrajectoryAdd event3(component_info, trajectory_set3);
+  QApplication::sendEvent(qApp, &event3);
+
+  tesseract_gui::events::JointTrajectoryRemove event4(component_info, trajectory_set2.getUUID());
+  QApplication::sendEvent(qApp, &event4);
 
   return QApplication::exec();
 }

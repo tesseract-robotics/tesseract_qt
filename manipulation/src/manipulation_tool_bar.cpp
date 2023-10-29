@@ -80,16 +80,16 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
     if (it == data_->state_component_infos.end())
       return;
 
-    QApplication::sendEvent(qApp,
-                            new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::LINK, true));
+    events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::LINK, true);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->hide_all_links_action = addAction(icons::getHideAllLinksIcon(), "Hide All Links", [this]() {
     auto it = data_->state_component_infos.find(data_->state_name);
     if (it == data_->state_component_infos.end())
       return;
 
-    QApplication::sendEvent(
-        qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::LINK, false));
+    events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::LINK, false);
+    QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
   data_->show_visual_all_links_action =
@@ -98,8 +98,8 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
         if (it == data_->state_component_infos.end())
           return;
 
-        QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::VISUAL, true));
+        events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::VISUAL, true);
+        QApplication::sendEvent(qApp, &event);
       });
   data_->hide_visual_all_links_action =
       addAction(icons::getHideVisualAllLinksIcon(), "Hide Visual All Links", [this]() {
@@ -107,8 +107,8 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
         if (it == data_->state_component_infos.end())
           return;
 
-        QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::VISUAL, false));
+        events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::VISUAL, false);
+        QApplication::sendEvent(qApp, &event);
       });
   addSeparator();
   data_->show_collision_all_links_action =
@@ -117,8 +117,8 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
         if (it == data_->state_component_infos.end())
           return;
 
-        QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::COLLISION, true));
+        events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::COLLISION, true);
+        QApplication::sendEvent(qApp, &event);
       });
   data_->hide_collision_all_links_action =
       addAction(icons::getHideCollisionAllLinksIcon(), "Hide Collision All Links", [this]() {
@@ -126,8 +126,8 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
         if (it == data_->state_component_infos.end())
           return;
 
-        QApplication::sendEvent(
-            qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::COLLISION, false));
+        events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::COLLISION, false);
+        QApplication::sendEvent(qApp, &event);
       });
   addSeparator();
   data_->select_all_links_action = addAction(icons::getSelectAllLinksIcon(), "Select All Links", [this]() {
@@ -135,16 +135,16 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
     if (it == data_->state_component_infos.end())
       return;
 
-    QApplication::sendEvent(
-        qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::WIREBOX, true));
+    events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::WIREBOX, true);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->deselect_all_links_action = addAction(icons::getDeselectAllLinksIcon(), "Deselect All Links", [this]() {
     auto it = data_->state_component_infos.find(data_->state_name);
     if (it == data_->state_component_infos.end())
       return;
 
-    QApplication::sendEvent(
-        qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::WIREBOX, false));
+    events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::WIREBOX, false);
+    QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
   data_->show_axis_all_links_action = addAction(icons::getShowAxisAllLinksIcon(), "Show Axis All Links", [this]() {
@@ -152,16 +152,16 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
     if (it == data_->state_component_infos.end())
       return;
 
-    QApplication::sendEvent(qApp,
-                            new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::AXIS, true));
+    events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::AXIS, true);
+    QApplication::sendEvent(qApp, &event);
   });
   data_->hide_axis_all_links_action = addAction(icons::getHideAxisAllLinksIcon(), "Hide Axis All Links", [this]() {
     auto it = data_->state_component_infos.find(data_->state_name);
     if (it == data_->state_component_infos.end())
       return;
 
-    QApplication::sendEvent(
-        qApp, new events::SceneGraphModifyLinkVisibilityALL(it->second, LinkVisibilityFlags::AXIS, false));
+    events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::AXIS, false);
+    QApplication::sendEvent(qApp, &event);
   });
 
   // Install event filter
