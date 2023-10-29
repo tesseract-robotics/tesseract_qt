@@ -83,7 +83,8 @@ bool ToolPathSelectionModel::eventFilter(QObject* obj, QEvent* event)
         {
           assert(dynamic_cast<ToolPathStandardItem*>(item) != nullptr);
           auto* derived_item = static_cast<ToolPathStandardItem*>(item);
-          QGuiApplication::sendEvent(qApp, new events::ToolPathRemove(component_info_, derived_item->getUUID()));
+          events::ToolPathRemove event(component_info_, derived_item->getUUID());
+          QGuiApplication::sendEvent(qApp, &event);
         }
         else if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
         {

@@ -49,7 +49,9 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
   {
     auto jts = tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::JointTrajectorySet>(
         filename.toStdString());
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(component_info, std::move(jts)));
+
+    events::JointTrajectoryAdd event(component_info, std::move(jts));
+    QApplication::sendEvent(qApp, &event);
     return true;
   }
 
@@ -57,7 +59,8 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
   {
     auto jts = tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::JointTrajectorySet>(
         filename.toStdString());
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(component_info, std::move(jts)));
+    events::JointTrajectoryAdd event(component_info, std::move(jts));
+    QApplication::sendEvent(qApp, &event);
     return true;
   }
 
@@ -77,7 +80,8 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
     tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
     jts.appendJointTrajectory(jt);
 
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(component_info, std::move(jts)));
+    events::JointTrajectoryAdd event(component_info, std::move(jts));
+    QApplication::sendEvent(qApp, &event);
     return true;
   }
 
@@ -95,7 +99,8 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
       initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
 
     tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
-    QApplication::sendEvent(qApp, new events::JointTrajectoryAdd(component_info, std::move(jts)));
+    events::JointTrajectoryAdd event(component_info, std::move(jts));
+    QApplication::sendEvent(qApp, &event);
     return true;
   }
 

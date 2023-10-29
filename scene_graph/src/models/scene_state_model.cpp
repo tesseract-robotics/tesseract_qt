@@ -239,11 +239,11 @@ bool SceneStateModel::setData(const QModelIndex& index, const QVariant& value, i
     {
       assert(dynamic_cast<TransformStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<TransformStandardItem*>(item);
-      QApplication::sendEvent(qApp,
-                              new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         { derived_item->text().toStdString() },
-                                                                         LinkVisibilityFlags::AXIS,
-                                                                         value.value<Qt::CheckState>() == Qt::Checked));
+      events::SceneGraphModifyLinkVisibility event(data_->component_info,
+                                                   { derived_item->text().toStdString() },
+                                                   LinkVisibilityFlags::AXIS,
+                                                   value.value<Qt::CheckState>() == Qt::Checked);
+      QApplication::sendEvent(qApp, &event);
     }
   }
   return QStandardItemModel::setData(index, value, role);

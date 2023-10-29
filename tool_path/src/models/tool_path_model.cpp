@@ -140,35 +140,45 @@ bool ToolPathModel::setData(const QModelIndex& index, const QVariant& value, int
       assert(dynamic_cast<ToolPathStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<ToolPathStandardItem*>(item);
       if (value.value<Qt::CheckState>() == Qt::Checked)
-        QApplication::sendEvent(qApp, new events::ToolPathShow(data_->component_info, derived_item->getUUID()));
+      {
+        events::ToolPathShow event(data_->component_info, derived_item->getUUID());
+        QApplication::sendEvent(qApp, &event);
+      }
       else
-        QApplication::sendEvent(qApp, new events::ToolPathHide(data_->component_info, derived_item->getUUID()));
+      {
+        events::ToolPathHide event(data_->component_info, derived_item->getUUID());
+        QApplication::sendEvent(qApp, &event);
+      }
     }
     else if (item->type() == static_cast<int>(StandardItemType::COMMON_TOOL_PATH_SEGMENT))
     {
       assert(dynamic_cast<ToolPathSegmentStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<ToolPathSegmentStandardItem*>(item);
       if (value.value<Qt::CheckState>() == Qt::Checked)
-        QApplication::sendEvent(qApp,
-                                new events::ToolPathShow(
-                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+      {
+        events::ToolPathShow event(data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID());
+        QApplication::sendEvent(qApp, &event);
+      }
       else
-        QApplication::sendEvent(qApp,
-                                new events::ToolPathHide(
-                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+      {
+        events::ToolPathHide event(data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID());
+        QApplication::sendEvent(qApp, &event);
+      }
     }
     else if (item->type() == static_cast<int>(StandardItemType::COMMON_TRANSFORM))
     {
       assert(dynamic_cast<TransformStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<TransformStandardItem*>(item);
       if (value.value<Qt::CheckState>() == Qt::Checked)
-        QApplication::sendEvent(qApp,
-                                new events::ToolPathShow(
-                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+      {
+        events::ToolPathShow event(data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID());
+        QApplication::sendEvent(qApp, &event);
+      }
       else
-        QApplication::sendEvent(qApp,
-                                new events::ToolPathHide(
-                                    data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID()));
+      {
+        events::ToolPathHide event(data_->component_info, findToolPathItem(item)->getUUID(), derived_item->getUUID());
+        QApplication::sendEvent(qApp, &event);
+      }
     }
   }
   return QStandardItemModel::setData(index, value, role);

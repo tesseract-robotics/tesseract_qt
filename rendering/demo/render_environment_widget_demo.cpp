@@ -175,10 +175,12 @@ int main(int argc, char** argv)
       std::make_shared<tesseract_gui::DefaultEnvironmentWrapper>(component_info, env));
 
   tesseract_gui::ToolPath tool_path = getToolPath();
-  QApplication::sendEvent(qApp, new tesseract_gui::events::ToolPathAdd(component_info, tool_path));
+  tesseract_gui::events::ToolPathAdd event1(component_info, tool_path);
+  QApplication::sendEvent(qApp, &event1);
 
   tesseract_common::JointTrajectorySet trajectory_set = getJointTrajectorySet();
-  QApplication::sendEvent(qApp, new tesseract_gui::events::JointTrajectoryAdd(jt_component_info, trajectory_set));
+  tesseract_gui::events::JointTrajectoryAdd event2(jt_component_info, trajectory_set);
+  QApplication::sendEvent(qApp, &event2);
 
   return app.exec();
 }

@@ -110,31 +110,31 @@ bool SceneGraphModel::setData(const QModelIndex& index, const QVariant& value, i
     {
       assert(dynamic_cast<LinkStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<LinkStandardItem*>(item);
-      QApplication::sendEvent(qApp,
-                              new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         { derived_item->link->getName() },
-                                                                         LinkVisibilityFlags::LINK,
-                                                                         value.value<Qt::CheckState>() == Qt::Checked));
+      events::SceneGraphModifyLinkVisibility event(data_->component_info,
+                                                   { derived_item->link->getName() },
+                                                   LinkVisibilityFlags::LINK,
+                                                   value.value<Qt::CheckState>() == Qt::Checked);
+      QApplication::sendEvent(qApp, &event);
     }
     else if (item->type() == static_cast<int>(StandardItemType::SG_VISUALS))
     {
       assert(dynamic_cast<LinkStandardItem*>(item->parent()) != nullptr);
       auto* derived_item = static_cast<LinkStandardItem*>(item->parent());
-      QApplication::sendEvent(qApp,
-                              new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         { derived_item->link->getName() },
-                                                                         LinkVisibilityFlags::VISUAL,
-                                                                         value.value<Qt::CheckState>() == Qt::Checked));
+      events::SceneGraphModifyLinkVisibility event(data_->component_info,
+                                                   { derived_item->link->getName() },
+                                                   LinkVisibilityFlags::VISUAL,
+                                                   value.value<Qt::CheckState>() == Qt::Checked);
+      QApplication::sendEvent(qApp, &event);
     }
     else if (item->type() == static_cast<int>(StandardItemType::SG_COLLISIONS))
     {
       assert(dynamic_cast<LinkStandardItem*>(item->parent()) != nullptr);
       auto* derived_item = static_cast<LinkStandardItem*>(item->parent());
-      QApplication::sendEvent(qApp,
-                              new events::SceneGraphModifyLinkVisibility(data_->component_info,
-                                                                         { derived_item->link->getName() },
-                                                                         LinkVisibilityFlags::COLLISION,
-                                                                         value.value<Qt::CheckState>() == Qt::Checked));
+      events::SceneGraphModifyLinkVisibility event(data_->component_info,
+                                                   { derived_item->link->getName() },
+                                                   LinkVisibilityFlags::COLLISION,
+                                                   value.value<Qt::CheckState>() == Qt::Checked);
+      QApplication::sendEvent(qApp, &event);
     }
   }
   return QStandardItemModel::setData(index, value, role);

@@ -77,21 +77,20 @@ bool ContactResultsModel::setData(const QModelIndex& index, const QVariant& valu
       auto* derived_item = static_cast<ContactResultStandardItem*>(item);
       auto* parent_item = static_cast<ContactResultVectorStandardItem*>(item->parent());
 
-      QApplication::sendEvent(qApp,
-                              new events::ContactResultsVisbility(data_->component_info,
-                                                                  parent_item->getUUID(),
-                                                                  derived_item->contact_result.getUUID(),
-                                                                  value.value<Qt::CheckState>() == Qt::Checked));
+      events::ContactResultsVisbility event(data_->component_info,
+                                            parent_item->getUUID(),
+                                            derived_item->contact_result.getUUID(),
+                                            value.value<Qt::CheckState>() == Qt::Checked);
+      QApplication::sendEvent(qApp, &event);
     }
     else if (item->type() == static_cast<int>(StandardItemType::COLLISION_CONTACT_RESULT_VECTOR))
     {
       assert(dynamic_cast<ContactResultVectorStandardItem*>(item) != nullptr);
       auto* derived_item = static_cast<ContactResultVectorStandardItem*>(item);
 
-      QApplication::sendEvent(qApp,
-                              new events::ContactResultsVisbility(data_->component_info,
-                                                                  derived_item->getUUID(),
-                                                                  value.value<Qt::CheckState>() == Qt::Checked));
+      events::ContactResultsVisbility event(
+          data_->component_info, derived_item->getUUID(), value.value<Qt::CheckState>() == Qt::Checked);
+      QApplication::sendEvent(qApp, &event);
     }
   }
   return QStandardItemModel::setData(index, value, role);

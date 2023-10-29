@@ -358,7 +358,8 @@ void Renderer::render()
 
   if (qApp != nullptr)
   {
-    QApplication::sendEvent(qApp, new events::PreRender(data_->scene_name));
+    events::PreRender event(data_->scene_name);
+    QApplication::sendEvent(qApp, &event);
   }
 
   {
@@ -369,7 +370,8 @@ void Renderer::render()
 
   if (qApp != nullptr)
   {
-    QApplication::sendEvent(qApp, new events::Render(data_->scene_name));
+    events::Render event(data_->scene_name);
+    QApplication::sendEvent(qApp, &event);
   }
 
   return;

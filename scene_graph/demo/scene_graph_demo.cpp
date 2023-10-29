@@ -62,7 +62,8 @@ int main(int argc, char** argv)
   widget.setLayout(layout);
   widget.show();
 
-  QApplication::sendEvent(qApp, new tesseract_gui::events::SceneGraphSet(component_info, std::move(scene_graph)));
+  tesseract_gui::events::SceneGraphSet event(component_info, std::move(scene_graph));
+  QApplication::sendEvent(qApp, &event);
 
   return app.exec();
 }

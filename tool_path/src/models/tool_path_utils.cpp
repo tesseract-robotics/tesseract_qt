@@ -84,7 +84,8 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
     auto tool_path =
         tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::Toolpath>(filename.toStdString());
     ToolPath qt_tool_path(tool_path, link_name.toStdString());
-    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(qt_tool_path)));
+    events::ToolPathAdd event(component_info, std::move(qt_tool_path));
+    QApplication::sendEvent(qApp, &event);
     return true;
   }
 
@@ -93,7 +94,8 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
     auto tool_path =
         tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::Toolpath>(filename.toStdString());
     ToolPath qt_tool_path(tool_path, link_name.toStdString());
-    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(qt_tool_path)));
+    events::ToolPathAdd event(component_info, std::move(qt_tool_path));
+    QApplication::sendEvent(qApp, &event);
     return true;
   }
 
@@ -102,7 +104,8 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
     YAML::Node node = YAML::LoadFile(filename.toStdString());
     auto tool_path = node.as<tesseract_common::Toolpath>();
     ToolPath qt_tool_path(tool_path, link_name.toStdString());
-    QApplication::sendEvent(qApp, new events::ToolPathAdd(component_info, std::move(qt_tool_path)));
+    events::ToolPathAdd event(component_info, std::move(qt_tool_path));
+    QApplication::sendEvent(qApp, &event);
     return true;
   }
 

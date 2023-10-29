@@ -112,7 +112,8 @@ void AllowedCollisionMatrixEditorWidget::onRemoveButtonClicked()
     if (idx.isValid() && idx.parent().isValid())
       remove.push_back({ m->data(idx.parent()).toString().toStdString(), m->data(idx).toString().toStdString() });
 
-    QApplication::sendEvent(qApp, new events::AllowedCollisionMatrixRemove(m->getComponentInfo(), remove));
+    events::AllowedCollisionMatrixRemove event(m->getComponentInfo(), remove);
+    QApplication::sendEvent(qApp, &event);
   }
 }
 
@@ -124,8 +125,8 @@ void AllowedCollisionMatrixEditorWidget::onAddButtonClicked()
 
 void AllowedCollisionMatrixEditorWidget::onGenerateButtonClicked()
 {
-  QApplication::sendEvent(
-      qApp, new events::AllowedCollisionMatrixGenerate(getComponentInfo(), ui_->resolutionSlider->value()));
+  events::AllowedCollisionMatrixGenerate event(getComponentInfo(), ui_->resolutionSlider->value());
+  QApplication::sendEvent(qApp, &event);
 }
 
 void AllowedCollisionMatrixEditorWidget::onApplyButtonClicked()
@@ -133,7 +134,8 @@ void AllowedCollisionMatrixEditorWidget::onApplyButtonClicked()
   auto cmd = std::make_shared<tesseract_environment::ModifyAllowedCollisionsCommand>(
       ui_->acm_widget->getModel()->getAllowedCollisionMatrix(),
       tesseract_environment::ModifyAllowedCollisionsType::REPLACE);
-  QApplication::sendEvent(qApp, new events::EnvironmentApplyCommand(getComponentInfo(), { cmd }));
+  events::EnvironmentApplyCommand event(getComponentInfo(), { cmd });
+  QApplication::sendEvent(qApp, &event);
 }
 
 }  // namespace tesseract_gui

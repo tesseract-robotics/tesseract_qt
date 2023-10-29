@@ -256,13 +256,13 @@ bool AllowedCollisionMatrixModel::setData(const QModelIndex& index, const QVaria
       }
     }
 
-    QApplication::sendEvent(
-        qApp,
-        new events::SceneGraphModifyLinkVisibilityALL(data_->component_info, LinkVisibilityFlags::WIREBOX, false));
+    events::SceneGraphModifyLinkVisibilityALL event(data_->component_info, LinkVisibilityFlags::WIREBOX, false);
+    QApplication::sendEvent(qApp, &event);
     if (!links.empty())
-      QApplication::sendEvent(
-          qApp,
-          new events::SceneGraphModifyLinkVisibility(data_->component_info, links, LinkVisibilityFlags::WIREBOX, true));
+    {
+      events::SceneGraphModifyLinkVisibility event(data_->component_info, links, LinkVisibilityFlags::WIREBOX, true);
+      QApplication::sendEvent(qApp, &event);
+    }
   }
   return true;
 }
