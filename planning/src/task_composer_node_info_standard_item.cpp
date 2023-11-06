@@ -133,8 +133,6 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
     appendRow(output_keys);
   }
 
-  appendRow(createStandardItemAnyPoly("results", info.results));
-
   ////////////////////////////////
   /// Add data for known types ///
   ////////////////////////////////
