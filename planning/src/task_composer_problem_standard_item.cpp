@@ -85,18 +85,18 @@ void TaskComposerProblemStandardItem::ctor(const tesseract_planning::TaskCompose
 
   appendRow(new ManipulatorInfoStandardItem("global_manip_info", planning_problem->manip_info));
 
-  if (planning_problem->input_instruction.isNull())
+  if (planning_problem->input.isNull())
   {
-    appendRow(new NullInstructionStandardItem("input_instruction"));
+    appendRow(new NullInstructionStandardItem("input"));
   }
-  else if (planning_problem->input_instruction.isCompositeInstruction())
+  else if (planning_problem->input.getType() == std::type_index(typeid(tesseract_planning::CompositeInstruction)))
   {
     appendRow(new CompositeInstructionStandardItem(
-        "input_instruction", planning_problem->input_instruction.as<tesseract_planning::CompositeInstruction>()));
+        "input", planning_problem->input.as<tesseract_planning::CompositeInstruction>()));
   }
-  else
+  else if (planning_problem->input.getType() == std::type_index(typeid(tesseract_planning::InstructionPoly)))
   {
-    appendRow(new InstructionStandardItem("input_instruction", planning_problem->input_instruction));
+    appendRow(new InstructionStandardItem("input", planning_problem->input.as<tesseract_planning::InstructionPoly>()));
   }
 
   appendRow(
