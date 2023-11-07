@@ -73,12 +73,14 @@ add_library(
   src/events/scene_graph_render_manager.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
+  src/models/any_standard_item.cpp
   src/models/collision_margin_data_standard_item.cpp
   src/models/component_info_manager_model.cpp
   src/models/component_info_standard_item.cpp
   src/models/contact_managers_plugin_info_standard_item.cpp
   src/models/kinematics_plugin_info_standard_item.cpp
   src/models/namespace_standard_item.cpp
+  src/models/null_any_standard_item.cpp
   src/models/transform_standard_item.cpp
   src/models/pairs_collision_margin_data_standard_item.cpp
   src/models/plugin_info_standard_item.cpp
