@@ -23,6 +23,8 @@
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/entity_manager.h>
 
+#include <stdexcept>
+
 namespace tesseract_gui
 {
 const std::string EntityContainer::VISUAL_NS = "visual";
