@@ -2,6 +2,14 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update dependencies.rosinstall
+* Fixe an include (required for newer GCC on Ubuntu 22.04)
+* Update to support changes in tesseract_planning
+* Member results was removed from TaskComposerNodeInfo
+* Contributors: Levi Armstrong, Roelof Oomen
+
 0.20.2 (2023-10-29)
 -------------------
 * Fix sendEvent calls
