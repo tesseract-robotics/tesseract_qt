@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.21.0 (2023-11-10)
+-------------------
 * Update dependencies.rosinstall
 * Fixe an include (required for newer GCC on Ubuntu 22.04)
 * Update to support changes in tesseract_planning
