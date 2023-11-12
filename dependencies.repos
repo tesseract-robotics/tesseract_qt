@@ -3,6 +3,10 @@
     uri: https://github.com/ros-industrial/ros_industrial_cmake_boilerplate.git
     version: 0.5.4
 - git:
+    local-name: opw_kinematics
+    uri: https://github.com/Jmeyer1292/opw_kinematics.git
+    version: 0.5.0
+- git:
     local-name: fcl
     uri: https://github.com/flexible-collision-library/fcl.git
     version: 0.6.1
