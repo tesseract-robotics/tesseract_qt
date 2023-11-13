@@ -35,6 +35,7 @@ jobs:
           apt upgrade -y
           apt install -y cmake wget curl software-properties-common lsb-release ca-certificates gnupg python3 python3-distutils python3-pip ccache git liboctomap-dev libompl-dev
           add-apt-repository ppa:ros-industrial/ppa
+          cd $GITHUB_WORKSPACE/target_ws/src
           ./.add-gazebo-ppa
           apt install -y taskflow libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
           python3 -m pip install vcstool -q
@@ -42,7 +43,6 @@ jobs:
           python3 -m pip install rosdep -q
           rosdep init
           rosdep update
-          cd $GITHUB_WORKSPACE/target_ws/src
           curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
           apt update -qq
