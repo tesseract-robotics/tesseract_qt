@@ -58,8 +58,8 @@ endif()
 
 if(${BUILD_STUDIO} AND ${BUILD_RENDERING})
   message("Building studio module")
+  list(APPEND DEPS "qtadvanceddocking NAMES qtadvanceddocking qt5advanceddocking qt6advanceddocking")
   add_subdirectory(studio)
-  list(APPEND DEPS qtadvanceddocking)
 endif()
 
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGraphviz.cmake"

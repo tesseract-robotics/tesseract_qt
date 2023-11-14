@@ -1,7 +1,20 @@
 find_package(tesseract_common REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
-find_package(qtadvanceddocking REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(
+  qtadvanceddocking
+  NAMES
+  qtadvanceddocking
+  qt5advanceddocking
+  qt6advanceddocking
+  REQUIRED)
+if(TARGET ads::qtadvanceddocking)
+  set(ADS_TARGET ads::qtadvanceddocking)
+elseif(TARGET ads::qt5advanceddocking)
+  set(ADS_TARGET ads::qt5advanceddocking)
+elseif(TARGET ads::qt6advanceddocking)
+  set(ADS_TARGET ads::qt6advanceddocking)
+endif()
 
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
@@ -34,7 +47,7 @@ target_link_libraries(
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
-         ads::qtadvanceddocking
+         ${ADS_TARGET}
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_plot)
 target_include_directories(
@@ -116,7 +129,7 @@ target_link_libraries(
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
-         ads::qtadvanceddocking
+         ${ADS_TARGET}
          Boost::program_options
          ${PROJECT_NAME}_studio_plugin_factory
          ${PROJECT_NAME}_common)
