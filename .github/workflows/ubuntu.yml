@@ -33,7 +33,7 @@ jobs:
         run: |
           apt update
           apt upgrade -y
-          apt install software-properties-common
+          apt install -y software-properties-common
           add-apt-repository ppa:levi-armstrong/tesseract-robotics
           cd $GITHUB_WORKSPACE/target_ws/src
           ./.add-gazebo-ppa
