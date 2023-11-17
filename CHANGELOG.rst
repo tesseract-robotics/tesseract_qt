@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.21.1 (2023-11-17)
+-------------------
 * Add colcon.pkg
 * Remove use of Industrial CI from clang-format CI
 * Remove use of Industrial CI (`#90 <https://github.com/tesseract-robotics/tesseract_qt/issues/90>`_)
