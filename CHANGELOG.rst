@@ -2,6 +2,12 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use tesseract_planning docker image (`#94 <https://github.com/tesseract-robotics/tesseract_qt/issues/94>`_)
+* Added docker files
+* Contributors: Levi Armstrong, Michael Ripperger
+
 0.21.1 (2023-11-17)
 -------------------
 * Add colcon.pkg
