@@ -7,7 +7,9 @@ on:
   pull_request:
   schedule:
     - cron: '0 5 * * *'
-
+  release:
+    types:
+      - released
 jobs:
   ci:
     name: ${{ matrix.distro }}
@@ -17,7 +19,7 @@ jobs:
       matrix:
         distro: [focal, jammy]
     container:
-      image: ubuntu:${{ matrix.distro }}
+      image: ghcr.io/tesseract-robotics/tesseract_planning:${{ matrix.distro }}-0.21
       env:
         CCACHE_DIR: "$GITHUB_WORKSPACE/${{ matrix.distro }}/.ccache"
         DEBIAN_FRONTEND: noninteractive
@@ -33,17 +35,15 @@ jobs:
         run: |
           apt update
           apt upgrade -y
-          apt install -y wget software-properties-common
-          add-apt-repository ppa:levi-armstrong/tesseract-robotics
+          apt install -y wget qt-advanced-docking-system
           cd $GITHUB_WORKSPACE/target_ws/src
           ./.add-gazebo-ppa
-          apt install -y liboctomap-dev libompl-dev taskflow qt-advanced-docking-system libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
+          apt install -y libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
 
       - name: Build and Tests
-        uses: tesseract-robotics/colcon-action@v1
+        uses: tesseract-robotics/colcon-action@v2
         with:
+          before-script: source /opt/tesseract/install/setup.bash && source /opt/tesseract_planning/install/setup.bash
           ccache-prefix: ${{ matrix.distro }}
-          vcs-file: dependencies.repos
-          upstream-args: --cmake-args -DCMAKE_BUILD_TYPE=Release
           target-path: target_ws/src
           target-args: --cmake-args -DCMAKE_BUILD_TYPE=Debug -DTESSERACT_ENABLE_TESTING=ON
