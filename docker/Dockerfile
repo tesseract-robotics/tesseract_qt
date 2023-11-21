@@ -9,7 +9,8 @@ USER root
 
 # Install the dependency
 COPY .add-gazebo-ppa /tmp/add_gazebo_ppa.sh
-RUN ./tmp/add_gazebo_ppa.sh \
+RUN apt install -y wget qt-advanced-docking-system \
+  && ./tmp/add_gazebo_ppa.sh \
   && apt install -y qt-advanced-docking-system libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
 
 # Bind mount the source directory so as not to unnecessarily copy source code into the docker image

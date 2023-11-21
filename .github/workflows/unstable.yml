@@ -35,9 +35,10 @@ jobs:
         run: |
           apt update
           apt upgrade -y
+          apt install -y wget qt-advanced-docking-system
           cd $GITHUB_WORKSPACE/target_ws/src
           ./.add-gazebo-ppa
-          apt install -y qt-advanced-docking-system libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
+          apt install -y libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
 
       - name: Build and Tests
         uses: tesseract-robotics/colcon-action@v2
