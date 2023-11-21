@@ -25,7 +25,7 @@ RUN --mount=type=bind,target=${WORKSPACE_DIR}/src/tesseract_qt \
 # Bind mount the source directory so as not to unnecessarily copy source code into the docker image
 RUN --mount=type=bind,target=${WORKSPACE_DIR}/src/tesseract_qt \
   source /opt/tesseract/install/setup.bash \
-  source /opt/tesseract_planning/install/setup.bash \
+  && source /opt/tesseract_planning/install/setup.bash \
   && cd ${WORKSPACE_DIR} \ 
   && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DBUILD_RENDERING=OFF -DBUILD_STUDIO=OFF \
   && rm -rf build log
