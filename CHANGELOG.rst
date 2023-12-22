@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.21.3 (2023-12-22)
+-------------------
 * Fix ogre rendering crash when link only has collision geometry
 * Fix branch name in docker CI
 * Contributors: Levi Armstrong
