@@ -294,6 +294,9 @@ gz::rendering::VisualPtr loadLink(gz::rendering::Scene& scene,
     ign_link->AddChild(ign_link_wirebox);
   }
 
+  // Cannot set visibilty to false in loadLinkCollisions because LocalBoundingBox only calculates for visible objects
+  ign_link_collisions->SetVisible(false);
+
   return ign_link;
 }
 
@@ -326,7 +329,7 @@ gz::rendering::VisualPtr loadLinkCollisions(gz::rendering::Scene& scene,
     ign_link_collisions->AddChild(loadLinkGeometry(
         scene, entity_container, *collision->geometry, Eigen::Vector3d::Ones(), collision->origin, nullptr));
 
-  ign_link_collisions->SetVisible(false);
+  ign_link_collisions->SetVisible(true);
   return ign_link_collisions;
 }
 
