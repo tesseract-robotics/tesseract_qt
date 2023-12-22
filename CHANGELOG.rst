@@ -2,6 +2,12 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix ogre rendering crash when link only has collision geometry
+* Fix branch name in docker CI
+* Contributors: Levi Armstrong
+
 0.21.2 (2023-11-21)
 -------------------
 * Use tesseract_planning docker image (`#94 <https://github.com/tesseract-robotics/tesseract_qt/issues/94>`_)
