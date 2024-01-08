@@ -108,6 +108,7 @@ void CollisionStandardItem::ctor()
     }
     case tesseract_geometry::GeometryType::CONVEX_MESH:
     case tesseract_geometry::GeometryType::MESH:
+    case tesseract_geometry::GeometryType::POLYGON_MESH:
     case tesseract_geometry::GeometryType::SDF_MESH:
     {
       geometry_item = new PolygonMeshStandardItem(

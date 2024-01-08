@@ -71,6 +71,11 @@ void PolygonMeshStandardItem::ctor()
     setIcon(icons::getMeshIcon());
     setText("Mesh");
   }
+  else if (mesh->getType() == tesseract_geometry::GeometryType::POLYGON_MESH)
+  {
+    setIcon(icons::getMeshIcon());
+    setText("Polygon Mesh");
+  }
   else if (mesh->getType() == tesseract_geometry::GeometryType::SDF_MESH)
   {
     setIcon(icons::getMeshIcon());
