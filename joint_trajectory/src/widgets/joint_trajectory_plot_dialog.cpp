@@ -34,13 +34,13 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
 {
   ui_->setupUi(this);
 
-  ui_->jtpHorizontalSlider->setMinimum(current_trajectory.second.front().time / SLIDER_RESOLUTION);
-  ui_->jtpHorizontalSlider->setMaximum(current_trajectory.second.back().time / SLIDER_RESOLUTION);
+  ui_->jtpHorizontalSlider->setMinimum(current_trajectory.joint_trajectory.front().time / SLIDER_RESOLUTION);
+  ui_->jtpHorizontalSlider->setMaximum(current_trajectory.joint_trajectory.back().time / SLIDER_RESOLUTION);
   ui_->jtpHorizontalSlider->setSliderPosition(0);
 
   plot_data_map_.clear();
 
-  const std::vector<std::string> joint_names = current_trajectory.second[0].joint_names;
+  const std::vector<std::string> joint_names = current_trajectory.joint_trajectory[0].joint_names;
 
   for (std::size_t i = 0; i < joint_names.size(); ++i)
   {
@@ -48,7 +48,7 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
     tesseract_gui::PlotData& velocity = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::velocity");
     tesseract_gui::PlotData& acceleration = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::acceleration");
     double ct{ 0 };
-    for (const auto& state : current_trajectory.second)
+    for (const auto& state : current_trajectory.joint_trajectory)
     {
       position.pushBack(tesseract_gui::PlotDataXY::Point(state.time, state.position(i)));
       velocity.pushBack(tesseract_gui::PlotDataXY::Point(state.time, state.velocity(i)));
