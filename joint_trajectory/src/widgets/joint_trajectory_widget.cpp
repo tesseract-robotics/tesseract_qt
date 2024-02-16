@@ -239,7 +239,7 @@ void JointTrajectoryWidget::onRemove()
 
 void JointTrajectoryWidget::onPlot()
 {
-  if (data_->current_trajectory.second.empty())
+  if (data_->current_trajectory.joint_trajectory.empty())
     return;
 
   data_->plot_dialog = nullptr;
@@ -291,9 +291,9 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         }
       }
 
-      data_->player->setTrajectory(data_->current_trajectory.second);
+      data_->player->setTrajectory(data_->current_trajectory.joint_trajectory);
 
-      if (!data_->current_trajectory.second.empty())
+      if (!data_->current_trajectory.joint_trajectory.empty())
         onEnablePlayer();
 
       break;
@@ -323,14 +323,14 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       }
 
       data_->current_trajectory = tesseract_common::JointTrajectoryInfo();
-      data_->current_trajectory.first = jts.getInitialState();
+      data_->current_trajectory.joint_state = jts.getInitialState();
       for (const auto& t : jts.getJointTrajectories())
-        data_->current_trajectory.second.insert(
-            data_->current_trajectory.second.end(), t.second.begin(), t.second.end());
+        data_->current_trajectory.joint_trajectory.insert(
+            data_->current_trajectory.joint_trajectory.end(), t.joint_trajectory.begin(), t.joint_trajectory.end());
 
-      data_->player->setTrajectory(data_->current_trajectory.second);
+      data_->player->setTrajectory(data_->current_trajectory.joint_trajectory);
 
-      if (!data_->current_trajectory.second.empty())
+      if (!data_->current_trajectory.joint_trajectory.empty())
         onEnablePlayer();
 
       break;

@@ -36,7 +36,7 @@ namespace tesseract_common
 class JointTrajectorySet;
 class JointState;
 class JointTrajectory;
-using JointTrajectoryInfo = std::pair<JointState, JointTrajectory>;
+struct JointTrajectoryInfo;
 }  // namespace tesseract_common
 
 namespace boost::uuids

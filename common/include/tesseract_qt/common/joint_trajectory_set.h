@@ -41,7 +41,16 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_common
 {
-using JointTrajectoryInfo = std::pair<JointState, JointTrajectory>;
+struct JointTrajectoryInfo
+{
+  JointState joint_state;
+  JointTrajectory joint_trajectory;
+  std::string description;
+
+  friend class boost::serialization::access;
+  template <class Archive>
+  void serialize(Archive& ar, const unsigned int version);  // NOLINT
+};
 
 class JointTrajectorySet
 {
