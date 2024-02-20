@@ -408,15 +408,15 @@ void JointTrajectoryWidget::onSliderValueChanged(int value)
 
 void JointTrajectoryWidget::onEnablePlayer()
 {
+  data_->current_duration = data_->player->currentDuration();
   ui_->trajectoryPlayerFrame->setEnabled(true);
   ui_->trajectoryPlayButton->setEnabled(true);
   ui_->trajectoryPauseButton->setEnabled(false);
-  ui_->trajectorySlider->setMinimum(0);
-  ui_->trajectorySlider->setMaximum(data_->player->trajectoryDuration() / SLIDER_RESOLUTION);
-  ui_->trajectorySlider->setSliderPosition(0);
-  ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->player->currentDuration()));
-  ui_->trajectoryDurationLabel->setText(QString().sprintf("%0.3f", data_->player->trajectoryDuration()));
-  data_->current_duration = 0;
+  ui_->trajectorySlider->setMinimum(data_->player->trajectoryDurationStart() / SLIDER_RESOLUTION);
+  ui_->trajectorySlider->setMaximum(data_->player->trajectoryDurationEnd() / SLIDER_RESOLUTION);
+  ui_->trajectorySlider->setSliderPosition(data_->current_duration);
+  ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
+  ui_->trajectoryDurationLabel->setText(QString().sprintf("%0.3f", data_->player->trajectoryDurationEnd()));
 }
 
 void JointTrajectoryWidget::onDisablePlayer() { ui_->trajectoryPlayerFrame->setEnabled(false); }
