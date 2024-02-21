@@ -412,7 +412,7 @@ void JointTrajectoryWidget::onEnablePlayer()
   ui_->trajectoryPlayerFrame->setEnabled(true);
   ui_->trajectoryPlayButton->setEnabled(true);
   ui_->trajectoryPauseButton->setEnabled(false);
-  ui_->trajectorySlider->setMinimum(data_->player->trajectoryDurationStart() / SLIDER_RESOLUTION);
+  ui_->trajectorySlider->setMinimum(data_->player->trajectoryDurationBegin() / SLIDER_RESOLUTION);
   ui_->trajectorySlider->setMaximum(data_->player->trajectoryDurationEnd() / SLIDER_RESOLUTION);
   ui_->trajectorySlider->setSliderPosition(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
