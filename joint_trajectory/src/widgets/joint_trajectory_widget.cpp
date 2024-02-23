@@ -337,26 +337,35 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
     }
     default:
     {
-      events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
-      event.save_enabled = false;
-      event.remove_enabled = false;
-      event.plot_enabled = false;
-      QApplication::sendEvent(qApp, &event);
-
-      const tesseract_common::JointState& state = data_->model->getJointState(current_index);
-      auto jts = data_->model->getJointTrajectorySet(current_index);
-
-      if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+      try
       {
-        if (data_->model->getComponentInfo()->hasParent() && data_->current_environment != jts.getEnvironment())
-        {
-          auto env_wrapper =
-              std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
-          EnvironmentManager::set(env_wrapper);
-        }
+        events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
+        event.save_enabled = false;
+        event.remove_enabled = false;
+        event.plot_enabled = false;
+        QApplication::sendEvent(qApp, &event);
 
-        data_->current_environment = jts.getEnvironment();
-        data_->current_environment->setState(state.joint_names, state.position);
+        const tesseract_common::JointState& state = data_->model->getJointState(current_index);
+        auto jts = data_->model->getJointTrajectorySet(current_index);
+
+        if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+        {
+          if (data_->model->getComponentInfo()->hasParent() && data_->current_environment != jts.getEnvironment())
+          {
+            auto env_wrapper =
+                std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
+            EnvironmentManager::set(env_wrapper);
+          }
+
+          data_->current_environment = jts.getEnvironment();
+          data_->current_environment->setState(state.joint_names, state.position);
+        }
+      }
+      catch (const std::runtime_error& ex)
+      {
+        std::stringstream sstr;
+        sstr << "Error in onCurrentRowChanged default, not updating env state: " << ex.what() << std::endl;
+        CONSOLE_BRIDGE_logDebug(sstr.str().c_str());
       }
 
       break;
