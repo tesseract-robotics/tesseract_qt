@@ -255,8 +255,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
   onDisablePlayer();
   switch (data_->selected_item->type())
   {
-    case static_cast<int>(StandardItemType::COMMON_NAMESPACE):
-    {
+    case static_cast<int>(StandardItemType::COMMON_NAMESPACE): {
       events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
       event.save_enabled = false;
       event.remove_enabled = false;
@@ -265,8 +264,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       break;
     }
-    case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY):
-    {
+    case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET_TRAJECTORY): {
       events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
       event.save_enabled = false;
       event.remove_enabled = false;
@@ -298,8 +296,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       break;
     }
-    case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET):
-    {
+    case static_cast<int>(StandardItemType::JOINT_TRAJECTORY_SET): {
       events::JointTrajectoryToolbarState event(data_->model->getComponentInfo());
       event.save_enabled = true;
       event.remove_enabled = true;
