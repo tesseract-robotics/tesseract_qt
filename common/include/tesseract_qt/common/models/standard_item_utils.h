@@ -24,9 +24,12 @@
 #define TESSERACT_QT_COMMON_STANDARD_ITEM_UTILS_H
 
 #include <array>
-#include <QStandardItem>
+
 #include <QList>
-#include <QDateTime>
+
+class QStandardItem;
+class QDateTime;
+class QIcon;
 
 namespace tesseract_gui
 {

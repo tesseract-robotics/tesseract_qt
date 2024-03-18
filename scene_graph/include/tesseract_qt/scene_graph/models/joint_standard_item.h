@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_SCENE_GRAPH_JOINT_STANDARD_ITEM_H
 #define TESSERACT_QT_SCENE_GRAPH_JOINT_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/joint.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_scene_graph/fwd.h>
 
 #include <QStandardItem>
 
@@ -37,15 +33,15 @@ namespace tesseract_gui
 class JointStandardItem : public QStandardItem
 {
 public:
-  JointStandardItem(tesseract_scene_graph::Joint::Ptr joint);
-  explicit JointStandardItem(const QString& text, tesseract_scene_graph::Joint::Ptr joint);
-  JointStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Joint::Ptr joint);
+  JointStandardItem(std::shared_ptr<tesseract_scene_graph::Joint> joint);
+  explicit JointStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Joint> joint);
+  JointStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<tesseract_scene_graph::Joint> joint);
   int type() const override;
 
   void setChildLink(const QString& name);
   void setParentLink(const QString& name);
 
-  tesseract_scene_graph::Joint::Ptr joint;
+  std::shared_ptr<tesseract_scene_graph::Joint> joint;
 
 private:
   class Implementation;

@@ -24,10 +24,7 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_MOVE_INSTRUCTION_STANDARD_ITEM_H
 
 #include <QStandardItem>
-namespace tesseract_planning
-{
-class MoveInstructionPoly;
-}
+#include <tesseract_command_language/fwd.h>
 
 namespace tesseract_gui
 {

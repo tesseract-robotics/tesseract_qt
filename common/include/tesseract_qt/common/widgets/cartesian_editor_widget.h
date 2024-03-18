@@ -23,9 +23,11 @@
 #ifndef TESSERACT_GUI_COMMON_CARTESIAN_EDITOR_WIDGET_H
 #define TESSERACT_GUI_COMMON_CARTESIAN_EDITOR_WIDGET_H
 
-#include <QWidget>
+#ifndef Q_MOC_RUN
 #include <memory>
 #include <Eigen/Geometry>
+#include <QWidget>
+#endif
 
 namespace Ui
 {

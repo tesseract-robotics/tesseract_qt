@@ -21,6 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/common/events/environment_events.h>
+
 #include <tesseract_environment/command.h>
 
 namespace tesseract_gui::events

@@ -32,10 +32,25 @@
 #include <tesseract_qt/common/events/kinematic_groups_events.h>
 #include <tesseract_qt/common/events/environment_events.h>
 
+#include <tesseract_collision/core/discrete_contact_manager.h>
+
+#include <tesseract_scene_graph/link.h>
+#include <tesseract_scene_graph/joint.h>
+#include <tesseract_scene_graph/graph.h>
+#include <tesseract_scene_graph/scene_state.h>
+
+#include <tesseract_state_solver/state_solver.h>
+
 #include <tesseract_environment/environment.h>
 #include <tesseract_environment/environment_monitor.h>
+#include <tesseract_environment/events.h>
+#include <tesseract_environment/command.h>
+#include <tesseract_environment/commands/add_contact_managers_plugin_info_command.h>
+
 #include <tesseract_collision/core/common.h>
 #include <tesseract_common/yaml_utils.h>
+
+#include <console_bridge/console.h>
 
 #include <QApplication>
 

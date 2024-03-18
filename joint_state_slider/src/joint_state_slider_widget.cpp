@@ -29,6 +29,8 @@
 #include <QFrame>
 #include <QDoubleSpinBox>
 
+#include <tesseract_scene_graph/joint.h>
+
 const double SLIDER_RESOLUTION = 0.001;
 
 namespace tesseract_gui
@@ -54,7 +56,7 @@ JointStateSliderWidget::JointStateSliderWidget(QWidget* parent)
 
 JointStateSliderWidget::~JointStateSliderWidget() = default;
 
-void JointStateSliderWidget::setJoints(const std::vector<tesseract_scene_graph::Joint::ConstPtr>& joints)
+void JointStateSliderWidget::setJoints(const std::vector<std::shared_ptr<const tesseract_scene_graph::Joint>>& joints)
 {
   data_->state.clear();
   data_->sliders.clear();

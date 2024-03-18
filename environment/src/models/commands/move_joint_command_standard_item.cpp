@@ -25,24 +25,29 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/move_joint_command.h>
+
 namespace tesseract_gui
 {
-MoveJointCommandStandardItem::MoveJointCommandStandardItem(tesseract_environment::MoveJointCommand::ConstPtr command)
+MoveJointCommandStandardItem::MoveJointCommandStandardItem(
+    std::shared_ptr<const tesseract_environment::MoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Move Joint"), command(std::move(command))
 {
   ctor();
 }
 
-MoveJointCommandStandardItem::MoveJointCommandStandardItem(const QString& text,
-                                                           tesseract_environment::MoveJointCommand::ConstPtr command)
+MoveJointCommandStandardItem::MoveJointCommandStandardItem(
+    const QString& text,
+    std::shared_ptr<const tesseract_environment::MoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-MoveJointCommandStandardItem::MoveJointCommandStandardItem(const QIcon& icon,
-                                                           const QString& text,
-                                                           tesseract_environment::MoveJointCommand::ConstPtr command)
+MoveJointCommandStandardItem::MoveJointCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    std::shared_ptr<const tesseract_environment::MoveJointCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

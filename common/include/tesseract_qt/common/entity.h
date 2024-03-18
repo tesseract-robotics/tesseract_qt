@@ -24,13 +24,10 @@
 #ifndef TESSERACT_GUI_COMMON_ENTITY_H
 #define TESSERACT_GUI_COMMON_ENTITY_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <memory>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {

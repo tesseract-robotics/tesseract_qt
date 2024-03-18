@@ -37,6 +37,9 @@
 #include <QApplication>
 
 #include <gz/math/eigen3/Conversions.hh>
+#include <gz/math/Color.hh>
+#include <gz/rendering/Scene.hh>
+#include <gz/rendering/Material.hh>
 
 #include <tesseract_scene_graph/scene_state.h>
 

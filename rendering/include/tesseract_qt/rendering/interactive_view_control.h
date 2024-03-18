@@ -18,8 +18,10 @@
 #ifndef TESSERACT_QT_RENDERING_INTERACTIVE_VIEW_CONTROL_H
 #define TESSERACT_QT_RENDERING_INTERACTIVE_VIEW_CONTROL_H
 
+#ifndef Q_MOC_RUN
 #include <memory>
 #include <QObject>
+#endif
 
 namespace tesseract_gui
 {

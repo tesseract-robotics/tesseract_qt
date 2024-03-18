@@ -23,12 +23,9 @@
 #ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_DATA_STORAGE_STANDARD_ITEM_H
 #define TESSERACT_QT_PLANNING_TASK_COMPOSER_DATA_STORAGE_STANDARD_ITEM_H
 
-#include <QStandardItem>
+#include <tesseract_task_composer/core/fwd.h>
 
-namespace tesseract_planning
-{
-class TaskComposerDataStorage;
-}
+#include <QStandardItem>
 
 namespace tesseract_gui
 {

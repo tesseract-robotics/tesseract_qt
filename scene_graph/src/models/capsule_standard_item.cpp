@@ -25,15 +25,18 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_geometry/impl/capsule.h>
+
 namespace tesseract_gui
 {
-CapsuleStandardItem::CapsuleStandardItem(tesseract_geometry::Capsule::ConstPtr capsule)
+CapsuleStandardItem::CapsuleStandardItem(std::shared_ptr<const tesseract_geometry::Capsule> capsule)
   : QStandardItem(icons::getCapsuleIcon(), "Capsule"), capsule(std::move(capsule))
 {
   ctor();
 }
 
-CapsuleStandardItem::CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::ConstPtr capsule)
+CapsuleStandardItem::CapsuleStandardItem(const QString& text,
+                                         std::shared_ptr<const tesseract_geometry::Capsule> capsule)
   : QStandardItem(icons::getCapsuleIcon(), text), capsule(std::move(capsule))
 {
   ctor();
@@ -41,7 +44,7 @@ CapsuleStandardItem::CapsuleStandardItem(const QString& text, tesseract_geometry
 
 CapsuleStandardItem::CapsuleStandardItem(const QIcon& icon,
                                          const QString& text,
-                                         tesseract_geometry::Capsule::ConstPtr capsule)
+                                         std::shared_ptr<const tesseract_geometry::Capsule> capsule)
   : QStandardItem(icon, text), capsule(std::move(capsule))
 {
   ctor();

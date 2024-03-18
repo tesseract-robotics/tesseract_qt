@@ -24,23 +24,24 @@
  * limitations under the License.
  */
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/set.hpp>
 #include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/map.hpp>
 #include <boost/uuid/uuid_serialize.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/random_generator.hpp>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_common/utils.h>
 #include <tesseract_common/serialization.h>
-//#include <tesseract_common/joint_trajectory_set.h>
-#include <tesseract_qt/common/joint_trajectory_set.h>
+#include <tesseract_environment/environment.h>
+#include <tesseract_scene_graph/scene_state.h>
 #include <tesseract_environment/commands.h>
+
+#include <tesseract_qt/common/joint_trajectory_set.h>
 
 namespace tesseract_common
 {
@@ -74,14 +75,15 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
 }
 
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                                       tesseract_environment::Commands commands,
+                                       std::vector<std::shared_ptr<const tesseract_environment::Command>> commands,
                                        std::string description)
   : JointTrajectorySet(initial_state, description)
 {
   commands_ = std::move(commands);
 }
 
-JointTrajectorySet::JointTrajectorySet(tesseract_environment::Environment::UPtr environment, std::string description)
+JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract_environment::Environment> environment,
+                                       std::string description)
   : JointTrajectorySet(environment->getState().joints, std::move(description))
 {
   environment_ = std::move(environment);
@@ -91,7 +93,7 @@ boost::uuids::uuid JointTrajectorySet::getUUID() const { return uuid_; }
 
 void JointTrajectorySet::regenerateUUID() { uuid_ = boost::uuids::random_generator()(); }
 
-void JointTrajectorySet::applyEnvironment(tesseract_environment::Environment::UPtr env)
+void JointTrajectorySet::applyEnvironment(std::unique_ptr<tesseract_environment::Environment> env)
 {
   if (environment_ != nullptr)
     throw std::runtime_error("JointTrajectorySet: Cannot apply environment to trajectory set which already contains an "
@@ -104,9 +106,13 @@ void JointTrajectorySet::applyEnvironment(tesseract_environment::Environment::UP
   commands_.clear();
 }
 
-tesseract_environment::Environment::Ptr JointTrajectorySet::getEnvironment() const { return environment_; }
+std::shared_ptr<tesseract_environment::Environment> JointTrajectorySet::getEnvironment() const { return environment_; }
 
-const tesseract_environment::Commands& JointTrajectorySet::getEnvironmentCommands() const { return commands_; }
+const std::vector<std::shared_ptr<const tesseract_environment::Command>>&
+JointTrajectorySet::getEnvironmentCommands() const
+{
+  return commands_;
+}
 
 JointState JointTrajectorySet::getNewTrajectoryInitialState() const
 {

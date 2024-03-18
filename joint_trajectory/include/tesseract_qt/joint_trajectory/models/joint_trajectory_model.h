@@ -23,13 +23,10 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <memory>
 #include <QStandardItemModel>
 #endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_common
 {
@@ -46,7 +43,7 @@ class uuid;
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 class JointTrajectoryModel : public QStandardItemModel
 {
   Q_OBJECT

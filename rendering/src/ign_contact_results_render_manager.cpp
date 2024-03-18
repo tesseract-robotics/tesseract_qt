@@ -36,12 +36,12 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
-#include <QApplication>
-#include <QUuid>
-
 #include <variant>
 
 #include <console_bridge/console.h>
+
+#include <QApplication>
+#include <QUuid>
 
 const std::string USER_VISIBILITY = "user_visibility";
 

@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_SCENE_GRAPH_LIMITS_STANDARD_ITEM_H
 #define TESSERACT_QT_SCENE_GRAPH_LIMITS_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/joint.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_scene_graph/fwd.h>
 
 #include <QStandardItem>
 
@@ -37,12 +33,14 @@ namespace tesseract_gui
 class LimitsStandardItem : public QStandardItem
 {
 public:
-  LimitsStandardItem(tesseract_scene_graph::JointLimits::Ptr limits);
-  explicit LimitsStandardItem(const QString& text, tesseract_scene_graph::JointLimits::Ptr limits);
-  LimitsStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::JointLimits::Ptr limits);
+  LimitsStandardItem(std::shared_ptr<tesseract_scene_graph::JointLimits> limits);
+  explicit LimitsStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointLimits> limits);
+  LimitsStandardItem(const QIcon& icon,
+                     const QString& text,
+                     std::shared_ptr<tesseract_scene_graph::JointLimits> limits);
   int type() const override;
 
-  tesseract_scene_graph::JointLimits::Ptr limits;
+  std::shared_ptr<tesseract_scene_graph::JointLimits> limits;
 
 private:
   void ctor();

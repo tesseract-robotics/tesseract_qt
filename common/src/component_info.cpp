@@ -21,8 +21,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/nvp.hpp>
 #if (BOOST_VERSION >= 107400) && (BOOST_VERSION < 107500)
 #include <boost/serialization/library_version_type.hpp>
@@ -30,10 +28,11 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
+#include <boost/serialization/export.hpp>
 #include <boost/uuid/uuid_serialize.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/random_generator.hpp>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <tesseract_common/serialization.h>
 
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
@@ -161,6 +160,5 @@ void ComponentInfo::serialize(Archive& ar, const unsigned int /*version*/)
 
 }  // namespace tesseract_gui
 
-#include <tesseract_common/serialization.h>
 TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_gui::ComponentInfo)
 BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_gui::ComponentInfo)

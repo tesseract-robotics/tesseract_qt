@@ -58,7 +58,7 @@ void JointTrajectorySetItem::ctor()
 {
   for (std::size_t i = 0; i < trajectory_set.size(); ++i)
   {
-    tesseract_common::JointTrajectoryInfo& traj_info = trajectory_set[i];
+    auto& traj_info = trajectory_set[i];
     QString description = traj_info.description.empty() ? QString("trajectory[%1]").arg(i) :
                                                           QString::fromStdString(traj_info.description);
     QStandardItem* trajectory_item = new JointTrajectoryInfoItem(description, traj_info);

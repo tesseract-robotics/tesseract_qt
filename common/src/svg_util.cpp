@@ -26,6 +26,7 @@
 
 #include <tesseract_qt/common/svg_util.h>
 
+#include <QPixmap>
 #include <QtSvg>
 #include <QFile>
 #include <QIcon>

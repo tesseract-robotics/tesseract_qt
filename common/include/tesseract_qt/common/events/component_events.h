@@ -23,14 +23,17 @@
 #ifndef TESSERACT_GUI_COMMON_COMPONENT_EVENTS_H
 #define TESSERACT_GUI_COMMON_COMPONENT_EVENTS_H
 
-#include <tesseract_qt/common/component_info.h>
-
-#include <QEvent>
 #include <memory>
+#include <QEvent>
 
 namespace boost::uuids
 {
 struct uuid;
+}
+
+namespace tesseract_gui
+{
+class ComponentInfo;
 }
 
 namespace tesseract_gui::events

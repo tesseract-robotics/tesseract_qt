@@ -25,16 +25,18 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_scene_graph/joint.h>
+
 namespace tesseract_gui
 {
-CalibrationStandardItem::CalibrationStandardItem(tesseract_scene_graph::JointCalibration::Ptr calibration)
+CalibrationStandardItem::CalibrationStandardItem(std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration)
   : QStandardItem(icons::getCalibrationIcon(), "Calibration"), calibration(std::move(calibration))
 {
   ctor();
 }
 
 CalibrationStandardItem::CalibrationStandardItem(const QString& text,
-                                                 tesseract_scene_graph::JointCalibration::Ptr calibration)
+                                                 std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration)
   : QStandardItem(icons::getCalibrationIcon(), text), calibration(std::move(calibration))
 {
   ctor();
@@ -42,7 +44,7 @@ CalibrationStandardItem::CalibrationStandardItem(const QString& text,
 
 CalibrationStandardItem::CalibrationStandardItem(const QIcon& icon,
                                                  const QString& text,
-                                                 tesseract_scene_graph::JointCalibration::Ptr calibration)
+                                                 std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration)
   : QStandardItem(icon, text), calibration(std::move(calibration))
 {
   ctor();

@@ -23,17 +23,14 @@
 #ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_SELECTION_MODEL_H
 #define TESSERACT_QT_TOOL_PATH_TOOL_PATH_SELECTION_MODEL_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <QItemSelectionModel>
 #include <memory>
 #endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 class ToolPathSelectionModel : public QItemSelectionModel
 {
   Q_OBJECT

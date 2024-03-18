@@ -23,12 +23,9 @@
 #ifndef TESSERACT_GUI_COMMON_TRACKED_OBJECT_H
 #define TESSERACT_GUI_COMMON_TRACKED_OBJECT_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/random_generator.hpp>
 #include <Eigen/Eigen>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {

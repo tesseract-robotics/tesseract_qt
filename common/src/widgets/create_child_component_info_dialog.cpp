@@ -24,6 +24,7 @@
 #include "ui_create_child_component_info_dialog.h"
 
 #include <tesseract_qt/common/component_info.h>
+
 #include <boost/uuid/uuid_io.hpp>
 
 #include <QStringListModel>

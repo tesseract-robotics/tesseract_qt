@@ -24,15 +24,14 @@
  * limitations under the License.
  */
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_serialize.hpp>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+
+#include <tesseract_common/serialization.h>
 
 #include <tesseract_qt/common/tool_path_segment.h>
 #include <tesseract_qt/common/tool_path_pose.h>

@@ -23,33 +23,23 @@
 #ifndef TESSERACT_QT_MANIPULATION_MANIPULATION_WIDGET_H
 #define TESSERACT_QT_MANIPULATION_MANIPULATION_WIDGET_H
 
-#include <QWidget>
+#ifndef Q_MOC_RUN
 #include <memory>
 #include <Eigen/Geometry>
+#include <tesseract_kinematics/core/fwd.h>
+#include <tesseract_scene_graph/fwd.h>
+#include <tesseract_environment/fwd.h>
+#include <QWidget>
+#endif
 
 namespace Ui
 {
 class ManipulationWidget;
 }
 
-namespace tesseract_environment
-{
-class Environment;
-}
-
-namespace tesseract_scene_graph
-{
-class SceneState;
-}
-
-namespace tesseract_kinematics
-{
-class KinematicGroup;
-}
-
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 class ManipulationWidget : public QWidget
 {
   Q_OBJECT

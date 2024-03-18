@@ -23,19 +23,16 @@
 #ifndef TESSERACT_QT_STUDIO_STUDIO_H
 #define TESSERACT_QT_STUDIO_STUDIO_H
 
-#include <QMainWindow>
+#ifndef Q_MOC_RUN
 #include <memory>
+#include <tesseract_common/fwd.h>
+#include <QMainWindow>
+#endif
 
 namespace Ui
 {
 class Studio;
 }
-
-namespace tesseract_common
-{
-class PluginLoader;
-struct PluginInfo;
-}  // namespace tesseract_common
 
 namespace tesseract_gui
 {

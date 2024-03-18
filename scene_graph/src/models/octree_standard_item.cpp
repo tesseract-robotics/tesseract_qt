@@ -25,15 +25,17 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_geometry/impl/octree.h>
+
 namespace tesseract_gui
 {
-OctreeStandardItem::OctreeStandardItem(tesseract_geometry::Octree::ConstPtr octree)
+OctreeStandardItem::OctreeStandardItem(std::shared_ptr<const tesseract_geometry::Octree> octree)
   : QStandardItem(icons::getOctreeIcon(), "Octree"), octree(std::move(octree))
 {
   ctor();
 }
 
-OctreeStandardItem::OctreeStandardItem(const QString& text, tesseract_geometry::Octree::ConstPtr octree)
+OctreeStandardItem::OctreeStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Octree> octree)
   : QStandardItem(icons::getOctreeIcon(), text), octree(std::move(octree))
 {
   ctor();
@@ -41,7 +43,7 @@ OctreeStandardItem::OctreeStandardItem(const QString& text, tesseract_geometry::
 
 OctreeStandardItem::OctreeStandardItem(const QIcon& icon,
                                        const QString& text,
-                                       tesseract_geometry::Octree::ConstPtr octree)
+                                       std::shared_ptr<const tesseract_geometry::Octree> octree)
   : QStandardItem(icon, text), octree(std::move(octree))
 {
   ctor();
@@ -55,17 +57,17 @@ void OctreeStandardItem::ctor()
 
   switch (octree->getSubType())
   {
-    case tesseract_geometry::Octree::BOX:
+    case tesseract_geometry::OctreeSubType::BOX:
     {
       appendRow(createStandardItemString(icons::getCubeIcon(), "subshape", "BOX"));
       break;
     }
-    case tesseract_geometry::Octree::SPHERE_INSIDE:
+    case tesseract_geometry::OctreeSubType::SPHERE_INSIDE:
     {
       appendRow(createStandardItemString(icons::getSphereIcon(), "subshape", "SPHERE INSIDE"));
       break;
     }
-    case tesseract_geometry::Octree::SPHERE_OUTSIDE:
+    case tesseract_geometry::OctreeSubType::SPHERE_OUTSIDE:
     {
       appendRow(createStandardItemString(icons::getSphereIcon(), "subshape", "SPHERE OUTSIDE"));
       break;

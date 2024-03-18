@@ -23,9 +23,10 @@
 #ifndef TESSERACT_QT_COMMON_KINEMATIC_GROUPS_EVENTS_H
 #define TESSERACT_QT_COMMON_KINEMATIC_GROUPS_EVENTS_H
 
+#include <tesseract_srdf/kinematics_information.h>
+
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
-#include <tesseract_srdf/kinematics_information.h>
 
 namespace tesseract_gui::events
 {

@@ -24,8 +24,10 @@
 #ifndef TESSERACT_QT_COMMON_YAML_MODEL_H
 #define TESSERACT_QT_COMMON_YAML_MODEL_H
 
-#include <QAbstractItemModel>
+#ifndef Q_MOC_RUN
 #include <yaml-cpp/yaml.h>
+#include <QAbstractItemModel>
+#endif
 
 class QIODevice;
 

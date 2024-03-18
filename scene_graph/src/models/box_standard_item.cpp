@@ -25,21 +25,25 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_geometry/impl/box.h>
+
 namespace tesseract_gui
 {
-BoxStandardItem::BoxStandardItem(tesseract_geometry::Box::ConstPtr box)
+BoxStandardItem::BoxStandardItem(std::shared_ptr<const tesseract_geometry::Box> box)
   : QStandardItem(icons::getCubeIcon(), "Box"), box(std::move(box))
 {
   ctor();
 }
 
-BoxStandardItem::BoxStandardItem(const QString& text, tesseract_geometry::Box::ConstPtr box)
+BoxStandardItem::BoxStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Box> box)
   : QStandardItem(icons::getCubeIcon(), text), box(std::move(box))
 {
   ctor();
 }
 
-BoxStandardItem::BoxStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Box::ConstPtr box)
+BoxStandardItem::BoxStandardItem(const QIcon& icon,
+                                 const QString& text,
+                                 std::shared_ptr<const tesseract_geometry::Box> box)
   : QStandardItem(icon, text), box(std::move(box))
 {
   ctor();

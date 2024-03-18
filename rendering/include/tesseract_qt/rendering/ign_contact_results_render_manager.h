@@ -28,7 +28,7 @@
 namespace tesseract_gui
 {
 class EntityManager;
-struct ComponentInfo;
+class ComponentInfo;
 
 class IgnContactResultsRenderManager : public ContactResultsRenderManager
 {

@@ -24,11 +24,8 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_STATE_WAYPOINT_STANDARD_ITEM_H
 
 #include <QStandardItem>
+#include <tesseract_command_language/fwd.h>
 
-namespace tesseract_planning
-{
-class StateWaypointPoly;
-}
 namespace tesseract_gui
 {
 class StateWaypointStandardItem : public QStandardItem

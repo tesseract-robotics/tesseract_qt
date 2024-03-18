@@ -23,23 +23,13 @@
 #ifndef TESSERACT_QT_SRDF_EDITOR_WIDGET_H
 #define TESSERACT_QT_SRDF_EDITOR_WIDGET_H
 
-#include <QWidget>
+#ifndef Q_MOC_RUN
 #include <memory>
-
-namespace tesseract_common
-{
-class ResourceLocator;
-}
-
-namespace tesseract_scene_graph
-{
-class Joint;
-}
-
-namespace tesseract_environment
-{
-class Environment;
-}
+#include <tesseract_common/fwd.h>
+#include <tesseract_scene_graph/fwd.h>
+#include <tesseract_environment/fwd.h>
+#include <QWidget>
+#endif
 
 namespace Ui
 {
@@ -48,7 +38,7 @@ class SRDFEditorWidget;
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 class SRDFEditorWidget : public QWidget
 {
   Q_OBJECT

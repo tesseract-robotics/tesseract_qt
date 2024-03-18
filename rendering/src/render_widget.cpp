@@ -16,16 +16,9 @@
  */
 
 #include <tesseract_qt/rendering/render_widget.h>
-//#include <tesseract_qt/rendring/gui_utils.h>
 #include <tesseract_qt/rendering/render_events.h>
 #include <tesseract_qt/rendering/conversions.h>
 #include <tesseract_qt/rendering/interactive_view_control.h>
-
-#include <algorithm>
-#include <map>
-#include <sstream>
-#include <string>
-#include <vector>
 
 // TODO(louise) Remove these pragmas once ign-rendering
 // is disabling the warnings
@@ -33,6 +26,11 @@
 #pragma warning(push, 0)
 #endif
 
+#include <algorithm>
+#include <map>
+#include <sstream>
+#include <vector>
+#include <gz/rendering/Material.hh>
 #include <gz/rendering/Camera.hh>
 #include <gz/rendering/RayQuery.hh>
 #include <gz/rendering/RenderEngine.hh>
@@ -40,12 +38,16 @@
 #include <gz/rendering/Scene.hh>
 #include <gz/rendering/Grid.hh>
 #include <gz/rendering/AxisVisual.hh>
+#include <gz/common/KeyEvent.hh>
+#include <gz/common/MouseEvent.hh>
 #include <gz/common/Console.hh>
+#include <gz/math/Color.hh>
 
 #include <QOpenGLTextureBlitter>
 #include <QOffscreenSurface>
 #include <QApplication>
 #include <QTimer>
+#include <QKeyEvent>
 
 #ifdef _MSC_VER
 #pragma warning(pop)

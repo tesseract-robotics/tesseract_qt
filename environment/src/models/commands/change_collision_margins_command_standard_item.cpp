@@ -26,10 +26,12 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/change_collision_margins_command.h>
+
 namespace tesseract_gui
 {
 ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(
-    tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeCollisionMarginsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Change Collision Margins"), command(std::move(command))
 {
   ctor();
@@ -37,7 +39,7 @@ ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandard
 
 ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(
     const QString& text,
-    tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeCollisionMarginsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -46,7 +48,7 @@ ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandard
 ChangeCollisionMarginsCommandStandardItem::ChangeCollisionMarginsCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::ChangeCollisionMarginsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeCollisionMarginsCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_ENVIRONMENT_COMMAND_STANDARD_ITEM_H
 #define TESSERACT_QT_ENVIRONMENT_COMMAND_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_environment/commands/add_allowed_collision_command.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_environment/fwd.h>
 
 #include <QStandardItem>
 
@@ -38,7 +34,7 @@ class CommandStandardItem : public QStandardItem
 {
 public:
   using CommandStandardItem::CommandStandardItem;
-  virtual tesseract_environment::Command::ConstPtr getCommand() const = 0;
+  virtual std::shared_ptr<const tesseract_environment::Command> getCommand() const = 0;
 };
 }  // namespace tesseract_gui
 

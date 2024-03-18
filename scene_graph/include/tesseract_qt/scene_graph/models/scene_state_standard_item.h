@@ -22,12 +22,9 @@
  */
 #ifndef TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_STANDARD_ITEM_H
 #define TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_STANDARD_ITEM_H
-#include <QStandardItem>
 
-namespace tesseract_scene_graph
-{
-class SceneState;
-}
+#include <QStandardItem>
+#include <tesseract_scene_graph/fwd.h>
 
 namespace tesseract_gui
 {

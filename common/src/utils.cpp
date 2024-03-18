@@ -22,6 +22,7 @@
  */
 
 #include <tesseract_qt/common/utils.h>
+
 #include <tesseract_common/utils.h>
 #include <boost/algorithm/string.hpp>
 #include <graphviz/gvc.h>

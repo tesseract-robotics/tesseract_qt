@@ -23,13 +23,8 @@
 #ifndef TESSERACT_QT_COMMON_VECTOR_STRING_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_VECTOR_STRING_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
 #include <vector>
 #include <string>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QStandardItem>
 

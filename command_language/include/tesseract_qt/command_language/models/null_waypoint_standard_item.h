@@ -24,10 +24,6 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_NULL_WAYPOINT_STANDARD_ITEM_H
 
 #include <QStandardItem>
-namespace tesseract_planning
-{
-class NullWaypoint;
-}
 
 namespace tesseract_gui
 {

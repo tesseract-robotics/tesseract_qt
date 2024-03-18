@@ -27,6 +27,7 @@
 #include <tesseract_qt/common/models/tool_path_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/events/tool_path_events.h>
+#include <tesseract_qt/common/tool_path.h>
 
 #include <tesseract_common/yaml_utils.h>
 

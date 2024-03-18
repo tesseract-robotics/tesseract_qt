@@ -23,11 +23,13 @@
 
 #include <tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.h>
 #include <tesseract_qt/acm/widgets/add_allowed_collision_entry_dialog.h>
+#include <tesseract_qt/acm/models/allowed_collision_matrix_model.h>
 #include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 #include <tesseract_qt/common/events/environment_events.h>
 
 #include "ui_allowed_collision_matrix_editor_widget.h"
 
+#include <tesseract_common/allowed_collision_matrix.h>
 #include <tesseract_environment/commands/modify_allowed_collisions_command.h>
 
 #include <QDialog>

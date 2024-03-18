@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_ENVIRONMENT_ADD_CONTACT_MANAGERS_PLUGIN_INFO_COMMAND_STANDARD_ITEM_H
 #define TESSERACT_QT_ENVIRONMENT_ADD_CONTACT_MANAGERS_PLUGIN_INFO_COMMAND_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_environment/commands/add_contact_managers_plugin_info_command.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_environment/fwd.h>
 
 #include <QStandardItem>
 
@@ -38,17 +34,17 @@ class AddContactManagersPluginInfoCommandStandardItem : public QStandardItem
 {
 public:
   explicit AddContactManagersPluginInfoCommandStandardItem(
-      tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::AddContactManagersPluginInfoCommand> command);
   explicit AddContactManagersPluginInfoCommandStandardItem(
       const QString& text,
-      tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::AddContactManagersPluginInfoCommand> command);
   explicit AddContactManagersPluginInfoCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::AddContactManagersPluginInfoCommand> command);
   int type() const override;
 
-  tesseract_environment::AddContactManagersPluginInfoCommand::ConstPtr command;
+  std::shared_ptr<const tesseract_environment::AddContactManagersPluginInfoCommand> command;
 
 private:
   void ctor();

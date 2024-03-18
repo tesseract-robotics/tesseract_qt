@@ -44,11 +44,14 @@
 #include <tesseract_qt/common/joint_trajectory_set.h>
 
 #include <tesseract_common/joint_state.h>
+#include <tesseract_environment/environment.h>
 #include <tesseract_visualization/trajectory_player.h>
+#include <set>
+#include <console_bridge/console.h>
 
 #include <QTimer>
 #include <QFileDialog>
-#include <set>
+#include <QItemSelectionModel>
 
 const double SLIDER_RESOLUTION = 0.001;
 

@@ -23,6 +23,7 @@
 
 #include <tesseract_qt/common/theme_utils.h>
 
+#include <QString>
 #include <QFile>
 
 namespace tesseract_gui::themes

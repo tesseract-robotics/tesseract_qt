@@ -25,6 +25,7 @@
 #include <tesseract_qt/common/models/component_info_standard_item.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
+
 #include <boost/uuid/uuid_hash.hpp>
 #include <boost/uuid/uuid_io.hpp>
 

@@ -23,13 +23,10 @@
 #ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H
 #define TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H
 
+#include <tesseract_common/fwd.h>
+
 #include <QStandardItem>
 #include <QList>
-
-namespace tesseract_common
-{
-class AnyPoly;
-}
 
 namespace tesseract_gui
 {

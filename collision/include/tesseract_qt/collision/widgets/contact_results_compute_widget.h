@@ -23,9 +23,10 @@
 #ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_COMPUTE_WIDGET_H
 #define TESSERACT_QT_COLLISION_CONTACT_RESULTS_COMPUTE_WIDGET_H
 
-#include <QWidget>
+#ifndef Q_MOC_RUN
 #include <memory>
-#include <tesseract_collision/core/types.h>
+#include <QWidget>
+#endif
 
 namespace Ui
 {

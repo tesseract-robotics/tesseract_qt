@@ -27,19 +27,19 @@
 
 namespace tesseract_gui
 {
-JointGroupStandardItem::JointGroupStandardItem(tesseract_srdf::JointGroup group)
+JointGroupStandardItem::JointGroupStandardItem(std::vector<std::string> group)
   : QStandardItem(icons::getRobotArmIcon(), "Joint Group"), group(std::move(group))
 {
   ctor();
 }
 
-JointGroupStandardItem::JointGroupStandardItem(const QString& text, tesseract_srdf::JointGroup group)
+JointGroupStandardItem::JointGroupStandardItem(const QString& text, std::vector<std::string> group)
   : QStandardItem(icons::getRobotArmIcon(), text), group(std::move(group))
 {
   ctor();
 }
 
-JointGroupStandardItem::JointGroupStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::JointGroup group)
+JointGroupStandardItem::JointGroupStandardItem(const QIcon& icon, const QString& text, std::vector<std::string> group)
   : QStandardItem(icon, text), group(std::move(group))
 {
   ctor();

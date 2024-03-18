@@ -25,6 +25,8 @@
 
 #include <memory>
 #include <mutex>
+#include <vector>
+
 #include <QObject>
 
 namespace tesseract_gui::events
@@ -34,7 +36,7 @@ class ComponentEvent;
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 
 class ToolPathRenderManager : public QObject
 {

@@ -27,10 +27,13 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/add_scene_graph_command.h>
+#include <tesseract_scene_graph/joint.h>
+
 namespace tesseract_gui
 {
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
-    tesseract_environment::AddSceneGraphCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Add Scene Graph"), command(std::move(command))
 {
   ctor();
@@ -38,7 +41,7 @@ AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
 
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
     const QString& text,
-    tesseract_environment::AddSceneGraphCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +50,7 @@ AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::AddSceneGraphCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

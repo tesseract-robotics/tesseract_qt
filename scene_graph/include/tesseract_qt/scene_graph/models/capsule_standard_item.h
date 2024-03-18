@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_SCENE_GRAPH_CAPSULE_STANDARD_ITEM_H
 #define TESSERACT_QT_SCENE_GRAPH_CAPSULE_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_geometry/impl/capsule.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_geometry/fwd.h>
 
 #include <QStandardItem>
 
@@ -37,12 +33,14 @@ namespace tesseract_gui
 class CapsuleStandardItem : public QStandardItem
 {
 public:
-  CapsuleStandardItem(tesseract_geometry::Capsule::ConstPtr capsule);
-  explicit CapsuleStandardItem(const QString& text, tesseract_geometry::Capsule::ConstPtr capsule);
-  CapsuleStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Capsule::ConstPtr capsule);
+  CapsuleStandardItem(std::shared_ptr<const tesseract_geometry::Capsule> capsule);
+  explicit CapsuleStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Capsule> capsule);
+  CapsuleStandardItem(const QIcon& icon,
+                      const QString& text,
+                      std::shared_ptr<const tesseract_geometry::Capsule> capsule);
   int type() const override;
 
-  tesseract_geometry::Capsule::ConstPtr capsule;
+  std::shared_ptr<const tesseract_geometry::Capsule> capsule;
 
 private:
   void ctor();

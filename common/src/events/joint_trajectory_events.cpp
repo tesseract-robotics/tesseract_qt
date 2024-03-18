@@ -22,6 +22,7 @@
  */
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
+
 #include <string>
 #include <boost/uuid/uuid.hpp>
 

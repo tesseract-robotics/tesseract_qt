@@ -23,15 +23,11 @@
 #ifndef TESSERACT_QT_JOINT_STATE_SLIDER_WIDGET_H
 #define TESSERACT_QT_JOINT_STATE_SLIDER_WIDGET_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/joint.h>
+#include <tesseract_scene_graph/fwd.h>
 #include <memory>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
 #include <QWidget>
+#endif
 
 namespace Ui
 {
@@ -49,7 +45,7 @@ public:
   explicit JointStateSliderWidget(QWidget* parent = nullptr);
   ~JointStateSliderWidget();
 
-  void setJoints(const std::vector<tesseract_scene_graph::Joint::ConstPtr>& joints);
+  void setJoints(const std::vector<std::shared_ptr<const tesseract_scene_graph::Joint>>& joints);
   std::unordered_map<std::string, double> getJointState() const;
 
 Q_SIGNALS:

@@ -23,8 +23,6 @@
 #ifndef TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATE_STANDARD_ITEM_H
 #define TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATE_STANDARD_ITEM_H
 
-#include <tesseract_srdf/kinematics_information.h>
-
 #include <QStandardItem>
 
 namespace tesseract_gui

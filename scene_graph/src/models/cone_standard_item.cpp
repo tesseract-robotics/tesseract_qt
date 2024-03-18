@@ -25,21 +25,25 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_geometry/impl/cone.h>
+
 namespace tesseract_gui
 {
-ConeStandardItem::ConeStandardItem(tesseract_geometry::Cone::ConstPtr cone)
+ConeStandardItem::ConeStandardItem(std::shared_ptr<const tesseract_geometry::Cone> cone)
   : QStandardItem(icons::getConeIcon(), "Cone"), cone(std::move(cone))
 {
   ctor();
 }
 
-ConeStandardItem::ConeStandardItem(const QString& text, tesseract_geometry::Cone::ConstPtr cone)
+ConeStandardItem::ConeStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Cone> cone)
   : QStandardItem(icons::getConeIcon(), text), cone(std::move(cone))
 {
   ctor();
 }
 
-ConeStandardItem::ConeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Cone::ConstPtr cone)
+ConeStandardItem::ConeStandardItem(const QIcon& icon,
+                                   const QString& text,
+                                   std::shared_ptr<const tesseract_geometry::Cone> cone)
   : QStandardItem(icon, text), cone(std::move(cone))
 {
   ctor();

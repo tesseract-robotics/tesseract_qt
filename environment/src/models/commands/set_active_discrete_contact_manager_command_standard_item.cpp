@@ -25,10 +25,12 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/set_active_discrete_contact_manager_command.h>
+
 namespace tesseract_gui
 {
 SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(
-    tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::SetActiveDiscreteContactManagerCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Set Active Discrete Contact Manager"), command(std::move(command))
 {
   ctor();
@@ -36,7 +38,7 @@ SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactMana
 
 SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(
     const QString& text,
-    tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::SetActiveDiscreteContactManagerCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -45,7 +47,7 @@ SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactMana
 SetActiveDiscreteContactManagerCommandStandardItem::SetActiveDiscreteContactManagerCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::SetActiveDiscreteContactManagerCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::SetActiveDiscreteContactManagerCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

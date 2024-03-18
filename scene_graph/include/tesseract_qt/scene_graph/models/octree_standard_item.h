@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_SCENE_GRAPH_OCTREE_STANDARD_ITEM_H
 #define TESSERACT_QT_SCENE_GRAPH_OCTREE_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_geometry/impl/octree.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_geometry/fwd.h>
 
 #include <QStandardItem>
 
@@ -37,12 +33,12 @@ namespace tesseract_gui
 class OctreeStandardItem : public QStandardItem
 {
 public:
-  OctreeStandardItem(tesseract_geometry::Octree::ConstPtr octree);
-  explicit OctreeStandardItem(const QString& text, tesseract_geometry::Octree::ConstPtr octree);
-  OctreeStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Octree::ConstPtr octree);
+  OctreeStandardItem(std::shared_ptr<const tesseract_geometry::Octree> octree);
+  explicit OctreeStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Octree> octree);
+  OctreeStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract_geometry::Octree> octree);
   int type() const override;
 
-  tesseract_geometry::Octree::ConstPtr octree;
+  std::shared_ptr<const tesseract_geometry::Octree> octree;
 
 private:
   void ctor();

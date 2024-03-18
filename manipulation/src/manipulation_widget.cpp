@@ -8,9 +8,14 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
+#include <tesseract_qt/common/component_info.h>
 
+#include <tesseract_scene_graph/joint.h>
+#include <tesseract_srdf/kinematics_information.h>
 #include <tesseract_environment/environment.h>
 #include <tesseract_kinematics/core/kinematic_group.h>
+
+#include <console_bridge/console.h>
 
 #include <QStringList>
 #include <QStringListModel>

@@ -23,12 +23,7 @@
 #ifndef TESSERACT_QT_KINEMATIC_GROUP_OPW_PARAMS_STANDARD_ITEM_H
 #define TESSERACT_QT_KINEMATIC_GROUP_OPW_PARAMS_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_kinematics/opw/opw_inv_kin.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <opw_kinematics/opw_parameters.h>
 
 #include <QStandardItem>
 

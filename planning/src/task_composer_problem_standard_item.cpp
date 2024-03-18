@@ -40,6 +40,8 @@
 #include <tesseract_task_composer/planning/planning_task_composer_problem.h>
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
+#include <tesseract_scene_graph/scene_state.h>
+#include <tesseract_environment/environment.h>
 
 namespace tesseract_gui
 {

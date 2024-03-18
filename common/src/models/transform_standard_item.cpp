@@ -27,6 +27,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/tool_path_pose.h>
+
 #include <boost/uuid/uuid_generators.hpp>
 
 namespace tesseract_gui

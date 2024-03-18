@@ -20,11 +20,9 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+
 #include <QApplication>
 #include <QStandardItemModel>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/kinematic_groups/widgets/kinematic_groups_editor_widget.h>
 #include <QStringListModel>

@@ -22,6 +22,7 @@
  */
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
+
 #include <string>
 #include <boost/uuid/uuid.hpp>
 

@@ -24,10 +24,11 @@
 #ifndef TESSERACT_GUI_COMMON_ENTITY_CONTAINER_H
 #define TESSERACT_GUI_COMMON_ENTITY_CONTAINER_H
 
-#include <tesseract_qt/common/entity.h>
 #include <memory>
 #include <vector>
 #include <shared_mutex>
+
+#include <tesseract_qt/common/entity.h>
 
 namespace tesseract_gui
 {

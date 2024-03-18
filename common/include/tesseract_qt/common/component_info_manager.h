@@ -26,12 +26,20 @@
 #include <memory>
 #include <vector>
 #include <mutex>
-#include <boost/uuid/uuid.hpp>
-#include <yaml-cpp/yaml.h>
+
+namespace YAML
+{
+class Node;
+}
+
+namespace boost::uuids
+{
+struct uuid;
+}
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 
 /** @brief This managers all component infos which can be accessed by anything within the application */
 class ComponentInfoManager

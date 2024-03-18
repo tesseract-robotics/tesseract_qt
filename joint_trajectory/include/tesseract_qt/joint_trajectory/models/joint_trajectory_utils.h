@@ -32,6 +32,7 @@ namespace tesseract_common
 {
 class JointTrajectorySet;
 }
+
 namespace tesseract_gui
 {
 class ComponentInfo;

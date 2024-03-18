@@ -27,6 +27,8 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_qt/common/joint_trajectory_set.h>
+
 namespace tesseract_gui
 {
 JointTrajectoryInfoItem::JointTrajectoryInfoItem(tesseract_common::JointTrajectoryInfo& trajectory_info)
