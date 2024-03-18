@@ -33,11 +33,10 @@
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
-
 /** @brief All modesl will have this object to allow associating disconnected object together. */
-struct ComponentInfo
+class ComponentInfo
 {
+public:
   /** @brief Get the unique name */
   const std::string& getName() const;
 

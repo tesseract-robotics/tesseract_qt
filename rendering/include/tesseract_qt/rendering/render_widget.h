@@ -1,15 +1,31 @@
 #ifndef TESSERACT_QT_RENDERING_SIMPLE_RENDER_WIDGET_H
 #define TESSERACT_QT_RENDERING_SIMPLE_RENDER_WIDGET_H
 
-#include <gz/common/KeyEvent.hh>
-#include <gz/common/MouseEvent.hh>
-#include <gz/math/Color.hh>
-#include <gz/math/Pose3.hh>
+#ifndef Q_MOC_RUN
+#include <string>
+#include <memory>
+#include <gz/math/config.hh>
 #include <gz/math/Vector2.hh>
-
+#include <gz/math/Vector3.hh>
+#include <gz/math/Pose3.hh>
 #include <QWidget>
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
+#endif
+
+namespace gz::common
+{
+class KeyEvent;
+class MouseEvent;
+}  // namespace gz::common
+
+namespace gz::math
+{
+inline namespace GZ_MATH_VERSION_NAMESPACE
+{
+class Color;
+}
+}  // namespace gz::math
 
 namespace tesseract_gui
 {
@@ -325,7 +341,7 @@ public:
 private Q_SLOTS:
   void onFrameSwapped();
 
-protected:
+private:
   // Documentation inherited
   void mousePressEvent(QMouseEvent* event) override;
 

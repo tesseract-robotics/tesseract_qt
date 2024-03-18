@@ -20,13 +20,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QVBoxLayout>
 #include <QDebug>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/scene_graph/widgets/scene_graph_widget.h>
 #include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
@@ -34,7 +32,9 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/common/widgets/tree_view.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
+
 #include <tesseract_urdf/urdf_parser.h>
+#include <tesseract_scene_graph/graph.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
 int main(int argc, char** argv)

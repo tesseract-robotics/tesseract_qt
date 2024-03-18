@@ -20,15 +20,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+
 #include <QApplication>
 #include <QDebug>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/joint_state_slider/joint_state_slider_widget.h>
 
 #include <tesseract_urdf/urdf_parser.h>
+#include <tesseract_scene_graph/graph.h>
+#include <tesseract_scene_graph/joint.h>
 #include <tesseract_support/tesseract_support_resource_locator.h>
 
 int main(int argc, char** argv)

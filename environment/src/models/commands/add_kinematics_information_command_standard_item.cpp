@@ -25,10 +25,12 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/add_kinematics_information_command.h>
+
 namespace tesseract_gui
 {
 AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
-    tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Add Kinematics Information"), command(std::move(command))
 {
   ctor();
@@ -36,7 +38,7 @@ AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStan
 
 AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
     const QString& text,
-    tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -45,7 +47,7 @@ AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStan
 AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::AddKinematicsInformationCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

@@ -35,6 +35,7 @@
 #include <tesseract_qt/common/widgets/create_child_component_info_dialog.h>
 
 #include <tesseract_common/plugin_loader.h>
+#include <tesseract_common/plugin_info.h>
 #include <tesseract_common/types.h>
 
 #include <boost/uuid/random_generator.hpp>

@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_STANDARD_ITEM_H
 #define TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_environment/command.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_environment/fwd.h>
 
 #include <QStandardItem>
 
@@ -38,20 +34,21 @@ class EnvironmentCommandsStandardItem : public QStandardItem
 {
 public:
   EnvironmentCommandsStandardItem();
-  explicit EnvironmentCommandsStandardItem(tesseract_environment::Commands commands);
-  explicit EnvironmentCommandsStandardItem(const QString& text, tesseract_environment::Commands commands);
+  explicit EnvironmentCommandsStandardItem(std::vector<std::shared_ptr<const tesseract_environment::Command>> commands);
+  explicit EnvironmentCommandsStandardItem(const QString& text,
+                                           std::vector<std::shared_ptr<const tesseract_environment::Command>> commands);
   explicit EnvironmentCommandsStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           tesseract_environment::Commands commands);
+                                           std::vector<std::shared_ptr<const tesseract_environment::Command>> commands);
   int type() const override;
 
-  void appendCommand(const tesseract_environment::Command::ConstPtr& command);
-  const tesseract_environment::Commands& getCommands() const;
+  void appendCommand(const std::shared_ptr<const tesseract_environment::Command>& command);
+  const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
 
 private:
-  tesseract_environment::Commands commands_;
+  std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
 
-  void addCommand(const QString& text, const tesseract_environment::Command::ConstPtr& command);
+  void addCommand(const QString& text, const std::shared_ptr<const tesseract_environment::Command>& command);
   void ctor();
 };
 }  // namespace tesseract_gui

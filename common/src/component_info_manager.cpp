@@ -21,10 +21,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <map>
-#include <unordered_map>
 #include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/component_info.h>
+
+#include <map>
+#include <unordered_map>
+#include <yaml-cpp/yaml.h>
+#include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 #include <shared_mutex>

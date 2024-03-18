@@ -27,6 +27,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/tool_path_pose.h>
+#include <tesseract_qt/common/tool_path_segment.h>
 
 namespace tesseract_gui
 {

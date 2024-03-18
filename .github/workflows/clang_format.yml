@@ -22,7 +22,7 @@ jobs:
       - name: Run clang format
         run: |
           sudo apt update
-          sudo apt install -y git clang-format-8
+          sudo apt install -y git clang-format-12
           if [ $? -ge 1 ]; then return 1; fi
           ./.run-clang-format
           if [ $? -ge 1 ]; then return 1; fi

@@ -23,14 +23,11 @@
 #ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_MODEL_H
 #define TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_MODEL_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_task_composer/core/task_composer_problem.h>
-#include <QStandardItemModel>
 #include <memory>
+#include <tesseract_task_composer/core/fwd.h>
+#include <QStandardItemModel>
 #endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {
@@ -49,7 +46,7 @@ public:
    * @param ns The namespace to store the problem under
    * @return The key associated with added problem for removal
    */
-  QString addProblem(tesseract_planning::TaskComposerProblem::UPtr problem, std::string ns = "general");
+  QString addProblem(std::unique_ptr<tesseract_planning::TaskComposerProblem> problem, std::string ns = "general");
 
   /**
    * @brief Remove the problem

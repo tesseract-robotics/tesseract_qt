@@ -22,6 +22,8 @@
  */
 
 #include <tesseract_qt/common/events/component_events.h>
+#include <tesseract_qt/common/component_info.h>
+
 #include <boost/uuid/uuid.hpp>
 
 namespace tesseract_gui::events

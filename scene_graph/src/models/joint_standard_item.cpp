@@ -31,6 +31,8 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_scene_graph/joint.h>
+
 namespace tesseract_gui
 {
 class JointStandardItem::Implementation
@@ -40,19 +42,21 @@ public:
   QList<QStandardItem*> parent_link_name;
 };
 
-JointStandardItem::JointStandardItem(tesseract_scene_graph::Joint::Ptr joint)
+JointStandardItem::JointStandardItem(std::shared_ptr<tesseract_scene_graph::Joint> joint)
   : QStandardItem(icons::getJointIcon(), "Joint"), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
 }
 
-JointStandardItem::JointStandardItem(const QString& text, tesseract_scene_graph::Joint::Ptr joint)
+JointStandardItem::JointStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Joint> joint)
   : QStandardItem(icons::getJointIcon(), text), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
 }
 
-JointStandardItem::JointStandardItem(const QIcon& icon, const QString& text, tesseract_scene_graph::Joint::Ptr joint)
+JointStandardItem::JointStandardItem(const QIcon& icon,
+                                     const QString& text,
+                                     std::shared_ptr<tesseract_scene_graph::Joint> joint)
   : QStandardItem(icon, text), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();

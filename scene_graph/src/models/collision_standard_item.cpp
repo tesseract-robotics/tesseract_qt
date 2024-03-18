@@ -34,22 +34,27 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_scene_graph/link.h>
+#include <tesseract_geometry/geometry.h>
+#include <tesseract_geometry/geometries.h>
+
 namespace tesseract_gui
 {
-CollisionStandardItem::CollisionStandardItem(tesseract_scene_graph::Collision::Ptr collision)
+CollisionStandardItem::CollisionStandardItem(std::shared_ptr<tesseract_scene_graph::Collision> collision)
   : QStandardItem(icons::getCollisionIcon(), "Collision"), collision(std::move(collision))
 {
   ctor();
 }
 
-CollisionStandardItem::CollisionStandardItem(const QString& text, tesseract_scene_graph::Collision::Ptr collision)
+CollisionStandardItem::CollisionStandardItem(const QString& text,
+                                             std::shared_ptr<tesseract_scene_graph::Collision> collision)
   : QStandardItem(icons::getCollisionIcon(), text), collision(std::move(collision))
 {
   ctor();
 }
 CollisionStandardItem::CollisionStandardItem(const QIcon& icon,
                                              const QString& text,
-                                             tesseract_scene_graph::Collision::Ptr collision)
+                                             std::shared_ptr<tesseract_scene_graph::Collision> collision)
   : QStandardItem(icon, text), collision(std::move(collision))
 {
   ctor();

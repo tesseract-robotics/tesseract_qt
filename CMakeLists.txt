@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6.0)
+cmake_minimum_required(VERSION 3.15.0)
 
 # Extract package name and version
 find_package(ros_industrial_cmake_boilerplate REQUIRED)
@@ -18,16 +18,16 @@ add_subdirectory(common)
 add_subdirectory(acm)
 add_subdirectory(collision)
 add_subdirectory(command_language)
-add_subdirectory(environment)
 add_subdirectory(joint_state_slider)
-add_subdirectory(joint_trajectory)
 add_subdirectory(kinematic_groups)
-add_subdirectory(manipulation)
-add_subdirectory(plot)
 add_subdirectory(scene_graph)
-add_subdirectory(planning)
-add_subdirectory(srdf)
+add_subdirectory(environment)
+add_subdirectory(plot)
+add_subdirectory(joint_trajectory)
 add_subdirectory(tool_path)
+add_subdirectory(manipulation)
+add_subdirectory(srdf)
+add_subdirectory(planning)
 add_subdirectory(workbench)
 
 set(DEPS

@@ -35,15 +35,19 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_scene_graph/link.h>
+#include <tesseract_geometry/geometry.h>
+#include <tesseract_geometry/geometries.h>
+
 namespace tesseract_gui
 {
-VisualStandardItem::VisualStandardItem(tesseract_scene_graph::Visual::Ptr visual)
+VisualStandardItem::VisualStandardItem(std::shared_ptr<tesseract_scene_graph::Visual> visual)
   : QStandardItem(icons::getVisualIcon(), "Visual"), visual(std::move(visual))
 {
   ctor();
 }
 
-VisualStandardItem::VisualStandardItem(const QString& text, tesseract_scene_graph::Visual::Ptr visual)
+VisualStandardItem::VisualStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Visual> visual)
   : QStandardItem(icons::getVisualIcon(), text), visual(std::move(visual))
 {
   ctor();
@@ -51,7 +55,7 @@ VisualStandardItem::VisualStandardItem(const QString& text, tesseract_scene_grap
 
 VisualStandardItem::VisualStandardItem(const QIcon& icon,
                                        const QString& text,
-                                       tesseract_scene_graph::Visual::Ptr visual)
+                                       std::shared_ptr<tesseract_scene_graph::Visual> visual)
   : QStandardItem(icon, text), visual(std::move(visual))
 {
   ctor();

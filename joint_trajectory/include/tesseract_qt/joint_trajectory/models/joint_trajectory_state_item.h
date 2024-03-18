@@ -23,13 +23,8 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_common/joint_state.h>
+#include <tesseract_common/fwd.h>
 #include <QStandardItem>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {

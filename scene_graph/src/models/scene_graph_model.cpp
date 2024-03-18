@@ -34,6 +34,9 @@
 #include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_scene_graph/graph.h>
+#include <tesseract_scene_graph/link.h>
+#include <tesseract_scene_graph/joint.h>
+
 #include <tesseract_environment/environment.h>
 
 #include <QApplication>

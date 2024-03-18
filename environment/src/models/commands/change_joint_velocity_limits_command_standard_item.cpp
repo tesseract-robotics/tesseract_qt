@@ -25,10 +25,12 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/change_joint_velocity_limits_command.h>
+
 namespace tesseract_gui
 {
 ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(
-    tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeJointVelocityLimitsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Velocity Limits"), command(std::move(command))
 {
   ctor();
@@ -36,7 +38,7 @@ ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandSt
 
 ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(
     const QString& text,
-    tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeJointVelocityLimitsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -45,7 +47,7 @@ ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandSt
 ChangeJointVelocityLimitsCommandStandardItem::ChangeJointVelocityLimitsCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::ChangeJointVelocityLimitsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeJointVelocityLimitsCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

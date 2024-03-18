@@ -25,10 +25,12 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/change_joint_position_limits_command.h>
+
 namespace tesseract_gui
 {
 ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(
-    tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeJointPositionLimitsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Position Limits"), command(std::move(command))
 {
   ctor();
@@ -36,7 +38,7 @@ ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandSt
 
 ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(
     const QString& text,
-    tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeJointPositionLimitsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -45,7 +47,7 @@ ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandSt
 ChangeJointPositionLimitsCommandStandardItem::ChangeJointPositionLimitsCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::ChangeJointPositionLimitsCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::ChangeJointPositionLimitsCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

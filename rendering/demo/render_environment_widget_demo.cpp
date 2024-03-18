@@ -20,14 +20,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+
 #include <QApplication>
 #include <QDebug>
 #include <QMainWindow>
 #include <QDockWidget>
 #include <memory>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/rendering/render_widget.h>
 #include <tesseract_qt/rendering/ign_scene_graph_render_manager.h>

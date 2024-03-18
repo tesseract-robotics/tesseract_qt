@@ -16,7 +16,9 @@
  */
 
 #include <tesseract_qt/rendering/render_events.h>
-#include <string>
+
+#include <gz/common/KeyEvent.hh>
+#include <gz/common/MouseEvent.hh>
 
 namespace tesseract_gui::events
 {

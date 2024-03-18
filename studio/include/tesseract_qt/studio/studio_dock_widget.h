@@ -23,12 +23,15 @@
 #ifndef TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_H
 #define TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#include <yaml-cpp/yaml.h>
-#include <ads_globals.h>
+#ifndef Q_MOC_RUN
+#include <string>
 #include <DockAreaWidget.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#endif
+
+namespace YAML
+{
+class Node;
+}
 
 namespace tesseract_gui
 {

@@ -25,15 +25,17 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_scene_graph/joint.h>
+
 namespace tesseract_gui
 {
-LimitsStandardItem::LimitsStandardItem(tesseract_scene_graph::JointLimits::Ptr limits)
+LimitsStandardItem::LimitsStandardItem(std::shared_ptr<tesseract_scene_graph::JointLimits> limits)
   : QStandardItem(icons::getLimitsIcon(), "Limits"), limits(std::move(limits))
 {
   ctor();
 }
 
-LimitsStandardItem::LimitsStandardItem(const QString& text, tesseract_scene_graph::JointLimits::Ptr limits)
+LimitsStandardItem::LimitsStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointLimits> limits)
   : QStandardItem(icons::getLimitsIcon(), text), limits(std::move(limits))
 {
   ctor();
@@ -41,7 +43,7 @@ LimitsStandardItem::LimitsStandardItem(const QString& text, tesseract_scene_grap
 
 LimitsStandardItem::LimitsStandardItem(const QIcon& icon,
                                        const QString& text,
-                                       tesseract_scene_graph::JointLimits::Ptr limits)
+                                       std::shared_ptr<tesseract_scene_graph::JointLimits> limits)
   : QStandardItem(icon, text), limits(std::move(limits))
 {
   ctor();

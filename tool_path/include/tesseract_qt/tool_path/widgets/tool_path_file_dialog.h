@@ -23,9 +23,11 @@
 #ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_FILE_DIALOG_H
 #define TESSERACT_QT_TOOL_PATH_TOOL_PATH_FILE_DIALOG_H
 
+#ifndef Q_MOC_RUN
+#include <memory>
 #include <QDialog>
 #include <QFileDialog>
-#include <memory>
+#endif
 
 namespace Ui
 {
@@ -34,7 +36,7 @@ class ToolPathFileDialog;
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 class ToolPathFileDialog : public QDialog
 {
   Q_OBJECT

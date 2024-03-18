@@ -23,11 +23,9 @@
 #ifndef TESSERACT_QT_COMMON_MANIPULATOR_INFO_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_MANIPULATOR_INFO_STANDARD_ITEM_H
 
+#include <tesseract_common/fwd.h>
+
 #include <QStandardItem>
-namespace tesseract_common
-{
-struct ManipulatorInfo;
-}
 
 namespace tesseract_gui
 {

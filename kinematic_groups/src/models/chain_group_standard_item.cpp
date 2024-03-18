@@ -27,19 +27,22 @@
 
 namespace tesseract_gui
 {
-ChainGroupStandardItem::ChainGroupStandardItem(tesseract_srdf::ChainGroup group)
+ChainGroupStandardItem::ChainGroupStandardItem(std::vector<std::pair<std::string, std::string>> group)
   : QStandardItem(icons::getRobotArmIcon(), "Chain Group"), group(std::move(group))
 {
   ctor();
 }
 
-ChainGroupStandardItem::ChainGroupStandardItem(const QString& text, tesseract_srdf::ChainGroup group)
+ChainGroupStandardItem::ChainGroupStandardItem(const QString& text,
+                                               std::vector<std::pair<std::string, std::string>> group)
   : QStandardItem(icons::getRobotArmIcon(), text), group(std::move(group))
 {
   ctor();
 }
 
-ChainGroupStandardItem::ChainGroupStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::ChainGroup group)
+ChainGroupStandardItem::ChainGroupStandardItem(const QIcon& icon,
+                                               const QString& text,
+                                               std::vector<std::pair<std::string, std::string>> group)
   : QStandardItem(icon, text), group(std::move(group))
 {
   ctor();

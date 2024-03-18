@@ -37,6 +37,8 @@
 #include <tesseract_qt/common/utils.h>
 
 #include <tesseract_common/joint_state.h>
+#include <tesseract_environment/environment.h>
+
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 

@@ -25,10 +25,12 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/remove_joint_command.h>
+
 namespace tesseract_gui
 {
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
-    tesseract_environment::RemoveJointCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::RemoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Remove Joint"), command(std::move(command))
 {
   ctor();
@@ -36,7 +38,7 @@ RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
 
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
     const QString& text,
-    tesseract_environment::RemoveJointCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::RemoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -45,7 +47,7 @@ RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_environment::RemoveJointCommand::ConstPtr command)
+    std::shared_ptr<const tesseract_environment::RemoveJointCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

@@ -28,8 +28,9 @@
 
 #include <string>
 #include <boost/uuid/uuid.hpp>
-#include <tesseract_common/types.h>
-#include <tesseract_common/serialization.h>
+#include <boost/serialization/access.hpp>
+#include <tesseract_common/eigen_types.h>
+#include <tesseract_common/fwd.h>
 
 namespace tesseract_gui
 {
@@ -233,7 +234,6 @@ protected:
 }  // namespace tesseract_gui
 
 #include <boost/serialization/export.hpp>
-#include <boost/serialization/tracking.hpp>
 BOOST_CLASS_EXPORT_KEY2(tesseract_gui::ToolPathSegment, "ToolPathSegment")
 
 #endif  // TESSERACT_COMMON_TOOL_PATH_SEGMENT_H

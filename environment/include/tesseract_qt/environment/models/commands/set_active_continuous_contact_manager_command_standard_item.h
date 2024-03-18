@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_ENVIRONMENT_SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER_COMMAND_STANDARD_ITEM_H
 #define TESSERACT_QT_ENVIRONMENT_SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER_COMMAND_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_environment/commands/set_active_continuous_contact_manager_command.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_environment/fwd.h>
 
 #include <QStandardItem>
 
@@ -38,17 +34,17 @@ class SetActiveContinuousContactManagerCommandStandardItem : public QStandardIte
 {
 public:
   explicit SetActiveContinuousContactManagerCommandStandardItem(
-      tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::SetActiveContinuousContactManagerCommand> command);
   explicit SetActiveContinuousContactManagerCommandStandardItem(
       const QString& text,
-      tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::SetActiveContinuousContactManagerCommand> command);
   explicit SetActiveContinuousContactManagerCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::SetActiveContinuousContactManagerCommand> command);
   int type() const override;
 
-  tesseract_environment::SetActiveContinuousContactManagerCommand::ConstPtr command;
+  std::shared_ptr<const tesseract_environment::SetActiveContinuousContactManagerCommand> command;
 
 private:
   void ctor();

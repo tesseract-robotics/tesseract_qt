@@ -23,12 +23,14 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_TOOL_BAR_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_TOOL_BAR_H
 
-#include <QToolBar>
+#ifndef Q_MOC_RUN
 #include <memory>
+#include <QToolBar>
+#endif
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 class JointTrajectoryToolBar : public QToolBar
 {
   Q_OBJECT

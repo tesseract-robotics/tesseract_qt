@@ -23,14 +23,12 @@
 #ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_MAP_STANDARD_ITEM_H
 #define TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_MAP_STANDARD_ITEM_H
 
-#include <QStandardItem>
 #include <memory>
 #include <map>
+#include <tesseract_task_composer/core/fwd.h>
 
-namespace tesseract_planning
-{
-class TaskComposerNodeInfo;
-}
+#include <QStandardItem>
+
 namespace boost
 {
 namespace uuids

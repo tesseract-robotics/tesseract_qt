@@ -16,23 +16,23 @@
  */
 #ifndef TESSERACT_QT_RENDERING_RENDER_EVENTS_H
 #define TESSERACT_QT_RENDERING_RENDER_EVENTS_H
-#include <QEvent>
-#include <QMap>
-#include <QString>
 
-#include <set>
+#ifndef Q_MOC_RUN
 #include <string>
-#include <utility>
-#include <vector>
 #include <memory>
-#include <tesseract_qt/common/entity.h>
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/render_events.h>
 
-#include <gz/common/KeyEvent.hh>
-#include <gz/common/MouseEvent.hh>
 #include <gz/math/Vector2.hh>
 #include <gz/math/Vector3.hh>
+#include <QEvent>
+#endif
+
+namespace gz::common
+{
+class KeyEvent;
+class MouseEvent;
+}  // namespace gz::common
 
 /** @brief Namespace for all events. Refer to the EventManager class for more information about events. */
 namespace tesseract_gui::events

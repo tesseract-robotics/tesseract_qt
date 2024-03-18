@@ -25,14 +25,11 @@
 
 #include <memory>
 #include <variant>
+#include <tesseract_scene_graph/fwd.h>
+
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 #include <tesseract_qt/common/contact_results_types.h>
-
-namespace tesseract_scene_graph
-{
-class SceneState;
-}
 
 namespace tesseract_gui::events
 {

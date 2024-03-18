@@ -23,16 +23,10 @@
 #ifndef TESSERACT_QT_GROUP_JOINT_STATES_EDITOR_WIDGET_H
 #define TESSERACT_QT_GROUP_JOINT_STATES_EDITOR_WIDGET_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-#include <tesseract_srdf/kinematics_information.h>
-#include <tesseract_scene_graph/joint.h>
 #include <memory>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
 #include <QWidget>
+#endif
 
 class QStringListModel;
 

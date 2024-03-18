@@ -23,22 +23,22 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_PLOT_DIALOG_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_PLOT_DIALOG_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
-//#include <tesseract_common/joint_trajectory_set.h>
-#include <tesseract_qt/common/joint_trajectory_set.h>
 #include <memory>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
+#include <tesseract_common/fwd.h>
 #include <QDialog>
 #include <tesseract_qt/plot/plot_data.h>
+#endif
 
 namespace Ui
 {
 class JointTrajectoryPlotDialog;
 }
+
+namespace tesseract_common
+{
+struct JointTrajectoryInfo;
+}  // namespace tesseract_common
 
 namespace tesseract_gui
 {

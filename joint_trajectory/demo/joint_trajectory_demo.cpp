@@ -20,13 +20,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QDebug>
 #include <QMainWindow>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/events/joint_trajectory_events.h>

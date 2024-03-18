@@ -28,9 +28,10 @@
 
 #include <string>
 #include <boost/uuid/uuid.hpp>
+#include <tesseract_common/fwd.h>
+
 #include <tesseract_qt/common/tool_path_segment.h>
 #include <tesseract_qt/common/tool_path_pose.h>
-#include <tesseract_common/serialization.h>
 
 namespace tesseract_gui
 {

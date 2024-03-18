@@ -25,24 +25,29 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_environment/commands/remove_link_command.h>
+
 namespace tesseract_gui
 {
-RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(tesseract_environment::RemoveLinkCommand::ConstPtr command)
+RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
+    std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Remove Link"), command(std::move(command))
 {
   ctor();
 }
 
-RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(const QString& text,
-                                                             tesseract_environment::RemoveLinkCommand::ConstPtr command)
+RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
+    const QString& text,
+    std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
 }
 
-RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(const QIcon& icon,
-                                                             const QString& text,
-                                                             tesseract_environment::RemoveLinkCommand::ConstPtr command)
+RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();

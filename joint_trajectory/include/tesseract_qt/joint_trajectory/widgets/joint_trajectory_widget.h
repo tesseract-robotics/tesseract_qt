@@ -23,37 +23,20 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <memory>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
+#include <tesseract_visualization/fwd.h>
+#include <tesseract_common/fwd.h>
+#include <tesseract_environment/fwd.h>
 #include <QWidget>
-#include <QItemSelectionModel>
+#endif
+
+class QItemSelectionModel;
 
 namespace Ui
 {
 class JointTrajectoryWidget;
 }
-
-namespace tesseract_visualization
-{
-class TrajectoryPlayer;
-}
-
-namespace tesseract_common
-{
-class JointState;
-class JointTrajectorySet;
-}  // namespace tesseract_common
-
-namespace tesseract_environment
-{
-class Environment;
-class Command;
-}  // namespace tesseract_environment
 
 namespace tesseract_gui
 {
@@ -96,7 +79,7 @@ private Q_SLOTS:
   void onEnablePlayer();
   void onDisablePlayer();
 
-protected:
+private:
   struct Implementation;
   std::unique_ptr<Ui::JointTrajectoryWidget> ui_;
   std::unique_ptr<Implementation> data_;

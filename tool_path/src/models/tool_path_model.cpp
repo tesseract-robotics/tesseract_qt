@@ -31,7 +31,10 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/utils.h>
+#include <tesseract_qt/common/tool_path.h>
+#include <tesseract_qt/common/tool_path_segment.h>
 #include <tesseract_qt/common/component_info.h>
+
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 

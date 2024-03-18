@@ -23,16 +23,10 @@
 #ifndef TESSERACT_QT_COMMON_COMPONENT_INFO_MANAGER_MODEL_H
 #define TESSERACT_QT_COMMON_COMPONENT_INFO_MANAGER_MODEL_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <memory>
-#include <unordered_map>
-#include <vector>
 #include <QStandardItemModel>
-#include <boost/uuid/uuid.hpp>
 #endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace tesseract_gui
 {

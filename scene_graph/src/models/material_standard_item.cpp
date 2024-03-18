@@ -26,15 +26,18 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_scene_graph/link.h>
+
 namespace tesseract_gui
 {
-MaterialStandardItem::MaterialStandardItem(tesseract_scene_graph::Material::Ptr material)
+MaterialStandardItem::MaterialStandardItem(std::shared_ptr<tesseract_scene_graph::Material> material)
   : QStandardItem(icons::getColorIcon(), "Material"), material(std::move(material))
 {
   ctor();
 }
 
-MaterialStandardItem::MaterialStandardItem(const QString& text, tesseract_scene_graph::Material::Ptr material)
+MaterialStandardItem::MaterialStandardItem(const QString& text,
+                                           std::shared_ptr<tesseract_scene_graph::Material> material)
   : QStandardItem(icons::getColorIcon(), text), material(std::move(material))
 {
   ctor();
@@ -42,7 +45,7 @@ MaterialStandardItem::MaterialStandardItem(const QString& text, tesseract_scene_
 
 MaterialStandardItem::MaterialStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           tesseract_scene_graph::Material::Ptr material)
+                                           std::shared_ptr<tesseract_scene_graph::Material> material)
   : QStandardItem(icon, text), material(std::move(material))
 {
   ctor();

@@ -23,14 +23,7 @@
 #ifndef TESSERACT_QT_PLOT_PLOT_DOCKER_H
 #define TESSERACT_QT_PLOT_PLOT_DOCKER_H
 
-//#include "Qads/DockManager.h"
-//#include "Qads/DockWidget.h"
-//#include "Qads/DockAreaWidget.h"
-//#include "Qads/DockAreaTitleBar.h"
-//#include "Qads/DockAreaTabBar.h"
-//#include "Qads/FloatingDockContainer.h"
-//#include "Qads/DockComponentsFactory.h"
-
+#ifndef Q_MOC_RUN
 #include <DockManager.h>
 #include <DockWidget.h>
 #include <DockAreaWidget.h>
@@ -40,6 +33,7 @@
 #include <DockComponentsFactory.h>
 #include <tesseract_qt/plot/plot_data.h>
 #include <tesseract_qt/plot/plot_widget.h>
+#endif
 
 namespace Ui
 {

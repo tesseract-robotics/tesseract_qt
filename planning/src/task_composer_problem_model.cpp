@@ -29,6 +29,8 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/utils.h>
 
+#include <tesseract_task_composer/core/task_composer_problem.h>
+
 #include <QUuid>
 
 namespace tesseract_gui
@@ -36,7 +38,7 @@ namespace tesseract_gui
 struct TaskComposerProblemModelPrivate
 {
   std::map<QString, QStandardItem*> items;
-  std::map<QStandardItem*, tesseract_planning::TaskComposerProblem::UPtr> problems;
+  std::map<QStandardItem*, std::unique_ptr<tesseract_planning::TaskComposerProblem>> problems;
   std::map<QStandardItem*, QString> problems_ns;
   void clear()
   {
@@ -62,7 +64,8 @@ void TaskComposerProblemModel::clear()
   data_->clear();
 }
 
-QString TaskComposerProblemModel::addProblem(tesseract_planning::TaskComposerProblem::UPtr problem, std::string ns)
+QString TaskComposerProblemModel::addProblem(std::unique_ptr<tesseract_planning::TaskComposerProblem> problem,
+                                             std::string ns)
 {
   QString key = QUuid::createUuid().toString();
   ns = (ns.empty()) ? "general" : ns;

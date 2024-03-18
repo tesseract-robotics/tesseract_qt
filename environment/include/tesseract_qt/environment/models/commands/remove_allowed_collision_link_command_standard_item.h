@@ -23,13 +23,8 @@
 #ifndef TESSERACT_QT_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_LINK_COMMAND_STANDARD_ITEM_H
 #define TESSERACT_QT_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_LINK_COMMAND_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#include <string>
-#ifndef Q_MOC_RUN
-#include <tesseract_environment/commands/remove_allowed_collision_link_command.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_environment/fwd.h>
 
 #include <QStandardItem>
 
@@ -39,17 +34,17 @@ class RemoveAllowedCollisionLinkCommandStandardItem : public QStandardItem
 {
 public:
   explicit RemoveAllowedCollisionLinkCommandStandardItem(
-      tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command);
   explicit RemoveAllowedCollisionLinkCommandStandardItem(
       const QString& text,
-      tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command);
   explicit RemoveAllowedCollisionLinkCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command);
+      std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command);
   int type() const override;
 
-  tesseract_environment::RemoveAllowedCollisionLinkCommand::ConstPtr command;
+  std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command;
 
 private:
   void ctor();

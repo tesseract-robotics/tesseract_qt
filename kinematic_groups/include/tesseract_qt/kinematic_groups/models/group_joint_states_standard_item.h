@@ -22,12 +22,8 @@
  */
 #ifndef TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATES_STANDARD_ITEM_H
 #define TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATES_STANDARD_ITEM_H
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
+
 #include <tesseract_srdf/kinematics_information.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <QStandardItem>
 

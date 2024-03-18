@@ -26,6 +26,10 @@
 #include <tesseract_qt/common/utils.h>
 #include <tesseract_qt/common/models/namespace_standard_item.h>
 
+#include <QStandardItem>
+#include <QDateTime>
+#include <QIcon>
+
 namespace tesseract_gui
 {
 QList<QStandardItem*> createStandardItemFloat(const std::string& text, double data)

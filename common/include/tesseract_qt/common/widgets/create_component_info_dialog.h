@@ -23,8 +23,10 @@
 #ifndef TESSERACT_GUI_COMMON_CREATE_COMPONENT_INFO_DIALOG_H
 #define TESSERACT_GUI_COMMON_CREATE_COMPONENT_INFO_DIALOG_H
 
+#ifndef Q_MOC_RUN
 #include <memory>
 #include <QDialog>
+#endif
 
 namespace Ui
 {

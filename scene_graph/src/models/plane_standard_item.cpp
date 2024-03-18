@@ -25,21 +25,25 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_geometry/impl/plane.h>
+
 namespace tesseract_gui
 {
-PlaneStandardItem::PlaneStandardItem(tesseract_geometry::Plane::ConstPtr plane)
+PlaneStandardItem::PlaneStandardItem(std::shared_ptr<const tesseract_geometry::Plane> plane)
   : QStandardItem(icons::getPlaneIcon(), "Plane"), plane(std::move(plane))
 {
   ctor();
 }
 
-PlaneStandardItem::PlaneStandardItem(const QString& text, tesseract_geometry::Plane::ConstPtr plane)
+PlaneStandardItem::PlaneStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Plane> plane)
   : QStandardItem(icons::getPlaneIcon(), text), plane(std::move(plane))
 {
   ctor();
 }
 
-PlaneStandardItem::PlaneStandardItem(const QIcon& icon, const QString& text, tesseract_geometry::Plane::ConstPtr plane)
+PlaneStandardItem::PlaneStandardItem(const QIcon& icon,
+                                     const QString& text,
+                                     std::shared_ptr<const tesseract_geometry::Plane> plane)
   : QStandardItem(icon, text), plane(std::move(plane))
 {
   ctor();

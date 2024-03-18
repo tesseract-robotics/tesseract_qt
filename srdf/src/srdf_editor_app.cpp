@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
+
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QDebug>
@@ -29,8 +28,6 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #include <QStatusBar>
 #include <QTabWidget>
 #include <QHBoxLayout>
-#include <memory>
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract_qt/srdf/srdf_editor_widget.h>
 #include <tesseract_qt/rendering/render_widget.h>
@@ -45,6 +42,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 
+#include <memory>
 #include <tesseract_common/resource_locator.h>
 
 int main(int argc, char** argv)

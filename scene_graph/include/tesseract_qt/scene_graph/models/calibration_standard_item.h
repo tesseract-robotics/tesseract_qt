@@ -23,12 +23,8 @@
 #ifndef TESSERACT_QT_SCENE_GRAPH_CALIBRATION_STANDARD_ITEM_H
 #define TESSERACT_QT_SCENE_GRAPH_CALIBRATION_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/link.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <memory>
+#include <tesseract_scene_graph/fwd.h>
 
 #include <QStandardItem>
 
@@ -37,14 +33,15 @@ namespace tesseract_gui
 class CalibrationStandardItem : public QStandardItem
 {
 public:
-  CalibrationStandardItem(tesseract_scene_graph::JointCalibration::Ptr calibration);
-  explicit CalibrationStandardItem(const QString& text, tesseract_scene_graph::JointCalibration::Ptr calibration);
+  CalibrationStandardItem(std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration);
+  explicit CalibrationStandardItem(const QString& text,
+                                   std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration);
   CalibrationStandardItem(const QIcon& icon,
                           const QString& text,
-                          tesseract_scene_graph::JointCalibration::Ptr calibration);
+                          std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration);
   int type() const override;
 
-  tesseract_scene_graph::JointCalibration::Ptr calibration;
+  std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration;
 
 private:
   void ctor();

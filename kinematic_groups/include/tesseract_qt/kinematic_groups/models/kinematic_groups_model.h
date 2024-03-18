@@ -23,18 +23,14 @@
 #ifndef TESSERACT_QT_KINEMATIC_GROUP_MODEL_H
 #define TESSERACT_QT_KINEMATIC_GROUP_MODEL_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <tesseract_srdf/kinematics_information.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
-
 #include <QStandardItem>
+#endif
 
 namespace tesseract_gui
 {
-struct ComponentInfo;
+class ComponentInfo;
 class KinematicGroupsModel : public QStandardItemModel
 {
   Q_OBJECT

@@ -24,12 +24,7 @@
 #ifndef TESSERACT_QT_COMMON_PLUGIN_INFO_CONTAINER_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_PLUGIN_INFO_CONTAINER_STANDARD_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_common/types.h>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
+#include <tesseract_common/plugin_info.h>
 
 #include <QStandardItem>
 

@@ -24,11 +24,8 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_SET_ANALOG_INSTRUCTION_STANDARD_ITEM_H
 
 #include <QStandardItem>
+#include <tesseract_command_language/fwd.h>
 
-namespace tesseract_planning
-{
-class SetAnalogInstruction;
-}
 namespace tesseract_gui
 {
 class SetAnalogInstructionStandardItem : public QStandardItem

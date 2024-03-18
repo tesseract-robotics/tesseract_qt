@@ -23,14 +23,11 @@
 #ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_MODEL_H
 #define TESSERACT_QT_TOOL_PATH_TOOL_PATH_MODEL_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 #ifndef Q_MOC_RUN
 #include <QStandardItemModel>
 #include <Eigen/Eigen>
 #include <memory>
 #endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 namespace boost::uuids
 {
@@ -41,7 +38,7 @@ namespace tesseract_gui
 {
 class ToolPath;
 class ToolPathSegment;
-struct ComponentInfo;
+class ComponentInfo;
 
 class ToolPathModel : public QStandardItemModel
 {

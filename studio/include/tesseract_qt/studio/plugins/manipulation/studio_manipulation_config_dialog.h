@@ -23,8 +23,10 @@
 #ifndef TESSERACT_QT_STUDIO_STUDIO_MANIPULATION_CONFIG_DIALOG_H
 #define TESSERACT_QT_STUDIO_STUDIO_MANIPULATION_CONFIG_DIALOG_H
 
+#ifndef Q_MOC_RUN
 #include <memory>
 #include <QDialog>
+#endif
 
 namespace Ui
 {

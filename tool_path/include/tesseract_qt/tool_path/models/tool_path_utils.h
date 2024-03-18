@@ -23,10 +23,13 @@
 #ifndef TOOL_PATH_TOOL_PATH_UTILS_H
 #define TOOL_PATH_TOOL_PATH_UTILS_H
 
+#include <memory>
+#include <tesseract_common/eigen_types.h>
+
 #include <Qt>
-#include <tesseract_common/types.h>
 
 class QStandardItem;
+class QString;
 
 namespace tesseract_gui
 {

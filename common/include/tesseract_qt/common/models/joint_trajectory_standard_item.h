@@ -22,12 +22,10 @@
  */
 #ifndef TESSERACT_QT_COMMON_JOINT_TRAJECTORY_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_JOINT_TRAJECTORY_STANDARD_ITEM_H
-#include <QStandardItem>
 
-namespace tesseract_common
-{
-class JointTrajectory;
-}
+#include <tesseract_common/fwd.h>
+
+#include <QStandardItem>
 
 namespace tesseract_gui
 {

@@ -26,15 +26,19 @@
 #include <tesseract_geometry/impl/convex_mesh.h>
 #include <tesseract_qt/common/icon_utils.h>
 
+#include <tesseract_geometry/impl/polygon_mesh.h>
+#include <tesseract_common/resource_locator.h>
+
 namespace tesseract_gui
 {
-PolygonMeshStandardItem::PolygonMeshStandardItem(tesseract_geometry::PolygonMesh::ConstPtr mesh)
+PolygonMeshStandardItem::PolygonMeshStandardItem(std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh)
   : QStandardItem(icons::getConvexMeshIcon(), "PolygonMesh"), mesh(std::move(mesh))
 {
   ctor();
 }
 
-PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text, tesseract_geometry::PolygonMesh::ConstPtr mesh)
+PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text,
+                                                 std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh)
   : QStandardItem(icons::getConvexMeshIcon(), text), mesh(std::move(mesh))
 {
   ctor();
@@ -42,7 +46,7 @@ PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text, tesseract_
 
 PolygonMeshStandardItem::PolygonMeshStandardItem(const QIcon& icon,
                                                  const QString& text,
-                                                 tesseract_geometry::PolygonMesh::ConstPtr mesh)
+                                                 std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh)
   : QStandardItem(icon, text), mesh(std::move(mesh))
 {
   ctor();

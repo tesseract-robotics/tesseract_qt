@@ -17,6 +17,20 @@
 
 #include <tesseract_qt/rendering/conversions.h>
 
+#include <gz/common/KeyEvent.hh>
+#include <gz/common/MouseEvent.hh>
+#include <gz/math/Color.hh>
+
+#include <QtCore>
+#include <QColor>
+#include <QVector3D>
+#include <QInputEvent>
+
+#include <QPointF>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+
 namespace tesseract_gui
 {
 //////////////////////////////////////////////////

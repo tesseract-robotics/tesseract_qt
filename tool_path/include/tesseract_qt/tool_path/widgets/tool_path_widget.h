@@ -23,8 +23,10 @@
 #ifndef TESSERACT_QT_TOOL_PATH_TOOL_PATH_WIDGET_H
 #define TESSERACT_QT_TOOL_PATH_TOOL_PATH_WIDGET_H
 
+#ifndef Q_MOC_RUN
 #include <memory>
 #include <QWidget>
+#endif
 
 class QItemSelectionModel;
 

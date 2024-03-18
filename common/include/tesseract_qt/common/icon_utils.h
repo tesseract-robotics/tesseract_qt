@@ -24,7 +24,7 @@
 #ifndef TESSERACT_QT_COMMON_ICON_UTILS_H
 #define TESSERACT_QT_COMMON_ICON_UTILS_H
 
-#include <QIcon>
+class QIcon;
 
 namespace tesseract_gui::icons
 {

@@ -24,11 +24,8 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_STANDARD_ITEM_H
 
 #include <QStandardItem>
+#include <tesseract_command_language/fwd.h>
 
-namespace tesseract_planning
-{
-class CompositeInstruction;
-}
 namespace tesseract_gui
 {
 class CompositeInstructionStandardItem : public QStandardItem

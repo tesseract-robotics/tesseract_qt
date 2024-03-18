@@ -23,14 +23,12 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_INFO_ITEM_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_INFO_ITEM_H
 
-#include <tesseract_common/macros.h>
-TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
-#ifndef Q_MOC_RUN
-#include <tesseract_qt/common/joint_trajectory_set.h>
 #include <QStandardItem>
-#endif
-TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
+namespace tesseract_common
+{
+struct JointTrajectoryInfo;
+}
 namespace tesseract_gui
 {
 class JointTrajectoryInfoItem : public QStandardItem

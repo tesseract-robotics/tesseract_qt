@@ -23,12 +23,9 @@
 #ifndef TESSERACT_QT_COMMON_JOINT_STATE_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_JOINT_STATE_STANDARD_ITEM_H
 
-#include <QStandardItem>
+#include <tesseract_common/fwd.h>
 
-namespace tesseract_common
-{
-class JointState;
-}
+#include <QStandardItem>
 
 namespace tesseract_gui
 {
