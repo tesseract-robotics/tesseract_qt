@@ -5,6 +5,10 @@ on:
     branches:
       - main
   pull_request:
+    paths:
+      - 'tesseract**'
+      - '.github/workflows/clang_format.yml'
+      - '**clang-format'
 
   # allow manually starting this workflow
   workflow_dispatch:
