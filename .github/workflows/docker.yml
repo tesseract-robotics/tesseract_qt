@@ -51,13 +51,23 @@ jobs:
             type=ref,event=branch,prefix=${{ matrix.distro }}-
             type=raw,event=pr,prefix=${{ matrix.distro }}-,value=master
             type=semver,pattern={{major}}.{{minor}},prefix=${{ matrix.distro }}-
+            
+      # Step to evaluate and set the TAG variable. This repo uses main instead of master, this also sets PRs to use master
+      - name: Set TAG variable
+        id: set_tag
+        run: |
+          if [[ "${{ steps.meta.outputs.version }}" == "main" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "TAG=master" >> $GITHUB_ENV
+          else
+            echo "TAG=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: docker/Dockerfile
-          build-args: TAG=${{ steps.meta.outputs.version }}
+          build-args: TAG=${{ env.TAG }}
           push: ${{ env.PUSH_DOCKER_IMAGE }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
