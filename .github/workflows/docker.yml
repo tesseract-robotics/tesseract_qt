@@ -37,6 +37,14 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Adjust branch name for Docker tag
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "BRANCH_NAME=master" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          fi
 
       - name: Extract Docker meta-information
         id: meta
@@ -51,23 +59,13 @@ jobs:
             type=ref,event=branch,prefix=${{ matrix.distro }}-
             type=raw,event=pr,prefix=${{ matrix.distro }}-,value=master
             type=semver,pattern={{major}}.{{minor}},prefix=${{ matrix.distro }}-
-            
-      # Step to evaluate and set the TAG variable. This repo uses main instead of master, this also sets PRs to use master
-      - name: Set TAG variable
-        id: set_tag
-        run: |
-          if [[ "${{ steps.meta.outputs.version }}" == "${{ matrix.distro }}-main" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "TAG=${{ matrix.distro }}-master" >> $GITHUB_ENV
-          else
-            echo "TAG=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
-          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: docker/Dockerfile
-          build-args: TAG=${{ env.TAG }}
+          build-args: TAG=${{ steps.meta.outputs.version }}
           push: ${{ env.PUSH_DOCKER_IMAGE }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
