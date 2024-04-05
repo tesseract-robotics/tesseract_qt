@@ -56,8 +56,8 @@ jobs:
       - name: Set TAG variable
         id: set_tag
         run: |
-          if [[ "${{ steps.meta.outputs.version }}" == "main" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "TAG=master" >> $GITHUB_ENV
+          if [[ "${{ steps.meta.outputs.version }}" == "${{ matrix.distro }}-main" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "TAG=${{ matrix.distro }}-master" >> $GITHUB_ENV
           else
             echo "TAG=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
           fi
