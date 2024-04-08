@@ -37,6 +37,14 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Adjust branch name for Docker tag
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "BRANCH_NAME=master" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          fi
 
       - name: Extract Docker meta-information
         id: meta
@@ -48,7 +56,7 @@ jobs:
             prefix=
             suffix=
           tags: |
-            type=ref,event=branch,prefix=${{ matrix.distro }}-
+            type=ref,event=branch,prefix=${{ matrix.distro }}-,value=${{ env.BRANCH_NAME }}
             type=raw,event=pr,prefix=${{ matrix.distro }}-,value=master
             type=semver,pattern={{major}}.{{minor}},prefix=${{ matrix.distro }}-
 
