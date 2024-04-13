@@ -3,7 +3,7 @@ name: CMake-Format
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
 
   # allow manually starting this workflow
