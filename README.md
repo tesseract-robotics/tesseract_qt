@@ -10,7 +10,7 @@ Lint  (CMake-Format) | [![Build Status](https://github.com/tesseract-robotics/te
 
 ## Application Screenshots
 
-Below are screenshots to highlight some of the applications within this repository and does not incude everything.
+Below are screenshots to highlight some of the applications within this repository but does not incude everything.
 
 ### Tesseract Studio
 ![Tesseract Studio](docs/images/tesseract_qt_studio_application.png)
