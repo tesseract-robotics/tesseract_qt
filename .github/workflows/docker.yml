@@ -3,7 +3,7 @@ name: Docker
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     paths:
       - 'docker/Dockerfile'
