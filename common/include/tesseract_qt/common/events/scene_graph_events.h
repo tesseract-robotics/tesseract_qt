@@ -24,6 +24,7 @@
 #define TESSERACT_QT_COMMON_SCENE_GRAPH_EVENTS_H
 
 #include <memory>
+#include <vector>
 #include <tesseract_scene_graph/fwd.h>
 
 #include <tesseract_qt/common/events/event_type.h>
