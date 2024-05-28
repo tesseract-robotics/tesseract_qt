@@ -27,6 +27,8 @@
 
 #include <tesseract_command_language/set_tool_instruction.h>
 
+#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
 SetToolInstructionStandardItem::SetToolInstructionStandardItem(const tesseract_planning::SetToolInstruction& sti)
@@ -55,6 +57,8 @@ int SetToolInstructionStandardItem::type() const { return static_cast<int>(Stand
 void SetToolInstructionStandardItem::ctor(const tesseract_planning::SetToolInstruction& sti)
 {
   appendRow(createStandardItemString("description", sti.getDescription()));
+  appendRow(createStandardItemString("uuid", boost::uuids::to_string(sti.getUUID())));
+  appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(sti.getParentUUID())));
   appendRow(createStandardItemInt("tool", sti.getTool()));
 }
 }  // namespace tesseract_gui

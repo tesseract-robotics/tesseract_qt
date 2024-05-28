@@ -27,6 +27,8 @@
 
 #include <tesseract_command_language/wait_instruction.h>
 
+#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
 WaitInstructionStandardItem::WaitInstructionStandardItem(const tesseract_planning::WaitInstruction& wi)
@@ -74,6 +76,8 @@ std::string toString(tesseract_planning::WaitInstructionType w_type)
 void WaitInstructionStandardItem::ctor(const tesseract_planning::WaitInstruction& wi)
 {
   appendRow(createStandardItemString("description", wi.getDescription()));
+  appendRow(createStandardItemString("uuid", boost::uuids::to_string(wi.getUUID())));
+  appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(wi.getParentUUID())));
   appendRow(createStandardItemString("type", toString(wi.getWaitType())));
   appendRow(createStandardItemFloat("time (sec)", wi.getWaitTime()));
   appendRow(createStandardItemInt("I/O", wi.getWaitIO()));

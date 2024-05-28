@@ -34,6 +34,8 @@
 #include <tesseract_command_language/move_instruction.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
 
+#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
 CompositeInstructionStandardItem::CompositeInstructionStandardItem(const tesseract_planning::CompositeInstruction& ci)
@@ -82,6 +84,8 @@ void CompositeInstructionStandardItem::ctor(const tesseract_planning::CompositeI
   appendRow(createStandardItemString("description", ci.getDescription()));
   appendRow(createStandardItemString("order", toString(ci.getOrder())));
   appendRow(createStandardItemString("profile", ci.getProfile()));
+  appendRow(createStandardItemString("uuid", boost::uuids::to_string(ci.getUUID())));
+  appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(ci.getParentUUID())));
   appendRow(new ManipulatorInfoStandardItem("manip info", ci.getManipulatorInfo()));
   appendRow(new VectorInstructionStandardItem("instructions", ci.getInstructions()));
 }

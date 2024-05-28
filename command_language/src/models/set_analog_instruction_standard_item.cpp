@@ -27,6 +27,8 @@
 
 #include <tesseract_command_language/set_analog_instruction.h>
 
+#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
 SetAnalogInstructionStandardItem::SetAnalogInstructionStandardItem(const tesseract_planning::SetAnalogInstruction& sai)
@@ -58,6 +60,8 @@ int SetAnalogInstructionStandardItem::type() const
 void SetAnalogInstructionStandardItem::ctor(const tesseract_planning::SetAnalogInstruction& sai)
 {
   appendRow(createStandardItemString("description", sai.getDescription()));
+  appendRow(createStandardItemString("uuid", boost::uuids::to_string(sai.getUUID())));
+  appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(sai.getParentUUID())));
   appendRow(createStandardItemString("key", sai.getKey()));
   appendRow(createStandardItemInt("index", sai.getIndex()));
   appendRow(createStandardItemFloat("value", sai.getValue()));
