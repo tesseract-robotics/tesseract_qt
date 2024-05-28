@@ -58,5 +58,6 @@ void LimitsStandardItem::ctor()
   appendRow(createStandardItemFloat("effort", limits->effort));
   appendRow(createStandardItemFloat("velocity", limits->velocity));
   appendRow(createStandardItemFloat("acceleration", limits->acceleration));
+  appendRow(createStandardItemFloat("jerk", limits->jerk));
 }
 }  // namespace tesseract_gui
