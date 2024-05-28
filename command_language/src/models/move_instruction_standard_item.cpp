@@ -35,6 +35,8 @@
 #include <tesseract_command_language/poly/joint_waypoint_poly.h>
 #include <tesseract_command_language/poly/state_waypoint_poly.h>
 
+#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
 MoveInstructionStandardItem::MoveInstructionStandardItem(const tesseract_planning::MoveInstructionPoly& mi)
@@ -81,6 +83,8 @@ void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstruction
   appendRow(createStandardItemString("profile", mi.getProfile()));
   appendRow(createStandardItemString("path_profile", mi.getPathProfile()));
   appendRow(createStandardItemString("type", toString(mi.getMoveType())));
+  appendRow(createStandardItemString("uuid", boost::uuids::to_string(mi.getUUID())));
+  appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(mi.getParentUUID())));
   appendRow(new ManipulatorInfoStandardItem(mi.getManipulatorInfo()));  // NOLINT
 
   if (mi.getWaypoint().isCartesianWaypoint())

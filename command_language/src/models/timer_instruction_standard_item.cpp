@@ -27,6 +27,8 @@
 
 #include <tesseract_command_language/timer_instruction.h>
 
+#include <boost/uuid/uuid_io.hpp>
+
 namespace tesseract_gui
 {
 TimerInstructionStandardItem::TimerInstructionStandardItem(const tesseract_planning::TimerInstruction& ti)
@@ -68,6 +70,8 @@ std::string toString(tesseract_planning::TimerInstructionType t_type)
 void TimerInstructionStandardItem::ctor(const tesseract_planning::TimerInstruction& ti)
 {
   appendRow(createStandardItemString("description", ti.getDescription()));
+  appendRow(createStandardItemString("uuid", boost::uuids::to_string(ti.getUUID())));
+  appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(ti.getParentUUID())));
   appendRow(createStandardItemString("type", toString(ti.getTimerType())));
   appendRow(createStandardItemFloat("time (sec)", ti.getTimerTime()));
   appendRow(createStandardItemInt("I/O", ti.getTimerIO()));
