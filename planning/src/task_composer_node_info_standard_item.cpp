@@ -82,7 +82,8 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
   appendRow(createStandardItemString("name", info.name));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(info.uuid)));
   appendRow(createStandardItemInt("return_value", info.return_value));
-  appendRow(createStandardItemString("message", info.message));
+  appendRow(createStandardItemInt("status_code", info.status_code));
+  appendRow(createStandardItemString("status_message", info.status_message));
   appendRow(createStandardItemFloat("elapsed_time", info.elapsed_time));
 
   if (info.inbound_edges.empty())
