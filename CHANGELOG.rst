@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.22.0 (2024-06-10)
+-------------------
 * Upgrade ros_industrial_cmake_boilerplate to version 0.6.0
 * Update to changes in task composer node info structure
 * Update command language instructions standard item to include uuid and parent uuid
