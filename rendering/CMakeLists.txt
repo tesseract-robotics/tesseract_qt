@@ -70,4 +70,10 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
+list(
+  APPEND
+  PROJECT_TARGETS
+  ${PROJECT_NAME}_gazebo_utils
+  ${PROJECT_NAME}_render_widgets)
+set(PROJECT_TARGETS ${PROJECT_TARGETS} PARENT_SCOPE)
 install_targets(TARGETS ${PROJECT_NAME}_gazebo_utils ${PROJECT_NAME}_render_widgets)

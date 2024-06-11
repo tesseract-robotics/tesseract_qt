@@ -164,6 +164,14 @@ foreach(dir config)
 endforeach()
 
 # Install
+list(
+  APPEND
+  PROJECT_TARGETS
+  ${PROJECT_NAME}_studio
+  ${PROJECT_NAME}_studio_widgets
+  ${PROJECT_NAME}_studio_plugin_factory
+  ${PROJECT_NAME}_studio_plugins)
+set(PROJECT_TARGETS ${PROJECT_TARGETS} PARENT_SCOPE)
 install_targets(
   TARGETS
   ${PROJECT_NAME}_studio

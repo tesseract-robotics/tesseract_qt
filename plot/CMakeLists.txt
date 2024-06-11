@@ -81,4 +81,6 @@ add_subdirectory(demo)
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
+list(APPEND PROJECT_TARGETS ${PROJECT_NAME}_plot)
+set(PROJECT_TARGETS ${PROJECT_TARGETS} PARENT_SCOPE)
 install_targets(TARGETS ${PROJECT_NAME}_plot)

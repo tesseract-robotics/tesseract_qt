@@ -14,6 +14,8 @@ endif()
 option(BUILD_RENDERING "Build the rendering module" ON)
 option(BUILD_STUDIO "Build the studio module" ON)
 
+set(PROJECT_TARGETS)
+
 add_subdirectory(common)
 add_subdirectory(acm)
 add_subdirectory(collision)
@@ -65,4 +67,9 @@ endif()
 install(FILES "${CMAKE_CURRENT_LIST_DIR}/cmake/FindQwt.cmake" "${CMAKE_CURRENT_LIST_DIR}/cmake/FindGraphviz.cmake"
         DESTINATION lib/cmake/${PROJECT_NAME})
 
-configure_package(NAMESPACE tesseract DEPENDENCIES ${DEPS} CFG_EXTRAS cmake/tesseract_qt-extras.cmake)
+configure_package(
+  SKIP_INSTALL_TARGETS
+  NAMESPACE tesseract
+  TARGETS ${PROJECT_TARGETS}
+  DEPENDENCIES ${DEPS}
+  CFG_EXTRAS cmake/tesseract_qt-extras.cmake)

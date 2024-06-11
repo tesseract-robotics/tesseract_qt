@@ -57,4 +57,10 @@ target_include_directories(
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
+list(
+  APPEND
+  PROJECT_TARGETS
+  ${PROJECT_NAME}_collision_models
+  ${PROJECT_NAME}_collision_widgets)
+set(PROJECT_TARGETS ${PROJECT_TARGETS} PARENT_SCOPE)
 install_targets(TARGETS ${PROJECT_NAME}_collision_models ${PROJECT_NAME}_collision_widgets)

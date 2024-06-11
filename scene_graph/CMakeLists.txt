@@ -79,4 +79,10 @@ add_subdirectory(demo)
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
 
 # Install
+list(
+  APPEND
+  PROJECT_TARGETS
+  ${PROJECT_NAME}_scene_graph_models
+  ${PROJECT_NAME}_scene_graph_widgets)
+set(PROJECT_TARGETS ${PROJECT_TARGETS} PARENT_SCOPE)
 install_targets(TARGETS ${PROJECT_NAME}_scene_graph_models ${PROJECT_NAME}_scene_graph_widgets)
