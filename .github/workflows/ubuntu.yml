@@ -19,7 +19,7 @@ jobs:
       matrix:
         distro: [focal, jammy]
     container:
-      image: ghcr.io/tesseract-robotics/tesseract_planning:${{ matrix.distro }}-0.21
+      image: ghcr.io/tesseract-robotics/tesseract_planning:${{ matrix.distro }}-0.22
       env:
         CCACHE_DIR: "$GITHUB_WORKSPACE/${{ matrix.distro }}/.ccache"
         DEBIAN_FRONTEND: noninteractive
