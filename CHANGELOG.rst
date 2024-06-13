@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.22.1 (2024-06-12)
+-------------------
 * Update the workflow to use tesseract_planning 0.22
 * Contributors: Tyler Marr
 
