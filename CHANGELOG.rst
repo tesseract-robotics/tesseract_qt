@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update the workflow to use tesseract_planning 0.22
+* Contributors: Tyler Marr
+
 0.22.0 (2024-06-10)
 -------------------
 * Upgrade ros_industrial_cmake_boilerplate to version 0.6.0
