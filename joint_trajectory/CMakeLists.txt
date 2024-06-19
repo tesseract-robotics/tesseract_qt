@@ -31,11 +31,10 @@ target_include_directories(
   ${PROJECT_NAME}_joint_trajectory_models PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                                  "$<INSTALL_INTERFACE:include>")
 
-set(
-  TRAJ_WIDGET_headers_MOC
-  include/tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h
-  include/tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h
-  include/tesseract_qt/joint_trajectory/widgets/joint_trajectory_plot_dialog.h)
+set(TRAJ_WIDGET_headers_MOC
+    include/tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h
+    include/tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h
+    include/tesseract_qt/joint_trajectory/widgets/joint_trajectory_plot_dialog.h)
 
 add_library(
   ${PROJECT_NAME}_joint_trajectory_widgets SHARED

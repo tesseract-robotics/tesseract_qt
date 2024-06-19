@@ -20,30 +20,28 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS include/tesseract_qt/common/widgets)
 
-set(
-  COMMON_WIDGETS_headers_MOC
-  include/tesseract_qt/common/environment_manager.h
-  include/tesseract_qt/common/environment_wrapper.h
-  include/tesseract_qt/common/models/json_model.h
-  include/tesseract_qt/common/models/yaml_model.h
-  include/tesseract_qt/common/models/component_info_manager_model.h
-  include/tesseract_qt/common/widgets/cartesian_editor_widget.h
-  include/tesseract_qt/common/widgets/combo_box.h
-  include/tesseract_qt/common/widgets/image_viewer_widget.h
-  include/tesseract_qt/common/widgets/tree_view.h
-  include/tesseract_qt/common/widgets/component_info_dialog.h
-  include/tesseract_qt/common/widgets/component_info_manager_widget.h
-  include/tesseract_qt/common/widgets/component_info_widget.h
-  include/tesseract_qt/common/widgets/create_child_component_info_dialog.h
-  include/tesseract_qt/common/widgets/create_component_info_dialog.h
-  include/tesseract_qt/common/widgets/load_environment_widget.h
-  include/tesseract_qt/common/widgets/load_environment_dialog.h)
+set(COMMON_WIDGETS_headers_MOC
+    include/tesseract_qt/common/environment_manager.h
+    include/tesseract_qt/common/environment_wrapper.h
+    include/tesseract_qt/common/models/json_model.h
+    include/tesseract_qt/common/models/yaml_model.h
+    include/tesseract_qt/common/models/component_info_manager_model.h
+    include/tesseract_qt/common/widgets/cartesian_editor_widget.h
+    include/tesseract_qt/common/widgets/combo_box.h
+    include/tesseract_qt/common/widgets/image_viewer_widget.h
+    include/tesseract_qt/common/widgets/tree_view.h
+    include/tesseract_qt/common/widgets/component_info_dialog.h
+    include/tesseract_qt/common/widgets/component_info_manager_widget.h
+    include/tesseract_qt/common/widgets/component_info_widget.h
+    include/tesseract_qt/common/widgets/create_child_component_info_dialog.h
+    include/tesseract_qt/common/widgets/create_component_info_dialog.h
+    include/tesseract_qt/common/widgets/load_environment_widget.h
+    include/tesseract_qt/common/widgets/load_environment_dialog.h)
 
-set(
-  COMMON_WIDGETS_resources_RCC
-  include/tesseract_qt/common/resources/tesseract_qt_resources.qrc
-  include/tesseract_qt/common/resources/themes/dark/qdarkstyle_dark.qrc
-  include/tesseract_qt/common/resources/themes/light/qdarkstyle_light.qrc)
+set(COMMON_WIDGETS_resources_RCC
+    include/tesseract_qt/common/resources/tesseract_qt_resources.qrc
+    include/tesseract_qt/common/resources/themes/dark/qdarkstyle_dark.qrc
+    include/tesseract_qt/common/resources/themes/light/qdarkstyle_light.qrc)
 
 add_library(
   ${PROJECT_NAME}_common SHARED

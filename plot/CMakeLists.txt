@@ -17,19 +17,18 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS include/tesseract_qt/plot include/tesseract_qt/plot/transforms)
 
-set(
-  PLOT_headers_MOC
-  include/tesseract_qt/plot/custom_tracker.h
-  include/tesseract_qt/plot/plot_legend.h
-  include/tesseract_qt/plot/plot_magnifier.h
-  include/tesseract_qt/plot/plot_widget.h
-  include/tesseract_qt/plot/plot_widget_base.h
-  include/tesseract_qt/plot/plot_widget_editor.h
-  include/tesseract_qt/plot/plot_widget_transforms.h
-  include/tesseract_qt/plot/plot_zoomer.h
-  include/tesseract_qt/plot/plot_subplots.h
-  include/tesseract_qt/plot/transform_function.h
-  include/tesseract_qt/plot/transforms/transform_selector.h)
+set(PLOT_headers_MOC
+    include/tesseract_qt/plot/custom_tracker.h
+    include/tesseract_qt/plot/plot_legend.h
+    include/tesseract_qt/plot/plot_magnifier.h
+    include/tesseract_qt/plot/plot_widget.h
+    include/tesseract_qt/plot/plot_widget_base.h
+    include/tesseract_qt/plot/plot_widget_editor.h
+    include/tesseract_qt/plot/plot_widget_transforms.h
+    include/tesseract_qt/plot/plot_zoomer.h
+    include/tesseract_qt/plot/plot_subplots.h
+    include/tesseract_qt/plot/transform_function.h
+    include/tesseract_qt/plot/transforms/transform_selector.h)
 
 add_library(
   ${PROJECT_NAME}_plot SHARED

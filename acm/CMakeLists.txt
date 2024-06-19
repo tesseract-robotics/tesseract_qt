@@ -26,11 +26,10 @@ target_include_directories(
   ${PROJECT_NAME}_acm_models PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/acm>" "$<INSTALL_INTERFACE:include>")
 
-set(
-  ACM_WIDGET_headers_MOC
-  include/tesseract_qt/acm/widgets/allowed_collision_matrix_widget.h
-  include/tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.h
-  include/tesseract_qt/acm/widgets/add_allowed_collision_entry_dialog.h)
+set(ACM_WIDGET_headers_MOC
+    include/tesseract_qt/acm/widgets/allowed_collision_matrix_widget.h
+    include/tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.h
+    include/tesseract_qt/acm/widgets/add_allowed_collision_entry_dialog.h)
 
 add_library(
   ${PROJECT_NAME}_acm_widgets SHARED

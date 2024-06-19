@@ -12,13 +12,10 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS include/tesseract_qt/manipulation)
 
 set(MANIPULATION_WIDGET_headers_MOC include/tesseract_qt/manipulation/manipulation_widget.h
-             include/tesseract_qt/manipulation/manipulation_tool_bar.h)
+                                    include/tesseract_qt/manipulation/manipulation_tool_bar.h)
 
-add_library(
-  ${PROJECT_NAME}_manipulation_widgets SHARED
-  ${MANIPULATION_WIDGET_headers_MOC}
-  src/manipulation_widget.cpp
-  src/manipulation_tool_bar.cpp)
+add_library(${PROJECT_NAME}_manipulation_widgets SHARED ${MANIPULATION_WIDGET_headers_MOC} src/manipulation_widget.cpp
+                                                        src/manipulation_tool_bar.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_manipulation_widgets

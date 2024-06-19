@@ -56,13 +56,11 @@ target_include_directories(
          "$<INSTALL_INTERFACE:include>")
 
 set(ENVIRONMENT_WIDGET_headers_MOC include/tesseract_qt/environment/widgets/environment_commands_widget.h
-             include/tesseract_qt/environment/widgets/environment_widget.h)
+                                   include/tesseract_qt/environment/widgets/environment_widget.h)
 
 add_library(
-  ${PROJECT_NAME}_environment_widgets SHARED
-  ${ENVIRONMENT_WIDGET_headers_MOC}
-  src/widgets/environment_widget.cpp
-  src/widgets/environment_commands_widget.cpp)
+  ${PROJECT_NAME}_environment_widgets SHARED ${ENVIRONMENT_WIDGET_headers_MOC} src/widgets/environment_widget.cpp
+                                             src/widgets/environment_commands_widget.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_environment_widgets
   PUBLIC tesseract::tesseract_environment
