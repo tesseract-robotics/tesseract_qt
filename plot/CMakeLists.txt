@@ -12,18 +12,12 @@ find_package(Qwt REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_ui(
-  PLOT_headers_UI
-  include/tesseract_qt/plot/plot_widget_editor.ui
-  include/tesseract_qt/plot/plot_widget_transforms.ui
-  include/tesseract_qt/plot/transforms/first_derivative.ui
-  include/tesseract_qt/plot/transforms/integral_transform.ui
-  include/tesseract_qt/plot/transforms/moving_average_filter.ui
-  include/tesseract_qt/plot/transforms/moving_rms.ui
-  include/tesseract_qt/plot/transforms/outlier_removal.ui
-  include/tesseract_qt/plot/transforms/scale_transform.ui
-  include/tesseract_qt/plot/transforms/transform_selector.ui)
-qt5_wrap_cpp(
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(CMAKE_AUTOUIC_SEARCH_PATHS include/tesseract_qt/plot include/tesseract_qt/plot/transforms)
+
+set(
   PLOT_headers_MOC
   include/tesseract_qt/plot/custom_tracker.h
   include/tesseract_qt/plot/plot_legend.h
@@ -39,7 +33,6 @@ qt5_wrap_cpp(
 
 add_library(
   ${PROJECT_NAME}_plot SHARED
-  ${PLOT_headers_UI}
   ${PLOT_headers_MOC}
   src/custom_tracker.cpp
   src/plot_data.cpp

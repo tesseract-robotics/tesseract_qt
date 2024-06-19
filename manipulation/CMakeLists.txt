@@ -6,14 +6,17 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(MANIPULATION_WIDGET_headers_MOC include/tesseract_qt/manipulation/manipulation_widget.h
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(CMAKE_AUTOUIC_SEARCH_PATHS include/tesseract_qt/manipulation)
+
+set(MANIPULATION_WIDGET_headers_MOC include/tesseract_qt/manipulation/manipulation_widget.h
              include/tesseract_qt/manipulation/manipulation_tool_bar.h)
-qt5_wrap_ui(MANIPULATION_WIDGET_headers_UI include/tesseract_qt/manipulation/manipulation_widget.ui)
 
 add_library(
   ${PROJECT_NAME}_manipulation_widgets SHARED
   ${MANIPULATION_WIDGET_headers_MOC}
-  ${MANIPULATION_WIDGET_headers_UI}
   src/manipulation_widget.cpp
   src/manipulation_tool_bar.cpp)
 

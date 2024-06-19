@@ -33,6 +33,8 @@
 #include <QStatusBar>
 #include <QApplication>
 
+#include <fstream>
+
 namespace tesseract_gui
 {
 std::vector<std::string> getNamespaces(const std::string& namespace_str, const std::string& separator)

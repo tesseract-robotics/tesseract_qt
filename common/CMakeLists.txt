@@ -14,7 +14,13 @@ find_package(
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(CMAKE_AUTOUIC_SEARCH_PATHS include/tesseract_qt/common/widgets)
+
+set(
   COMMON_WIDGETS_headers_MOC
   include/tesseract_qt/common/environment_manager.h
   include/tesseract_qt/common/environment_wrapper.h
@@ -33,19 +39,7 @@ qt5_wrap_cpp(
   include/tesseract_qt/common/widgets/load_environment_widget.h
   include/tesseract_qt/common/widgets/load_environment_dialog.h)
 
-qt5_wrap_ui(
-  COMMON_WIDGETS_headers_UI
-  include/tesseract_qt/common/widgets/cartesian_editor_widget.ui
-  include/tesseract_qt/common/widgets/image_viewer_widget.ui
-  include/tesseract_qt/common/widgets/component_info_dialog.ui
-  include/tesseract_qt/common/widgets/component_info_manager_widget.ui
-  include/tesseract_qt/common/widgets/component_info_widget.ui
-  include/tesseract_qt/common/widgets/create_child_component_info_dialog.ui
-  include/tesseract_qt/common/widgets/create_component_info_dialog.ui
-  include/tesseract_qt/common/widgets/load_environment_widget.ui
-  include/tesseract_qt/common/widgets/load_environment_dialog.ui)
-
-qt5_add_resources(
+set(
   COMMON_WIDGETS_resources_RCC
   include/tesseract_qt/common/resources/tesseract_qt_resources.qrc
   include/tesseract_qt/common/resources/themes/dark/qdarkstyle_dark.qrc
@@ -54,7 +48,6 @@ qt5_add_resources(
 add_library(
   ${PROJECT_NAME}_common SHARED
   ${COMMON_WIDGETS_headers_MOC}
-  ${COMMON_WIDGETS_headers_UI}
   ${COMMON_WIDGETS_resources_RCC}
   src/events/component_events.cpp
   src/events/allowed_collision_matrix_events.cpp
