@@ -5,7 +5,9 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 # Load variable for clang tidy args, compiler options and cxx version
 tesseract_variables()
 
-qt5_wrap_cpp(PLANNING_headers_MOC include/tesseract_qt/planning/task_composer_problem_model.h)
+set(CMAKE_AUTOMOC ON)
+
+set(PLANNING_headers_MOC include/tesseract_qt/planning/task_composer_problem_model.h)
 
 add_library(
   ${PROJECT_NAME}_planning SHARED
