@@ -31,55 +31,55 @@
 
 namespace tesseract_gui
 {
-struct TaskComposerProblemModelPrivate;
-class TaskComposerProblemModel : public QStandardItemModel
+class TaskComposerDataStorageModel : public QStandardItemModel
 {
   Q_OBJECT
 
 public:
-  explicit TaskComposerProblemModel(QObject* parent = nullptr);
-  ~TaskComposerProblemModel() override;
+  explicit TaskComposerDataStorageModel(QObject* parent = nullptr);
+  ~TaskComposerDataStorageModel() override;
 
   /**
-   * @brief Add problem
-   * @param problem The problem associated with the key
-   * @param ns The namespace to store the problem under
-   * @return The key associated with added problem for removal
+   * @brief Add data storage
+   * @param data_storage The data storage associated with the namespace
+   * @param ns The namespace to store the data storage under
+   * @return The key associated with added data storage for removal
    */
-  QString addProblem(std::unique_ptr<tesseract_planning::TaskComposerProblem> problem, std::string ns = "general");
+  QString add(std::unique_ptr<tesseract_planning::TaskComposerDataStorage> data_storage, std::string ns = "general");
 
   /**
-   * @brief Remove the problem
-   * @param key The key associated with the problem to be removed
+   * @brief Remove the data storage
+   * @param key The key associated with the data storage to be removed
    */
-  void removeProblem(const QString& key);
+  void remove(const QString& key);
 
   /**
-   * @brief Check if a problem with the provided key exists
-   * @param key The key associated with the problem to find
-   * @return True if a problem exists under the provided key, otherwise false
+   * @brief Check if a data storage with the provided key exists
+   * @param key The key associated with the data storage to find
+   * @return True if a data storage exists under the provided key, otherwise false
    */
-  bool hasProblem(const QString& key);
+  bool has(const QString& key);
 
   /**
-   * @brief Get the problem associated with the row
-   * @param row The row to get associated problem
-   * @return The problem
+   * @brief Get the data storage associated with the row
+   * @param row The row to get associated data storage
+   * @return The data storage
    */
-  const tesseract_planning::TaskComposerProblem& getProblem(const QModelIndex& row) const;
+  const tesseract_planning::TaskComposerDataStorage& get(const QModelIndex& row) const;
 
   /**
-   * @brief Get the problem namespace associated with the row
-   * @param row The row to get associated problem
+   * @brief Get the data storage namespace associated with the row
+   * @param row The row to get associated data storage
    * @return The namespace
    */
-  const QString& getProblemNamespace(const QModelIndex& row) const;
+  const QString& getNamespace(const QModelIndex& row) const;
 
   /** @brief Clear the model */
   void clear();
 
 private:
-  std::unique_ptr<TaskComposerProblemModelPrivate> data_;
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 };
 
 }  // namespace tesseract_gui

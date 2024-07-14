@@ -21,6 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/planning/task_composer_node_info_standard_item.h>
+#include <tesseract_qt/planning/task_composer_keys_standard_item.h>
 #include <tesseract_qt/planning/task_composer_standard_item_utils.h>
 
 #include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
@@ -111,28 +112,14 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
   }
 
   if (info.input_keys.empty())
-  {
     appendRow(createStandardItemString("input_keys", "Empty"));
-  }
   else
-  {
-    auto* input_keys = new QStandardItem(icons::getSetIcon(), "input_keys");
-    for (const auto& key : info.input_keys)
-      input_keys->appendRow(createStandardItemString("key", key));
-    appendRow(input_keys);
-  }
+    appendRow(new TaskComposerKeysStandardItem("input_keys", info.input_keys));
 
   if (info.output_keys.empty())
-  {
     appendRow(createStandardItemString("output_keys", "Empty"));
-  }
   else
-  {
-    auto* output_keys = new QStandardItem(icons::getSetIcon(), "output_keys");
-    for (const auto& key : info.output_keys)
-      output_keys->appendRow(createStandardItemString("key", key));
-    appendRow(output_keys);
-  }
+    appendRow(new TaskComposerKeysStandardItem("output_keys", info.output_keys));
 
   ////////////////////////////////
   /// Add data for known types ///

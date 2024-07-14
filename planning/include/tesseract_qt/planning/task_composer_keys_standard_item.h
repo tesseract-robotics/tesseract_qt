@@ -20,28 +20,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_TASK_COMPOSER_KEYS_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_TASK_COMPOSER_KEYS_STANDARD_ITEM_H
 
-#include <memory>
 #include <tesseract_task_composer/core/fwd.h>
-#include <QStandardItemModel>
+
+#include <QStandardItem>
 
 namespace tesseract_gui
 {
-class TaskComposerProblemStandardItem : public QStandardItem
+class TaskComposerKeysStandardItem : public QStandardItem
 {
 public:
-  explicit TaskComposerProblemStandardItem(const tesseract_planning::TaskComposerProblem& problem);
-  TaskComposerProblemStandardItem(const QString& text, const tesseract_planning::TaskComposerProblem& problem);
-  TaskComposerProblemStandardItem(const QIcon& icon,
-                                  const QString& text,
-                                  const tesseract_planning::TaskComposerProblem& problem);
+  explicit TaskComposerKeysStandardItem(const tesseract_planning::TaskComposerKeys& data);
+  TaskComposerKeysStandardItem(const QString& text, const tesseract_planning::TaskComposerKeys& data);
+  TaskComposerKeysStandardItem(const QIcon& icon,
+                               const QString& text,
+                               const tesseract_planning::TaskComposerKeys& data);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::TaskComposerProblem& problem);
+  void ctor(const tesseract_planning::TaskComposerKeys& data);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_TASK_COMPOSER_KEYS_STANDARD_ITEM_H

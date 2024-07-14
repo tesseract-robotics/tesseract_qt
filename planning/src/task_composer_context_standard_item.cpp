@@ -21,7 +21,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/planning/task_composer_context_standard_item.h>
-#include <tesseract_qt/planning/task_composer_problem_standard_item.h>
 #include <tesseract_qt/planning/task_composer_node_info_map_standard_item.h>
 #include <tesseract_qt/planning/task_composer_data_storage_standard_item.h>
 
@@ -61,7 +60,8 @@ int TaskComposerContextStandardItem::type() const
 
 void TaskComposerContextStandardItem::ctor(const tesseract_planning::TaskComposerContext& input)
 {
-  appendRow(new TaskComposerProblemStandardItem("problem", *input.problem));
+  appendRow(createStandardItemString("name", input.name));
+  appendRow(createStandardItemBool("dotgraph", input.dotgraph));
   appendRow(new TaskComposerDataStorageStandardItem("data_storage", *input.data_storage));
   /** @todo Add profiles */
   appendRow(createStandardItemBool("successful", input.isSuccessful()));
