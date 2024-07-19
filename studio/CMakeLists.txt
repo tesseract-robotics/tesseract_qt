@@ -163,18 +163,24 @@ foreach(dir config)
   install(DIRECTORY ${dir}/ DESTINATION share/${PROJECT_NAME}/studio/${dir})
 endforeach()
 
+# Plugin should not be export only installed
+install(
+  TARGETS ${PROJECT_NAME}_studio_plugins
+  COMPONENT taskflow
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
+
 # Install
 list(
   APPEND
   PROJECT_TARGETS
   ${PROJECT_NAME}_studio
   ${PROJECT_NAME}_studio_widgets
-  ${PROJECT_NAME}_studio_plugin_factory
-  ${PROJECT_NAME}_studio_plugins)
+  ${PROJECT_NAME}_studio_plugin_factory)
 set(PROJECT_TARGETS ${PROJECT_TARGETS} PARENT_SCOPE)
 install_targets(
   TARGETS
   ${PROJECT_NAME}_studio
   ${PROJECT_NAME}_studio_widgets
-  ${PROJECT_NAME}_studio_plugin_factory
-  ${PROJECT_NAME}_studio_plugins)
+  ${PROJECT_NAME}_studio_plugin_factory)
