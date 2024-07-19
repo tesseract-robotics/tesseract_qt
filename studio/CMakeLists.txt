@@ -165,8 +165,8 @@ endforeach()
 
 # Plugin should not be export only installed
 install(
-  TARGETS ${PROJECT_NAME}_studio_plugin_factory
-  COMPONENT ${PROJECT_NAME}
+  TARGETS ${PROJECT_NAME}_studio_plugins
+  COMPONENT taskflow
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
@@ -177,10 +177,10 @@ list(
   PROJECT_TARGETS
   ${PROJECT_NAME}_studio
   ${PROJECT_NAME}_studio_widgets
-  ${PROJECT_NAME}_studio_plugins)
+  ${PROJECT_NAME}_studio_plugin_factory)
 set(PROJECT_TARGETS ${PROJECT_TARGETS} PARENT_SCOPE)
 install_targets(
   TARGETS
   ${PROJECT_NAME}_studio
   ${PROJECT_NAME}_studio_widgets
-  ${PROJECT_NAME}_studio_plugins)
+  ${PROJECT_NAME}_studio_plugin_factory)
