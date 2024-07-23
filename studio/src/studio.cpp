@@ -38,8 +38,13 @@
 #include <tesseract_qt/studio/studio_plugin_loader_dialog.h>
 #include <tesseract_qt/studio/studio_dock_widget_factory.h>
 
-#include <DockManager.h>
+#if __has_include(<qtadvanceddocking/DockManager.h>)
+#include <qtadvanceddocking/DockAreaWidget.h>
+#include <qtadvanceddocking/DockManager.h>
+#else
 #include <DockAreaWidget.h>
+#include <DockManager.h>
+#endif
 
 #include <QSettings>
 #include <QWidgetAction>
