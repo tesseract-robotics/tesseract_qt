@@ -25,7 +25,11 @@
 
 #ifndef Q_MOC_RUN
 #include <string>
+#if __has_include(<qtadvanceddocking/DockManager.h>)
+#include <qtadvanceddocking/DockAreaWidget.h>
+#else
 #include <DockAreaWidget.h>
+#endif
 #endif
 
 namespace YAML

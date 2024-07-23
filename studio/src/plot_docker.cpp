@@ -23,7 +23,11 @@
 #include <tesseract_qt/studio/plot_docker.h>
 #include <tesseract_qt/plot/plot_widget_editor.h>
 #include <tesseract_qt/common/svg_util.h>
+#if __has_include(<qtadvanceddocking/DockManager.h>)
+#include <qtadvanceddocking/DockSplitter.h>
+#else
 #include <DockSplitter.h>
+#endif
 #include <QPushButton>
 #include <QBoxLayout>
 #include <QMouseEvent>

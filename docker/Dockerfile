@@ -9,9 +9,15 @@ USER root
 
 # Install the dependency
 COPY .add-gazebo-ppa /tmp/add_gazebo_ppa.sh
-RUN apt install -y wget qt-advanced-docking-system \
+RUN apt install -y wget \
   && ./tmp/add_gazebo_ppa.sh \
-  && apt install -y qt-advanced-docking-system libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
+  && if [[ $(lsb_release -cs) != noble ]] ; then \
+  apt install -y libgz-rendering7-dev libgz-common5-dev libgz-math7-dev \
+  && apt install -y qt-advanced-docking-system \
+  ; else \
+  apt install -y libgz-rendering8-dev libgz-common5-dev libgz-math7-dev \
+  && apt install -y libqt-advanced-docking-system-dev \
+  ; fi
 
 # Bind mount the source directory so as not to unnecessarily copy source code into the docker image
 ARG WORKSPACE_DIR=/opt/tesseract_qt

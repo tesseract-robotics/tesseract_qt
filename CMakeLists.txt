@@ -7,6 +7,13 @@ project(${pkg_extracted_name} VERSION ${pkg_extracted_version} LANGUAGES C CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  # Determine Ubuntu release
+  find_program(LSB_RELEASE_EXEC lsb_release)
+  execute_process(COMMAND ${LSB_RELEASE_EXEC} -cs OUTPUT_VARIABLE LSB_RELEASE_CODE_SHORT
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+
 if(WIN32)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
@@ -50,10 +57,15 @@ set(DEPS
 if(${BUILD_RENDERING})
   message("Building rendering module")
   add_subdirectory(rendering)
+  if((EXISTS LSB_RELEASE_CODE_SHORT) AND (LSB_RELEASE_CODE_SHORT STREQUAL "noble"))
+    set(GZ-RENDERING gz-rendering8)
+  else()
+    set(GZ-RENDERING gz-rendering7)
+  endif()
   list(
     APPEND
     DEPS
-    gz-rendering7
+    ${GZ_RENDERING}
     gz-math7-eigen3
     "gz-common5 COMPONENTS profiler events av")
 endif()
