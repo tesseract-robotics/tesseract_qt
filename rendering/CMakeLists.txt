@@ -10,14 +10,20 @@ find_package(
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   if(LSB_RELEASE_CODE_SHORT STREQUAL "noble")
     find_package(gz-rendering8 REQUIRED)
-    add_library(gz-rendering::gz-rendering ALIAS gz-rendering8::gz-rendering8)
+    # Workaround instead of an ALIAS target, compatible with older CMake
+    add_library(gz-rendering INTERFACE IMPORTED)
+    set_target_properties(gz-rendering PROPERTIES INTERFACE_LINK_LIBRARIES gz-rendering8::gz-rendering8)
   else()
     find_package(gz-rendering7 REQUIRED)
-    add_library(gz-rendering::gz-rendering ALIAS gz-rendering7::gz-rendering7)
+    # Workaround instead of an ALIAS target, compatible with older CMake
+    add_library(gz-rendering INTERFACE IMPORTED)
+    set_target_properties(gz-rendering PROPERTIES INTERFACE_LINK_LIBRARIES gz-rendering7::gz-rendering7)
   endif()
 else()
   find_package(gz-rendering7 REQUIRED)
-  add_library(gz-rendering::gz-rendering ALIAS gz-rendering7::gz-rendering7)
+  # Workaround instead of an ALIAS target, compatible with older CMake
+  add_library(gz-rendering INTERFACE IMPORTED)
+  set_target_properties(gz-rendering PROPERTIES INTERFACE_LINK_LIBRARIES gz-rendering7::gz-rendering7)
 endif()
 find_package(gz-common5 COMPONENTS profiler events av REQUIRED)
 find_package(gz-math7 REQUIRED)
@@ -33,7 +39,7 @@ target_link_libraries(
          gz-common5::gz-common5-profiler
          gz-common5::gz-common5-events
          gz-common5::gz-common5-av
-         gz-rendering::gz-rendering
+         gz-rendering
          gz-math7::gz-math7
          gz-math7::gz-math7-eigen3
          ${PROJECT_NAME}_common)
@@ -63,7 +69,7 @@ target_link_libraries(
          gz-common5::gz-common5-profiler
          gz-common5::gz-common5-events
          gz-common5::gz-common5-av
-         gz-rendering::gz-rendering
+         gz-rendering
          gz-math7::gz-math7-eigen3
          Qt5::Core
          Qt5::Gui
