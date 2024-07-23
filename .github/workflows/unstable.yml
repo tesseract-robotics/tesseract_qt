@@ -38,16 +38,17 @@ jobs:
           apt install -y wget
           cd $GITHUB_WORKSPACE/target_ws/src
           ./.add-gazebo-ppa
-          apt install -y libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
       - name: Install Depends (non-noble)
         if: ${{ matrix.distro != 'noble' }}
         shell: bash
         run: |
+          apt install -y libgz-rendering7-dev libgz-common5-dev libgz-math7-dev
           apt install -y qt-advanced-docking-system
       - name: Install Depends (noble)
         if: ${{ matrix.distro  == 'noble' }}
         shell: bash
         run: |
+          apt install -y libgz-rendering8-dev libgz-common5-dev libgz-math7-dev
           apt install -y libqt-advanced-docking-system-dev
 
       - name: Build and Tests
