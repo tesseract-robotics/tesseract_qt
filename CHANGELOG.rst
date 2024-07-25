@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.23.0 (2024-07-24)
+-------------------
 * Update ubuntu.yml
 * Add CI for Ubuntu Noble (`#116 <https://github.com/tesseract-robotics/tesseract_qt/issues/116>`_)
 * Do not export plugin libraries (`#118 <https://github.com/tesseract-robotics/tesseract_qt/issues/118>`_)
