@@ -2,6 +2,16 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update ubuntu.yml
+* Add CI for Ubuntu Noble (`#116 <https://github.com/tesseract-robotics/tesseract_qt/issues/116>`_)
+* Do not export plugin libraries (`#118 <https://github.com/tesseract-robotics/tesseract_qt/issues/118>`_)
+* Update docker.yml
+* Update because TaskComposerProblem was removed
+* Fixes for building on Ubuntu Noble (`#114 <https://github.com/tesseract-robotics/tesseract_qt/issues/114>`_)
+* Contributors: Levi Armstrong, Roelof Oomen
+
 0.22.1 (2024-06-12)
 -------------------
 * Update the workflow to use tesseract_planning 0.22
