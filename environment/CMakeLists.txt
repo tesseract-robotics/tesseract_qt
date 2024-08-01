@@ -17,6 +17,7 @@ add_library(
   ${ENVIRONMENT_MODEL_headers_MOC}
   src/models/environment_commands_standard_item.cpp
   src/models/environment_commands_model.cpp
+  src/models/environment_standard_item.cpp
   src/models/commands/add_contact_managers_plugin_info_command_standard_item.cpp
   src/models/commands/add_kinematics_information_command_standard_item.cpp
   src/models/commands/add_link_command_standard_item.cpp

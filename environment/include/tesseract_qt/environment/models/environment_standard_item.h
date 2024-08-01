@@ -20,23 +20,30 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H
-#define TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H
+#ifndef TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_STANDARD_ITEM_H
+#define TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_STANDARD_ITEM_H
 
-#include <tesseract_common/fwd.h>
+#include <memory>
+#include <tesseract_environment/fwd.h>
 
 #include <QStandardItem>
-#include <QList>
 
 namespace tesseract_gui
 {
-/**
- * @brief This will return a standard item anything stored in the AnyPoly.
- * @param any_poly The any poly to create a standard item
- * @return A standard item representation of the AnyPoly
- */
-QList<QStandardItem*> createStandardItemAnyPoly(const QString& key, const tesseract_common::AnyPoly& any_poly);
+class EnvironmentStandardItem : public QStandardItem
+{
+public:
+  EnvironmentStandardItem();
+  explicit EnvironmentStandardItem(const tesseract_environment::Environment& env);
+  explicit EnvironmentStandardItem(const QString& text, const tesseract_environment::Environment& env);
+  explicit EnvironmentStandardItem(const QIcon& icon,
+                                   const QString& text,
+                                   const tesseract_environment::Environment& env);
+  int type() const override;
 
+private:
+  void ctor(const tesseract_environment::Environment& env);
+};
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_STANDARD_ITEM_UTILS_H
+#endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_STANDARD_ITEM_H
