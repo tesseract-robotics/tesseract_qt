@@ -64,6 +64,8 @@ add_library(
   src/events/scene_graph_render_manager.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
+  src/factories/any_poly_standard_item_factory.cpp
+  src/factories/instruction_poly_standard_item_factory.cpp
   src/models/any_standard_item.cpp
   src/models/collision_margin_data_standard_item.cpp
   src/models/component_info_manager_model.cpp

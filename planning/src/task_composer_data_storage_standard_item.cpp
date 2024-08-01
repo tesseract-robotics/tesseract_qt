@@ -22,9 +22,9 @@
  */
 
 #include <tesseract_qt/planning/task_composer_data_storage_standard_item.h>
-#include <tesseract_qt/planning/task_composer_standard_item_utils.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
+#include <tesseract_qt/common/factories/any_poly_standard_item_factory.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_task_composer/core/task_composer_data_storage.h>
@@ -64,6 +64,22 @@ void TaskComposerDataStorageStandardItem::ctor(const tesseract_planning::TaskCom
 {
   auto copy = data.getData();
   for (const auto& entry : copy)
-    appendRow(createStandardItemAnyPoly(QString::fromStdString(entry.first), entry.second));
+  {
+    QList<QStandardItem*> items = AnyPolyStandardItemManager::create(entry.second);  // NOLINT
+    if (!items.empty())
+    {
+      auto* base_item = new QStandardItem(QString::fromStdString(entry.first));  // NOLINT
+      auto* base_item_desc = new QStandardItem(items.front()->text());           // NOLINT
+      base_item->appendRow(items);
+      appendRow({ base_item, base_item_desc });
+    }
+    else
+    {
+      auto* name = new QStandardItem(icons::getUnknownIcon(), QString::fromStdString(entry.first));
+      auto* value = new QStandardItem();  // NOLINT
+      value->setData("Unknown any type", Qt::DisplayRole);
+      appendRow({ name, value });
+    }
+  }
 }
 }  // namespace tesseract_gui

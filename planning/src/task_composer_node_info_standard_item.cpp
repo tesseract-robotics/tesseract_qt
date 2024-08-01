@@ -22,7 +22,6 @@
  */
 #include <tesseract_qt/planning/task_composer_node_info_standard_item.h>
 #include <tesseract_qt/planning/task_composer_keys_standard_item.h>
-#include <tesseract_qt/planning/task_composer_standard_item_utils.h>
 
 #include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
 #include <tesseract_qt/command_language/models/null_instruction_standard_item.h>
