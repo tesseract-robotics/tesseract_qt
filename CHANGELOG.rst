@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.23.1 (2024-08-02)
+-------------------
 * Add poly factories
 * Contributors: Levi Armstrong
 
