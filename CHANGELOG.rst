@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add poly factories
+* Contributors: Levi Armstrong
+
 0.23.0 (2024-07-24)
 -------------------
 * Update ubuntu.yml
