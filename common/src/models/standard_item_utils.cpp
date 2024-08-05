@@ -45,16 +45,29 @@ QList<QStandardItem*> createStandardItemFloat(const QIcon& icon, const std::stri
   return { name, value };
 }
 
-QList<QStandardItem*> createStandardItemInt(const std::string& text, int data)
+QList<QStandardItem*> createStandardItemInt(const std::string& text, long data)
 {
   return createStandardItemInt(icons::getNumericIcon(), text, data);
 }
 
-QList<QStandardItem*> createStandardItemInt(const QIcon& icon, const std::string& text, int data)
+QList<QStandardItem*> createStandardItemInt(const QIcon& icon, const std::string& text, long data)
 {
   auto* name = new QStandardItem(icon, QString::fromStdString(text));
   auto* value = new QStandardItem();  // NOLINT
-  value->setData(data, Qt::DisplayRole);
+  value->setData(static_cast<qlonglong>(data), Qt::DisplayRole);
+  return { name, value };
+}
+
+QList<QStandardItem*> createStandardItemUnsigned(const std::string& text, unsigned long data)
+{
+  return createStandardItemUnsigned(icons::getNumericIcon(), text, data);
+}
+
+QList<QStandardItem*> createStandardItemUnsigned(const QIcon& icon, const std::string& text, unsigned long data)
+{
+  auto* name = new QStandardItem(icon, QString::fromStdString(text));
+  auto* value = new QStandardItem();  // NOLINT
+  value->setData(static_cast<qulonglong>(data), Qt::DisplayRole);
   return { name, value };
 }
 

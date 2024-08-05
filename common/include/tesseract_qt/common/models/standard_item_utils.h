@@ -37,8 +37,10 @@ class NamespaceStandardItem;
 
 QList<QStandardItem*> createStandardItemFloat(const std::string& text, double data);
 QList<QStandardItem*> createStandardItemFloat(const QIcon& icon, const std::string& text, double data);
-QList<QStandardItem*> createStandardItemInt(const std::string& text, int data);
-QList<QStandardItem*> createStandardItemInt(const QIcon& icon, const std::string& text, int data);
+QList<QStandardItem*> createStandardItemInt(const std::string& text, long data);
+QList<QStandardItem*> createStandardItemInt(const QIcon& icon, const std::string& text, long data);
+QList<QStandardItem*> createStandardItemUnsigned(const std::string& text, unsigned long data);
+QList<QStandardItem*> createStandardItemUnsigned(const QIcon& icon, const std::string& text, unsigned long data);
 QList<QStandardItem*> createStandardItemString(const std::string& text, const std::string& data);
 QList<QStandardItem*> createStandardItemString(const QIcon& icon, const std::string& text, const std::string& data);
 QList<QStandardItem*> createStandardItemURL(const std::string& text, const std::string& data);
