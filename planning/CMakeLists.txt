@@ -12,6 +12,10 @@ set(PLANNING_headers_MOC include/tesseract_qt/planning/task_composer_data_storag
 add_library(
   ${PROJECT_NAME}_planning SHARED
   ${PLANNING_headers_MOC}
+  src/continuous_contact_check_task_info_standard_item.cpp
+  src/discrete_contact_check_task_info_standard_item.cpp
+  src/fix_state_collision_task_info_standard_item.cpp
+  src/motion_planner_task_info_standard_item.cpp
   src/planning_profile_remapping_standard_item.cpp
   src/register_poly_types.cpp
   src/task_composer_context_standard_item.cpp
@@ -19,7 +23,9 @@ add_library(
   src/task_composer_data_storage_standard_item.cpp
   src/task_composer_keys_standard_item.cpp
   src/task_composer_node_info_map_standard_item.cpp
-  src/task_composer_node_info_standard_item.cpp)
+  src/task_composer_node_info_standard_item_factory.cpp
+  src/task_composer_node_info_standard_item.cpp
+  src/time_optimal_parameterization_task_info_standard_item.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}_planning

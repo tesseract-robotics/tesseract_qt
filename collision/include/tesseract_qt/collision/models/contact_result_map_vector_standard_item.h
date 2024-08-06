@@ -20,28 +20,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULT_MAP_VECTOR_STANDARD_ITEM_H
+#define TESSERACT_QT_COLLISION_CONTACT_RESULT_MAP_VECTOR_STANDARD_ITEM_H
 
-#include <tesseract_task_composer/core/fwd.h>
-
+#include <memory>
 #include <QStandardItem>
+#include <tesseract_qt/common/contact_results_types.h>
 
 namespace tesseract_gui
 {
-class TaskComposerNodeInfoStandardItem : public QStandardItem
+class ContactResultMapVectorStandardItem : public QStandardItem
 {
 public:
-  explicit TaskComposerNodeInfoStandardItem(const tesseract_planning::TaskComposerNodeInfo& info);
-  TaskComposerNodeInfoStandardItem(const QString& text, const tesseract_planning::TaskComposerNodeInfo& info);
-  TaskComposerNodeInfoStandardItem(const QIcon& icon,
-                                   const QString& text,
-                                   const tesseract_planning::TaskComposerNodeInfo& info);
+  ContactResultMapVectorStandardItem(const std::vector<ContactResultMap>& contact_results);
+  explicit ContactResultMapVectorStandardItem(const QString& text,
+                                              const std::vector<ContactResultMap>& contact_results);
+  ContactResultMapVectorStandardItem(const QIcon& icon,
+                                     const QString& text,
+                                     const std::vector<ContactResultMap>& contact_resultss);
   int type() const override;
 
-protected:
-  void ctor(const tesseract_planning::TaskComposerNodeInfo& info);
+private:
+  void ctor(const std::vector<ContactResultMap>& contact_results);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_MAP_VECTOR_STANDARD_ITEM_H

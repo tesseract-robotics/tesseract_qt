@@ -32,5 +32,10 @@ namespace tesseract_gui
 using ContactResult = TrackedObject<tesseract_collision::ContactResult>;
 using ContactResultVector = TrackedObject<tesseract_common::AlignedVector<ContactResult>>;
 using ContactResultMap = tesseract_common::AlignedMap<std::pair<std::string, std::string>, ContactResultVector>;
+
+ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_results);
+
+std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::ContactResultMap>& contact_results);
+
 }  // namespace tesseract_gui
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
