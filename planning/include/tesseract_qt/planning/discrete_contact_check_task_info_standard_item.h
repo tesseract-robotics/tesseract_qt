@@ -20,28 +20,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_DISCRETE_CONTACT_CHECK_TASK_INFO_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_DISCRETE_CONTACT_CHECK_TASK_INFO_STANDARD_ITEM_H
 
-#include <tesseract_task_composer/core/fwd.h>
+#include <tesseract_qt/planning/task_composer_node_info_standard_item.h>
 
-#include <QStandardItem>
+namespace tesseract_planning
+{
+class DiscreteContactCheckTaskInfo;
+}
 
 namespace tesseract_gui
 {
-class TaskComposerNodeInfoStandardItem : public QStandardItem
+class DiscreteContactCheckTaskInfoStandardItem : public TaskComposerNodeInfoStandardItem
 {
 public:
-  explicit TaskComposerNodeInfoStandardItem(const tesseract_planning::TaskComposerNodeInfo& info);
-  TaskComposerNodeInfoStandardItem(const QString& text, const tesseract_planning::TaskComposerNodeInfo& info);
-  TaskComposerNodeInfoStandardItem(const QIcon& icon,
-                                   const QString& text,
-                                   const tesseract_planning::TaskComposerNodeInfo& info);
+  explicit DiscreteContactCheckTaskInfoStandardItem(const tesseract_planning::DiscreteContactCheckTaskInfo& info);
+  DiscreteContactCheckTaskInfoStandardItem(const QString& text,
+                                           const tesseract_planning::DiscreteContactCheckTaskInfo& info);
+  DiscreteContactCheckTaskInfoStandardItem(const QIcon& icon,
+                                           const QString& text,
+                                           const tesseract_planning::DiscreteContactCheckTaskInfo& info);
   int type() const override;
 
-protected:
-  void ctor(const tesseract_planning::TaskComposerNodeInfo& info);
+private:
+  void ctor(const tesseract_planning::DiscreteContactCheckTaskInfo& info);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_DISCRETE_CONTACT_CHECK_TASK_INFO_STANDARD_ITEM_H

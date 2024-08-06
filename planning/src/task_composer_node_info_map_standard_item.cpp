@@ -22,6 +22,7 @@
  */
 #include <tesseract_qt/planning/task_composer_node_info_map_standard_item.h>
 #include <tesseract_qt/planning/task_composer_node_info_standard_item.h>
+#include <tesseract_qt/planning/task_composer_node_info_standard_item_factory.h>
 
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
@@ -66,8 +67,20 @@ void TaskComposerNodeInfoMapStandardItem::ctor(
     const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map)
 {
   for (const auto& pair : info_map)
-    appendRow({ new TaskComposerNodeInfoStandardItem(QString::fromStdString(boost::uuids::to_string(pair.first)),
-                                                     *pair.second),
-                new QStandardItem(pair.second->name.c_str()) });
+  {
+    QList<QStandardItem*> items = TaskComposerNodeInfoStandardItemManager::create(*pair.second);
+    auto* item_desc = new QStandardItem(pair.second->name.c_str());
+    QString item_text = QString::fromStdString(boost::uuids::to_string(pair.first));
+    if (items.empty())
+    {
+      items.front()->setText(item_text);
+      items.append(item_desc);
+      appendRow(items);
+    }
+    else
+    {
+      appendRow({ new TaskComposerNodeInfoStandardItem(item_text, *pair.second), item_desc });
+    }
+  }
 }
 }  // namespace tesseract_gui

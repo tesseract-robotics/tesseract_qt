@@ -12,6 +12,8 @@ add_library(
   ${COLLISION_MODEL_headers_MOC}
   src/models/collision_margin_data_standard_item.cpp
   src/models/contact_request_standard_item.cpp
+  src/models/contact_result_map_standard_item.cpp
+  src/models/contact_result_map_vector_standard_item.cpp
   src/models/contact_result_standard_item.cpp
   src/models/contact_result_vector_standard_item.cpp
   src/models/contact_results_model.cpp)

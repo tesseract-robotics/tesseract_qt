@@ -20,28 +20,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H
-
-#include <tesseract_task_composer/core/fwd.h>
-
-#include <QStandardItem>
+#include <tesseract_qt/common/contact_results_types.h>
 
 namespace tesseract_gui
 {
-class TaskComposerNodeInfoStandardItem : public QStandardItem
+tesseract_gui::ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_results)
 {
-public:
-  explicit TaskComposerNodeInfoStandardItem(const tesseract_planning::TaskComposerNodeInfo& info);
-  TaskComposerNodeInfoStandardItem(const QString& text, const tesseract_planning::TaskComposerNodeInfo& info);
-  TaskComposerNodeInfoStandardItem(const QIcon& icon,
-                                   const QString& text,
-                                   const tesseract_planning::TaskComposerNodeInfo& info);
-  int type() const override;
+  // Convert to tracked objects
+  tesseract_gui::ContactResultMap tracked_object;
+  for (const auto& contact : contact_results)
+  {
+    tesseract_gui::ContactResultVector crv;
+    for (const auto& result : contact.second)
+      crv().emplace_back(tesseract_gui::ContactResult(result));
 
-protected:
-  void ctor(const tesseract_planning::TaskComposerNodeInfo& info);
-};
+    tracked_object[contact.first] = crv;
+  }
+  return tracked_object;
+}
+
+std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::ContactResultMap>& contact_results)
+{
+  std::vector<tesseract_gui::ContactResultMap> tracked_contact_results;
+  tracked_contact_results.reserve(contact_results.size());
+  for (const auto& state_results : contact_results)
+    tracked_contact_results.push_back(convert(state_results));
+
+  return tracked_contact_results;
+}
+
 }  // namespace tesseract_gui
-
-#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_STANDARD_ITEM_H

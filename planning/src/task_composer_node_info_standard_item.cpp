@@ -23,29 +23,11 @@
 #include <tesseract_qt/planning/task_composer_node_info_standard_item.h>
 #include <tesseract_qt/planning/task_composer_keys_standard_item.h>
 
-#include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
-#include <tesseract_qt/command_language/models/null_instruction_standard_item.h>
-#include <tesseract_qt/command_language/models/instruction_standard_item.h>
-
-#include <tesseract_qt/scene_graph/models/scene_state_standard_item.h>
-
-#include <tesseract_qt/environment/models/environment_commands_standard_item.h>
-
-#include <tesseract_qt/collision/models/contact_result_vector_standard_item.h>
-
-#include <tesseract_qt/common/contact_results_types.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract_task_composer/core/task_composer_node_info.h>
-#include <tesseract_task_composer/planning/nodes/fix_state_collision_task.h>
-#include <tesseract_task_composer/planning/nodes/discrete_contact_check_task.h>
-#include <tesseract_task_composer/planning/nodes/continuous_contact_check_task.h>
-#include <tesseract_task_composer/planning/nodes/time_optimal_parameterization_task.h>
-
-#include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/poly/instruction_poly.h>
 
 #include <boost/uuid/uuid_io.hpp>
 
@@ -113,88 +95,11 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
   if (info.input_keys.empty())
     appendRow(createStandardItemString("input_keys", "Empty"));
   else
-    appendRow(new TaskComposerKeysStandardItem("input_keys", info.input_keys));
+    appendRow(new TaskComposerKeysStandardItem("input_keys", info.input_keys));  // NOLINT
 
   if (info.output_keys.empty())
     appendRow(createStandardItemString("output_keys", "Empty"));
   else
-    appendRow(new TaskComposerKeysStandardItem("output_keys", info.output_keys));
-
-  ////////////////////////////////
-  /// Add data for known types ///
-  ////////////////////////////////
-
-  auto addContactResults = [this](const std::vector<tesseract_collision::ContactResultMap>& input) {
-    std::vector<ContactResultMap> contact_results;
-    contact_results.reserve(input.size());
-    for (const auto& state_results : input)
-    {
-      // Convert to tracked objects
-      tesseract_gui::ContactResultMap tracked_object;
-      for (const auto& contact : state_results)
-      {
-        tesseract_gui::ContactResultVector crv;
-        for (const auto& result : contact.second)
-          crv().emplace_back(tesseract_gui::ContactResult(result));
-
-        tracked_object[contact.first] = crv;
-      }
-
-      contact_results.push_back(tracked_object);
-    }
-
-    QStandardItem* crsv_item = new QStandardItem(icons::getSetIcon(), "contact_results");
-    for (std::size_t i = 0; i < contact_results.size(); ++i)
-    {
-      QStandardItem* state_item = new QStandardItem(icons::getSetIcon(), QString("[%1]").arg(i));
-      for (const auto& pair : contact_results[i])
-      {
-        auto text =
-            QString("%1::%2").arg(QString::fromStdString(pair.first.first), QString::fromStdString(pair.first.second));
-        auto* link_pair_item = new ContactResultVectorStandardItem(text, pair.second);
-        state_item->appendRow(link_pair_item);
-      }
-      crsv_item->appendRow(state_item);
-    }
-    appendRow(crsv_item);
-  };
-
-  {  // Try FixStateCollisionTaskInfo
-    const auto* derived_type = dynamic_cast<const tesseract_planning::FixStateCollisionTaskInfo*>(&info);
-    if (derived_type != nullptr)
-    {
-      addContactResults(derived_type->contact_results);
-      return;
-    }
-  }
-
-  {  // Try DiscreteContactCheckTaskInfo
-    const auto* derived_type = dynamic_cast<const tesseract_planning::DiscreteContactCheckTaskInfo*>(&info);
-    if (derived_type != nullptr)
-    {
-      addContactResults(derived_type->contact_results);
-      return;
-    }
-  }
-
-  {  // Try ContinuousContactCheckTaskInfo
-    const auto* derived_type = dynamic_cast<const tesseract_planning::ContinuousContactCheckTaskInfo*>(&info);
-    if (derived_type != nullptr)
-    {
-      addContactResults(derived_type->contact_results);
-      return;
-    }
-  }
-
-  {  // Try ContinuousContactCheckTaskInfo
-    const auto* derived_type = dynamic_cast<const tesseract_planning::TimeOptimalParameterizationTaskInfo*>(&info);
-    if (derived_type != nullptr)
-    {
-      appendRow(createStandardItemFloat("max_velocity_scaling_factor", derived_type->max_velocity_scaling_factor));
-      appendRow(
-          createStandardItemFloat("max_acceleration_scaling_factor", derived_type->max_acceleration_scaling_factor));
-      return;
-    }
-  }
+    appendRow(new TaskComposerKeysStandardItem("output_keys", info.output_keys));  // NOLINT
 }
 }  // namespace tesseract_gui

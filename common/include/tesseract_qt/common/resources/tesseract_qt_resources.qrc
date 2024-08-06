@@ -91,6 +91,7 @@
         <file>png/show-origin.png</file>
         <file>png/tesseract_logo.png</file>
         <file>png/log.png</file>
+        <file>svg/data.svg</file>
         <file>svg/datetime.svg</file>
         <file>svg/red_circle.svg</file>
         <file>svg/green_circle.svg</file>
