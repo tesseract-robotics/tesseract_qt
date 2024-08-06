@@ -104,8 +104,9 @@ add_library(
   src/widgets/combo_box.cpp
   src/widgets/tree_view.cpp
   src/widgets/image_viewer_widget.cpp
-  src/component_info.cpp
   src/component_info_manager.cpp
+  src/component_info.cpp
+  src/contact_result_types.cpp
   src/entity_manager.cpp
   src/entity_container.cpp
   src/environment_manager.cpp

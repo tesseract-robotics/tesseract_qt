@@ -22,8 +22,11 @@
  */
 
 #include <tesseract_qt/planning/register_poly_types.h>
+#include <tesseract_qt/common/contact_results_types.h>
 #include <tesseract_qt/common/factories/any_poly_standard_item_factory.h>
 #include <tesseract_qt/common/factories/instruction_poly_standard_item_factory.h>
+#include <tesseract_qt/collision/models/contact_result_map_standard_item.h>
+#include <tesseract_qt/collision/models/contact_result_map_vector_standard_item.h>
 #include <tesseract_qt/environment/models/environment_standard_item.h>
 #include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
 #include <tesseract_qt/command_language/models/set_analog_instruction_standard_item.h>
@@ -80,6 +83,24 @@ void registerCommonAnyPolyTypes()
     auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new CompositeInstructionStandardItem(data) };
+    };
+    AnyPolyStandardItemManager::registerFactory<Type>(fn);
+  }
+
+  {  // tesseract_collision::ContactResultMap
+    using Type = tesseract_collision::ContactResultMap;
+    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+      const auto& data = any_poly.as<Type>();
+      return { new ContactResultMapStandardItem(convert(data)) };
+    };
+    AnyPolyStandardItemManager::registerFactory<Type>(fn);
+  }
+
+  {  // std::vector<tesseract_collision::ContactResultMap>
+    using Type = std::vector<tesseract_collision::ContactResultMap>;
+    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+      const auto& data = any_poly.as<Type>();
+      return { new ContactResultMapVectorStandardItem(convert(data)) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }

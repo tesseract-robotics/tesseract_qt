@@ -20,22 +20,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
-
-#include <tesseract_collision/core/types.h>
-
-#include <tesseract_qt/common/tracked_object.h>
+#include <tesseract_qt/common/contact_results_types.h>
 
 namespace tesseract_gui
 {
-using ContactResult = TrackedObject<tesseract_collision::ContactResult>;
-using ContactResultVector = TrackedObject<tesseract_common::AlignedVector<ContactResult>>;
-using ContactResultMap = tesseract_common::AlignedMap<std::pair<std::string, std::string>, ContactResultVector>;
+ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_results)
+{
+  // Convert to tracked objects
+  ContactResultMap tracked_object;
+  for (const auto& contact : contact_results)
+  {
+    ContactResultVector crv;
+    for (const auto& result : contact.second)
+      crv().emplace_back(tesseract_gui::ContactResult(result));
 
-ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_results);
+    tracked_object[contact.first] = crv;
+  }
+  return tracked_object;
+}
 
-std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::ContactResultMap>& contact_results);
+std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::ContactResultMap>& contact_results)
+{
+  std::vector<ContactResultMap> tracked_contact_results;
+  tracked_contact_results.reserve(contact_results.size());
+  for (const auto& state_results : contact_results)
+    tracked_contact_results.push_back(convert(state_results));
+
+  return tracked_contact_results;
+}
 
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
