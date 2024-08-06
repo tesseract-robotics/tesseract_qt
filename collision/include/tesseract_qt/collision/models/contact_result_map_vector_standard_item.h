@@ -20,22 +20,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
-#define TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
+#ifndef TESSERACT_QT_COLLISION_CONTACT_RESULT_MAP_VECTOR_STANDARD_ITEM_H
+#define TESSERACT_QT_COLLISION_CONTACT_RESULT_MAP_VECTOR_STANDARD_ITEM_H
 
-#include <tesseract_collision/core/types.h>
-
-#include <tesseract_qt/common/tracked_object.h>
+#include <memory>
+#include <QStandardItem>
+#include <tesseract_qt/common/contact_results_types.h>
 
 namespace tesseract_gui
 {
-using ContactResult = TrackedObject<tesseract_collision::ContactResult>;
-using ContactResultVector = TrackedObject<tesseract_common::AlignedVector<ContactResult>>;
-using ContactResultMap = tesseract_common::AlignedMap<std::pair<std::string, std::string>, ContactResultVector>;
+class ContactResultMapVectorStandardItem : public QStandardItem
+{
+public:
+  ContactResultMapVectorStandardItem(const std::vector<ContactResultMap>& contact_results);
+  explicit ContactResultMapVectorStandardItem(const QString& text,
+                                              const std::vector<ContactResultMap>& contact_results);
+  ContactResultMapVectorStandardItem(const QIcon& icon,
+                                     const QString& text,
+                                     const std::vector<ContactResultMap>& contact_resultss);
+  int type() const override;
 
-ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_results);
-
-std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::ContactResultMap>& contact_results);
-
+private:
+  void ctor(const std::vector<ContactResultMap>& contact_results);
+};
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H
+
+#endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_MAP_VECTOR_STANDARD_ITEM_H
