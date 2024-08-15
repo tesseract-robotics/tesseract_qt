@@ -2,6 +2,12 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add any poly support for contact result map types
+* Add long and unsigned long support
+* Contributors: Levi Armstrong
+
 0.23.1 (2024-08-02)
 -------------------
 * Add poly factories
