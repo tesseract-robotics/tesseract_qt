@@ -65,6 +65,7 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
   appendRow(createStandardItemString("name", info.name));
   appendRow(createStandardItemString("ns", info.ns));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(info.uuid)));
+  appendRow(createStandardItemString("root_uuid", boost::uuids::to_string(info.root_uuid)));
   appendRow(createStandardItemString("parent_uuid", boost::uuids::to_string(info.parent_uuid)));
 
   if (info.type == tesseract_planning::TaskComposerNodeType::NODE)
@@ -78,7 +79,7 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
 
   appendRow(createStandardItemUnsigned("type_hash_code", info.type_hash_code));
   appendRow(createStandardItemBool("conditional", info.conditional));
-  appendRow(createStandardItemInt("abort_terminal", info.abort_terminal));
+  appendRow(createStandardItemBool("triggers_abort", info.triggers_abort));
   appendRow(createStandardItemInt("return_value", info.return_value));
   appendRow(createStandardItemInt("status_code", info.status_code));
   appendRow(createStandardItemString("status_message", info.status_message));
