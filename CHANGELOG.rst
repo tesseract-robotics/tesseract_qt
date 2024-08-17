@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.24.1 (2024-08-16)
+-------------------
 * Update task composer node info standard item
 * Contributors: Levi Armstrong
 
