@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update task composer node info standard item
+* Contributors: Levi Armstrong
+
 0.24.0 (2024-08-15)
 -------------------
 * Add any poly support for contact result map types
