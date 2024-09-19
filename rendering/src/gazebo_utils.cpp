@@ -584,6 +584,123 @@ loadLinkGeometry(gz::rendering::Scene& scene,
       assert(false);
       return nullptr;
     }
+    case tesseract_geometry::GeometryType::COMPOUND_MESH:
+    {
+      const auto& shape = static_cast<const tesseract_geometry::CompoundMesh&>(geometry);
+      auto resource = shape.getResource();
+
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      std::shared_ptr<gz::rendering::Visual> mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
+      gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
+
+      const auto& sub_meshes = shape.getMeshes();
+      if (sub_meshes.front()->getType() == tesseract_geometry::GeometryType::CONVEX_MESH)
+      {
+        if (resource && static_cast<const tesseract_geometry::ConvexMesh&>(*sub_meshes.front()).getCreationMethod() !=
+                            tesseract_geometry::ConvexMesh::CreationMethod::CONVERTED)
+        {
+          gz::rendering::MeshDescriptor descriptor;
+          descriptor.meshName = resource->getFilePath();
+          descriptor.mesh = mesh_manager->Load(descriptor.meshName);
+          gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+
+          if (!isMeshWithColor(resource->getFilePath()))
+            mesh_geom->SetMaterial(ign_material);
+
+          mesh->AddGeometry(mesh_geom);
+          mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
+          return mesh;
+        }
+
+        for (const auto& sub_mesh : sub_meshes)
+        {
+          const std::string geom_hash_str =
+              std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(sub_mesh.get()));
+          std::string name{ geom_hash_str };
+          if (resource)
+          {
+            name.append(resource->getFilePath());
+            name.append("::");
+            name.append(geom_hash_str);
+            name.append("::CONVERTED_CONVEX_HULL");
+          }
+
+          const gz::common::Mesh* gz_mesh{ nullptr };
+          if (!mesh_manager->HasMesh(name))
+          {
+            auto* nm = new gz::common::Mesh();
+            nm->SetName(name);
+            nm->AddSubMesh(convert(*sub_mesh));
+            mesh_manager->AddMesh(nm);
+            gz_mesh = nm;
+          }
+          else
+          {
+            gz_mesh = mesh_manager->MeshByName(name);
+          }
+
+          gz::rendering::MeshDescriptor descriptor;
+          descriptor.meshName = name;
+          descriptor.mesh = gz_mesh;
+          gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+          mesh_geom->SetMaterial(ign_material);
+          mesh->AddGeometry(mesh_geom);
+        }
+
+        mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
+        return mesh;
+      }
+
+      if (sub_meshes.front()->getType() == tesseract_geometry::GeometryType::MESH)
+      {
+        if (resource)
+        {
+          gz::rendering::MeshDescriptor descriptor;
+          descriptor.meshName = resource->getFilePath();
+          descriptor.mesh = mesh_manager->Load(descriptor.meshName);
+          gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+
+          if (!isMeshWithColor(resource->getFilePath()))
+            mesh_geom->SetMaterial(ign_material);
+
+          mesh->AddGeometry(mesh_geom);
+          mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
+          return mesh;
+        }
+
+        for (const auto& sub_mesh : sub_meshes)
+        {
+          std::string name = std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(sub_mesh.get()));
+
+          const gz::common::Mesh* gz_mesh{ nullptr };
+          if (!mesh_manager->HasMesh(name))
+          {
+            auto* nm = new gz::common::Mesh();
+            nm->SetName(name);
+            nm->AddSubMesh(convert(*sub_mesh));
+            mesh_manager->AddMesh(nm);
+            gz_mesh = nm;
+          }
+          else
+          {
+            gz_mesh = mesh_manager->MeshByName(name);
+          }
+
+          gz::rendering::MeshDescriptor descriptor;
+          descriptor.meshName = name;
+          descriptor.mesh = gz_mesh;
+          gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+          mesh_geom->SetMaterial(ign_material);
+          mesh->AddGeometry(mesh_geom);
+        }
+        mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
+        return mesh;
+      }
+
+      if (sub_meshes.front()->getType() == tesseract_geometry::GeometryType::SDF_MESH)
+        throw std::runtime_error("SDF Mesh, currently not supported!");
+    }
     default:
     {
       //      CONSOLE_BRIDGE_logError("This geometric shape type (%d) is not supported",
