@@ -31,6 +31,7 @@
 #include <tesseract_qt/scene_graph/models/polygon_mesh_standard_item.h>
 #include <tesseract_qt/scene_graph/models/octree_standard_item.h>
 #include <tesseract_qt/common/models/transform_standard_item.h>
+#include <tesseract_qt/common/models/type_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
@@ -63,53 +64,44 @@ VisualStandardItem::VisualStandardItem(const QIcon& icon,
 
 int VisualStandardItem::type() const { return static_cast<int>(StandardItemType::SG_VISUAL); }
 
-void VisualStandardItem::ctor()
+inline QStandardItem* getGeometryItem(const std::shared_ptr<const tesseract_geometry::Geometry>& geometry)
 {
-  appendRow(createStandardItemString("name", visual->name));
-  appendRow(new TransformStandardItem(visual->origin));
-  appendRow(new MaterialStandardItem(visual->material));
-
-  QStandardItem* geometry_item;
-  switch (visual->geometry->getType())
+  QStandardItem* geometry_item{ nullptr };
+  switch (geometry->getType())
   {
     case tesseract_geometry::GeometryType::BOX:
     {
-      geometry_item = new BoxStandardItem(std::static_pointer_cast<const tesseract_geometry::Box>(visual->geometry));
+      geometry_item = new BoxStandardItem(std::static_pointer_cast<const tesseract_geometry::Box>(geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CAPSULE:
     {
-      geometry_item =
-          new CapsuleStandardItem(std::static_pointer_cast<const tesseract_geometry::Capsule>(visual->geometry));
+      geometry_item = new CapsuleStandardItem(std::static_pointer_cast<const tesseract_geometry::Capsule>(geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CONE:
     {
-      geometry_item = new ConeStandardItem(std::static_pointer_cast<const tesseract_geometry::Cone>(visual->geometry));
+      geometry_item = new ConeStandardItem(std::static_pointer_cast<const tesseract_geometry::Cone>(geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CYLINDER:
     {
-      geometry_item =
-          new CylinderStandardItem(std::static_pointer_cast<const tesseract_geometry::Cylinder>(visual->geometry));
+      geometry_item = new CylinderStandardItem(std::static_pointer_cast<const tesseract_geometry::Cylinder>(geometry));
       break;
     }
     case tesseract_geometry::GeometryType::PLANE:
     {
-      geometry_item =
-          new PlaneStandardItem(std::static_pointer_cast<const tesseract_geometry::Plane>(visual->geometry));
+      geometry_item = new PlaneStandardItem(std::static_pointer_cast<const tesseract_geometry::Plane>(geometry));
       break;
     }
     case tesseract_geometry::GeometryType::SPHERE:
     {
-      geometry_item =
-          new SphereStandardItem(std::static_pointer_cast<const tesseract_geometry::Sphere>(visual->geometry));
+      geometry_item = new SphereStandardItem(std::static_pointer_cast<const tesseract_geometry::Sphere>(geometry));
       break;
     }
     case tesseract_geometry::GeometryType::OCTREE:
     {
-      geometry_item =
-          new OctreeStandardItem(std::static_pointer_cast<const tesseract_geometry::Octree>(visual->geometry));
+      geometry_item = new OctreeStandardItem(std::static_pointer_cast<const tesseract_geometry::Octree>(geometry));
       break;
     }
     case tesseract_geometry::GeometryType::CONVEX_MESH:
@@ -117,12 +109,37 @@ void VisualStandardItem::ctor()
     case tesseract_geometry::GeometryType::POLYGON_MESH:
     case tesseract_geometry::GeometryType::SDF_MESH:
     {
-      geometry_item = new PolygonMeshStandardItem(
-          std::static_pointer_cast<const tesseract_geometry::PolygonMesh>(visual->geometry));
+      geometry_item =
+          new PolygonMeshStandardItem(std::static_pointer_cast<const tesseract_geometry::PolygonMesh>(geometry));
       break;
     }
+    case tesseract_geometry::GeometryType::COMPOUND_MESH:
+    {
+      geometry_item = new TypeStandardItem(
+          icons::getVisualVectorIcon(), "CompoundMesh", static_cast<int>(StandardItemType::SG_COMPOUND_MESH));
+      auto meshes = std::static_pointer_cast<const tesseract_geometry::CompoundMesh>(geometry)->getMeshes();
+      for (const auto& mesh : meshes)
+        geometry_item->appendRow(getGeometryItem(mesh));
+
+      if (meshes.front()->getType() == tesseract_geometry::GeometryType::MESH ||
+          meshes.front()->getType() == tesseract_geometry::GeometryType::SDF_MESH)
+        geometry_item->setIcon(icons::getMeshIcon());
+      else if (meshes.front()->getType() == tesseract_geometry::GeometryType::CONVEX_MESH)
+        geometry_item->setIcon(icons::getConvexMeshIcon());
+    }
   }
+  return geometry_item;
+}
+
+void VisualStandardItem::ctor()
+{
+  appendRow(createStandardItemString("name", visual->name));
+  appendRow(new TransformStandardItem(visual->origin));
+  appendRow(new MaterialStandardItem(visual->material));
+
+  QStandardItem* geometry_item = getGeometryItem(visual->geometry);
   setIcon(geometry_item->icon());
+
   appendRow(geometry_item);
 }
 }  // namespace tesseract_gui
