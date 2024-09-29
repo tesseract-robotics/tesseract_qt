@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.25.0 (2024-09-29)
+-------------------
 * Update ubuntu.yml
 * Update to support Geometry Type CompoundMesh
 * Contributors: Levi Armstrong
