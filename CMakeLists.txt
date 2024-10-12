@@ -48,7 +48,6 @@ set(DEPS
     tesseract_environment
     tesseract_scene_graph
     tesseract_common
-    tesseract_support
     tesseract_urdf
     tesseract_srdf
     tesseract_visualization

@@ -62,6 +62,7 @@ add_library(
   src/events/render_events.cpp
   src/events/scene_graph_events.cpp
   src/events/scene_graph_render_manager.cpp
+  src/events/task_composer_events.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
   src/factories/any_poly_standard_item_factory.cpp

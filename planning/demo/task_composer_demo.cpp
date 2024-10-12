@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2024 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -23,14 +23,19 @@
 
 #include <QApplication>
 
-#include <tesseract_qt/workbench/workbench_widget.h>
-#include <tesseract_qt/common/environment_manager.h>
-#include <tesseract_qt/common/environment_wrapper.h>
+#include <tesseract_qt/planning/widgets/task_composer_widget.h>
+#include <tesseract_qt/planning/widgets/task_composer_tool_bar.h>
+
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
+#include <tesseract_qt/common/environment_manager.h>
+#include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_environment/environment.h>
 #include <tesseract_common/resource_locator.h>
+#include <tesseract_common/serialization.h>
+
+#include <QVBoxLayout>
 
 int main(int argc, char** argv)
 {
@@ -47,13 +52,14 @@ int main(int argc, char** argv)
   auto env = std::make_shared<tesseract_environment::Environment>();
   env->init(urdf_path, srdf_path, locator);
 
-  auto component_info = tesseract_gui::ComponentInfoManager::create("scene_name");
-
-  tesseract_gui::WorkbenchWidget widget(component_info);
-  widget.show();
-
+  auto component_info = tesseract_gui::ComponentInfoManager::create("tesseract_scene");
   tesseract_gui::EnvironmentManager::set(
       std::make_shared<tesseract_gui::DefaultEnvironmentWrapper>(component_info, env));
+
+  tesseract_gui::TaskComposerToolBar toolbar(component_info);
+  tesseract_gui::TaskComposerWidget widget(component_info);
+  static_cast<QVBoxLayout*>(widget.layout())->insertWidget(0, &toolbar);
+  widget.show();
 
   return QApplication::exec();
 }

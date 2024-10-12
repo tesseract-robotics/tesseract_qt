@@ -31,7 +31,7 @@
 #include <tesseract_qt/common/environment_wrapper.h>
 
 #include <tesseract_environment/environment.h>
-#include <tesseract_support/tesseract_support_resource_locator.h>
+#include <tesseract_common/resource_locator.h>
 
 int main(int argc, char** argv)
 {
@@ -39,9 +39,11 @@ int main(int argc, char** argv)
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
-  auto locator = std::make_shared<tesseract_common::TesseractSupportResourceLocator>();
-  tesseract_common::fs::path urdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
-  tesseract_common::fs::path srdf_path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.srdf";
+  auto locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
+  tesseract_common::fs::path urdf_path(
+      locator->locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath());
+  tesseract_common::fs::path srdf_path(
+      locator->locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.srdf")->getFilePath());
 
   auto env = std::make_shared<tesseract_environment::Environment>();
   env->init(urdf_path, srdf_path, locator);

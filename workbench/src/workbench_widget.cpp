@@ -26,6 +26,7 @@
 #include <tesseract_qt/scene_graph/widgets/scene_graph_tool_bar.h>
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
 #include <tesseract_qt/manipulation/manipulation_tool_bar.h>
+#include <tesseract_qt/planning/widgets/task_composer_tool_bar.h>
 #include <tesseract_qt/common/component_info.h>
 
 #include <QToolBar>
@@ -38,10 +39,11 @@ struct WorkbenchWidget::Implementation
   std::shared_ptr<const ComponentInfo> component_info;
   std::shared_ptr<const ComponentInfo> jt_component_info;
 
-  SceneGraphToolBar* env_toolbar;
-  SceneGraphToolBar* jt_env_toolbar;
-  JointTrajectoryToolBar* jt_toolbar;
-  ManipulationToolBar* manip_toolbar;
+  SceneGraphToolBar* env_toolbar{ nullptr };
+  SceneGraphToolBar* jt_env_toolbar{ nullptr };
+  JointTrajectoryToolBar* jt_toolbar{ nullptr };
+  ManipulationToolBar* manip_toolbar{ nullptr };
+  TaskComposerToolBar* task_composer_toolbar{ nullptr };
 };
 
 WorkbenchWidget::WorkbenchWidget(QWidget* parent) : WorkbenchWidget(nullptr, parent) {}
@@ -52,17 +54,20 @@ WorkbenchWidget::WorkbenchWidget(std::shared_ptr<const ComponentInfo> component_
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0);
 
-  data_->env_toolbar = new SceneGraphToolBar();
+  data_->env_toolbar = new SceneGraphToolBar();  // NOLINT
   static_cast<QVBoxLayout*>(ui->environment_widget->layout())->insertWidget(0, data_->env_toolbar);
 
-  data_->jt_env_toolbar = new SceneGraphToolBar();
+  data_->jt_env_toolbar = new SceneGraphToolBar();  // NOLINT
   static_cast<QVBoxLayout*>(ui->jt_environment_widget->layout())->insertWidget(0, data_->jt_env_toolbar);
 
-  data_->jt_toolbar = new JointTrajectoryToolBar();
+  data_->jt_toolbar = new JointTrajectoryToolBar();  // NOLINT
   static_cast<QVBoxLayout*>(ui->joint_trajectory_widget->layout())->insertWidget(0, data_->jt_toolbar);
 
-  data_->manip_toolbar = new ManipulationToolBar();
+  data_->manip_toolbar = new ManipulationToolBar();  // NOLINT
   static_cast<QVBoxLayout*>(ui->manipulation_widget->layout())->insertWidget(0, data_->manip_toolbar);
+
+  data_->task_composer_toolbar = new TaskComposerToolBar();  // NOLINT
+  static_cast<QVBoxLayout*>(ui->task_composer_widget->layout())->insertWidget(0, data_->task_composer_toolbar);
 
   setComponentInfo(std::move(component_info));
 }
@@ -82,6 +87,8 @@ void WorkbenchWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> comp
   data_->jt_toolbar->setComponentInfo(data_->jt_component_info);
   ui->jt_environment_widget->setComponentInfo(data_->jt_component_info);
   data_->jt_env_toolbar->setComponentInfo(data_->jt_component_info);
+  ui->task_composer_widget->setComponentInfo(data_->component_info);
+  data_->task_composer_toolbar->setComponentInfo(data_->component_info);
 }
 
 std::shared_ptr<const ComponentInfo> WorkbenchWidget::getComponentInfo() const { return data_->component_info; }
@@ -94,5 +101,8 @@ const JointTrajectoryWidget& WorkbenchWidget::getJointTrajectoryWidget() const {
 
 ManipulationWidget& WorkbenchWidget::getManipulationWidget() { return *ui->manipulation_widget; }
 const ManipulationWidget& WorkbenchWidget::getManipulationWidget() const { return *ui->manipulation_widget; }
+
+TaskComposerWidget& WorkbenchWidget::getTaskComposerWidget() { return *ui->task_composer_widget; }
+const TaskComposerWidget& WorkbenchWidget::getTaskComposerWidget() const { return *ui->task_composer_widget; }
 
 }  // namespace tesseract_gui

@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/planning/task_composer_data_storage_model.h>
-#include <tesseract_qt/planning/task_composer_data_storage_standard_item.h>
+#include <tesseract_qt/planning/models/task_composer_data_storage_model.h>
+#include <tesseract_qt/planning/models/task_composer_data_storage_standard_item.h>
 #include <tesseract_qt/common/models/namespace_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
@@ -85,7 +85,7 @@ void TaskComposerDataStorageModel::remove(const QString& key)
     throw std::runtime_error("Tried to remove data storage '" + key.toStdString() + "' which does not exist!");
 
   data_->data_storages.erase(it->second);
-  data_->data_storages.erase(it->second);
+  data_->data_storages_ns.erase(it->second);
   QModelIndex idx = indexFromItem(it->second);
   data_->items.erase(it);
   removeRow(idx.row(), idx.parent());

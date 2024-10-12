@@ -170,7 +170,8 @@ enum class StandardItemType : int
   MP_TASK_COMPOSER_NODE_INFO            = CL_TYPES_END + 5,
   MP_TASK_COMPOSER_NODE_INFO_MAP        = CL_TYPES_END + 6,
   MP_TASK_COMPOSER_DATA_STORAGE         = CL_TYPES_END + 7,
-  MP_TYPES_END                          = CL_TYPES_END + 8,
+  MP_TASK_COMPOSER_LOG                  = CL_TYPES_END + 8,
+  MP_TYPES_END                          = CL_TYPES_END + 9,
 
 };
 // clang-format on

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>369</width>
+    <width>420</width>
     <height>347</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="environment_tab">
       <property name="sizePolicy">
@@ -134,7 +134,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="planning_tab">
+     <widget class="QWidget" name="task_composer_tab">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -142,8 +142,25 @@
        </sizepolicy>
       </property>
       <attribute name="title">
-       <string>Planning</string>
+       <string>Task Composer</string>
       </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="leftMargin">
+        <number>3</number>
+       </property>
+       <property name="topMargin">
+        <number>3</number>
+       </property>
+       <property name="rightMargin">
+        <number>3</number>
+       </property>
+       <property name="bottomMargin">
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="tesseract_gui::TaskComposerWidget" name="task_composer_widget" native="true"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -166,6 +183,12 @@
    <class>tesseract_gui::ManipulationWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/manipulation/manipulation_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tesseract_gui::TaskComposerWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/planning/widgets/task_composer_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

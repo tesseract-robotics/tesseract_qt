@@ -65,6 +65,7 @@ qt5_wrap_cpp(
   include/tesseract_qt/studio/plugins/render/studio_render_dock_widget.h
   include/tesseract_qt/studio/plugins/studio_environment_dock_widget.h
   include/tesseract_qt/studio/plugins/studio_joint_trajectory_dock_widget.h
+  include/tesseract_qt/studio/plugins/studio_task_composer_dock_widget.h
   include/tesseract_qt/studio/plugins/studio_tool_path_dock_widget.h)
 qt5_wrap_ui(
   STUDIO_PLUGINS_headers_UI include/tesseract_qt/studio/plugins/manipulation/studio_manipulation_config_dialog.ui
@@ -80,6 +81,7 @@ add_library(
   src/plugins/render/studio_render_dock_widget.cpp
   src/plugins/studio_environment_dock_widget.cpp
   src/plugins/studio_joint_trajectory_dock_widget.cpp
+  src/plugins/studio_task_composer_dock_widget.cpp
   src/plugins/studio_tool_path_dock_widget.cpp
   src/plugins/studio_plugin_factories.cpp)
 
@@ -96,6 +98,7 @@ target_link_libraries(
          ${PROJECT_NAME}_environment_widgets
          ${PROJECT_NAME}_joint_trajectory_widgets
          ${PROJECT_NAME}_manipulation_widgets
+         ${PROJECT_NAME}_planning_widgets
          ${PROJECT_NAME}_tool_path_widgets)
 target_include_directories(
   ${PROJECT_NAME}_studio_plugins PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

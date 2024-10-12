@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <tesseract_qt/planning/planning_profile_remapping_standard_item.h>
+#include <tesseract_qt/planning/models/planning_profile_remapping_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
