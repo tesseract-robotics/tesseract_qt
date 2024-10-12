@@ -1,6 +1,7 @@
 studio_config:
   search_paths:
     - /home/larmstrong/catkin_ws/tesseract_ws/devel/lib
+    - /home/lharmstrong/catkin_ws/tesseract_ws/devel/lib
   search_libraries:
     - tesseract_qt_studio_plugins
   component_infos:
@@ -24,6 +25,10 @@ studio_config:
         class: StudioJointTrajectoryDockWidgetFactory
         config:
           component_info: bc184caf-74f7-457f-a2e2-a659f88b90f1
+      Joint Trajectory Environment:
+        class: StudioEnvironmentDockWidgetFactory
+        config:
+          component_info: bc184caf-74f7-457f-a2e2-a659f88b90f1
       Manipulation:
         class: StudioManipulationDockWidgetFactory
         config:
@@ -38,6 +43,18 @@ studio_config:
           show_grid: true
           show_shadows: false
           central_widget: true
+      StudioPlugin18379996627190872657:
+        class: StudioTaskComposerDockWidgetFactory
+        config:
+          component_info: f203e94e-f59a-4612-88fe-358188aeed02
+      StudioPlugin6600024128670871300:
+        class: StudioTaskComposerDockWidgetFactory
+        config:
+          component_info: f203e94e-f59a-4612-88fe-358188aeed02
+      Task Composer:
+        class: StudioTaskComposerDockWidgetFactory
+        config:
+          component_info: f203e94e-f59a-4612-88fe-358188aeed02
       Tool Path:
         class: StudioToolPathDockWidgetFactory
         config:

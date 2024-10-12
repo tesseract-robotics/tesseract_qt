@@ -30,7 +30,6 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/move_instruction.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
 
@@ -64,6 +63,11 @@ int CompositeInstructionStandardItem::type() const
   return static_cast<int>(StandardItemType::CL_COMPOSITE_INSTRUCTION);
 }
 
+const tesseract_planning::CompositeInstruction& CompositeInstructionStandardItem::getCompositeInstruction() const
+{
+  return ci_;
+}
+
 std::string toString(tesseract_planning::CompositeInstructionOrder order)
 {
   switch (order)
@@ -81,12 +85,13 @@ std::string toString(tesseract_planning::CompositeInstructionOrder order)
 
 void CompositeInstructionStandardItem::ctor(const tesseract_planning::CompositeInstruction& ci)
 {
+  ci_ = ci;
   appendRow(createStandardItemString("description", ci.getDescription()));
   appendRow(createStandardItemString("order", toString(ci.getOrder())));
   appendRow(createStandardItemString("profile", ci.getProfile()));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(ci.getUUID())));
   appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(ci.getParentUUID())));
-  appendRow(new ManipulatorInfoStandardItem("manip info", ci.getManipulatorInfo()));
-  appendRow(new VectorInstructionStandardItem("instructions", ci.getInstructions()));
+  appendRow(new ManipulatorInfoStandardItem("manip info", ci.getManipulatorInfo()));   // NOLINT
+  appendRow(new VectorInstructionStandardItem("instructions", ci.getInstructions()));  // NOLINT
 }
 }  // namespace tesseract_gui

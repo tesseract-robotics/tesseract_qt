@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2024 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -20,28 +20,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef TESSERACT_QT_TASK_COMPOSER_TOOL_BAR_H
+#define TESSERACT_QT_TASK_COMPOSER_TOOL_BAR_H
 
-#include <QApplication>
+#ifndef Q_MOC_RUN
+#include <QToolBar>
+#include <memory>
+#endif
 
-#include <tesseract_qt/kinematic_groups/widgets/group_joint_states_editor_widget.h>
-
-#include <tesseract_urdf/urdf_parser.h>
-#include <tesseract_common/resource_locator.h>
-
-int main(int argc, char** argv)
+namespace tesseract_gui
 {
-  QApplication app(argc, argv);
+class ComponentInfo;
+class TaskComposerToolBar : public QToolBar
+{
+  Q_OBJECT
+public:
+  TaskComposerToolBar(QWidget* parent = nullptr);
+  explicit TaskComposerToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
+  ~TaskComposerToolBar() final;
 
-  Q_INIT_RESOURCE(tesseract_qt_resources);
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  // Load Scene Graph
-  tesseract_common::GeneralResourceLocator locator;
-  std::string path = locator.locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath();
+private:
+  class Implementation;
+  std::unique_ptr<Implementation> data_;
+};
+}  // namespace tesseract_gui
 
-  /** @todo need to load environment */
-
-  tesseract_gui::GroupJointStatesEditorWidget widget;
-  widget.show();
-
-  return app.exec();
-}
+#endif  // TESSERACT_QT_TASK_COMPOSER_TOOL_BAR_H

@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2024 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -20,55 +20,52 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_WORKBENCH_WORKBENCH_WIDGET_H
-#define TESSERACT_QT_WORKBENCH_WORKBENCH_WIDGET_H
+#ifndef TESSERACT_QT_TASK_COMPOSER_WIDGET_H
+#define TESSERACT_QT_TASK_COMPOSER_WIDGET_H
 
 #ifndef Q_MOC_RUN
 #include <memory>
 #include <QWidget>
+#include <QMenu>
 #endif
 
 namespace Ui
 {
-class WorkbenchWidget;
+class TaskComposerWidget;
 }
 
 namespace tesseract_gui
 {
-class EnvironmentWidget;
-class JointTrajectoryWidget;
-class ManipulationWidget;
-class TaskComposerWidget;
 class ComponentInfo;
 
-class WorkbenchWidget : public QWidget
+class TaskComposerWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit WorkbenchWidget(QWidget* parent = nullptr);
-  explicit WorkbenchWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
-  ~WorkbenchWidget();
+  explicit TaskComposerWidget(QWidget* parent = nullptr);
+  explicit TaskComposerWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
+  ~TaskComposerWidget() override;
 
   void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  EnvironmentWidget& getEnvironmentWidget();
-  const EnvironmentWidget& getEnvironmentWidget() const;
+private Q_SLOTS:
+  void onRun(bool checked = false);
+  void onShowContextMenu(const QPoint& pos);
+  void onPickEnvironmentClicked(bool checked = false);
 
-  JointTrajectoryWidget& getJointTrajectoryWidget();
-  const JointTrajectoryWidget& getJointTrajectoryWidget() const;
-
-  ManipulationWidget& getManipulationWidget();
-  const ManipulationWidget& getManipulationWidget() const;
-
-  TaskComposerWidget& getTaskComposerWidget();
-  const TaskComposerWidget& getTaskComposerWidget() const;
+protected:
+  // Documentation inherited
+  bool eventFilter(QObject* obj, QEvent* event) override;
+  void createContextMenu(QMenu& log_menu);
+  static void viewDotgraph(const std::string& dotgraph);
 
 private:
   struct Implementation;
-  std::unique_ptr<Ui::WorkbenchWidget> ui;
+  std::unique_ptr<Ui::TaskComposerWidget> ui;
   std::unique_ptr<Implementation> data_;
 };
 }  // namespace tesseract_gui
-#endif  // TESSERACT_QT_WORKBENCH_WORKBENCH_WIDGET_H
+
+#endif  // TESSERACT_QT_TASK_COMPOSER_WIDGET_H

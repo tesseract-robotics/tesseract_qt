@@ -29,15 +29,15 @@
 #include <tesseract_urdf/urdf_parser.h>
 #include <tesseract_scene_graph/graph.h>
 #include <tesseract_scene_graph/joint.h>
-#include <tesseract_support/tesseract_support_resource_locator.h>
+#include <tesseract_common/resource_locator.h>
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
   // Load Scene Graph
-  std::string path = std::string(TESSERACT_SUPPORT_DIR) + "/urdf/lbr_iiwa_14_r820.urdf";
-  tesseract_common::TesseractSupportResourceLocator locator;
+  tesseract_common::GeneralResourceLocator locator;
+  std::string path = locator.locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath();
   tesseract_scene_graph::SceneGraph::UPtr sg = tesseract_urdf::parseURDFFile(path, locator);
   std::vector<tesseract_scene_graph::Joint::ConstPtr> joints;
   for (const auto& joint : sg->getJoints())

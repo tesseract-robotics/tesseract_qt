@@ -1,7 +1,7 @@
 /**
  * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2022 Levi Armstrong <levi.armstrong@gmail.com>
+ * @copyright Copyright (C) 2023 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -20,30 +20,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_STANDARD_ITEM_H
-#define TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_LOG_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_LOG_STANDARD_ITEM_H
+
+#include <tesseract_task_composer/core/fwd.h>
 
 #include <QStandardItem>
-#include <tesseract_command_language/composite_instruction.h>
 
 namespace tesseract_gui
 {
-class CompositeInstructionStandardItem : public QStandardItem
+class TaskComposerLogStandardItem : public QStandardItem
 {
 public:
-  explicit CompositeInstructionStandardItem(const tesseract_planning::CompositeInstruction& ci);
-  CompositeInstructionStandardItem(const QString& text, const tesseract_planning::CompositeInstruction& ci);
-  CompositeInstructionStandardItem(const QIcon& icon,
-                                   const QString& text,
-                                   const tesseract_planning::CompositeInstruction& ci);
+  explicit TaskComposerLogStandardItem(const tesseract_planning::TaskComposerLog& data);
+  TaskComposerLogStandardItem(const QString& text, const tesseract_planning::TaskComposerLog& data);
+  TaskComposerLogStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::TaskComposerLog& data);
   int type() const override;
 
-  const tesseract_planning::CompositeInstruction& getCompositeInstruction() const;
-
 private:
-  tesseract_planning::CompositeInstruction ci_;
-  void ctor(const tesseract_planning::CompositeInstruction& ci);
+  void ctor(const tesseract_planning::TaskComposerLog& data);
 };
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_LOG_STANDARD_ITEM_H
