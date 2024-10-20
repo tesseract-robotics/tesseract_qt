@@ -143,7 +143,7 @@ void TaskComposerWidget::createContextMenu(QMenu& log_menu)
   {
     vjt_menu->addAction(
         icons::getModelIcon(), QString::fromStdString(component_info->getName()), [this, component_info]() {
-          QModelIndex row = ui->log_tree_view->selectionModel()->currentIndex();
+          const QModelIndex row = ui->log_tree_view->selectionModel()->currentIndex();
           if (row.isValid())
           {
             QStandardItem* item = static_cast<TaskComposerLogModel*>(ui->log_tree_view->model())->itemFromIndex(row);
@@ -153,11 +153,32 @@ void TaskComposerWidget::createContextMenu(QMenu& log_menu)
               const auto& log = data_->log_model.get(row);
               auto env_any = log.initial_data.getData("environment");
               auto env = env_any.as<std::shared_ptr<const tesseract_environment::Environment>>();
-              tesseract_common::JointTrajectorySet jset(env->clone(), log.description);
-              jset.appendJointTrajectory(tesseract_planning::toJointTrajectory(ci));
-              jset.setNamespace(ui->ns_line_edit->text().toStdString());
-              events::JointTrajectoryAdd event(component_info, jset);
-              QApplication::sendEvent(qApp, &event);
+
+              bool trajectory_sent {false};
+              if (!ci.empty() && ci.front().isCompositeInstruction())
+              {
+                  tesseract_common::JointTrajectorySet jset(env->clone(), log.description);
+                  jset.setNamespace(ui->ns_line_edit->text().toStdString());
+                  for (const auto& sub_ci : ci)
+                  {
+                      if (!sub_ci.isCompositeInstruction())
+                          break;
+
+                      jset.appendJointTrajectory(tesseract_planning::toJointTrajectory(sub_ci));
+                  }
+                  events::JointTrajectoryAdd event(component_info, jset);
+                  QApplication::sendEvent(qApp, &event);
+                  trajectory_sent = true;
+              }
+
+              if (!trajectory_sent)
+              {
+                  tesseract_common::JointTrajectorySet jset(env->clone(), log.description);
+                  jset.setNamespace(ui->ns_line_edit->text().toStdString());
+                  jset.appendJointTrajectory(tesseract_planning::toJointTrajectory(ci));
+                  events::JointTrajectoryAdd event(component_info, jset);
+                  QApplication::sendEvent(qApp, &event);
+              }
             }
           }
         });
