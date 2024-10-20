@@ -43,14 +43,6 @@ studio_config:
           show_grid: true
           show_shadows: false
           central_widget: true
-      StudioPlugin18379996627190872657:
-        class: StudioTaskComposerDockWidgetFactory
-        config:
-          component_info: f203e94e-f59a-4612-88fe-358188aeed02
-      StudioPlugin6600024128670871300:
-        class: StudioTaskComposerDockWidgetFactory
-        config:
-          component_info: f203e94e-f59a-4612-88fe-358188aeed02
       Task Composer:
         class: StudioTaskComposerDockWidgetFactory
         config:
