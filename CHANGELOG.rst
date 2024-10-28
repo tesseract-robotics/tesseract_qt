@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.26.0 (2024-10-27)
+-------------------
 * Update promote task composer tree view tesseract_gui::TreeView
 * Fix data.svg to allow changing color
 * Update task composer plot joint trajectory to handle nested composites
