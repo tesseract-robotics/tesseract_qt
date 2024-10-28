@@ -2,6 +2,16 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update promote task composer tree view tesseract_gui::TreeView
+* Fix data.svg to allow changing color
+* Update task composer plot joint trajectory to handle nested composites
+* Add Task Composer Widgets
+* Fix Ubuntu CI by extracting latest Tag instead of organization variable
+* Update ubuntu.yml
+* Contributors: Levi Armstrong
+
 0.25.0 (2024-09-29)
 -------------------
 * Update ubuntu.yml
