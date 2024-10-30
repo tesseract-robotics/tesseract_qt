@@ -75,6 +75,27 @@ void JointTrajectoryModel::clear()
   setHorizontalHeaderLabels({ "Name", "Values" });
 }
 
+void JointTrajectoryModel::clearNamespace(const std::string& ns)
+{
+  const std::string remove_ns = (ns.empty()) ? "general" : ns;
+  for (auto it = data_->trajectory_sets.begin(); it != data_->trajectory_sets.end();)
+  {
+    auto* jts_item = static_cast<JointTrajectorySetItem*>(it->second);
+    const std::string jts_ns =
+        (jts_item->trajectory_set.getNamespace().empty()) ? "general" : jts_item->trajectory_set.getNamespace();
+    if (remove_ns == jts_ns)
+    {
+      QModelIndex idx = indexFromItem(it->second);
+      it = data_->trajectory_sets.erase(it);  // erase returns the next iterator after deletion
+      removeRow(idx.row(), idx.parent());
+    }
+    else
+    {
+      ++it;  // only increment if no deletion
+    }
+  }
+}
+
 void JointTrajectoryModel::addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set)
 {
   if (trajectory_set.getEnvironment() == nullptr)
@@ -202,6 +223,13 @@ bool JointTrajectoryModel::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::JointTrajectoryRemove*>(event);
     if (e->getComponentInfo() == data_->component_info)
       removeJointTrajectorySet(e->getUUID());
+  }
+  else if (event->type() == events::JointTrajectoryRemoveNamespace::kType)
+  {
+    assert(dynamic_cast<events::JointTrajectoryRemoveNamespace*>(event) != nullptr);
+    auto* e = static_cast<events::JointTrajectoryRemoveNamespace*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+      clearNamespace(e->getNamespace());
   }
   else if (event->type() == events::JointTrajectoryRemoveAll::kType)
   {

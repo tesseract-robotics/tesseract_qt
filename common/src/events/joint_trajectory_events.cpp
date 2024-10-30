@@ -70,6 +70,21 @@ JointTrajectoryRemove::~JointTrajectoryRemove() = default;
 
 //////////////////////////////////////////
 
+JointTrajectoryRemoveNamespace::JointTrajectoryRemoveNamespace(std::shared_ptr<const ComponentInfo> component_info,
+                                                               std::string ns)
+  : ComponentEvent(std::move(component_info), kType), ns_(std::move(ns))
+{
+}
+JointTrajectoryRemoveNamespace::JointTrajectoryRemoveNamespace(const JointTrajectoryRemoveNamespace& other)
+  : JointTrajectoryRemoveNamespace(other.getComponentInfo(), other.ns_)
+{
+}
+JointTrajectoryRemoveNamespace::~JointTrajectoryRemoveNamespace() = default;
+
+const std::string& JointTrajectoryRemoveNamespace::getNamespace() const { return ns_; }
+
+//////////////////////////////////////////
+
 JointTrajectoryRemoveAll::JointTrajectoryRemoveAll(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), kType)
 {

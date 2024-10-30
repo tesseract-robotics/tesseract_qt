@@ -83,7 +83,16 @@ private:
    */
   bool hasJointTrajectorySet(const boost::uuids::uuid& uuid);
 
+  /**
+   * @brief Clear all trajectories
+   */
   void clear();
+
+  /**
+   * @brief Clear all trajectories under a given namspace
+   * @param ns The namespace to clear
+   */
+  void clearNamespace(const std::string& ns);
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
