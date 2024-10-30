@@ -215,7 +215,21 @@ bool JointTrajectoryModel::eventFilter(QObject* obj, QEvent* event)
     assert(dynamic_cast<events::JointTrajectoryAdd*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryAdd*>(event);
     if (e->getComponentInfo() == data_->component_info)
+    {
+      if (e->clearNamespace())
+        clearNamespace(e->getJointTrajectory().getNamespace());
+
+      // If a trajectory already exist with the same UUID then remove it first.
+      auto it = data_->trajectory_sets.find(e->getJointTrajectory().getUUID());
+      if (it != data_->trajectory_sets.end())
+      {
+        const QModelIndex idx = indexFromItem(it->second);
+        data_->trajectory_sets.erase(it);
+        removeRow(idx.row(), idx.parent());
+      }
+
       addJointTrajectorySet(e->getJointTrajectory());
+    }
   }
   else if (event->type() == events::JointTrajectoryRemove::kType)
   {

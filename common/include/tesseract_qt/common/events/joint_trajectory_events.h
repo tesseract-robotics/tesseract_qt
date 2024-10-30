@@ -39,12 +39,21 @@ namespace tesseract_gui::events
 class JointTrajectoryAdd : public ComponentEvent
 {
 public:
+  /**
+   * @brief Add a joint trajectory event
+   * @param component_info The component info associated with the trajectory
+   * @param joint_trajectory The joint trajectory to be added
+   * @param clear_namespace Indicate if the namespace should be cleared prior to adding the trajectory
+   */
   JointTrajectoryAdd(std::shared_ptr<const ComponentInfo> component_info,
-                     const tesseract_common::JointTrajectorySet& joint_trajectory);
+                     const tesseract_common::JointTrajectorySet& joint_trajectory,
+                     bool clear_namespace = false);
   JointTrajectoryAdd(const JointTrajectoryAdd& other);
   ~JointTrajectoryAdd() override;
 
   const tesseract_common::JointTrajectorySet& getJointTrajectory() const;
+
+  bool clearNamespace() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::JOINT_TRAJECTORY_ADD);

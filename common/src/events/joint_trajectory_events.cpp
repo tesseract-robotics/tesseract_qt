@@ -36,16 +36,19 @@ public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   tesseract_common::JointTrajectorySet joint_trajectory_set;
+  bool clear_namespace{ false };
 };
 
 JointTrajectoryAdd::JointTrajectoryAdd(std::shared_ptr<const ComponentInfo> component_info,
-                                       const tesseract_common::JointTrajectorySet& joint_trajectory_set)
+                                       const tesseract_common::JointTrajectorySet& joint_trajectory_set,
+                                       bool clear_namespace)
   : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
 {
   data_->joint_trajectory_set = joint_trajectory_set;
+  data_->clear_namespace = clear_namespace;
 }
 JointTrajectoryAdd::JointTrajectoryAdd(const JointTrajectoryAdd& other)
-  : JointTrajectoryAdd(other.getComponentInfo(), other.getJointTrajectory())
+  : JointTrajectoryAdd(other.getComponentInfo(), other.getJointTrajectory(), other.clearNamespace())
 {
 }
 JointTrajectoryAdd::~JointTrajectoryAdd() = default;
@@ -54,6 +57,8 @@ const tesseract_common::JointTrajectorySet& JointTrajectoryAdd::getJointTrajecto
 {
   return data_->joint_trajectory_set;
 }
+
+bool JointTrajectoryAdd::clearNamespace() const { return data_->clear_namespace; }
 
 //////////////////////////////////////////
 
