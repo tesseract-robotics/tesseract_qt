@@ -67,6 +67,23 @@ public:
   static const QEvent::Type kType = QEvent::Type(EventType::JOINT_TRAJECTORY_REMOVE);
 };
 
+/** @brief Event called to remove all a joint trajectories under a given namespace for a given scene */
+class JointTrajectoryRemoveNamespace : public ComponentEvent
+{
+public:
+  JointTrajectoryRemoveNamespace(std::shared_ptr<const ComponentInfo> component_info, std::string ns);
+  JointTrajectoryRemoveNamespace(const JointTrajectoryRemoveNamespace& other);
+  ~JointTrajectoryRemoveNamespace() override;
+
+  const std::string& getNamespace() const;
+
+  /** @brief Unique type for this event. */
+  static const QEvent::Type kType = QEvent::Type(EventType::JOINT_TRAJECTORY_REMOVE_ALL);
+
+private:
+  std::string ns_;
+};
+
 /** @brief Event called to remove all a joint trajectories for a given scene */
 class JointTrajectoryRemoveAll : public ComponentEvent
 {
