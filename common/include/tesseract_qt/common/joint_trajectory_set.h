@@ -81,6 +81,12 @@ public:
   /** @brief Get the uuid */
   boost::uuids::uuid getUUID() const;
 
+  /**
+   * @brief Set the trajectory sets UUID
+   * @param uuid The UUID to assign
+   */
+  void setUUID(boost::uuids::uuid uuid);
+
   /** @brief Regenerate uuid */
   void regenerateUUID();
 

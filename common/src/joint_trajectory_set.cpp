@@ -91,6 +91,8 @@ JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract_environment::En
 
 boost::uuids::uuid JointTrajectorySet::getUUID() const { return uuid_; }
 
+void JointTrajectorySet::setUUID(boost::uuids::uuid uuid) { uuid_ = uuid; }
+
 void JointTrajectorySet::regenerateUUID() { uuid_ = boost::uuids::random_generator()(); }
 
 void JointTrajectorySet::applyEnvironment(std::unique_ptr<tesseract_environment::Environment> env)
