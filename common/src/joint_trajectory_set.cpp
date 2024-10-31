@@ -46,11 +46,10 @@
 namespace tesseract_common
 {
 template <class Archive>
-void JointTrajectoryInfo::serialize(Archive& ar, const unsigned int /*version*/)
+void JointTrajectoryInfo::serialize(Archive& ar, const unsigned int version)
 {
   ar& BOOST_SERIALIZATION_NVP(joint_state);
   ar& BOOST_SERIALIZATION_NVP(joint_trajectory);
-  ar& BOOST_SERIALIZATION_NVP(description);
 }
 
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
@@ -143,7 +142,8 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
   JointTrajectoryInfo traj_info;
   traj_info.joint_state = getNewTrajectoryInitialState();
   traj_info.joint_trajectory.reserve(joint_trajectory.size());
-  traj_info.description = joint_trajectory.description;
+  traj_info.joint_trajectory.uuid = joint_trajectory.uuid;
+  traj_info.joint_trajectory.description = joint_trajectory.description;
 
   std::set<std::string> prune_joint_names;
   double last_time = traj_info.joint_state.time;

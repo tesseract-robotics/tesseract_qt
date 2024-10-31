@@ -42,7 +42,6 @@ struct JointTrajectoryInfo
 {
   JointState joint_state;
   JointTrajectory joint_trajectory;
-  std::string description;
 
   friend class boost::serialization::access;
   template <class Archive>
