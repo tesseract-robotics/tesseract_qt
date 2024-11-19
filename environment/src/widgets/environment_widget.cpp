@@ -62,16 +62,4 @@ void EnvironmentWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> co
 
 std::shared_ptr<const ComponentInfo> EnvironmentWidget::getComponentInfo() const { return data_->component_info; }
 
-void EnvironmentWidget::onPlotSceneGraph()
-{
-  //  tesseract_common::fs::path dot_path("/tmp/environment_widget_scene_graph.dot");
-  //  tesseract_common::fs::path image_path("/tmp/environment_widget_scene_graph.png");
-  //  data_->config->getEnvironment()->getSceneGraph()->saveDOT(dot_path.c_str());
-  //  saveDotImage(dot_path, image_path, "png");
-
-  //  auto* image_viewer = new ImageViewerWidget();
-  //  image_viewer->loadImage(image_path.c_str());
-  //  image_viewer->show();
-}
-
 }  // namespace tesseract_gui
