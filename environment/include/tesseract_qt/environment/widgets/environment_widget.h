@@ -52,9 +52,6 @@ public:
   void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-public Q_SLOTS:
-  virtual void onPlotSceneGraph();
-
 private:
   struct Implementation;
   std::unique_ptr<Ui::EnvironmentWidget> ui;

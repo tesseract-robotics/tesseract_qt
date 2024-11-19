@@ -67,7 +67,7 @@ bool saveDotImage(const tesseract_common::fs::path& dot_path,
   gvc = gvContext();
   fp = fopen(dot_path.c_str(), "r");
   g = agread(fp, 0);
-  agsafeset(g, const_cast<char*>("dpi"), const_cast<char*>("300"), const_cast<char*>("300"));
+  agsafeset(g, const_cast<char*>("dpi"), const_cast<char*>("1000"), const_cast<char*>("1000"));
   gvLayout(gvc, g, "dot");
   gvRender(gvc, g, format.c_str(), fopen(save_path.c_str(), "w"));
   gvFreeLayout(gvc, g);

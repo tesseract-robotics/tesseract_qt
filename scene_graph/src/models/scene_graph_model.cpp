@@ -32,7 +32,10 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
+#include <tesseract_qt/common/utils.h>
+#include <tesseract_qt/common/widgets/image_viewer_widget.h>
 
+#include <tesseract_common/utils.h>
 #include <tesseract_scene_graph/graph.h>
 #include <tesseract_scene_graph/link.h>
 #include <tesseract_scene_graph/joint.h>
@@ -270,6 +273,27 @@ bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
 
         if (flags & LinkVisibilityFlags::VISUAL && link_item.second->getVisualsItem() != nullptr)
           link_item.second->getVisualsItem()->setCheckState(checked_state);
+      }
+    }
+  }
+  else if (event->type() == events::SceneGraphPlot::kType)
+  {
+    assert(dynamic_cast<events::SceneGraphPlot*>(event) != nullptr);
+    auto* e = static_cast<events::SceneGraphPlot*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+    {
+      auto env_wrapper = EnvironmentManager::get(data_->component_info);
+      if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
+      {
+        tesseract_common::fs::path dot_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.dot");
+        tesseract_common::fs::path image_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.png");
+
+        env_wrapper->getEnvironment()->getSceneGraph()->saveDOT(dot_path.c_str());
+        saveDotImage(dot_path, image_path, "png");
+
+        auto* image_viewer = new ImageViewerWidget();
+        image_viewer->loadImage(image_path.c_str());
+        image_viewer->show();
       }
     }
   }
