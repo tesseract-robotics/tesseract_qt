@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.27.0 (2024-12-01)
+-------------------
 * Fix "Plot Scene Graph" function
 * Cleanup JointTrajectorySet and leverage JointTrajectory UUID
 * Add setUUID to JointTrajectorySet class
