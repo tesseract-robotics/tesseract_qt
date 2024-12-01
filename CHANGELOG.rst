@@ -2,6 +2,15 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix "Plot Scene Graph" function
+* Cleanup JointTrajectorySet and leverage JointTrajectory UUID
+* Add setUUID to JointTrajectorySet class
+* Update Joint trajectory add event to allow clearing namespace and same UUID entry
+* Add joint trajectory remove namespace event
+* Contributors: Levi Armstrong, Roelof Oomen
+
 0.26.0 (2024-10-27)
 -------------------
 * Update promote task composer tree view tesseract_gui::TreeView
