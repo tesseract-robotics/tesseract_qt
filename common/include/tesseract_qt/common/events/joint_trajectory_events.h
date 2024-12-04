@@ -87,7 +87,7 @@ public:
   const std::string& getNamespace() const;
 
   /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::JOINT_TRAJECTORY_REMOVE_ALL);
+  static const QEvent::Type kType = QEvent::Type(EventType::JOINT_TRAJECTORY_REMOVE_NAMESPACE);
 
 private:
   std::string ns_;
