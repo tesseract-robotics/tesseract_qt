@@ -333,6 +333,7 @@ void ManipulationWidget::onGroupNameChanged()
       QStringList wf_sl;
       for (const auto& working_frame : working_frames)
         wf_sl.append(working_frame.c_str());
+      wf_sl.sort();
       data_->working_frames_model.setStringList(wf_sl);
 
       if (!working_frames.empty())
@@ -343,6 +344,7 @@ void ManipulationWidget::onGroupNameChanged()
       QStringList tcp_sl;
       for (const auto& tcp_name : tcp_names)
         tcp_sl.append(tcp_name.c_str());
+      tcp_sl.sort();
       data_->tcp_names_model.setStringList(tcp_sl);
 
       if (!tcp_names.empty())
