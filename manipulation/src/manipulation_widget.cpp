@@ -30,7 +30,7 @@ struct ManipulationWidget::Implementation
   /** @brief If true adding and removing states is disabled */
   bool use_parent_component_info{ false };
 
-  tesseract_kinematics::KinematicGroup::UPtr kin_group;
+  tesseract_kinematics::KinematicGroup::ConstPtr kin_group;
   QStringList state_names;
   tesseract_environment::Environment::Ptr environment;
   std::unordered_map<std::string, std::unordered_map<std::string, double>> states;
@@ -614,7 +614,7 @@ void ManipulationWidget::onReset()
 
     for (const auto& group_name : env->getGroupNames())
     {
-      tesseract_kinematics::KinematicGroup::UPtr kin_group;
+      tesseract_kinematics::KinematicGroup::ConstPtr kin_group;
       try
       {
         kin_group = env->getKinematicGroup(group_name);
