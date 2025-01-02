@@ -25,6 +25,8 @@
 
 #include <tesseract_common/plugin_loader.hpp>
 #include <tesseract_common/yaml_utils.h>
+#include <tesseract_common/yaml_extenstions.h>
+#include <tesseract_common/filesystem.h>
 
 #include <boost/program_options.hpp>
 
