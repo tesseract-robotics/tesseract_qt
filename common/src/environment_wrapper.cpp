@@ -235,7 +235,7 @@ void eventFilterHelper(QObject* /*obj*/,
     auto state_solver = env.getStateSolver();
 
     // We want to disable the allowed contact function for this process so it is set null
-    contact_manager->setIsContactAllowedFn(nullptr);
+    contact_manager->setContactAllowedValidator(nullptr);
     tesseract_collision::ContactResultMap results;
     tesseract_collision::ContactRequest request;
     request.type = tesseract_collision::ContactTestType::ALL;
