@@ -45,8 +45,7 @@ int main(int argc, char** argv)
   QApplication app(argc, argv);
 
   // Create Program
-  CompositeInstruction program(
-      "cartesian_program", CompositeInstructionOrder::ORDERED, ManipulatorInfo("manipulator", "base_link", "tool0"));
+  CompositeInstruction program("cartesian_program", ManipulatorInfo("manipulator", "base_link", "tool0"));
 
   // Set the robot initial state
   std::vector<std::string> joint_names;
