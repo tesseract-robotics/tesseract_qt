@@ -2,6 +2,24 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add CPack packaging CI pipeline (`#145 <https://github.com/tesseract-robotics/tesseract_qt/issues/145>`_)
+* Add cpack support for debian and nuget package creation
+* Update task composer config loading
+* Update because composite constructor changed
+* Update tesseract collision validator
+* Update to tesseract_common and tesseract_environment
+* Merge pull request `#140 <https://github.com/tesseract-robotics/tesseract_qt/issues/140>`_ from marip8/feature/add-issue-templates
+  Added issue templates
+* Added labels to issue templates
+* Added issue templates
+* Sort frame names in the manipulation widget alphabetically
+* Add heater to task composer widget
+* Fix trajectory removal
+* Update ubuntu.yml
+* Contributors: Levi Armstrong, Michael Ripperger, Roelof Oomen
+
 0.27.0 (2024-12-01)
 -------------------
 * Fix "Plot Scene Graph" function
