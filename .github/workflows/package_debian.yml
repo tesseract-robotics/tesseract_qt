@@ -38,7 +38,7 @@ jobs:
 
   Debian:
     name: ${{ matrix.distro }}
-    needs: get-tag  # Make sure the 'ci' job waits for the 'get-tag' job to finish
+    # needs: get-tag  # Make sure the 'ci' job waits for the 'get-tag' job to finish
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
