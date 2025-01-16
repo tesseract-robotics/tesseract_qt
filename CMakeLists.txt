@@ -60,19 +60,20 @@ set(LINUX_DEPENDS
     "libqt5svg5"
     "libqt5opengl5"
     "libqt5xml5"
+    "libgraphviz-dev"
+    "libqwt-qt5-6"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-common"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-environment"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-urdf"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-srdf"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-visualization"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-command-language"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-collision-core"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-core"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-opw"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-core"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-planning"
-)
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-environment"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-urdf"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-srdf"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-visualization"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-command-language"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-collision-core"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-core"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-opw"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-core"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-planning")
 
 set(WINDOWS_DEPENDS
   "libboost-program-options-dev"
@@ -81,6 +82,8 @@ set(WINDOWS_DEPENDS
   "libqt5svg5"
   "libqt5opengl5"
   "libqt5xml5"
+  "libgraphviz-dev"
+  "libqwt-qt5-6"
   "${TESSERACT_PACKAGE_PREFIX}tesseract-common"
   "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph
     "${TESSERACT_PACKAGE_PREFIX}tesseract-environment"
