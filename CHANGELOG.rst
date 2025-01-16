@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.28.0 (2025-01-16)
+-------------------
 * Add CPack packaging CI pipeline (`#145 <https://github.com/tesseract-robotics/tesseract_qt/issues/145>`_)
 * Add cpack support for debian and nuget package creation
 * Update task composer config loading
