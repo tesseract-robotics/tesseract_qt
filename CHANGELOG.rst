@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.28.1 (2025-01-18)
+-------------------
 * Add floating joints to scene state standard item
 * Contributors: Levi Armstrong
 
