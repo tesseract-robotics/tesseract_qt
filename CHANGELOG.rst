@@ -2,6 +2,11 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add floating joints to scene state standard item
+* Contributors: Levi Armstrong
+
 0.28.0 (2025-01-16)
 -------------------
 * Add CPack packaging CI pipeline (`#145 <https://github.com/tesseract-robotics/tesseract_qt/issues/145>`_)
