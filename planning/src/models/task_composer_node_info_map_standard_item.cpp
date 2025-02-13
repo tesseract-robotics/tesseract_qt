@@ -34,7 +34,7 @@
 namespace tesseract_gui
 {
 TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
-    const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map)
+    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
   : QStandardItem(icons::getUnknownIcon(), "Task Composer Node Info Map")
 {
   ctor(info_map);
@@ -42,7 +42,7 @@ TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
 
 TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
     const QString& text,
-    const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map)
+    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(info_map);
@@ -51,7 +51,7 @@ TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
 TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
     const QIcon& icon,
     const QString& text,
-    const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map)
+    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
   : QStandardItem(icon, text)
 {
   ctor(info_map);
@@ -63,13 +63,13 @@ int TaskComposerNodeInfoMapStandardItem::type() const
 }
 
 void TaskComposerNodeInfoMapStandardItem::ctor(
-    const std::map<boost::uuids::uuid, std::unique_ptr<tesseract_planning::TaskComposerNodeInfo>>& info_map)
+    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
 {
   for (const auto& pair : info_map)
   {
-    auto* item_desc = new QStandardItem(pair.second->name.c_str());
+    auto* item_desc = new QStandardItem(pair.second.name.c_str());
     QString item_text = QString::fromStdString(boost::uuids::to_string(pair.first));
-    appendRow({ new TaskComposerNodeInfoStandardItem(item_text, *pair.second), item_desc });
+    appendRow({ new TaskComposerNodeInfoStandardItem(item_text, pair.second), item_desc });
   }
 }
 }  // namespace tesseract_gui
