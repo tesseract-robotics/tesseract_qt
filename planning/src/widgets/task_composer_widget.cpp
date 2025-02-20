@@ -307,7 +307,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
       auto resource = data_->resource_locator.locateResource(e->getResourcePath());
       if (resource != nullptr)
       {
-        data_->task_composer_server.loadConfig(tesseract_common::fs::path(resource->getFilePath()), *resource);
+        data_->task_composer_server.loadConfig(std::filesystem::path(resource->getFilePath()), *resource);
 
         ui->executor_combo_box->clear();
         for (const auto& executor : data_->task_composer_server.getAvailableExecutors())

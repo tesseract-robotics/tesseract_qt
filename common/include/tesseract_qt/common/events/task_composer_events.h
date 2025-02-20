@@ -26,7 +26,7 @@
 #include <tesseract_command_language/fwd.h>
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
-#include <tesseract_common/filesystem.h>
+#include <filesystem>
 
 namespace tesseract_gui::events
 {

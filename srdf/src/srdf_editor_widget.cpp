@@ -115,14 +115,14 @@ void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_
   if (srdf_filepath.toStdString().empty())
   {
     loaded =
-        this->data_->env->init(boost::filesystem::path(this->data_->urdf_filepath.toStdString()), this->data_->locator);
+        this->data_->env->init(std::filesystem::path(this->data_->urdf_filepath.toStdString()), this->data_->locator);
   }
   else
   {
     this->data_->srdf_filepath =
         QString::fromStdString(this->data_->locator->locateResource(srdf_filepath.toStdString())->getFilePath());
-    loaded = this->data_->env->init(boost::filesystem::path(this->data_->urdf_filepath.toStdString()),
-                                    boost::filesystem::path(this->data_->srdf_filepath.toStdString()),
+    loaded = this->data_->env->init(std::filesystem::path(this->data_->urdf_filepath.toStdString()),
+                                    std::filesystem::path(this->data_->srdf_filepath.toStdString()),
                                     this->data_->locator);
 
     // Store the base srdf model

@@ -285,8 +285,8 @@ bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
       auto env_wrapper = EnvironmentManager::get(data_->component_info);
       if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
       {
-        tesseract_common::fs::path dot_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.dot");
-        tesseract_common::fs::path image_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.png");
+        std::filesystem::path dot_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.dot");
+        std::filesystem::path image_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.png");
 
         env_wrapper->getEnvironment()->getSceneGraph()->saveDOT(dot_path.c_str());
         saveDotImage(dot_path, image_path, "png");

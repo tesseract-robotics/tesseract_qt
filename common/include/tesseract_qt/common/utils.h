@@ -25,7 +25,7 @@
 
 #include <vector>
 #include <string>
-#include <tesseract_common/filesystem.h>
+#include <filesystem>
 
 class QMainWindow;
 class QMenuBar;
@@ -50,9 +50,7 @@ std::vector<std::string> getNamespaces(const std::string& namespace_str, const s
  * @param save_path The location to save
  * @return True if successful, otherwise false
  */
-bool saveDotImage(const std::string& dot_string,
-                  const tesseract_common::fs::path& save_path,
-                  std::string format = "ps");
+bool saveDotImage(const std::string& dot_string, const std::filesystem::path& save_path, std::string format = "ps");
 
 /**
  * @brief Convert a dot file to image and save
@@ -60,8 +58,8 @@ bool saveDotImage(const std::string& dot_string,
  * @param save_path The location to save
  * @return True if successful, otherwise false
  */
-bool saveDotImage(const tesseract_common::fs::path& dot_path,
-                  const tesseract_common::fs::path& save_path,
+bool saveDotImage(const std::filesystem::path& dot_path,
+                  const std::filesystem::path& save_path,
                   std::string format = "ps");
 
 /**

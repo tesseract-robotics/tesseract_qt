@@ -65,10 +65,10 @@ void LoadEnvironmentDialog::setResourceLocator(std::shared_ptr<tesseract_common:
 
 void LoadEnvironmentDialog::onAccepted()
 {
-  tesseract_common::fs::path urdf_filepath(ui_->load_widget->getURDFFilePath().toStdString());
-  tesseract_common::fs::path srdf_filepath(ui_->load_widget->getSRDFFilePath().toStdString());
-  bool urdf_filepath_exists = tesseract_common::fs::exists(urdf_filepath);
-  bool srdf_filepath_exists = tesseract_common::fs::exists(srdf_filepath);
+  std::filesystem::path urdf_filepath(ui_->load_widget->getURDFFilePath().toStdString());
+  std::filesystem::path srdf_filepath(ui_->load_widget->getSRDFFilePath().toStdString());
+  bool urdf_filepath_exists = std::filesystem::exists(urdf_filepath);
+  bool srdf_filepath_exists = std::filesystem::exists(srdf_filepath);
   if (urdf_filepath_exists && srdf_filepath_exists)
   {
     auto env = std::make_shared<tesseract_environment::Environment>();
