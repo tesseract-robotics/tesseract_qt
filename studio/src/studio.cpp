@@ -26,7 +26,7 @@
 #include <tesseract_common/plugin_loader.h>
 #include <tesseract_common/yaml_utils.h>
 #include <tesseract_common/yaml_extenstions.h>
-#include <tesseract_common/filesystem.h>
+#include <filesystem>
 
 #include <boost/program_options.hpp>
 
@@ -84,8 +84,8 @@ struct Studio::Implementation
   std::string central_widget;
   std::vector<StudioDockWidget*> dock_widgets;
 
-  tesseract_common::fs::path config_filepath;
-  tesseract_common::fs::path settings_filepath;
+  std::filesystem::path config_filepath;
+  std::filesystem::path settings_filepath;
 
   /** @brief Load a config */
   void loadConfig();
