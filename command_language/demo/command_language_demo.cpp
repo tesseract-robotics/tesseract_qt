@@ -69,14 +69,14 @@ int main(int argc, char** argv)
   // Start Joint Position for the program
   StateWaypointPoly wp0{ StateWaypoint(joint_names, joint_pos) };
   MoveInstruction start_instruction(wp0, MoveInstructionType::FREESPACE);
-  program.appendMoveInstruction(start_instruction);
+  program.push_back(start_instruction);
 
   // Create cartesian waypoint
-  CartesianWaypointPoly wp1{ CartesianWaypoint(Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, -0.2, 0.62) *
-                                               Eigen::Quaterniond(0, 0, 1.0, 0)) };
+  CartesianWaypoint wp1{ Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, -0.2, 0.62) *
+                         Eigen::Quaterniond(0, 0, 1.0, 0) };
 
-  CartesianWaypointPoly wp2{ CartesianWaypoint(Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, 0.3, 0.62) *
-                                               Eigen::Quaterniond(0, 0, 1.0, 0)) };
+  CartesianWaypoint wp2{ Eigen::Isometry3d::Identity() * Eigen::Translation3d(0.5, 0.3, 0.62) *
+                         Eigen::Quaterniond(0, 0, 1.0, 0) };
 
   // Plan freespace from start
   MoveInstruction plan_f0(wp1, MoveInstructionType::FREESPACE, "freespace_profile");
@@ -90,10 +90,10 @@ int main(int argc, char** argv)
   plan_f1.setDescription("to_end_plan");
 
   // Add Instructions to program
-  program.appendMoveInstruction(start_instruction);
-  program.appendMoveInstruction(plan_f0);
-  program.appendMoveInstruction(plan_c0);
-  program.appendMoveInstruction(plan_f1);
+  program.push_back(start_instruction);
+  program.push_back(plan_f0);
+  program.push_back(plan_c0);
+  program.push_back(plan_f1);
 
   std::shared_ptr<const tesseract_gui::ComponentInfo> component_info = tesseract_gui::ComponentInfoManager::create("sce"
                                                                                                                    "ne_"
