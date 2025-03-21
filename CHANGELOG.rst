@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.29.0 (2025-03-21)
+-------------------
 * Update CI colcon-action to v11
 * Update changes with composite instruction
 * Update to leverage std::filesystem
