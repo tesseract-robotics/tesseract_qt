@@ -2,6 +2,14 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update CI colcon-action to v11
+* Update changes with composite instruction
+* Update to leverage std::filesystem
+* Update due to changes with TaskComposerNodeInfo
+* Contributors: Levi Armstrong
+
 0.28.1 (2025-01-18)
 -------------------
 * Add floating joints to scene state standard item
