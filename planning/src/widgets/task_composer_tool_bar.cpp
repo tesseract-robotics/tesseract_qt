@@ -86,6 +86,7 @@ TaskComposerToolBar::TaskComposerToolBar(std::shared_ptr<const ComponentInfo> co
       data_->default_config_dir = QFileInfo(config_filepath).absoluteDir().path();
       events::TaskComposerLoadConfig event(data_->component_info, config_filepath.toStdString());
       QApplication::sendEvent(qApp, &event);
+      data_->load_log_action->setEnabled(true);
     }
   });
 
@@ -115,6 +116,7 @@ TaskComposerToolBar::TaskComposerToolBar(std::shared_ptr<const ComponentInfo> co
       QApplication::sendEvent(qApp, &event);
     }
   });
+  data_->load_log_action->setEnabled(false);
 
   addSeparator();
 
