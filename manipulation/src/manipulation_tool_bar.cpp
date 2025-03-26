@@ -32,6 +32,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QStringListModel>
+#include <QMessageBox>
 
 namespace tesseract_gui
 {
@@ -42,22 +43,24 @@ struct ManipulationToolBar::Implementation
   std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos;
 
   QStringListModel state_names_model;
-  QComboBox* state_names_combo_box;
+  QComboBox* state_names_combo_box{ nullptr };
 
-  QAction* show_all_links_action;
-  QAction* hide_all_links_action;
+  QAction* show_all_links_action{ nullptr };
+  QAction* hide_all_links_action{ nullptr };
 
-  QAction* show_visual_all_links_action;
-  QAction* hide_visual_all_links_action;
+  QAction* show_visual_all_links_action{ nullptr };
+  QAction* hide_visual_all_links_action{ nullptr };
 
-  QAction* show_collision_all_links_action;
-  QAction* hide_collision_all_links_action;
+  QAction* show_collision_all_links_action{ nullptr };
+  QAction* hide_collision_all_links_action{ nullptr };
 
-  QAction* select_all_links_action;
-  QAction* deselect_all_links_action;
+  QAction* select_all_links_action{ nullptr };
+  QAction* deselect_all_links_action{ nullptr };
 
-  QAction* show_axis_all_links_action;
-  QAction* hide_axis_all_links_action;
+  QAction* show_axis_all_links_action{ nullptr };
+  QAction* hide_axis_all_links_action{ nullptr };
+
+  QAction* component_info_action{ nullptr };
 };
 
 ManipulationToolBar::ManipulationToolBar(QWidget* parent) : ManipulationToolBar(nullptr, parent) {}
@@ -162,6 +165,14 @@ ManipulationToolBar::ManipulationToolBar(std::shared_ptr<const ComponentInfo> pa
 
     events::SceneGraphModifyLinkVisibilityALL event(it->second, LinkVisibilityFlags::AXIS, false);
     QApplication::sendEvent(qApp, &event);
+  });
+  addSeparator();
+  data_->component_info_action = addAction(QIcon::fromTheme("dialog-information"), "Component Info", [this]() {
+    if (data_->parent_component_info != nullptr)
+      QMessageBox::information(
+          this, "Component Information", QString::fromStdString(data_->parent_component_info->toString()));
+    else
+      QMessageBox::information(this, "Component Information", "Null");
   });
 
   // Install event filter

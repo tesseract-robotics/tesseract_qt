@@ -93,6 +93,12 @@ public:
    */
   bool isChild(const std::shared_ptr<const ComponentInfo>& other) const;
 
+  /**
+   * @brief Create detailed string of the component info
+   * @return A string containing the details of the component info.
+   */
+  std::string toString() const;
+
   bool operator==(const ComponentInfo& rhs) const;
   bool operator!=(const ComponentInfo& rhs) const;
 

@@ -77,7 +77,9 @@ WorkbenchWidget::~WorkbenchWidget() = default;
 void WorkbenchWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
 {
   data_->component_info = std::move(component_info);
-  data_->jt_component_info = data_->component_info->createChild();
+  auto jt_component_info = data_->component_info->createChild();
+  jt_component_info->setDescription("Workbench Joint Trajectory");
+  data_->jt_component_info = jt_component_info;
 
   ui->environment_widget->setComponentInfo(data_->component_info);
   data_->env_toolbar->setComponentInfo(data_->component_info);
