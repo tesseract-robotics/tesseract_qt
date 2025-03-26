@@ -26,6 +26,7 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <QApplication>
+#include <QMessageBox>
 
 namespace tesseract_gui
 {
@@ -33,12 +34,13 @@ struct ToolPathToolBar::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
 
-  QAction* remove_all;
-  QAction* remove_selected;
-  QAction* hide_all;
-  QAction* show_all;
-  QAction* open_action;
-  QAction* save_action;
+  QAction* remove_all{ nullptr };
+  QAction* remove_selected{ nullptr };
+  QAction* hide_all{ nullptr };
+  QAction* show_all{ nullptr };
+  QAction* open_action{ nullptr };
+  QAction* save_action{ nullptr };
+  QAction* component_info_action{ nullptr };
 };
 
 ToolPathToolBar::ToolPathToolBar(QWidget* parent) : ToolPathToolBar(nullptr, parent) {}
@@ -72,6 +74,14 @@ ToolPathToolBar::ToolPathToolBar(std::shared_ptr<const ComponentInfo> component_
   data_->save_action = addAction(icons::getSaveIcon(), "Save", [component_info]() {
     events::ToolPathSave event(component_info);
     QApplication::sendEvent(qApp, &event);
+  });
+  addSeparator();
+  data_->component_info_action = addAction(QIcon::fromTheme("dialog-information"), "Component Info", [this]() {
+    if (data_->component_info != nullptr)
+      QMessageBox::information(
+          this, "Component Information", QString::fromStdString(data_->component_info->toString()));
+    else
+      QMessageBox::information(this, "Component Information", "Null");
   });
 }
 

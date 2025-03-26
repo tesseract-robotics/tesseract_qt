@@ -141,6 +141,18 @@ bool ComponentInfo::isChild(const std::shared_ptr<const ComponentInfo>& other) c
   return isParentRecursive(other.get(), this);
 }
 
+std::string ComponentInfo::toString() const
+{
+  std::string str;
+  str += "Name: " + name_ + "\n";
+  str += "Scene: " + scene_name_ + "\n";
+  str += "Namespace: " + boost::uuids::to_string(ns_) + "\n";
+  str += "Description: " + description_ + "\n";
+  str += "Child: " + std::string((parent_ == nullptr) ? "False" : "True");
+
+  return str;
+}
+
 bool ComponentInfo::operator==(const ComponentInfo& rhs) const
 {
   return (scene_name_ == rhs.scene_name_ && ns_ == rhs.ns_);

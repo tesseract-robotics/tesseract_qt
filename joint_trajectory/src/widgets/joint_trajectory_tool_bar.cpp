@@ -26,6 +26,7 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <QApplication>
+#include <QMessageBox>
 
 namespace tesseract_gui
 {
@@ -33,11 +34,13 @@ struct JointTrajectoryToolBar::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
 
-  QAction* remove_all_action;
-  QAction* remove_action;
-  QAction* open_action;
-  QAction* save_action;
-  QAction* plot_action;
+  QAction* remove_all_action{ nullptr };
+  QAction* remove_action{ nullptr };
+  QAction* open_action{ nullptr };
+  QAction* save_action{ nullptr };
+  QAction* plot_action{ nullptr };
+
+  QAction* component_info_action{ nullptr };
 };
 
 JointTrajectoryToolBar::JointTrajectoryToolBar(QWidget* parent) : JointTrajectoryToolBar(nullptr, parent) {}
@@ -67,6 +70,14 @@ JointTrajectoryToolBar::JointTrajectoryToolBar(std::shared_ptr<const ComponentIn
   data_->plot_action = addAction(icons::getPlotIcon(), "Plot Joint Trajectory", [this]() {
     events::JointTrajectoryPlot event(data_->component_info);
     QApplication::sendEvent(qApp, &event);
+  });
+  addSeparator();
+  data_->component_info_action = addAction(QIcon::fromTheme("dialog-information"), "Component Info", [this]() {
+    if (data_->component_info != nullptr)
+      QMessageBox::information(
+          this, "Component Information", QString::fromStdString(data_->component_info->toString()));
+    else
+      QMessageBox::information(this, "Component Information", "Null");
   });
 
   data_->save_action->setDisabled(true);

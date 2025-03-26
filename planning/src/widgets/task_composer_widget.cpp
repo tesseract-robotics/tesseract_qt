@@ -113,6 +113,7 @@ std::shared_ptr<const ComponentInfo> TaskComposerWidget::getComponentInfo() cons
 
 void TaskComposerWidget::createContextMenu(QMenu& log_menu)
 {
+  ComponentInfoManager::removeUnused();
   auto component_infos = ComponentInfoManager::get();
 
   QMenu* vtp_menu = log_menu.addMenu(icons::getToolPathIcon(), "View Tool Path");

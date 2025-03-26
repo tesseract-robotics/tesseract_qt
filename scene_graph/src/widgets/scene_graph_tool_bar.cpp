@@ -27,6 +27,7 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <QApplication>
+#include <QMessageBox>
 
 namespace tesseract_gui
 {
@@ -34,22 +35,24 @@ struct SceneGraphToolBar::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
 
-  QAction* show_all_links_action;
-  QAction* hide_all_links_action;
+  QAction* show_all_links_action{ nullptr };
+  QAction* hide_all_links_action{ nullptr };
 
-  QAction* show_visual_all_links_action;
-  QAction* hide_visual_all_links_action;
+  QAction* show_visual_all_links_action{ nullptr };
+  QAction* hide_visual_all_links_action{ nullptr };
 
-  QAction* show_collision_all_links_action;
-  QAction* hide_collision_all_links_action;
+  QAction* show_collision_all_links_action{ nullptr };
+  QAction* hide_collision_all_links_action{ nullptr };
 
-  QAction* select_all_links_action;
-  QAction* deselect_all_links_action;
+  QAction* select_all_links_action{ nullptr };
+  QAction* deselect_all_links_action{ nullptr };
 
-  QAction* show_axis_all_links_action;
-  QAction* hide_axis_all_links_action;
+  QAction* show_axis_all_links_action{ nullptr };
+  QAction* hide_axis_all_links_action{ nullptr };
 
-  QAction* plot_scene_graph_action;
+  QAction* plot_scene_graph_action{ nullptr };
+
+  QAction* component_info_action{ nullptr };
 };
 
 SceneGraphToolBar::SceneGraphToolBar(QWidget* parent) : SceneGraphToolBar(nullptr, parent) {}
@@ -110,6 +113,14 @@ SceneGraphToolBar::SceneGraphToolBar(std::shared_ptr<const ComponentInfo> compon
   data_->plot_scene_graph_action = addAction(icons::getPlotIcon(), "Plot Scene Graph", [this]() {
     events::SceneGraphPlot event(data_->component_info);
     QApplication::sendEvent(qApp, &event);
+  });
+  addSeparator();
+  data_->component_info_action = addAction(QIcon::fromTheme("dialog-information"), "Component Info", [this]() {
+    if (data_->component_info != nullptr)
+      QMessageBox::information(
+          this, "Component Information", QString::fromStdString(data_->component_info->toString()));
+    else
+      QMessageBox::information(this, "Component Information", "Null");
   });
 }
 

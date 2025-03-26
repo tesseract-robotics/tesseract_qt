@@ -42,6 +42,8 @@ struct TaskComposerToolBar::Implementation
   QAction* save_log_action{ nullptr };
   QAction* plot_dotgraph_action{ nullptr };
 
+  QAction* component_info_action{ nullptr };
+
   QString default_config_dir;
   QString default_log_dir;
 };
@@ -143,6 +145,16 @@ TaskComposerToolBar::TaskComposerToolBar(std::shared_ptr<const ComponentInfo> co
   data_->plot_dotgraph_action = addAction(icons::getPlotIcon(), "Plot Task Composer Dotgraph", [this]() {
     events::TaskComposerPlotDotgraph event(data_->component_info);
     QApplication::sendEvent(qApp, &event);
+  });
+
+  addSeparator();
+
+  data_->component_info_action = addAction(QIcon::fromTheme("dialog-information"), "Component Info", [this]() {
+    if (data_->component_info != nullptr)
+      QMessageBox::information(
+          this, "Component Information", QString::fromStdString(data_->component_info->toString()));
+    else
+      QMessageBox::information(this, "Component Information", "Null");
   });
 }
 

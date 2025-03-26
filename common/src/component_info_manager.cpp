@@ -353,7 +353,32 @@ std::string ComponentInfoManager::getUniqueName()
   return name;
 }
 
-void ComponentInfoManager::removeUnusedHelper() {}
+void ComponentInfoManager::removeUnusedHelper()
+{
+  for (auto it = data_->component_infos_by_ns.begin(); it != data_->component_infos_by_ns.end();)
+  {
+    if (it->second.use_count() <= 2)
+    {
+      it = data_->component_infos_by_ns.erase(it);  // erase returns the next iterator
+    }
+    else
+    {
+      ++it;
+    }
+  }
+
+  for (auto it = data_->component_infos_by_name.begin(); it != data_->component_infos_by_name.end();)
+  {
+    if (it->second.use_count() <= 2)
+    {
+      it = data_->component_infos_by_name.erase(it);  // erase returns the next iterator
+    }
+    else
+    {
+      ++it;
+    }
+  }
+}
 
 std::shared_ptr<ComponentInfo> ComponentInfoManager::getHelper(const boost::uuids::uuid& ns) const
 {
