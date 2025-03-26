@@ -51,6 +51,9 @@ public:
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
   QStringListModel& getModel() const;
 
+protected:
+  void showEvent(QShowEvent* event) override;
+
 private Q_SLOTS:
   void onRefreshed();
 
