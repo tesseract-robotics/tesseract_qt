@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.29.1 (2025-03-26)
+-------------------
 * Fix ComponentInfoDialog not updating model
 * Add information button to toolbars to visualize component information
 * Require loading task composer config before log file
