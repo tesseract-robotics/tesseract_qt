@@ -87,6 +87,12 @@ std::shared_ptr<const ComponentInfo> ComponentInfoDialog::getComponentInfo() con
 
 QStringListModel& ComponentInfoDialog::getModel() const { return data_->model; }
 
+void ComponentInfoDialog::showEvent(QShowEvent* event)
+{
+  ui->component_info_manager_widget->refresh();
+  QDialog::showEvent(event);  // Call base class implementation
+}
+
 void ComponentInfoDialog::onRefreshed()
 {
   QString current_text = ui->component_info_combo_box->currentText();
