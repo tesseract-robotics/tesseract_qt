@@ -211,10 +211,15 @@ void TaskComposerWidget::onShowContextMenu(const QPoint& pos)
   QModelIndex index = ui->log_tree_view->indexAt(pos);
   if (index.isValid())
   {
-    QPoint global_pos = ui->log_tree_view->viewport()->mapToGlobal(pos);
-    QMenu menu;
-    createContextMenu(menu);
-    menu.exec(global_pos);
+    QStandardItem* item = static_cast<QStandardItemModel*>(ui->log_tree_view->model())->itemFromIndex(index);
+
+    if (item->type() == static_cast<int>(StandardItemType::CL_COMPOSITE_INSTRUCTION))
+    {
+      QPoint global_pos = ui->log_tree_view->viewport()->mapToGlobal(pos);
+      QMenu menu;
+      createContextMenu(menu);
+      menu.exec(global_pos);
+    }
   }
 }
 
