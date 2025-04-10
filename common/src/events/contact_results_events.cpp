@@ -96,12 +96,14 @@ ContactResultsVisbilityAll::~ContactResultsVisbilityAll() = default;
 //////////////////////////////////////////
 
 ContactResultsCompute::ContactResultsCompute(std::shared_ptr<const ComponentInfo> component_info,
-                                             tesseract_collision::CollisionCheckConfig config,
+                                             tesseract_collision::ContactManagerConfig contact_manager_config,
+                                             tesseract_collision::CollisionCheckConfig collision_check_config,
                                              StateType state_type,
                                              std::string ns)
   : ComponentEvent(std::move(component_info), kType)
   , ns_(std::move(ns))
-  , config_(std::move(config))
+  , contact_manager_config_(std::move(contact_manager_config))
+  , collision_check_config_(std::move(collision_check_config))
   , state_type_(std::move(state_type))
 {
 }
@@ -109,7 +111,14 @@ ContactResultsCompute::ContactResultsCompute(std::shared_ptr<const ComponentInfo
 ContactResultsCompute::~ContactResultsCompute() = default;
 
 const std::string& ContactResultsCompute::getNamespace() const { return ns_; }
-const tesseract_collision::CollisionCheckConfig& ContactResultsCompute::getConfig() const { return config_; }
+const tesseract_collision::ContactManagerConfig& ContactResultsCompute::getContactManagerConfig() const
+{
+  return contact_manager_config_;
+}
+const tesseract_collision::CollisionCheckConfig& ContactResultsCompute::getCollisionCheckConfig() const
+{
+  return collision_check_config_;
+}
 ContactResultsCompute::StateType ContactResultsCompute::getStateType() const { return state_type_; }
 
 //////////////////////////////////////////

@@ -115,13 +115,15 @@ public:
   };
 
   ContactResultsCompute(std::shared_ptr<const ComponentInfo> component_info,
-                        tesseract_collision::CollisionCheckConfig config,
+                        tesseract_collision::ContactManagerConfig contact_manager_config,
+                        tesseract_collision::CollisionCheckConfig collision_check_config,
                         StateType state_type = CURRENT_STATE,
                         std::string ns = "");
   ~ContactResultsCompute() override;
 
   const std::string& getNamespace() const;
-  const tesseract_collision::CollisionCheckConfig& getConfig() const;
+  const tesseract_collision::ContactManagerConfig& getContactManagerConfig() const;
+  const tesseract_collision::CollisionCheckConfig& getCollisionCheckConfig() const;
   StateType getStateType() const;
 
   /** @brief Unique type for this event. */
@@ -129,7 +131,8 @@ public:
 
 private:
   std::string ns_;
-  tesseract_collision::CollisionCheckConfig config_;
+  tesseract_collision::ContactManagerConfig contact_manager_config_;
+  tesseract_collision::CollisionCheckConfig collision_check_config_;
   StateType state_type_;
 };
 
