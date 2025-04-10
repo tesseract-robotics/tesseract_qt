@@ -62,6 +62,7 @@ void CollisionMarginDataStandardItem::ctor()
 {
   appendRow(createStandardItemFloat("Default Margin", collision_margin_data.getDefaultCollisionMargin()));
   appendRow(createStandardItemFloat("Max Margin", collision_margin_data.getMaxCollisionMargin()));
-  appendRow(new PairsCollisionMarginDataStandardItem(collision_margin_data.getPairCollisionMargins()));
+  appendRow(new PairsCollisionMarginDataStandardItem(
+      collision_margin_data.getCollisionMarginPairData().getCollisionMargins()));
 }
 }  // namespace tesseract_gui

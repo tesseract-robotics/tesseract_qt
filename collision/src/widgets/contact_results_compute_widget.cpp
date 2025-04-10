@@ -56,15 +56,18 @@ const QItemSelectionModel& ContactResultsComputeWidget::getSelectionModel() cons
 
 void ContactResultsComputeWidget::onComputeClicked()
 {
-  tesseract_collision::CollisionCheckConfig config;
-  config.contact_manager_config = tesseract_collision::ContactManagerConfig(ui->contact_threshold->value());
-  config.contact_request.calculate_distance = ui->calculate_distance->isChecked();
-  config.contact_request.calculate_penetration = ui->calculate_penetration->isChecked();
-  config.contact_request.type =
+  tesseract_collision::ContactManagerConfig contact_manager_config(ui->contact_threshold->value());
+  tesseract_collision::CollisionCheckConfig collision_check_config;
+  collision_check_config.contact_request.calculate_distance = ui->calculate_distance->isChecked();
+  collision_check_config.contact_request.calculate_penetration = ui->calculate_penetration->isChecked();
+  collision_check_config.contact_request.type =
       static_cast<tesseract_collision::ContactTestType>(ui->contact_test_type->currentIndex());
 
-  events::ContactResultsCompute event(
-      getComponentInfo(), config, events::ContactResultsCompute::StateType::CURRENT_STATE, "Contact Results");
+  events::ContactResultsCompute event(getComponentInfo(),
+                                      contact_manager_config,
+                                      collision_check_config,
+                                      events::ContactResultsCompute::StateType::CURRENT_STATE,
+                                      "Contact Results");
   QApplication::sendEvent(qApp, &event);
 }
 

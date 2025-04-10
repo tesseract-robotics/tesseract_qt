@@ -190,8 +190,8 @@ void eventFilterHelper(QObject* /*obj*/,
           applyDefaultContactManager(env);
           contact_manager = env.getDiscreteContactManager();
         }
-        contact_manager->applyContactManagerConfig(e->getConfig().contact_manager_config);
-        contact_manager->contactTest(contacts, e->getConfig().contact_request);
+        contact_manager->applyContactManagerConfig(e->getContactManagerConfig());
+        contact_manager->contactTest(contacts, e->getCollisionCheckConfig().contact_request);
         break;
       }
       case tesseract_gui::events::ContactResultsCompute::StateType::NAMED_STATE:
