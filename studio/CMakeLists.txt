@@ -1,3 +1,4 @@
+find_package(boost_plugin_loader REQUIRED)
 find_package(tesseract_common REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options)
@@ -44,6 +45,7 @@ add_library(
 target_link_libraries(
   ${PROJECT_NAME}_studio_plugin_factory
   PUBLIC tesseract::tesseract_common
+         boost_plugin_loader::boost_plugin_loader
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
@@ -129,6 +131,7 @@ add_library(
 target_link_libraries(
   ${PROJECT_NAME}_studio_widgets
   PUBLIC tesseract::tesseract_common
+         boost_plugin_loader::boost_plugin_loader
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
