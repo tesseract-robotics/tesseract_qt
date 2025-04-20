@@ -23,14 +23,21 @@
 #include <tesseract_qt/studio/studio.h>
 #include "ui_studio.h"
 
-#include <tesseract_common/plugin_loader.h>
 #include <tesseract_common/yaml_utils.h>
 #include <tesseract_common/yaml_extenstions.h>
+#include <boost_plugin_loader/plugin_loader.hpp>
+
 #include <filesystem>
+#include <fstream>
 
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/constants.hpp>
 
 #include <yaml-cpp/yaml.h>
+
+#include <console_bridge/console.h>
 
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
@@ -78,7 +85,7 @@ struct Studio::Implementation
   QString default_directory;
 
   std::map<std::string, StudioDockWidgetFactory::Ptr> factories;
-  tesseract_common::PluginLoader plugin_loader;
+  boost_plugin_loader::PluginLoader plugin_loader;
   StudioPluginLoaderDialog plugin_loader_dialog;
 
   std::string central_widget;
@@ -571,8 +578,8 @@ void Studio::closeEvent(QCloseEvent* event)
   QMainWindow::closeEvent(event);
 }
 
-tesseract_common::PluginLoader& Studio::getPluginLoader() { return data_->plugin_loader; }
-const tesseract_common::PluginLoader& Studio::getPluginLoader() const { return data_->plugin_loader; }
+boost_plugin_loader::PluginLoader& Studio::getPluginLoader() { return data_->plugin_loader; }
+const boost_plugin_loader::PluginLoader& Studio::getPluginLoader() const { return data_->plugin_loader; }
 
 StudioDockWidget* Studio::createDockWidget(const QString& name, const tesseract_common::PluginInfo& plugin_info)
 {
@@ -590,7 +597,7 @@ StudioDockWidget* Studio::createDockWidget(const QString& name, const tesseract_
       return dock_widget;
     }
 
-    auto plugin = data_->plugin_loader.instantiate<StudioDockWidgetFactory>(plugin_info.class_name);
+    auto plugin = data_->plugin_loader.createInstance<StudioDockWidgetFactory>(plugin_info.class_name);
     if (plugin == nullptr)
     {
       CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s'", plugin_info.class_name.c_str());

@@ -42,6 +42,7 @@ add_subdirectory(workbench)
 set(DEPS
     "Qt5 COMPONENTS Core Gui Widgets Svg OpenGL Xml"
     "Boost COMPONENTS program_options"
+    "boost_plugin_loader"
     "tesseract_collision REQUIRED COMPONENTS core"
     "tesseract_kinematics REQUIRED COMPONENTS core opw"
     "tesseract_task_composer REQUIRED COMPONENTS core planning"
@@ -62,6 +63,7 @@ set(LINUX_DEPENDS
     "libqt5xml5"
     "libgraphviz-dev"
     "libqwt-qt5-6"
+    "boost_plugin_loader"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-common"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph
     "${TESSERACT_PACKAGE_PREFIX}tesseract-environment"
@@ -84,6 +86,7 @@ set(WINDOWS_DEPENDS
   "libqt5xml5"
   "libgraphviz-dev"
   "libqwt-qt5-6"
+  "boost_plugin_loader"
   "${TESSERACT_PACKAGE_PREFIX}tesseract-common"
   "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph
     "${TESSERACT_PACKAGE_PREFIX}tesseract-environment"

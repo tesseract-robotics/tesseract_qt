@@ -34,7 +34,8 @@
 #include <tesseract_qt/common/widgets/create_component_info_dialog.h>
 #include <tesseract_qt/common/widgets/create_child_component_info_dialog.h>
 
-#include <tesseract_common/plugin_loader.h>
+#include <boost_plugin_loader/plugin_loader.hpp>
+
 #include <tesseract_common/plugin_info.h>
 #include <tesseract_common/types.h>
 
@@ -144,7 +145,7 @@ void StudioPluginLoaderDialog::showEvent(QShowEvent* event)
   data_->search_libraries_model.setStringList(qlist_search_libraries);
 
   std::vector<std::string> plugins =
-      data_->app->getPluginLoader().getAvailablePlugins(StudioDockWidgetFactory::getSectionName());
+      data_->app->getPluginLoader().getAvailablePlugins(StudioDockWidgetFactory::getSection());
   ui->plugin_combo_box->clear();
   for (const auto& plugin : plugins)
     ui->plugin_combo_box->addItem(QString::fromStdString(plugin));
@@ -202,7 +203,7 @@ void StudioPluginLoaderDialog::refreshSearchPathsAndLibraries()
   data_->app->getPluginLoader().search_libraries = search_libraries;
 
   std::vector<std::string> plugins =
-      data_->app->getPluginLoader().getAvailablePlugins(StudioDockWidgetFactory::getSectionName());
+      data_->app->getPluginLoader().getAvailablePlugins(StudioDockWidgetFactory::getSection());
   ui->plugin_combo_box->clear();
   for (const auto& plugin : plugins)
     ui->plugin_combo_box->addItem(QString::fromStdString(plugin));

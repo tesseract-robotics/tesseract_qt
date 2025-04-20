@@ -26,6 +26,7 @@
 #ifndef Q_MOC_RUN
 #include <memory>
 #include <tesseract_common/fwd.h>
+#include <boost_plugin_loader/fwd.h>
 #include <QMainWindow>
 #endif
 
@@ -68,8 +69,8 @@ private:
   std::unique_ptr<Ui::Studio> ui;
   std::unique_ptr<Implementation> data_;
 
-  tesseract_common::PluginLoader& getPluginLoader();
-  const tesseract_common::PluginLoader& getPluginLoader() const;
+  boost_plugin_loader::PluginLoader& getPluginLoader();
+  const boost_plugin_loader::PluginLoader& getPluginLoader() const;
 
   /**
    * @brief Get studio dock widget given name and plugin info
