@@ -24,6 +24,7 @@
 #include <tesseract_qt/planning/widgets/task_composer_widget.h>
 #include "ui_task_composer_widget.h"
 
+#include <tesseract_common/profile_dictionary.h>
 #include <tesseract_common/resource_locator.h>
 #include <tesseract_common/serialization.h>
 #include <tesseract_common/stopwatch.h>
@@ -38,7 +39,6 @@
 #include <tesseract_task_composer/core/task_composer_node_info.h>
 #include <tesseract_task_composer/core/task_composer_data_storage.h>
 #include <tesseract_task_composer/core/task_composer_log.h>
-#include <tesseract_command_language/profile_dictionary.h>
 #include <tesseract_command_language/utils.h>
 
 #include <tesseract_qt/common/models/standard_item_type.h>
@@ -73,7 +73,7 @@ struct TaskComposerWidget::Implementation
   std::shared_ptr<const ComponentInfo> component_info;
   tesseract_planning::TaskComposerServer task_composer_server;
   tesseract_common::GeneralResourceLocator resource_locator;
-  tesseract_planning::ProfileDictionary::Ptr profiles;
+  tesseract_common::ProfileDictionary::Ptr profiles;
   tesseract_gui::TaskComposerLogModel log_model;
 
   ComponentInfoDialog environment_picker;

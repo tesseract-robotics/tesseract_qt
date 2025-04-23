@@ -23,10 +23,9 @@
 #ifndef TESSERACT_QT_COMMON_TASK_COMPOSER_EVENTS_H
 #define TESSERACT_QT_COMMON_TASK_COMPOSER_EVENTS_H
 
-#include <tesseract_command_language/fwd.h>
+#include <tesseract_common/fwd.h>
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
-#include <filesystem>
 
 namespace tesseract_gui::events
 {
@@ -93,16 +92,16 @@ class TaskComposerSetProfiles : public ComponentEvent
 {
 public:
   TaskComposerSetProfiles(std::shared_ptr<const ComponentInfo> component_info,
-                          std::shared_ptr<tesseract_planning::ProfileDictionary> profiles);
+                          std::shared_ptr<tesseract_common::ProfileDictionary> profiles);
   ~TaskComposerSetProfiles() override;
 
-  std::shared_ptr<tesseract_planning::ProfileDictionary> getProfiles() const;
+  std::shared_ptr<tesseract_common::ProfileDictionary> getProfiles() const;
 
   /** @brief Unique type for this event. */
   static const QEvent::Type kType = QEvent::Type(EventType::TASK_COMPOSER_SET_PROFILES);
 
 private:
-  std::shared_ptr<tesseract_planning::ProfileDictionary> profiles_;
+  std::shared_ptr<tesseract_common::ProfileDictionary> profiles_;
 };
 }  // namespace tesseract_gui::events
 
