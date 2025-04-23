@@ -22,6 +22,7 @@
  */
 
 #include <tesseract_qt/common/events/task_composer_events.h>
+#include <tesseract_common/profile_dictionary.h>
 
 namespace tesseract_gui::events
 {
@@ -69,14 +70,11 @@ TaskComposerPlotDotgraph::~TaskComposerPlotDotgraph() = default;
 //////////////////////////////////////////////////////
 
 TaskComposerSetProfiles::TaskComposerSetProfiles(std::shared_ptr<const ComponentInfo> component_info,
-                                                 std::shared_ptr<tesseract_planning::ProfileDictionary> profiles)
+                                                 std::shared_ptr<tesseract_common::ProfileDictionary> profiles)
   : ComponentEvent(std::move(component_info), kType), profiles_(std::move(profiles))
 {
 }
 
 TaskComposerSetProfiles::~TaskComposerSetProfiles() = default;
-std::shared_ptr<tesseract_planning::ProfileDictionary> TaskComposerSetProfiles::getProfiles() const
-{
-  return profiles_;
-}
+std::shared_ptr<tesseract_common::ProfileDictionary> TaskComposerSetProfiles::getProfiles() const { return profiles_; }
 }  // namespace tesseract_gui::events
