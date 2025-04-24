@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.30.0 (2025-04-23)
+-------------------
 * Move profile dictionary to tesseract_common
 * Update clang_format CI to use 22.04 image
 * Update cmake format CI to 22.04 image
