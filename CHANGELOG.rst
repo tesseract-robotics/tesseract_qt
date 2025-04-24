@@ -2,6 +2,16 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Move profile dictionary to tesseract_common
+* Update clang_format CI to use 22.04 image
+* Update cmake format CI to 22.04 image
+* Update to leverage boost_plugin_loader
+* Update because of changes with collision margin data
+* Updated task composer menu to only be enabled for composite instruction items
+* Contributors: Levi Armstrong, Michael Ripperger
+
 0.29.1 (2025-03-26)
 -------------------
 * Fix ComponentInfoDialog not updating model
