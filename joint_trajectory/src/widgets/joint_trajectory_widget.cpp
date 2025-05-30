@@ -427,7 +427,7 @@ void JointTrajectoryWidget::onDisablePlayer() { ui_->trajectoryPlayerFrame->setE
 // Documentation inherited
 bool JointTrajectoryWidget::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::JointTrajectoryOpen::kType)
+  if (event->type() == events::EventType::JOINT_TRAJECTORY_OPEN)
   {
     assert(dynamic_cast<events::JointTrajectoryOpen*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryOpen*>(event);
@@ -438,7 +438,7 @@ bool JointTrajectoryWidget::eventFilter(QObject* obj, QEvent* event)
       data_->open_dialog->activateWindow();
     }
   }
-  else if (event->type() == events::JointTrajectorySave::kType)
+  else if (event->type() == events::EventType::JOINT_TRAJECTORY_SAVE)
   {
     assert(dynamic_cast<events::JointTrajectorySave*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectorySave*>(event);
@@ -454,14 +454,14 @@ bool JointTrajectoryWidget::eventFilter(QObject* obj, QEvent* event)
       }
     }
   }
-  else if (event->type() == events::JointTrajectoryPlot::kType)
+  else if (event->type() == events::EventType::JOINT_TRAJECTORY_PLOT)
   {
     assert(dynamic_cast<events::JointTrajectoryPlot*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryPlot*>(event);
     if (e->getComponentInfo() == data_->model->getComponentInfo())
       onPlot();
   }
-  else if (event->type() == events::JointTrajectoryRemoveSelected::kType)
+  else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE_SELECTED)
   {
     assert(dynamic_cast<events::JointTrajectoryRemoveSelected*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryRemoveSelected*>(event);

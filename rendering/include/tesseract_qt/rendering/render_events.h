@@ -73,9 +73,6 @@ public:
    */
   gz::math::Vector3d getScale() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::SNAP_INTERVALS);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -99,9 +96,6 @@ public:
    * @return The resource string
    */
   const std::string& getDescription() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::SPAWN_FROM_DESCRIPTION);
 
 private:
   /** @brief Private data pointer */
@@ -127,9 +121,6 @@ public:
    */
   const std::string& getFilePath() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::SPAWN_FROM_PATH);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -153,9 +144,6 @@ public:
    * @return The 3D point
    */
   gz::math::Vector3d getPoint() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::HOVER_TO_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -182,9 +170,6 @@ public:
    */
   gz::math::Vector3d getPoint() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::LEFT_CLICK_TO_SCENE);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -208,9 +193,6 @@ public:
    * @return The 3D point.
    */
   gz::math::Vector3d getPoint() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::RIGHT_CLICK_TO_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -240,9 +222,6 @@ public:
    */
   bool getMenuEnabled() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::DROPDOWN_MENU_ENABLED);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -267,9 +246,6 @@ public:
    */
   gz::common::KeyEvent getKey() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KEY_RELEASE_ON_SCENE);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -293,9 +269,6 @@ public:
    * @return The key code.
    */
   gz::common::KeyEvent getKey() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KEY_PRESS_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -322,9 +295,6 @@ public:
   /** @brief Return the left mouse event */
   const gz::common::MouseEvent& getMouse() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::LEFT_CLICK_ON_SCENE);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -349,9 +319,6 @@ public:
 
   /** @brief Return the right mouse event */
   const gz::common::MouseEvent& getMouse() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::RIGHT_CLICK_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -380,9 +347,6 @@ public:
    */
   bool getBlock() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::BLOCK_ORBIT);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -403,9 +367,6 @@ public:
 
   /** @brief Get the point within the scene over which the user is hovering. */
   gz::common::MouseEvent getMouse() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::HOVER_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -430,9 +391,6 @@ public:
    * @return The name of the resource to be cloned
    */
   const std::string& getName() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::SPAWN_CLONE_FROM_NAME);
 
 private:
   /** @brief Private data pointer */
@@ -465,9 +423,6 @@ public:
    */
   const gz::math::Vector2i& getMouse() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::DROP_ON_SCENE);
-
 private:
   /** @brief Private data pointer */
   class Implementation;
@@ -488,9 +443,6 @@ public:
 
   /** @brief Return the scroll mouse event */
   const gz::common::MouseEvent& getMouse() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::SCROLL_ON_SCENE);
 
 private:
   /** @brief Private data pointer */
@@ -513,9 +465,6 @@ public:
   /** @brief Return the drag on mouse event */
   gz::common::MouseEvent getMouse() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::DRAG_ON_SCENE);
-
 public:
   /** @brief Private data pointer */
   class Implementation;
@@ -537,9 +486,6 @@ public:
 
   /** @brief Return the button press mouse event */
   const gz::common::MouseEvent& getMouse() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::MOUSE_PRESS_ON_SCENE);
 
 private:
   /** @brief Private data pointer */

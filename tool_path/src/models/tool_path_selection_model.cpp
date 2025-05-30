@@ -70,7 +70,7 @@ bool ToolPathSelectionModel::eventFilter(QObject* obj, QEvent* event)
 
   QModelIndexList selected_rows = selectedRows();
   auto* tool_path_model = dynamic_cast<ToolPathModel*>(model());
-  if (event->type() == events::ToolPathRemoveSelected::kType)
+  if (event->type() == events::EventType::TOOL_PATH_REMOVE_SELECTED)
   {
     assert(dynamic_cast<events::ToolPathRemoveSelected*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathRemoveSelected*>(event);

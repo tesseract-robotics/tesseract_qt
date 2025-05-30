@@ -172,7 +172,7 @@ void eventFilterHelper(QObject* /*obj*/,
                        const std::shared_ptr<const tesseract_gui::ComponentInfo>& component_info,
                        tesseract_environment::Environment& env)
 {
-  if (event->type() == tesseract_gui::events::ContactResultsCompute::kType)
+  if (event->type() == tesseract_gui::events::EventType::CONTACT_RESULTS_COMPUTE)
   {
     assert(dynamic_cast<tesseract_gui::events::ContactResultsCompute*>(event) != nullptr);
     auto* e = static_cast<tesseract_gui::events::ContactResultsCompute*>(event);
@@ -218,7 +218,7 @@ void eventFilterHelper(QObject* /*obj*/,
     tesseract_gui::events::ContactResultsSet event(component_info, tracked_object, e->getNamespace());
     QApplication::sendEvent(qApp, &event);
   }
-  else if (event->type() == tesseract_gui::events::AllowedCollisionMatrixGenerate::kType)
+  else if (event->type() == tesseract_gui::events::EventType::ACM_GENERATE)
   {
     assert(dynamic_cast<tesseract_gui::events::AllowedCollisionMatrixGenerate*>(event) != nullptr);
     auto* e = static_cast<tesseract_gui::events::AllowedCollisionMatrixGenerate*>(event);
@@ -285,7 +285,7 @@ void eventFilterHelper(QObject* /*obj*/,
     tesseract_gui::events::AllowedCollisionMatrixSet event(component_info, acm);
     QApplication::sendEvent(qApp, &event);
   }
-  else if (event->type() == tesseract_gui::events::EnvironmentApplyCommand::kType)
+  else if (event->type() == tesseract_gui::events::EventType::ENVIRONMENT_APPLY_COMMANDS)
   {
     assert(dynamic_cast<tesseract_gui::events::EnvironmentApplyCommand*>(event) != nullptr);
     auto* e = static_cast<tesseract_gui::events::EnvironmentApplyCommand*>(event);

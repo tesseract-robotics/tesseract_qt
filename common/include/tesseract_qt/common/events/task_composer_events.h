@@ -37,9 +37,6 @@ public:
 
   const std::string& getResourcePath() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::TASK_COMPOSER_LOAD_CONFIG);
-
 private:
   std::string resource_path_;
 };
@@ -55,9 +52,6 @@ public:
   const std::string& getResourcePath() const;
   const std::string& getNamespace() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::TASK_COMPOSER_LOAD_LOG);
-
 private:
   std::string resource_path_;
   std::string ns_;
@@ -71,9 +65,6 @@ public:
 
   const std::string& getSavePath() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::TASK_COMPOSER_SAVE_LOG);
-
 private:
   std::string save_path_;
 };
@@ -83,9 +74,6 @@ class TaskComposerPlotDotgraph : public ComponentEvent
 public:
   TaskComposerPlotDotgraph(std::shared_ptr<const ComponentInfo> component_info);
   ~TaskComposerPlotDotgraph() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::TASK_COMPOSER_PLOT_DOTGRAPH);
 };
 
 class TaskComposerSetProfiles : public ComponentEvent
@@ -96,9 +84,6 @@ public:
   ~TaskComposerSetProfiles() override;
 
   std::shared_ptr<tesseract_common::ProfileDictionary> getProfiles() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::TASK_COMPOSER_SET_PROFILES);
 
 private:
   std::shared_ptr<tesseract_common::ProfileDictionary> profiles_;

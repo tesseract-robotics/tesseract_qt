@@ -210,7 +210,7 @@ tesseract_common::JointTrajectorySet JointTrajectoryModel::getJointTrajectorySet
 
 bool JointTrajectoryModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::JointTrajectoryAdd::kType)
+  if (event->type() == events::EventType::JOINT_TRAJECTORY_ADD)
   {
     assert(dynamic_cast<events::JointTrajectoryAdd*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryAdd*>(event);
@@ -231,21 +231,21 @@ bool JointTrajectoryModel::eventFilter(QObject* obj, QEvent* event)
       addJointTrajectorySet(e->getJointTrajectory());
     }
   }
-  else if (event->type() == events::JointTrajectoryRemove::kType)
+  else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE)
   {
     assert(dynamic_cast<events::JointTrajectoryRemove*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryRemove*>(event);
     if (e->getComponentInfo() == data_->component_info)
       removeJointTrajectorySet(e->getUUID());
   }
-  else if (event->type() == events::JointTrajectoryRemoveNamespace::kType)
+  else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE_NAMESPACE)
   {
     assert(dynamic_cast<events::JointTrajectoryRemoveNamespace*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryRemoveNamespace*>(event);
     if (e->getComponentInfo() == data_->component_info)
       clearNamespace(e->getNamespace());
   }
-  else if (event->type() == events::JointTrajectoryRemoveAll::kType)
+  else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE_ALL)
   {
     assert(dynamic_cast<events::JointTrajectoryRemoveAll*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryRemoveAll*>(event);

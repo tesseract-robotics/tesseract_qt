@@ -35,7 +35,8 @@ ManipulationChanged::ManipulationChanged(
     std::shared_ptr<const ComponentInfo> component_info,
     std::string state_name,
     std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>> state_component_infos)
-  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::MANIPULATION_CHANGED))
+  , data_(std::make_unique<Implementation>())
 {
   assert((state_component_infos.empty() ? true : !state_name.empty()));
   data_->state_name = std::move(state_name);

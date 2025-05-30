@@ -27,7 +27,7 @@
 namespace tesseract_gui::events
 {
 AllowedCollisionMatrixClear::AllowedCollisionMatrixClear(std::shared_ptr<const ComponentInfo> component_info)
-  : ComponentEvent(std::move(component_info), kType)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_CLEAR))
 {
 }
 
@@ -42,7 +42,8 @@ struct AllowedCollisionMatrixSet::Implementation
 
 AllowedCollisionMatrixSet::AllowedCollisionMatrixSet(std::shared_ptr<const ComponentInfo> component_info,
                                                      const tesseract_common::AllowedCollisionMatrix& acm)
-  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_SET))
+  , data_(std::make_unique<Implementation>())
 {
   data_->acm = acm;
 }
@@ -55,7 +56,7 @@ const tesseract_common::AllowedCollisionMatrix& AllowedCollisionMatrixSet::getAC
 
 AllowedCollisionMatrixAdd::AllowedCollisionMatrixAdd(std::shared_ptr<const ComponentInfo> component_info,
                                                      const std::vector<std::array<std::string, 3>>& entries)
-  : ComponentEvent(std::move(component_info), kType), entries_(entries)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_ADD)), entries_(entries)
 {
 }
 
@@ -67,7 +68,7 @@ const std::vector<std::array<std::string, 3>>& AllowedCollisionMatrixAdd::getEnt
 
 AllowedCollisionMatrixRemove::AllowedCollisionMatrixRemove(std::shared_ptr<const ComponentInfo> component_info,
                                                            const std::vector<std::array<std::string, 2>>& entries)
-  : ComponentEvent(std::move(component_info), kType), entries_(entries)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_REMOVE)), entries_(entries)
 {
 }
 
@@ -79,7 +80,7 @@ const std::vector<std::array<std::string, 2>>& AllowedCollisionMatrixRemove::get
 
 AllowedCollisionMatrixRemoveLink::AllowedCollisionMatrixRemoveLink(std::shared_ptr<const ComponentInfo> component_info,
                                                                    const std::vector<std::string>& link_names)
-  : ComponentEvent(std::move(component_info), kType), link_names_(link_names)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_REMOVE_LINK)), link_names_(link_names)
 {
 }
 
@@ -91,7 +92,7 @@ const std::vector<std::string>& AllowedCollisionMatrixRemoveLink::getLinkNames()
 
 AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(std::shared_ptr<const ComponentInfo> component_info,
                                                                long resolution)
-  : ComponentEvent(std::move(component_info), kType), resolution_(resolution)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_GENERATE)), resolution_(resolution)
 {
 }
 

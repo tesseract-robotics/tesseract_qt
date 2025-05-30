@@ -25,7 +25,7 @@
 namespace tesseract_gui::events
 {
 GroupTCPsClear::GroupTCPsClear(std::shared_ptr<const ComponentInfo> component_info)
-  : ComponentEvent(std::move(component_info), kType)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::GROUP_TCPS_CLEAR))
 {
 }
 
@@ -35,7 +35,7 @@ GroupTCPsClear::~GroupTCPsClear() = default;
 
 GroupTCPsSet::GroupTCPsSet(std::shared_ptr<const ComponentInfo> component_info,
                            const tesseract_srdf::GroupTCPs& group_tcps)
-  : ComponentEvent(std::move(component_info), kType), group_tcps_(group_tcps)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::GROUP_TCPS_SET)), group_tcps_(group_tcps)
 {
 }
 
@@ -49,7 +49,7 @@ GroupTCPsAdd::GroupTCPsAdd(std::shared_ptr<const ComponentInfo> component_info,
                            std::string group_name,
                            std::string tcp_name,
                            const Eigen::Isometry3d& tcp)
-  : ComponentEvent(std::move(component_info), kType)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::GROUP_TCPS_ADD))
   , group_name_(std::move(group_name))
   , tcp_name_(std::move(tcp_name))
   , tcp_(tcp)
@@ -66,7 +66,7 @@ const Eigen::Isometry3d& GroupTCPsAdd::getTCP() const { return tcp_; }
 
 GroupTCPsRemove::GroupTCPsRemove(std::shared_ptr<const ComponentInfo> component_info,
                                  const std::vector<std::array<std::string, 2>>& entries)
-  : ComponentEvent(std::move(component_info), kType), entries_(entries)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::GROUP_TCPS_REMOVE)), entries_(entries)
 {
 }
 
@@ -78,7 +78,8 @@ const std::vector<std::array<std::string, 2>>& GroupTCPsRemove::getEntries() con
 
 GroupTCPsRemoveGroup::GroupTCPsRemoveGroup(std::shared_ptr<const ComponentInfo> component_info,
                                            const std::vector<std::string>& group_names)
-  : ComponentEvent(std::move(component_info), kType), group_names_(group_names)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::GROUP_TCPS_REMOVE_GROUP))
+  , group_names_(group_names)
 {
 }
 

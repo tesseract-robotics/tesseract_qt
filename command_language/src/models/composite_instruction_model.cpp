@@ -121,21 +121,21 @@ CompositeInstructionModel::getCompositeInstruction(const QModelIndex& row) const
 
 bool CompositeInstructionModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::CompositeInstructionSet::kType)
+  if (event->type() == events::EventType::CL_COMPOSITE_INSTRUCTION_SET)
   {
     assert(dynamic_cast<events::CompositeInstructionSet*>(event) != nullptr);
     auto* e = static_cast<events::CompositeInstructionSet*>(event);
     if (e->getComponentInfo() == data_->component_info)
       setCompositeInstruction(e->getNamespace(), e->getCompositeInstruction());
   }
-  else if (event->type() == events::CompositeInstructionClear::kType)
+  else if (event->type() == events::EventType::CL_COMPOSITE_INSTRUCTION_CLEAR)
   {
     assert(dynamic_cast<events::CompositeInstructionClear*>(event) != nullptr);
     auto* e = static_cast<events::CompositeInstructionClear*>(event);
     if (e->getComponentInfo() == data_->component_info)
       clear();
   }
-  else if (event->type() == events::CompositeInstructionRemove::kType)
+  else if (event->type() == events::EventType::CL_COMPOSITE_INSTRUCTION_REMOVE)
   {
     assert(dynamic_cast<events::CompositeInstructionRemove*>(event) != nullptr);
     auto* e = static_cast<events::CompositeInstructionRemove*>(event);

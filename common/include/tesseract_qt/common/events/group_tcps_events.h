@@ -35,9 +35,6 @@ class GroupTCPsClear : public ComponentEvent
 public:
   GroupTCPsClear(std::shared_ptr<const ComponentInfo> component_info);
   ~GroupTCPsClear() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_CLEAR);
 };
 
 class GroupTCPsSet : public ComponentEvent
@@ -47,9 +44,6 @@ public:
   ~GroupTCPsSet() override;
 
   const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_SET);
 
 private:
   tesseract_srdf::GroupTCPs group_tcps_;
@@ -72,9 +66,6 @@ public:
   const std::string& getTCPName() const;
   const Eigen::Isometry3d& getTCP() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_ADD);
-
 private:
   std::string group_name_;
   std::string tcp_name_;
@@ -90,9 +81,6 @@ public:
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_REMOVE);
-
 private:
   std::vector<std::array<std::string, 2>> entries_;
 };
@@ -105,9 +93,6 @@ public:
   ~GroupTCPsRemoveGroup() override;
 
   const std::vector<std::string>& getGroupNames() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_TCPS_REMOVE_GROUP);
 
 private:
   std::vector<std::string> group_names_;

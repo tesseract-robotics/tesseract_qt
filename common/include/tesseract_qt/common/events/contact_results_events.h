@@ -41,9 +41,6 @@ public:
 
   const std::string& getNamespace() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_CLEAR);
-
 private:
   std::string ns_;
 };
@@ -59,9 +56,6 @@ public:
   const std::string& getNamespace() const;
   const std::variant<ContactResultVector, ContactResultMap>& getContactResults() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_SET);
-
 private:
   std::string ns_;
   std::variant<ContactResultVector, ContactResultMap> contact_results_;
@@ -75,9 +69,6 @@ public:
                        boost::uuids::uuid uuid,
                        boost::uuids::uuid child_uuid);
   ~ContactResultsRemove() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_REMOVE);
 };
 
 class ContactResultsVisbility : public ComponentEventVisibility
@@ -89,9 +80,6 @@ public:
                           boost::uuids::uuid child_uuid,
                           bool visible);
   ~ContactResultsVisbility() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_VISIBILITY);
 };
 
 class ContactResultsVisbilityAll : public ComponentEventVisibilityAll
@@ -99,9 +87,6 @@ class ContactResultsVisbilityAll : public ComponentEventVisibilityAll
 public:
   ContactResultsVisbilityAll(std::shared_ptr<const ComponentInfo> component_info, bool visible);
   ~ContactResultsVisbilityAll() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_VISIBILITY_ALL);
 };
 
 class ContactResultsCompute : public ComponentEvent
@@ -125,9 +110,6 @@ public:
   const tesseract_collision::ContactManagerConfig& getContactManagerConfig() const;
   const tesseract_collision::CollisionCheckConfig& getCollisionCheckConfig() const;
   StateType getStateType() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::CONTACT_RESULTS_COMPUTE);
 
 private:
   std::string ns_;

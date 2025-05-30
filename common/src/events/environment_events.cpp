@@ -27,7 +27,7 @@
 namespace tesseract_gui::events
 {
 EnvironmentCommandsClear::EnvironmentCommandsClear(std::shared_ptr<const ComponentInfo> component_info)
-  : ComponentEvent(std::move(component_info), kType)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ENVIRONMENT_COMMANDS_CLEAR))
 {
 }
 
@@ -37,7 +37,7 @@ EnvironmentCommandsClear::~EnvironmentCommandsClear() = default;
 
 EnvironmentCommandsSet::EnvironmentCommandsSet(std::shared_ptr<const ComponentInfo> component_info,
                                                const tesseract_environment::Commands& commands)
-  : ComponentEvent(std::move(component_info), kType), commands_(commands)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ENVIRONMENT_COMMANDS_SET)), commands_(commands)
 {
 }
 
@@ -49,7 +49,7 @@ const tesseract_environment::Commands& EnvironmentCommandsSet::getCommands() con
 
 EnvironmentCommandsAppend::EnvironmentCommandsAppend(std::shared_ptr<const ComponentInfo> component_info,
                                                      const tesseract_environment::Commands& commands)
-  : ComponentEvent(std::move(component_info), kType), commands_(commands)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ENVIRONMENT_COMMANDS_APPEND)), commands_(commands)
 {
 }
 
@@ -62,7 +62,9 @@ const tesseract_environment::Commands& EnvironmentCommandsAppend::getCommands() 
 EnvironmentApplyCommand::EnvironmentApplyCommand(std::shared_ptr<const ComponentInfo> component_info,
                                                  const tesseract_environment::Commands& commands,
                                                  bool reset)
-  : ComponentEvent(std::move(component_info), kType), commands_(commands), reset_(reset)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ENVIRONMENT_APPLY_COMMANDS))
+  , commands_(commands)
+  , reset_(reset)
 {
 }
 

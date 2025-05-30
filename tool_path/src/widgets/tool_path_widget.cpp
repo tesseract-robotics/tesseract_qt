@@ -136,7 +136,7 @@ const QItemSelectionModel& ToolPathWidget::getSelectionModel() const { return *d
 // Documentation inherited
 bool ToolPathWidget::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::ToolPathOpen::kType)
+  if (event->type() == events::EventType::TOOL_PATH_OPEN)
   {
     assert(dynamic_cast<events::ToolPathOpen*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathOpen*>(event);
@@ -147,7 +147,7 @@ bool ToolPathWidget::eventFilter(QObject* obj, QEvent* event)
       data_->open_dialog->activateWindow();
     }
   }
-  else if (event->type() == events::ToolPathSave::kType)
+  else if (event->type() == events::EventType::TOOL_PATH_SAVE)
   {
     assert(dynamic_cast<events::ToolPathSave*>(event) != nullptr);
     auto* e = static_cast<events::ToolPathSave*>(event);
