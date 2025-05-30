@@ -43,9 +43,6 @@ public:
   const std::string& getStateName() const;
   const std::unordered_map<std::string, std::shared_ptr<const ComponentInfo>>& getStateComponentInfos() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::MANIPULATION_CHANGED);
-
 private:
   /** @brief Private data pointer */
   class Implementation;

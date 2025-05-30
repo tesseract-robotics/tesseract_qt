@@ -151,7 +151,7 @@ ContactResultVectorStandardItem* findContactResultsItem(QStandardItem* item)
 
 bool ContactResultsModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::ContactResultsSet::kType)
+  if (event->type() == events::EventType::CONTACT_RESULTS_SET)
   {
     assert(dynamic_cast<events::ContactResultsSet*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsSet*>(event);
@@ -163,14 +163,14 @@ bool ContactResultsModel::eventFilter(QObject* obj, QEvent* event)
         setContactResults(e->getNamespace().c_str(), std::get<ContactResultMap>(e->getContactResults()));
     }
   }
-  else if (event->type() == events::ContactResultsClear::kType)
+  else if (event->type() == events::EventType::CONTACT_RESULTS_CLEAR)
   {
     assert(dynamic_cast<events::ContactResultsClear*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsClear*>(event);
     if (e->getComponentInfo() == data_->component_info)
       clear();
   }
-  else if (event->type() == events::ContactResultsRemove::kType)
+  else if (event->type() == events::EventType::CONTACT_RESULTS_REMOVE)
   {
     assert(dynamic_cast<events::ContactResultsRemove*>(event) != nullptr);
     auto* e = static_cast<events::ContactResultsRemove*>(event);

@@ -38,9 +38,6 @@ public:
 
   QString message;
   int timeout;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::APP_STATUS_MESSAGE_SHOW);
 };
 
 class StatusMessageClear : public QEvent
@@ -48,9 +45,6 @@ class StatusMessageClear : public QEvent
 public:
   StatusMessageClear();
   ~StatusMessageClear() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::APP_STATUS_MESSAGE_CLEAR);
 };
 }  // namespace tesseract_gui::events
 #endif  // TESSERACT_QT_COMMON_APPLICATION_EVENTS_H

@@ -197,7 +197,7 @@ void ManipulationToolBar::onStateNameChanged(const QString& text) { data_->state
 
 bool ManipulationToolBar::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::ManipulationChanged::kType)
+  if (event->type() == events::EventType::MANIPULATION_CHANGED)
   {
     assert(dynamic_cast<events::ManipulationChanged*>(event) != nullptr);
     auto* e = static_cast<events::ManipulationChanged*>(event);

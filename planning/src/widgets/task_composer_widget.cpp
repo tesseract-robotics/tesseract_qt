@@ -304,7 +304,7 @@ void TaskComposerWidget::onPickEnvironmentClicked(bool /*checked*/)
 
 bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::TaskComposerLoadConfig::kType)
+  if (event->type() == events::EventType::TASK_COMPOSER_LOAD_CONFIG)
   {
     assert(dynamic_cast<events::TaskComposerLoadConfig*>(event) != nullptr);
     auto* e = static_cast<events::TaskComposerLoadConfig*>(event);
@@ -326,7 +326,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
     }
   }
 
-  if (event->type() == events::TaskComposerLoadLog::kType)
+  if (event->type() == events::EventType::TASK_COMPOSER_LOAD_LOG)
   {
     assert(dynamic_cast<events::TaskComposerLoadLog*>(event) != nullptr);
     auto* e = static_cast<events::TaskComposerLoadLog*>(event);
@@ -345,7 +345,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
     }
   }
 
-  if (event->type() == events::TaskComposerSaveLog::kType)
+  if (event->type() == events::EventType::TASK_COMPOSER_SAVE_LOG)
   {
     assert(dynamic_cast<events::TaskComposerSaveLog*>(event) != nullptr);
     auto* e = static_cast<events::TaskComposerSaveLog*>(event);
@@ -360,7 +360,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
     }
   }
 
-  if (event->type() == events::TaskComposerPlotDotgraph::kType)
+  if (event->type() == events::EventType::TASK_COMPOSER_PLOT_DOTGRAPH)
   {
     assert(dynamic_cast<events::TaskComposerPlotDotgraph*>(event) != nullptr);
     auto* e = static_cast<events::TaskComposerPlotDotgraph*>(event);
@@ -384,7 +384,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
     }
   }
 
-  if (event->type() == events::TaskComposerSetProfiles::kType)
+  if (event->type() == events::EventType::TASK_COMPOSER_SET_PROFILES)
   {
     assert(dynamic_cast<events::TaskComposerSetProfiles*>(event) != nullptr);
     auto* e = static_cast<events::TaskComposerSetProfiles*>(event);

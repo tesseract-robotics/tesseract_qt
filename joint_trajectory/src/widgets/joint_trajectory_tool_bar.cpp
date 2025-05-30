@@ -98,7 +98,7 @@ std::shared_ptr<const ComponentInfo> JointTrajectoryToolBar::getComponentInfo() 
 
 bool JointTrajectoryToolBar::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::JointTrajectoryToolbarState::kType)
+  if (event->type() == events::EventType::JOINT_TRAJECTORY_TOOLBAR_STATE)
   {
     assert(dynamic_cast<events::JointTrajectoryToolbarState*>(event) != nullptr);
     auto* e = static_cast<events::JointTrajectoryToolbarState*>(event);

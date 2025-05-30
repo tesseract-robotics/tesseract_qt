@@ -37,9 +37,6 @@ class EnvironmentCommandsClear : public ComponentEvent
 public:
   EnvironmentCommandsClear(std::shared_ptr<const ComponentInfo> component_info);
   ~EnvironmentCommandsClear() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::ENVIRONMENT_COMMANDS_CLEAR);
 };
 
 class EnvironmentCommandsSet : public ComponentEvent
@@ -50,9 +47,6 @@ public:
   ~EnvironmentCommandsSet() override;
 
   const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::ENVIRONMENT_COMMANDS_SET);
 
 private:
   std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
@@ -66,9 +60,6 @@ public:
   ~EnvironmentCommandsAppend() override;
 
   const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::ENVIRONMENT_COMMANDS_APPEND);
 
 private:
   std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
@@ -84,9 +75,6 @@ public:
 
   bool isReset() const;
   const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::ENVIRONMENT_APPLY_COMMANDS);
 
 private:
   std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;

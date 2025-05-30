@@ -213,42 +213,42 @@ const tesseract_srdf::LinkGroups& KinematicGroupsModel::getLinkGroups() const { 
 
 bool KinematicGroupsModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::KinematicGroupsSet::kType)
+  if (event->type() == events::EventType::KINEMATIC_GROUPS_SET)
   {
     assert(dynamic_cast<events::KinematicGroupsSet*>(event) != nullptr);
     auto* e = static_cast<events::KinematicGroupsSet*>(event);
     if (e->getComponentInfo() == data_->component_info)
       set(e->getChainGroups(), e->getJointGroups(), e->getLinkGroups());
   }
-  else if (event->type() == events::KinematicGroupsAddChain::kType)
+  else if (event->type() == events::EventType::KINEMATIC_GROUPS_ADD_CHAIN)
   {
     assert(dynamic_cast<events::KinematicGroupsAddChain*>(event) != nullptr);
     auto* e = static_cast<events::KinematicGroupsAddChain*>(event);
     if (e->getComponentInfo() == data_->component_info)
       addChainGroup(e->getGroupName(), e->getGroup());
   }
-  else if (event->type() == events::KinematicGroupsAddJoint::kType)
+  else if (event->type() == events::EventType::KINEMATIC_GROUPS_ADD_JOINT)
   {
     assert(dynamic_cast<events::KinematicGroupsAddJoint*>(event) != nullptr);
     auto* e = static_cast<events::KinematicGroupsAddJoint*>(event);
     if (e->getComponentInfo() == data_->component_info)
       addJointGroup(e->getGroupName(), e->getGroup());
   }
-  else if (event->type() == events::KinematicGroupsAddLink::kType)
+  else if (event->type() == events::EventType::KINEMATIC_GROUPS_ADD_LINK)
   {
     assert(dynamic_cast<events::KinematicGroupsAddLink*>(event) != nullptr);
     auto* e = static_cast<events::KinematicGroupsAddLink*>(event);
     if (e->getComponentInfo() == data_->component_info)
       addLinkGroup(e->getGroupName(), e->getGroup());
   }
-  else if (event->type() == events::KinematicGroupsClear::kType)
+  else if (event->type() == events::EventType::KINEMATIC_GROUPS_CLEAR)
   {
     assert(dynamic_cast<events::KinematicGroupsClear*>(event) != nullptr);
     auto* e = static_cast<events::KinematicGroupsClear*>(event);
     if (e->getComponentInfo() == data_->component_info)
       clear();
   }
-  else if (event->type() == events::KinematicGroupsRemove::kType)
+  else if (event->type() == events::EventType::KINEMATIC_GROUPS_REMOVE)
   {
     assert(dynamic_cast<events::KinematicGroupsRemove*>(event) != nullptr);
     auto* e = static_cast<events::KinematicGroupsRemove*>(event);

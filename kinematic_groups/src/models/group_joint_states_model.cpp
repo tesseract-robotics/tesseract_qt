@@ -177,28 +177,28 @@ const GroupJointStatesStandardItem* GroupJointStatesModel::getRoot() const
 
 bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::GroupJointStatesSet::kType)
+  if (event->type() == events::EventType::GROUP_JOINT_STATES_SET)
   {
     assert(dynamic_cast<events::GroupJointStatesSet*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesSet*>(event);
     if (e->getComponentInfo() == component_info_)
       set(e->getGroupJointStates());
   }
-  else if (event->type() == events::GroupJointStatesAdd::kType)
+  else if (event->type() == events::EventType::GROUP_JOINT_STATES_ADD)
   {
     assert(dynamic_cast<events::GroupJointStatesAdd*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesAdd*>(event);
     if (e->getComponentInfo() == component_info_)
       add(e->getGroupName(), e->getStateName(), e->getJointState());
   }
-  else if (event->type() == events::GroupJointStatesClear::kType)
+  else if (event->type() == events::EventType::GROUP_JOINT_STATES_CLEAR)
   {
     assert(dynamic_cast<events::GroupJointStatesClear*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesClear*>(event);
     if (e->getComponentInfo() == component_info_)
       clear();
   }
-  else if (event->type() == events::GroupJointStatesRemove::kType)
+  else if (event->type() == events::EventType::GROUP_JOINT_STATES_REMOVE)
   {
     assert(dynamic_cast<events::GroupJointStatesRemove*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesRemove*>(event);
@@ -208,7 +208,7 @@ bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
         remove(entry[0], entry[1]);
     }
   }
-  else if (event->type() == events::GroupJointStatesRemoveGroup::kType)
+  else if (event->type() == events::EventType::GROUP_JOINT_STATES_REMOVE_GROUP)
   {
     assert(dynamic_cast<events::GroupJointStatesRemoveGroup*>(event) != nullptr);
     auto* e = static_cast<events::GroupJointStatesRemoveGroup*>(event);

@@ -28,7 +28,7 @@ namespace tesseract_gui::events
 {
 CompositeInstructionClear::CompositeInstructionClear(std::shared_ptr<const ComponentInfo> component_info,
                                                      const std::string& ns)
-  : ComponentEvent(std::move(component_info), kType), ns_(ns)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::CL_COMPOSITE_INSTRUCTION_CLEAR)), ns_(ns)
 {
 }
 
@@ -47,7 +47,8 @@ struct CompositeInstructionSet::Implementation
 CompositeInstructionSet::CompositeInstructionSet(std::shared_ptr<const ComponentInfo> component_info,
                                                  const tesseract_planning::CompositeInstruction& composite_instruction,
                                                  const std::string& ns)
-  : ComponentEvent(std::move(component_info), kType), data_(std::make_unique<Implementation>())
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::CL_COMPOSITE_INSTRUCTION_SET))
+  , data_(std::make_unique<Implementation>())
 {
   data_->ns = ns;
   data_->composite_instruction = composite_instruction;
@@ -65,13 +66,16 @@ const tesseract_planning::CompositeInstruction& CompositeInstructionSet::getComp
 
 CompositeInstructionRemove::CompositeInstructionRemove(std::shared_ptr<const ComponentInfo> component_info,
                                                        boost::uuids::uuid uuid)
-  : ComponentEventUUID(std::move(component_info), uuid, kType)
+  : ComponentEventUUID(std::move(component_info), uuid, QEvent::Type(EventType::CL_COMPOSITE_INSTRUCTION_REMOVE))
 {
 }
 CompositeInstructionRemove::CompositeInstructionRemove(std::shared_ptr<const ComponentInfo> component_info,
                                                        boost::uuids::uuid uuid,
                                                        boost::uuids::uuid child_uuid)
-  : ComponentEventUUID(std::move(component_info), uuid, child_uuid, kType)
+  : ComponentEventUUID(std::move(component_info),
+                       uuid,
+                       child_uuid,
+                       QEvent::Type(EventType::CL_COMPOSITE_INSTRUCTION_REMOVE))
 {
 }
 CompositeInstructionRemove::~CompositeInstructionRemove() = default;

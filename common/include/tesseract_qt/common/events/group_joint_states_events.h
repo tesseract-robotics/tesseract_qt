@@ -35,9 +35,6 @@ class GroupJointStatesClear : public ComponentEvent
 public:
   GroupJointStatesClear(std::shared_ptr<const ComponentInfo> component_info);
   ~GroupJointStatesClear() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_CLEAR);
 };
 
 class GroupJointStatesSet : public ComponentEvent
@@ -48,9 +45,6 @@ public:
   ~GroupJointStatesSet() override;
 
   const tesseract_srdf::GroupJointStates& getGroupJointStates() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_SET);
 
 private:
   tesseract_srdf::GroupJointStates group_joint_states_;
@@ -69,9 +63,6 @@ public:
   const std::string& getStateName() const;
   const tesseract_srdf::GroupsJointState& getJointState() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_ADD);
-
 private:
   std::string group_name_;
   std::string state_name_;
@@ -87,9 +78,6 @@ public:
 
   const std::vector<std::array<std::string, 2>>& getEntries() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_REMOVE);
-
 private:
   std::vector<std::array<std::string, 2>> entries_;
 };
@@ -102,9 +90,6 @@ public:
   ~GroupJointStatesRemoveGroup() override;
 
   const std::vector<std::string>& getGroupNames() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_REMOVE_GROUP);
 
 private:
   std::vector<std::string> group_names_;
@@ -124,9 +109,6 @@ public:
   const std::string& getStateName() const;
   const tesseract_srdf::GroupsJointState& getJointState() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_SHOW);
-
 private:
   std::string group_name_;
   std::string state_name_;
@@ -144,9 +126,6 @@ public:
 
   const std::string& getGroupName() const;
   const std::string& getStateName() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_HIDE);
 
 private:
   std::string group_name_;

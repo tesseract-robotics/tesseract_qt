@@ -28,7 +28,8 @@ namespace tesseract_gui::events
 {
 TaskComposerLoadConfig::TaskComposerLoadConfig(std::shared_ptr<const ComponentInfo> component_info,
                                                std::string resource_path)
-  : ComponentEvent(std::move(component_info), kType), resource_path_(std::move(resource_path))
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_LOAD_CONFIG))
+  , resource_path_(std::move(resource_path))
 {
 }
 
@@ -40,7 +41,9 @@ const std::string& TaskComposerLoadConfig::getResourcePath() const { return reso
 TaskComposerLoadLog::TaskComposerLoadLog(std::shared_ptr<const ComponentInfo> component_info,
                                          std::string resource_path,
                                          std::string ns)
-  : ComponentEvent(std::move(component_info), kType), resource_path_(std::move(resource_path)), ns_(std::move(ns))
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_LOAD_LOG))
+  , resource_path_(std::move(resource_path))
+  , ns_(std::move(ns))
 {
 }
 
@@ -51,7 +54,8 @@ const std::string& TaskComposerLoadLog::getNamespace() const { return ns_; }
 //////////////////////////////////////////////////////
 
 TaskComposerSaveLog::TaskComposerSaveLog(std::shared_ptr<const ComponentInfo> component_info, std::string save_path)
-  : ComponentEvent(std::move(component_info), kType), save_path_(std::move(save_path))
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_SAVE_LOG))
+  , save_path_(std::move(save_path))
 {
 }
 
@@ -61,7 +65,7 @@ const std::string& TaskComposerSaveLog::getSavePath() const { return save_path_;
 //////////////////////////////////////////////////////
 
 TaskComposerPlotDotgraph::TaskComposerPlotDotgraph(std::shared_ptr<const ComponentInfo> component_info)
-  : ComponentEvent(std::move(component_info), kType)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_PLOT_DOTGRAPH))
 {
 }
 
@@ -71,7 +75,8 @@ TaskComposerPlotDotgraph::~TaskComposerPlotDotgraph() = default;
 
 TaskComposerSetProfiles::TaskComposerSetProfiles(std::shared_ptr<const ComponentInfo> component_info,
                                                  std::shared_ptr<tesseract_common::ProfileDictionary> profiles)
-  : ComponentEvent(std::move(component_info), kType), profiles_(std::move(profiles))
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_SET_PROFILES))
+  , profiles_(std::move(profiles))
 {
 }
 

@@ -221,13 +221,13 @@ void IgnContactResultsRenderManager::render()
 
   for (const auto& event : events_)
   {
-    if (event->type() == tesseract_gui::events::ContactResultsClear::kType)
+    if (event->type() == tesseract_gui::events::EventType::CONTACT_RESULTS_CLEAR)
     {
       auto& e = static_cast<tesseract_gui::events::ContactResultsClear&>(*event);
       tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
       data_->clear(*scene, *entity_manager);
     }
-    else if (event->type() == events::ContactResultsRemove::kType)
+    else if (event->type() == events::EventType::CONTACT_RESULTS_REMOVE)
     {
       auto& e = static_cast<tesseract_gui::events::ContactResultsRemove&>(*event);
       tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
@@ -243,7 +243,7 @@ void IgnContactResultsRenderManager::render()
         CONSOLE_BRIDGE_logError("IgnContactResultsRenderManager, removing child elements is currently not supported");
       }
     }
-    else if (event->type() == tesseract_gui::events::ContactResultsSet::kType)
+    else if (event->type() == tesseract_gui::events::EventType::CONTACT_RESULTS_SET)
     {
       auto& e = static_cast<tesseract_gui::events::ContactResultsSet&>(*event);
       tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
@@ -299,7 +299,7 @@ void IgnContactResultsRenderManager::render()
         }
       }
     }
-    else if (event->type() == events::ContactResultsVisbility::kType)
+    else if (event->type() == events::EventType::CONTACT_RESULTS_VISIBILITY)
     {
       auto& e = static_cast<tesseract_gui::events::ContactResultsVisbility&>(*event);
       tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
@@ -339,7 +339,7 @@ void IgnContactResultsRenderManager::render()
         }
       }
     }
-    else if (event->type() == events::ContactResultsVisbilityAll::kType)
+    else if (event->type() == events::EventType::CONTACT_RESULTS_VISIBILITY_ALL)
     {
       auto& e = static_cast<tesseract_gui::events::ContactResultsVisbilityAll&>(*event);
       const bool visibility = e.getVisibility();

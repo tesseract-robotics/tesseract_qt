@@ -103,14 +103,14 @@ const EnvironmentCommandsStandardItem* EnvironmentCommandsModel::getRoot() const
 
 bool EnvironmentCommandsModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::EnvironmentCommandsSet::kType)
+  if (event->type() == events::EventType::ENVIRONMENT_COMMANDS_SET)
   {
     assert(dynamic_cast<events::EnvironmentCommandsSet*>(event) != nullptr);
     auto* e = static_cast<events::EnvironmentCommandsSet*>(event);
     if (e->getComponentInfo() == component_info_)
       set(e->getCommands());
   }
-  else if (event->type() == events::EnvironmentCommandsAppend::kType)
+  else if (event->type() == events::EventType::ENVIRONMENT_COMMANDS_APPEND)
   {
     assert(dynamic_cast<events::EnvironmentCommandsAppend*>(event) != nullptr);
     auto* e = static_cast<events::EnvironmentCommandsAppend*>(event);

@@ -35,9 +35,6 @@ class KinematicGroupsClear : public ComponentEvent
 public:
   KinematicGroupsClear(std::shared_ptr<const ComponentInfo> component_info);
   ~KinematicGroupsClear() override;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KINEMATIC_GROUPS_CLEAR);
 };
 
 class KinematicGroupsSet : public ComponentEvent
@@ -52,9 +49,6 @@ public:
   const tesseract_srdf::ChainGroups& getChainGroups() const;
   const tesseract_srdf::JointGroups& getJointGroups() const;
   const tesseract_srdf::LinkGroups& getLinkGroups() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KINEMATIC_GROUPS_SET);
 
 private:
   tesseract_srdf::ChainGroups chain_groups_;
@@ -73,9 +67,6 @@ public:
   const std::string& getGroupName() const;
   const tesseract_srdf::ChainGroup& getGroup() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KINEMATIC_GROUPS_ADD_CHAIN);
-
 private:
   std::string group_name_;
   tesseract_srdf::ChainGroup group_;
@@ -91,9 +82,6 @@ public:
 
   const std::string& getGroupName() const;
   const tesseract_srdf::JointGroup& getGroup() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KINEMATIC_GROUPS_ADD_JOINT);
 
 private:
   std::string group_name_;
@@ -111,9 +99,6 @@ public:
   const std::string& getGroupName() const;
   const tesseract_srdf::LinkGroup& getGroup() const;
 
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KINEMATIC_GROUPS_ADD_LINK);
-
 private:
   std::string group_name_;
   tesseract_srdf::LinkGroup group_;
@@ -127,9 +112,6 @@ public:
   ~KinematicGroupsRemove() override;
 
   const std::vector<std::string>& getGroupNames() const;
-
-  /** @brief Unique type for this event. */
-  static const QEvent::Type kType = QEvent::Type(EventType::KINEMATIC_GROUPS_REMOVE);
 
 private:
   std::vector<std::string> group_names_;
