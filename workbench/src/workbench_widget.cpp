@@ -27,6 +27,7 @@
 #include <tesseract_qt/joint_trajectory/widgets/joint_trajectory_tool_bar.h>
 #include <tesseract_qt/manipulation/manipulation_tool_bar.h>
 #include <tesseract_qt/planning/widgets/task_composer_tool_bar.h>
+#include <tesseract_qt/common/widgets/status_log_tool_bar.h>
 #include <tesseract_qt/common/component_info.h>
 
 #include <QToolBar>
@@ -44,6 +45,7 @@ struct WorkbenchWidget::Implementation
   JointTrajectoryToolBar* jt_toolbar{ nullptr };
   ManipulationToolBar* manip_toolbar{ nullptr };
   TaskComposerToolBar* task_composer_toolbar{ nullptr };
+  StatusLogToolBar* status_log_toolbar{ nullptr };
 };
 
 WorkbenchWidget::WorkbenchWidget(QWidget* parent) : WorkbenchWidget(nullptr, parent) {}
@@ -68,6 +70,9 @@ WorkbenchWidget::WorkbenchWidget(std::shared_ptr<const ComponentInfo> component_
 
   data_->task_composer_toolbar = new TaskComposerToolBar();  // NOLINT
   static_cast<QVBoxLayout*>(ui->task_composer_widget->layout())->insertWidget(0, data_->task_composer_toolbar);
+
+  data_->status_log_toolbar = new StatusLogToolBar();  // NOLINT
+  static_cast<QVBoxLayout*>(ui->status_log_widget->layout())->insertWidget(0, data_->status_log_toolbar);
 
   setComponentInfo(std::move(component_info));
 }
@@ -106,5 +111,8 @@ const ManipulationWidget& WorkbenchWidget::getManipulationWidget() const { retur
 
 TaskComposerWidget& WorkbenchWidget::getTaskComposerWidget() { return *ui->task_composer_widget; }
 const TaskComposerWidget& WorkbenchWidget::getTaskComposerWidget() const { return *ui->task_composer_widget; }
+
+StatusLogWidget& WorkbenchWidget::getStatusLogWidget() { return *ui->status_log_widget; }
+const StatusLogWidget& WorkbenchWidget::getStatusLogWidget() const { return *ui->status_log_widget; }
 
 }  // namespace tesseract_gui

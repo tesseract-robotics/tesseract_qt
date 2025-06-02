@@ -34,6 +34,7 @@
 #include <tesseract_qt/plot/transforms/outlier_removal.h>
 #include <tesseract_qt/plot/transforms/scale_transform.h>
 
+#include <tesseract_qt/common/events/log_events.h>
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/environment_manager.h>
@@ -47,7 +48,6 @@
 #include <tesseract_environment/environment.h>
 #include <tesseract_visualization/trajectory_player.h>
 #include <set>
-#include <console_bridge/console.h>
 
 #include <QTimer>
 #include <QFileDialog>
@@ -368,7 +368,8 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       {
         std::stringstream sstr;
         sstr << "Error in onCurrentRowChanged default, not updating env state: " << ex.what() << std::endl;
-        CONSOLE_BRIDGE_logDebug(sstr.str().c_str());
+        tesseract_gui::events::LogInfoEvent event(sstr.str().c_str());
+        QApplication::sendEvent(qApp, &event);
       }
 
       break;

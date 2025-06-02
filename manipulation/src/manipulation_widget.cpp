@@ -3,6 +3,7 @@
 
 #include <tesseract_qt/scene_graph/models/scene_state_model.h>
 
+#include <tesseract_qt/common/events/log_events.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/events/manipulation_events.h>
 #include <tesseract_qt/common/icon_utils.h>
@@ -14,8 +15,6 @@
 #include <tesseract_srdf/kinematics_information.h>
 #include <tesseract_environment/environment.h>
 #include <tesseract_kinematics/core/kinematic_group.h>
-
-#include <console_bridge/console.h>
 
 #include <QStringList>
 #include <QStringListModel>
@@ -621,7 +620,10 @@ void ManipulationWidget::onReset()
       }
       catch (...)
       {
-        CONSOLE_BRIDGE_logDebug("ManipulationWidget, Group '%s' is not supported!", group_name.c_str());
+        std::stringstream sstr;
+        tesseract_gui::events::LogInfoEvent event(
+            QString("ManipulationWidget, Group %1 is not supported!").arg(group_name.c_str()));
+        QApplication::sendEvent(qApp, &event);
       }
 
       if (kin_group != nullptr)

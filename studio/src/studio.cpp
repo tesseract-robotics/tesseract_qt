@@ -37,8 +37,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <console_bridge/console.h>
-
+#include <tesseract_qt/common/events/log_events.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
@@ -269,8 +268,9 @@ void Studio::Implementation::loadConfig()
             StudioDockWidget* dock_widget = app->createDockWidget(name, it->second);
             if (dock_widget == nullptr)
             {
-              CONSOLE_BRIDGE_logError("Studio::loadConfig: Failed to load dock widget '%s' from config.",
-                                      it->first.c_str());
+              tesseract_gui::events::LogErrorEvent event(
+                  QString("Studio::loadConfig: Failed to load dock widget '%1' from config.").arg(it->first.c_str()));
+              QApplication::sendEvent(qApp, &event);
             }
             else
             {
@@ -287,8 +287,10 @@ void Studio::Implementation::loadConfig()
             StudioDockWidget* dock_widget = app->createDockWidget(name, plugin_info.second);
             if (dock_widget == nullptr)
             {
-              CONSOLE_BRIDGE_logError("Studio::loadConfig: Failed to load dock widget '%s' from config.",
-                                      plugin_info.first.c_str());
+              tesseract_gui::events::LogErrorEvent event(QString("Studio::loadConfig: Failed to load dock widget '%1' "
+                                                                 "from config.")
+                                                             .arg(plugin_info.first.c_str()));
+              QApplication::sendEvent(qApp, &event);
               continue;
             }
 
@@ -534,7 +536,8 @@ bool Studio::init(int argc, char** argv)
     {
       std::stringstream ss;
       ss << "Basic Command Line Parameter App" << std::endl << desc << std::endl;
-      CONSOLE_BRIDGE_logInform(ss.str().c_str());
+      tesseract_gui::events::LogInfoEvent event(ss.str().c_str());
+      QApplication::sendEvent(qApp, &event);
       return false;
     }
 
@@ -546,7 +549,8 @@ bool Studio::init(int argc, char** argv)
     std::stringstream ss;
     ss << "ERROR: " << e.what() << std::endl << std::endl;
     ss << desc << std::endl;
-    CONSOLE_BRIDGE_logError(ss.str().c_str());
+    tesseract_gui::events::LogErrorEvent event(ss.str().c_str());
+    QApplication::sendEvent(qApp, &event);
     return false;
   }
 
@@ -600,7 +604,9 @@ StudioDockWidget* Studio::createDockWidget(const QString& name, const tesseract_
     auto plugin = data_->plugin_loader.createInstance<StudioDockWidgetFactory>(plugin_info.class_name);
     if (plugin == nullptr)
     {
-      CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s'", plugin_info.class_name.c_str());
+      tesseract_gui::events::LogWarnEvent event(
+          QString("Failed to load symbol '%1'").arg(plugin_info.class_name.c_str()));
+      QApplication::sendEvent(qApp, &event);
       return nullptr;
     }
     data_->factories[plugin_info.class_name] = plugin;
@@ -615,7 +621,9 @@ StudioDockWidget* Studio::createDockWidget(const QString& name, const tesseract_
   }
   catch (const std::exception& e)
   {
-    CONSOLE_BRIDGE_logWarn("Failed to load symbol '%s', Details: %s", plugin_info.class_name.c_str(), e.what());
+    tesseract_gui::events::LogWarnEvent event(
+        QString("Failed to load symbol '%1', Details: %2").arg(plugin_info.class_name.c_str(), e.what()));
+    QApplication::sendEvent(qApp, &event);
     return nullptr;
   }
 }

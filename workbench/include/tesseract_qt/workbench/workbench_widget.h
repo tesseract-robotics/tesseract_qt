@@ -39,6 +39,7 @@ class EnvironmentWidget;
 class JointTrajectoryWidget;
 class ManipulationWidget;
 class TaskComposerWidget;
+class StatusLogWidget;
 class ComponentInfo;
 
 class WorkbenchWidget : public QWidget
@@ -64,6 +65,9 @@ public:
 
   TaskComposerWidget& getTaskComposerWidget();
   const TaskComposerWidget& getTaskComposerWidget() const;
+
+  StatusLogWidget& getStatusLogWidget();
+  const StatusLogWidget& getStatusLogWidget() const;
 
 private:
   struct Implementation;

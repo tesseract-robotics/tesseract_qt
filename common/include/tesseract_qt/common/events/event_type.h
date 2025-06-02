@@ -156,6 +156,18 @@ struct EventType
   static const int TASK_COMPOSER_SAVE_LOG;
   static const int TASK_COMPOSER_PLOT_DOTGRAPH;
   static const int TASK_COMPOSER_SET_PROFILES;
+
+  // Status Log
+  static const int LOG_INFO;
+  static const int LOG_WARN;
+  static const int LOG_ERROR;
+  static const int STATUS_CLEAR;
+  static const int TOGGLE_LOG_INFO_ON;
+  static const int TOGGLE_LOG_WARN_ON;
+  static const int TOGGLE_LOG_ERROR_ON;
+  static const int TOGGLE_LOG_INFO_OFF;
+  static const int TOGGLE_LOG_WARN_OFF;
+  static const int TOGGLE_LOG_ERROR_OFF;
 };
 }  // namespace tesseract_gui::events
 
