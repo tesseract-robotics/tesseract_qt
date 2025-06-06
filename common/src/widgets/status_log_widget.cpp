@@ -121,6 +121,10 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     {
       data_->regex_pattern.remove("|Info");
     }
+    else if (data_->regex_pattern.contains(QString("Info|")))
+    {
+      data_->regex_pattern.remove("Info|");
+    }
     else if (data_->regex_pattern.contains(QString("Info")))
     {
       data_->regex_pattern.remove("Info");
@@ -152,6 +156,10 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     {
       data_->regex_pattern.remove("|Warn");
     }
+    else if (data_->regex_pattern.contains(QString("Warn|")))
+    {
+      data_->regex_pattern.remove("Warn|");
+    }
     else if (data_->regex_pattern.contains(QString("Warn")))
     {
       data_->regex_pattern.remove("Warn");
@@ -182,6 +190,10 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     if (data_->regex_pattern.contains(QString("|Error")))
     {
       data_->regex_pattern.remove("|Error");
+    }
+    else if (data_->regex_pattern.contains(QString("Error|")))
+    {
+      data_->regex_pattern.remove("Error|");
     }
     else if (data_->regex_pattern.contains(QString("Error")))
     {
