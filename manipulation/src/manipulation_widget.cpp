@@ -3,7 +3,7 @@
 
 #include <tesseract_qt/scene_graph/models/scene_state_model.h>
 
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/events/manipulation_events.h>
 #include <tesseract_qt/common/icon_utils.h>

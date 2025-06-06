@@ -22,8 +22,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef TESSERACT_QT_COMMON_LOG_EVENTS_H
-#define TESSERACT_QT_COMMON_LOG_EVENTS_H
+#ifndef TESSERACT_QT_COMMON_STATUS_LOG_EVENTS_H
+#define TESSERACT_QT_COMMON_STATUS_LOG_EVENTS_H
 
 #include <string>
 #include <qcoreevent.h>
@@ -121,4 +121,4 @@ public:
 
 }  // namespace tesseract_gui::events
 
-#endif  // TESSERACT_QT_COMMON_LOG_EVENTS_H
+#endif  // TESSERACT_QT_COMMON_STATUS_LOG_EVENTS_H

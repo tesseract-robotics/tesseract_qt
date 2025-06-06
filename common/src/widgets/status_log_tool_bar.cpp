@@ -22,7 +22,7 @@
  */
 
 #include <tesseract_qt/common/widgets/status_log_tool_bar.h>
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 

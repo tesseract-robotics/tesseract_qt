@@ -66,9 +66,6 @@ public:
   TaskComposerWidget& getTaskComposerWidget();
   const TaskComposerWidget& getTaskComposerWidget() const;
 
-  StatusLogWidget& getStatusLogWidget();
-  const StatusLogWidget& getStatusLogWidget() const;
-
 private:
   struct Implementation;
   std::unique_ptr<Ui::WorkbenchWidget> ui;

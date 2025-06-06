@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 
 #include <tesseract_qt/common/events/event_type.h>
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/models/status_log_model.h>
 #include <tesseract_qt/common/widgets/status_log_tool_bar.h>
 #include <tesseract_qt/common/widgets/status_log_widget.h>

@@ -21,7 +21,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="sizeConstraint">
-    <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+    <enum>QLayout::SetNoConstraint</enum>
    </property>
    <property name="leftMargin">
     <number>3</number>
@@ -97,7 +97,7 @@
        <item>
         <widget class="Line" name="line">
          <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
+          <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
@@ -164,9 +164,6 @@
      </widget>
     </widget>
    </item>
-   <item>
-    <widget class="tesseract_gui::StatusLogWidget" name="status_log_widget" native="true"/>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -192,12 +189,6 @@
    <class>tesseract_gui::TaskComposerWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/planning/widgets/task_composer_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>tesseract_gui::StatusLogWidget</class>
-   <extends>QWidget</extends>
-   <header>tesseract_qt/common/widgets/status_log_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

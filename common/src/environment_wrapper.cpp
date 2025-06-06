@@ -31,7 +31,7 @@
 #include <tesseract_qt/common/events/group_tcps_events.h>
 #include <tesseract_qt/common/events/kinematic_groups_events.h>
 #include <tesseract_qt/common/events/environment_events.h>
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 
 #include <tesseract_collision/core/discrete_contact_manager.h>
 

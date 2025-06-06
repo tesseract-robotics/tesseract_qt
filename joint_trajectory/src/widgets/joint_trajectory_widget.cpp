@@ -34,7 +34,7 @@
 #include <tesseract_qt/plot/transforms/outlier_removal.h>
 #include <tesseract_qt/plot/transforms/scale_transform.h>
 
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/environment_manager.h>

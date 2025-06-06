@@ -25,7 +25,7 @@
 #include <tesseract_qt/rendering/gazebo_utils.h>
 
 #include <tesseract_qt/common/events/contact_results_events.h>
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/component_info.h>

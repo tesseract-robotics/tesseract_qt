@@ -21,12 +21,12 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/common/events/event_type.h>
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/models/status_log_model.h>
-#include <tesseract_qt/common/models/status_log_standard_item.h>
 
 #include <QApplication>
+#include <QDateTime>
 
 namespace tesseract_gui
 {
@@ -58,11 +58,11 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
     auto* e = dynamic_cast<events::StatusLogInfoEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
-    auto* log_standard_item = new StatusLogStandardItem(*e);
     QList<QStandardItem*> items;
-    items.append(log_standard_item->getTimeStamp());
-    items.append(log_standard_item->getSeverity());
-    items.append(log_standard_item->getText());
+    items.append(new QStandardItem(QDateTime::currentDateTime().toString("dd MMMM yyyy hh:mm:ss.zzz")));
+    items.append(new QStandardItem(icons::getInfoMsgIcon(), "Info"));
+    items.append(new QStandardItem(e->getString()));
+    items.back()->setForeground(Qt::black);
     appendRow(items);
   }
   else if (event->type() == events::EventType::STATUS_LOG_WARN)
@@ -70,11 +70,11 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
     auto* e = dynamic_cast<events::StatusLogWarnEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
-    auto* log_standard_item = new StatusLogStandardItem(*e);
     QList<QStandardItem*> items;
-    items.append(log_standard_item->getTimeStamp());
-    items.append(log_standard_item->getSeverity());
-    items.append(log_standard_item->getText());
+    items.append(new QStandardItem(QDateTime::currentDateTime().toString("dd MMMM yyyy hh:mm:ss.zzz")));
+    items.append(new QStandardItem(icons::getWarnMsgIcon(), "Warn"));
+    items.append(new QStandardItem(e->getString()));
+    items.back()->setForeground(QColor("orange"));
     appendRow(items);
   }
   else if (event->type() == events::EventType::STATUS_LOG_ERROR)
@@ -82,11 +82,11 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
     auto* e = dynamic_cast<events::StatusLogErrorEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
-    auto* log_standard_item = new StatusLogStandardItem(*e);
     QList<QStandardItem*> items;
-    items.append(log_standard_item->getTimeStamp());
-    items.append(log_standard_item->getSeverity());
-    items.append(log_standard_item->getText());
+    items.append(new QStandardItem(QDateTime::currentDateTime().toString("dd MMMM yyyy hh:mm:ss.zzz")));
+    items.append(new QStandardItem(icons::getErrorMsgIcon(), "Error"));
+    items.append(new QStandardItem(e->getString()));
+    items.back()->setForeground(Qt::red);
     appendRow(items);
   }
   else if (event->type() == events::EventType::STATUS_LOG_CLEAR)

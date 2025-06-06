@@ -37,7 +37,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>

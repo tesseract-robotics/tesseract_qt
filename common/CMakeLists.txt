@@ -64,9 +64,9 @@ add_library(
   src/events/kinematic_groups_events.cpp
   src/events/manipulation_events.cpp
   src/events/render_events.cpp
-  src/events/log_events.cpp
   src/events/scene_graph_events.cpp
   src/events/scene_graph_render_manager.cpp
+  src/events/status_log_events.cpp
   src/events/task_composer_events.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
@@ -88,7 +88,6 @@ add_library(
   src/models/quaternion_standard_item.cpp
   src/models/rgba_standard_item.cpp
   src/models/status_log_model.cpp
-  src/models/status_log_standard_item.cpp
   src/models/tool_path_segment_standard_item.cpp
   src/models/tool_path_standard_item.cpp
   src/models/type_standard_item.cpp

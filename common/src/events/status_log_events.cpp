@@ -26,7 +26,7 @@
 #include <string>
 
 #include <tesseract_qt/common/events/event_type.h>
-#include <tesseract_qt/common/events/log_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 
 namespace tesseract_gui::events
 {
