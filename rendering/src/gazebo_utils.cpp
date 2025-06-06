@@ -58,7 +58,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromFirstRenderEngine(const std::stri
   auto loaded_eng_names = gz::rendering::loadedEngines();
   if (loaded_eng_names.empty())
   {
-    tesseract_gui::events::LogInfoEvent event("No rendering engine is loaded yet");
+    tesseract_gui::events::StatusLogInfoEvent event("No rendering engine is loaded yet");
     QApplication::sendEvent(qApp, &event);
     return nullptr;
   }
@@ -66,7 +66,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromFirstRenderEngine(const std::stri
   auto engine_name = loaded_eng_names[0];
   if (loaded_eng_names.size() > 1)
   {
-    tesseract_gui::events::LogWarnEvent event(
+    tesseract_gui::events::StatusLogWarnEvent event(
         QString("More than one engine is available. Using engine %1").arg(engine_name.c_str()));
     QApplication::sendEvent(qApp, &event);
   }
@@ -74,7 +74,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromFirstRenderEngine(const std::stri
   auto* engine = gz::rendering::engine(engine_name);
   if (engine == nullptr)
   {
-    tesseract_gui::events::LogErrorEvent event(
+    tesseract_gui::events::StatusLogErrorEvent event(
         QString("Internal error: failed to load engine %1").arg(engine_name.c_str()));
     QApplication::sendEvent(qApp, &event);
     return nullptr;
@@ -82,7 +82,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromFirstRenderEngine(const std::stri
 
   if (engine->SceneCount() == 0)
   {
-    tesseract_gui::events::LogInfoEvent event("No scene has been created yet");
+    tesseract_gui::events::StatusLogInfoEvent event("No scene has been created yet");
     QApplication::sendEvent(qApp, &event);
     return nullptr;
   }
@@ -90,7 +90,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromFirstRenderEngine(const std::stri
   auto scene = engine->SceneByName(scene_name);
   if (scene == nullptr)
   {
-    tesseract_gui::events::LogErrorEvent event("Internal error: scene is null.");
+    tesseract_gui::events::StatusLogErrorEvent event("Internal error: scene is null.");
     QApplication::sendEvent(qApp, &event);
     return nullptr;
   }
@@ -105,7 +105,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromRenderEngine(const std::string& s
   auto* engine = gz::rendering::engine(engine_name);
   if (engine == nullptr)
   {
-    tesseract_gui::events::LogErrorEvent event(
+    tesseract_gui::events::StatusLogErrorEvent event(
         QString("Internal error: failed to load engine %1").arg(engine_name.c_str()));
     QApplication::sendEvent(qApp, &event);
     return nullptr;
@@ -113,7 +113,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromRenderEngine(const std::string& s
 
   if (engine->SceneCount() == 0)
   {
-    tesseract_gui::events::LogInfoEvent event("No scene has been created yet");
+    tesseract_gui::events::StatusLogInfoEvent event("No scene has been created yet");
     QApplication::sendEvent(qApp, &event);
     return nullptr;
   }
@@ -121,7 +121,7 @@ std::shared_ptr<gz::rendering::Scene> sceneFromRenderEngine(const std::string& s
   auto scene = engine->SceneByName(scene_name);
   if (scene == nullptr)
   {
-    tesseract_gui::events::LogErrorEvent event("Internal error: scene is null.");
+    tesseract_gui::events::StatusLogErrorEvent event("Internal error: scene is null.");
     QApplication::sendEvent(qApp, &event);
     return nullptr;
   }
@@ -892,7 +892,8 @@ void tesseractEventFilter(const tesseract_environment::Event& event,
             // LCOV_EXCL_START
             default:
             {
-              tesseract_gui::events::LogErrorEvent event("Tesseract Qt Gazebo Utils, Unhandled environment command");
+              tesseract_gui::events::StatusLogErrorEvent event("Tesseract Qt Gazebo Utils, Unhandled environment "
+                                                               "command");
               QApplication::sendEvent(qApp, &event);
             }
           }

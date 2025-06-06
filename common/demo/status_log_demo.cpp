@@ -48,22 +48,22 @@ int main(int argc, char** argv)
   widget.setLayout(layout);
   widget.show();
 
-  tesseract_gui::events::LogInfoEvent event("Info Test 1");
+  tesseract_gui::events::StatusLogInfoEvent event("Info Test 1");
   QApplication::sendEvent(qApp, &event);
 
-  tesseract_gui::events::LogWarnEvent event1("Warn Test 1");
+  tesseract_gui::events::StatusLogWarnEvent event1("Warn Test 1");
   QApplication::sendEvent(qApp, &event1);
 
-  tesseract_gui::events::LogErrorEvent event2("Error Test 1");
+  tesseract_gui::events::StatusLogErrorEvent event2("Error Test 1");
   QApplication::sendEvent(qApp, &event2);
 
-  tesseract_gui::events::LogInfoEvent event3("Info Test 2");
+  tesseract_gui::events::StatusLogInfoEvent event3("Info Test 2");
   QApplication::sendEvent(qApp, &event3);
 
-  tesseract_gui::events::LogErrorEvent event4("Error Test 2");
+  tesseract_gui::events::StatusLogErrorEvent event4("Error Test 2");
   QApplication::sendEvent(qApp, &event4);
 
-  tesseract_gui::events::LogWarnEvent event5("Warn Test 2");
+  tesseract_gui::events::StatusLogWarnEvent event5("Warn Test 2");
   QApplication::sendEvent(qApp, &event5);
 
   return QApplication::exec();

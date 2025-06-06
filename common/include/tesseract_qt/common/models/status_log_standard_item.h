@@ -37,9 +37,9 @@ namespace tesseract_gui
 class StatusLogStandardItem : public QStandardItem
 {
 public:
-  explicit StatusLogStandardItem(const events::LogInfoEvent& message);
-  explicit StatusLogStandardItem(const events::LogWarnEvent& message);
-  explicit StatusLogStandardItem(const events::LogErrorEvent& message);
+  explicit StatusLogStandardItem(const events::StatusLogInfoEvent& message);
+  explicit StatusLogStandardItem(const events::StatusLogWarnEvent& message);
+  explicit StatusLogStandardItem(const events::StatusLogErrorEvent& message);
 
   QStandardItem* getTimeStamp() const;
   QStandardItem* getSeverity() const;
@@ -48,9 +48,9 @@ public:
   int type() const override;
 
 private:
-  void ctor(const events::LogInfoEvent& message);
-  void ctor(const events::LogWarnEvent& message);
-  void ctor(const events::LogErrorEvent& message);
+  void ctor(const events::StatusLogInfoEvent& message);
+  void ctor(const events::StatusLogWarnEvent& message);
+  void ctor(const events::StatusLogErrorEvent& message);
   StandardItemType type_;
   QStandardItem* time_stamp_;
   QStandardItem* severity_;

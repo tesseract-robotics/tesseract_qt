@@ -53,9 +53,9 @@ void StatusLogModel::clear()
 
 bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == QEvent::Type(events::EventType::LOG_INFO))
+  if (event->type() == QEvent::Type(events::EventType::STATUS_LOG_INFO))
   {
-    auto* e = dynamic_cast<events::LogInfoEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogInfoEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     auto* log_standard_item = new StatusLogStandardItem(*e);
@@ -65,9 +65,9 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
     items.append(log_standard_item->getText());
     appendRow(items);
   }
-  else if (event->type() == events::EventType::LOG_WARN)
+  else if (event->type() == events::EventType::STATUS_LOG_WARN)
   {
-    auto* e = dynamic_cast<events::LogWarnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogWarnEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     auto* log_standard_item = new StatusLogStandardItem(*e);
@@ -77,9 +77,9 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
     items.append(log_standard_item->getText());
     appendRow(items);
   }
-  else if (event->type() == events::EventType::LOG_ERROR)
+  else if (event->type() == events::EventType::STATUS_LOG_ERROR)
   {
-    auto* e = dynamic_cast<events::LogErrorEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogErrorEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     auto* log_standard_item = new StatusLogStandardItem(*e);
@@ -89,9 +89,9 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
     items.append(log_standard_item->getText());
     appendRow(items);
   }
-  else if (event->type() == events::EventType::STATUS_CLEAR)
+  else if (event->type() == events::EventType::STATUS_LOG_CLEAR)
   {
-    auto* e = dynamic_cast<events::ClearStatusLogEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogClearEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     clear();

@@ -96,9 +96,9 @@ void StatusLogWidget::setModel(std::shared_ptr<StatusLogModel> model)
 // Documentation inherited
 bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::EventType::TOGGLE_LOG_INFO_ON)
+  if (event->type() == events::EventType::STATUS_LOG_INFO_TOGGLE_ON)
   {
-    auto* e = dynamic_cast<events::ToggleLogInfoOnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogInfoToggleOnEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     if (data_->regex_pattern.isEmpty())
@@ -112,9 +112,9 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     data_->proxy_model->setFilterRegularExpression(data_->regex_pattern);
     data_->proxy_model->setFilterKeyColumn(1);
   }
-  else if (event->type() == events::EventType::TOGGLE_LOG_INFO_OFF)
+  else if (event->type() == events::EventType::STATUS_LOG_INFO_TOGGLE_OFF)
   {
-    auto* e = dynamic_cast<events::ToggleLogInfoOffEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogInfoToggleOffEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     if (data_->regex_pattern.contains(QString("|Info")))
@@ -127,9 +127,9 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     }
     data_->proxy_model->setFilterRegularExpression(data_->regex_pattern);
   }
-  else if (event->type() == events::EventType::TOGGLE_LOG_WARN_ON)
+  else if (event->type() == events::EventType::STATUS_LOG_WARN_TOGGLE_ON)
   {
-    auto* e = dynamic_cast<events::ToggleLogWarnOnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogWarnToggleOnEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     if (data_->regex_pattern.isEmpty())
@@ -143,9 +143,9 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     data_->proxy_model->setFilterRegularExpression(data_->regex_pattern);
     data_->proxy_model->setFilterKeyColumn(1);
   }
-  else if (event->type() == events::EventType::TOGGLE_LOG_WARN_OFF)
+  else if (event->type() == events::EventType::STATUS_LOG_WARN_TOGGLE_OFF)
   {
-    auto* e = dynamic_cast<events::ToggleLogWarnOffEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogWarnToggleOffEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     if (data_->regex_pattern.contains(QString("|Warn")))
@@ -158,9 +158,9 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     }
     data_->proxy_model->setFilterRegularExpression(data_->regex_pattern);
   }
-  else if (event->type() == events::EventType::TOGGLE_LOG_ERROR_ON)
+  else if (event->type() == events::EventType::STATUS_LOG_ERROR_TOGGLE_ON)
   {
-    auto* e = dynamic_cast<events::ToggleLogErrorOnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogErrorToggleOnEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     if (data_->regex_pattern.isEmpty())
@@ -174,9 +174,9 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
     data_->proxy_model->setFilterRegularExpression(data_->regex_pattern);
     data_->proxy_model->setFilterKeyColumn(1);
   }
-  else if (event->type() == events::EventType::TOGGLE_LOG_ERROR_OFF)
+  else if (event->type() == events::EventType::STATUS_LOG_ERROR_TOGGLE_OFF)
   {
-    auto* e = dynamic_cast<events::ToggleLogErrorOffEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogErrorToggleOffEvent*>(event);
     if (e == nullptr)
       return true;  // Filter out
     if (data_->regex_pattern.contains(QString("|Error")))

@@ -239,8 +239,8 @@ void IgnContactResultsRenderManager::render()
       }
       else
       {
-        tesseract_gui::events::LogErrorEvent event("IgnContactResultsRenderManager, removing child elements is "
-                                                   "currently not supported");
+        tesseract_gui::events::StatusLogErrorEvent event("IgnContactResultsRenderManager, removing child elements is "
+                                                         "currently not supported");
         QApplication::sendEvent(qApp, &event);
       }
     }

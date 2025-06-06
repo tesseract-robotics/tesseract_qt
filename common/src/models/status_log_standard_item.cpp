@@ -30,19 +30,15 @@
 
 namespace tesseract_gui
 {
-StatusLogStandardItem::StatusLogStandardItem(const events::LogInfoEvent& message) { ctor(message); }
+StatusLogStandardItem::StatusLogStandardItem(const events::StatusLogInfoEvent& message) { ctor(message); }
 
-StatusLogStandardItem::StatusLogStandardItem(const events::LogWarnEvent& message) { ctor(message); }
+StatusLogStandardItem::StatusLogStandardItem(const events::StatusLogWarnEvent& message) { ctor(message); }
 
-StatusLogStandardItem::StatusLogStandardItem(const events::LogErrorEvent& message)
-  : QStandardItem(icons::getInfoMsgIcon(), "Error Message")
-{
-  ctor(message);
-}
+StatusLogStandardItem::StatusLogStandardItem(const events::StatusLogErrorEvent& message) { ctor(message); }
 
 int StatusLogStandardItem::type() const { return static_cast<int>(type_); }
 
-void StatusLogStandardItem::ctor(const events::LogInfoEvent& message)
+void StatusLogStandardItem::ctor(const events::StatusLogInfoEvent& message)
 {
   type_ = StandardItemType::STATUS_LOG_INFO;
   const QDateTime time;
@@ -52,7 +48,7 @@ void StatusLogStandardItem::ctor(const events::LogInfoEvent& message)
   text_->setForeground(Qt::black);
 }
 
-void StatusLogStandardItem::ctor(const events::LogWarnEvent& message)
+void StatusLogStandardItem::ctor(const events::StatusLogWarnEvent& message)
 {
   type_ = StandardItemType::STATUS_LOG_WARN;
   const QDateTime time;
@@ -63,7 +59,7 @@ void StatusLogStandardItem::ctor(const events::LogWarnEvent& message)
   text_->setForeground(orange);
 }
 
-void StatusLogStandardItem::ctor(const events::LogErrorEvent& message)
+void StatusLogStandardItem::ctor(const events::StatusLogErrorEvent& message)
 {
   type_ = StandardItemType::STATUS_LOG_ERROR;
   const QDateTime time;

@@ -41,10 +41,6 @@ public:
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
-
-  void onInfoToggle(const bool& toggled);
-  void onWarnToggle(const bool& toggled);
-  void onErrorToggle(const bool& toggled);
 };
 }  // namespace tesseract_gui
 

@@ -368,7 +368,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
       {
         std::stringstream sstr;
         sstr << "Error in onCurrentRowChanged default, not updating env state: " << ex.what() << std::endl;
-        tesseract_gui::events::LogInfoEvent event(sstr.str().c_str());
+        tesseract_gui::events::StatusLogInfoEvent event(sstr.str().c_str());
         QApplication::sendEvent(qApp, &event);
       }
 

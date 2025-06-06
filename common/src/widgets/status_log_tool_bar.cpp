@@ -38,12 +38,54 @@ struct StatusLogToolBar::Implementation
   QAction* toggle_info{ nullptr };
   QAction* toggle_warn{ nullptr };
   QAction* toggle_error{ nullptr };
+
+  void onInfoToggle(bool toggled)
+  {
+    if (toggled)
+    {
+      events::StatusLogInfoToggleOnEvent event;
+      QApplication::sendEvent(qApp, &event);
+    }
+    else
+    {
+      events::StatusLogInfoToggleOffEvent event;
+      QApplication::sendEvent(qApp, &event);
+    }
+  }
+
+  void onWarnToggle(bool toggled)
+  {
+    if (toggled)
+    {
+      events::StatusLogWarnToggleOnEvent event;
+      QApplication::sendEvent(qApp, &event);
+    }
+    else
+    {
+      events::StatusLogWarnToggleOffEvent event;
+      QApplication::sendEvent(qApp, &event);
+    }
+  }
+
+  void onErrorToggle(bool toggled)
+  {
+    if (toggled)
+    {
+      events::StatusLogErrorToggleOnEvent event;
+      QApplication::sendEvent(qApp, &event);
+    }
+    else
+    {
+      events::StatusLogErrorToggleOffEvent event;
+      QApplication::sendEvent(qApp, &event);
+    }
+  }
 };
 
 StatusLogToolBar::StatusLogToolBar(QWidget* parent) : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
   data_->clear_all = addAction(icons::getClearIcon(), "Clear All", []() {
-    events::ClearStatusLogEvent event;
+    events::StatusLogClearEvent event;
     QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
@@ -55,53 +97,11 @@ StatusLogToolBar::StatusLogToolBar(QWidget* parent) : QToolBar(parent), data_(st
   data_->toggle_warn->setCheckable(true);
   data_->toggle_error->setCheckable(true);
 
-  connect(data_->toggle_info, &QAction::toggled, this, &StatusLogToolBar::onInfoToggle);
-  connect(data_->toggle_warn, &QAction::toggled, this, &StatusLogToolBar::onWarnToggle);
-  connect(data_->toggle_error, &QAction::toggled, this, &StatusLogToolBar::onErrorToggle);
+  connect(data_->toggle_info, &QAction::toggled, this, [this](bool state) { data_->onInfoToggle(state); });
+  connect(data_->toggle_warn, &QAction::toggled, this, [this](bool state) { data_->onWarnToggle(state); });
+  connect(data_->toggle_error, &QAction::toggled, this, [this](bool state) { data_->onErrorToggle(state); });
 }
 
 StatusLogToolBar::~StatusLogToolBar() = default;
-
-void StatusLogToolBar::onInfoToggle(const bool& toggled)
-{
-  if (toggled)
-  {
-    events::ToggleLogInfoOnEvent event;
-    QApplication::sendEvent(qApp, &event);
-  }
-  else
-  {
-    events::ToggleLogInfoOffEvent event;
-    QApplication::sendEvent(qApp, &event);
-  }
-}
-
-void StatusLogToolBar::onWarnToggle(const bool& toggled)
-{
-  if (toggled)
-  {
-    events::ToggleLogWarnOnEvent event;
-    QApplication::sendEvent(qApp, &event);
-  }
-  else
-  {
-    events::ToggleLogWarnOffEvent event;
-    QApplication::sendEvent(qApp, &event);
-  }
-}
-
-void StatusLogToolBar::onErrorToggle(const bool& toggled)
-{
-  if (toggled)
-  {
-    events::ToggleLogErrorOnEvent event;
-    QApplication::sendEvent(qApp, &event);
-  }
-  else
-  {
-    events::ToggleLogErrorOffEvent event;
-    QApplication::sendEvent(qApp, &event);
-  }
-}
 
 }  // namespace tesseract_gui

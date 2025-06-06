@@ -134,15 +134,15 @@ const int EventType::TASK_COMPOSER_PLOT_DOTGRAPH = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_SET_PROFILES = QEvent::registerEventType();
 
 // Status Log
-const int EventType::LOG_INFO = QEvent::registerEventType();
-const int EventType::LOG_WARN = QEvent::registerEventType();
-const int EventType::LOG_ERROR = QEvent::registerEventType();
-const int EventType::STATUS_CLEAR = QEvent::registerEventType();
-const int EventType::TOGGLE_LOG_INFO_ON = QEvent::registerEventType();
-const int EventType::TOGGLE_LOG_WARN_ON = QEvent::registerEventType();
-const int EventType::TOGGLE_LOG_ERROR_ON = QEvent::registerEventType();
-const int EventType::TOGGLE_LOG_INFO_OFF = QEvent::registerEventType();
-const int EventType::TOGGLE_LOG_WARN_OFF = QEvent::registerEventType();
-const int EventType::TOGGLE_LOG_ERROR_OFF = QEvent::registerEventType();
+const int EventType::STATUS_LOG_INFO = QEvent::registerEventType();
+const int EventType::STATUS_LOG_WARN = QEvent::registerEventType();
+const int EventType::STATUS_LOG_ERROR = QEvent::registerEventType();
+const int EventType::STATUS_LOG_CLEAR = QEvent::registerEventType();
+const int EventType::STATUS_LOG_INFO_TOGGLE_ON = QEvent::registerEventType();
+const int EventType::STATUS_LOG_WARN_TOGGLE_ON = QEvent::registerEventType();
+const int EventType::STATUS_LOG_ERROR_TOGGLE_ON = QEvent::registerEventType();
+const int EventType::STATUS_LOG_INFO_TOGGLE_OFF = QEvent::registerEventType();
+const int EventType::STATUS_LOG_WARN_TOGGLE_OFF = QEvent::registerEventType();
+const int EventType::STATUS_LOG_ERROR_TOGGLE_OFF = QEvent::registerEventType();
 
 }  // namespace tesseract_gui::events
