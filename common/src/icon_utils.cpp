@@ -519,4 +519,22 @@ QIcon getKeyValueIcon()
   return icon;
 }
 
+QIcon getInfoMsgIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/info.svg"));
+  return icon;
+}
+
+QIcon getWarnMsgIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/warning.svg"));
+  return icon;
+}
+
+QIcon getErrorMsgIcon()
+{
+  static QIcon icon = QIcon(LoadSvg(":/tesseract_qt/svg/error.svg"));
+  return icon;
+}
+
 }  // namespace tesseract_gui::icons

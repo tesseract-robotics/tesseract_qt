@@ -31,6 +31,7 @@
 #include <tesseract_qt/common/events/group_tcps_events.h>
 #include <tesseract_qt/common/events/kinematic_groups_events.h>
 #include <tesseract_qt/common/events/environment_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 
 #include <tesseract_collision/core/discrete_contact_manager.h>
 
@@ -50,8 +51,6 @@
 #include <tesseract_collision/core/common.h>
 #include <tesseract_common/yaml_utils.h>
 #include <tesseract_common/yaml_extenstions.h>
-
-#include <console_bridge/console.h>
 
 #include <QApplication>
 
@@ -147,7 +146,9 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
             // LCOV_EXCL_START
             default:
             {
-              CONSOLE_BRIDGE_logError("Tesseract Qt Environment Wrapper, Unhandled environment command");
+              tesseract_gui::events::StatusLogInfoEvent event("Tesseract Qt Environment Wrapper, Unhandled environment "
+                                                              "command");
+              QApplication::sendEvent(qApp, &event);
             }
           }
         }

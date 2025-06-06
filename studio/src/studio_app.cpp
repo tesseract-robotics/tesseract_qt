@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QString>
 
-#include <console_bridge/console.h>
 #include <sstream>
 
 int main(int argc, char* argv[])
@@ -20,8 +19,6 @@ int main(int argc, char* argv[])
   QApplication app(argc, argv);
   QApplication::setApplicationName("Tesseract Studio");
   QApplication::setQuitOnLastWindowClosed(true);
-
-  console_bridge::setLogLevel(console_bridge::CONSOLE_BRIDGE_LOG_DEBUG);
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
   Q_INIT_RESOURCE(qdarkstyle_dark);

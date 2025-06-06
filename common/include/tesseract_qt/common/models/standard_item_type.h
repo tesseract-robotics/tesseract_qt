@@ -173,6 +173,10 @@ enum class StandardItemType : int
   MP_TASK_COMPOSER_LOG                  = CL_TYPES_END + 8,
   MP_TYPES_END                          = CL_TYPES_END + 9,
 
+  // Status Log Types
+  STATUS_LOG_INFO = MP_TYPES_END + 1,
+  STATUS_LOG_WARN = MP_TYPES_END + 2,
+  STATUS_LOG_ERROR = MP_TYPES_END + 3
 };
 // clang-format on
 }  // namespace tesseract_gui

@@ -24,6 +24,7 @@ set(COMMON_WIDGETS_headers_MOC
     include/tesseract_qt/common/environment_manager.h
     include/tesseract_qt/common/environment_wrapper.h
     include/tesseract_qt/common/models/json_model.h
+    include/tesseract_qt/common/models/status_log_model.h
     include/tesseract_qt/common/models/yaml_model.h
     include/tesseract_qt/common/models/component_info_manager_model.h
     include/tesseract_qt/common/widgets/cartesian_editor_widget.h
@@ -36,7 +37,9 @@ set(COMMON_WIDGETS_headers_MOC
     include/tesseract_qt/common/widgets/create_child_component_info_dialog.h
     include/tesseract_qt/common/widgets/create_component_info_dialog.h
     include/tesseract_qt/common/widgets/load_environment_widget.h
-    include/tesseract_qt/common/widgets/load_environment_dialog.h)
+    include/tesseract_qt/common/widgets/load_environment_dialog.h
+    include/tesseract_qt/common/widgets/status_log_tool_bar.h
+    include/tesseract_qt/common/widgets/status_log_widget.h)
 
 set(COMMON_WIDGETS_resources_RCC
     include/tesseract_qt/common/resources/tesseract_qt_resources.qrc
@@ -63,6 +66,7 @@ add_library(
   src/events/render_events.cpp
   src/events/scene_graph_events.cpp
   src/events/scene_graph_render_manager.cpp
+  src/events/status_log_events.cpp
   src/events/task_composer_events.cpp
   src/events/tool_path_events.cpp
   src/events/tool_path_render_manager.cpp
@@ -83,6 +87,7 @@ add_library(
   src/models/position_standard_item.cpp
   src/models/quaternion_standard_item.cpp
   src/models/rgba_standard_item.cpp
+  src/models/status_log_model.cpp
   src/models/tool_path_segment_standard_item.cpp
   src/models/tool_path_standard_item.cpp
   src/models/type_standard_item.cpp
@@ -106,6 +111,8 @@ add_library(
   src/widgets/combo_box.cpp
   src/widgets/tree_view.cpp
   src/widgets/image_viewer_widget.cpp
+  src/widgets/status_log_tool_bar.cpp
+  src/widgets/status_log_widget.cpp
   src/component_info_manager.cpp
   src/component_info.cpp
   src/contact_result_types.cpp

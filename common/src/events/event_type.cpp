@@ -132,4 +132,17 @@ const int EventType::TASK_COMPOSER_LOAD_LOG = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_SAVE_LOG = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_PLOT_DOTGRAPH = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_SET_PROFILES = QEvent::registerEventType();
+
+// Status Log
+const int EventType::STATUS_LOG_INFO = QEvent::registerEventType();
+const int EventType::STATUS_LOG_WARN = QEvent::registerEventType();
+const int EventType::STATUS_LOG_ERROR = QEvent::registerEventType();
+const int EventType::STATUS_LOG_CLEAR = QEvent::registerEventType();
+const int EventType::STATUS_LOG_INFO_TOGGLE_ON = QEvent::registerEventType();
+const int EventType::STATUS_LOG_WARN_TOGGLE_ON = QEvent::registerEventType();
+const int EventType::STATUS_LOG_ERROR_TOGGLE_ON = QEvent::registerEventType();
+const int EventType::STATUS_LOG_INFO_TOGGLE_OFF = QEvent::registerEventType();
+const int EventType::STATUS_LOG_WARN_TOGGLE_OFF = QEvent::registerEventType();
+const int EventType::STATUS_LOG_ERROR_TOGGLE_OFF = QEvent::registerEventType();
+
 }  // namespace tesseract_gui::events
