@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>637</height>
+    <height>419</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -147,9 +147,15 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="joint_tab">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <attribute name="title">
        <string>Joint</string>
       </attribute>
@@ -167,7 +173,14 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::JointStateSliderWidget" name="joint_state_slider" native="true"/>
+        <widget class="tesseract_gui::JointStateSliderWidget" name="joint_state_slider" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">
@@ -185,6 +198,12 @@
       </layout>
      </widget>
      <widget class="QWidget" name="cartesian_tab">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <attribute name="title">
        <string>Cartesian</string>
       </attribute>
@@ -202,11 +221,37 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::CartesianEditorWidget" name="cartesian_widget" native="true"/>
+        <widget class="tesseract_gui::CartesianEditorWidget" name="cartesian_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="state_tab">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <attribute name="title">
        <string>State</string>
       </attribute>
@@ -224,7 +269,14 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::SceneStateWidget" name="state_widget" native="true"/>
+        <widget class="tesseract_gui::SceneStateWidget" name="state_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -233,6 +285,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>tesseract_gui::SceneStateWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/scene_graph/widgets/scene_state_widget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>tesseract_gui::JointStateSliderWidget</class>
    <extends>QWidget</extends>
@@ -243,12 +301,6 @@
    <class>tesseract_gui::CartesianEditorWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/common/widgets/cartesian_editor_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>tesseract_gui::SceneStateWidget</class>
-   <extends>QWidget</extends>
-   <header>tesseract_qt/scene_graph/widgets/scene_state_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

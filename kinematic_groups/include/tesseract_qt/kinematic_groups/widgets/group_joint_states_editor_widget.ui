@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>395</height>
+    <height>258</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -144,12 +144,19 @@
     </widget>
    </item>
    <item>
-    <widget class="tesseract_gui::JointStateSliderWidget" name="jointSliderWidget" native="true"/>
+    <widget class="tesseract_gui::JointStateSliderWidget" name="jointSliderWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="tesseract_gui::GroupJointStatesWidget" name="groupJointStatesWidget" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>1</verstretch>
       </sizepolicy>
@@ -160,9 +167,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::ComboBox</class>
-   <extends>QComboBox</extends>
-   <header>tesseract_qt/common/widgets/combo_box.h</header>
+   <class>tesseract_gui::GroupJointStatesWidget</class>
+   <extends>QWidget</extends>
+   <header>tesseract_qt/kinematic_groups/widgets/group_joint_states_widget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>tesseract_gui::JointStateSliderWidget</class>
@@ -171,10 +179,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::GroupJointStatesWidget</class>
-   <extends>QWidget</extends>
-   <header>tesseract_qt/kinematic_groups/widgets/group_joint_states_widget.h</header>
-   <container>1</container>
+   <class>tesseract_gui::ComboBox</class>
+   <extends>QComboBox</extends>
+   <header>tesseract_qt/common/widgets/combo_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
