@@ -83,6 +83,7 @@ add_library(
   src/plugins/render/studio_render_dock_widget.cpp
   src/plugins/studio_environment_dock_widget.cpp
   src/plugins/studio_joint_trajectory_dock_widget.cpp
+  src/plugins/studio_status_log_dock_widget.cpp
   src/plugins/studio_task_composer_dock_widget.cpp
   src/plugins/studio_tool_path_dock_widget.cpp
   src/plugins/studio_plugin_factories.cpp)

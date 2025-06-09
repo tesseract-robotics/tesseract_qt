@@ -1,7 +1,7 @@
 /**
- * @author David Spielman <david.spielman7@gmail.com>
+ * @author Levi Armstrong <levi.armstrong@gmail.com>
  *
- * @copyright Copyright (C) 2025 David Spielman <david.spielman7@gmail.com>
+ * @copyright Copyright (C) 2025 Levi Armstrong <levi.armstrong@gmail.com>
  *
  * @par License
  * GNU Lesser General Public License Version 3, 29 June 2007
@@ -20,32 +20,40 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-#ifndef TESSERACT_QT_COMMON_STATUS_LOG_MODEL_H
-#define TESSERACT_QT_COMMON_STATUS_LOG_MODEL_H
+#ifndef TESSERACT_QT_STUDIO_STUDIO_STATUS_LOG_DOCK_WIDGET_H
+#define TESSERACT_QT_STUDIO_STUDIO_STATUS_LOG_DOCK_WIDGET_H
 
 #ifndef Q_MOC_RUN
-#include <QStandardItemModel>
-#include <Eigen/Eigen>
+#include <memory>
+#include <tesseract_qt/studio/studio_dock_widget.h>
 #endif
 
 namespace tesseract_gui
 {
-class StatusLogModel : public QStandardItemModel
+class StudioStatusLogDockWidget : public StudioDockWidget
 {
   Q_OBJECT
-
 public:
-  explicit StatusLogModel(QObject* parent = nullptr);
-  ~StatusLogModel() override;
+  StudioStatusLogDockWidget(const QString& title, QWidget* parent = nullptr);
+
+  ~StudioStatusLogDockWidget() override;
+
+  std::string getFactoryClassName() const override;
+
+  void loadConfig(const YAML::Node& config) override;
+
+  YAML::Node getConfig() const override;
+
+public Q_SLOTS:
+  void onInitialize() override;
 
 private:
-  void clear();
+  struct Implementation;
+  std::unique_ptr<Implementation> data_;
 
-  // Documentation inherited
-  bool eventFilter(QObject* obj, QEvent* event) override;
+  void setup();
 };
 
 }  // namespace tesseract_gui
 
-#endif  // TESSERACT_QT_COMMON_STATUS_LOG_MODEL_H
+#endif  // TESSERACT_QT_STUDIO_STUDIO_STATUS_LOG_DOCK_WIDGET_H

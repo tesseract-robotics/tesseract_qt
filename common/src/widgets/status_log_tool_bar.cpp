@@ -24,7 +24,6 @@
 #include <tesseract_qt/common/widgets/status_log_tool_bar.h>
 #include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/icon_utils.h>
-#include <tesseract_qt/common/component_info.h>
 
 #include <QApplication>
 #include <QEvent>
@@ -39,7 +38,7 @@ struct StatusLogToolBar::Implementation
   QAction* toggle_warn{ nullptr };
   QAction* toggle_error{ nullptr };
 
-  void onInfoToggle(bool toggled)
+  static void onInfoToggle(bool toggled)
   {
     if (toggled)
     {
@@ -53,7 +52,7 @@ struct StatusLogToolBar::Implementation
     }
   }
 
-  void onWarnToggle(bool toggled)
+  static void onWarnToggle(bool toggled)
   {
     if (toggled)
     {
@@ -67,7 +66,7 @@ struct StatusLogToolBar::Implementation
     }
   }
 
-  void onErrorToggle(bool toggled)
+  static void onErrorToggle(bool toggled)
   {
     if (toggled)
     {
@@ -89,17 +88,16 @@ StatusLogToolBar::StatusLogToolBar(QWidget* parent) : QToolBar(parent), data_(st
     QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
-  data_->toggle_info = addAction(icons::getInfoMsgIcon(), "Toggle Info", []() {});
-  data_->toggle_warn = addAction(icons::getWarnMsgIcon(), "Toggle Warn", []() {});
-  data_->toggle_error = addAction(icons::getErrorMsgIcon(), "Toggle Error", []() {});
+  data_->toggle_info =
+      addAction(icons::getInfoMsgIcon(), "Toggle Info", [this](bool state) { data_->onInfoToggle(state); });
+  data_->toggle_warn =
+      addAction(icons::getWarnMsgIcon(), "Toggle Warn", [this](bool state) { data_->onWarnToggle(state); });
+  data_->toggle_error =
+      addAction(icons::getErrorMsgIcon(), "Toggle Error", [this](bool state) { data_->onErrorToggle(state); });
 
   data_->toggle_info->setCheckable(true);
   data_->toggle_warn->setCheckable(true);
   data_->toggle_error->setCheckable(true);
-
-  connect(data_->toggle_info, &QAction::toggled, this, [this](bool state) { data_->onInfoToggle(state); });
-  connect(data_->toggle_warn, &QAction::toggled, this, [this](bool state) { data_->onWarnToggle(state); });
-  connect(data_->toggle_error, &QAction::toggled, this, [this](bool state) { data_->onErrorToggle(state); });
 }
 
 StatusLogToolBar::~StatusLogToolBar() = default;

@@ -39,7 +39,6 @@ class EnvironmentWidget;
 class JointTrajectoryWidget;
 class ManipulationWidget;
 class TaskComposerWidget;
-class StatusLogWidget;
 class ComponentInfo;
 
 class WorkbenchWidget : public QWidget
