@@ -25,6 +25,7 @@
 #include <tesseract_qt/rendering/gazebo_utils.h>
 
 #include <tesseract_qt/common/events/contact_results_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/component_info.h>
@@ -37,8 +38,6 @@
 #include <boost/uuid/uuid_io.hpp>
 
 #include <variant>
-
-#include <console_bridge/console.h>
 
 #include <QApplication>
 #include <QUuid>
@@ -240,7 +239,9 @@ void IgnContactResultsRenderManager::render()
       }
       else
       {
-        CONSOLE_BRIDGE_logError("IgnContactResultsRenderManager, removing child elements is currently not supported");
+        tesseract_gui::events::StatusLogErrorEvent event("IgnContactResultsRenderManager, removing child elements is "
+                                                         "currently not supported");
+        QApplication::sendEvent(qApp, &event);
       }
     }
     else if (event->type() == tesseract_gui::events::EventType::CONTACT_RESULTS_SET)

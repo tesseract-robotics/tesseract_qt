@@ -110,5 +110,8 @@
         <file>svg/true-false.svg</file>
         <file>svg/array.svg</file>
         <file>svg/key-value.svg</file>
+        <file>svg/error.svg</file>
+        <file>svg/info.svg</file>
+        <file>svg/warning.svg</file>
     </qresource>
 </RCC>

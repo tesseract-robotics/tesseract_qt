@@ -53,6 +53,9 @@ Below are screenshots to highlight some of the widgets within this repository an
 ## Material Design Icons
 repo: https://github.com/google/material-design-icons
 search: https://fonts.google.com/icons
+  - info.svg 
+  - warning.svg 
+  - error.svg
 
 ## Icons Provided by Freepik
 <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
