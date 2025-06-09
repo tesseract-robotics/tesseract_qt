@@ -62,6 +62,8 @@ ToolPathWidget::ToolPathWidget(QWidget* parent) : ToolPathWidget(nullptr, parent
 ToolPathWidget::ToolPathWidget(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent)
   : QWidget(parent), data_(std::make_unique<Implementation>())
 {
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
   // Create model
   data_->model = std::make_shared<ToolPathModel>(component_info);
   data_->selection_model = std::make_shared<ToolPathSelectionModel>(data_->model.get(), component_info);
@@ -69,6 +71,7 @@ ToolPathWidget::ToolPathWidget(std::shared_ptr<const ComponentInfo> component_in
   // Create tree widget
   data_->tree_view = new TreeView();
   data_->tree_view->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
+  data_->tree_view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   data_->tree_view->setModel(data_->model.get());
 
   // Create layout
