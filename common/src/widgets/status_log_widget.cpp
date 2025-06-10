@@ -120,7 +120,7 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
 {
   if (event->type() == events::EventType::STATUS_LOG_INFO_TOGGLE_ON)
   {
-    auto* e = dynamic_cast<events::StatusLogInfoToggleOnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogInfoToggleOn*>(event);
     if (e == nullptr)
       return true;  // Filter out
 
@@ -128,14 +128,14 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
   }
   else if (event->type() == events::EventType::STATUS_LOG_INFO_TOGGLE_OFF)
   {
-    auto* e = dynamic_cast<events::StatusLogInfoToggleOffEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogInfoToggleOff*>(event);
     if (e == nullptr)
       return true;  // Filter out
     data_->removeFilterEntry("Info");
   }
   else if (event->type() == events::EventType::STATUS_LOG_WARN_TOGGLE_ON)
   {
-    auto* e = dynamic_cast<events::StatusLogWarnToggleOnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogWarnToggleOn*>(event);
     if (e == nullptr)
       return true;  // Filter out
 
@@ -143,14 +143,14 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
   }
   else if (event->type() == events::EventType::STATUS_LOG_WARN_TOGGLE_OFF)
   {
-    auto* e = dynamic_cast<events::StatusLogWarnToggleOffEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogWarnToggleOff*>(event);
     if (e == nullptr)
       return true;  // Filter out
     data_->removeFilterEntry("Warn");
   }
   else if (event->type() == events::EventType::STATUS_LOG_ERROR_TOGGLE_ON)
   {
-    auto* e = dynamic_cast<events::StatusLogErrorToggleOnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogErrorToggleOn*>(event);
     if (e == nullptr)
       return true;  // Filter out
 
@@ -158,7 +158,7 @@ bool StatusLogWidget::eventFilter(QObject* obj, QEvent* event)
   }
   else if (event->type() == events::EventType::STATUS_LOG_ERROR_TOGGLE_OFF)
   {
-    auto* e = dynamic_cast<events::StatusLogErrorToggleOffEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogErrorToggleOff*>(event);
     if (e == nullptr)
       return true;  // Filter out
 

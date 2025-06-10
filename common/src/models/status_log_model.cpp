@@ -61,7 +61,7 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
 {
   if (event->type() == QEvent::Type(events::EventType::STATUS_LOG_INFO))
   {
-    auto* e = dynamic_cast<events::StatusLogInfoEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogInfo*>(event);
     if (e == nullptr)
       return true;  // Filter out
 
@@ -69,7 +69,7 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
   }
   else if (event->type() == events::EventType::STATUS_LOG_WARN)
   {
-    auto* e = dynamic_cast<events::StatusLogWarnEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogWarn*>(event);
     if (e == nullptr)
       return true;  // Filter out
 
@@ -77,7 +77,7 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
   }
   else if (event->type() == events::EventType::STATUS_LOG_ERROR)
   {
-    auto* e = dynamic_cast<events::StatusLogErrorEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogError*>(event);
     if (e == nullptr)
       return true;  // Filter out
 
@@ -85,7 +85,7 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
   }
   else if (event->type() == events::EventType::STATUS_LOG_CLEAR)
   {
-    auto* e = dynamic_cast<events::StatusLogClearEvent*>(event);
+    auto* e = dynamic_cast<events::StatusLogClear*>(event);
     if (e == nullptr)
       return true;  // Filter out
     clear();

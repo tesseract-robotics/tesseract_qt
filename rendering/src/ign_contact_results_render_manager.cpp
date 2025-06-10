@@ -49,7 +49,7 @@ namespace tesseract_gui
 struct IgnContactResultsRenderManager::Implementation
 {
   std::string scene_name;
-  std::map<std::shared_ptr<const ComponentInfo>, tesseract_gui::EntityManager::Ptr> entity_managers;
+  std::map<std::shared_ptr<const ComponentInfo>, EntityManager::Ptr> entity_managers;
 
   void clear(gz::rendering::Scene& scene, EntityContainer& container)
   {
@@ -68,7 +68,7 @@ struct IgnContactResultsRenderManager::Implementation
     container.clear();
   }
 
-  void clear(gz::rendering::Scene& scene, tesseract_gui::EntityManager& entity_manager)
+  void clear(gz::rendering::Scene& scene, EntityManager& entity_manager)
   {
     for (auto& entity_container : entity_manager.getEntityContainers())
     {
@@ -205,13 +205,12 @@ void IgnContactResultsRenderManager::render()
   if (events_.empty())
     return;
 
-  auto getEntityManager =
-      [this](const std::shared_ptr<const ComponentInfo>& component_info) -> tesseract_gui::EntityManager::Ptr {
+  auto getEntityManager = [this](const std::shared_ptr<const ComponentInfo>& component_info) -> EntityManager::Ptr {
     auto it = data_->entity_managers.find(component_info);
     if (it != data_->entity_managers.end())
       return it->second;
 
-    auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
+    auto entity_manager = std::make_shared<EntityManager>();
     data_->entity_managers[component_info] = entity_manager;
     return entity_manager;
   };
@@ -220,16 +219,16 @@ void IgnContactResultsRenderManager::render()
 
   for (const auto& event : events_)
   {
-    if (event->type() == tesseract_gui::events::EventType::CONTACT_RESULTS_CLEAR)
+    if (event->type() == events::EventType::CONTACT_RESULTS_CLEAR)
     {
-      auto& e = static_cast<tesseract_gui::events::ContactResultsClear&>(*event);
-      tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
+      auto& e = static_cast<events::ContactResultsClear&>(*event);
+      EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
       data_->clear(*scene, *entity_manager);
     }
     else if (event->type() == events::EventType::CONTACT_RESULTS_REMOVE)
     {
-      auto& e = static_cast<tesseract_gui::events::ContactResultsRemove&>(*event);
-      tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
+      auto& e = static_cast<events::ContactResultsRemove&>(*event);
+      EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
       const std::string parent_key = boost::uuids::to_string(e.getUUID());
       auto entity_container = entity_manager->getEntityContainer(parent_key);
       if (e.getChildUUID().is_nil())
@@ -239,25 +238,25 @@ void IgnContactResultsRenderManager::render()
       }
       else
       {
-        tesseract_gui::events::StatusLogErrorEvent event("IgnContactResultsRenderManager, removing child elements is "
-                                                         "currently not supported");
+        events::StatusLogError event("IgnContactResultsRenderManager, removing child elements is "
+                                     "currently not supported");
         QApplication::sendEvent(qApp, &event);
       }
     }
-    else if (event->type() == tesseract_gui::events::EventType::CONTACT_RESULTS_SET)
+    else if (event->type() == events::EventType::CONTACT_RESULTS_SET)
     {
-      auto& e = static_cast<tesseract_gui::events::ContactResultsSet&>(*event);
-      tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
+      auto& e = static_cast<events::ContactResultsSet&>(*event);
+      EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
       data_->clear(*scene, *entity_manager);
 
       auto contacts = e.getContactResults();
       if (contacts.index() == 0)
       {
-        const tesseract_gui::ContactResultVector& crv = std::get<tesseract_gui::ContactResultVector>(contacts);
+        const ContactResultVector& crv = std::get<ContactResultVector>(contacts);
         const std::string parent_key = boost::uuids::to_string(crv.getUUID());
 
-        tesseract_gui::EntityContainer::Ptr entity_container = entity_manager->getEntityContainer(parent_key);
-        auto entity = entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, parent_key);
+        EntityContainer::Ptr entity_container = entity_manager->getEntityContainer(parent_key);
+        auto entity = entity_container->addTrackedEntity(EntityContainer::VISUAL_NS, parent_key);
         gz::rendering::VisualPtr ign_contact_results = scene->CreateVisual(entity.id, entity.unique_name);
         ign_contact_results->SetUserData(USER_VISIBILITY, false);
 
@@ -266,8 +265,7 @@ void IgnContactResultsRenderManager::render()
           const auto& cr = crt();
 
           const std::string arrow_key_name = boost::uuids::to_string(crt.getUUID());
-          auto arrow_entity =
-              entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name);
+          auto arrow_entity = entity_container->addTrackedEntity(EntityContainer::VISUAL_NS, arrow_key_name);
 
           ign_contact_results->AddChild(data_->createArrow(cr, *scene, arrow_entity));
         }
@@ -276,12 +274,12 @@ void IgnContactResultsRenderManager::render()
       }
       else
       {
-        const tesseract_gui::ContactResultMap& crm = std::get<tesseract_gui::ContactResultMap>(contacts);
+        const ContactResultMap& crm = std::get<ContactResultMap>(contacts);
         for (const auto& pair : crm)
         {
           const std::string parent_key = boost::uuids::to_string(pair.second.getUUID());
-          tesseract_gui::EntityContainer::Ptr entity_container = entity_manager->getEntityContainer(parent_key);
-          auto entity = entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, parent_key);
+          EntityContainer::Ptr entity_container = entity_manager->getEntityContainer(parent_key);
+          auto entity = entity_container->addTrackedEntity(EntityContainer::VISUAL_NS, parent_key);
           gz::rendering::VisualPtr ign_contact_results = scene->CreateVisual(entity.id, entity.unique_name);
           ign_contact_results->SetUserData(USER_VISIBILITY, false);
 
@@ -290,8 +288,7 @@ void IgnContactResultsRenderManager::render()
             const auto& cr = crt();
 
             std::string arrow_key_name = boost::uuids::to_string(crt.getUUID());
-            auto arrow_entity =
-                entity_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name);
+            auto arrow_entity = entity_container->addTrackedEntity(EntityContainer::VISUAL_NS, arrow_key_name);
 
             ign_contact_results->AddChild(data_->createArrow(cr, *scene, arrow_entity));
           }
@@ -302,13 +299,13 @@ void IgnContactResultsRenderManager::render()
     }
     else if (event->type() == events::EventType::CONTACT_RESULTS_VISIBILITY)
     {
-      auto& e = static_cast<tesseract_gui::events::ContactResultsVisbility&>(*event);
-      tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
+      auto& e = static_cast<events::ContactResultsVisbility&>(*event);
+      EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
       const std::string parent_key = boost::uuids::to_string(e.getUUID());
       auto entity_container = entity_manager->getEntityContainer(parent_key);
-      if (entity_container->hasTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, parent_key))
+      if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, parent_key))
       {
-        auto parent_entity = entity_container->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, parent_key);
+        auto parent_entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, parent_key);
         auto parent_scene_node = scene->VisualById(parent_entity.id);
         auto parent_visibility = std::get<bool>(parent_scene_node->UserData(USER_VISIBILITY));
         if (e.getChildUUID().is_nil())
@@ -316,7 +313,7 @@ void IgnContactResultsRenderManager::render()
           parent_visibility = e.getVisibility();
           parent_scene_node->SetUserData(USER_VISIBILITY, parent_visibility);
 
-          auto entities = entity_container->getTrackedEntities(tesseract_gui::EntityContainer::VISUAL_NS);
+          auto entities = entity_container->getTrackedEntities(EntityContainer::VISUAL_NS);
           for (auto& entity : entities)
           {
             if (entity.second.id != parent_entity.id)
@@ -330,9 +327,9 @@ void IgnContactResultsRenderManager::render()
         else
         {
           const std::string arrow_key_name = boost::uuids::to_string(e.getChildUUID());
-          if (entity_container->hasTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name))
+          if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, arrow_key_name))
           {
-            auto entity = entity_container->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, arrow_key_name);
+            auto entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, arrow_key_name);
             auto arrow = scene->VisualById(entity.id);
             arrow->SetUserData(USER_VISIBILITY, e.getVisibility());
             arrow->SetVisible(parent_visibility & e.getVisibility());
@@ -342,17 +339,16 @@ void IgnContactResultsRenderManager::render()
     }
     else if (event->type() == events::EventType::CONTACT_RESULTS_VISIBILITY_ALL)
     {
-      auto& e = static_cast<tesseract_gui::events::ContactResultsVisbilityAll&>(*event);
+      auto& e = static_cast<events::ContactResultsVisbilityAll&>(*event);
       const bool visibility = e.getVisibility();
-      tesseract_gui::EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
+      EntityManager::Ptr entity_manager = getEntityManager(e.getComponentInfo());
       for (auto& container : entity_manager->getEntityContainers())
       {
-        auto parent_entity =
-            container.second->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, container.first);
+        auto parent_entity = container.second->getTrackedEntity(EntityContainer::VISUAL_NS, container.first);
         auto parent_scene_node = scene->VisualById(parent_entity.id);
         parent_scene_node->SetUserData(USER_VISIBILITY, visibility);
 
-        auto entities = container.second->getTrackedEntities(tesseract_gui::EntityContainer::VISUAL_NS);
+        auto entities = container.second->getTrackedEntities(EntityContainer::VISUAL_NS);
         for (auto& entity : entities)
         {
           if (entity.second.id != parent_entity.id)

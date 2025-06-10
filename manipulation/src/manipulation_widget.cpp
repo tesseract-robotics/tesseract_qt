@@ -621,8 +621,7 @@ void ManipulationWidget::onReset()
       catch (...)
       {
         std::stringstream sstr;
-        tesseract_gui::events::StatusLogInfoEvent event(
-            QString("ManipulationWidget, Group %1 is not supported!").arg(group_name.c_str()));
+        events::StatusLogInfo event(QString("ManipulationWidget, Group %1 is not supported!").arg(group_name.c_str()));
         QApplication::sendEvent(qApp, &event);
       }
 

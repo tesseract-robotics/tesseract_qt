@@ -42,12 +42,12 @@ struct StatusLogToolBar::Implementation
   {
     if (toggled)
     {
-      events::StatusLogInfoToggleOnEvent event;
+      events::StatusLogInfoToggleOn event;
       QApplication::sendEvent(qApp, &event);
     }
     else
     {
-      events::StatusLogInfoToggleOffEvent event;
+      events::StatusLogInfoToggleOff event;
       QApplication::sendEvent(qApp, &event);
     }
   }
@@ -56,12 +56,12 @@ struct StatusLogToolBar::Implementation
   {
     if (toggled)
     {
-      events::StatusLogWarnToggleOnEvent event;
+      events::StatusLogWarnToggleOn event;
       QApplication::sendEvent(qApp, &event);
     }
     else
     {
-      events::StatusLogWarnToggleOffEvent event;
+      events::StatusLogWarnToggleOff event;
       QApplication::sendEvent(qApp, &event);
     }
   }
@@ -70,12 +70,12 @@ struct StatusLogToolBar::Implementation
   {
     if (toggled)
     {
-      events::StatusLogErrorToggleOnEvent event;
+      events::StatusLogErrorToggleOn event;
       QApplication::sendEvent(qApp, &event);
     }
     else
     {
-      events::StatusLogErrorToggleOffEvent event;
+      events::StatusLogErrorToggleOff event;
       QApplication::sendEvent(qApp, &event);
     }
   }
@@ -84,7 +84,7 @@ struct StatusLogToolBar::Implementation
 StatusLogToolBar::StatusLogToolBar(QWidget* parent) : QToolBar(parent), data_(std::make_unique<Implementation>())
 {
   data_->clear_all = addAction(icons::getClearIcon(), "Clear All", []() {
-    events::StatusLogClearEvent event;
+    events::StatusLogClear event;
     QApplication::sendEvent(qApp, &event);
   });
   addSeparator();
