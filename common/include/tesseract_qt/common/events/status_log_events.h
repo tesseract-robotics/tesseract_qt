@@ -32,12 +32,12 @@
 namespace tesseract_gui::events
 {
 /** @brief Event called to log information */
-class StatusLogInfoEvent : public QEvent
+class StatusLogInfo : public QEvent
 {
 public:
-  explicit StatusLogInfoEvent(QString text);
-  explicit StatusLogInfoEvent(const std::string& text);
-  explicit StatusLogInfoEvent(const char* text);
+  explicit StatusLogInfo(QString text);
+  explicit StatusLogInfo(const std::string& text);
+  explicit StatusLogInfo(const char* text);
   [[nodiscard]] QString getString() const;
 
 private:
@@ -45,12 +45,12 @@ private:
 };
 
 /** @brief Event called to log warnings */
-class StatusLogWarnEvent : public QEvent
+class StatusLogWarn : public QEvent
 {
 public:
-  explicit StatusLogWarnEvent(QString text);
-  explicit StatusLogWarnEvent(const std::string& text);
-  explicit StatusLogWarnEvent(const char* text);
+  explicit StatusLogWarn(QString text);
+  explicit StatusLogWarn(const std::string& text);
+  explicit StatusLogWarn(const char* text);
   [[nodiscard]] QString getString() const;
 
 private:
@@ -58,12 +58,12 @@ private:
 };
 
 /** @brief Event called to log errors */
-class StatusLogErrorEvent : public QEvent
+class StatusLogError : public QEvent
 {
 public:
-  explicit StatusLogErrorEvent(QString text);
-  explicit StatusLogErrorEvent(const std::string& text);
-  explicit StatusLogErrorEvent(const char* text);
+  explicit StatusLogError(QString text);
+  explicit StatusLogError(const std::string& text);
+  explicit StatusLogError(const char* text);
   [[nodiscard]] QString getString() const;
 
 private:
@@ -71,52 +71,52 @@ private:
 };
 
 /** @brief Event called to clear the messages in the status log */
-class StatusLogClearEvent : public QEvent
+class StatusLogClear : public QEvent
 {
 public:
-  StatusLogClearEvent();
+  StatusLogClear();
 };
 
 /** @brief Event called to toggle viewing log information on*/
-class StatusLogInfoToggleOnEvent : public QEvent
+class StatusLogInfoToggleOn : public QEvent
 {
 public:
-  StatusLogInfoToggleOnEvent();
+  StatusLogInfoToggleOn();
 };
 
 /** @brief Event called to toggle viewing log warnings on*/
-class StatusLogWarnToggleOnEvent : public QEvent
+class StatusLogWarnToggleOn : public QEvent
 {
 public:
-  StatusLogWarnToggleOnEvent();
+  StatusLogWarnToggleOn();
 };
 
 /** @brief Event called to toggle viewing log errors on*/
-class StatusLogErrorToggleOnEvent : public QEvent
+class StatusLogErrorToggleOn : public QEvent
 {
 public:
-  StatusLogErrorToggleOnEvent();
+  StatusLogErrorToggleOn();
 };
 
 /** @brief Event called to toggle viewing log information off*/
-class StatusLogInfoToggleOffEvent : public QEvent
+class StatusLogInfoToggleOff : public QEvent
 {
 public:
-  StatusLogInfoToggleOffEvent();
+  StatusLogInfoToggleOff();
 };
 
 /** @brief Event called to toggle viewing log warnings off*/
-class StatusLogWarnToggleOffEvent : public QEvent
+class StatusLogWarnToggleOff : public QEvent
 {
 public:
-  StatusLogWarnToggleOffEvent();
+  StatusLogWarnToggleOff();
 };
 
 /** @brief Event called to toggle viewing log errors off*/
-class StatusLogErrorToggleOffEvent : public QEvent
+class StatusLogErrorToggleOff : public QEvent
 {
 public:
-  StatusLogErrorToggleOffEvent();
+  StatusLogErrorToggleOff();
 };
 
 }  // namespace tesseract_gui::events

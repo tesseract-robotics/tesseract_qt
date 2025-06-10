@@ -146,8 +146,8 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
             // LCOV_EXCL_START
             default:
             {
-              tesseract_gui::events::StatusLogInfoEvent event("Tesseract Qt Environment Wrapper, Unhandled environment "
-                                                              "command");
+              tesseract_gui::events::StatusLogInfo event("Tesseract Qt Environment Wrapper, Unhandled environment "
+                                                         "command");
               QApplication::sendEvent(qApp, &event);
             }
           }

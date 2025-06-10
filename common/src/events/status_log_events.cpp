@@ -22,68 +22,52 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <utility>
-#include <string>
-
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/status_log_events.h>
 
+#include <utility>
+#include <string>
+
 namespace tesseract_gui::events
 {
-StatusLogInfoEvent::StatusLogInfoEvent(QString text)
-  : QEvent(QEvent::Type(EventType::STATUS_LOG_INFO)), text_(std::move(text))
+StatusLogInfo::StatusLogInfo(QString text) : QEvent(QEvent::Type(EventType::STATUS_LOG_INFO)), text_(std::move(text)) {}
+
+StatusLogInfo::StatusLogInfo(const std::string& text) : StatusLogInfo(QString::fromStdString(text)) {}
+
+StatusLogInfo::StatusLogInfo(const char* text) : StatusLogInfo(QString(text)) {}
+
+QString StatusLogInfo::getString() const { return text_; }
+
+StatusLogWarn::StatusLogWarn(QString text) : QEvent(QEvent::Type(EventType::STATUS_LOG_WARN)), text_(std::move(text)) {}
+
+StatusLogWarn::StatusLogWarn(const std::string& text) : StatusLogWarn(QString::fromStdString(text)) {}
+
+StatusLogWarn::StatusLogWarn(const char* text) : StatusLogWarn(QString(text)) {}
+
+QString StatusLogWarn::getString() const { return text_; }
+
+StatusLogError::StatusLogError(QString text) : QEvent(QEvent::Type(EventType::STATUS_LOG_ERROR)), text_(std::move(text))
 {
 }
 
-StatusLogInfoEvent::StatusLogInfoEvent(const std::string& text) : StatusLogInfoEvent(QString::fromStdString(text)) {}
+StatusLogError::StatusLogError(const std::string& text) : StatusLogError(QString::fromStdString(text)) {}
 
-StatusLogInfoEvent::StatusLogInfoEvent(const char* text) : StatusLogInfoEvent(QString(text)) {}
+StatusLogError::StatusLogError(const char* text) : StatusLogError(QString(text)) {}
 
-QString StatusLogInfoEvent::getString() const { return text_; }
+QString StatusLogError::getString() const { return text_; }
 
-StatusLogWarnEvent::StatusLogWarnEvent(QString text)
-  : QEvent(QEvent::Type(EventType::STATUS_LOG_WARN)), text_(std::move(text))
-{
-}
+StatusLogClear::StatusLogClear() : QEvent(QEvent::Type(EventType::STATUS_LOG_CLEAR)) {}
 
-StatusLogWarnEvent::StatusLogWarnEvent(const std::string& text) : StatusLogWarnEvent(QString::fromStdString(text)) {}
+StatusLogInfoToggleOn::StatusLogInfoToggleOn() : QEvent(QEvent::Type(EventType::STATUS_LOG_INFO_TOGGLE_ON)) {}
 
-StatusLogWarnEvent::StatusLogWarnEvent(const char* text) : StatusLogWarnEvent(QString(text)) {}
+StatusLogWarnToggleOn::StatusLogWarnToggleOn() : QEvent(QEvent::Type(EventType::STATUS_LOG_WARN_TOGGLE_ON)) {}
 
-QString StatusLogWarnEvent::getString() const { return text_; }
+StatusLogErrorToggleOn::StatusLogErrorToggleOn() : QEvent(QEvent::Type(EventType::STATUS_LOG_ERROR_TOGGLE_ON)) {}
 
-StatusLogErrorEvent::StatusLogErrorEvent(QString text)
-  : QEvent(QEvent::Type(EventType::STATUS_LOG_ERROR)), text_(std::move(text))
-{
-}
+StatusLogInfoToggleOff::StatusLogInfoToggleOff() : QEvent(QEvent::Type(EventType::STATUS_LOG_INFO_TOGGLE_OFF)) {}
 
-StatusLogErrorEvent::StatusLogErrorEvent(const std::string& text) : StatusLogErrorEvent(QString::fromStdString(text)) {}
+StatusLogWarnToggleOff::StatusLogWarnToggleOff() : QEvent(QEvent::Type(EventType::STATUS_LOG_WARN_TOGGLE_OFF)) {}
 
-StatusLogErrorEvent::StatusLogErrorEvent(const char* text) : StatusLogErrorEvent(QString(text)) {}
-
-QString StatusLogErrorEvent::getString() const { return text_; }
-
-StatusLogClearEvent::StatusLogClearEvent() : QEvent(QEvent::Type(EventType::STATUS_LOG_CLEAR)) {}
-
-StatusLogInfoToggleOnEvent::StatusLogInfoToggleOnEvent() : QEvent(QEvent::Type(EventType::STATUS_LOG_INFO_TOGGLE_ON)) {}
-
-StatusLogWarnToggleOnEvent::StatusLogWarnToggleOnEvent() : QEvent(QEvent::Type(EventType::STATUS_LOG_WARN_TOGGLE_ON)) {}
-
-StatusLogErrorToggleOnEvent::StatusLogErrorToggleOnEvent() : QEvent(QEvent::Type(EventType::STATUS_LOG_ERROR_TOGGLE_ON))
-{
-}
-
-StatusLogInfoToggleOffEvent::StatusLogInfoToggleOffEvent() : QEvent(QEvent::Type(EventType::STATUS_LOG_INFO_TOGGLE_OFF))
-{
-}
-
-StatusLogWarnToggleOffEvent::StatusLogWarnToggleOffEvent() : QEvent(QEvent::Type(EventType::STATUS_LOG_WARN_TOGGLE_OFF))
-{
-}
-
-StatusLogErrorToggleOffEvent::StatusLogErrorToggleOffEvent()
-  : QEvent(QEvent::Type(EventType::STATUS_LOG_ERROR_TOGGLE_OFF))
-{
-}
+StatusLogErrorToggleOff::StatusLogErrorToggleOff() : QEvent(QEvent::Type(EventType::STATUS_LOG_ERROR_TOGGLE_OFF)) {}
 
 }  // namespace tesseract_gui::events
