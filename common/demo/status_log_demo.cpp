@@ -46,7 +46,8 @@ int main(int argc, char** argv)
   widget.setLayout(layout);
   widget.show();
 
-  tesseract_gui::events::StatusLogInfo event("Info Test 1");
+  tesseract_gui::events::StatusLogInfo event("Info Test 1, This is a long message to show that text wrapping is "
+                                             "working!");
   QApplication::sendEvent(qApp, &event);
 
   tesseract_gui::events::StatusLogWarn event1("Warn Test 1");
