@@ -32,9 +32,46 @@
 #include <QStandardItemModel>
 #include <QTableView>
 #include <QVBoxLayout>
+#include <QStyledItemDelegate>
+#include <QTextOption>
+#include <QPainter>
+#include <QStyleOptionViewItem>
 
 namespace tesseract_gui
 {
+/**
+ * @brief This used by the last column so the message will wrap
+ */
+class WrapDelegate : public QStyledItemDelegate
+{
+public:
+  explicit WrapDelegate(QObject* parent = nullptr) : QStyledItemDelegate(parent) {}
+
+  // Paint with wrapping, no eliding
+  void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
+  {
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
+
+    opt.textElideMode = Qt::ElideNone;               // disable “…”
+    opt.features |= QStyleOptionViewItem::WrapText;  // enable wrap
+
+    QStyledItemDelegate::paint(painter, opt, index);
+  }
+
+  // Calculate size based on multi-line layout
+  QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
+  {
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
+
+    opt.textElideMode = Qt::ElideNone;
+    opt.features |= QStyleOptionViewItem::WrapText;
+
+    return QStyledItemDelegate::sizeHint(opt, index);
+  }
+};
+
 struct StatusLogWidget::Implementation
 {
   std::shared_ptr<StatusLogModel> model;
@@ -85,6 +122,10 @@ StatusLogWidget::StatusLogWidget(QWidget* parent) : data_(std::make_unique<Imple
   data_->table_view->setAlternatingRowColors(true);
   data_->table_view->horizontalHeader()->setStretchLastSection(true);
   data_->table_view->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  data_->table_view->setWordWrap(true);
+  data_->table_view->setTextElideMode(Qt::ElideNone);
+  data_->table_view->setItemDelegateForColumn(2, new WrapDelegate(data_->table_view));
+  data_->table_view->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   // Create layout
   data_->layout = new QVBoxLayout();
@@ -99,6 +140,11 @@ StatusLogWidget::StatusLogWidget(QWidget* parent) : data_(std::make_unique<Imple
           SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
           this,
           SLOT(onCurrentRowChanged(QModelIndex, QModelIndex)));
+
+  connect(data_->table_view->horizontalHeader(),
+          &QHeaderView::sectionResized,
+          data_->table_view,
+          &QTableView::resizeRowsToContents);
 
   // Install event filter for interactive view controller
   qGuiApp->installEventFilter(this);
