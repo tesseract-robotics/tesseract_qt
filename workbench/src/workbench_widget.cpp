@@ -69,7 +69,8 @@ WorkbenchWidget::WorkbenchWidget(std::shared_ptr<const ComponentInfo> component_
   data_->task_composer_toolbar = new TaskComposerToolBar();  // NOLINT
   static_cast<QVBoxLayout*>(ui->task_composer_widget->layout())->insertWidget(0, data_->task_composer_toolbar);
 
-  setComponentInfo(std::move(component_info));
+  if (component_info != nullptr)
+    setComponentInfo(std::move(component_info));
 }
 
 WorkbenchWidget::~WorkbenchWidget() = default;
