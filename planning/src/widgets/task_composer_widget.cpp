@@ -46,6 +46,7 @@
 #include <tesseract_qt/common/events/task_composer_events.h>
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
@@ -58,7 +59,6 @@
 #include <tesseract_qt/planning/register_poly_types.h>
 #include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
 
-#include <ostream>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
@@ -230,7 +230,8 @@ void TaskComposerWidget::onRun(bool /*checked*/)
   QModelIndex current_index = ui->log_tree_view->selectionModel()->currentIndex();
   if (!current_index.isValid())
   {
-    ui->status_line_edit->setText("No log selected!");
+    tesseract_gui::events::StatusLogError e("TaskComposerWidget, No log selected!");
+    QApplication::sendEvent(qApp, &e);
     return;
   }
 
@@ -273,11 +274,12 @@ void TaskComposerWidget::onRun(bool /*checked*/)
   // Log Context
   nlog.context = future->context;
 
-  ui->time_line_edit->setText(QString::fromStdString(std::to_string(stopwatch.elapsedSeconds()) + "s"));
-  if (future->context->isSuccessful())
-    ui->status_line_edit->setText("Successful");
-  else
-    ui->status_line_edit->setText("Failed");
+  // Send status
+  const QString ps = (future->context->isSuccessful()) ? "Successful" : "Failed";
+  const QString msg =
+      QString("TaskComposerWidget, Planning %1, elapsed time %2 seconds").arg(ps, stopwatch.elapsedSeconds());
+  tesseract_gui::events::StatusLogInfo e(msg);
+  QApplication::sendEvent(qApp, &e);
 
   // Add llog
   data_->log_model.add(nlog, ui->ns_line_edit->text().toStdString());
