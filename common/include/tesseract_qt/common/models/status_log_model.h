@@ -37,7 +37,6 @@ class StatusLogModel : public QStandardItemModel
 
 public:
   explicit StatusLogModel(QObject* parent = nullptr);
-  ~StatusLogModel() override;
 
 private:
   void clear();

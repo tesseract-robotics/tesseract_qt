@@ -107,10 +107,10 @@ struct StatusLogWidget::Implementation
   }
 };
 
-StatusLogWidget::StatusLogWidget(QWidget* parent) : data_(std::make_unique<Implementation>())
+StatusLogWidget::StatusLogWidget(QWidget* parent) : QWidget(parent), data_(std::make_unique<Implementation>())
 {
   // Create model
-  data_->model = std::make_shared<StatusLogModel>(parent);
+  data_->model = std::make_shared<StatusLogModel>();
 
   // Create table widget
   data_->table_view = new QTableView();
