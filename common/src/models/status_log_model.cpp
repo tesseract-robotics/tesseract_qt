@@ -38,8 +38,6 @@ StatusLogModel::StatusLogModel(QObject* parent) : QStandardItemModel(parent)
   qGuiApp->installEventFilter(this);
 }
 
-StatusLogModel::~StatusLogModel() = default;
-
 void StatusLogModel::clear()
 {
   QStandardItemModel::clear();
