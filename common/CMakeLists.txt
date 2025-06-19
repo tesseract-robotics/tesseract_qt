@@ -28,6 +28,7 @@ set(COMMON_WIDGETS_headers_MOC
     include/tesseract_qt/common/models/yaml_model.h
     include/tesseract_qt/common/models/component_info_manager_model.h
     include/tesseract_qt/common/widgets/cartesian_editor_widget.h
+    include/tesseract_qt/common/widgets/collapsible_group_box.h
     include/tesseract_qt/common/widgets/combo_box.h
     include/tesseract_qt/common/widgets/image_viewer_widget.h
     include/tesseract_qt/common/widgets/tree_view.h
@@ -108,6 +109,7 @@ add_library(
   src/widgets/load_environment_widget.cpp
   src/widgets/load_environment_dialog.cpp
   src/widgets/cartesian_editor_widget.cpp
+  src/widgets/collapsible_group_box.cpp
   src/widgets/combo_box.cpp
   src/widgets/tree_view.cpp
   src/widgets/image_viewer_widget.cpp
