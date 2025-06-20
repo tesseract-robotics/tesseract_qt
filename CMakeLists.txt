@@ -65,7 +65,7 @@ set(LINUX_DEPENDS
     "libqwt-qt5-6"
     "boost_plugin_loader"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-common"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-environment"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-urdf"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-srdf"
@@ -78,17 +78,17 @@ set(LINUX_DEPENDS
     "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-planning")
 
 set(WINDOWS_DEPENDS
-  "libboost-program-options-dev"
-  "libqt5gui5"
-  "libqt5widgets5"
-  "libqt5svg5"
-  "libqt5opengl5"
-  "libqt5xml5"
-  "libgraphviz-dev"
-  "libqwt-qt5-6"
-  "boost_plugin_loader"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-common"
-  "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph
+    "libboost-program-options-dev"
+    "libqt5gui5"
+    "libqt5widgets5"
+    "libqt5svg5"
+    "libqt5opengl5"
+    "libqt5xml5"
+    "libgraphviz-dev"
+    "libqwt-qt5-6"
+    "boost_plugin_loader"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-common"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-scene-graph"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-environment"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-urdf"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-srdf"
