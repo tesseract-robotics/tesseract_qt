@@ -49,7 +49,18 @@ QList<QStandardItem*> getItems(const QString& severity, const QString& message, 
 {
   QList<QStandardItem*> items;
   items.append(new QStandardItem(QDateTime::currentDateTime().toString("dd MMMM yyyy hh:mm:ss.zzz")));
-  items.append(new QStandardItem(icons::getInfoMsgIcon(), severity));
+  if (severity == "Info")
+  {
+    items.append(new QStandardItem(icons::getInfoMsgIcon(), severity));
+  }
+  else if (severity == "Warn")
+  {
+    items.append(new QStandardItem(icons::getWarnMsgIcon(), severity));
+  }
+  else if (severity == "Error")
+  {
+    items.append(new QStandardItem(icons::getErrorMsgIcon(), severity));
+  }
   items.append(new QStandardItem(message));
   items.back()->setForeground(color);
   return items;
