@@ -129,6 +129,7 @@ const int EventType::MANIPULATION_CHANGED = QEvent::registerEventType();
 // Task Composer
 const int EventType::TASK_COMPOSER_LOAD_CONFIG = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_LOAD_LOG = QEvent::registerEventType();
+const int EventType::TASK_COMPOSER_ADD_LOG = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_SAVE_LOG = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_PLOT_DOTGRAPH = QEvent::registerEventType();
 const int EventType::TASK_COMPOSER_SET_PROFILES = QEvent::registerEventType();
