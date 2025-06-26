@@ -65,6 +65,8 @@ private:
   struct Implementation;
   std::unique_ptr<Ui::TaskComposerWidget> ui;
   std::unique_ptr<Implementation> data_;
+
+  QModelIndex getSelectedLog();
 };
 }  // namespace tesseract_gui
 
