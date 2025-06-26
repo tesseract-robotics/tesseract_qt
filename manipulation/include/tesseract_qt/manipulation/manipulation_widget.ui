@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>419</height>
+    <width>291</width>
+    <height>268</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,119 +36,126 @@
     <number>3</number>
    </property>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="mode_label">
-        <property name="text">
-         <string>Mode:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="mode_combo_box">
-        <item>
-         <property name="text">
-          <string>Joint</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Cartesian</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="group_label">
-        <property name="text">
-         <string>Group Name:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="group_combo_box"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="working_frame_label">
-        <property name="text">
-         <string>Working Frame:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="working_frame_combo_box"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="tcp_label">
-        <property name="text">
-         <string>TCP Frame:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="tcp_combo_box"/>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="tcp_offset_label">
-        <property name="text">
-         <string>TCP Offset:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QComboBox" name="tcp_offset_combo_box"/>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="state_label">
-        <property name="text">
-         <string>State:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QComboBox" name="state_combo_box"/>
-      </item>
-      <item row="6" column="1">
-       <widget class="QPushButton" name="reload_push_button">
-        <property name="text">
-         <string>Reload</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
+     <widget class="QWidget" name="config_tab">
+      <attribute name="title">
+       <string>Config</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QFrame" name="frame">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="mode_label">
+            <property name="text">
+             <string>Mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="mode_combo_box">
+            <item>
+             <property name="text">
+              <string>Joint</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Cartesian</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="group_label">
+            <property name="text">
+             <string>Group Name:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="group_combo_box"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="working_frame_label">
+            <property name="text">
+             <string>Working Frame:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="working_frame_combo_box"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="tcp_label">
+            <property name="text">
+             <string>TCP Frame:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="tcp_combo_box"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="tcp_offset_label">
+            <property name="text">
+             <string>TCP Offset:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QComboBox" name="tcp_offset_combo_box"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="state_label">
+            <property name="text">
+             <string>State:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QComboBox" name="state_combo_box"/>
+          </item>
+          <item row="6" column="1">
+           <widget class="QPushButton" name="reload_push_button">
+            <property name="text">
+             <string>Reload</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="joint_tab">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
