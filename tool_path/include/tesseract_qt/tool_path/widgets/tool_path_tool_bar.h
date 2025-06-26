@@ -39,6 +39,9 @@ public:
   explicit ToolPathToolBar(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~ToolPathToolBar();
 
+  void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
+  std::shared_ptr<const ComponentInfo> getComponentInfo() const;
+
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;

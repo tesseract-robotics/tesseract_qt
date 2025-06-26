@@ -87,4 +87,11 @@ ToolPathToolBar::ToolPathToolBar(std::shared_ptr<const ComponentInfo> component_
 
 ToolPathToolBar::~ToolPathToolBar() = default;
 
+void ToolPathToolBar::setComponentInfo(std::shared_ptr<const ComponentInfo> component_info)
+{
+  data_->component_info = std::move(component_info);
+}
+
+std::shared_ptr<const ComponentInfo> ToolPathToolBar::getComponentInfo() const { return data_->component_info; }
+
 }  // namespace tesseract_gui
