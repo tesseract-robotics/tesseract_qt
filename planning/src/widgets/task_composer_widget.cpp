@@ -39,6 +39,7 @@
 #include <tesseract_task_composer/core/task_composer_node_info.h>
 #include <tesseract_task_composer/core/task_composer_data_storage.h>
 #include <tesseract_task_composer/core/task_composer_log.h>
+#include <tesseract_task_composer/core/task_composer_graph.h>
 #include <tesseract_command_language/utils.h>
 
 #include <tesseract_qt/common/models/standard_item_type.h>
@@ -87,12 +88,28 @@ TaskComposerWidget::TaskComposerWidget(std::shared_ptr<const ComponentInfo> comp
 
   ui->log_tree_view->setModel(&data_->log_model);
   ui->log_tree_view->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+  ui->ns_combo_box->setModel(&data_->log_model);
+  ui->ns_combo_box->setModelColumn(0);
+  ui->log_combo_box->setModel(&data_->log_model);
+  ui->log_combo_box->setModelColumn(0);
 
   setComponentInfo(std::move(component_info));
 
   connect(ui->task_run_push_button, SIGNAL(clicked(bool)), this, SLOT(onRun(bool)));
   connect(ui->log_tree_view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onShowContextMenu(QPoint)));
   connect(ui->environment_push_button, SIGNAL(clicked(bool)), this, SLOT(onPickEnvironmentClicked(bool)));
+
+  connect(ui->ns_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [&](int viewIndex) {
+    // which column is being shown?
+    int column = ui->ns_combo_box->modelColumn();
+    // what’s the current root?
+    QModelIndex root = ui->ns_combo_box->rootModelIndex();
+    // build the model index for that row/column
+    QModelIndex mi = data_->log_model.index(viewIndex, column, root);
+    // now set the root of the log combo box
+    ui->log_combo_box->setRootModelIndex(mi);
+    ui->log_combo_box->setCurrentIndex(0);
+  });
 
   // Register Types
   registerCommonAnyPolyTypes();
@@ -223,11 +240,22 @@ void TaskComposerWidget::onShowContextMenu(const QPoint& pos)
   }
 }
 
+QModelIndex TaskComposerWidget::getSelectedLog()
+{
+  // which column is being shown?
+  int column = ui->log_combo_box->modelColumn();
+  // what’s the current root?
+  QModelIndex root = ui->log_combo_box->rootModelIndex();
+  // build the model index for that row/column
+  return data_->log_model.index(ui->log_combo_box->currentIndex(), column, root);
+}
+
 void TaskComposerWidget::onRun(bool /*checked*/)
 {
   tesseract_planning::TaskComposerLog nlog(ui->desc_line_edit->text().toStdString());
 
-  QModelIndex current_index = ui->log_tree_view->selectionModel()->currentIndex();
+  // Get selected log
+  QModelIndex current_index = getSelectedLog();
   if (!current_index.isValid())
   {
     tesseract_gui::events::StatusLogError e("TaskComposerWidget, No log selected!");
@@ -271,13 +299,27 @@ void TaskComposerWidget::onRun(bool /*checked*/)
   future->wait();
   stopwatch.stop();
 
+  // Check for failure if running pipeline or graph
+  // This is useful if you are testing a sub task which should not abort in normal
+  const tesseract_planning::TaskComposerNode& task = data_->task_composer_server.getTask(task_name);
+  if (task.getType() == tesseract_planning::TaskComposerNodeType::GRAPH ||
+      task.getType() == tesseract_planning::TaskComposerNodeType::PIPELINE)
+  {
+    const auto& graph_task = dynamic_cast<const tesseract_planning::TaskComposerGraph&>(task);
+    std::vector<boost::uuids::uuid> terminals = graph_task.getTerminals();
+    std::optional<tesseract_planning::TaskComposerNodeInfo> task_info =
+        future->context->task_infos.getInfo(terminals.front());
+    if (task_info.has_value())
+      future->context->abort(terminals.front());
+  }
+
   // Log Context
   nlog.context = future->context;
 
   // Send status
   const QString ps = (future->context->isSuccessful()) ? "Successful" : "Failed";
   const QString msg =
-      QString("TaskComposerWidget, Planning %1, elapsed time %2 seconds").arg(ps, stopwatch.elapsedSeconds());
+      QString("TaskComposerWidget, Planning %1, elapsed time %2 seconds").arg(ps).arg(stopwatch.elapsedSeconds());
   tesseract_gui::events::StatusLogInfo e(msg);
   QApplication::sendEvent(qApp, &e);
 
@@ -366,7 +408,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::TaskComposerSaveLog*>(event);
     if (e->getComponentInfo() == data_->component_info)
     {
-      QModelIndex current_index = ui->log_tree_view->selectionModel()->currentIndex();
+      QModelIndex current_index = getSelectedLog();
       if (current_index.isValid())
       {
         const auto& log = data_->log_model.get(current_index);
@@ -381,7 +423,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
     auto* e = static_cast<events::TaskComposerPlotDotgraph*>(event);
     if (e->getComponentInfo() == data_->component_info)
     {
-      QModelIndex current_index = ui->log_tree_view->selectionModel()->currentIndex();
+      QModelIndex current_index = getSelectedLog();
       if (current_index.isValid())
       {
         const auto& log = data_->log_model.get(current_index);
@@ -389,11 +431,16 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
         {
           TaskComposerWidget::viewDotgraph(log.dotgraph);
         }
-        else if (data_->task_composer_server.hasTask(log.context->name))
+        else if (log.context != nullptr && data_->task_composer_server.hasTask(log.context->name))
         {
           const auto& task = data_->task_composer_server.getTask(log.context->name);
           const std::string dotgraph = task.getDotgraph(log.context->task_infos.getInfoMap());
           TaskComposerWidget::viewDotgraph(dotgraph);
+        }
+        else
+        {
+          tesseract_gui::events::StatusLogWarn e("TaskComposerWidget, No dotgraph found!");
+          QApplication::sendEvent(qApp, &e);
         }
       }
     }

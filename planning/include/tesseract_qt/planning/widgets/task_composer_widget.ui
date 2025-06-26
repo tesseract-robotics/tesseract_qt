@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>466</width>
-    <height>375</height>
+    <height>274</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,154 +33,161 @@
     <number>10</number>
    </property>
    <item>
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="title">
-      <string>Config</string>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <layout class="QFormLayout" name="formLayout">
-      <property name="leftMargin">
-       <number>3</number>
-      </property>
-      <property name="topMargin">
-       <number>9</number>
-      </property>
-      <property name="rightMargin">
-       <number>3</number>
-      </property>
-      <property name="bottomMargin">
-       <number>3</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="executor_label">
-        <property name="text">
-         <string>Executor:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="executor_combo_box"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="task_label">
-        <property name="text">
-         <string>Task:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="task_combo_box">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="ns_label">
-        <property name="text">
-         <string>Namespace:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="ns_line_edit"/>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="dotgraph_label">
-        <property name="text">
-         <string>Dot Graph:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QCheckBox" name="dotgraph_check_box">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="desc_label">
-        <property name="text">
-         <string>Description:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="desc_line_edit"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Environment:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QFrame" name="frame">
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <property name="leftMargin">
-          <number>0</number>
+     <widget class="QWidget" name="config_tab">
+      <attribute name="title">
+       <string>Config</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="executor_label">
+         <property name="text">
+          <string>Executor:</string>
          </property>
-         <property name="topMargin">
-          <number>0</number>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="executor_combo_box"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="task_label">
+         <property name="text">
+          <string>Task:</string>
          </property>
-         <property name="rightMargin">
-          <number>0</number>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="task_combo_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="bottomMargin">
-          <number>0</number>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Environment:</string>
          </property>
-         <item>
-          <widget class="QLineEdit" name="environment_line_edit">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="placeholderText">
-            <string>Log Environment</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="environment_push_button">
-           <property name="minimumSize">
-            <size>
-             <width>25</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>25</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Pick Environment</string>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QFrame" name="frame">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLineEdit" name="environment_line_edit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="placeholderText">
+             <string>Log Environment</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="environment_push_button">
+            <property name="minimumSize">
+             <size>
+              <width>25</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>25</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Pick Environment</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="ns_label">
+         <property name="text">
+          <string>Namespace:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="ns_line_edit"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="desc_label">
+         <property name="text">
+          <string>Description:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="desc_line_edit"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="dotgraph_label">
+         <property name="text">
+          <string>Dot Graph:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QCheckBox" name="dotgraph_check_box">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="logs_tab">
+      <attribute name="title">
+       <string>Logs</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="tesseract_gui::TreeView" name="log_tree_view">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -191,7 +198,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1,0">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -205,56 +212,54 @@
        <number>0</number>
       </property>
       <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Log:</string>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="ns_combo_box">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-       </spacer>
+        <property name="toolTip">
+         <string>Namespace</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="log_combo_box">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Log</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="task_run_push_button">
-        <property name="minimumSize">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
          <size>
-          <width>80</width>
-          <height>0</height>
+          <width>50</width>
+          <height>16777215</height>
          </size>
         </property>
         <property name="text">
          <string>run</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Logs</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <property name="leftMargin">
-       <number>3</number>
-      </property>
-      <property name="topMargin">
-       <number>9</number>
-      </property>
-      <property name="rightMargin">
-       <number>3</number>
-      </property>
-      <property name="bottomMargin">
-       <number>3</number>
-      </property>
-      <item>
-       <widget class="tesseract_gui::TreeView" name="log_tree_view">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
         </property>
        </widget>
       </item>
