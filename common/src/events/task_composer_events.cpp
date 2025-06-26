@@ -53,6 +53,21 @@ const std::string& TaskComposerLoadLog::getNamespace() const { return ns_; }
 
 //////////////////////////////////////////////////////
 
+TaskComposerAddLog::TaskComposerAddLog(std::shared_ptr<const ComponentInfo> component_info,
+                                       tesseract_planning::TaskComposerLog log,
+                                       std::string ns)
+  : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_ADD_LOG))
+  , log_(std::move(log))
+  , ns_(std::move(ns))
+{
+}
+TaskComposerAddLog::~TaskComposerAddLog() = default;
+
+const tesseract_planning::TaskComposerLog& TaskComposerAddLog::getLog() const { return log_; }
+const std::string& TaskComposerAddLog::getNamespace() const { return ns_; }
+
+//////////////////////////////////////////////////////
+
 TaskComposerSaveLog::TaskComposerSaveLog(std::shared_ptr<const ComponentInfo> component_info, std::string save_path)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_SAVE_LOG))
   , save_path_(std::move(save_path))

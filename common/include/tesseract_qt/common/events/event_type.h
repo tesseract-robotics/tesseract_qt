@@ -153,6 +153,7 @@ struct EventType
   // Task Composer
   static const int TASK_COMPOSER_LOAD_CONFIG;
   static const int TASK_COMPOSER_LOAD_LOG;
+  static const int TASK_COMPOSER_ADD_LOG;
   static const int TASK_COMPOSER_SAVE_LOG;
   static const int TASK_COMPOSER_PLOT_DOTGRAPH;
   static const int TASK_COMPOSER_SET_PROFILES;

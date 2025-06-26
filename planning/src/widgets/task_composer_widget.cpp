@@ -347,6 +347,19 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
     }
   }
 
+  if (event->type() == events::EventType::TASK_COMPOSER_ADD_LOG)
+  {
+    assert(dynamic_cast<events::TaskComposerAddLog*>(event) != nullptr);
+    auto* e = static_cast<events::TaskComposerAddLog*>(event);
+    if (e->getComponentInfo() == data_->component_info)
+    {
+      if (e->getNamespace().empty())
+        data_->log_model.add(e->getLog());
+      else
+        data_->log_model.add(e->getLog(), e->getNamespace());
+    }
+  }
+
   if (event->type() == events::EventType::TASK_COMPOSER_SAVE_LOG)
   {
     assert(dynamic_cast<events::TaskComposerSaveLog*>(event) != nullptr);
