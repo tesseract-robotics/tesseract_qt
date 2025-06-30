@@ -316,6 +316,10 @@ void TaskComposerWidget::onRun(bool /*checked*/)
   // Log Context
   nlog.context = future->context;
 
+  // Generate dot graph if requested
+  if (dotgraph)
+    nlog.dotgraph = task.getDotgraph(nlog.context->task_infos.getInfoMap());
+
   // Send status
   const QString ps = (future->context->isSuccessful()) ? "Successful" : "Failed";
   const QString msg =
