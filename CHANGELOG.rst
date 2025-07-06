@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.31.0 (2025-07-06)
+-------------------
 * Fix yaml extensions file name spelling
 * Fix task composer widget not populating dotgraph if requested (`#174 <https://github.com/tesseract-robotics/tesseract_qt/issues/174>`_)
 * Update manipulation widget to be more compact
