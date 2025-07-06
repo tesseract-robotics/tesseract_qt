@@ -24,7 +24,7 @@
 #include "ui_studio.h"
 
 #include <tesseract_common/yaml_utils.h>
-#include <tesseract_common/yaml_extenstions.h>
+#include <tesseract_common/yaml_extensions.h>
 #include <boost_plugin_loader/plugin_loader.hpp>
 
 #include <filesystem>
