@@ -50,7 +50,7 @@
 
 #include <tesseract_collision/core/common.h>
 #include <tesseract_common/yaml_utils.h>
-#include <tesseract_common/yaml_extenstions.h>
+#include <tesseract_common/yaml_extensions.h>
 
 #include <QApplication>
 
