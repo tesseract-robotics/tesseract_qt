@@ -18,6 +18,7 @@ add_library(
   src/models/null_instruction_standard_item.cpp
   src/models/move_instruction_standard_item.cpp
   src/models/set_analog_instruction_standard_item.cpp
+  src/models/set_digital_instruction_standard_item.cpp
   src/models/set_tool_instruction_standard_item.cpp
   src/models/timer_instruction_standard_item.cpp
   src/models/wait_instruction_standard_item.cpp
