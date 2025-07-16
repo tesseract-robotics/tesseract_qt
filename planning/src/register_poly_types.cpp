@@ -30,6 +30,7 @@
 #include <tesseract_qt/environment/models/environment_standard_item.h>
 #include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
 #include <tesseract_qt/command_language/models/set_analog_instruction_standard_item.h>
+#include <tesseract_qt/command_language/models/set_digital_instruction_standard_item.h>
 #include <tesseract_qt/command_language/models/set_tool_instruction_standard_item.h>
 #include <tesseract_qt/command_language/models/timer_instruction_standard_item.h>
 #include <tesseract_qt/command_language/models/wait_instruction_standard_item.h>
@@ -42,6 +43,7 @@
 #include <tesseract_command_language/poly/move_instruction_poly.h>
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/set_analog_instruction.h>
+#include <tesseract_command_language/set_digital_instruction.h>
 #include <tesseract_command_language/set_tool_instruction.h>
 #include <tesseract_command_language/timer_instruction.h>
 #include <tesseract_command_language/wait_instruction.h>
@@ -130,6 +132,15 @@ void registerCommonInstructionPolyTypes()
     auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new SetAnalogInstructionStandardItem(data) };
+    };
+    InstructionPolyStandardItemManager::registerFactory<Type>(fn);
+  }
+
+  {  // tesseract_planning::SetDigitalInstruction
+    using Type = tesseract_planning::SetDigitalInstruction;
+    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+      const auto& data = instruction_poly.as<Type>();
+      return { new SetDigitalInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
