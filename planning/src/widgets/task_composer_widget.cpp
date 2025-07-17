@@ -128,6 +128,9 @@ void TaskComposerWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> c
 
 std::shared_ptr<const ComponentInfo> TaskComposerWidget::getComponentInfo() const { return data_->component_info; }
 
+TaskComposerLogModel& TaskComposerWidget::getModel() { return data_->log_model; }
+const TaskComposerLogModel& TaskComposerWidget::getModel() const { return data_->log_model; }
+
 void TaskComposerWidget::createContextMenu(QMenu& log_menu)
 {
   ComponentInfoManager::removeUnused();
@@ -240,7 +243,7 @@ void TaskComposerWidget::onShowContextMenu(const QPoint& pos)
   }
 }
 
-QModelIndex TaskComposerWidget::getSelectedLog()
+QModelIndex TaskComposerWidget::getSelectedLog() const
 {
   // which column is being shown?
   int column = ui->log_combo_box->modelColumn();

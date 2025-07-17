@@ -37,6 +37,7 @@ class TaskComposerWidget;
 namespace tesseract_gui
 {
 class ComponentInfo;
+class TaskComposerLogModel;
 
 class TaskComposerWidget : public QWidget
 {
@@ -49,6 +50,11 @@ public:
 
   void setComponentInfo(std::shared_ptr<const ComponentInfo> component_info);
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
+
+  TaskComposerLogModel& getModel();
+  const TaskComposerLogModel& getModel() const;
+
+  QModelIndex getSelectedLog() const;
 
 private Q_SLOTS:
   void onRun(bool checked = false);
@@ -65,8 +71,6 @@ private:
   struct Implementation;
   std::unique_ptr<Ui::TaskComposerWidget> ui;
   std::unique_ptr<Implementation> data_;
-
-  QModelIndex getSelectedLog();
 };
 }  // namespace tesseract_gui
 
