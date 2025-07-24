@@ -101,9 +101,9 @@ if(${BUILD_RENDERING})
   message("Building rendering module")
   add_subdirectory(rendering)
   if((EXISTS LSB_RELEASE_CODE_SHORT) AND (LSB_RELEASE_CODE_SHORT STREQUAL "noble"))
-    set(GZ-RENDERING gz-rendering8)
+    set(GZ_RENDERING gz-rendering8)
   else()
-    set(GZ-RENDERING gz-rendering7)
+    set(GZ_RENDERING gz-rendering7)
   endif()
   list(
     APPEND
