@@ -103,7 +103,7 @@ set(WINDOWS_DEPENDS
 if(${BUILD_RENDERING})
   message("Building rendering module")
   add_subdirectory(rendering)
-  if((EXISTS LSB_RELEASE_CODE_SHORT) AND (LSB_RELEASE_CODE_SHORT STREQUAL "noble"))
+  if((DEFINED LSB_RELEASE_CODE_SHORT) AND (LSB_RELEASE_CODE_SHORT STREQUAL "noble"))
     set(GZ_RENDERING gz-rendering8)
   else()
     set(GZ_RENDERING gz-rendering7)
