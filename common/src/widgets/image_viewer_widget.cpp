@@ -22,7 +22,6 @@
  */
 #include <tesseract_qt/common/widgets/image_viewer_widget.h>
 #include <tesseract_qt/common/icon_utils.h>
-#include "ui_image_viewer_widget.h"
 
 #include <QToolBar>
 #include <QImageReader>
@@ -34,14 +33,25 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QGraphicsPixmapItem>
+#include <QKeyEvent>
+#include <QWheelEvent>
+
+#include <cmath>
 
 namespace tesseract_gui
 {
 struct ImageViewerWidgetImpl
 {
+  // Image & scene
   QImage image;
-  QLabel* image_area;
-  double scale_factor{ 1 };
+  QGraphicsScene* scene{ nullptr };
+  QGraphicsPixmapItem* pix{ nullptr };
+
+  // View state
+  double scale_factor{ 1.0 };  // only used when not in "fit" mode
+
+  // Default Directory
   QString default_directory;
 
   // Toolbar
@@ -55,27 +65,29 @@ struct ImageViewerWidgetImpl
 };
 
 ImageViewerWidget::ImageViewerWidget(QWidget* parent)
-  : QWidget(parent), ui(std::make_unique<Ui::ImageViewerWidget>()), data_(std::make_unique<ImageViewerWidgetImpl>())
+  : QGraphicsView(parent), data_(std::make_unique<ImageViewerWidgetImpl>())
 {
-  ui->setupUi(this);
+  data_->scene = new QGraphicsScene(this);
+  data_->pix = data_->scene->addPixmap(QPixmap());
 
-  data_->image_area = new QLabel();
-  data_->image_area->setBackgroundRole(QPalette::Base);
-  data_->image_area->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-  data_->image_area->setScaledContents(true);
-
-  ui->scroll_area->setBackgroundRole(QPalette::Dark);
-  ui->scroll_area->setWidget(data_->image_area);
-  ui->scroll_area->setVisible(false);
+  setScene(data_->scene);
+  setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+  setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+  setResizeAnchor(QGraphicsView::AnchorViewCenter);
+  setDragMode(QGraphicsView::ScrollHandDrag);  // pan with mouse drag
 
   createToolBar();
-  ui->verticalLayout->insertWidget(0, data_->toolbar);
+  data_->toolbar->setParent(this);
+  data_->toolbar->raise();
+  data_->toolbar->show();
 
   QSettings ms;
   ms.beginGroup("ImageViewerWidget");
-  data_->default_directory =
-      ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::PicturesLocation)[0]).toString();
+  const QStringList standard_locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+  data_->default_directory = ms.value("default_directory", standard_locations[0]).toString();
   ms.endGroup();
+
+  updateActionEnables();
 }
 
 ImageViewerWidget::~ImageViewerWidget()
@@ -97,41 +109,24 @@ bool ImageViewerWidget::loadImage(const QString& filepath)
         this, "ImageViewer", QString("Failed to load file %1: %2").arg(filepath, reader.errorString()));
     return false;
   }
-  loadImage(image);
+  setImage(image);
   return true;
 }
 
-void ImageViewerWidget::loadImage(const QImage& image)
+void ImageViewerWidget::setImage(const QImage& image)
 {
   data_->image = image;
-  data_->image_area->setPixmap(QPixmap::fromImage(data_->image));
+  data_->pix->setPixmap(QPixmap::fromImage(image));
+  data_->pix->setTransformationMode(Qt::SmoothTransformation);
+
+  data_->scene->setSceneRect(data_->pix->pixmap().rect());
   data_->scale_factor = 1.0;
 
-  ui->scroll_area->setVisible(true);
-  data_->fit_to_window_action->setEnabled(true);
-  data_->save_action->setEnabled(!data_->image.isNull());
-  data_->zoom_in_action->setEnabled(!data_->fit_to_window_action->isChecked());
-  data_->zoom_out_action->setEnabled(!data_->fit_to_window_action->isChecked());
-  data_->normal_size_action->setEnabled(!data_->fit_to_window_action->isChecked());
+  setTransform(QTransform());
 
-  if (!data_->fit_to_window_action->isChecked())
-    data_->image_area->adjustSize();
-}
+  applyFitIfEnabled();
 
-void ImageViewerWidget::scaleImage(double factor)
-{
-  data_->scale_factor *= factor;
-  QSize current_size = data_->image_area->pixmap()->size();
-  data_->image_area->resize(data_->scale_factor * current_size);
-
-  QScrollBar* hsb = ui->scroll_area->horizontalScrollBar();
-  hsb->setValue(int(data_->scale_factor * hsb->value() + ((data_->scale_factor - 1) * hsb->pageStep() / 2)));
-
-  QScrollBar* vsb = ui->scroll_area->verticalScrollBar();
-  vsb->setValue(int(data_->scale_factor * vsb->value() + ((data_->scale_factor - 1) * vsb->pageStep() / 2)));
-
-  data_->zoom_in_action->setEnabled(data_->scale_factor < 3.0);
-  data_->zoom_out_action->setEnabled(data_->scale_factor > 0.333);
+  updateActionEnables();
 }
 
 void ImageViewerWidget::onOpen()
@@ -146,13 +141,17 @@ void ImageViewerWidget::onOpen()
   dialog.setNameFilters(filters);
   if (dialog.exec() == 1)
   {
-    data_->default_directory = QFileInfo(dialog.selectedFiles()[0]).absoluteDir().path();
-    loadImage(dialog.selectedFiles()[0]);
+    const QStringList selected_files = dialog.selectedFiles();
+    data_->default_directory = QFileInfo(selected_files[0]).absoluteDir().path();
+    loadImage(selected_files[0]);
   }
 }
 
 void ImageViewerWidget::onSave()
 {
+  if (data_->image.isNull())
+    return;
+
   QStringList filters;
   for (const QByteArray& mimeTypeName : QImageReader::supportedMimeTypes())
     filters.append(mimeTypeName);
@@ -163,8 +162,9 @@ void ImageViewerWidget::onSave()
   dialog.setNameFilters(filters);
   if (dialog.exec() == 1)
   {
-    data_->default_directory = QFileInfo(dialog.selectedFiles()[0]).absoluteDir().path();
-    QString save_path = dialog.selectedFiles()[0];
+    const QStringList selected_files = dialog.selectedFiles();
+    data_->default_directory = QFileInfo(selected_files[0]).absoluteDir().path();
+    QString save_path = selected_files[0];
     QImageWriter writer(save_path);
 
     if (!writer.write(data_->image))
@@ -173,32 +173,31 @@ void ImageViewerWidget::onSave()
   }
 }
 
-void ImageViewerWidget::onZoomIn() { scaleImage(1.25); }
+void ImageViewerWidget::onZoomIn() { setScaleFactor(data_->scale_factor * 1.25); }
 
-void ImageViewerWidget::onZoomOut() { scaleImage(0.8); }
+void ImageViewerWidget::onZoomOut() { setScaleFactor(data_->scale_factor * 0.8); }
 
 void ImageViewerWidget::onNormalSize()
 {
-  data_->image_area->adjustSize();
   data_->scale_factor = 1.0;
+  setTransform(QTransform());
+  updateActionEnables();
 }
 
 void ImageViewerWidget::onFitToWindow()
 {
-  bool fit_to_window = data_->fit_to_window_action->isChecked();
-  ui->scroll_area->setWidgetResizable(fit_to_window);
-  if (!fit_to_window)
-    onNormalSize();
-
-  data_->save_action->setEnabled(!data_->image.isNull());
-  data_->zoom_in_action->setEnabled(!data_->fit_to_window_action->isChecked());
-  data_->zoom_out_action->setEnabled(!data_->fit_to_window_action->isChecked());
-  data_->normal_size_action->setEnabled(!data_->fit_to_window_action->isChecked());
+  applyFitIfEnabled();
+  updateActionEnables();
 }
 
 void ImageViewerWidget::createToolBar()
 {
   data_->toolbar = new QToolBar;  // NOLINT
+  data_->toolbar->setIconSize(QSize(18, 18));
+  data_->toolbar->setMovable(false);
+  data_->toolbar->setFloatable(false);
+  data_->toolbar->setContentsMargins(0, 0, 0, 0);
+
   data_->open_action = data_->toolbar->addAction(icons::getImportIcon(), "Open Image", this, SLOT(onOpen()));
   data_->save_action = data_->toolbar->addAction(icons::getSaveIcon(), "Save Image", this, SLOT(onSave()));
   data_->toolbar->addSeparator();
@@ -208,5 +207,93 @@ void ImageViewerWidget::createToolBar()
       data_->toolbar->addAction(icons::getRatioIcon(), "Normal Size", this, SLOT(onNormalSize()));
   data_->fit_to_window_action =
       data_->toolbar->addAction(icons::getFullscreenIcon(), "Fit To Window", this, SLOT(onFitToWindow()));
+
+  data_->fit_to_window_action->setCheckable(true);
+  data_->fit_to_window_action->setChecked(true);
+}
+
+void ImageViewerWidget::updateActionEnables()
+{
+  const bool has_image = !data_->image.isNull();
+  const bool fit = (data_->fit_to_window_action && data_->fit_to_window_action->isChecked());
+
+  if (data_->save_action)
+    data_->save_action->setEnabled(has_image);
+  if (data_->zoom_in_action)
+    data_->zoom_in_action->setEnabled(has_image && !fit);
+  if (data_->zoom_out_action)
+    data_->zoom_out_action->setEnabled(has_image && !fit);
+  if (data_->normal_size_action)
+    data_->normal_size_action->setEnabled(has_image && !fit);
+}
+
+void ImageViewerWidget::applyFitIfEnabled()
+{
+  if (!data_->pix)
+    return;
+
+  if (data_->fit_to_window_action && data_->fit_to_window_action->isChecked())
+  {
+    setTransform(QTransform());
+    fitInView(data_->pix, Qt::KeepAspectRatio);
+  }
+  else
+  {
+    onNormalSize();
+  }
+}
+
+void ImageViewerWidget::setScaleFactor(double s)
+{
+  if (!data_->pix)
+    return;
+  if (data_->fit_to_window_action && data_->fit_to_window_action->isChecked())
+    return;  // disabled in fit mode
+
+  data_->scale_factor = s;  // std::clamp(s, 0.333, 3.0);
+  setTransform(QTransform());
+  updateActionEnables();
+}
+
+void ImageViewerWidget::wheelEvent(QWheelEvent* e)
+{
+  if (data_->image.isNull())
+    return;
+
+  // Scroll by default; hold Ctrl to zoom
+  if (!(e->modifiers() & Qt::ControlModifier) || !data_->pix)
+  {
+    QGraphicsView::wheelEvent(e);
+    return;
+  }
+
+  // Smooth delta (support touchpads)
+  qreal dy = 0;
+  if (!e->pixelDelta().isNull())
+    dy = e->pixelDelta().y();
+  else if (!e->angleDelta().isNull())
+    dy = e->angleDelta().y();
+
+  const qreal base = 1.0015;
+  const qreal factor = std::pow(base, dy);
+  setScaleFactor(data_->scale_factor * factor);
+
+  e->accept();
+}
+
+void ImageViewerWidget::resizeEvent(QResizeEvent* e)
+{
+  QGraphicsView::resizeEvent(e);
+
+  // Keep toolbar pinned to the top-left with a margin
+  if (data_->toolbar)
+    data_->toolbar->move(8, 8);
+
+  // Re-apply fit on resize if enabled
+  if (data_->pix && data_->fit_to_window_action && data_->fit_to_window_action->isChecked())
+  {
+    setTransform(QTransform());
+    fitInView(data_->pix, Qt::KeepAspectRatio);
+  }
 }
 }  // namespace tesseract_gui
