@@ -250,8 +250,9 @@ void ImageViewerWidget::setScaleFactor(double s)
   if (data_->fit_to_window_action && data_->fit_to_window_action->isChecked())
     return;  // disabled in fit mode
 
-  data_->scale_factor = s;  // std::clamp(s, 0.333, 3.0);
+  data_->scale_factor = s;
   setTransform(QTransform());
+  scale(data_->scale_factor, data_->scale_factor);
   updateActionEnables();
 }
 
