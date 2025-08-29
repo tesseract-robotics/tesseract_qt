@@ -25,22 +25,16 @@
 
 #ifndef Q_MOC_RUN
 #include <memory>
-#include <QWidget>
+#include <QGraphicsView>
 #endif
 
-class QScrollBar;
 class QImage;
-
-namespace Ui
-{
-class ImageViewerWidget;
-}
 
 namespace tesseract_gui
 {
 struct ImageViewerWidgetImpl;
 
-class ImageViewerWidget : public QWidget
+class ImageViewerWidget : public QGraphicsView
 {
   Q_OBJECT
 
@@ -49,8 +43,7 @@ public:
   ~ImageViewerWidget();
 
   bool loadImage(const QString& filepath);
-  void loadImage(const QImage& image);
-  void scaleImage(double factor);
+  void setImage(const QImage& image);
 
 public Q_SLOTS:
   virtual void onOpen();
@@ -60,11 +53,17 @@ public Q_SLOTS:
   virtual void onNormalSize();
   virtual void onFitToWindow();
 
+protected:
+  void wheelEvent(QWheelEvent* e) override;
+  void resizeEvent(QResizeEvent* e) override;
+
 private:
-  std::unique_ptr<Ui::ImageViewerWidget> ui;
   std::unique_ptr<ImageViewerWidgetImpl> data_;
 
   void createToolBar();
+  void updateActionEnables();
+  void applyFitIfEnabled();
+  void setScaleFactor(double s);
 };
 }  // namespace tesseract_gui
 #endif  // TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H
