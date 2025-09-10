@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro: [focal, jammy, noble]
+        distro: [jammy, noble]
     container:
       image: ghcr.io/tesseract-robotics/tesseract_planning:${{ matrix.distro }}-master
       env:
