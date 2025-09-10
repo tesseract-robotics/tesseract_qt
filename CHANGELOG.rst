@@ -2,6 +2,18 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove Focal CI Pipelines
+* Update: getMaxCollisionMargin is now optional
+* Fix image viewer zoom functionality
+* Update ImageViewerWidget to inherit from QGraphicsView
+* Use DEFINED when checking if cmake var exists
+* Fixed naming of GZ_RENDERING variable
+* Expose task composer model and selected log
+* Add SetDigitalInstructionStandardItem
+* Contributors: Douglas Smith, Levi Armstrong, Michael Ripperger, Roelof Oomen
+
 0.31.0 (2025-07-06)
 -------------------
 * Fix yaml extensions file name spelling
