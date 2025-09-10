@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.32.0 (2025-09-10)
+-------------------
 * Remove Focal CI Pipelines
 * Update: getMaxCollisionMargin is now optional
 * Fix image viewer zoom functionality
