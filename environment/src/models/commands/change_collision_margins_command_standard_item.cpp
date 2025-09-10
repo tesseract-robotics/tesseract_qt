@@ -67,7 +67,11 @@ void ChangeCollisionMarginsCommandStandardItem::ctor()
   else
     appendRow(createStandardItemString("Default Margin", "nullopt"));
 
-  appendRow(createStandardItemFloat("Max Margin", command->getCollisionMarginPairData().getMaxCollisionMargin()));
+  if (command->getCollisionMarginPairData().getMaxCollisionMargin())
+    appendRow(
+        createStandardItemFloat("Max Margin", command->getCollisionMarginPairData().getMaxCollisionMargin().value()));
+  else
+    appendRow(createStandardItemString("Max Margin", "nullopt"));
 
   switch (command->getCollisionMarginPairOverrideType())
   {
