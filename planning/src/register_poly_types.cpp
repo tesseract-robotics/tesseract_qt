@@ -22,6 +22,7 @@
  */
 
 #include <tesseract_qt/planning/register_poly_types.h>
+#include <tesseract_qt/planning/models/task_composer_data_storage_standard_item.h>
 #include <tesseract_qt/common/contact_results_types.h>
 #include <tesseract_qt/common/factories/any_poly_standard_item_factory.h>
 #include <tesseract_qt/common/factories/instruction_poly_standard_item_factory.h>
@@ -71,11 +72,20 @@ void registerCommonAnyPolyTypes()
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // std::shared_ptr<tesseract_environment::Environment>
+  {  // std::shared_ptr<const tesseract_environment::Environment>
     using Type = std::shared_ptr<const tesseract_environment::Environment>;
     auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new EnvironmentStandardItem(*data) };
+    };
+    AnyPolyStandardItemManager::registerFactory<Type>(fn);
+  }
+
+  {  // std::shared_ptr<tesseract_planning::TaskComposerDataStorage>
+    using Type = std::shared_ptr<tesseract_planning::TaskComposerDataStorage>;
+    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+      const auto& data = any_poly.as<Type>();
+      return { new TaskComposerDataStorageStandardItem(*data) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }

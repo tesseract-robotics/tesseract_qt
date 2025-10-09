@@ -311,7 +311,7 @@ void TaskComposerWidget::onRun(bool /*checked*/)
     const auto& graph_task = dynamic_cast<const tesseract_planning::TaskComposerGraph&>(task);
     std::vector<boost::uuids::uuid> terminals = graph_task.getTerminals();
     std::optional<tesseract_planning::TaskComposerNodeInfo> task_info =
-        future->context->task_infos.getInfo(terminals.front());
+        future->context->task_infos->getInfo(terminals.front());
     if (task_info.has_value())
       future->context->abort(terminals.front());
   }
@@ -321,7 +321,7 @@ void TaskComposerWidget::onRun(bool /*checked*/)
 
   // Generate dot graph if requested
   if (dotgraph)
-    nlog.dotgraph = task.getDotgraph(nlog.context->task_infos.getInfoMap());
+    nlog.dotgraph = task.getDotgraph(nlog.context->task_infos->getInfoMap());
 
   // Send status
   const QString ps = (future->context->isSuccessful()) ? "Successful" : "Failed";
@@ -441,7 +441,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
         else if (log.context != nullptr && data_->task_composer_server.hasTask(log.context->name))
         {
           const auto& task = data_->task_composer_server.getTask(log.context->name);
-          const std::string dotgraph = task.getDotgraph(log.context->task_infos.getInfoMap());
+          const std::string dotgraph = task.getDotgraph(log.context->task_infos->getInfoMap());
           TaskComposerWidget::viewDotgraph(dotgraph);
         }
         else

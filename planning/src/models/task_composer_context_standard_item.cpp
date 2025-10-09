@@ -66,6 +66,6 @@ void TaskComposerContextStandardItem::ctor(const tesseract_planning::TaskCompose
   /** @todo Add profiles */
   appendRow(createStandardItemBool("successful", input.isSuccessful()));
   appendRow(createStandardItemBool("aborted", input.isAborted()));
-  appendRow(new TaskComposerNodeInfoMapStandardItem("node_infos", input.task_infos.getInfoMap()));
+  appendRow(new TaskComposerNodeInfoMapStandardItem("node_infos", input.task_infos->getInfoMap()));
 }
 }  // namespace tesseract_gui
