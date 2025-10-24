@@ -129,7 +129,7 @@ StudioPluginLoaderDialog::~StudioPluginLoaderDialog() = default;
 void StudioPluginLoaderDialog::showEvent(QShowEvent* event)
 {
   // Load search paths into widget
-  std::set<std::string> search_paths = data_->app->getPluginLoader().search_paths;
+  std::vector<std::string> search_paths = data_->app->getPluginLoader().search_paths;
   QStringList qlist_search_paths;
   for (const auto& search_path : search_paths)
     qlist_search_paths.append(search_path.c_str());
@@ -137,7 +137,7 @@ void StudioPluginLoaderDialog::showEvent(QShowEvent* event)
   data_->search_paths_model.setStringList(qlist_search_paths);
 
   // Load search libraries into widget
-  std::set<std::string> search_libraries = data_->app->getPluginLoader().search_libraries;
+  std::vector<std::string> search_libraries = data_->app->getPluginLoader().search_libraries;
   QStringList qlist_search_libraries;
   for (const auto& search_library : search_libraries)
     qlist_search_libraries.append(search_library.c_str());
@@ -189,16 +189,16 @@ void StudioPluginLoaderDialog::addPluginWidget()
 void StudioPluginLoaderDialog::refreshSearchPathsAndLibraries()
 {
   QStringList qlist_search_paths = data_->search_paths_model.stringList();
-  std::set<std::string> search_paths;
+  std::vector<std::string> search_paths;
   for (const auto& entry : qlist_search_paths)
-    search_paths.insert(entry.toStdString());
+    search_paths.push_back(entry.toStdString());
 
   data_->app->getPluginLoader().search_paths = search_paths;
 
   QStringList qlist_search_libraries = data_->search_libraries_model.stringList();
-  std::set<std::string> search_libraries;
+  std::vector<std::string> search_libraries;
   for (const auto& entry : qlist_search_libraries)
-    search_libraries.insert(entry.toStdString());
+    search_libraries.push_back(entry.toStdString());
 
   data_->app->getPluginLoader().search_libraries = search_libraries;
 

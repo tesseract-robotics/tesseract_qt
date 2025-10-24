@@ -135,7 +135,7 @@ Studio::Implementation::Implementation(Studio* app) : app(app), plugin_loader_di
   // Config plugin loader
   plugin_loader.search_libraries_env = TESSERACT_STUDIO_PLUGINS_ENV;
   plugin_loader.search_paths_env = TESSERACT_STUDIO_PLUGIN_DIRECTORIES_ENV;
-  plugin_loader.search_paths.insert(TESSERACT_STUDIO_PLUGIN_PATH);
+  plugin_loader.search_paths.emplace_back(TESSERACT_STUDIO_PLUGIN_PATH);
   boost::split(
       plugin_loader.search_libraries, TESSERACT_STUDIO_PLUGINS, boost::is_any_of(":"), boost::token_compress_on);
 
@@ -191,10 +191,10 @@ void Studio::Implementation::loadConfig()
   {
     if (const YAML::Node& search_paths = config_node[SEARCH_PATHS_KEY])
     {
-      std::set<std::string> sp;
+      std::vector<std::string> sp;
       try
       {
-        sp = search_paths.as<std::set<std::string>>();
+        sp = search_paths.as<std::vector<std::string>>();
       }
       catch (const std::exception& e)
       {
@@ -203,15 +203,15 @@ void Studio::Implementation::loadConfig()
                                  "Details: " +
                                  e.what());
       }
-      plugin_loader.search_paths.insert(sp.begin(), sp.end());
+      plugin_loader.search_paths.insert(plugin_loader.search_paths.end(), sp.begin(), sp.end());
     }
 
     if (const YAML::Node& search_libraries = config_node[SEARCH_LIBRARIES_KEY])
     {
-      std::set<std::string> sl;
+      std::vector<std::string> sl;
       try
       {
-        sl = search_libraries.as<std::set<std::string>>();
+        sl = search_libraries.as<std::vector<std::string>>();
       }
       catch (const std::exception& e)
       {
@@ -220,7 +220,7 @@ void Studio::Implementation::loadConfig()
                                  "Details: " +
                                  e.what());
       }
-      plugin_loader.search_libraries.insert(sl.begin(), sl.end());
+      plugin_loader.search_libraries.insert(plugin_loader.search_libraries.end(), sl.begin(), sl.end());
     }
 
     if (const YAML::Node& component_infos = config_node[COMPONENT_INFOS_KEY])
