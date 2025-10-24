@@ -50,7 +50,11 @@ CollapsibleGroupBox::CollapsibleGroupBox(const QString& title, QWidget* parent)
   connect(toggle_button_, &QToolButton::toggled, this, &CollapsibleGroupBox::onToggled);
 }
 
-void CollapsibleGroupBox::setCollapsed(bool collapse) { toggle_button_->setChecked(collapse); }
+void CollapsibleGroupBox::setCollapsed(bool collapse)
+{
+  toggle_button_->setChecked(collapse);
+  emit collapsed(collapse);
+}
 
 void CollapsibleGroupBox::resizeEvent(QResizeEvent* event)
 {
@@ -103,5 +107,7 @@ void CollapsibleGroupBox::onToggled(bool checked)
   }
   if (layout())
     layout()->invalidate();
+
+  emit collapsed(checked);
 }
 }  // namespace tesseract_gui

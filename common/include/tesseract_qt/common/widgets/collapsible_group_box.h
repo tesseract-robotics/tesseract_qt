@@ -38,6 +38,9 @@ public:
 
   void setCollapsed(bool collapse);
 
+Q_SIGNALS:
+  void collapsed(bool collapsed);
+
 protected:
   void resizeEvent(QResizeEvent* event) override;
 
@@ -46,7 +49,6 @@ private Q_SLOTS:
 
 private:
   QToolButton* toggle_button_;
-
   void updateToggleButtonPosition();
 };
 
