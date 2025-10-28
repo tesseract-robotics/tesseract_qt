@@ -2,6 +2,13 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Exposing signal for collapsible group box
+* Update due to change in boost plugin loader
+* Update due to nested data storage changes
+* Contributors: David Spielman, Levi Armstrong
+
 0.32.0 (2025-09-10)
 -------------------
 * Remove Focal CI Pipelines
