@@ -26,7 +26,6 @@
 
 #include <tesseract_common/profile_dictionary.h>
 #include <tesseract_common/resource_locator.h>
-#include <tesseract_common/serialization.h>
 #include <tesseract_common/stopwatch.h>
 #include <tesseract_common/utils.h>
 #include <tesseract_environment/environment.h>
@@ -41,6 +40,13 @@
 #include <tesseract_task_composer/core/task_composer_log.h>
 #include <tesseract_task_composer/core/task_composer_graph.h>
 #include <tesseract_command_language/utils.h>
+
+#include <tesseract_common/cereal_serialization.h>
+#include <tesseract_scene_graph/cereal_serialization.h>
+#include <tesseract_environment/cereal_serialization.h>
+#include <tesseract_command_language/cereal_serialization.h>
+#include <tesseract_task_composer/core/cereal_serialization.h>
+#include <tesseract_common/serialization.h>
 
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/widgets/component_info_dialog.h>
@@ -64,8 +70,6 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 #include <QMenu>
-
-BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_common::GeneralResourceLocator)
 
 namespace tesseract_gui
 {

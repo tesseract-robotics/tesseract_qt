@@ -30,7 +30,6 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include <boost/serialization/access.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <tesseract_common/fwd.h>
 #include <tesseract_environment/fwd.h>
@@ -42,11 +41,11 @@ struct JointTrajectoryInfo
 {
   JointState joint_state;
   JointTrajectory joint_trajectory;
-
-  friend class boost::serialization::access;
-  template <class Archive>
-  void serialize(Archive& ar, const unsigned int version);  // NOLINT
 };
+
+class JointTrajectorySet;
+template <class Archive>
+void serialize(Archive& ar, JointTrajectorySet& obj);
 
 class JointTrajectorySet
 {
@@ -199,9 +198,8 @@ private:
 
   JointState getNewTrajectoryInitialState() const;
 
-  friend class boost::serialization::access;
   template <class Archive>
-  void serialize(Archive& ar, const unsigned int version);  // NOLINT
+  friend void ::tesseract_common::serialize(Archive& ar, JointTrajectorySet& obj);
 };
 }  // namespace tesseract_common
 #endif  // TESSERACT_COMMON_JOINT_TRAJECTORY_SET_H

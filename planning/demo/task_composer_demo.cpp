@@ -33,7 +33,6 @@
 
 #include <tesseract_environment/environment.h>
 #include <tesseract_common/resource_locator.h>
-#include <tesseract_common/serialization.h>
 
 #include <QVBoxLayout>
 

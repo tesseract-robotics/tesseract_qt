@@ -24,19 +24,9 @@
  * limitations under the License.
  */
 
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/string.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/shared_ptr.hpp>
-#include <boost/serialization/base_object.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/uuid/uuid_serialize.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/random_generator.hpp>
 
 #include <tesseract_common/utils.h>
-#include <tesseract_common/serialization.h>
 #include <tesseract_environment/environment.h>
 #include <tesseract_scene_graph/scene_state.h>
 #include <tesseract_environment/commands.h>
@@ -45,13 +35,6 @@
 
 namespace tesseract_common
 {
-template <class Archive>
-void JointTrajectoryInfo::serialize(Archive& ar, const unsigned int version)
-{
-  ar& BOOST_SERIALIZATION_NVP(joint_state);
-  ar& BOOST_SERIALIZATION_NVP(joint_trajectory);
-}
-
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
                                        std::string description)
   : description_(std::move(description)), uuid_(boost::uuids::random_generator()())
@@ -262,20 +245,4 @@ std::vector<JointTrajectoryInfo>::const_reference JointTrajectorySet::operator[]
 
 const JointState& JointTrajectorySet::getInitialState() const { return initial_state_; }
 
-template <class Archive>
-void JointTrajectorySet::serialize(Archive& ar, const unsigned int /*version*/)
-{
-  ar& BOOST_SERIALIZATION_NVP(initial_state_);
-  ar& BOOST_SERIALIZATION_NVP(joint_trajectory_);
-  ar& BOOST_SERIALIZATION_NVP(environment_);
-  ar& BOOST_SERIALIZATION_NVP(commands_);
-  ar& BOOST_SERIALIZATION_NVP(description_);
-  ar& BOOST_SERIALIZATION_NVP(ns_);
-  ar& BOOST_SERIALIZATION_NVP(uuid_);
-}
-
 }  // namespace tesseract_common
-
-#include <tesseract_common/serialization.h>
-TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_common::JointTrajectoryInfo)
-TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_common::JointTrajectorySet)

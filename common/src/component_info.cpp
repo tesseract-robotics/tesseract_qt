@@ -21,18 +21,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <boost/serialization/nvp.hpp>
-#if (BOOST_VERSION >= 107400) && (BOOST_VERSION < 107500)
-#include <boost/serialization/library_version_type.hpp>
-#endif
-#include <boost/serialization/shared_ptr.hpp>
-#include <boost/serialization/utility.hpp>
-#include <boost/serialization/list.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/uuid/uuid_serialize.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/random_generator.hpp>
-#include <tesseract_common/serialization.h>
+#include <boost/uuid/uuid_io.hpp>
 
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
@@ -160,17 +150,4 @@ bool ComponentInfo::operator==(const ComponentInfo& rhs) const
 
 bool ComponentInfo::operator!=(const ComponentInfo& rhs) const { return !operator==(rhs); }
 
-template <class Archive>
-void ComponentInfo::serialize(Archive& ar, const unsigned int /*version*/)
-{
-  ar& BOOST_SERIALIZATION_NVP(scene_name_);
-  ar& BOOST_SERIALIZATION_NVP(name_);
-  ar& BOOST_SERIALIZATION_NVP(ns_);
-  ar& BOOST_SERIALIZATION_NVP(parent_);
-  ar& BOOST_SERIALIZATION_NVP(description_);
-}
-
 }  // namespace tesseract_gui
-
-TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_gui::ComponentInfo)
-BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_gui::ComponentInfo)

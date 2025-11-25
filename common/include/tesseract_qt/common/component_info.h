@@ -27,12 +27,15 @@
 #include <list>
 #include <functional>
 #include <memory>
-#include <boost/serialization/access.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_hash.hpp>
 
 namespace tesseract_gui
 {
+class ComponentInfo;
+template <class Archive>
+void serialize(Archive& ar, ComponentInfo& obj);
+
 /** @brief All modesl will have this object to allow associating disconnected object together. */
 class ComponentInfo
 {
@@ -103,11 +106,7 @@ public:
   bool operator!=(const ComponentInfo& rhs) const;
 
 private:
-  friend class boost::serialization::access;
   friend class ComponentInfoManager;
-
-  template <class Archive>
-  void serialize(Archive& ar, const unsigned int version);  // NOLINT
 
   /** @brief The associated render scene */
   std::string scene_name_{ "tesseract_default" };
@@ -145,6 +144,9 @@ private:
                          const boost::uuids::uuid& ns,
                          std::shared_ptr<const ComponentInfo> parent = nullptr,
                          std::string description = "");
+
+  template <class Archive>
+  friend void ::tesseract_gui::serialize(Archive& ar, ComponentInfo& obj);
 };
 
 }  // namespace tesseract_gui

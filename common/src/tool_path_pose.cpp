@@ -24,14 +24,7 @@
  * limitations under the License.
  */
 
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_serialize.hpp>
-#include <tesseract_common/serialization.h>
-#include <tesseract_common/eigen_serialization.h>
 
 #include <tesseract_qt/common/tool_path_pose.h>
 
@@ -84,17 +77,4 @@ bool ToolPathPose::operator==(const ToolPathPose& rhs) const
 
 bool ToolPathPose::operator!=(const ToolPathPose& rhs) const { return !operator==(rhs); }
 
-template <class Archive>
-void ToolPathPose::serialize(Archive& ar, const unsigned int /*version*/)
-{
-  ar& BOOST_SERIALIZATION_NVP(uuid_);
-  ar& BOOST_SERIALIZATION_NVP(parent_uuid_);
-  ar& BOOST_SERIALIZATION_NVP(description_);
-  ar& BOOST_SERIALIZATION_NVP(transform_);
-}
-
 }  // namespace tesseract_gui
-
-#include <tesseract_common/serialization.h>
-TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_gui::ToolPathPose)
-BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_gui::ToolPathPose)
