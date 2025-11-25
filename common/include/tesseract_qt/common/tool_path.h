@@ -35,6 +35,10 @@
 
 namespace tesseract_gui
 {
+class ToolPath;
+template <class Archive>
+void serialize(Archive& ar, ToolPath& obj);
+
 class ToolPath
 {
 public:
@@ -268,16 +272,10 @@ protected:
   /** @brief The namespace associated with the tool path */
   std::string ns_{ "general" };
 
-  friend struct tesseract_common::Serialization;
-  friend class boost::serialization::access;
   template <class Archive>
-  void serialize(Archive& ar, const unsigned int version);  // NOLINT
+  friend void ::tesseract_gui::serialize(Archive& ar, ToolPath& obj);
 };
 
 }  // namespace tesseract_gui
-
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/tracking.hpp>
-BOOST_CLASS_EXPORT_KEY2(tesseract_gui::ToolPath, "ToolPath")
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_H

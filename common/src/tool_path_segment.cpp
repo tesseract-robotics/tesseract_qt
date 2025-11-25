@@ -24,14 +24,7 @@
  * limitations under the License.
  */
 
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_serialize.hpp>
-
-#include <tesseract_common/serialization.h>
 
 #include <tesseract_qt/common/tool_path_segment.h>
 #include <tesseract_qt/common/tool_path_pose.h>
@@ -80,15 +73,6 @@ bool ToolPathSegment::operator==(const ToolPathSegment& rhs) const
 }
 
 bool ToolPathSegment::operator!=(const ToolPathSegment& rhs) const { return !operator==(rhs); }
-
-template <class Archive>
-void ToolPathSegment::serialize(Archive& ar, const unsigned int /*version*/)
-{
-  ar& BOOST_SERIALIZATION_NVP(uuid_);
-  ar& BOOST_SERIALIZATION_NVP(parent_uuid_);
-  ar& BOOST_SERIALIZATION_NVP(description_);
-  ar& BOOST_SERIALIZATION_NVP(container_);
-}
 
 // LCOV_EXCL_START
 
@@ -186,7 +170,3 @@ void ToolPathSegment::swap(tesseract_common::AlignedVector<ToolPathPose>& other)
 
 // LCOV_EXCL_STOP
 }  // namespace tesseract_gui
-
-#include <tesseract_common/serialization.h>
-TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_gui::ToolPathSegment)
-BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_gui::ToolPathSegment)

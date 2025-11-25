@@ -24,14 +24,7 @@
  * limitations under the License.
  */
 
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_serialize.hpp>
-
-#include <tesseract_common/serialization.h>
 
 #include <tesseract_qt/common/tool_path.h>
 
@@ -94,17 +87,6 @@ void ToolPath::setWorkingFrame(std::string working_frame) { working_frame_ = std
 const std::string& ToolPath::getWorkingFrame() const { return working_frame_; }
 
 bool ToolPath::operator!=(const ToolPath& rhs) const { return !operator==(rhs); }
-
-template <class Archive>
-void ToolPath::serialize(Archive& ar, const unsigned int /*version*/)
-{
-  ar& BOOST_SERIALIZATION_NVP(uuid_);
-  ar& BOOST_SERIALIZATION_NVP(parent_uuid_);
-  ar& BOOST_SERIALIZATION_NVP(description_);
-  ar& BOOST_SERIALIZATION_NVP(container_);
-  ar& BOOST_SERIALIZATION_NVP(working_frame_);
-  ar& BOOST_SERIALIZATION_NVP(ns_);
-}
 
 // LCOV_EXCL_START
 
@@ -179,7 +161,3 @@ void ToolPath::pop_back() { container_.pop_back(); }
 void ToolPath::swap(tesseract_common::AlignedVector<ToolPathSegment>& other) { container_.swap(other); }
 // LCOV_EXCL_STOP
 }  // namespace tesseract_gui
-
-#include <tesseract_common/serialization.h>
-TESSERACT_SERIALIZE_ARCHIVES_INSTANTIATE(tesseract_gui::ToolPath)
-BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_gui::ToolPath)

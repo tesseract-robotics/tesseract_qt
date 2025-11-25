@@ -28,12 +28,11 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/events/tool_path_events.h>
 #include <tesseract_qt/common/tool_path.h>
+#include <tesseract_qt/common/cereal_serialization.h>
 
 #include <tesseract_common/yaml_utils.h>
 #include <tesseract_common/yaml_extensions.h>
-#include <tesseract_common/eigen_serialization.h>
 #include <tesseract_common/serialization.h>
-#include <boost/serialization/vector.hpp>
 
 #include <QStandardItem>
 #include <QApplication>

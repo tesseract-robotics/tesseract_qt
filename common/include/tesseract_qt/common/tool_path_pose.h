@@ -30,13 +30,14 @@
 #include <Eigen/Geometry>
 #include <boost/uuid/uuid.hpp>
 
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/export.hpp>
-
 #include <tesseract_common/fwd.h>
 
 namespace tesseract_gui
 {
+class ToolPathPose;
+template <class Archive>
+void serialize(Archive& ar, ToolPathPose& obj);
+
 class ToolPathPose
 {
 public:
@@ -97,14 +98,10 @@ protected:
   /** @brief The transform */
   Eigen::Isometry3d transform_{ Eigen::Isometry3d::Identity() };
 
-  friend struct tesseract_common::Serialization;
-  friend class boost::serialization::access;
   template <class Archive>
-  void serialize(Archive& ar, const unsigned int version);  // NOLINT
+  friend void ::tesseract_gui::serialize(Archive& ar, ToolPathPose& obj);
 };
 
 }  // namespace tesseract_gui
-
-BOOST_CLASS_EXPORT_KEY2(tesseract_gui::ToolPathPose, "ToolPathPose")
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_POSE_H

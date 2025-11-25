@@ -26,6 +26,7 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
 #include <tesseract_qt/common/icon_utils.h>
+#include <tesseract_qt/common/cereal_serialization.h>
 
 #include <tesseract_qt/common/widgets/component_info_dialog.h>
 
@@ -41,8 +42,10 @@
 #include <tesseract_common/resource_locator.h>
 #include <tesseract_environment/environment.h>
 
-BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_common::GeneralResourceLocator)
-BOOST_CLASS_EXPORT_IMPLEMENT(tesseract_environment::Environment)
+#include <tesseract_common/cereal_serialization.h>
+#include <tesseract_geometry/cereal_serialization.h>
+#include <tesseract_srdf/cereal_serialization.h>
+#include <tesseract_environment/cereal_serialization.h>
 
 namespace tesseract_gui
 {

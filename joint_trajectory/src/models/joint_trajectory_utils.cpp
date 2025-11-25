@@ -26,12 +26,16 @@
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
-
-#include <tesseract_common/serialization.h>
+#include <tesseract_qt/common/cereal_serialization.h>
 
 #include <tesseract_command_language/poly/instruction_poly.h>
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/utils.h>
+
+#include <tesseract_environment/cereal_serialization.h>
+#include <tesseract_command_language/cereal_serialization.h>
+
+#include <tesseract_common/serialization.h>
 
 #include <QApplication>
 #include <QString>

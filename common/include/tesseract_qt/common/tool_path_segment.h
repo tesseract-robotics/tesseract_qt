@@ -28,13 +28,16 @@
 
 #include <string>
 #include <boost/uuid/uuid.hpp>
-#include <boost/serialization/access.hpp>
 #include <tesseract_common/eigen_types.h>
 #include <tesseract_common/fwd.h>
 
 namespace tesseract_gui
 {
 class ToolPathPose;
+class ToolPathSegment;
+template <class Archive>
+void serialize(Archive& ar, ToolPathSegment& obj);
+
 class ToolPathSegment
 {
 public:
@@ -225,15 +228,10 @@ protected:
   /** @brief The container */
   tesseract_common::AlignedVector<ToolPathPose> container_;
 
-  friend struct tesseract_common::Serialization;
-  friend class boost::serialization::access;
   template <class Archive>
-  void serialize(Archive& ar, const unsigned int version);  // NOLINT
+  friend void ::tesseract_gui::serialize(Archive& ar, ToolPathSegment& obj);
 };
 
 }  // namespace tesseract_gui
-
-#include <boost/serialization/export.hpp>
-BOOST_CLASS_EXPORT_KEY2(tesseract_gui::ToolPathSegment, "ToolPathSegment")
 
 #endif  // TESSERACT_COMMON_TOOL_PATH_SEGMENT_H

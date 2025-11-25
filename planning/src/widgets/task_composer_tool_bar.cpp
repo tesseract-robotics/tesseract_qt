@@ -94,7 +94,7 @@ TaskComposerToolBar::TaskComposerToolBar(std::shared_ptr<const ComponentInfo> co
 
   data_->load_log_action = addAction(icons::getLogIcon(), "Load Task Composer Log", [this]() {
     QStringList filters;
-    filters.append("Task Composer Log (*.tclx *.tclb)");
+    filters.append("Task Composer Log (*.tclx *.tclj *.tclb)");
 
     QFileDialog dialog(this, "Open Task Composer Log", data_->default_log_dir);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
@@ -124,7 +124,7 @@ TaskComposerToolBar::TaskComposerToolBar(std::shared_ptr<const ComponentInfo> co
 
   data_->save_log_action = addAction(icons::getSaveIcon(), "Save Task Composer Log", [this]() {
     QStringList filters;
-    filters.append("Task Composer Log (*.tclx *.tclb)");
+    filters.append("Task Composer Log (*.tclx *.tclj *.tclb)");
 
     QFileDialog dialog(this, "Save Task Composer Log", data_->default_log_dir);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
