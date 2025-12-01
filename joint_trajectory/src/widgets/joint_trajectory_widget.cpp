@@ -288,9 +288,13 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         // If no parent then it using the top most so no need to overwrite existing environment
         if (data_->model->getComponentInfo()->hasParent())
         {
-          auto env_wrapper =
-              std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
-          EnvironmentManager::set(env_wrapper);
+          // Defer the EnvironmentManager::set() call to avoid blocking the UI
+          // Use a longer delay (100ms) to allow the UI to process other events first
+          constexpr int kDelayTimeMs = 100;
+          QTimer::singleShot(kDelayTimeMs, this, [this, jts, component_info = data_->model->getComponentInfo()]() {
+            auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(component_info, jts.getEnvironment());
+            EnvironmentManager::set(env_wrapper);
+          });
         }
       }
 
@@ -319,9 +323,13 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         // If no parent then it using the top most so no need to overwrite existing environment
         if (data_->model->getComponentInfo()->hasParent())
         {
-          auto env_wrapper =
-              std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
-          EnvironmentManager::set(env_wrapper);
+          // Defer the EnvironmentManager::set() call to avoid blocking the UI
+          // Use a longer delay (100ms) to allow the UI to process other events first
+          constexpr int kDelayTimeMs = 100;
+          QTimer::singleShot(kDelayTimeMs, this, [this, jts, component_info = data_->model->getComponentInfo()]() {
+            auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(component_info, jts.getEnvironment());
+            EnvironmentManager::set(env_wrapper);
+          });
         }
       }
 
@@ -353,15 +361,28 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
         if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
         {
-          if (data_->model->getComponentInfo()->hasParent() && data_->current_environment != jts.getEnvironment())
+          auto env = jts.getEnvironment();
+          if (data_->model->getComponentInfo()->hasParent() && data_->current_environment != env)
           {
-            auto env_wrapper =
-                std::make_shared<DefaultEnvironmentWrapper>(data_->model->getComponentInfo(), jts.getEnvironment());
-            EnvironmentManager::set(env_wrapper);
+            // Defer the EnvironmentManager::set() call
+            // Use a longer delay (100ms) to allow the UI to process other events first
+            constexpr int kDelayTimeMs = 100;
+            QTimer::singleShot(kDelayTimeMs, this, [this, env, component_info = data_->model->getComponentInfo()]() {
+              auto env_wrapper = std::make_shared<DefaultEnvironmentWrapper>(component_info, env);
+              EnvironmentManager::set(env_wrapper);
+            });
           }
 
-          data_->current_environment = jts.getEnvironment();
-          data_->current_environment->setState(state.joint_names, state.position);
+          data_->current_environment = env;
+          // Defer setState() as well since it triggers currentStateChanged() which broadcasts events
+          // Capture state by value to avoid issues with local variable lifetime
+          constexpr int kDelayTimeMs = 100;
+          QTimer::singleShot(kDelayTimeMs, this, [this, env, state]() {
+            if (data_->current_environment == env && data_->current_environment != nullptr)
+            {
+              data_->current_environment->setState(state.joint_names, state.position);
+            }
+          });
         }
       }
       catch (const std::runtime_error& ex)
