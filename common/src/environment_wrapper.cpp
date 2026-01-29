@@ -52,7 +52,23 @@
 #include <tesseract_common/yaml_utils.h>
 #include <tesseract_common/yaml_extensions.h>
 
+#include <utility>
+
 #include <QApplication>
+#include <QMetaObject>
+#include <QThread>
+
+namespace
+{
+template <typename Fn>
+void invokeOnAppThread(Fn&& fn)
+{
+  if (qApp == nullptr || QThread::currentThread() == qApp->thread())
+    fn();
+  else
+    QMetaObject::invokeMethod(qApp, std::forward<Fn>(fn), Qt::QueuedConnection);
+}
+}  // namespace
 
 static const std::string DEFAULT_CONTACT_MANAGER_PLUGINS =
     R"(contact_manager_plugins:
@@ -146,9 +162,11 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
             // LCOV_EXCL_START
             default:
             {
-              tesseract_gui::events::StatusLogInfo event("Tesseract Qt Environment Wrapper, Unhandled environment "
-                                                         "command");
-              QApplication::sendEvent(qApp, &event);
+              invokeOnAppThread([]() {
+                tesseract_gui::events::StatusLogInfo event("Tesseract Qt Environment Wrapper, Unhandled environment "
+                                                           "command");
+                QApplication::sendEvent(qApp, &event);
+              });
             }
           }
         }
@@ -161,8 +179,10 @@ void tesseractEventFilterHelper(const tesseract_environment::Event& event,
     case tesseract_environment::Events::SCENE_STATE_CHANGED:
     {
       const auto& e = static_cast<const tesseract_environment::SceneStateChangedEvent&>(event);
-      tesseract_gui::events::SceneStateChanged event(env_wrapper.getComponentInfo(), e.state);
-      QApplication::sendEvent(qApp, &event);
+      invokeOnAppThread([component_info = env_wrapper.getComponentInfo(), state = e.state]() {
+        tesseract_gui::events::SceneStateChanged event(component_info, state);
+        QApplication::sendEvent(qApp, &event);
+      });
       break;
     }
   }
@@ -305,29 +325,39 @@ void broadcastHelper(const std::shared_ptr<const tesseract_gui::ComponentInfo>& 
   if (!env.isInitialized())
     return;
 
-  // Broadcast environment data
-  tesseract_gui::events::SceneGraphSet set_scene_graph_event(component_info, env.getSceneGraph()->clone());
-  QApplication::sendEvent(qApp, &set_scene_graph_event);
-
-  tesseract_gui::events::SceneStateChanged scene_state_changed_event(component_info, env.getState());
-  QApplication::sendEvent(qApp, &scene_state_changed_event);
-
-  tesseract_gui::events::EnvironmentCommandsSet set_environment_commands_event(component_info, env.getCommandHistory());
-  QApplication::sendEvent(qApp, &set_environment_commands_event);
-
-  tesseract_gui::events::AllowedCollisionMatrixSet set_acm_event(component_info, *env.getAllowedCollisionMatrix());
-  QApplication::sendEvent(qApp, &set_acm_event);
-
+  auto scene_graph_clone = env.getSceneGraph()->clone();
+  std::shared_ptr<tesseract_scene_graph::SceneGraph> scene_graph_shared(std::move(scene_graph_clone));
+  auto scene_state = env.getState();
+  auto command_history = env.getCommandHistory();
+  auto acm = *env.getAllowedCollisionMatrix();
   auto kin_info = env.getKinematicsInformation();
-  tesseract_gui::events::KinematicGroupsSet set_kin_groups_event(
-      component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
-  QApplication::sendEvent(qApp, &set_kin_groups_event);
 
-  tesseract_gui::events::GroupJointStatesSet set_group_joint_states_event(component_info, kin_info.group_states);
-  QApplication::sendEvent(qApp, &set_group_joint_states_event);
+  lock.unlock();
 
-  tesseract_gui::events::GroupTCPsSet set_group_tcps_event(component_info, kin_info.group_tcps);
-  QApplication::sendEvent(qApp, &set_group_tcps_event);
+  invokeOnAppThread([component_info, scene_graph_shared, scene_state, command_history, acm, kin_info]() {
+    // Broadcast environment data
+    tesseract_gui::events::SceneGraphSet set_scene_graph_event(component_info, scene_graph_shared);
+    QApplication::sendEvent(qApp, &set_scene_graph_event);
+
+    tesseract_gui::events::SceneStateChanged scene_state_changed_event(component_info, scene_state);
+    QApplication::sendEvent(qApp, &scene_state_changed_event);
+
+    tesseract_gui::events::EnvironmentCommandsSet set_environment_commands_event(component_info, command_history);
+    QApplication::sendEvent(qApp, &set_environment_commands_event);
+
+    tesseract_gui::events::AllowedCollisionMatrixSet set_acm_event(component_info, acm);
+    QApplication::sendEvent(qApp, &set_acm_event);
+
+    tesseract_gui::events::KinematicGroupsSet set_kin_groups_event(
+        component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
+    QApplication::sendEvent(qApp, &set_kin_groups_event);
+
+    tesseract_gui::events::GroupJointStatesSet set_group_joint_states_event(component_info, kin_info.group_states);
+    QApplication::sendEvent(qApp, &set_group_joint_states_event);
+
+    tesseract_gui::events::GroupTCPsSet set_group_tcps_event(component_info, kin_info.group_tcps);
+    QApplication::sendEvent(qApp, &set_group_tcps_event);
+  });
 }
 
 namespace tesseract_gui
