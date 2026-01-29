@@ -78,6 +78,9 @@ AllowedCollisionMatrixModel::~AllowedCollisionMatrixModel() = default;
 
 AllowedCollisionMatrixModel& AllowedCollisionMatrixModel::operator=(const AllowedCollisionMatrixModel& other)
 {
+  if (this == &other)
+    return *this;
+
   data_->component_info = other.getComponentInfo();
   return *this;
 }
