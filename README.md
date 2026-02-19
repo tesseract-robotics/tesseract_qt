@@ -3,8 +3,8 @@ Tesseract Qt Widgets and Applications
 
 Platform             | CI Status
 ---------------------|:---------
-Linux (Focal)        | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/workflows/Focal-Build/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions)
-Linux (Unstable)     | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/workflows/Unstable-Build/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions)
+Linux (Stable)       | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions/workflows/ubuntu.yml)
+Linux (Unstable)     | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/actions/workflows/unstable.yml/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions/workflows/unstable.yml)
 Lint  (Clang-Format) | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/workflows/Clang-Format/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions)
 Lint  (CMake-Format) | [![Build Status](https://github.com/tesseract-robotics/tesseract_qt/workflows/CMake-Format/badge.svg)](https://github.com/tesseract-robotics/tesseract_qt/actions)
 
