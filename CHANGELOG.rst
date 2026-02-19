@@ -2,6 +2,75 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update README.md (`#201 <https://github.com/tesseract-robotics/tesseract_qt/issues/201>`_)
+* Defer environment updates to prevent UI blocking
+* Bump actions/upload-artifact from 5 to 6
+  Bumps [actions/upload-artifact](https://github.com/actions/upload-artifact) from 5 to 6.
+  - [Release notes](https://github.com/actions/upload-artifact/releases)
+  - [Commits](https://github.com/actions/upload-artifact/compare/v5...v6)
+  ---
+  updated-dependencies:
+  - dependency-name: actions/upload-artifact
+  dependency-version: '6'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Fix Qt warnings at workbench startup
+* Fix handling of self-assignment (clang-tidy warning)
+* Update colcon action to v14
+* Updated Dockerfile to use tmpfs mount
+* Bump actions/checkout from 1 to 6
+  Bumps [actions/checkout](https://github.com/actions/checkout) from 1 to 6.
+  - [Release notes](https://github.com/actions/checkout/releases)
+  - [Changelog](https://github.com/actions/checkout/blob/main/CHANGELOG.md)
+  - [Commits](https://github.com/actions/checkout/compare/v1...v6)
+  ---
+  updated-dependencies:
+  - dependency-name: actions/checkout
+  dependency-version: '6'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Bump actions/upload-artifact from 4 to 5
+  Bumps [actions/upload-artifact](https://github.com/actions/upload-artifact) from 4 to 5.
+  - [Release notes](https://github.com/actions/upload-artifact/releases)
+  - [Commits](https://github.com/actions/upload-artifact/compare/v4...v5)
+  ---
+  updated-dependencies:
+  - dependency-name: actions/upload-artifact
+  dependency-version: '5'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Bump docker/build-push-action from 5 to 6
+  Bumps [docker/build-push-action](https://github.com/docker/build-push-action) from 5 to 6.
+  - [Release notes](https://github.com/docker/build-push-action/releases)
+  - [Commits](https://github.com/docker/build-push-action/compare/v5...v6)
+  ---
+  updated-dependencies:
+  - dependency-name: docker/build-push-action
+  dependency-version: '6'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Bump tesseract-robotics/colcon-action from 11 to 13
+  Bumps [tesseract-robotics/colcon-action](https://github.com/tesseract-robotics/colcon-action) from 11 to 13.
+  - [Release notes](https://github.com/tesseract-robotics/colcon-action/releases)
+  - [Commits](https://github.com/tesseract-robotics/colcon-action/compare/v11...v13)
+  ---
+  updated-dependencies:
+  - dependency-name: tesseract-robotics/colcon-action
+  dependency-version: '13'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Cleanup doxygen file headers
+* Add dependabot
+* Switch to Cereal for serialization
+* Contributors: Levi Armstrong, Michael Ripperger, Roelof Oomen, dependabot[bot], mike-o-main
+
 0.33.0 (2025-10-28)
 -------------------
 * Exposing signal for collapsible group box
