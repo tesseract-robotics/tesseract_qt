@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.34.0 (2026-02-19)
+-------------------
 * Update README.md (`#201 <https://github.com/tesseract-robotics/tesseract_qt/issues/201>`_)
 * Defer environment updates to prevent UI blocking
 * Bump actions/upload-artifact from 5 to 6
