@@ -11,7 +11,7 @@
 
 #include <cereal/cereal.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 template <class Archive>
 void serialize(Archive& ar, ComponentInfo& obj)
@@ -52,9 +52,9 @@ void serialize(Archive& ar, ToolPathSegment& obj)
   ar(cereal::make_nvp("container", obj.container_));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
-namespace tesseract_common
+namespace tesseract::common
 {
 template <class Archive>
 void serialize(Archive& ar, JointTrajectoryInfo& obj)
@@ -74,6 +74,6 @@ void serialize(Archive& ar, JointTrajectorySet& obj)
   ar(cereal::make_nvp("ns", obj.ns_));
   ar(cereal::make_nvp("uuid", obj.uuid_));
 }
-}  // namespace tesseract_common
+}  // namespace tesseract::common
 
 #endif  // TESSERACT_GUI_COMMON_CEREAL_SERIALIZATION_H

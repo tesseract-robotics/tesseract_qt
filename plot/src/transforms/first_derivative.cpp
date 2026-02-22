@@ -25,7 +25,7 @@
 #include <QDoubleValidator>
 #include "ui_first_derivative.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 FirstDerivative::FirstDerivative()
   : _widget(std::make_unique<QWidget>()), ui(std::make_unique<Ui::FirstDerivariveForm>()), _dT(0.0)
@@ -135,4 +135,4 @@ void FirstDerivative::on_buttonCompute_clicked()
     emit parametersChanged();
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

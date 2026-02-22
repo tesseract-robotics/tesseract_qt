@@ -52,17 +52,17 @@ int main(int argc, char** argv)
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
   // setup stylesheet
-  app.setStyleSheet(tesseract_gui::themes::getDarkTheme());
+  app.setStyleSheet(tesseract::gui::themes::getDarkTheme());
   app.setApplicationName("Tesseract SRDF Editor");
 
-  auto locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
-  auto component_info = tesseract_gui::ComponentInfoManager::create("srdf_scene");
-  auto entity_manager = std::make_shared<tesseract_gui::EntityManager>();
-  auto* srdf_widget = new tesseract_gui::SRDFEditorWidget(component_info, locator);
-  auto* env_widget = new tesseract_gui::EnvironmentWidget(component_info);
-  auto* render_widget = new tesseract_gui::RenderWidget(component_info->getSceneName());
+  auto locator = std::make_shared<tesseract::common::GeneralResourceLocator>();
+  auto component_info = tesseract::gui::ComponentInfoManager::create("srdf_scene");
+  auto entity_manager = std::make_shared<tesseract::gui::EntityManager>();
+  auto* srdf_widget = new tesseract::gui::SRDFEditorWidget(component_info, locator);
+  auto* env_widget = new tesseract::gui::EnvironmentWidget(component_info);
+  auto* render_widget = new tesseract::gui::RenderWidget(component_info->getSceneName());
 
-  tesseract_gui::IgnSceneGraphRenderManager scene_graph_manager{ component_info, entity_manager };
+  tesseract::gui::IgnSceneGraphRenderManager scene_graph_manager{ component_info, entity_manager };
 
   auto tab_widget = new QTabWidget();
   tab_widget->addTab(srdf_widget, "SRDF");
@@ -83,13 +83,13 @@ int main(int argc, char** argv)
   window.resize(1200, 800);
 
   //  QApplication::connect(srdf_widget,
-  //                        &tesseract_gui::SRDFEditorWidget::environmentSet,
-  //                        [env_config](const std::shared_ptr<tesseract_environment::Environment>& env) {
+  //                        &tesseract::gui::SRDFEditorWidget::environmentSet,
+  //                        [env_config](const std::shared_ptr<tesseract::environment::Environment>& env) {
   //                          env_config->setEnvironment(env);
   //                        });
 
   //  QApplication::connect(
-  //      srdf_widget, &tesseract_gui::SRDFEditorWidget::showStatusMessage, [&window](const QString& message, int
+  //      srdf_widget, &tesseract::gui::SRDFEditorWidget::showStatusMessage, [&window](const QString& message, int
   //      timeout) {
   //        window.statusBar()->showMessage(message, timeout);
   //        window.repaint();

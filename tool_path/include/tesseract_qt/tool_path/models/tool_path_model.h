@@ -34,7 +34,7 @@ namespace boost::uuids
 class uuid;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPath;
 class ToolPathSegment;
@@ -85,6 +85,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_MODEL_H

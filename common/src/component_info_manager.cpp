@@ -32,7 +32,7 @@
 #include <boost/lexical_cast.hpp>
 #include <shared_mutex>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ComponentInfoManager::Implementation
 {
@@ -411,4 +411,4 @@ std::vector<std::shared_ptr<ComponentInfo>> ComponentInfoManager::getHelper() co
 
 bool ComponentInfoManager::emptyHelper() const { return data_->component_infos_by_ns.empty(); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

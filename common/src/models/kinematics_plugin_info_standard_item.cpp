@@ -26,16 +26,16 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(tesseract_common::KinematicsPluginInfo plugin_info)
+KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(tesseract::common::KinematicsPluginInfo plugin_info)
   : QStandardItem(icons::getCubeIcon(), "Kinematics Plugin Info"), plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
 KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(const QString& text,
-                                                                   tesseract_common::KinematicsPluginInfo plugin_info)
+                                                                   tesseract::common::KinematicsPluginInfo plugin_info)
   : QStandardItem(icons::getCubeIcon(), text), plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -43,7 +43,7 @@ KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(const QString
 
 KinematicsPluginInfoStandardItem::KinematicsPluginInfoStandardItem(const QIcon& icon,
                                                                    const QString& text,
-                                                                   tesseract_common::KinematicsPluginInfo plugin_info)
+                                                                   tesseract::common::KinematicsPluginInfo plugin_info)
   : QStandardItem(icon, text), plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -84,4 +84,4 @@ void KinematicsPluginInfoStandardItem::ctor()
 
   appendRow({ inv_plugins, new QStandardItem() });
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

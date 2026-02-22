@@ -33,11 +33,11 @@
 #include <QFont>
 #include <QIcon>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 bool isBool(std::string s)
 {
-  tesseract_common::trim(s);
+  tesseract::common::trim(s);
   std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
   return (s == "true" || s == "false");
 }
@@ -125,7 +125,7 @@ QYamlTreeItem* QYamlTreeItem::load(const YAML::Node& node, QYamlTreeItem* parent
           return rootItem;
         }
 
-        if (tesseract_common::isNumeric(val_str))
+        if (tesseract::common::isNumeric(val_str))
         {
           if (val_str.find(".") == std::string::npos)
           {
@@ -405,4 +405,4 @@ YAML::Node QYamlModel::genYaml(QYamlTreeItem* item) const
   return va;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

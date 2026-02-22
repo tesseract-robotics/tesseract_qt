@@ -47,7 +47,7 @@
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct SRDFEditorWidget::Implementation
 {
@@ -61,22 +61,22 @@ struct SRDFEditorWidget::Implementation
   QString srdf_filepath;
 
   /** @brief The SRDF model */
-  tesseract_srdf::SRDFModel srdf_model;
+  tesseract::srdf::SRDFModel srdf_model;
 
   /** @brief The Tesseract resource locator */
-  tesseract_common::ResourceLocator::Ptr locator;
+  tesseract::common::ResourceLocator::Ptr locator;
 
   /** @brief The current environment */
-  tesseract_environment::Environment::Ptr env;
+  tesseract::environment::Environment::Ptr env;
 };
 
-SRDFEditorWidget::SRDFEditorWidget(std::shared_ptr<tesseract_common::ResourceLocator> locator, QWidget* parent)
+SRDFEditorWidget::SRDFEditorWidget(std::shared_ptr<tesseract::common::ResourceLocator> locator, QWidget* parent)
   : SRDFEditorWidget(nullptr, std::move(locator), parent)
 {
 }
 
 SRDFEditorWidget::SRDFEditorWidget(std::shared_ptr<const ComponentInfo> component_info,
-                                   std::shared_ptr<tesseract_common::ResourceLocator> locator,
+                                   std::shared_ptr<tesseract::common::ResourceLocator> locator,
                                    QWidget* parent)
   : QWidget(parent), ui_(std::make_unique<Ui::SRDFEditorWidget>()), data_(std::make_unique<Implementation>())
 {
@@ -108,7 +108,7 @@ SRDFEditorWidget::~SRDFEditorWidget() {}
 void SRDFEditorWidget::onLoad(const QString& urdf_filepath, const QString& srdf_filepath)
 {
   Q_EMIT showStatusMessage("Parsing URDF/SRDF!", 0);
-  this->data_->env = std::make_shared<tesseract_environment::Environment>();
+  this->data_->env = std::make_shared<tesseract::environment::Environment>();
   this->data_->urdf_filepath =
       QString::fromStdString(this->data_->locator->locateResource(urdf_filepath.toStdString())->getFilePath());
   bool loaded = false;
@@ -169,7 +169,7 @@ void SRDFEditorWidget::onLoad() { onLoad(data_->urdf_filepath, data_->srdf_filep
 void SRDFEditorWidget::onSave(const QString& srdf_filepath)
 {
   std::string local_path = this->data_->locator->locateResource(srdf_filepath.toStdString())->getFilePath();
-  tesseract_srdf::SRDFModel srdf_model = this->data_->srdf_model;
+  tesseract::srdf::SRDFModel srdf_model = this->data_->srdf_model;
   srdf_model.name = data_->env->getName();
   srdf_model.acm = *(this->data_->env->getAllowedCollisionMatrix());
   srdf_model.kinematics_information = this->data_->env->getKinematicsInformation();
@@ -234,4 +234,4 @@ void SRDFEditorWidget::enablePages(bool enable)
   ui_->save_page->setEnabled(enable);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

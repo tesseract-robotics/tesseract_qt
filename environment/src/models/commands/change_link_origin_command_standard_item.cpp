@@ -28,10 +28,10 @@
 
 #include <tesseract_environment/commands/change_link_origin_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::ChangeLinkOriginCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeLinkOriginCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Change Link Origin"), command(std::move(command))
 {
   ctor();
@@ -39,7 +39,7 @@ ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
 
 ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeLinkOriginCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeLinkOriginCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -48,7 +48,7 @@ ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
 ChangeLinkOriginCommandStandardItem::ChangeLinkOriginCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeLinkOriginCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeLinkOriginCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -64,4 +64,4 @@ void ChangeLinkOriginCommandStandardItem::ctor()
   auto* item = new TransformStandardItem(icons::getLinkIcon(), command->getLinkName().c_str(), command->getOrigin());
   appendRow({ item, new QStandardItem() });
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

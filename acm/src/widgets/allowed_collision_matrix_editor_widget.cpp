@@ -36,7 +36,7 @@
 #include <QApplication>
 #include <QItemSelection>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct AllowedCollisionMatrixEditorWidget::Implementation
 {
@@ -133,11 +133,11 @@ void AllowedCollisionMatrixEditorWidget::onGenerateButtonClicked()
 
 void AllowedCollisionMatrixEditorWidget::onApplyButtonClicked()
 {
-  auto cmd = std::make_shared<tesseract_environment::ModifyAllowedCollisionsCommand>(
+  auto cmd = std::make_shared<tesseract::environment::ModifyAllowedCollisionsCommand>(
       ui_->acm_widget->getModel()->getAllowedCollisionMatrix(),
-      tesseract_environment::ModifyAllowedCollisionsType::REPLACE);
+      tesseract::environment::ModifyAllowedCollisionsType::REPLACE);
   events::EnvironmentApplyCommand event(getComponentInfo(), { cmd });
   QApplication::sendEvent(qApp, &event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -28,7 +28,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPathPose;
 class PositionStandardItem;
@@ -79,6 +79,6 @@ private:
   PositionStandardItem* position_;
   QuaternionStandardItem* orientation_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_TRANSFORM_STANDARD_ITEM_H

@@ -27,15 +27,15 @@
 
 #include <tesseract_geometry/impl/plane.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-PlaneStandardItem::PlaneStandardItem(std::shared_ptr<const tesseract_geometry::Plane> plane)
+PlaneStandardItem::PlaneStandardItem(std::shared_ptr<const tesseract::geometry::Plane> plane)
   : QStandardItem(icons::getPlaneIcon(), "Plane"), plane(std::move(plane))
 {
   ctor();
 }
 
-PlaneStandardItem::PlaneStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Plane> plane)
+PlaneStandardItem::PlaneStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Plane> plane)
   : QStandardItem(icons::getPlaneIcon(), text), plane(std::move(plane))
 {
   ctor();
@@ -43,7 +43,7 @@ PlaneStandardItem::PlaneStandardItem(const QString& text, std::shared_ptr<const 
 
 PlaneStandardItem::PlaneStandardItem(const QIcon& icon,
                                      const QString& text,
-                                     std::shared_ptr<const tesseract_geometry::Plane> plane)
+                                     std::shared_ptr<const tesseract::geometry::Plane> plane)
   : QStandardItem(icon, text), plane(std::move(plane))
 {
   ctor();
@@ -58,4 +58,4 @@ void PlaneStandardItem::ctor()
   appendRow(createStandardItemFloat("c", plane->getC()));
   appendRow(createStandardItemFloat("d", plane->getD()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

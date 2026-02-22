@@ -28,12 +28,12 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_common
+namespace tesseract::common
 {
 class JointTrajectorySet;
 }
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 /** @brief Event called to add a joint trajectory */
 class JointTrajectoryAdd : public ComponentEvent
@@ -46,12 +46,12 @@ public:
    * @param clear_namespace Indicate if the namespace should be cleared prior to adding the trajectory
    */
   JointTrajectoryAdd(std::shared_ptr<const ComponentInfo> component_info,
-                     const tesseract_common::JointTrajectorySet& joint_trajectory,
+                     const tesseract::common::JointTrajectorySet& joint_trajectory,
                      bool clear_namespace = false);
   JointTrajectoryAdd(const JointTrajectoryAdd& other);
   ~JointTrajectoryAdd() override;
 
-  const tesseract_common::JointTrajectorySet& getJointTrajectory() const;
+  const tesseract::common::JointTrajectorySet& getJointTrajectory() const;
 
   bool clearNamespace() const;
 
@@ -143,5 +143,5 @@ public:
   bool save_enabled{ true };
   bool plot_enabled{ true };
 };
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_JOINT_TRAJECTORY_EVENTS_H

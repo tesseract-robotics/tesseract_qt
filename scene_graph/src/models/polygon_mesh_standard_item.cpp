@@ -29,16 +29,16 @@
 #include <tesseract_geometry/impl/polygon_mesh.h>
 #include <tesseract_common/resource_locator.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-PolygonMeshStandardItem::PolygonMeshStandardItem(std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh)
+PolygonMeshStandardItem::PolygonMeshStandardItem(std::shared_ptr<const tesseract::geometry::PolygonMesh> mesh)
   : QStandardItem(icons::getConvexMeshIcon(), "PolygonMesh"), mesh(std::move(mesh))
 {
   ctor();
 }
 
 PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text,
-                                                 std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh)
+                                                 std::shared_ptr<const tesseract::geometry::PolygonMesh> mesh)
   : QStandardItem(icons::getConvexMeshIcon(), text), mesh(std::move(mesh))
 {
   ctor();
@@ -46,7 +46,7 @@ PolygonMeshStandardItem::PolygonMeshStandardItem(const QString& text,
 
 PolygonMeshStandardItem::PolygonMeshStandardItem(const QIcon& icon,
                                                  const QString& text,
-                                                 std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh)
+                                                 std::shared_ptr<const tesseract::geometry::PolygonMesh> mesh)
   : QStandardItem(icon, text), mesh(std::move(mesh))
 {
   ctor();
@@ -56,31 +56,31 @@ int PolygonMeshStandardItem::type() const { return static_cast<int>(StandardItem
 
 void PolygonMeshStandardItem::ctor()
 {
-  if (mesh->getType() == tesseract_geometry::GeometryType::CONVEX_MESH)
+  if (mesh->getType() == tesseract::geometry::GeometryType::CONVEX_MESH)
   {
     setIcon(icons::getConvexMeshIcon());
     setText("Convex Mesh");
 
     std::string method{ "Default" };
-    auto convex_mesh = std::static_pointer_cast<const tesseract_geometry::ConvexMesh>(mesh);
-    if (convex_mesh->getCreationMethod() == tesseract_geometry::ConvexMesh::MESH)
+    auto convex_mesh = std::static_pointer_cast<const tesseract::geometry::ConvexMesh>(mesh);
+    if (convex_mesh->getCreationMethod() == tesseract::geometry::ConvexMesh::MESH)
       method = "Mesh";
-    else if (convex_mesh->getCreationMethod() == tesseract_geometry::ConvexMesh::CONVERTED)
+    else if (convex_mesh->getCreationMethod() == tesseract::geometry::ConvexMesh::CONVERTED)
       method = "Converted";
 
     appendRow(createStandardItemString("creation method", method));
   }
-  else if (mesh->getType() == tesseract_geometry::GeometryType::MESH)
+  else if (mesh->getType() == tesseract::geometry::GeometryType::MESH)
   {
     setIcon(icons::getMeshIcon());
     setText("Mesh");
   }
-  else if (mesh->getType() == tesseract_geometry::GeometryType::POLYGON_MESH)
+  else if (mesh->getType() == tesseract::geometry::GeometryType::POLYGON_MESH)
   {
     setIcon(icons::getMeshIcon());
     setText("Polygon Mesh");
   }
-  else if (mesh->getType() == tesseract_geometry::GeometryType::SDF_MESH)
+  else if (mesh->getType() == tesseract::geometry::GeometryType::SDF_MESH)
   {
     setIcon(icons::getMeshIcon());
     setText("SDF Mesh");
@@ -94,4 +94,4 @@ void PolygonMeshStandardItem::ctor()
   appendRow(createStandardItemInt("vertex count", mesh->getVertexCount()));
   appendRow(createStandardItemInt("face count", mesh->getFaceCount()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -23,7 +23,7 @@
 #include <tesseract_qt/plot/transforms/scale_transform.h>
 #include "ui_scale_transform.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ScaleTransform::ScaleTransform() : _widget(std::make_unique<QWidget>()), ui(std::make_unique<Ui::ScaleTransform>())
 {
@@ -64,4 +64,4 @@ std::optional<PlotData::Point> ScaleTransform::calculateNextPoint(size_t index)
   PlotData::Point out = { p.x + off_x, scale * p.y + off_y };
   return out;
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

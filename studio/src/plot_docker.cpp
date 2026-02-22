@@ -37,7 +37,7 @@
 #include <QLineEdit>
 #include "ui_plot_docker_toolbar.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class SplittableComponentsFactory : public ads::CDockComponentsFactory
 {
@@ -357,4 +357,4 @@ void DraggableToolbar::leaveEvent(QEvent* ev)
   ui->buttonSplitVertical->setVisible(false);
   QWidget::leaveEvent(ev);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

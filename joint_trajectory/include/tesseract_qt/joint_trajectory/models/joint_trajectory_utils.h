@@ -28,19 +28,19 @@
 class QString;
 class QWidget;
 
-namespace tesseract_common
+namespace tesseract::common
 {
 class JointTrajectorySet;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 
 bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& component_info,
                             const QString& filename,
                             const QString& suffix);
-bool saveJointTrajectorySet(const tesseract_common::JointTrajectorySet& jts, QString filename, const QString& suffix);
-}  // namespace tesseract_gui
+bool saveJointTrajectorySet(const tesseract::common::JointTrajectorySet& jts, QString filename, const QString& suffix);
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_UTILS_H

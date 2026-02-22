@@ -37,8 +37,8 @@
 #include <tesseract_command_language/move_instruction.h>
 #include <tesseract_command_language/state_waypoint.h>
 
-using namespace tesseract_planning;
-using tesseract_common::ManipulatorInfo;
+using namespace tesseract::command_language;
+using tesseract::common::ManipulatorInfo;
 
 int main(int argc, char** argv)
 {
@@ -95,14 +95,15 @@ int main(int argc, char** argv)
   program.push_back(plan_c0);
   program.push_back(plan_f1);
 
-  std::shared_ptr<const tesseract_gui::ComponentInfo> component_info = tesseract_gui::ComponentInfoManager::create("sce"
-                                                                                                                   "ne_"
-                                                                                                                   "nam"
-                                                                                                                   "e");
-  tesseract_gui::CompositeInstructionWidget widget(component_info);
+  std::shared_ptr<const tesseract::gui::ComponentInfo> component_info =
+      tesseract::gui::ComponentInfoManager::create("sce"
+                                                   "ne_"
+                                                   "nam"
+                                                   "e");
+  tesseract::gui::CompositeInstructionWidget widget(component_info);
   widget.show();
 
-  tesseract_gui::events::CompositeInstructionSet event(component_info, program, "general");
+  tesseract::gui::events::CompositeInstructionSet event(component_info, program, "general");
   QApplication::sendEvent(qApp, &event);
 
   return QApplication::exec();

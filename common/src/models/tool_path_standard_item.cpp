@@ -29,7 +29,7 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/tool_path.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ToolPathStandardItem::ToolPathStandardItem(const ToolPath& tool_path)
   : QStandardItem(icons::getToolPathIcon(), "Tool Path")
@@ -72,9 +72,9 @@ ToolPath ToolPathStandardItem::getToolPath() const
 
 const std::string& ToolPathStandardItem::getWorkingFrame() const { return working_frame_; }
 
-tesseract_common::Toolpath ToolPathStandardItem::getCommonToolPath() const
+tesseract::common::Toolpath ToolPathStandardItem::getCommonToolPath() const
 {
-  tesseract_common::Toolpath tool_path;
+  tesseract::common::Toolpath tool_path;
   tool_path.reserve(rowCount());
   for (std::size_t i = 0; i < rowCount(); ++i)
   {
@@ -101,4 +101,4 @@ void ToolPathStandardItem::ctor(const ToolPath& tool_path)
   description_ = tool_path.getDescription();
   working_frame_ = tool_path.getWorkingFrame();
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

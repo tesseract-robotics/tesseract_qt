@@ -37,23 +37,23 @@ int main(int argc, char** argv)
 
   QHBoxLayout* layout = new QHBoxLayout(&window);
 
-  tesseract_gui::PlotDataMapRef plot_data_map;
-  tesseract_gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
-  tesseract_gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
+  tesseract::gui::PlotDataMapRef plot_data_map;
+  tesseract::gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
+  tesseract::gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
   for (int i = 0; i < int((2 * M_PI) / 0.01); ++i)
   {
-    cosine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::cos(i * 0.01)));
-    sine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::sin(i * 0.01)));
+    cosine_data.pushBack(tesseract::gui::PlotDataXY::Point(i * 0.01, std::cos(i * 0.01)));
+    sine_data.pushBack(tesseract::gui::PlotDataXY::Point(i * 0.01, std::sin(i * 0.01)));
   }
 
-  auto plot_docker = new tesseract_gui::PlotDocker("test", plot_data_map);
-  tesseract_gui::PlotWidget* widget = plot_docker->plotAt(0);
+  auto plot_docker = new tesseract::gui::PlotDocker("test", plot_data_map);
+  tesseract::gui::PlotWidget* widget = plot_docker->plotAt(0);
   widget->addCurve("cosine");
   widget->addCurve("sine");
   widget->enableTracker(true);
   widget->replot();
 
-  QObject::connect(widget, &tesseract_gui::PlotWidget::trackerMoved, [widget](QPointF pos) {
+  QObject::connect(widget, &tesseract::gui::PlotWidget::trackerMoved, [widget](QPointF pos) {
     widget->setTrackerPosition(pos.x());
     widget->replot();
   });

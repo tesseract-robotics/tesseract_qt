@@ -35,24 +35,27 @@
 #include <tesseract_command_language/poly/joint_waypoint_poly.h>
 #include <tesseract_command_language/poly/state_waypoint_poly.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-CartesianWaypointStandardItem::CartesianWaypointStandardItem(const tesseract_planning::CartesianWaypointPoly& cwp)
+CartesianWaypointStandardItem::CartesianWaypointStandardItem(
+    const tesseract::command_language::CartesianWaypointPoly& cwp)
   : QStandardItem(icons::getOriginIcon(), "Cartesian Waypoint")
 {
   ctor(cwp);
 }
 
-CartesianWaypointStandardItem::CartesianWaypointStandardItem(const QString& text,
-                                                             const tesseract_planning::CartesianWaypointPoly& cwp)
+CartesianWaypointStandardItem::CartesianWaypointStandardItem(
+    const QString& text,
+    const tesseract::command_language::CartesianWaypointPoly& cwp)
   : QStandardItem(icons::getOriginIcon(), text)
 {
   ctor(cwp);
 }
 
-CartesianWaypointStandardItem::CartesianWaypointStandardItem(const QIcon& icon,
-                                                             const QString& text,
-                                                             const tesseract_planning::CartesianWaypointPoly& cwp)
+CartesianWaypointStandardItem::CartesianWaypointStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const tesseract::command_language::CartesianWaypointPoly& cwp)
   : QStandardItem(icon, text)
 {
   ctor(cwp);
@@ -60,7 +63,7 @@ CartesianWaypointStandardItem::CartesianWaypointStandardItem(const QIcon& icon,
 
 int CartesianWaypointStandardItem::type() const { return static_cast<int>(StandardItemType::CL_CARTESIAN_WAYPOINT); }
 
-void CartesianWaypointStandardItem::ctor(const tesseract_planning::CartesianWaypointPoly& cwp)
+void CartesianWaypointStandardItem::ctor(const tesseract::command_language::CartesianWaypointPoly& cwp)
 {
   appendRow(createStandardItemString("name", cwp.getName()));
   appendRow(new TransformStandardItem("waypoint", cwp.getTransform()));
@@ -70,4 +73,4 @@ void CartesianWaypointStandardItem::ctor(const tesseract_planning::CartesianWayp
   if (cwp.hasSeed())
     appendRow(new JointStateStandardItem("seed", cwp.getSeed()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

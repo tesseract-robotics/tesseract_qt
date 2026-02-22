@@ -41,28 +41,28 @@ int main(int argc, char** argv)
   auto layout = new QVBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
-  layout->addWidget(new tesseract_gui::StatusLogToolBar());
-  layout->addWidget(new tesseract_gui::StatusLogWidget());
+  layout->addWidget(new tesseract::gui::StatusLogToolBar());
+  layout->addWidget(new tesseract::gui::StatusLogWidget());
   widget.setLayout(layout);
   widget.show();
 
-  tesseract_gui::events::StatusLogInfo event("Info Test 1, This is a long message to show that text wrapping is "
-                                             "working!");
+  tesseract::gui::events::StatusLogInfo event("Info Test 1, This is a long message to show that text wrapping is "
+                                              "working!");
   QApplication::sendEvent(qApp, &event);
 
-  tesseract_gui::events::StatusLogWarn event1("Warn Test 1");
+  tesseract::gui::events::StatusLogWarn event1("Warn Test 1");
   QApplication::sendEvent(qApp, &event1);
 
-  tesseract_gui::events::StatusLogError event2("Error Test 1");
+  tesseract::gui::events::StatusLogError event2("Error Test 1");
   QApplication::sendEvent(qApp, &event2);
 
-  tesseract_gui::events::StatusLogInfo event3("Info Test 2");
+  tesseract::gui::events::StatusLogInfo event3("Info Test 2");
   QApplication::sendEvent(qApp, &event3);
 
-  tesseract_gui::events::StatusLogError event4("Error Test 2");
+  tesseract::gui::events::StatusLogError event4("Error Test 2");
   QApplication::sendEvent(qApp, &event4);
 
-  tesseract_gui::events::StatusLogWarn event5("Warn Test 2");
+  tesseract::gui::events::StatusLogWarn event5("Warn Test 2");
   QApplication::sendEvent(qApp, &event5);
 
   return QApplication::exec();

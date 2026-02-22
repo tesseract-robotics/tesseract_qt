@@ -41,7 +41,7 @@
 #include <QVBoxLayout>
 #include <QStandardItemModel>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ToolPathWidget::Implementation
 {
@@ -176,13 +176,13 @@ void ToolPathWidget::onSaveFinished(int results)
     auto* item = dynamic_cast<ToolPathStandardItem*>(data_->selected_item);
     const std::string& working_frame = item->getWorkingFrame();
     std::string link_name = data_->save_dialog->getLinkName().toStdString();
-    tesseract_common::Toolpath tp = item->getCommonToolPath();
+    tesseract::common::Toolpath tp = item->getCommonToolPath();
     if (!working_frame.empty() && working_frame != link_name)
     {
       auto env_wrapper = EnvironmentManager::get(data_->model->getComponentInfo());
       if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
       {
-        tesseract_scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();
+        tesseract::scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();
         auto it1 = state.link_transforms.find(working_frame);
         auto it2 = state.link_transforms.find(link_name);
         if (it1 != state.link_transforms.end() && it2 != state.link_transforms.end())
@@ -216,4 +216,4 @@ void ToolPathWidget::onCurrentRowChanged(const QModelIndex& current, const QMode
   QModelIndex current_index = current;  // This appears to be changing so copy
   data_->selected_item = data_->model->itemFromIndex(current_index);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

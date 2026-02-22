@@ -27,15 +27,15 @@
 
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-LimitsStandardItem::LimitsStandardItem(std::shared_ptr<tesseract_scene_graph::JointLimits> limits)
+LimitsStandardItem::LimitsStandardItem(std::shared_ptr<tesseract::scene_graph::JointLimits> limits)
   : QStandardItem(icons::getLimitsIcon(), "Limits"), limits(std::move(limits))
 {
   ctor();
 }
 
-LimitsStandardItem::LimitsStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointLimits> limits)
+LimitsStandardItem::LimitsStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::JointLimits> limits)
   : QStandardItem(icons::getLimitsIcon(), text), limits(std::move(limits))
 {
   ctor();
@@ -43,7 +43,7 @@ LimitsStandardItem::LimitsStandardItem(const QString& text, std::shared_ptr<tess
 
 LimitsStandardItem::LimitsStandardItem(const QIcon& icon,
                                        const QString& text,
-                                       std::shared_ptr<tesseract_scene_graph::JointLimits> limits)
+                                       std::shared_ptr<tesseract::scene_graph::JointLimits> limits)
   : QStandardItem(icon, text), limits(std::move(limits))
 {
   ctor();
@@ -60,4 +60,4 @@ void LimitsStandardItem::ctor()
   appendRow(createStandardItemFloat("acceleration", limits->acceleration));
   appendRow(createStandardItemFloat("jerk", limits->jerk));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

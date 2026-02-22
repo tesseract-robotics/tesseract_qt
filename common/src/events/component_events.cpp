@@ -26,7 +26,7 @@
 
 #include <boost/uuid/uuid.hpp>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 ComponentEvent::ComponentEvent(std::shared_ptr<const ComponentInfo> component_info, QEvent::Type type)
   : QEvent(type), component_info_(std::move(component_info))
@@ -107,4 +107,4 @@ ComponentEventVisibilityAll::ComponentEventVisibilityAll(std::shared_ptr<const C
 ComponentEventVisibilityAll::~ComponentEventVisibilityAll() = default;
 
 bool ComponentEventVisibilityAll::getVisibility() const { return visible_; }
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

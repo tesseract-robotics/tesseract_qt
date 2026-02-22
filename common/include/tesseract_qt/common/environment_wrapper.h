@@ -29,7 +29,7 @@
 #include <QObject>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class EnvironmentWrapper : public QObject
@@ -41,11 +41,11 @@ public:
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  virtual std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const = 0;
-  virtual std::shared_ptr<tesseract_environment::Environment> getEnvironment() = 0;
+  virtual std::shared_ptr<const tesseract::environment::Environment> getEnvironment() const = 0;
+  virtual std::shared_ptr<tesseract::environment::Environment> getEnvironment() = 0;
 
-  virtual const tesseract_environment::Environment& environment() const = 0;
-  virtual tesseract_environment::Environment& environment() = 0;
+  virtual const tesseract::environment::Environment& environment() const = 0;
+  virtual tesseract::environment::Environment& environment() = 0;
 
   /** @brief This broadcast events with associated data for models */
   void broadcast() const;
@@ -65,19 +65,19 @@ class DefaultEnvironmentWrapper : public EnvironmentWrapper
 {
   Q_OBJECT
 public:
-  DefaultEnvironmentWrapper(std::shared_ptr<tesseract_environment::Environment> env);
+  DefaultEnvironmentWrapper(std::shared_ptr<tesseract::environment::Environment> env);
   DefaultEnvironmentWrapper(std::shared_ptr<const ComponentInfo> component_info,
-                            std::shared_ptr<tesseract_environment::Environment> env);
+                            std::shared_ptr<tesseract::environment::Environment> env);
   ~DefaultEnvironmentWrapper() override;
 
-  std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
-  std::shared_ptr<tesseract_environment::Environment> getEnvironment() override;
+  std::shared_ptr<const tesseract::environment::Environment> getEnvironment() const override;
+  std::shared_ptr<tesseract::environment::Environment> getEnvironment() override;
 
-  const tesseract_environment::Environment& environment() const override;
-  tesseract_environment::Environment& environment() override;
+  const tesseract::environment::Environment& environment() const override;
+  tesseract::environment::Environment& environment() override;
 
 private:
-  std::shared_ptr<tesseract_environment::Environment> env_;
+  std::shared_ptr<tesseract::environment::Environment> env_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
@@ -87,26 +87,26 @@ class MonitorEnvironmentWrapper : public EnvironmentWrapper
 {
   Q_OBJECT
 public:
-  MonitorEnvironmentWrapper(std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor);
+  MonitorEnvironmentWrapper(std::shared_ptr<tesseract::environment::EnvironmentMonitor> env_monitor);
   MonitorEnvironmentWrapper(std::shared_ptr<const ComponentInfo> component_info,
-                            std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor);
+                            std::shared_ptr<tesseract::environment::EnvironmentMonitor> env_monitor);
   ~MonitorEnvironmentWrapper() override;
 
-  std::shared_ptr<const tesseract_environment::Environment> getEnvironment() const override;
-  std::shared_ptr<tesseract_environment::Environment> getEnvironment() override;
+  std::shared_ptr<const tesseract::environment::Environment> getEnvironment() const override;
+  std::shared_ptr<tesseract::environment::Environment> getEnvironment() override;
 
-  const tesseract_environment::Environment& environment() const override;
-  tesseract_environment::Environment& environment() override;
+  const tesseract::environment::Environment& environment() const override;
+  tesseract::environment::Environment& environment() override;
 
-  std::shared_ptr<tesseract_environment::EnvironmentMonitor> getEnvironmentMonitor();
-  std::shared_ptr<const tesseract_environment::EnvironmentMonitor> getEnvironmentMonitor() const;
+  std::shared_ptr<tesseract::environment::EnvironmentMonitor> getEnvironmentMonitor();
+  std::shared_ptr<const tesseract::environment::EnvironmentMonitor> getEnvironmentMonitor() const;
 
 private:
-  std::shared_ptr<tesseract_environment::EnvironmentMonitor> env_monitor_;
+  std::shared_ptr<tesseract::environment::EnvironmentMonitor> env_monitor_;
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_ENVIRONMENT_WRAPPER_H

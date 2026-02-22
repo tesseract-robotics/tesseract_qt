@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class SafetyStandardItem : public QStandardItem
 {
 public:
-  SafetyStandardItem(std::shared_ptr<tesseract_scene_graph::JointSafety> safety);
-  explicit SafetyStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointSafety> safety);
+  SafetyStandardItem(std::shared_ptr<tesseract::scene_graph::JointSafety> safety);
+  explicit SafetyStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::JointSafety> safety);
   SafetyStandardItem(const QIcon& icon,
                      const QString& text,
-                     std::shared_ptr<tesseract_scene_graph::JointSafety> safety);
+                     std::shared_ptr<tesseract::scene_graph::JointSafety> safety);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::JointSafety> safety;
+  std::shared_ptr<tesseract::scene_graph::JointSafety> safety;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_SAFETY_STANDARD_ITEM_H

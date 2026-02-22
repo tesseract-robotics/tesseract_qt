@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ToolPathToolBar::Implementation
 {
@@ -94,4 +94,4 @@ void ToolPathToolBar::setComponentInfo(std::shared_ptr<const ComponentInfo> comp
 
 std::shared_ptr<const ComponentInfo> ToolPathToolBar::getComponentInfo() const { return data_->component_info; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -23,10 +23,10 @@
 #ifndef TESSERACT_QT_PLANNING_REGISTER_POLY_TYPES_H
 #define TESSERACT_QT_PLANNING_REGISTER_POLY_TYPES_H
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 void registerCommonAnyPolyTypes();
 void registerCommonInstructionPolyTypes();
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLANNING_REGISTER_POLY_TYPES_H

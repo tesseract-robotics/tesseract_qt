@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CylinderStandardItem : public QStandardItem
 {
 public:
-  CylinderStandardItem(std::shared_ptr<const tesseract_geometry::Cylinder> cylinder);
-  explicit CylinderStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Cylinder> cylinder);
+  CylinderStandardItem(std::shared_ptr<const tesseract::geometry::Cylinder> cylinder);
+  explicit CylinderStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Cylinder> cylinder);
   CylinderStandardItem(const QIcon& icon,
                        const QString& text,
-                       std::shared_ptr<const tesseract_geometry::Cylinder> cylinder);
+                       std::shared_ptr<const tesseract::geometry::Cylinder> cylinder);
   int type() const override;
 
-  std::shared_ptr<const tesseract_geometry::Cylinder> cylinder;
+  std::shared_ptr<const tesseract::geometry::Cylinder> cylinder;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_CYLINDER_STANDARD_ITEM_H

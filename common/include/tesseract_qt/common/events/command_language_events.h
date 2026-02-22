@@ -29,7 +29,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class CompositeInstructionClear : public ComponentEvent
 {
@@ -47,12 +47,12 @@ class CompositeInstructionSet : public ComponentEvent
 {
 public:
   CompositeInstructionSet(std::shared_ptr<const ComponentInfo> component_info,
-                          const tesseract_planning::CompositeInstruction& composite_instruction,
+                          const tesseract::command_language::CompositeInstruction& composite_instruction,
                           const std::string& ns = "");
   ~CompositeInstructionSet() override;
 
   const std::string& getNamespace() const;
-  const tesseract_planning::CompositeInstruction& getCompositeInstruction() const;
+  const tesseract::command_language::CompositeInstruction& getCompositeInstruction() const;
 
 private:
   struct Implementation;
@@ -69,5 +69,5 @@ public:
   ~CompositeInstructionRemove() override;
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_COMMAND_LANGUAGE_EVENTS_H

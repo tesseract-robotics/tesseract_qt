@@ -40,10 +40,10 @@ int main(int argc, char** argv)
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
-  tesseract_gui::ToolPath tool_path("Demo Tool Path");
+  tesseract::gui::ToolPath tool_path("Demo Tool Path");
   for (int i = 0; i < 5; ++i)
   {
-    tesseract_gui::ToolPathSegment segment("Segment [" + std::to_string(i) + "]");
+    tesseract::gui::ToolPathSegment segment("Segment [" + std::to_string(i) + "]");
 
     for (int j = 0; j < 5; ++j)
     {
@@ -56,49 +56,49 @@ int main(int argc, char** argv)
     tool_path.push_back(segment);
   }
 
-  tesseract_gui::ToolPath tool_path1{ tool_path };
+  tesseract::gui::ToolPath tool_path1{ tool_path };
   tool_path1.setDescription("Demo Tool Path 1");
   tool_path1.regenerateUUID();
 
-  tesseract_gui::ToolPath tool_path2{ tool_path };
+  tesseract::gui::ToolPath tool_path2{ tool_path };
   tool_path2.setDescription("Demo Tool Path 2");
   tool_path2.regenerateUUID();
 
-  tesseract_gui::ToolPath tool_path3{ tool_path };
+  tesseract::gui::ToolPath tool_path3{ tool_path };
   tool_path3.setDescription("Demo Tool Path 3");
   tool_path3.regenerateUUID();
 
-  tesseract_gui::ToolPath tool_path4{ tool_path };
+  tesseract::gui::ToolPath tool_path4{ tool_path };
   tool_path4.setDescription("Demo Tool Path 4");
   tool_path4.regenerateUUID();
 
-  auto component_info = tesseract_gui::ComponentInfoManager::create("scene_name");
+  auto component_info = tesseract::gui::ComponentInfoManager::create("scene_name");
 
   QWidget widget;
   auto layout = new QVBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
-  layout->addWidget(new tesseract_gui::ToolPathToolBar(component_info));
-  layout->addWidget(new tesseract_gui::ToolPathWidget(component_info), 1);
+  layout->addWidget(new tesseract::gui::ToolPathToolBar(component_info));
+  layout->addWidget(new tesseract::gui::ToolPathWidget(component_info), 1);
   widget.setLayout(layout);
   widget.show();
 
-  tesseract_gui::events::ToolPathAdd event(component_info, tool_path);
+  tesseract::gui::events::ToolPathAdd event(component_info, tool_path);
   QApplication::sendEvent(qApp, &event);
 
-  tesseract_gui::events::ToolPathAdd event1(component_info, tool_path1);
+  tesseract::gui::events::ToolPathAdd event1(component_info, tool_path1);
   QApplication::sendEvent(qApp, &event1);
 
-  tesseract_gui::events::ToolPathAdd event2(component_info, tool_path2);
+  tesseract::gui::events::ToolPathAdd event2(component_info, tool_path2);
   QApplication::sendEvent(qApp, &event2);
 
-  tesseract_gui::events::ToolPathAdd event3(component_info, tool_path3);
+  tesseract::gui::events::ToolPathAdd event3(component_info, tool_path3);
   QApplication::sendEvent(qApp, &event3);
 
-  tesseract_gui::events::ToolPathAdd event4(component_info, tool_path4);
+  tesseract::gui::events::ToolPathAdd event4(component_info, tool_path4);
   QApplication::sendEvent(qApp, &event4);
 
-  tesseract_gui::events::ToolPathRemove event5(component_info, tool_path3.getUUID());
+  tesseract::gui::events::ToolPathRemove event5(component_info, tool_path3.getUUID());
   QApplication::sendEvent(qApp, &event5);
 
   return QApplication::exec();

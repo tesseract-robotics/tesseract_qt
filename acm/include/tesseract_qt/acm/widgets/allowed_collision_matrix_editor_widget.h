@@ -35,7 +35,7 @@ class AllowedCollisionMatrixEditorWidget;
 
 class QItemSelectionModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class AllowedCollisionMatrixModel;
@@ -72,6 +72,6 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ACM_GENERATE_ALLOWED_COLLISION_MATRIX_WIDGET_H

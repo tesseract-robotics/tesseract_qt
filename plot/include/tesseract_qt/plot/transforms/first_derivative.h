@@ -31,7 +31,7 @@ namespace Ui
 class FirstDerivariveForm;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class FirstDerivative : public TransformFunction_SISO
 {
@@ -53,6 +53,6 @@ private:
   std::unique_ptr<Ui::FirstDerivariveForm> ui;
   double _dT;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_TRANSFORMS_FIRST_DERIVATIVE_H

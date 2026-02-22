@@ -28,27 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ChangeJointOriginCommandStandardItem : public QStandardItem
 {
 public:
   explicit ChangeJointOriginCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::ChangeJointOriginCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeJointOriginCommand> command);
   explicit ChangeJointOriginCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeJointOriginCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeJointOriginCommand> command);
   explicit ChangeJointOriginCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeJointOriginCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeJointOriginCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::ChangeJointOriginCommand> command;
+  std::shared_ptr<const tesseract::environment::ChangeJointOriginCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_CHANGE_JOINT_ORIGIN_COMMAND_STANDARD_ITEM_H

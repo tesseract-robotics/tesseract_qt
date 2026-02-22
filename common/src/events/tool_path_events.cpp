@@ -26,14 +26,14 @@
 #include <string>
 #include <boost/uuid/uuid.hpp>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class ToolPathAdd::Implementation
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  tesseract_gui::ToolPath tool_path;
+  tesseract::gui::ToolPath tool_path;
 };
 
 ToolPathAdd::ToolPathAdd(std::shared_ptr<const ComponentInfo> component_info, const ToolPath& tool_path)
@@ -188,4 +188,4 @@ ToolPathSave::ToolPathSave(const ToolPathSave& other) : ToolPathSave(other.getCo
 ToolPathSave::~ToolPathSave() = default;
 
 //////////////////////////////////////////
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

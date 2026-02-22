@@ -29,7 +29,7 @@
 
 class QModelIndex;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class GroupJointStatesStandardItem;
@@ -48,9 +48,9 @@ public:
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  tesseract_srdf::GroupJointStates getGroupsJointStates() const;
+  tesseract::srdf::GroupJointStates getGroupsJointStates() const;
 
-  tesseract_srdf::GroupsJointState getGroupsJointState(const QModelIndex& row) const;
+  tesseract::srdf::GroupsJointState getGroupsJointState(const QModelIndex& row) const;
 
 private:
   std::shared_ptr<const ComponentInfo> component_info_;
@@ -58,8 +58,10 @@ private:
   GroupJointStatesStandardItem* getRoot();
   const GroupJointStatesStandardItem* getRoot() const;
 
-  void set(const tesseract_srdf::GroupJointStates& group_joint_states);
-  void add(const std::string& group_name, const std::string& state_name, const tesseract_srdf::GroupsJointState& state);
+  void set(const tesseract::srdf::GroupJointStates& group_joint_states);
+  void add(const std::string& group_name,
+           const std::string& state_name,
+           const tesseract::srdf::GroupsJointState& state);
   void remove(const std::string& group_name, const std::string& state_name);
   void remove(const std::string& group_name);
   void clear();
@@ -68,6 +70,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_KINEMATIC_GROUPS_GROUPS_JOINT_STATES_MODEL_H

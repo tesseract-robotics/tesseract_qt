@@ -33,7 +33,7 @@ namespace Ui
 class StudioManipulationConfigDialog;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class StudioManipulationConfigDialog : public QDialog
@@ -50,5 +50,5 @@ public:
 private:
   std::unique_ptr<Ui::StudioManipulationConfigDialog> ui;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_STUDIO_STUDIO_MANIPULATION_CONFIG_DIALOG_H

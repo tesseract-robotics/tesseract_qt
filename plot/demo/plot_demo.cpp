@@ -35,7 +35,7 @@ int main(int argc, char** argv)
   QApplication app(argc, argv);
 
   // setup stylesheet
-  app.setStyleSheet(tesseract_gui::themes::getDarkTheme());
+  app.setStyleSheet(tesseract::gui::themes::getDarkTheme());
 
   QWidget window;
   window.resize(320, 240);
@@ -43,22 +43,22 @@ int main(int argc, char** argv)
 
   QHBoxLayout* layout = new QHBoxLayout(&window);  // NOLINT
 
-  tesseract_gui::PlotDataMapRef plot_data_map;
-  tesseract_gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
-  tesseract_gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
+  tesseract::gui::PlotDataMapRef plot_data_map;
+  tesseract::gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
+  tesseract::gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
   for (int i = 0; i < int((2 * M_PI) / 0.01); ++i)
   {
-    cosine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::cos(i * 0.01)));
-    sine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::sin(i * 0.01)));
+    cosine_data.pushBack(tesseract::gui::PlotDataXY::Point(i * 0.01, std::cos(i * 0.01)));
+    sine_data.pushBack(tesseract::gui::PlotDataXY::Point(i * 0.01, std::sin(i * 0.01)));
   }
 
-  auto widget = std::make_unique<tesseract_gui::PlotWidget>(plot_data_map);
+  auto widget = std::make_unique<tesseract::gui::PlotWidget>(plot_data_map);
   widget->addCurve("cosine");
   widget->addCurve("sine");
   widget->enableTracker(true);
   widget->replot();
 
-  QObject::connect(widget.get(), &tesseract_gui::PlotWidget::trackerMoved, [&](QPointF pos) {
+  QObject::connect(widget.get(), &tesseract::gui::PlotWidget::trackerMoved, [&](QPointF pos) {
     widget->setTrackerPosition(pos.x());
     widget->replot();
   });

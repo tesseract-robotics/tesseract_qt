@@ -29,7 +29,7 @@
 #include <unordered_map>
 #include <shared_mutex>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct EnvironmentManager::Implementation
 {
@@ -190,4 +190,4 @@ void EnvironmentManager::removeHelper(const std::shared_ptr<const ComponentInfo>
   }
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

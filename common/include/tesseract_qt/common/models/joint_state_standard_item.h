@@ -27,18 +27,18 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointStateStandardItem : public QStandardItem
 {
 public:
-  explicit JointStateStandardItem(const tesseract_common::JointState& state);
-  JointStateStandardItem(const QString& text, const tesseract_common::JointState& state);
-  JointStateStandardItem(const QIcon& icon, const QString& text, const tesseract_common::JointState& state);
+  explicit JointStateStandardItem(const tesseract::common::JointState& state);
+  JointStateStandardItem(const QString& text, const tesseract::common::JointState& state);
+  JointStateStandardItem(const QIcon& icon, const QString& text, const tesseract::common::JointState& state);
   int type() const override;
 
 private:
-  void ctor(const tesseract_common::JointState& state);
+  void ctor(const tesseract::common::JointState& state);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_COMMON_JOINT_STATE_STANDARD_ITEM_H

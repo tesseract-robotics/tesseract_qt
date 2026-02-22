@@ -29,7 +29,7 @@
 #include <tesseract_qt/common/tool_path_pose.h>
 #include <tesseract_qt/common/tool_path_segment.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ToolPathSegmentStandardItem::ToolPathSegmentStandardItem(const ToolPathSegment& segment)
   : QStandardItem(icons::getToolPathIcon(), "Tool Path Segment")
@@ -78,9 +78,9 @@ ToolPathSegment ToolPathSegmentStandardItem::getToolPathSegment() const
   return segment;
 }
 
-tesseract_common::VectorIsometry3d ToolPathSegmentStandardItem::getCommonToolPathSegment() const
+tesseract::common::VectorIsometry3d ToolPathSegmentStandardItem::getCommonToolPathSegment() const
 {
-  tesseract_common::VectorIsometry3d segment;
+  tesseract::common::VectorIsometry3d segment;
   segment.reserve(rowCount());
   for (std::size_t i = 0; i < rowCount(); ++i)
   {
@@ -106,4 +106,4 @@ void ToolPathSegmentStandardItem::ctor(const ToolPathSegment& segment)
   parent_uuid_ = segment.getParentUUID();
   description_ = segment.getDescription();
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

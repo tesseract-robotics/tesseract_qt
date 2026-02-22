@@ -27,7 +27,7 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct EnvironmentWidget::Implementation
 {
@@ -62,4 +62,4 @@ void EnvironmentWidget::setComponentInfo(std::shared_ptr<const ComponentInfo> co
 
 std::shared_ptr<const ComponentInfo> EnvironmentWidget::getComponentInfo() const { return data_->component_info; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

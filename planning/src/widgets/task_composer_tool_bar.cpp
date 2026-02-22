@@ -31,7 +31,7 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct TaskComposerToolBar::Implementation
 {
@@ -175,4 +175,4 @@ void TaskComposerToolBar::setComponentInfo(std::shared_ptr<const ComponentInfo> 
 }
 std::shared_ptr<const ComponentInfo> TaskComposerToolBar::getComponentInfo() const { return data_->component_info; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

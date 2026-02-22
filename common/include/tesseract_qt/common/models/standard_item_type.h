@@ -25,7 +25,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 // clang-format off
 enum class StandardItemType : int
@@ -180,6 +180,6 @@ enum class StandardItemType : int
   STATUS_LOG_ERROR = MP_TYPES_END + 3
 };
 // clang-format on
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_STANDARD_ITEMS_TYPES_H

@@ -33,7 +33,7 @@
   EXPORT_CLASS_SECTIONED(DERIVED_CLASS, ALIAS, Studio)
 // clang-format on
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StudioDockWidgetFactory
 {
@@ -58,6 +58,6 @@ public:
   StudioDockWidget* create(const QString& name) const override { return new StudioDockWidgetType(name); }
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_FACTORY_H

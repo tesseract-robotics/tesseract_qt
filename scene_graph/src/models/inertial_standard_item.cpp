@@ -27,23 +27,23 @@
 
 #include <tesseract_scene_graph/link.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-InertialStandardItem::InertialStandardItem(std::shared_ptr<tesseract_scene_graph::Inertial> inertial)
+InertialStandardItem::InertialStandardItem(std::shared_ptr<tesseract::scene_graph::Inertial> inertial)
   : QStandardItem("Inertial"), inertial(std::move(inertial))
 {
   ctor();
 }
 
 InertialStandardItem::InertialStandardItem(const QString& text,
-                                           std::shared_ptr<tesseract_scene_graph::Inertial> inertial)
+                                           std::shared_ptr<tesseract::scene_graph::Inertial> inertial)
   : QStandardItem(text), inertial(std::move(inertial))
 {
   ctor();
 }
 InertialStandardItem::InertialStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           std::shared_ptr<tesseract_scene_graph::Inertial> inertial)
+                                           std::shared_ptr<tesseract::scene_graph::Inertial> inertial)
   : QStandardItem(icon, text), inertial(std::move(inertial))
 {
   ctor();
@@ -64,4 +64,4 @@ void InertialStandardItem::ctor()
   appendRow(createStandardItemFloat("iyz", inertial->iyz));
   appendRow(createStandardItemFloat("izz", inertial->izz));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

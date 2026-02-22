@@ -24,7 +24,7 @@
 
 #include <tesseract_scene_graph/scene_state.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 ContactResultsClear::ContactResultsClear(std::shared_ptr<const ComponentInfo> component_info, const std::string& ns)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::CONTACT_RESULTS_CLEAR)), ns_(ns)
@@ -107,8 +107,8 @@ ContactResultsVisbilityAll::~ContactResultsVisbilityAll() = default;
 //////////////////////////////////////////
 
 ContactResultsCompute::ContactResultsCompute(std::shared_ptr<const ComponentInfo> component_info,
-                                             tesseract_collision::ContactManagerConfig contact_manager_config,
-                                             tesseract_collision::CollisionCheckConfig collision_check_config,
+                                             tesseract::collision::ContactManagerConfig contact_manager_config,
+                                             tesseract::collision::CollisionCheckConfig collision_check_config,
                                              StateType state_type,
                                              std::string ns)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::CONTACT_RESULTS_COMPUTE))
@@ -122,11 +122,11 @@ ContactResultsCompute::ContactResultsCompute(std::shared_ptr<const ComponentInfo
 ContactResultsCompute::~ContactResultsCompute() = default;
 
 const std::string& ContactResultsCompute::getNamespace() const { return ns_; }
-const tesseract_collision::ContactManagerConfig& ContactResultsCompute::getContactManagerConfig() const
+const tesseract::collision::ContactManagerConfig& ContactResultsCompute::getContactManagerConfig() const
 {
   return contact_manager_config_;
 }
-const tesseract_collision::CollisionCheckConfig& ContactResultsCompute::getCollisionCheckConfig() const
+const tesseract::collision::CollisionCheckConfig& ContactResultsCompute::getCollisionCheckConfig() const
 {
   return collision_check_config_;
 }
@@ -134,4 +134,4 @@ ContactResultsCompute::StateType ContactResultsCompute::getStateType() const { r
 
 //////////////////////////////////////////
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

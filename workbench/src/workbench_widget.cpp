@@ -32,7 +32,7 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct WorkbenchWidget::Implementation
 {
@@ -108,4 +108,4 @@ const ManipulationWidget& WorkbenchWidget::getManipulationWidget() const { retur
 TaskComposerWidget& WorkbenchWidget::getTaskComposerWidget() { return *ui->task_composer_widget; }
 const TaskComposerWidget& WorkbenchWidget::getTaskComposerWidget() const { return *ui->task_composer_widget; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

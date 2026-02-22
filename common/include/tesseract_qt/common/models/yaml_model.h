@@ -47,7 +47,7 @@ struct ScalarType
 };
 }  // namespace YAML
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class QYamlTreeItem
 {
@@ -108,6 +108,6 @@ private:
   QStringList headers_;
   bool show_icons_{ false };
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_YAML_MODEL_H

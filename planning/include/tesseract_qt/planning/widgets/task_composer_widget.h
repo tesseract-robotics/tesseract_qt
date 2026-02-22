@@ -34,7 +34,7 @@ namespace Ui
 class TaskComposerWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class TaskComposerLogModel;
@@ -72,6 +72,6 @@ private:
   std::unique_ptr<Ui::TaskComposerWidget> ui;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_TASK_COMPOSER_WIDGET_H

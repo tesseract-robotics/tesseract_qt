@@ -32,24 +32,27 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-TaskComposerNodeInfoStandardItem::TaskComposerNodeInfoStandardItem(const tesseract_planning::TaskComposerNodeInfo& info)
+TaskComposerNodeInfoStandardItem::TaskComposerNodeInfoStandardItem(
+    const tesseract::task_composer::TaskComposerNodeInfo& info)
   : QStandardItem(icons::getUnknownIcon(), "Task Composer Node Info")
 {
   ctor(info);
 }
 
-TaskComposerNodeInfoStandardItem::TaskComposerNodeInfoStandardItem(const QString& text,
-                                                                   const tesseract_planning::TaskComposerNodeInfo& info)
+TaskComposerNodeInfoStandardItem::TaskComposerNodeInfoStandardItem(
+    const QString& text,
+    const tesseract::task_composer::TaskComposerNodeInfo& info)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(info);
 }
 
-TaskComposerNodeInfoStandardItem::TaskComposerNodeInfoStandardItem(const QIcon& icon,
-                                                                   const QString& text,
-                                                                   const tesseract_planning::TaskComposerNodeInfo& info)
+TaskComposerNodeInfoStandardItem::TaskComposerNodeInfoStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const tesseract::task_composer::TaskComposerNodeInfo& info)
   : QStandardItem(icon, text)
 {
   ctor(info);
@@ -60,7 +63,7 @@ int TaskComposerNodeInfoStandardItem::type() const
   return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_NODE_INFO);
 }
 
-void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskComposerNodeInfo& info)
+void TaskComposerNodeInfoStandardItem::ctor(const tesseract::task_composer::TaskComposerNodeInfo& info)
 {
   appendRow(createStandardItemString("name", info.name));
   appendRow(createStandardItemString("ns", info.ns));
@@ -68,13 +71,13 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
   appendRow(createStandardItemString("root_uuid", boost::uuids::to_string(info.root_uuid)));
   appendRow(createStandardItemString("parent_uuid", boost::uuids::to_string(info.parent_uuid)));
 
-  if (info.type == tesseract_planning::TaskComposerNodeType::NODE)
+  if (info.type == tesseract::task_composer::TaskComposerNodeType::NODE)
     appendRow(createStandardItemString("type", "NODE"));
-  else if (info.type == tesseract_planning::TaskComposerNodeType::TASK)
+  else if (info.type == tesseract::task_composer::TaskComposerNodeType::TASK)
     appendRow(createStandardItemString("type", "TASK"));
-  else if (info.type == tesseract_planning::TaskComposerNodeType::PIPELINE)
+  else if (info.type == tesseract::task_composer::TaskComposerNodeType::PIPELINE)
     appendRow(createStandardItemString("type", "PIPELINE"));
-  else if (info.type == tesseract_planning::TaskComposerNodeType::GRAPH)
+  else if (info.type == tesseract::task_composer::TaskComposerNodeType::GRAPH)
     appendRow(createStandardItemString("type", "GRAPH"));
 
   appendRow(createStandardItemUnsigned("type_hash_code", info.type_hash_code));
@@ -134,4 +137,4 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract_planning::TaskCompos
 
   appendRow(new TaskComposerDataStorageStandardItem("data_storage", info.data_storage));  // NOLINT
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -26,7 +26,7 @@
 #include <qstyleoption.h>
 #include <qframe.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 CollapsibleGroupBox::CollapsibleGroupBox(QWidget* parent) : CollapsibleGroupBox("", parent) {}
 
@@ -110,4 +110,4 @@ void CollapsibleGroupBox::onToggled(bool checked)
 
   emit collapsed(checked);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

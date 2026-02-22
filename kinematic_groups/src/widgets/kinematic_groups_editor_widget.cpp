@@ -37,7 +37,7 @@
 #include <QStringListModel>
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct KinematicGroupsEditorWidget::Implementation
 {
@@ -131,7 +131,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
     if (!validateChainGroup(base_link, tip_link))
       return;
 
-    tesseract_srdf::ChainGroup group{ { base_link.toStdString(), tip_link.toStdString() } };
+    tesseract::srdf::ChainGroup group{ { base_link.toStdString(), tip_link.toStdString() } };
 
     events::KinematicGroupsAddChain event(getComponentInfo(), group_name, group);
     QApplication::sendEvent(qApp, &event);
@@ -148,7 +148,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
     if (!validateJointChain(joints))
       return;
 
-    tesseract_srdf::JointGroup group;
+    tesseract::srdf::JointGroup group;
     for (auto& joint : joints)
       group.push_back(joint.toStdString());
 
@@ -168,7 +168,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
     if (!validateLinkChain(links))
       return;
 
-    tesseract_srdf::LinkGroup group;
+    tesseract::srdf::LinkGroup group;
     for (auto& link : links)
       group.push_back(link.toStdString());
 
@@ -229,13 +229,13 @@ void KinematicGroupsEditorWidget::onRemoveLink()
 
 void KinematicGroupsEditorWidget::onApply()
 {
-  tesseract_srdf::KinematicsInformation info;
+  tesseract::srdf::KinematicsInformation info;
   info.group_names = ui_->kinGroupsWidget->getModel()->getGroupNames();
   info.chain_groups = ui_->kinGroupsWidget->getModel()->getChainGroups();
   info.joint_groups = ui_->kinGroupsWidget->getModel()->getJointGroups();
   info.link_groups = ui_->kinGroupsWidget->getModel()->getLinkGroups();
 
-  auto cmd = std::make_shared<tesseract_environment::AddKinematicsInformationCommand>(info);
+  auto cmd = std::make_shared<tesseract::environment::AddKinematicsInformationCommand>(info);
   events::EnvironmentApplyCommand event(getComponentInfo(), { cmd });
   QApplication::sendEvent(qApp, &event);
 }
@@ -323,4 +323,4 @@ bool KinematicGroupsEditorWidget::validateLinkChain(QStringList links)
   return true;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

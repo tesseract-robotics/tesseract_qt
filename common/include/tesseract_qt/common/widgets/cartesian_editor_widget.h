@@ -34,7 +34,7 @@ namespace Ui
 class CartesianEditorWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CartesianEditorWidget : public QWidget
 {
@@ -65,5 +65,5 @@ private:
   void setPositionHelper(const Eigen::Vector3d& xyz);
   void setOrientationHelper(const Eigen::Quaterniond& xyzw);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_GUI_COMMON_CARTESIAN_EDITOR_WIDGET_H

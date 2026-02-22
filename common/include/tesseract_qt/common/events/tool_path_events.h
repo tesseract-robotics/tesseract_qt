@@ -28,7 +28,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPath;
 }
@@ -38,17 +38,17 @@ namespace boost::uuids
 struct uuid;
 }
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 /** @brief Event called to add a tool path */
 class ToolPathAdd : public ComponentEvent
 {
 public:
-  ToolPathAdd(std::shared_ptr<const ComponentInfo> component_info, const tesseract_gui::ToolPath& tool_path);
+  ToolPathAdd(std::shared_ptr<const ComponentInfo> component_info, const tesseract::gui::ToolPath& tool_path);
   ToolPathAdd(const ToolPathAdd& other);
   ~ToolPathAdd() override;
 
-  const tesseract_gui::ToolPath& getToolPath() const;
+  const tesseract::gui::ToolPath& getToolPath() const;
 
 private:
   /** @brief Private data pointer */
@@ -166,6 +166,6 @@ public:
   ~ToolPathSave() override;
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_EVENTS_H

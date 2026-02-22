@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PlannerProfileRemappingStandardItem::PlannerProfileRemappingStandardItem(const PlannerProfileRemapping& remapping)
   : QStandardItem(icons::getUnknownIcon(), "Planner Profile Remapping")
@@ -64,4 +64,4 @@ void PlannerProfileRemappingStandardItem::ctor(const PlannerProfileRemapping& re
     appendRow(planner);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

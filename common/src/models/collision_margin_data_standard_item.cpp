@@ -26,10 +26,10 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
-    tesseract_common::CollisionMarginData collision_margin_data)
+    tesseract::common::CollisionMarginData collision_margin_data)
   : QStandardItem(icons::getCubeIcon(), "Collision Margin Data")
   , collision_margin_data(std::move(collision_margin_data))
 {
@@ -38,7 +38,7 @@ CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
 
 CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
     const QString& text,
-    tesseract_common::CollisionMarginData collision_margin_data)
+    tesseract::common::CollisionMarginData collision_margin_data)
   : QStandardItem(icons::getCubeIcon(), text), collision_margin_data(std::move(collision_margin_data))
 {
   ctor();
@@ -47,7 +47,7 @@ CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
 CollisionMarginDataStandardItem::CollisionMarginDataStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_common::CollisionMarginData collision_margin_data)
+    tesseract::common::CollisionMarginData collision_margin_data)
   : QStandardItem(icon, text), collision_margin_data(std::move(collision_margin_data))
 {
   ctor();
@@ -65,4 +65,4 @@ void CollisionMarginDataStandardItem::ctor()
   appendRow(new PairsCollisionMarginDataStandardItem(
       collision_margin_data.getCollisionMarginPairData().getCollisionMargins()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

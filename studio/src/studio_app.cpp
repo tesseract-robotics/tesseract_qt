@@ -25,9 +25,9 @@ int main(int argc, char* argv[])
   Q_INIT_RESOURCE(qdarkstyle_light);
 
   // setup stylesheet
-  app.setStyleSheet(tesseract_gui::themes::getDarkTheme());
+  app.setStyleSheet(tesseract::gui::themes::getDarkTheme());
 
-  tesseract_gui::Studio widget;
+  tesseract::gui::Studio widget;
   if (!widget.init(argc, argv))
     return 0;
 

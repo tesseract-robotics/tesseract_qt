@@ -24,7 +24,7 @@
 #include <tesseract_qt/common/events/task_composer_events.h>
 #include <tesseract_common/profile_dictionary.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 TaskComposerLoadConfig::TaskComposerLoadConfig(std::shared_ptr<const ComponentInfo> component_info,
                                                std::string resource_path)
@@ -54,7 +54,7 @@ const std::string& TaskComposerLoadLog::getNamespace() const { return ns_; }
 //////////////////////////////////////////////////////
 
 TaskComposerAddLog::TaskComposerAddLog(std::shared_ptr<const ComponentInfo> component_info,
-                                       tesseract_planning::TaskComposerLog log,
+                                       task_composer::TaskComposerLog log,
                                        std::string ns)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_ADD_LOG))
   , log_(std::move(log))
@@ -63,7 +63,7 @@ TaskComposerAddLog::TaskComposerAddLog(std::shared_ptr<const ComponentInfo> comp
 }
 TaskComposerAddLog::~TaskComposerAddLog() = default;
 
-const tesseract_planning::TaskComposerLog& TaskComposerAddLog::getLog() const { return log_; }
+const task_composer::TaskComposerLog& TaskComposerAddLog::getLog() const { return log_; }
 const std::string& TaskComposerAddLog::getNamespace() const { return ns_; }
 
 //////////////////////////////////////////////////////
@@ -89,12 +89,12 @@ TaskComposerPlotDotgraph::~TaskComposerPlotDotgraph() = default;
 //////////////////////////////////////////////////////
 
 TaskComposerSetProfiles::TaskComposerSetProfiles(std::shared_ptr<const ComponentInfo> component_info,
-                                                 std::shared_ptr<tesseract_common::ProfileDictionary> profiles)
+                                                 std::shared_ptr<tesseract::common::ProfileDictionary> profiles)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::TASK_COMPOSER_SET_PROFILES))
   , profiles_(std::move(profiles))
 {
 }
 
 TaskComposerSetProfiles::~TaskComposerSetProfiles() = default;
-std::shared_ptr<tesseract_common::ProfileDictionary> TaskComposerSetProfiles::getProfiles() const { return profiles_; }
-}  // namespace tesseract_gui::events
+std::shared_ptr<tesseract::common::ProfileDictionary> TaskComposerSetProfiles::getProfiles() const { return profiles_; }
+}  // namespace tesseract::gui::events

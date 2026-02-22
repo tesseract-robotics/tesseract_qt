@@ -25,7 +25,7 @@
 
 #include <tesseract_qt/common/events/tool_path_render_manager.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EntityManager;
 class ComponentInfo;
@@ -44,5 +44,5 @@ private:
   void render() override;
   void updateWorkingFrameTransforms();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_RENDERING_IGN_TOOL_PATH_RENDER_MANAGER_H

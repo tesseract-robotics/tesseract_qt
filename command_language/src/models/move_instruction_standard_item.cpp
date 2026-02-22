@@ -37,16 +37,16 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-MoveInstructionStandardItem::MoveInstructionStandardItem(const tesseract_planning::MoveInstructionPoly& mi)
+MoveInstructionStandardItem::MoveInstructionStandardItem(const tesseract::command_language::MoveInstructionPoly& mi)
   : QStandardItem(icons::getUnknownIcon(), "Move Instruction")
 {
   ctor(mi);
 }
 
 MoveInstructionStandardItem::MoveInstructionStandardItem(const QString& text,
-                                                         const tesseract_planning::MoveInstructionPoly& mi)
+                                                         const tesseract::command_language::MoveInstructionPoly& mi)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(mi);
@@ -54,7 +54,7 @@ MoveInstructionStandardItem::MoveInstructionStandardItem(const QString& text,
 
 MoveInstructionStandardItem::MoveInstructionStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         const tesseract_planning::MoveInstructionPoly& mi)
+                                                         const tesseract::command_language::MoveInstructionPoly& mi)
   : QStandardItem(icon, text)
 {
   ctor(mi);
@@ -62,22 +62,22 @@ MoveInstructionStandardItem::MoveInstructionStandardItem(const QIcon& icon,
 
 int MoveInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_MOVE_INSTRUCTION); }
 
-std::string toString(tesseract_planning::MoveInstructionType m_type)
+std::string toString(tesseract::command_language::MoveInstructionType m_type)
 {
   switch (m_type)
   {
-    case tesseract_planning::MoveInstructionType::LINEAR:
+    case tesseract::command_language::MoveInstructionType::LINEAR:
       return "LINEAR";
-    case tesseract_planning::MoveInstructionType::FREESPACE:
+    case tesseract::command_language::MoveInstructionType::FREESPACE:
       return "FREESPACE";
-    case tesseract_planning::MoveInstructionType::CIRCULAR:
+    case tesseract::command_language::MoveInstructionType::CIRCULAR:
       return "CIRCULAR";
     default:
-      throw std::runtime_error("Unhandled tesseract_planning::MoveInstructionType");
+      throw std::runtime_error("Unhandled tesseract::command_language::MoveInstructionType");
   }
 }
 
-void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstructionPoly& mi)
+void MoveInstructionStandardItem::ctor(const tesseract::command_language::MoveInstructionPoly& mi)
 {
   appendRow(createStandardItemString("description", mi.getDescription()));
   appendRow(createStandardItemString("profile", mi.getProfile()));
@@ -89,20 +89,22 @@ void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstruction
 
   if (mi.getWaypoint().isCartesianWaypoint())
   {
-    auto* wp =
-        new CartesianWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::CartesianWaypointPoly>());
+    auto* wp = new CartesianWaypointStandardItem(
+        "waypoint", mi.getWaypoint().as<tesseract::command_language::CartesianWaypointPoly>());
     auto* desc = new QStandardItem("Cartesian Waypoint");
     appendRow({ wp, desc });
   }
   else if (mi.getWaypoint().isJointWaypoint())
   {
-    auto* wp = new JointWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::JointWaypointPoly>());
+    auto* wp = new JointWaypointStandardItem("waypoint",
+                                             mi.getWaypoint().as<tesseract::command_language::JointWaypointPoly>());
     auto* desc = new QStandardItem("Joint Waypoint");
     appendRow({ wp, desc });
   }
   else if (mi.getWaypoint().isStateWaypoint())
   {
-    auto* wp = new StateWaypointStandardItem("waypoint", mi.getWaypoint().as<tesseract_planning::StateWaypointPoly>());
+    auto* wp = new StateWaypointStandardItem("waypoint",
+                                             mi.getWaypoint().as<tesseract::command_language::StateWaypointPoly>());
     auto* desc = new QStandardItem("State Waypoint");
     appendRow({ wp, desc });
   }
@@ -113,4 +115,4 @@ void MoveInstructionStandardItem::ctor(const tesseract_planning::MoveInstruction
     appendRow({ wp, desc });
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

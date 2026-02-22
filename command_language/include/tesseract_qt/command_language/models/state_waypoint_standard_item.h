@@ -26,19 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StateWaypointStandardItem : public QStandardItem
 {
 public:
-  explicit StateWaypointStandardItem(const tesseract_planning::StateWaypointPoly& swp);
-  StateWaypointStandardItem(const QString& text, const tesseract_planning::StateWaypointPoly& swp);
-  StateWaypointStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::StateWaypointPoly& swp);
+  explicit StateWaypointStandardItem(const tesseract::command_language::StateWaypointPoly& swp);
+  StateWaypointStandardItem(const QString& text, const tesseract::command_language::StateWaypointPoly& swp);
+  StateWaypointStandardItem(const QIcon& icon,
+                            const QString& text,
+                            const tesseract::command_language::StateWaypointPoly& swp);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::StateWaypointPoly& swp);
+  void ctor(const tesseract::command_language::StateWaypointPoly& swp);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_STATE_WAYPOINT_STANDARD_ITEM_H

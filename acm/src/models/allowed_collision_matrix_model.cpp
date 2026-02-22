@@ -36,7 +36,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct AllowedCollisionMatrixModel::Implementation
 {
@@ -90,7 +90,7 @@ std::shared_ptr<const ComponentInfo> AllowedCollisionMatrixModel::getComponentIn
   return data_->component_info;
 }
 
-void AllowedCollisionMatrixModel::set(const tesseract_common::AllowedCollisionMatrix& acm)
+void AllowedCollisionMatrixModel::set(const tesseract::common::AllowedCollisionMatrix& acm)
 {
   clear();
 
@@ -214,9 +214,9 @@ void AllowedCollisionMatrixModel::clear()
   data_->items.clear();
 }
 
-tesseract_common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowedCollisionMatrix() const
+tesseract::common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowedCollisionMatrix() const
 {
-  tesseract_common::AllowedCollisionMatrix acm;
+  tesseract::common::AllowedCollisionMatrix acm;
   for (int parent_rows = 0; parent_rows < invisibleRootItem()->rowCount(); ++parent_rows)
   {
     QStandardItem* parent = invisibleRootItem()->child(parent_rows);
@@ -320,4 +320,4 @@ bool AllowedCollisionMatrixModel::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

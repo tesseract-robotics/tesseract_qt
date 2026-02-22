@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 NullWaypointStandardItem::NullWaypointStandardItem() : QStandardItem(icons::getUnknownIcon(), "Null Waypoint") {}
 
@@ -39,4 +39,4 @@ NullWaypointStandardItem::NullWaypointStandardItem(const QIcon& icon, const QStr
 
 int NullWaypointStandardItem::type() const { return static_cast<int>(StandardItemType::CL_NULL_WAYPOINT); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

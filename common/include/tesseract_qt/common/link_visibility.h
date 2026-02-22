@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_COMMON_LINK_VISIBILITY_H
 #define TESSERACT_QT_COMMON_LINK_VISIBILITY_H
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 enum class LinkVisibilityFlags : int
 {
@@ -45,6 +45,6 @@ inline bool operator&(LinkVisibilityFlags a, LinkVisibilityFlags b)
   return (static_cast<int>(a) & static_cast<int>(b));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_LINK_VISIBILITY_H

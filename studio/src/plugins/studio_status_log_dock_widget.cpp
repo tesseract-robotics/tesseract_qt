@@ -31,7 +31,7 @@
 #include <QMenu>
 #include <QAction>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StudioStatusLogDockWidget::Implementation
 {
@@ -69,4 +69,4 @@ void StudioStatusLogDockWidget::setup()
   toolBar()->setIconSize(QSize(25, 25));
   setFeature(ads::CDockWidget::DockWidgetFocusable, true);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -23,7 +23,7 @@
 #include <tesseract_qt/common/entity_manager.h>
 #include <tesseract_qt/common/entity_container.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 int EntityManager::entity_counter_ = 10000;  // NOLINT
 
@@ -106,4 +106,4 @@ void EntityManager::clear()
 
   containers_.clear();
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/plot/plot_data.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 template <typename T>
 typename std::unordered_map<std::string, T>::iterator addImpl(std::unordered_map<std::string, T>& series,
@@ -166,4 +166,4 @@ bool PlotDataMapRef::erase(const std::string& name)
   return erased;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

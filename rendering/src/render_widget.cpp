@@ -53,7 +53,7 @@
 #pragma warning(pop)
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /** @brief Private data class for Renderer */
 class Renderer::Implementation
@@ -1144,4 +1144,4 @@ void RenderWidget::handleKeyPress(const gz::common::KeyEvent& event) { data_->re
 ////////////////////////////////////////////////
 void RenderWidget::handleKeyRelease(const gz::common::KeyEvent& event) { data_->renderer.handleKeyRelease(event); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

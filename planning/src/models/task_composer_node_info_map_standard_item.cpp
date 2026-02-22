@@ -31,10 +31,10 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
-    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
+    const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map)
   : QStandardItem(icons::getUnknownIcon(), "Task Composer Node Info Map")
 {
   ctor(info_map);
@@ -42,7 +42,7 @@ TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
 
 TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
     const QString& text,
-    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
+    const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(info_map);
@@ -51,7 +51,7 @@ TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
 TaskComposerNodeInfoMapStandardItem::TaskComposerNodeInfoMapStandardItem(
     const QIcon& icon,
     const QString& text,
-    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
+    const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map)
   : QStandardItem(icon, text)
 {
   ctor(info_map);
@@ -63,7 +63,7 @@ int TaskComposerNodeInfoMapStandardItem::type() const
 }
 
 void TaskComposerNodeInfoMapStandardItem::ctor(
-    const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map)
+    const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map)
 {
   for (const auto& pair : info_map)
   {
@@ -72,4 +72,4 @@ void TaskComposerNodeInfoMapStandardItem::ctor(
     appendRow({ new TaskComposerNodeInfoStandardItem(item_text, pair.second), item_desc });
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

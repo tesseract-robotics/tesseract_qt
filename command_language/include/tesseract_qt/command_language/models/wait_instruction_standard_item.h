@@ -26,19 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class WaitInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit WaitInstructionStandardItem(const tesseract_planning::WaitInstruction& wi);
-  WaitInstructionStandardItem(const QString& text, const tesseract_planning::WaitInstruction& wi);
-  WaitInstructionStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::WaitInstruction& wi);
+  explicit WaitInstructionStandardItem(const tesseract::command_language::WaitInstruction& wi);
+  WaitInstructionStandardItem(const QString& text, const tesseract::command_language::WaitInstruction& wi);
+  WaitInstructionStandardItem(const QIcon& icon,
+                              const QString& text,
+                              const tesseract::command_language::WaitInstruction& wi);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::WaitInstruction& wi);
+  void ctor(const tesseract::command_language::WaitInstruction& wi);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_WAIT_INSTRUCTION_STANDARD_ITEM_H

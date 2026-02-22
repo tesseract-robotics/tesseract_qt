@@ -33,7 +33,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent) : EnvironmentCommandsModel(nullptr, parent) {}
 
@@ -73,7 +73,7 @@ void EnvironmentCommandsModel::clear()
   appendRow(new EnvironmentCommandsStandardItem());
 }
 
-void EnvironmentCommandsModel::set(const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands)
+void EnvironmentCommandsModel::set(const std::vector<std::shared_ptr<const tesseract::environment::Command>>& commands)
 {
   QStandardItemModel::clear();
   setColumnCount(2);
@@ -81,12 +81,12 @@ void EnvironmentCommandsModel::set(const std::vector<std::shared_ptr<const tesse
   appendRow(new EnvironmentCommandsStandardItem(commands));
 }
 
-void EnvironmentCommandsModel::appendCommand(const std::shared_ptr<const tesseract_environment::Command>& command)
+void EnvironmentCommandsModel::appendCommand(const std::shared_ptr<const tesseract::environment::Command>& command)
 {
   getRoot()->appendCommand(command);
 }
 
-const std::vector<std::shared_ptr<const tesseract_environment::Command>>& EnvironmentCommandsModel::getCommands() const
+const std::vector<std::shared_ptr<const tesseract::environment::Command>>& EnvironmentCommandsModel::getCommands() const
 {
   return getRoot()->getCommands();
 }
@@ -125,4 +125,4 @@ bool EnvironmentCommandsModel::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -28,16 +28,16 @@
 
 #include <tesseract_task_composer/core/task_composer_keys.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const tesseract_planning::TaskComposerKeys& data)
+TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const tesseract::task_composer::TaskComposerKeys& data)
   : QStandardItem(icons::getDataIcon(), "Task Composer Keys")
 {
   ctor(data);
 }
 
 TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const QString& text,
-                                                           const tesseract_planning::TaskComposerKeys& data)
+                                                           const tesseract::task_composer::TaskComposerKeys& data)
   : QStandardItem(icons::getDataIcon(), text)
 {
   ctor(data);
@@ -45,7 +45,7 @@ TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const QString& text,
 
 TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const QIcon& icon,
                                                            const QString& text,
-                                                           const tesseract_planning::TaskComposerKeys& data)
+                                                           const tesseract::task_composer::TaskComposerKeys& data)
   : QStandardItem(icon, text)
 {
   ctor(data);
@@ -53,7 +53,7 @@ TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const QIcon& icon,
 
 int TaskComposerKeysStandardItem::type() const { return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_KEYS); }
 
-void TaskComposerKeysStandardItem::ctor(const tesseract_planning::TaskComposerKeys& data)
+void TaskComposerKeysStandardItem::ctor(const tesseract::task_composer::TaskComposerKeys& data)
 {
   for (const auto& pair : data.data())
   {
@@ -72,4 +72,4 @@ void TaskComposerKeysStandardItem::ctor(const tesseract_planning::TaskComposerKe
     }
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -28,21 +28,21 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class OctreeStandardItem : public QStandardItem
 {
 public:
-  OctreeStandardItem(std::shared_ptr<const tesseract_geometry::Octree> octree);
-  explicit OctreeStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Octree> octree);
-  OctreeStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract_geometry::Octree> octree);
+  OctreeStandardItem(std::shared_ptr<const tesseract::geometry::Octree> octree);
+  explicit OctreeStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Octree> octree);
+  OctreeStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract::geometry::Octree> octree);
   int type() const override;
 
-  std::shared_ptr<const tesseract_geometry::Octree> octree;
+  std::shared_ptr<const tesseract::geometry::Octree> octree;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_OCTREE_STANDARD_ITEM_H

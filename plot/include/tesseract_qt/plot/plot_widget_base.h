@@ -32,7 +32,7 @@ class QwtPlotCurve;
 class QwtPlotPanner;
 class QwtPlotMarker;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class QwtPlotPimpl;
 class PlotZoomer;
@@ -165,6 +165,6 @@ private:
   bool _keep_aspect_ratio;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_PLOT_WIDGET_BASE_H

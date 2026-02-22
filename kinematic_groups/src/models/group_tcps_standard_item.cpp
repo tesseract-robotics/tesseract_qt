@@ -25,17 +25,17 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 GroupTCPsStandardItem::GroupTCPsStandardItem() : QStandardItem("Group TCPs") { ctor(); }
 
-GroupTCPsStandardItem::GroupTCPsStandardItem(tesseract_srdf::GroupTCPs group_tcps)
+GroupTCPsStandardItem::GroupTCPsStandardItem(tesseract::srdf::GroupTCPs group_tcps)
   : QStandardItem("Group TCPs"), group_tcps_(std::move(group_tcps))
 {
   ctor();
 }
 
-GroupTCPsStandardItem::GroupTCPsStandardItem(const QString& text, tesseract_srdf::GroupTCPs group_tcps)
+GroupTCPsStandardItem::GroupTCPsStandardItem(const QString& text, tesseract::srdf::GroupTCPs group_tcps)
   : QStandardItem(text), group_tcps_(std::move(group_tcps))
 {
   ctor();
@@ -43,7 +43,7 @@ GroupTCPsStandardItem::GroupTCPsStandardItem(const QString& text, tesseract_srdf
 
 GroupTCPsStandardItem::GroupTCPsStandardItem(const QIcon& icon,
                                              const QString& text,
-                                             tesseract_srdf::GroupTCPs group_tcps)
+                                             tesseract::srdf::GroupTCPs group_tcps)
   : QStandardItem(icon, text), group_tcps_(std::move(group_tcps))
 {
   ctor();
@@ -115,7 +115,7 @@ void GroupTCPsStandardItem::removeGroup(const QString& group_name)
   removeRow(item->index().row());
 }
 
-const tesseract_srdf::GroupTCPs& GroupTCPsStandardItem::getGroupTCPs() const { return group_tcps_; }
+const tesseract::srdf::GroupTCPs& GroupTCPsStandardItem::getGroupTCPs() const { return group_tcps_; }
 
 void GroupTCPsStandardItem::ctor()
 {
@@ -125,4 +125,4 @@ void GroupTCPsStandardItem::ctor()
       addGroupTCPItem(QString::fromStdString(group.first), QString::fromStdString(tcp.first), tcp.second);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

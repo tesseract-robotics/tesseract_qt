@@ -30,7 +30,7 @@
 #include <QDateTime>
 #include <QIcon>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 QList<QStandardItem*> createStandardItemFloat(const std::string& text, double data)
 {
@@ -154,4 +154,4 @@ NamespaceStandardItem* createNamespaceItem(QStandardItem& root_item, const std::
 
   return item;
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

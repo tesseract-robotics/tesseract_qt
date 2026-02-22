@@ -35,7 +35,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 GroupJointStatesModel::GroupJointStatesModel(QObject* parent) : GroupJointStatesModel(nullptr, parent) {}
 
@@ -104,7 +104,7 @@ void GroupJointStatesModel::clear()
   appendRow(new GroupJointStatesStandardItem());
 }
 
-void GroupJointStatesModel::set(const tesseract_srdf::GroupJointStates& group_joint_states)
+void GroupJointStatesModel::set(const tesseract::srdf::GroupJointStates& group_joint_states)
 {
   QStandardItemModel::clear();
   setColumnCount(2);
@@ -114,7 +114,7 @@ void GroupJointStatesModel::set(const tesseract_srdf::GroupJointStates& group_jo
 
 void GroupJointStatesModel::add(const std::string& group_name,
                                 const std::string& state_name,
-                                const tesseract_srdf::GroupsJointState& state)
+                                const tesseract::srdf::GroupsJointState& state)
 {
   getRoot()->addGroupJointState(QString::fromStdString(group_name), QString::fromStdString(state_name), state);
 }
@@ -129,7 +129,7 @@ void GroupJointStatesModel::remove(const std::string& group_name)
   getRoot()->removeGroup(QString::fromStdString(group_name));
 }
 
-tesseract_srdf::GroupJointStates GroupJointStatesModel::getGroupsJointStates() const
+tesseract::srdf::GroupJointStates GroupJointStatesModel::getGroupsJointStates() const
 {
   return getRoot()->getGroupJointStates();
 }
@@ -150,7 +150,7 @@ NamespaceStandardItem* findJointStateGroupItem(QStandardItem* item)
   return findJointStateGroupItem(item->parent());
 }
 
-tesseract_srdf::GroupsJointState GroupJointStatesModel::getGroupsJointState(const QModelIndex& row) const
+tesseract::srdf::GroupsJointState GroupJointStatesModel::getGroupsJointState(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
 
@@ -222,4 +222,4 @@ bool GroupJointStatesModel::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

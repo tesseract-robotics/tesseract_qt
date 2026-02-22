@@ -28,7 +28,7 @@
 #include <memory>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class SceneGraphToolBar : public QToolBar
@@ -46,6 +46,6 @@ private:
   class Implementation;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_SCENE_GRAPH_TOOL_BAR_H

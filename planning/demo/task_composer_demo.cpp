@@ -42,21 +42,21 @@ int main(int argc, char** argv)
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
-  auto locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
+  auto locator = std::make_shared<tesseract::common::GeneralResourceLocator>();
   std::filesystem::path urdf_path(
       locator->locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath());
   std::filesystem::path srdf_path(
       locator->locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.srdf")->getFilePath());
 
-  auto env = std::make_shared<tesseract_environment::Environment>();
+  auto env = std::make_shared<tesseract::environment::Environment>();
   env->init(urdf_path, srdf_path, locator);
 
-  auto component_info = tesseract_gui::ComponentInfoManager::create("tesseract_scene");
-  tesseract_gui::EnvironmentManager::set(
-      std::make_shared<tesseract_gui::DefaultEnvironmentWrapper>(component_info, env));
+  auto component_info = tesseract::gui::ComponentInfoManager::create("tesseract_scene");
+  tesseract::gui::EnvironmentManager::set(
+      std::make_shared<tesseract::gui::DefaultEnvironmentWrapper>(component_info, env));
 
-  tesseract_gui::TaskComposerToolBar toolbar(component_info);
-  tesseract_gui::TaskComposerWidget widget(component_info);
+  tesseract::gui::TaskComposerToolBar toolbar(component_info);
+  tesseract::gui::TaskComposerWidget widget(component_info);
   static_cast<QVBoxLayout*>(widget.layout())->insertWidget(0, &toolbar);
   widget.show();
 

@@ -27,7 +27,7 @@
 #include <qgroupbox.h>
 #include <qtoolbutton.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CollapsibleGroupBox : public QGroupBox
 {
@@ -52,6 +52,6 @@ private:
   void updateToggleButtonPosition();
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_COLLAPSIBLE_GROUP_BOX_H

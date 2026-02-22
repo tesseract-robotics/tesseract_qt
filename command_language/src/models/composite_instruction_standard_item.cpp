@@ -35,24 +35,27 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-CompositeInstructionStandardItem::CompositeInstructionStandardItem(const tesseract_planning::CompositeInstruction& ci)
+CompositeInstructionStandardItem::CompositeInstructionStandardItem(
+    const tesseract::command_language::CompositeInstruction& ci)
   : QStandardItem(icons::getUnknownIcon(), "Composite Instruction")
 {
   ctor(ci);
 }
 
-CompositeInstructionStandardItem::CompositeInstructionStandardItem(const QString& text,
-                                                                   const tesseract_planning::CompositeInstruction& ci)
+CompositeInstructionStandardItem::CompositeInstructionStandardItem(
+    const QString& text,
+    const tesseract::command_language::CompositeInstruction& ci)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(ci);
 }
 
-CompositeInstructionStandardItem::CompositeInstructionStandardItem(const QIcon& icon,
-                                                                   const QString& text,
-                                                                   const tesseract_planning::CompositeInstruction& ci)
+CompositeInstructionStandardItem::CompositeInstructionStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const tesseract::command_language::CompositeInstruction& ci)
   : QStandardItem(icon, text)
 {
   ctor(ci);
@@ -63,27 +66,28 @@ int CompositeInstructionStandardItem::type() const
   return static_cast<int>(StandardItemType::CL_COMPOSITE_INSTRUCTION);
 }
 
-const tesseract_planning::CompositeInstruction& CompositeInstructionStandardItem::getCompositeInstruction() const
+const tesseract::command_language::CompositeInstruction&
+CompositeInstructionStandardItem::getCompositeInstruction() const
 {
   return ci_;
 }
 
-std::string toString(tesseract_planning::CompositeInstructionOrder order)
+std::string toString(tesseract::command_language::CompositeInstructionOrder order)
 {
   switch (order)
   {
-    case tesseract_planning::CompositeInstructionOrder::ORDERED:
+    case tesseract::command_language::CompositeInstructionOrder::ORDERED:
       return "ORDERED";
-    case tesseract_planning::CompositeInstructionOrder::UNORDERED:
+    case tesseract::command_language::CompositeInstructionOrder::UNORDERED:
       return "UNORDERED";
-    case tesseract_planning::CompositeInstructionOrder::ORDERED_AND_REVERABLE:
+    case tesseract::command_language::CompositeInstructionOrder::ORDERED_AND_REVERABLE:
       return "ORDERED_AND_REVERABLE";
     default:
-      throw std::runtime_error("Unhandled tesseract_planning::CompositeInstructionOrder");
+      throw std::runtime_error("Unhandled tesseract::command_language::CompositeInstructionOrder");
   }
 }
 
-void CompositeInstructionStandardItem::ctor(const tesseract_planning::CompositeInstruction& ci)
+void CompositeInstructionStandardItem::ctor(const tesseract::command_language::CompositeInstruction& ci)
 {
   ci_ = ci;
   appendRow(createStandardItemString("description", ci.getDescription()));
@@ -94,4 +98,4 @@ void CompositeInstructionStandardItem::ctor(const tesseract_planning::CompositeI
   appendRow(new ManipulatorInfoStandardItem("manip info", ci.getManipulatorInfo()));   // NOLINT
   appendRow(new VectorInstructionStandardItem("instructions", ci.getInstructions()));  // NOLINT
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

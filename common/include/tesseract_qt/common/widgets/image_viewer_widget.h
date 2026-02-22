@@ -30,7 +30,7 @@
 
 class QImage;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ImageViewerWidgetImpl;
 
@@ -65,5 +65,5 @@ private:
   void applyFitIfEnabled();
   void setScaleFactor(double s);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_GUI_COMMON_IMAGE_VIEWER_WIDGET_H

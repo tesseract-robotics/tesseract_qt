@@ -37,7 +37,7 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /**
  * @brief This used by the last column so the message will wrap
@@ -220,4 +220,4 @@ void StatusLogWidget::onCurrentRowChanged(const QModelIndex& current, const QMod
   QModelIndex current_index = current;  // This appears to be changing so copy
   data_->selected_item = data_->model->itemFromIndex(current_index);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

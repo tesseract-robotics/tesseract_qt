@@ -26,10 +26,10 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
-    tesseract_common::ContactManagersPluginInfo plugin_info)
+    tesseract::common::ContactManagersPluginInfo plugin_info)
   : QStandardItem(icons::getCubeIcon(), "Contact Managers Plugin Info"), plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -37,7 +37,7 @@ ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
 
 ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
     const QString& text,
-    tesseract_common::ContactManagersPluginInfo plugin_info)
+    tesseract::common::ContactManagersPluginInfo plugin_info)
   : QStandardItem(icons::getCubeIcon(), text), plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -46,7 +46,7 @@ ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
 ContactManagersPluginInfoStandardItem::ContactManagersPluginInfoStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_common::ContactManagersPluginInfo plugin_info)
+    tesseract::common::ContactManagersPluginInfo plugin_info)
   : QStandardItem(icon, text), plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -78,4 +78,4 @@ void ContactManagersPluginInfoStandardItem::ctor()
   appendRow(new PluginInfoContainerStandardItem(
       icons::getCollisionIcon(), "Continuous Plugins", plugin_info.continuous_plugin_infos));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

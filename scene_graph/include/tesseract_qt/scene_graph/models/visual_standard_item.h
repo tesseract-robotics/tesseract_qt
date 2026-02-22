@@ -28,21 +28,21 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class VisualStandardItem : public QStandardItem
 {
 public:
-  VisualStandardItem(std::shared_ptr<tesseract_scene_graph::Visual> visual);
-  explicit VisualStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Visual> visual);
-  VisualStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<tesseract_scene_graph::Visual> visual);
+  VisualStandardItem(std::shared_ptr<tesseract::scene_graph::Visual> visual);
+  explicit VisualStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::Visual> visual);
+  VisualStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<tesseract::scene_graph::Visual> visual);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::Visual> visual;
+  std::shared_ptr<tesseract::scene_graph::Visual> visual;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_VISUAL_STANDARD_ITEM_H

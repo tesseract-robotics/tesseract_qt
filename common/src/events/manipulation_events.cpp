@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/events/manipulation_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class ManipulationChanged::Implementation
 {
@@ -56,4 +56,4 @@ ManipulationChanged::getStateComponentInfos() const
   return data_->state_component_infos;
 }
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

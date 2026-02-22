@@ -28,27 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ModifyAllowedCollisionsCommandStandardItem : public QStandardItem
 {
 public:
   explicit ModifyAllowedCollisionsCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::ModifyAllowedCollisionsCommand> command);
+      std::shared_ptr<const tesseract::environment::ModifyAllowedCollisionsCommand> command);
   explicit ModifyAllowedCollisionsCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ModifyAllowedCollisionsCommand> command);
+      std::shared_ptr<const tesseract::environment::ModifyAllowedCollisionsCommand> command);
   explicit ModifyAllowedCollisionsCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ModifyAllowedCollisionsCommand> command);
+      std::shared_ptr<const tesseract::environment::ModifyAllowedCollisionsCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::ModifyAllowedCollisionsCommand> command;
+  std::shared_ptr<const tesseract::environment::ModifyAllowedCollisionsCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_MODIFY_ALLOWED_COLLISIONS_COMMAND_STANDARD_ITEM_H

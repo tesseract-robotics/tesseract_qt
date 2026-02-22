@@ -33,7 +33,7 @@ namespace Ui
 class WorkbenchWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EnvironmentWidget;
 class JointTrajectoryWidget;
@@ -70,5 +70,5 @@ private:
   std::unique_ptr<Ui::WorkbenchWidget> ui;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_WORKBENCH_WORKBENCH_WIDGET_H

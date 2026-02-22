@@ -40,7 +40,7 @@
 #include <optional>
 #include <QVariant>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct Range
 {
@@ -407,6 +407,6 @@ protected:
   }
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_PLOTDATA_BASE_H

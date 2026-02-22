@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/change_joint_origin_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ChangeJointOriginCommandStandardItem::ChangeJointOriginCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::ChangeJointOriginCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeJointOriginCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Origin"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ ChangeJointOriginCommandStandardItem::ChangeJointOriginCommandStandardItem(
 
 ChangeJointOriginCommandStandardItem::ChangeJointOriginCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeJointOriginCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeJointOriginCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ ChangeJointOriginCommandStandardItem::ChangeJointOriginCommandStandardItem(
 ChangeJointOriginCommandStandardItem::ChangeJointOriginCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeJointOriginCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeJointOriginCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -63,4 +63,4 @@ void ChangeJointOriginCommandStandardItem::ctor()
   auto* item = new TransformStandardItem(icons::getJointIcon(), command->getJointName().c_str(), command->getOrigin());
   appendRow({ item, new QStandardItem() });
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

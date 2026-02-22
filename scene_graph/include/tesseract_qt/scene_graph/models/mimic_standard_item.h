@@ -28,21 +28,21 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class MimicStandardItem : public QStandardItem
 {
 public:
-  MimicStandardItem(std::shared_ptr<tesseract_scene_graph::JointMimic> mimic);
-  explicit MimicStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointMimic> mimic);
-  MimicStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<tesseract_scene_graph::JointMimic> mimic);
+  MimicStandardItem(std::shared_ptr<tesseract::scene_graph::JointMimic> mimic);
+  explicit MimicStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::JointMimic> mimic);
+  MimicStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<tesseract::scene_graph::JointMimic> mimic);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::JointMimic> mimic;
+  std::shared_ptr<tesseract::scene_graph::JointMimic> mimic;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_MIMIC_STANDARD_ITEM_H

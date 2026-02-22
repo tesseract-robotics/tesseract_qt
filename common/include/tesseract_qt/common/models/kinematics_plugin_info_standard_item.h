@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class KinematicsPluginInfoStandardItem : public QStandardItem
 {
 public:
-  KinematicsPluginInfoStandardItem(tesseract_common::KinematicsPluginInfo plugin_info);
-  explicit KinematicsPluginInfoStandardItem(const QString& text, tesseract_common::KinematicsPluginInfo plugin_info);
+  KinematicsPluginInfoStandardItem(tesseract::common::KinematicsPluginInfo plugin_info);
+  explicit KinematicsPluginInfoStandardItem(const QString& text, tesseract::common::KinematicsPluginInfo plugin_info);
   KinematicsPluginInfoStandardItem(const QIcon& icon,
                                    const QString& text,
-                                   tesseract_common::KinematicsPluginInfo plugin_info);
+                                   tesseract::common::KinematicsPluginInfo plugin_info);
   int type() const override;
 
-  tesseract_common::KinematicsPluginInfo plugin_info;
+  tesseract::common::KinematicsPluginInfo plugin_info;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_KINEMATICS_PLUGIN_INFO_STANDARD_ITEM_H

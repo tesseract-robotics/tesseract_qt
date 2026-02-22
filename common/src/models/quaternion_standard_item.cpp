@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 QuaternionStandardItem::QuaternionStandardItem(const Eigen::Quaterniond& q)
   : QStandardItem(icons::getOrientationIcon(), "orientation")
@@ -72,4 +72,4 @@ void QuaternionStandardItem::ctor(const Eigen::Quaterniond& q)
   appendRow(createStandardItemFloat("z", q.z()));
   appendRow(createStandardItemFloat("w", q.w()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

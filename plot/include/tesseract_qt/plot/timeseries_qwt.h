@@ -27,7 +27,7 @@
 #include <tesseract_qt/plot/plot_data.h>
 #include <tesseract_qt/plot/transform_function.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 // wrapper to Timeseries including a time offset
 class QwtSeriesWrapper : public QwtSeriesData<QPointF>
@@ -98,5 +98,5 @@ protected:
 };
 
 //---------------------------------------------------------
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_TIMESERIES_QWT_H

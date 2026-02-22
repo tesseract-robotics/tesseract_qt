@@ -28,27 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class AddKinematicsInformationCommandStandardItem : public QStandardItem
 {
 public:
   explicit AddKinematicsInformationCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command);
+      std::shared_ptr<const tesseract::environment::AddKinematicsInformationCommand> command);
   explicit AddKinematicsInformationCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command);
+      std::shared_ptr<const tesseract::environment::AddKinematicsInformationCommand> command);
   explicit AddKinematicsInformationCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command);
+      std::shared_ptr<const tesseract::environment::AddKinematicsInformationCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command;
+  std::shared_ptr<const tesseract::environment::AddKinematicsInformationCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ADD_KINEMATICS_INFORMATION_COMMAND_STANDARD_ITEM_H

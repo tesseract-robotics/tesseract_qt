@@ -29,7 +29,7 @@
 #include <tesseract_common/fwd.h>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class AllowedCollisionMatrixModel : public QStandardItemModel
@@ -46,13 +46,13 @@ public:
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-  tesseract_common::AllowedCollisionMatrix getAllowedCollisionMatrix() const;
+  tesseract::common::AllowedCollisionMatrix getAllowedCollisionMatrix() const;
 
 private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
-  void set(const tesseract_common::AllowedCollisionMatrix& acm);
+  void set(const tesseract::common::AllowedCollisionMatrix& acm);
   void add(const std::string& link1_name, const std::string& link2_name, const std::string& reason);
   void remove(const std::string& link1_name, const std::string& link2_name);
   void remove(const std::string& link_name);
@@ -61,6 +61,6 @@ private:
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ACM_ALLOWED_COLLISION_MATRIX_MODEL_H

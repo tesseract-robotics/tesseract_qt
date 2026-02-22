@@ -20,7 +20,7 @@
 #include <gz/common/KeyEvent.hh>
 #include <gz/common/MouseEvent.hh>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class SnapIntervals::Implementation
 {
@@ -405,4 +405,4 @@ const gz::common::MouseEvent& MousePressOnScene::getMouse() const { return data_
 
 /////////////////////////////////////////////////
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

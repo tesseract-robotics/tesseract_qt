@@ -37,25 +37,25 @@ class uuid;
 }
 }  // namespace boost
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TaskComposerNodeInfoMapStandardItem : public QStandardItem
 {
 public:
   explicit TaskComposerNodeInfoMapStandardItem(
-      const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map);
+      const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map);
   TaskComposerNodeInfoMapStandardItem(
       const QString& text,
-      const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map);
+      const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map);
   TaskComposerNodeInfoMapStandardItem(
       const QIcon& icon,
       const QString& text,
-      const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map);
+      const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map);
   int type() const override;
 
 private:
-  void ctor(const std::map<boost::uuids::uuid, tesseract_planning::TaskComposerNodeInfo>& info_map);
+  void ctor(const std::map<boost::uuids::uuid, tesseract::task_composer::TaskComposerNodeInfo>& info_map);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_NODE_INFO_MAP_STANDARD_ITEM_H

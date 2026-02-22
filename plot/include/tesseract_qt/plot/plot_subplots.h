@@ -28,7 +28,7 @@
 #include <tesseract_qt/plot/plot_database.h>
 #include <tesseract_qt/plot/plot_widget.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PlotSubplots : public QWidget
 {
@@ -49,5 +49,5 @@ private:
   int cols_{ 0 };
   std::vector<std::vector<std::unique_ptr<PlotWidget>>> subplots_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_PLOT_SUBPLOTS_H

@@ -25,8 +25,8 @@
 
 #include <string>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 std::string StudioDockWidgetFactory::getSection() { return "Studio"; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

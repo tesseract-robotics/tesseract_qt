@@ -29,7 +29,7 @@
 #include <functional>
 #include <tesseract_qt/plot/plot_data.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /** @brief Generic interface for a multi input - multi output transformation function.
  * Contrariwise to other plugins, multiple instances of the this class might be created.
@@ -148,10 +148,10 @@ public:
   static TransformFunction::Ptr create(const std::string& name);
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
-Q_DECLARE_OPAQUE_POINTER(tesseract_gui::TransformFactory*)
-Q_DECLARE_METATYPE(tesseract_gui::TransformFactory*)
-Q_GLOBAL_STATIC(tesseract_gui::TransformFactory, transform_factory_ptr_from_macro_)
+Q_DECLARE_OPAQUE_POINTER(tesseract::gui::TransformFactory*)
+Q_DECLARE_METATYPE(tesseract::gui::TransformFactory*)
+Q_GLOBAL_STATIC(tesseract::gui::TransformFactory, transform_factory_ptr_from_macro_)
 
 #endif  // TESSERACT_QT_PLOT_TRANSFORM_FUNCTION_H

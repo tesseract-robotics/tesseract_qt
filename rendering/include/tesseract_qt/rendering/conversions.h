@@ -26,7 +26,7 @@ class QMouseEvent;
 class QWheelEvent;
 class QKeyEvent;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /**
  * @brief Return the equivalent Qt color
@@ -94,6 +94,6 @@ gz::common::MouseEvent convert(const QWheelEvent& e);
  */
 gz::common::KeyEvent convert(const QKeyEvent& e);
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_RENDERING_CONVERSIONS_H

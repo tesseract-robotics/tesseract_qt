@@ -35,12 +35,12 @@ namespace Ui
 class JointTrajectoryPlotDialog;
 }
 
-namespace tesseract_common
+namespace tesseract::common
 {
 struct JointTrajectoryInfo;
-}  // namespace tesseract_common
+}  // namespace tesseract::common
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PlotSubplots;
 
@@ -49,7 +49,7 @@ class JointTrajectoryPlotDialog : public QDialog
   Q_OBJECT
 
 public:
-  explicit JointTrajectoryPlotDialog(tesseract_common::JointTrajectoryInfo current_trajectory,
+  explicit JointTrajectoryPlotDialog(tesseract::common::JointTrajectoryInfo current_trajectory,
                                      QWidget* parent = nullptr);
   ~JointTrajectoryPlotDialog();
 
@@ -59,10 +59,10 @@ private Q_SLOTS:
 
 private:
   std::unique_ptr<Ui::JointTrajectoryPlotDialog> ui_;
-  tesseract_gui::PlotDataMapRef plot_data_map_;
-  tesseract_gui::PlotSubplots* position_subplots_;
-  tesseract_gui::PlotSubplots* velocity_subplots_;
-  tesseract_gui::PlotSubplots* acceleration_subplots_;
+  tesseract::gui::PlotDataMapRef plot_data_map_;
+  tesseract::gui::PlotSubplots* position_subplots_;
+  tesseract::gui::PlotSubplots* velocity_subplots_;
+  tesseract::gui::PlotSubplots* acceleration_subplots_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_PLOT_DIALOG_H

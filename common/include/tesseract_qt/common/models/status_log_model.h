@@ -29,7 +29,7 @@
 #include <Eigen/Eigen>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StatusLogModel : public QStandardItemModel
 {
@@ -45,6 +45,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_STATUS_LOG_MODEL_H

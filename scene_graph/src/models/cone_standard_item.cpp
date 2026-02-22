@@ -27,15 +27,15 @@
 
 #include <tesseract_geometry/impl/cone.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-ConeStandardItem::ConeStandardItem(std::shared_ptr<const tesseract_geometry::Cone> cone)
+ConeStandardItem::ConeStandardItem(std::shared_ptr<const tesseract::geometry::Cone> cone)
   : QStandardItem(icons::getConeIcon(), "Cone"), cone(std::move(cone))
 {
   ctor();
 }
 
-ConeStandardItem::ConeStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Cone> cone)
+ConeStandardItem::ConeStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Cone> cone)
   : QStandardItem(icons::getConeIcon(), text), cone(std::move(cone))
 {
   ctor();
@@ -43,7 +43,7 @@ ConeStandardItem::ConeStandardItem(const QString& text, std::shared_ptr<const te
 
 ConeStandardItem::ConeStandardItem(const QIcon& icon,
                                    const QString& text,
-                                   std::shared_ptr<const tesseract_geometry::Cone> cone)
+                                   std::shared_ptr<const tesseract::geometry::Cone> cone)
   : QStandardItem(icon, text), cone(std::move(cone))
 {
   ctor();
@@ -56,4 +56,4 @@ void ConeStandardItem::ctor()
   appendRow(createStandardItemFloat("radius", cone->getRadius()));
   appendRow(createStandardItemFloat("length", cone->getLength()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
