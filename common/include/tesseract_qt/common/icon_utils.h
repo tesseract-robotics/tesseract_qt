@@ -26,7 +26,7 @@
 
 class QIcon;
 
-namespace tesseract_gui::icons
+namespace tesseract::gui::icons
 {
 QIcon getAnchorIcon();
 
@@ -162,5 +162,5 @@ QIcon getKeyValueIcon();
 QIcon getInfoMsgIcon();
 QIcon getWarnMsgIcon();
 QIcon getErrorMsgIcon();
-}  // namespace tesseract_gui::icons
+}  // namespace tesseract::gui::icons
 #endif  // TESSERACT_QT_COMMON_ICON_UTILS_H

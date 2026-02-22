@@ -32,7 +32,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ContactResultsModel::Implementation
 {
@@ -184,4 +184,4 @@ bool ContactResultsModel::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

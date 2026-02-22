@@ -28,24 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class AddSceneGraphCommandStandardItem : public QStandardItem
 {
 public:
-  explicit AddSceneGraphCommandStandardItem(std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command);
-  explicit AddSceneGraphCommandStandardItem(const QString& text,
-                                            std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command);
-  explicit AddSceneGraphCommandStandardItem(const QIcon& icon,
-                                            const QString& text,
-                                            std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command);
+  explicit AddSceneGraphCommandStandardItem(
+      std::shared_ptr<const tesseract::environment::AddSceneGraphCommand> command);
+  explicit AddSceneGraphCommandStandardItem(
+      const QString& text,
+      std::shared_ptr<const tesseract::environment::AddSceneGraphCommand> command);
+  explicit AddSceneGraphCommandStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      std::shared_ptr<const tesseract::environment::AddSceneGraphCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command;
+  std::shared_ptr<const tesseract::environment::AddSceneGraphCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ADD_SCENE_GRAPH_COMMAND_STANDARD_ITEM_H

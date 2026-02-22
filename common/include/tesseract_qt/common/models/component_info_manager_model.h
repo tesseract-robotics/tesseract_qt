@@ -28,7 +28,7 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfoManagerModel : public QStandardItemModel
 {
@@ -48,6 +48,6 @@ private:
 
   void clear();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_COMPONENT_INFO_MANAGER_MODEL_H

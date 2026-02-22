@@ -28,7 +28,7 @@
 
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct GroupJointStatesWidget::Implementation
 {
@@ -87,4 +87,4 @@ const QItemSelectionModel& GroupJointStatesWidget::getSelectionModel() const
   return *data_->tree_view->selectionModel();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

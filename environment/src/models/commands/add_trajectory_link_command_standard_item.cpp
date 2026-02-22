@@ -28,10 +28,10 @@
 
 #include <tesseract_environment/commands/add_trajectory_link_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 AddTrajectoryLinkCommandStandardItem::AddTrajectoryLinkCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::AddTrajectoryLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::AddTrajectoryLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Add Trajectory Link"), command(std::move(command))
 {
   ctor();
@@ -39,7 +39,7 @@ AddTrajectoryLinkCommandStandardItem::AddTrajectoryLinkCommandStandardItem(
 
 AddTrajectoryLinkCommandStandardItem::AddTrajectoryLinkCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddTrajectoryLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::AddTrajectoryLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -48,7 +48,7 @@ AddTrajectoryLinkCommandStandardItem::AddTrajectoryLinkCommandStandardItem(
 AddTrajectoryLinkCommandStandardItem::AddTrajectoryLinkCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddTrajectoryLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::AddTrajectoryLinkCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -66,4 +66,4 @@ void AddTrajectoryLinkCommandStandardItem::ctor()
   appendRow(createStandardItemString("replace allowed", (command->replaceAllowed()) ? "True" : "False"));
   appendRow(new JointTrajectoryStandardItem("trajectory", command->getTrajectory()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

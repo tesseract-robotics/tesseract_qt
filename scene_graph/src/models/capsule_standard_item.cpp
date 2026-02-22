@@ -27,16 +27,16 @@
 
 #include <tesseract_geometry/impl/capsule.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-CapsuleStandardItem::CapsuleStandardItem(std::shared_ptr<const tesseract_geometry::Capsule> capsule)
+CapsuleStandardItem::CapsuleStandardItem(std::shared_ptr<const tesseract::geometry::Capsule> capsule)
   : QStandardItem(icons::getCapsuleIcon(), "Capsule"), capsule(std::move(capsule))
 {
   ctor();
 }
 
 CapsuleStandardItem::CapsuleStandardItem(const QString& text,
-                                         std::shared_ptr<const tesseract_geometry::Capsule> capsule)
+                                         std::shared_ptr<const tesseract::geometry::Capsule> capsule)
   : QStandardItem(icons::getCapsuleIcon(), text), capsule(std::move(capsule))
 {
   ctor();
@@ -44,7 +44,7 @@ CapsuleStandardItem::CapsuleStandardItem(const QString& text,
 
 CapsuleStandardItem::CapsuleStandardItem(const QIcon& icon,
                                          const QString& text,
-                                         std::shared_ptr<const tesseract_geometry::Capsule> capsule)
+                                         std::shared_ptr<const tesseract::geometry::Capsule> capsule)
   : QStandardItem(icon, text), capsule(std::move(capsule))
 {
   ctor();
@@ -57,4 +57,4 @@ void CapsuleStandardItem::ctor()
   appendRow(createStandardItemFloat("radius", capsule->getRadius()));
   appendRow(createStandardItemFloat("length", capsule->getLength()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

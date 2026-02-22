@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct JointTrajectoryToolBar::Implementation
 {
@@ -115,4 +115,4 @@ bool JointTrajectoryToolBar::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

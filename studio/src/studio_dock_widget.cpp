@@ -23,7 +23,7 @@
 
 #include <tesseract_qt/studio/studio_dock_widget.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 StudioDockWidget::StudioDockWidget(const QString& title, QWidget* parent) : CDockWidget(title, parent) {}
 
@@ -35,4 +35,4 @@ bool StudioDockWidget::assignAsCentralWidget() const { return assign_as_central_
 bool StudioDockWidget::isInitialized() const { return (widget() != nullptr); }
 void StudioDockWidget::onInitialize() {}
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

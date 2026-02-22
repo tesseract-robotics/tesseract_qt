@@ -35,7 +35,7 @@
 
 #include <fstream>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 std::vector<std::string> getNamespaces(const std::string& namespace_str, const std::string& separator)
 {
@@ -49,7 +49,7 @@ std::vector<std::string> getNamespaces(const std::string& namespace_str, const s
 bool saveDotImage(const std::string& dot_string, const std::filesystem::path& save_path, std::string format)
 {
   std::filesystem::path dot_filepath =
-      tesseract_common::getTempPath() + "save_dot_image_" + tesseract_common::getTimestampString() + ".dot";
+      tesseract::common::getTempPath() + "save_dot_image_" + tesseract::common::getTimestampString() + ".dot";
   std::ofstream out(dot_filepath);
   out << dot_string;
   out.close();
@@ -133,4 +133,4 @@ QAction* getMainWindowMenuAction(QMenu* menu, const QString& text)
   return nullptr;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

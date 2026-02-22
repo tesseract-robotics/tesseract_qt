@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/move_joint_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 MoveJointCommandStandardItem::MoveJointCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::MoveJointCommand> command)
+    std::shared_ptr<const tesseract::environment::MoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Move Joint"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ MoveJointCommandStandardItem::MoveJointCommandStandardItem(
 
 MoveJointCommandStandardItem::MoveJointCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::MoveJointCommand> command)
+    std::shared_ptr<const tesseract::environment::MoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ MoveJointCommandStandardItem::MoveJointCommandStandardItem(
 MoveJointCommandStandardItem::MoveJointCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::MoveJointCommand> command)
+    std::shared_ptr<const tesseract::environment::MoveJointCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -60,4 +60,4 @@ void MoveJointCommandStandardItem::ctor()
   appendRow(createStandardItemString("joint name", command->getJointName()));
   appendRow(createStandardItemString("parent link", command->getParentLink()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

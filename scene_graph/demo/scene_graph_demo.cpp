@@ -43,26 +43,27 @@ int main(int argc, char** argv)
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
-  tesseract_common::GeneralResourceLocator locator;
+  tesseract::common::GeneralResourceLocator locator;
   std::string path = locator.locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath();
 
-  auto scene_graph = tesseract_urdf::parseURDFFile(path, locator);
+  auto scene_graph = tesseract::urdf::parseURDFFile(path, locator);
 
-  std::shared_ptr<const tesseract_gui::ComponentInfo> component_info = tesseract_gui::ComponentInfoManager::create("sce"
-                                                                                                                   "ne_"
-                                                                                                                   "nam"
-                                                                                                                   "e");
+  std::shared_ptr<const tesseract::gui::ComponentInfo> component_info =
+      tesseract::gui::ComponentInfoManager::create("sce"
+                                                   "ne_"
+                                                   "nam"
+                                                   "e");
 
   QWidget widget;
   auto layout = new QVBoxLayout();
   layout->setMargin(0);
   layout->setSpacing(0);
-  layout->addWidget(new tesseract_gui::SceneGraphToolBar(component_info));
-  layout->addWidget(new tesseract_gui::SceneGraphWidget(component_info), 1);
+  layout->addWidget(new tesseract::gui::SceneGraphToolBar(component_info));
+  layout->addWidget(new tesseract::gui::SceneGraphWidget(component_info), 1);
   widget.setLayout(layout);
   widget.show();
 
-  tesseract_gui::events::SceneGraphSet event(component_info, std::move(scene_graph));
+  tesseract::gui::events::SceneGraphSet event(component_info, std::move(scene_graph));
   QApplication::sendEvent(qApp, &event);
 
   return app.exec();

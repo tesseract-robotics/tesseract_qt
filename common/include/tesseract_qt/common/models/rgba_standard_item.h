@@ -27,7 +27,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class RGBAStandardItem : public QStandardItem
 {
@@ -42,6 +42,6 @@ public:
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_RGBA_STANDARD_ITEM_H

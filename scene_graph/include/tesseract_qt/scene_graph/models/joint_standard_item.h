@@ -28,20 +28,20 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointStandardItem : public QStandardItem
 {
 public:
-  JointStandardItem(std::shared_ptr<tesseract_scene_graph::Joint> joint);
-  explicit JointStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Joint> joint);
-  JointStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<tesseract_scene_graph::Joint> joint);
+  JointStandardItem(std::shared_ptr<tesseract::scene_graph::Joint> joint);
+  explicit JointStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::Joint> joint);
+  JointStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<tesseract::scene_graph::Joint> joint);
   int type() const override;
 
   void setChildLink(const QString& name);
   void setParentLink(const QString& name);
 
-  std::shared_ptr<tesseract_scene_graph::Joint> joint;
+  std::shared_ptr<tesseract::scene_graph::Joint> joint;
 
 private:
   class Implementation;
@@ -50,6 +50,6 @@ private:
   void ctor();
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_JOINT_STANDARD_ITEM_H

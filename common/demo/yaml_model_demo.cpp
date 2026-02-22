@@ -44,7 +44,7 @@ int main(int argc, char** argv)
                            - 3)";
 
   YAML::Node node = YAML::Load(str);
-  tesseract_gui::QYamlModel model;
+  tesseract::gui::QYamlModel model;
   model.showIcons(true);
   model.load(node);
 

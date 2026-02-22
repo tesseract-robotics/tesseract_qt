@@ -28,27 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class RemoveAllowedCollisionLinkCommandStandardItem : public QStandardItem
 {
 public:
   explicit RemoveAllowedCollisionLinkCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command);
+      std::shared_ptr<const tesseract::environment::RemoveAllowedCollisionLinkCommand> command);
   explicit RemoveAllowedCollisionLinkCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command);
+      std::shared_ptr<const tesseract::environment::RemoveAllowedCollisionLinkCommand> command);
   explicit RemoveAllowedCollisionLinkCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command);
+      std::shared_ptr<const tesseract::environment::RemoveAllowedCollisionLinkCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command;
+  std::shared_ptr<const tesseract::environment::RemoveAllowedCollisionLinkCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_REMOVE_ALLOWED_COLLISION_LINK_COMMAND_STANDARD_ITEM_H

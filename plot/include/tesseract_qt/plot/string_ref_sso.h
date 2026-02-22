@@ -26,7 +26,7 @@
 #include <iostream>
 #include <string.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /**
  * @brief Super simple, unmutable, string_view with
@@ -90,6 +90,6 @@ public:
   size_t size() const { return isSSO() ? (SSO_SIZE - _storage.sso.data[SSO_SIZE]) : _storage.no_sso.size & ~TYPE_BIT; }
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_STRING_REF_SSO_H

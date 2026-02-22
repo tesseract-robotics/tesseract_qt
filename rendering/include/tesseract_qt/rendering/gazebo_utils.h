@@ -51,7 +51,7 @@ namespace gz::common
 class SubMesh;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EntityContainer;
 
@@ -81,7 +81,7 @@ sceneFromRenderEngine(const std::string& scene_name,
  */
 void setSceneState(gz::rendering::Scene& scene,
                    const EntityContainer& entity_container,
-                   const tesseract_common::TransformMap& link_transforms);
+                   const tesseract::common::TransformMap& link_transforms);
 
 /**
  * @brief Clear all items associated with the provided entity container from the scene
@@ -95,7 +95,7 @@ void clearScene(gz::rendering::Scene& scene, EntityContainer& entity_container);
  * @param mesh The polygon mesh to convert
  * @return A Ignition SubMesh
  */
-gz::common::SubMesh convert(const tesseract_geometry::PolygonMesh& mesh);
+gz::common::SubMesh convert(const tesseract::geometry::PolygonMesh& mesh);
 
 /**
  * @brief Check if mesh has color
@@ -114,7 +114,7 @@ bool isMeshWithColor(const std::string& file_path);
  */
 std::vector<std::string> loadSceneGraph(gz::rendering::Scene& scene,
                                         EntityContainer& entity_container,
-                                        const tesseract_scene_graph::SceneGraph& scene_graph,
+                                        const tesseract::scene_graph::SceneGraph& scene_graph,
                                         const std::string& prefix = "");
 
 /**
@@ -127,7 +127,7 @@ std::vector<std::string> loadSceneGraph(gz::rendering::Scene& scene,
  */
 std::shared_ptr<gz::rendering::Visual> loadLink(gz::rendering::Scene& scene,
                                                 EntityContainer& entity_container,
-                                                const tesseract_scene_graph::Link& link);
+                                                const tesseract::scene_graph::Link& link);
 
 /**
  * @brief Convert tesseract link visual objects to gazebo objects
@@ -139,7 +139,7 @@ std::shared_ptr<gz::rendering::Visual> loadLink(gz::rendering::Scene& scene,
  */
 std::shared_ptr<gz::rendering::Visual> loadLinkVisuals(gz::rendering::Scene& scene,
                                                        EntityContainer& entity_container,
-                                                       const tesseract_scene_graph::Link& link);
+                                                       const tesseract::scene_graph::Link& link);
 
 /**
  * @brief Convert tesseract link collision objects to gazebo objects
@@ -151,7 +151,7 @@ std::shared_ptr<gz::rendering::Visual> loadLinkVisuals(gz::rendering::Scene& sce
  */
 std::shared_ptr<gz::rendering::Visual> loadLinkCollisions(gz::rendering::Scene& scene,
                                                           EntityContainer& entity_container,
-                                                          const tesseract_scene_graph::Link& link);
+                                                          const tesseract::scene_graph::Link& link);
 
 /**
  * @brief Create a gazebo wire frame box for tesseract link
@@ -164,7 +164,7 @@ std::shared_ptr<gz::rendering::Visual> loadLinkCollisions(gz::rendering::Scene& 
  */
 std::shared_ptr<gz::rendering::Visual> loadLinkWireBox(gz::rendering::Scene& scene,
                                                        EntityContainer& entity_container,
-                                                       const tesseract_scene_graph::Link& link,
+                                                       const tesseract::scene_graph::Link& link,
                                                        const gz::math::AxisAlignedBox& aabb);
 
 /**
@@ -177,7 +177,7 @@ std::shared_ptr<gz::rendering::Visual> loadLinkWireBox(gz::rendering::Scene& sce
  */
 std::shared_ptr<gz::rendering::Visual> loadLinkAxis(gz::rendering::Scene& scene,
                                                     EntityContainer& entity_container,
-                                                    const tesseract_scene_graph::Link& link);
+                                                    const tesseract::scene_graph::Link& link);
 
 /**
  * @brief Convert tesseract geometry objects to gazebo objects
@@ -193,10 +193,10 @@ std::shared_ptr<gz::rendering::Visual> loadLinkAxis(gz::rendering::Scene& scene,
 std::shared_ptr<gz::rendering::Visual>
 loadLinkGeometry(gz::rendering::Scene& scene,
                  EntityContainer& entity_container,
-                 const tesseract_geometry::Geometry& geometry,
+                 const tesseract::geometry::Geometry& geometry,
                  const Eigen::Vector3d& scale,
                  const Eigen::Isometry3d& local_pose,
-                 const std::shared_ptr<const tesseract_scene_graph::Material>& material);
+                 const std::shared_ptr<const tesseract::scene_graph::Material>& material);
 
 /**
  * @brief Convert tesseract material objects to gazebo objects
@@ -206,7 +206,7 @@ loadLinkGeometry(gz::rendering::Scene& scene,
  * @return A gazebo visual object
  */
 std::shared_ptr<gz::rendering::Material>
-loadMaterial(gz::rendering::Scene& scene, const std::shared_ptr<const tesseract_scene_graph::Material>& material);
+loadMaterial(gz::rendering::Scene& scene, const std::shared_ptr<const tesseract::scene_graph::Material>& material);
 
 /**
  * @brief Convert tesseract contact results to gazebo objects
@@ -219,7 +219,7 @@ loadMaterial(gz::rendering::Scene& scene, const std::shared_ptr<const tesseract_
 std::shared_ptr<gz::rendering::Visual>
 loadContactResults(gz::rendering::Scene& scene,
                    EntityContainer& entity_container,
-                   const tesseract_collision::ContactResultVector& contact_results);
+                   const tesseract::collision::ContactResultVector& contact_results);
 
 /**
  * @brief A tesseract event filter compatible with gazebo scene
@@ -229,11 +229,11 @@ loadContactResults(gz::rendering::Scene& scene,
  * @param scene
  * @param entity_container
  */
-void tesseractEventFilter(const tesseract_environment::Event& event,
-                          const tesseract_environment::Environment& env,
+void tesseractEventFilter(const tesseract::environment::Event& event,
+                          const tesseract::environment::Environment& env,
                           int& current_revision,
                           gz::rendering::Scene& scene,
                           EntityContainer& entity_container); /** @brief Private data class for Renderer */
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_RENDERING_GAZEBO_UTILS_H

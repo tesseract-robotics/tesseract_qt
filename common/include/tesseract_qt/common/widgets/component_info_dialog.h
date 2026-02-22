@@ -36,7 +36,7 @@ class ComponentInfoDialog;
 
 class QStringListModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 
@@ -62,6 +62,6 @@ private:
   std::unique_ptr<Ui::ComponentInfoDialog> ui;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_DIALOG_H

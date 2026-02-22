@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class MaterialStandardItem : public QStandardItem
 {
 public:
-  MaterialStandardItem(std::shared_ptr<tesseract_scene_graph::Material> material);
-  explicit MaterialStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Material> material);
+  MaterialStandardItem(std::shared_ptr<tesseract::scene_graph::Material> material);
+  explicit MaterialStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::Material> material);
   MaterialStandardItem(const QIcon& icon,
                        const QString& text,
-                       std::shared_ptr<tesseract_scene_graph::Material> material);
+                       std::shared_ptr<tesseract::scene_graph::Material> material);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::Material> material;
+  std::shared_ptr<tesseract::scene_graph::Material> material;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_MATERIAL_STANDARD_ITEM_H

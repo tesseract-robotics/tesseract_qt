@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 VectorStringStandardItem::VectorStringStandardItem(const std::vector<std::string>& vector_string)
   : QStandardItem(icons::getSetIcon(), "Vector String")
@@ -54,4 +54,4 @@ void VectorStringStandardItem::ctor(const std::vector<std::string>& vector_strin
   for (std::size_t i = 0; i < vector_string.size(); ++i)
     appendRow(createStandardItemString(QString("[%1]").arg(i).toStdString(), vector_string[i]));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

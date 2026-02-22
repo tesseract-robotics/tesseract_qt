@@ -28,29 +28,32 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EnvironmentCommandsStandardItem : public QStandardItem
 {
 public:
   EnvironmentCommandsStandardItem();
-  explicit EnvironmentCommandsStandardItem(std::vector<std::shared_ptr<const tesseract_environment::Command>> commands);
-  explicit EnvironmentCommandsStandardItem(const QString& text,
-                                           std::vector<std::shared_ptr<const tesseract_environment::Command>> commands);
-  explicit EnvironmentCommandsStandardItem(const QIcon& icon,
-                                           const QString& text,
-                                           std::vector<std::shared_ptr<const tesseract_environment::Command>> commands);
+  explicit EnvironmentCommandsStandardItem(
+      std::vector<std::shared_ptr<const tesseract::environment::Command>> commands);
+  explicit EnvironmentCommandsStandardItem(
+      const QString& text,
+      std::vector<std::shared_ptr<const tesseract::environment::Command>> commands);
+  explicit EnvironmentCommandsStandardItem(
+      const QIcon& icon,
+      const QString& text,
+      std::vector<std::shared_ptr<const tesseract::environment::Command>> commands);
   int type() const override;
 
-  void appendCommand(const std::shared_ptr<const tesseract_environment::Command>& command);
-  const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
+  void appendCommand(const std::shared_ptr<const tesseract::environment::Command>& command);
+  const std::vector<std::shared_ptr<const tesseract::environment::Command>>& getCommands() const;
 
 private:
-  std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
+  std::vector<std::shared_ptr<const tesseract::environment::Command>> commands_;
 
-  void addCommand(const QString& text, const std::shared_ptr<const tesseract_environment::Command>& command);
+  void addCommand(const QString& text, const std::shared_ptr<const tesseract::environment::Command>& command);
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_STANDARD_ITEM_H

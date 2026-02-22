@@ -23,7 +23,7 @@
 
 #include <tesseract_qt/common/widgets/combo_box.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 void ComboBox::showPopup()
 {
@@ -32,4 +32,4 @@ void ComboBox::showPopup()
   QComboBox::showPopup();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

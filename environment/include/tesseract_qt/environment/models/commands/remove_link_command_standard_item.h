@@ -28,24 +28,24 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class RemoveLinkCommandStandardItem : public QStandardItem
 {
 public:
-  explicit RemoveLinkCommandStandardItem(std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command);
+  explicit RemoveLinkCommandStandardItem(std::shared_ptr<const tesseract::environment::RemoveLinkCommand> command);
   explicit RemoveLinkCommandStandardItem(const QString& text,
-                                         std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command);
+                                         std::shared_ptr<const tesseract::environment::RemoveLinkCommand> command);
   explicit RemoveLinkCommandStandardItem(const QIcon& icon,
                                          const QString& text,
-                                         std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command);
+                                         std::shared_ptr<const tesseract::environment::RemoveLinkCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command;
+  std::shared_ptr<const tesseract::environment::RemoveLinkCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_REMOVE_LINK_COMMAND_STANDARD_ITEM_H

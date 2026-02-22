@@ -24,7 +24,7 @@
 #define TESSERACT_GUI_COMMON_EVENT_TYPE_H
 
 #include <QEvent>
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 struct EventType
 {
@@ -170,6 +170,6 @@ struct EventType
   static const int STATUS_LOG_WARN_TOGGLE_OFF;
   static const int STATUS_LOG_ERROR_TOGGLE_OFF;
 };
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 
 #endif  // TESSERACT_GUI_COMMON_EVENT_TYPE_H

@@ -30,7 +30,7 @@
 
 class QItemSelectionModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class GroupTCPsModel;
@@ -58,5 +58,5 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_KINEMATIC_GROUPS_GROUP_TCPS_WIDGET_H

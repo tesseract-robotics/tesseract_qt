@@ -30,7 +30,7 @@
 
 class QItemSelectionModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class CompositeInstructionModel;
@@ -58,6 +58,6 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_WIDGET_H

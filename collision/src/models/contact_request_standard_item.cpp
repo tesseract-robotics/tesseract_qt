@@ -25,16 +25,16 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-ContactRequestStandardItem::ContactRequestStandardItem(const tesseract_collision::ContactRequest& contact_request)
+ContactRequestStandardItem::ContactRequestStandardItem(const tesseract::collision::ContactRequest& contact_request)
   : QStandardItem(icons::getCollisionIcon(), "Contact Request"), contact_request(contact_request)
 {
   ctor();
 }
 
 ContactRequestStandardItem::ContactRequestStandardItem(const QString& text,
-                                                       const tesseract_collision::ContactRequest& contact_request)
+                                                       const tesseract::collision::ContactRequest& contact_request)
   : QStandardItem(icons::getCollisionIcon(), text), contact_request(contact_request)
 {
   ctor();
@@ -42,7 +42,7 @@ ContactRequestStandardItem::ContactRequestStandardItem(const QString& text,
 
 ContactRequestStandardItem::ContactRequestStandardItem(const QIcon& icon,
                                                        const QString& text,
-                                                       const tesseract_collision::ContactRequest& contact_request)
+                                                       const tesseract::collision::ContactRequest& contact_request)
   : QStandardItem(icon, text), contact_request(contact_request)
 {
   ctor();
@@ -50,20 +50,20 @@ ContactRequestStandardItem::ContactRequestStandardItem(const QIcon& icon,
 
 int ContactRequestStandardItem::type() const { return static_cast<int>(StandardItemType::COLLISION_CONTACT_REQUEST); }
 
-std::string toString(tesseract_collision::ContactTestType c_type)
+std::string toString(tesseract::collision::ContactTestType c_type)
 {
   switch (c_type)
   {
-    case tesseract_collision::ContactTestType::ALL:
+    case tesseract::collision::ContactTestType::ALL:
       return "ALL";
-    case tesseract_collision::ContactTestType::CLOSEST:
+    case tesseract::collision::ContactTestType::CLOSEST:
       return "CLOSEST";
-    case tesseract_collision::ContactTestType::FIRST:
+    case tesseract::collision::ContactTestType::FIRST:
       return "FIRST";
-    case tesseract_collision::ContactTestType::LIMITED:
+    case tesseract::collision::ContactTestType::LIMITED:
       return "LIMITED";
     default:
-      throw std::runtime_error("Unhandled tesseract_collision::ContactTestType");
+      throw std::runtime_error("Unhandled tesseract::collision::ContactTestType");
   }
 }
 void ContactRequestStandardItem::ctor()
@@ -73,4 +73,4 @@ void ContactRequestStandardItem::ctor()
   appendRow(createStandardItemBool("calculate_penetration", contact_request.calculate_penetration));
   appendRow(createStandardItemString("is_valid", (contact_request.is_valid == nullptr) ? "NULL" : "Object"));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

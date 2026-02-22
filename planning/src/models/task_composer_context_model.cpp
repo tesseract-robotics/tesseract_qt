@@ -32,12 +32,12 @@
 
 #include <QUuid>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct TaskComposerContextModel::Implementation
 {
   std::map<QString, QStandardItem*> items;
-  std::map<QStandardItem*, std::shared_ptr<tesseract_planning::TaskComposerContext>> contexts;
+  std::map<QStandardItem*, std::shared_ptr<tesseract::task_composer::TaskComposerContext>> contexts;
   std::map<QStandardItem*, QString> contexts_ns;
   void clear()
   {
@@ -63,7 +63,7 @@ void TaskComposerContextModel::clear()
   data_->clear();
 }
 
-QString TaskComposerContextModel::add(std::shared_ptr<tesseract_planning::TaskComposerContext> context, std::string ns)
+QString TaskComposerContextModel::add(std::shared_ptr<task_composer::TaskComposerContext> context, std::string ns)
 {
   QString key = QUuid::createUuid().toString();
   ns = (ns.empty()) ? "general" : ns;
@@ -103,7 +103,7 @@ TaskComposerContextStandardItem* findTaskComposerContextItem(QStandardItem* item
   return findTaskComposerContextItem(item->parent());
 }
 
-const tesseract_planning::TaskComposerContext& TaskComposerContextModel::get(const QModelIndex& row) const
+const task_composer::TaskComposerContext& TaskComposerContextModel::get(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
   return *data_->contexts.at(findTaskComposerContextItem(item));
@@ -115,4 +115,4 @@ const QString& TaskComposerContextModel::getNamespace(const QModelIndex& row) co
   return data_->contexts_ns.at(findTaskComposerContextItem(item));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

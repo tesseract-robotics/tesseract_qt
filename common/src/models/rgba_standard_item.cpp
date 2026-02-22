@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 RGBAStandardItem::RGBAStandardItem(const Eigen::Vector4d& rgba)
   : QStandardItem(icons::getRGBIcon(), "Color"), rgba(rgba)
@@ -54,4 +54,4 @@ void RGBAStandardItem::ctor()
   appendRow(createStandardItemFloat("b", rgba(2)));
   appendRow(createStandardItemFloat("a", rgba(3)));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

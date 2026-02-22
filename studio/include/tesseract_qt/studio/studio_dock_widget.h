@@ -37,7 +37,7 @@ namespace YAML
 class Node;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StudioDockWidget : public ads::CDockWidget
 {
@@ -107,6 +107,6 @@ protected:
   bool assign_as_central_widget_{ false };
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_STUDIO_STUDIO_DOCK_WIDGET_H

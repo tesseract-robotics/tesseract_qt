@@ -29,16 +29,16 @@
 
 #include <tesseract_qt/common/joint_trajectory_set.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-JointTrajectoryInfoItem::JointTrajectoryInfoItem(tesseract_common::JointTrajectoryInfo& trajectory_info)
+JointTrajectoryInfoItem::JointTrajectoryInfoItem(tesseract::common::JointTrajectoryInfo& trajectory_info)
   : trajectory_info(trajectory_info)
 {
   ctor();
 }
 
 JointTrajectoryInfoItem::JointTrajectoryInfoItem(const QString& text,
-                                                 tesseract_common::JointTrajectoryInfo& trajectory_info)
+                                                 tesseract::common::JointTrajectoryInfo& trajectory_info)
   : QStandardItem(icons::getTrajectoryIcon(), text), trajectory_info(trajectory_info)
 {
   ctor();
@@ -46,7 +46,7 @@ JointTrajectoryInfoItem::JointTrajectoryInfoItem(const QString& text,
 
 JointTrajectoryInfoItem::JointTrajectoryInfoItem(const QIcon& icon,
                                                  const QString& text,
-                                                 tesseract_common::JointTrajectoryInfo& trajectory_info)
+                                                 tesseract::common::JointTrajectoryInfo& trajectory_info)
   : QStandardItem(icon, text), trajectory_info(trajectory_info)
 {
   ctor();
@@ -66,4 +66,4 @@ void JointTrajectoryInfoItem::ctor()
     appendRow(trajectory_state);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

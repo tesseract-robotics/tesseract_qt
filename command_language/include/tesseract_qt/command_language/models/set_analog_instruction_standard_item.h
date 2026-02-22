@@ -26,21 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class SetAnalogInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit SetAnalogInstructionStandardItem(const tesseract_planning::SetAnalogInstruction& sai);
-  SetAnalogInstructionStandardItem(const QString& text, const tesseract_planning::SetAnalogInstruction& sai);
+  explicit SetAnalogInstructionStandardItem(const tesseract::command_language::SetAnalogInstruction& sai);
+  SetAnalogInstructionStandardItem(const QString& text, const tesseract::command_language::SetAnalogInstruction& sai);
   SetAnalogInstructionStandardItem(const QIcon& icon,
                                    const QString& text,
-                                   const tesseract_planning::SetAnalogInstruction& sai);
+                                   const tesseract::command_language::SetAnalogInstruction& sai);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::SetAnalogInstruction& sai);
+  void ctor(const tesseract::command_language::SetAnalogInstruction& sai);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_SET_ANALOG_INSTRUCTION_STANDARD_ITEM_H

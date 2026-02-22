@@ -29,7 +29,7 @@
 
 #include <QStringListModel>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct CreateChildComponentInfoDialog::Implementation
 {
@@ -76,4 +76,4 @@ void CreateChildComponentInfoDialog::reset(std::shared_ptr<const ComponentInfo> 
 
   data_->lineage_model.setStringList(lineage);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

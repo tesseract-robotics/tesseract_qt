@@ -33,7 +33,7 @@ namespace Ui
 class StudioRenderConfigDialog;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 
@@ -55,6 +55,6 @@ private:
   std::unique_ptr<Ui::StudioRenderConfigDialog> ui;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_STUDIO_STUDIO_RENDER_CONFIG_DIALOG_H

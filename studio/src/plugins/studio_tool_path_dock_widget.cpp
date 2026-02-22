@@ -38,7 +38,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StudioToolPathDockWidget::Implementation
 {
@@ -110,4 +110,4 @@ void StudioToolPathDockWidget::setup()
   toolBar()->setIconSize(QSize(25, 25));
   setFeature(ads::CDockWidget::DockWidgetFocusable, true);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -32,12 +32,12 @@
 
 #include <QUuid>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct TaskComposerDataStorageModel::Implementation
 {
   std::map<QString, QStandardItem*> items;
-  std::map<QStandardItem*, std::unique_ptr<tesseract_planning::TaskComposerDataStorage>> data_storages;
+  std::map<QStandardItem*, std::unique_ptr<tesseract::task_composer::TaskComposerDataStorage>> data_storages;
   std::map<QStandardItem*, QString> data_storages_ns;
   void clear()
   {
@@ -63,8 +63,9 @@ void TaskComposerDataStorageModel::clear()
   data_->clear();
 }
 
-QString TaskComposerDataStorageModel::add(std::unique_ptr<tesseract_planning::TaskComposerDataStorage> data_storage,
-                                          std::string ns)
+QString
+TaskComposerDataStorageModel::add(std::unique_ptr<tesseract::task_composer::TaskComposerDataStorage> data_storage,
+                                  std::string ns)
 {
   QString key = QUuid::createUuid().toString();
   ns = (ns.empty()) ? "general" : ns;
@@ -104,7 +105,7 @@ TaskComposerDataStorageStandardItem* findTaskComposerDataStorageItem(QStandardIt
   return findTaskComposerDataStorageItem(item->parent());
 }
 
-const tesseract_planning::TaskComposerDataStorage& TaskComposerDataStorageModel::get(const QModelIndex& row) const
+const tesseract::task_composer::TaskComposerDataStorage& TaskComposerDataStorageModel::get(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
   return *data_->data_storages.at(findTaskComposerDataStorageItem(item));
@@ -116,4 +117,4 @@ const QString& TaskComposerDataStorageModel::getNamespace(const QModelIndex& row
   return data_->data_storages_ns.at(findTaskComposerDataStorageItem(item));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

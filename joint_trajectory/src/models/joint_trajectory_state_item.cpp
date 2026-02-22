@@ -28,11 +28,11 @@
 
 #include <tesseract_common/joint_state.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-JointTrajectoryStateItem::JointTrajectoryStateItem(tesseract_common::JointState& state) : state(state) { ctor(); }
+JointTrajectoryStateItem::JointTrajectoryStateItem(tesseract::common::JointState& state) : state(state) { ctor(); }
 
-JointTrajectoryStateItem::JointTrajectoryStateItem(const QString& text, tesseract_common::JointState& state)
+JointTrajectoryStateItem::JointTrajectoryStateItem(const QString& text, tesseract::common::JointState& state)
   : QStandardItem(icons::getRobotArmIcon(), text), state(state)
 {
   ctor();
@@ -40,7 +40,7 @@ JointTrajectoryStateItem::JointTrajectoryStateItem(const QString& text, tesserac
 
 JointTrajectoryStateItem::JointTrajectoryStateItem(const QIcon& icon,
                                                    const QString& text,
-                                                   tesseract_common::JointState& state)
+                                                   tesseract::common::JointState& state)
   : QStandardItem(icon, text), state(state)
 {
   ctor();
@@ -85,4 +85,4 @@ void JointTrajectoryStateItem::ctor()
   // Add time from start
   appendRow(createStandardItemFloat("time", state.time));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -25,7 +25,7 @@
 #include <numeric>
 #include <QCheckBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 MovingAverageFilter::MovingAverageFilter()
   : ui(std::make_unique<Ui::MovingAverageFilter>())
@@ -83,4 +83,4 @@ std::optional<PlotData::Point> MovingAverageFilter::calculateNextPoint(size_t in
 }
 
 QWidget* MovingAverageFilter::optionsWidget() { return _widget.get(); }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

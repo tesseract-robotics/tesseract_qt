@@ -26,15 +26,15 @@
 
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-MimicStandardItem::MimicStandardItem(std::shared_ptr<tesseract_scene_graph::JointMimic> mimic)
+MimicStandardItem::MimicStandardItem(std::shared_ptr<tesseract::scene_graph::JointMimic> mimic)
   : QStandardItem("Mimic"), mimic(std::move(mimic))
 {
   ctor();
 }
 
-MimicStandardItem::MimicStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointMimic> mimic)
+MimicStandardItem::MimicStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::JointMimic> mimic)
   : QStandardItem(text), mimic(std::move(mimic))
 {
   ctor();
@@ -42,7 +42,7 @@ MimicStandardItem::MimicStandardItem(const QString& text, std::shared_ptr<tesser
 
 MimicStandardItem::MimicStandardItem(const QIcon& icon,
                                      const QString& text,
-                                     std::shared_ptr<tesseract_scene_graph::JointMimic> mimic)
+                                     std::shared_ptr<tesseract::scene_graph::JointMimic> mimic)
   : QStandardItem(icon, text), mimic(std::move(mimic))
 {
   ctor();
@@ -56,4 +56,4 @@ void MimicStandardItem::ctor()
   appendRow(createStandardItemFloat("multiplier", mimic->multiplier));
   appendRow(createStandardItemString("joint_name", mimic->joint_name));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -25,7 +25,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class LinkGroupStandardItem : public QStandardItem
 {
@@ -40,5 +40,5 @@ public:
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_KINEMATICS_GROUP_LINK_GROUP_STANDARD_ITEM_H

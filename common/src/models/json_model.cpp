@@ -27,7 +27,7 @@
 #include <QFile>
 #include <QFont>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) { mParent = parent; }
 
@@ -538,4 +538,4 @@ QJsonValue QJsonModel::genJson(QJsonTreeItem* item) const
     return va;
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

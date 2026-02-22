@@ -31,7 +31,7 @@
 class QStandardItem;
 class QString;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TransformStandardItem;
 class ToolPathSegmentStandardItem;
@@ -85,8 +85,8 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
  * @param filename The tool path file location
  * @return True if successful, otherwise false
  */
-bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename);
+bool saveToolPath(const tesseract::common::Toolpath& tool_path, QString filename);
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TOOL_PATH_TOOL_PATH_UTILS_H

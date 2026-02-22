@@ -24,7 +24,7 @@
 #include <cmath>
 #include <cstdlib>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PointSeriesXY::PointSeriesXY(const PlotData* x_axis, const PlotData* y_axis)
   : QwtSeriesWrapper(&_cached_curve), _x_axis(x_axis), _y_axis(y_axis), _cached_curve("", x_axis->group())
@@ -86,4 +86,4 @@ bool PointSeriesXY::updateCache(bool reset_old_data)
 }
 
 RangeOpt PointSeriesXY::getVisualizationRangeX() { return _cached_curve.rangeX(); }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

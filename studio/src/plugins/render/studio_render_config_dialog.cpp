@@ -1,7 +1,7 @@
 #include <tesseract_qt/studio/plugins/render/studio_render_config_dialog.h>
 #include "ui_studio_render_config_dialog.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 StudioRenderConfigDialog::StudioRenderConfigDialog(QWidget* parent)
   : QDialog(parent), ui(std::make_unique<Ui::StudioRenderConfigDialog>())
@@ -20,4 +20,4 @@ bool StudioRenderConfigDialog::assignAsCentralWidget() const { return ui->centra
 bool StudioRenderConfigDialog::skyEnabled() const { return ui->sky_check_box->isChecked(); }
 bool StudioRenderConfigDialog::gridEnabled() const { return ui->grid_check_box->isChecked(); }
 bool StudioRenderConfigDialog::shadowsEnabled() const { return ui->shadows_check_box->isChecked(); }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

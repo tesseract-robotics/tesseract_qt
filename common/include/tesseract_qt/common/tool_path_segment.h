@@ -29,7 +29,7 @@
 #include <tesseract_common/eigen_types.h>
 #include <tesseract_common/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPathPose;
 class ToolPathSegment;
@@ -81,25 +81,25 @@ public:
   // C++ container support //
   ///////////////////////////
   /** pointer */
-  using pointer = typename tesseract_common::AlignedVector<ToolPathPose>::pointer;
+  using pointer = typename tesseract::common::AlignedVector<ToolPathPose>::pointer;
   /** const_pointer */
-  using const_pointer = typename tesseract_common::AlignedVector<ToolPathPose>::const_pointer;
+  using const_pointer = typename tesseract::common::AlignedVector<ToolPathPose>::const_pointer;
   /** reference */
-  using reference = typename tesseract_common::AlignedVector<ToolPathPose>::reference;
+  using reference = typename tesseract::common::AlignedVector<ToolPathPose>::reference;
   /** const_reference */
-  using const_reference = typename tesseract_common::AlignedVector<ToolPathPose>::const_reference;
+  using const_reference = typename tesseract::common::AlignedVector<ToolPathPose>::const_reference;
   /** size_type */
-  using size_type = typename tesseract_common::AlignedVector<ToolPathPose>::size_type;
+  using size_type = typename tesseract::common::AlignedVector<ToolPathPose>::size_type;
   /** difference_type */
-  using difference_type = typename tesseract_common::AlignedVector<ToolPathPose>::difference_type;
+  using difference_type = typename tesseract::common::AlignedVector<ToolPathPose>::difference_type;
   /** iterator */
-  using iterator = typename tesseract_common::AlignedVector<ToolPathPose>::iterator;
+  using iterator = typename tesseract::common::AlignedVector<ToolPathPose>::iterator;
   /** const_iterator */
-  using const_iterator = typename tesseract_common::AlignedVector<ToolPathPose>::const_iterator;
+  using const_iterator = typename tesseract::common::AlignedVector<ToolPathPose>::const_iterator;
   /** reverse_iterator */
-  using reverse_iterator = typename tesseract_common::AlignedVector<ToolPathPose>::reverse_iterator;
+  using reverse_iterator = typename tesseract::common::AlignedVector<ToolPathPose>::reverse_iterator;
   /** const_reverse_iterator */
-  using const_reverse_iterator = typename tesseract_common::AlignedVector<ToolPathPose>::const_reverse_iterator;
+  using const_reverse_iterator = typename tesseract::common::AlignedVector<ToolPathPose>::const_reverse_iterator;
 
   ///////////////
   // Iterators //
@@ -209,7 +209,7 @@ public:
   void pop_back();
 
   /** @brief swaps the contents  */
-  void swap(tesseract_common::AlignedVector<ToolPathPose>& other);
+  void swap(tesseract::common::AlignedVector<ToolPathPose>& other);
 
   // LCOV_EXCL_STOP
 
@@ -224,12 +224,12 @@ protected:
   std::string description_;
 
   /** @brief The container */
-  tesseract_common::AlignedVector<ToolPathPose> container_;
+  tesseract::common::AlignedVector<ToolPathPose> container_;
 
   template <class Archive>
-  friend void ::tesseract_gui::serialize(Archive& ar, ToolPathSegment& obj);
+  friend void ::tesseract::gui::serialize(Archive& ar, ToolPathSegment& obj);
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_COMMON_TOOL_PATH_SEGMENT_H

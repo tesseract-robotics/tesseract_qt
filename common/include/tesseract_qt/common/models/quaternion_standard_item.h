@@ -27,7 +27,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class QuaternionStandardItem : public QStandardItem
 {
@@ -43,6 +43,6 @@ public:
 private:
   void ctor(const Eigen::Quaterniond& q);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_QUATERNION_STANDARD_ITEM_H

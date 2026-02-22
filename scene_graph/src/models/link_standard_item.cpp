@@ -31,7 +31,7 @@
 
 #include <tesseract_scene_graph/link.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class LinkStandardItem::Implementation
 {
@@ -40,14 +40,14 @@ public:
   QStandardItem* visuals_item{ nullptr };
 };
 
-LinkStandardItem::LinkStandardItem(std::shared_ptr<tesseract_scene_graph::Link> link, bool checkable)
+LinkStandardItem::LinkStandardItem(std::shared_ptr<tesseract::scene_graph::Link> link, bool checkable)
   : QStandardItem(icons::getLinkIcon(), "Link"), link(std::move(link)), data_(std::make_unique<Implementation>())
 {
   ctor(checkable);
 }
 
 LinkStandardItem::LinkStandardItem(const QString& text,
-                                   std::shared_ptr<tesseract_scene_graph::Link> link,
+                                   std::shared_ptr<tesseract::scene_graph::Link> link,
                                    bool checkable)
   : QStandardItem(icons::getLinkIcon(), text), link(std::move(link)), data_(std::make_unique<Implementation>())
 {
@@ -56,7 +56,7 @@ LinkStandardItem::LinkStandardItem(const QString& text,
 
 LinkStandardItem::LinkStandardItem(const QIcon& icon,
                                    const QString& text,
-                                   std::shared_ptr<tesseract_scene_graph::Link> link,
+                                   std::shared_ptr<tesseract::scene_graph::Link> link,
                                    bool checkable)
   : QStandardItem(icon, text), link(std::move(link)), data_(std::make_unique<Implementation>())
 {
@@ -114,4 +114,4 @@ void LinkStandardItem::ctor(bool checkable)
     appendRow(data_->collisions_item);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

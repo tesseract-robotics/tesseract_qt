@@ -34,7 +34,7 @@ class QStatusBar;
 class QAction;
 class QString;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /**
  * @brief Extract a vector of namespace separated by the provided separator
@@ -100,6 +100,6 @@ QMenu* getMainWindowMenu(const QString& text);
  * @return If not found nullptr, otherwise menu action item
  */
 QAction* getMainWindowMenuAction(QMenu* menu, const QString& text);
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_UTILS_H

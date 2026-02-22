@@ -23,7 +23,7 @@
 #include <tesseract_qt/common/models/type_standard_item.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TypeStandardItem::TypeStandardItem(int type) : QStandardItem(icons::getUnknownIcon(), "UserType"), type_(type) {}
 
@@ -39,4 +39,4 @@ TypeStandardItem::TypeStandardItem(const QIcon& icon, const QString& text, int t
 
 int TypeStandardItem::type() const { return type_; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -28,28 +28,28 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PairsCollisionMarginDataStandardItem : public QStandardItem
 {
 public:
-  PairsCollisionMarginDataStandardItem(tesseract_common::PairsCollisionMarginData pairs_margin_data);
+  PairsCollisionMarginDataStandardItem(tesseract::common::PairsCollisionMarginData pairs_margin_data);
   explicit PairsCollisionMarginDataStandardItem(const QString& text,
-                                                tesseract_common::PairsCollisionMarginData pairs_margin_data);
+                                                tesseract::common::PairsCollisionMarginData pairs_margin_data);
   PairsCollisionMarginDataStandardItem(const QIcon& icon,
                                        const QString& text,
-                                       tesseract_common::PairsCollisionMarginData pairs_margin_data);
+                                       tesseract::common::PairsCollisionMarginData pairs_margin_data);
   int type() const override;
 
-  tesseract_common::PairsCollisionMarginData pairs_margin_data;
+  tesseract::common::PairsCollisionMarginData pairs_margin_data;
 
 private:
   void ctor();
 
-  void addPairCollisionMargin(const tesseract_common::LinkNamesPair& pair, double collision_margin);
+  void addPairCollisionMargin(const tesseract::common::LinkNamesPair& pair, double collision_margin);
 
   std::unordered_map<std::string, QStandardItem*> items_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_PAIRS_COLLISION_MARGIN_DATA_STANDARD_ITEM_H

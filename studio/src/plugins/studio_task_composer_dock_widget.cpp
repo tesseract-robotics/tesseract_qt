@@ -47,7 +47,7 @@
 #include <tesseract_srdf/cereal_serialization.h>
 #include <tesseract_environment/cereal_serialization.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StudioTaskComposerDockWidget::Implementation
 {
@@ -119,4 +119,4 @@ void StudioTaskComposerDockWidget::setup()
   toolBar()->setIconSize(QSize(25, 25));
   setFeature(ads::CDockWidget::DockWidgetFocusable, true);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

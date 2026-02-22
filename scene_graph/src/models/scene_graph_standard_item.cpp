@@ -31,7 +31,7 @@
 #include <tesseract_scene_graph/link.h>
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class SceneGraphStandardItem::Implementation
 {
@@ -62,7 +62,7 @@ SceneGraphStandardItem::SceneGraphStandardItem(const QIcon& icon, const QString&
   ctor(checkable);
 }
 
-void SceneGraphStandardItem::setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph)
+void SceneGraphStandardItem::setSceneGraph(const tesseract::scene_graph::SceneGraph& scene_graph)
 {
   clear();
 
@@ -80,10 +80,10 @@ void SceneGraphStandardItem::setName(const std::string& name)
   data_->name_item[1]->setData(name.c_str(), Qt::DisplayRole);
 }
 
-void SceneGraphStandardItem::addLink(const tesseract_scene_graph::Link& link)
+void SceneGraphStandardItem::addLink(const tesseract::scene_graph::Link& link)
 {
   auto* item = new LinkStandardItem(
-      QString::fromStdString(link.getName()), std::make_shared<tesseract_scene_graph::Link>(link.clone()), true);
+      QString::fromStdString(link.getName()), std::make_shared<tesseract::scene_graph::Link>(link.clone()), true);
 
   if (data_->checkable)
   {
@@ -95,10 +95,10 @@ void SceneGraphStandardItem::addLink(const tesseract_scene_graph::Link& link)
   data_->links[link.getName()] = item;
 }
 
-void SceneGraphStandardItem::addJoint(const tesseract_scene_graph::Joint& joint)
+void SceneGraphStandardItem::addJoint(const tesseract::scene_graph::Joint& joint)
 {
   auto* item = new JointStandardItem(QString::fromStdString(joint.getName()),
-                                     std::make_shared<tesseract_scene_graph::Joint>(joint.clone()));
+                                     std::make_shared<tesseract::scene_graph::Joint>(joint.clone()));
   data_->joints_item->appendRow(item);
   data_->joints_item->sortChildren(0);
   data_->joints[joint.getName()] = item;
@@ -172,4 +172,4 @@ void SceneGraphStandardItem::clear()
   data_->joints.clear();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

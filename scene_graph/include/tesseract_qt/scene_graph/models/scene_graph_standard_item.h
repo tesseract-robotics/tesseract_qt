@@ -27,7 +27,7 @@
 #include <QStandardItem>
 #include <tesseract_scene_graph/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class LinkStandardItem;
 class JointStandardItem;
@@ -38,10 +38,10 @@ public:
   SceneGraphStandardItem(const QString& text, bool checkable = true);
   SceneGraphStandardItem(const QIcon& icon, const QString& text, bool checkable = true);
 
-  void setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph);
+  void setSceneGraph(const tesseract::scene_graph::SceneGraph& scene_graph);
   void setName(const std::string& name);
-  void addLink(const tesseract_scene_graph::Link& link);
-  void addJoint(const tesseract_scene_graph::Joint& joint);
+  void addLink(const tesseract::scene_graph::Link& link);
+  void addJoint(const tesseract::scene_graph::Joint& joint);
   void removeLink(const std::string& link_name);
   void removeJoint(const std::string& joint_name);
 
@@ -58,6 +58,6 @@ protected:
 
   void ctor(bool checkable);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_STANDARD_ITEM_H

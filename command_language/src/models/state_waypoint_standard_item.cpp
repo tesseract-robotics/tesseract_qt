@@ -29,16 +29,16 @@
 
 #include <tesseract_command_language/poly/state_waypoint_poly.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-StateWaypointStandardItem::StateWaypointStandardItem(const tesseract_planning::StateWaypointPoly& swp)
+StateWaypointStandardItem::StateWaypointStandardItem(const tesseract::command_language::StateWaypointPoly& swp)
   : QStandardItem(icons::getRobotArmIcon(), "State Waypoint")
 {
   ctor(swp);
 }
 
 StateWaypointStandardItem::StateWaypointStandardItem(const QString& text,
-                                                     const tesseract_planning::StateWaypointPoly& swp)
+                                                     const tesseract::command_language::StateWaypointPoly& swp)
   : QStandardItem(icons::getRobotArmIcon(), text)
 {
   ctor(swp);
@@ -46,7 +46,7 @@ StateWaypointStandardItem::StateWaypointStandardItem(const QString& text,
 
 StateWaypointStandardItem::StateWaypointStandardItem(const QIcon& icon,
                                                      const QString& text,
-                                                     const tesseract_planning::StateWaypointPoly& swp)
+                                                     const tesseract::command_language::StateWaypointPoly& swp)
   : QStandardItem(icon, text)
 {
   ctor(swp);
@@ -54,7 +54,7 @@ StateWaypointStandardItem::StateWaypointStandardItem(const QIcon& icon,
 
 int StateWaypointStandardItem::type() const { return static_cast<int>(StandardItemType::CL_STATE_WAYPOINT); }
 
-void StateWaypointStandardItem::ctor(const tesseract_planning::StateWaypointPoly& swp)
+void StateWaypointStandardItem::ctor(const tesseract::command_language::StateWaypointPoly& swp)
 {
   // Add State Joint Names
   appendRow(createStandardItemString("name", swp.getName()));
@@ -64,4 +64,4 @@ void StateWaypointStandardItem::ctor(const tesseract_planning::StateWaypointPoly
   appendRow(new VectorDoubleStandardItem("acceleration", swp.getAcceleration()));
   appendRow(createStandardItemFloat("time", swp.getTime()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

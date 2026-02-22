@@ -28,7 +28,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPathSegment;
 
@@ -43,7 +43,7 @@ public:
   const boost::uuids::uuid& getUUID() const;
   const boost::uuids::uuid& getParentUUID() const;
   ToolPathSegment getToolPathSegment() const;
-  tesseract_common::VectorIsometry3d getCommonToolPathSegment() const;
+  tesseract::common::VectorIsometry3d getCommonToolPathSegment() const;
 
 private:
   void ctor(const ToolPathSegment& segment);
@@ -51,6 +51,6 @@ private:
   boost::uuids::uuid parent_uuid_{};
   std::string description_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_SEGMENT_STANDARD_ITEM_H

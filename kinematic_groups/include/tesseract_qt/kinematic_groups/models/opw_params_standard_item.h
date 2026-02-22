@@ -27,7 +27,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class OPWParamsStandardItem : public QStandardItem
 {
@@ -42,6 +42,6 @@ public:
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_OPW_PARAMS_STANDARD_ITEM_H

@@ -24,7 +24,7 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_NULL_INSTRUCTION_STANDARD_ITEM_H
 
 #include <QStandardItem>
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class NullAnyStandardItem : public QStandardItem
 {
@@ -34,6 +34,6 @@ public:
   NullAnyStandardItem(const QIcon& icon, const QString& text);
   int type() const override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_NULL_ANY_STANDARD_ITEM_H

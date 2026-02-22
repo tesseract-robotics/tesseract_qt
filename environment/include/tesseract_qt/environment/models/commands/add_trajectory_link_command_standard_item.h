@@ -28,27 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class AddTrajectoryLinkCommandStandardItem : public QStandardItem
 {
 public:
   explicit AddTrajectoryLinkCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::AddTrajectoryLinkCommand> command);
+      std::shared_ptr<const tesseract::environment::AddTrajectoryLinkCommand> command);
   explicit AddTrajectoryLinkCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::AddTrajectoryLinkCommand> command);
+      std::shared_ptr<const tesseract::environment::AddTrajectoryLinkCommand> command);
   explicit AddTrajectoryLinkCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::AddTrajectoryLinkCommand> command);
+      std::shared_ptr<const tesseract::environment::AddTrajectoryLinkCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::AddTrajectoryLinkCommand> command;
+  std::shared_ptr<const tesseract::environment::AddTrajectoryLinkCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ADD_TRAJECTORY_LINK_COMMAND_STANDARD_ITEM_H

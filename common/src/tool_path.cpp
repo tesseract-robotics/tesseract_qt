@@ -26,7 +26,7 @@
 
 #include <tesseract_qt/common/tool_path.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ToolPath::ToolPath(std::string description)
   : uuid_(boost::uuids::random_generator()()), description_(std::move(description))
@@ -37,7 +37,7 @@ ToolPath::ToolPath(boost::uuids::uuid uuid, std::string description) : uuid_(uui
 {
 }
 
-ToolPath::ToolPath(const tesseract_common::Toolpath& tool_path, std::string working_frame, std::string description)
+ToolPath::ToolPath(const tesseract::common::Toolpath& tool_path, std::string working_frame, std::string description)
   : uuid_(boost::uuids::random_generator()())
   , description_(std::move(description))
   , working_frame_(std::move(working_frame))
@@ -45,7 +45,7 @@ ToolPath::ToolPath(const tesseract_common::Toolpath& tool_path, std::string work
   long cnt{ 0 };
   for (const auto& seg : tool_path)
   {
-    tesseract_gui::ToolPathSegment segment("Segment [" + std::to_string(cnt++) + "]");
+    tesseract::gui::ToolPathSegment segment("Segment [" + std::to_string(cnt++) + "]");
     segment.reserve(seg.size());
     for (const auto& p : seg)
       segment.push_back(p);
@@ -156,6 +156,6 @@ void ToolPath::push_back(const ToolPathSegment& x) { container_.push_back(x); }
 void ToolPath::push_back(const ToolPathSegment&& x) { container_.push_back(x); }
 
 void ToolPath::pop_back() { container_.pop_back(); }
-void ToolPath::swap(tesseract_common::AlignedVector<ToolPathSegment>& other) { container_.swap(other); }
+void ToolPath::swap(tesseract::common::AlignedVector<ToolPathSegment>& other) { container_.swap(other); }
 // LCOV_EXCL_STOP
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

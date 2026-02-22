@@ -23,7 +23,7 @@
 #include <tesseract_qt/common/widgets/cartesian_editor_widget.h>
 #include "ui_cartesian_editor_widget.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 CartesianEditorWidget::CartesianEditorWidget(QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::CartesianEditorWidget>())
@@ -193,4 +193,4 @@ void CartesianEditorWidget::setOrientationHelper(const Eigen::Quaterniond& xyzw)
   Q_EMIT orientationChanged(xyzw);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

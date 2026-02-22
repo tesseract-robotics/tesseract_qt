@@ -39,7 +39,7 @@
 #include <QString>
 #include <QDir>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TransformStandardItem* findTransformItem(QStandardItem* item)
 {
@@ -82,7 +82,7 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
   if (file_info.suffix() == "tpx")
   {
     auto tool_path =
-        tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::Toolpath>(filename.toStdString());
+        tesseract::common::Serialization::fromArchiveFileXML<tesseract::common::Toolpath>(filename.toStdString());
     ToolPath qt_tool_path(tool_path, link_name.toStdString());
     events::ToolPathAdd event(component_info, std::move(qt_tool_path));
     QApplication::sendEvent(qApp, &event);
@@ -92,7 +92,7 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
   if (file_info.suffix() == "tpb")
   {
     auto tool_path =
-        tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::Toolpath>(filename.toStdString());
+        tesseract::common::Serialization::fromArchiveFileBinary<tesseract::common::Toolpath>(filename.toStdString());
     ToolPath qt_tool_path(tool_path, link_name.toStdString());
     events::ToolPathAdd event(component_info, std::move(qt_tool_path));
     QApplication::sendEvent(qApp, &event);
@@ -102,7 +102,7 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
   if (file_info.suffix() == "yaml" || file_info.suffix() == "json")
   {
     YAML::Node node = YAML::LoadFile(filename.toStdString());
-    auto tool_path = node.as<tesseract_common::Toolpath>();
+    auto tool_path = node.as<tesseract::common::Toolpath>();
     ToolPath qt_tool_path(tool_path, link_name.toStdString());
     events::ToolPathAdd event(component_info, std::move(qt_tool_path));
     QApplication::sendEvent(qApp, &event);
@@ -112,18 +112,19 @@ bool openToolPath(const std::shared_ptr<const ComponentInfo>& component_info,
   return false;
 }
 
-bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename)
+bool saveToolPath(const tesseract::common::Toolpath& tool_path, QString filename)
 {
   QFileInfo file_info(filename);
   if (file_info.suffix() == "tpx")
   {
-    tesseract_common::Serialization::toArchiveFileXML<tesseract_common::Toolpath>(tool_path, filename.toStdString());
+    tesseract::common::Serialization::toArchiveFileXML<tesseract::common::Toolpath>(tool_path, filename.toStdString());
     return true;
   }
 
   if (file_info.suffix() == "tpb")
   {
-    tesseract_common::Serialization::toArchiveFileBinary<tesseract_common::Toolpath>(tool_path, filename.toStdString());
+    tesseract::common::Serialization::toArchiveFileBinary<tesseract::common::Toolpath>(tool_path,
+                                                                                       filename.toStdString());
     return true;
   }
 
@@ -137,4 +138,4 @@ bool saveToolPath(const tesseract_common::Toolpath& tool_path, QString filename)
 
   return false;
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

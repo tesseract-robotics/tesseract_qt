@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 NullAnyStandardItem::NullAnyStandardItem() : QStandardItem(icons::getUnknownIcon(), "Null Any") {}
 
@@ -35,4 +35,4 @@ NullAnyStandardItem::NullAnyStandardItem(const QIcon& icon, const QString& text)
 
 int NullAnyStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_NULL_ANY); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

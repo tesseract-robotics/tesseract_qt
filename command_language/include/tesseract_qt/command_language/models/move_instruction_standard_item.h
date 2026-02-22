@@ -26,21 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class MoveInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit MoveInstructionStandardItem(const tesseract_planning::MoveInstructionPoly& mi);
-  MoveInstructionStandardItem(const QString& text, const tesseract_planning::MoveInstructionPoly& mi);
+  explicit MoveInstructionStandardItem(const tesseract::command_language::MoveInstructionPoly& mi);
+  MoveInstructionStandardItem(const QString& text, const tesseract::command_language::MoveInstructionPoly& mi);
   MoveInstructionStandardItem(const QIcon& icon,
                               const QString& text,
-                              const tesseract_planning::MoveInstructionPoly& mi);
+                              const tesseract::command_language::MoveInstructionPoly& mi);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::MoveInstructionPoly& mi);
+  void ctor(const tesseract::command_language::MoveInstructionPoly& mi);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_MOVE_INSTRUCTION_STANDARD_ITEM_H

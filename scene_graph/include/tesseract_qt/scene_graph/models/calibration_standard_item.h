@@ -28,24 +28,24 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CalibrationStandardItem : public QStandardItem
 {
 public:
-  CalibrationStandardItem(std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration);
+  CalibrationStandardItem(std::shared_ptr<tesseract::scene_graph::JointCalibration> calibration);
   explicit CalibrationStandardItem(const QString& text,
-                                   std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration);
+                                   std::shared_ptr<tesseract::scene_graph::JointCalibration> calibration);
   CalibrationStandardItem(const QIcon& icon,
                           const QString& text,
-                          std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration);
+                          std::shared_ptr<tesseract::scene_graph::JointCalibration> calibration);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::JointCalibration> calibration;
+  std::shared_ptr<tesseract::scene_graph::JointCalibration> calibration;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_CALIBRATION_STANDARD_ITEM_H

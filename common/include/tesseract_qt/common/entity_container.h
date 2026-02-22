@@ -30,7 +30,7 @@
 
 #include <tesseract_qt/common/entity.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EntityManager;
 
@@ -188,5 +188,5 @@ private:
 
   mutable std::shared_mutex mutex_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_GUI_COMMON_ENTITY_CONTAINER_H

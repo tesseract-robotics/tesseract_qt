@@ -31,7 +31,7 @@
 #include <QWheelEvent>
 #include <QKeyEvent>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 //////////////////////////////////////////////////
 QColor convert(const gz::math::Color& color)
@@ -172,4 +172,4 @@ gz::common::KeyEvent convert(const QKeyEvent& e)
   return event;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

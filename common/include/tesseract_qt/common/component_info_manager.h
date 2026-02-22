@@ -37,7 +37,7 @@ namespace boost::uuids
 struct uuid;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 
@@ -180,6 +180,6 @@ private:
 
   bool emptyHelper() const;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_MANAGER_H

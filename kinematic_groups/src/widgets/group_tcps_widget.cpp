@@ -28,7 +28,7 @@
 
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct GroupTCPsWidget::Implementation
 {
@@ -84,4 +84,4 @@ std::shared_ptr<const GroupTCPsModel> GroupTCPsWidget::getModel() const { return
 QItemSelectionModel& GroupTCPsWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
 const QItemSelectionModel& GroupTCPsWidget::getSelectionModel() const { return *data_->tree_view->selectionModel(); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -27,15 +27,15 @@
 
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-SafetyStandardItem::SafetyStandardItem(std::shared_ptr<tesseract_scene_graph::JointSafety> safety)
+SafetyStandardItem::SafetyStandardItem(std::shared_ptr<tesseract::scene_graph::JointSafety> safety)
   : QStandardItem(icons::getSafetyIcon(), "Safety"), safety(std::move(safety))
 {
   ctor();
 }
 
-SafetyStandardItem::SafetyStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointSafety> safety)
+SafetyStandardItem::SafetyStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::JointSafety> safety)
   : QStandardItem(icons::getSafetyIcon(), text), safety(std::move(safety))
 {
   ctor();
@@ -43,7 +43,7 @@ SafetyStandardItem::SafetyStandardItem(const QString& text, std::shared_ptr<tess
 
 SafetyStandardItem::SafetyStandardItem(const QIcon& icon,
                                        const QString& text,
-                                       std::shared_ptr<tesseract_scene_graph::JointSafety> safety)
+                                       std::shared_ptr<tesseract::scene_graph::JointSafety> safety)
   : QStandardItem(icon, text), safety(std::move(safety))
 {
   ctor();
@@ -58,4 +58,4 @@ void SafetyStandardItem::ctor()
   appendRow(createStandardItemFloat("k_position", safety->k_position));
   appendRow(createStandardItemFloat("k_velocity", safety->k_velocity));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

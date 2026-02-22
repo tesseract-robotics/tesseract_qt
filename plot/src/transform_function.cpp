@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/plot/transform_function.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TransformFunction::TransformFunction() : _data(nullptr)
 {
@@ -126,4 +126,4 @@ TransformFactory* TransformFactory::instance()
 
 const std::set<std::string>& TransformFactory::registeredTransforms() { return instance()->names_; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

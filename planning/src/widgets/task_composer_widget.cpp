@@ -71,15 +71,15 @@
 #include <boost/lexical_cast.hpp>
 #include <QMenu>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct TaskComposerWidget::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
-  tesseract_planning::TaskComposerServer task_composer_server;
-  tesseract_common::GeneralResourceLocator resource_locator;
-  tesseract_common::ProfileDictionary::Ptr profiles;
-  tesseract_gui::TaskComposerLogModel log_model;
+  tesseract::task_composer::TaskComposerServer task_composer_server;
+  tesseract::common::GeneralResourceLocator resource_locator;
+  tesseract::common::ProfileDictionary::Ptr profiles;
+  tesseract::gui::TaskComposerLogModel log_model;
 
   ComponentInfoDialog environment_picker;
 };
@@ -154,9 +154,9 @@ void TaskComposerWidget::createContextMenu(QMenu& log_menu)
               const auto& ci = dynamic_cast<CompositeInstructionStandardItem*>(item)->getCompositeInstruction();
               const auto& log = data_->log_model.get(row);
               auto env_any = log.initial_data.getData("environment");
-              auto env = env_any.as<std::shared_ptr<const tesseract_environment::Environment>>();
+              auto env = env_any.as<std::shared_ptr<const tesseract::environment::Environment>>();
               // The toolpath is in world coordinate system
-              tesseract_common::Toolpath toolpath = tesseract_planning::toToolpath(ci, *env);
+              tesseract::common::Toolpath toolpath = tesseract::motion_planners::toToolpath(ci, *env);
               events::ToolPathAdd event(component_info, toolpath);
               QApplication::sendEvent(qApp, &event);
             }
@@ -178,19 +178,19 @@ void TaskComposerWidget::createContextMenu(QMenu& log_menu)
               const auto& ci = dynamic_cast<CompositeInstructionStandardItem*>(item)->getCompositeInstruction();
               const auto& log = data_->log_model.get(row);
               auto env_any = log.initial_data.getData("environment");
-              auto env = env_any.as<std::shared_ptr<const tesseract_environment::Environment>>();
+              auto env = env_any.as<std::shared_ptr<const tesseract::environment::Environment>>();
 
               bool trajectory_sent{ false };
               if (!ci.empty() && ci.front().isCompositeInstruction())
               {
-                tesseract_common::JointTrajectorySet jset(env->clone(), log.description);
+                tesseract::common::JointTrajectorySet jset(env->clone(), log.description);
                 jset.setNamespace(ui->ns_line_edit->text().toStdString());
                 for (const auto& sub_ci : ci)
                 {
                   if (!sub_ci.isCompositeInstruction())
                     break;
 
-                  jset.appendJointTrajectory(tesseract_planning::toJointTrajectory(sub_ci));
+                  jset.appendJointTrajectory(tesseract::command_language::toJointTrajectory(sub_ci));
                 }
                 events::JointTrajectoryAdd event(component_info, jset);
                 QApplication::sendEvent(qApp, &event);
@@ -199,9 +199,9 @@ void TaskComposerWidget::createContextMenu(QMenu& log_menu)
 
               if (!trajectory_sent)
               {
-                tesseract_common::JointTrajectorySet jset(env->clone(), log.description);
+                tesseract::common::JointTrajectorySet jset(env->clone(), log.description);
                 jset.setNamespace(ui->ns_line_edit->text().toStdString());
-                jset.appendJointTrajectory(tesseract_planning::toJointTrajectory(ci));
+                jset.appendJointTrajectory(tesseract::command_language::toJointTrajectory(ci));
                 events::JointTrajectoryAdd event(component_info, jset);
                 QApplication::sendEvent(qApp, &event);
               }
@@ -218,7 +218,7 @@ void TaskComposerWidget::viewDotgraph(const std::string& dotgraph)
     return;
 
   const std::string dotgraph_location =
-      tesseract_common::getTempPath() + tesseract_common::getTimestampString() + ".dot";
+      tesseract::common::getTempPath() + tesseract::common::getTimestampString() + ".dot";
   {  // Save to temp under unique name
     std::ofstream os{};
     os.open(dotgraph_location);
@@ -259,19 +259,19 @@ QModelIndex TaskComposerWidget::getSelectedLog() const
 
 void TaskComposerWidget::onRun(bool /*checked*/)
 {
-  tesseract_planning::TaskComposerLog nlog(ui->desc_line_edit->text().toStdString());
+  tesseract::task_composer::TaskComposerLog nlog(ui->desc_line_edit->text().toStdString());
 
   // Get selected log
   QModelIndex current_index = getSelectedLog();
   if (!current_index.isValid())
   {
-    tesseract_gui::events::StatusLogError e("TaskComposerWidget, No log selected!");
+    tesseract::gui::events::StatusLogError e("TaskComposerWidget, No log selected!");
     QApplication::sendEvent(qApp, &e);
     return;
   }
 
   const auto& log = data_->log_model.get(current_index);
-  auto data_storage = std::make_shared<tesseract_planning::TaskComposerDataStorage>(log.initial_data);
+  auto data_storage = std::make_shared<tesseract::task_composer::TaskComposerDataStorage>(log.initial_data);
   data_storage->setData("profiles", data_->profiles);
 
   // Load environment
@@ -288,7 +288,7 @@ void TaskComposerWidget::onRun(bool /*checked*/)
         auto env = EnvironmentManager::get(component_info);
         if (env != nullptr)
           data_storage->setData("environment",
-                                std::shared_ptr<const tesseract_environment::Environment>(env->environment().clone()));
+                                std::shared_ptr<const tesseract::environment::Environment>(env->environment().clone()));
       }
     }
   }
@@ -300,7 +300,7 @@ void TaskComposerWidget::onRun(bool /*checked*/)
   const std::string executor_name = ui->executor_combo_box->currentText().toStdString();
   const bool dotgraph = ui->dotgraph_check_box->isChecked();
 
-  tesseract_common::Stopwatch stopwatch;
+  tesseract::common::Stopwatch stopwatch;
   stopwatch.start();
   auto future = data_->task_composer_server.run(task_name, data_storage, dotgraph, executor_name);
   future->wait();
@@ -308,13 +308,13 @@ void TaskComposerWidget::onRun(bool /*checked*/)
 
   // Check for failure if running pipeline or graph
   // This is useful if you are testing a sub task which should not abort in normal
-  const tesseract_planning::TaskComposerNode& task = data_->task_composer_server.getTask(task_name);
-  if (task.getType() == tesseract_planning::TaskComposerNodeType::GRAPH ||
-      task.getType() == tesseract_planning::TaskComposerNodeType::PIPELINE)
+  const tesseract::task_composer::TaskComposerNode& task = data_->task_composer_server.getTask(task_name);
+  if (task.getType() == tesseract::task_composer::TaskComposerNodeType::GRAPH ||
+      task.getType() == tesseract::task_composer::TaskComposerNodeType::PIPELINE)
   {
-    const auto& graph_task = dynamic_cast<const tesseract_planning::TaskComposerGraph&>(task);
+    const auto& graph_task = dynamic_cast<const tesseract::task_composer::TaskComposerGraph&>(task);
     std::vector<boost::uuids::uuid> terminals = graph_task.getTerminals();
-    std::optional<tesseract_planning::TaskComposerNodeInfo> task_info =
+    std::optional<tesseract::task_composer::TaskComposerNodeInfo> task_info =
         future->context->task_infos->getInfo(terminals.front());
     if (task_info.has_value())
       future->context->abort(terminals.front());
@@ -331,7 +331,7 @@ void TaskComposerWidget::onRun(bool /*checked*/)
   const QString ps = (future->context->isSuccessful()) ? "Successful" : "Failed";
   const QString msg =
       QString("TaskComposerWidget, Planning %1, elapsed time %2 seconds").arg(ps).arg(stopwatch.elapsedSeconds());
-  tesseract_gui::events::StatusLogInfo e(msg);
+  tesseract::gui::events::StatusLogInfo e(msg);
   QApplication::sendEvent(qApp, &e);
 
   // Add llog
@@ -390,7 +390,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
       auto resource = data_->resource_locator.locateResource(e->getResourcePath());
       if (resource != nullptr)
       {
-        auto log = tesseract_common::Serialization::fromArchiveFile<tesseract_planning::TaskComposerLog>(
+        auto log = tesseract::common::Serialization::fromArchiveFile<tesseract::task_composer::TaskComposerLog>(
             resource->getFilePath());
         if (e->getNamespace().empty())
           data_->log_model.add(std::move(log));
@@ -423,7 +423,8 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
       if (current_index.isValid())
       {
         const auto& log = data_->log_model.get(current_index);
-        tesseract_common::Serialization::toArchiveFile<tesseract_planning::TaskComposerLog>(log, e->getSavePath());
+        tesseract::common::Serialization::toArchiveFile<tesseract::task_composer::TaskComposerLog>(log,
+                                                                                                   e->getSavePath());
       }
     }
   }
@@ -450,7 +451,7 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
         }
         else
         {
-          tesseract_gui::events::StatusLogWarn e("TaskComposerWidget, No dotgraph found!");
+          tesseract::gui::events::StatusLogWarn e("TaskComposerWidget, No dotgraph found!");
           QApplication::sendEvent(qApp, &e);
         }
       }
@@ -468,4 +469,4 @@ bool TaskComposerWidget::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

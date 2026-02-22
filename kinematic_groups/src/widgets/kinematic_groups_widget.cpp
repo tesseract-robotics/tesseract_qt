@@ -28,7 +28,7 @@
 
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct KinematicGroupsWidget::Implementation
 {
@@ -87,4 +87,4 @@ const QItemSelectionModel& KinematicGroupsWidget::getSelectionModel() const
   return *data_->tree_view->selectionModel();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

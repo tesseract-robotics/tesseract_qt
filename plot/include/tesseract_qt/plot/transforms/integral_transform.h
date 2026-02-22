@@ -31,7 +31,7 @@ namespace Ui
 class IntegralTransform;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class IntegralTransform : public TransformFunction_SISO
 {
@@ -57,6 +57,6 @@ private:
 
   double _accumulated_value;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_TRANSFORMS_INTEGRAL_TRANSFORM_H

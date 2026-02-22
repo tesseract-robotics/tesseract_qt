@@ -28,20 +28,20 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_common
+namespace tesseract::common
 {
 class JointTrajectorySet;
 class JointState;
 class JointTrajectory;
 struct JointTrajectoryInfo;
-}  // namespace tesseract_common
+}  // namespace tesseract::common
 
 namespace boost::uuids
 {
 class uuid;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class JointTrajectoryModel : public QStandardItemModel
@@ -55,9 +55,9 @@ public:
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  tesseract_common::JointState getJointState(const QModelIndex& row) const;
-  tesseract_common::JointTrajectoryInfo getJointTrajectory(const QModelIndex& row) const;
-  tesseract_common::JointTrajectorySet getJointTrajectorySet(const QModelIndex& row) const;
+  tesseract::common::JointState getJointState(const QModelIndex& row) const;
+  tesseract::common::JointTrajectoryInfo getJointTrajectory(const QModelIndex& row) const;
+  tesseract::common::JointTrajectorySet getJointTrajectorySet(const QModelIndex& row) const;
 
 private:
   struct Implementation;
@@ -68,7 +68,7 @@ private:
    * @param trajectory_set The trajectory set associated with the key
    * @return The key associated with added trajectory for removal
    */
-  void addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set);
+  void addJointTrajectorySet(tesseract::common::JointTrajectorySet trajectory_set);
 
   /**
    * @brief Remove the joint trajectory set
@@ -98,6 +98,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_MODEL_H

@@ -28,7 +28,7 @@
 #include <tesseract_qt/acm/allowed_collision_matrix_model.h>
 #include <tesseract_qt/acm/allowed_collision_matrix_widget.h>
 
-void onEntrySelected(const tesseract_common::AllowedCollisionEntries& selection)
+void onEntrySelected(const tesseract::common::AllowedCollisionEntries& selection)
 {
   std::stringstream ss;
   ss << "Selected Rows:" << std::endl;
@@ -44,13 +44,13 @@ int main(int argc, char** argv)
 
   std::vector<std::string> links{ "link_1", "link_2", "link_3", "link_4" };
 
-  tesseract_gui::AllowedCollisionMatrixModel model;
+  tesseract::gui::AllowedCollisionMatrixModel model;
   model.add("link_1", "link_2", "Adjacent");
   model.add("link_2", "link_3", "Adjacent");
   model.add("link_3", "link_4", "Adjacent");
 
-  tesseract_gui::AllowedCollisionMatrixWidget widget;
-  QObject::connect(&widget, &tesseract_gui::AllowedCollisionMatrixWidget::entrySelected, &onEntrySelected);
+  tesseract::gui::AllowedCollisionMatrixWidget widget;
+  QObject::connect(&widget, &tesseract::gui::AllowedCollisionMatrixWidget::entrySelected, &onEntrySelected);
 
   widget.setModel(&model);
   widget.show();

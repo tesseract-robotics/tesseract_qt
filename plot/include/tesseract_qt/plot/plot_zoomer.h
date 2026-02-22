@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <qwt/qwt_plot_zoomer.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PlotZoomer : public QwtPlotZoomer
 {
@@ -57,5 +57,5 @@ private:
   bool _keep_aspect_ratio;
   QPoint _initial_pos;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_PLOT_ZOOMER_H

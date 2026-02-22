@@ -13,9 +13,9 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-using AnyPolyStandardItemFactoryFn = std::function<QList<QStandardItem*>(const tesseract_common::AnyPoly& any_poly)>;
+using AnyPolyStandardItemFactoryFn = std::function<QList<QStandardItem*>(const tesseract::common::AnyPoly& any_poly)>;
 
 class AnyPolyStandardItemFactory
 {
@@ -34,7 +34,7 @@ public:
   AnyPolyStandardItemManager(AnyPolyStandardItemManager&&) = delete;
   AnyPolyStandardItemManager& operator=(AnyPolyStandardItemManager&&) = delete;
 
-  static QList<QStandardItem*> create(const tesseract_common::AnyPoly& any_poly);
+  static QList<QStandardItem*> create(const tesseract::common::AnyPoly& any_poly);
 
   static void registerFactory(const AnyPolyStandardItemFactory& factory);
 
@@ -54,7 +54,7 @@ private:
   static void initSingleton();
   static std::shared_ptr<AnyPolyStandardItemManager> instance();
 
-  QList<QStandardItem*> createHelper(const tesseract_common::AnyPoly& any_poly);
+  QList<QStandardItem*> createHelper(const tesseract::common::AnyPoly& any_poly);
 
   void registerFactoryHelper(const AnyPolyStandardItemFactory& factory);
 
@@ -65,6 +65,6 @@ private:
     factories_[std::type_index(typeid(InstructionType))] = factory;
   }
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_ANY_POLY_STANDARD_ITEM_FACTORY_H

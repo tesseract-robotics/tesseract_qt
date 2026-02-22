@@ -86,7 +86,7 @@ const double MAX_DOUBLE = std::numeric_limits<double>::max() / 2;
 
 static bool if_xy_plot_failed_show_dialog = true;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PlotWidget::PlotWidget(PlotDataMapRef& datamap, QWidget* parent)
   : PlotWidgetBase(parent)
@@ -1417,4 +1417,4 @@ void PlotWidget::changeBackgroundColor(QColor color)
     replot();
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

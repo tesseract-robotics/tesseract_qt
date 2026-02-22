@@ -28,7 +28,7 @@
 #include <QToolBar>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ManipulationToolBar : public QToolBar
@@ -52,6 +52,6 @@ private:
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_MANIPULATION_MANIPULATION_TOOL_BAR_H

@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ContactResultMapVectorStandardItem::ContactResultMapVectorStandardItem(
     const std::vector<ContactResultMap>& contact_results)
@@ -61,4 +61,4 @@ void ContactResultMapVectorStandardItem::ctor(const std::vector<ContactResultMap
   for (std::size_t i = 0; i < contact_results.size(); ++i)
     appendRow(new ContactResultMapStandardItem(icons::getSetIcon(), QString("[%1]").arg(i), contact_results[i]));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

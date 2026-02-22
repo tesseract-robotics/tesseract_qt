@@ -28,21 +28,21 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PlaneStandardItem : public QStandardItem
 {
 public:
-  PlaneStandardItem(std::shared_ptr<const tesseract_geometry::Plane> plane);
-  explicit PlaneStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Plane> plane);
-  PlaneStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract_geometry::Plane> plane);
+  PlaneStandardItem(std::shared_ptr<const tesseract::geometry::Plane> plane);
+  explicit PlaneStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Plane> plane);
+  PlaneStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract::geometry::Plane> plane);
   int type() const override;
 
-  std::shared_ptr<const tesseract_geometry::Plane> plane;
+  std::shared_ptr<const tesseract::geometry::Plane> plane;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_PLANE_STANDARD_ITEM_H

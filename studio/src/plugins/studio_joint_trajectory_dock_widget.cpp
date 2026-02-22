@@ -38,7 +38,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StudioJointTrajectoryDockWidget::Implementation
 {
@@ -113,4 +113,4 @@ void StudioJointTrajectoryDockWidget::setup()
   toolBar()->setIconSize(QSize(25, 25));
   setFeature(ads::CDockWidget::DockWidgetFocusable, true);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

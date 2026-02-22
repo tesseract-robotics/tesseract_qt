@@ -11,7 +11,7 @@
 
 #include <QMenu>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ComponentInfoManagerWidget::Implementation
 {
@@ -122,4 +122,4 @@ void ComponentInfoManagerWidget::showContextMenu(const QPoint& pos)
   data_->context_menu.exec(global_pos);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -29,16 +29,16 @@
 
 #include <tesseract_command_language/joint_waypoint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-JointWaypointStandardItem::JointWaypointStandardItem(const tesseract_planning::JointWaypointPoly& jwp)
+JointWaypointStandardItem::JointWaypointStandardItem(const tesseract::command_language::JointWaypointPoly& jwp)
   : QStandardItem(icons::getJointIcon(), "Joint Waypoint")
 {
   ctor(jwp);
 }
 
 JointWaypointStandardItem::JointWaypointStandardItem(const QString& text,
-                                                     const tesseract_planning::JointWaypointPoly& jwp)
+                                                     const command_language::JointWaypointPoly& jwp)
   : QStandardItem(icons::getJointIcon(), text)
 {
   ctor(jwp);
@@ -46,7 +46,7 @@ JointWaypointStandardItem::JointWaypointStandardItem(const QString& text,
 
 JointWaypointStandardItem::JointWaypointStandardItem(const QIcon& icon,
                                                      const QString& text,
-                                                     const tesseract_planning::JointWaypointPoly& jwp)
+                                                     const tesseract::command_language::JointWaypointPoly& jwp)
   : QStandardItem(icon, text)
 {
   ctor(jwp);
@@ -54,7 +54,7 @@ JointWaypointStandardItem::JointWaypointStandardItem(const QIcon& icon,
 
 int JointWaypointStandardItem::type() const { return static_cast<int>(StandardItemType::CL_JOINT_WAYPOINT); }
 
-void JointWaypointStandardItem::ctor(const tesseract_planning::JointWaypointPoly& jwp)
+void JointWaypointStandardItem::ctor(const tesseract::command_language::JointWaypointPoly& jwp)
 {
   appendRow(createStandardItemString("name", jwp.getName()));
   appendRow(new VectorStringStandardItem("joint_names", jwp.getNames()));
@@ -62,4 +62,4 @@ void JointWaypointStandardItem::ctor(const tesseract_planning::JointWaypointPoly
   appendRow(new VectorDoubleStandardItem("lower_tolerance", jwp.getLowerTolerance()));
   appendRow(new VectorDoubleStandardItem("upper_tolerance", jwp.getUpperTolerance()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

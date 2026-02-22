@@ -34,7 +34,7 @@ namespace Ui
 class ToolPathFileDialog;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ToolPathFileDialog : public QDialog
@@ -66,5 +66,5 @@ private:
 
   void showEvent(QShowEvent* e) override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_FILE_DIALOG_H

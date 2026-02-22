@@ -34,7 +34,7 @@ namespace Ui
 class LoadEnvironmentWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class LoadEnvironmentWidget : public QWidget
 {
@@ -57,6 +57,6 @@ private:
   QString srdf_filepath_;
   QString default_directory_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_WIDGET_H

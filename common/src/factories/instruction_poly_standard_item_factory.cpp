@@ -24,7 +24,7 @@
 #include <tesseract_qt/common/factories/instruction_poly_standard_item_factory.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 std::shared_ptr<InstructionPolyStandardItemManager> InstructionPolyStandardItemManager::singleton = nullptr;
 std::once_flag InstructionPolyStandardItemManager::init_instance_flag;
@@ -40,13 +40,13 @@ std::shared_ptr<InstructionPolyStandardItemManager> InstructionPolyStandardItemM
 }
 
 QList<QStandardItem*>
-InstructionPolyStandardItemManager::create(const tesseract_planning::InstructionPoly& instruction_poly)
+InstructionPolyStandardItemManager::create(const command_language::InstructionPoly& instruction_poly)
 {
   return instance()->createHelper(instruction_poly);
 }
 
 QList<QStandardItem*>
-InstructionPolyStandardItemManager::createHelper(const tesseract_planning::InstructionPoly& instruction_poly)
+InstructionPolyStandardItemManager::createHelper(const tesseract::command_language::InstructionPoly& instruction_poly)
 {
   std::shared_lock lock(mutex_);
   auto it = factories_.find(instruction_poly.getType());
@@ -63,4 +63,4 @@ void InstructionPolyStandardItemManager::registerFactoryHelper(const Instruction
   factories_.insert(fm.begin(), fm.end());
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

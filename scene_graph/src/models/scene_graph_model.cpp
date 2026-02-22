@@ -44,7 +44,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct SceneGraphModel::Implementation
 {
@@ -89,7 +89,7 @@ SceneGraphModel& SceneGraphModel::operator=(const SceneGraphModel& other) { retu
 
 std::shared_ptr<const ComponentInfo> SceneGraphModel::getComponentInfo() const { return data_->component_info; }
 
-void SceneGraphModel::setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph)
+void SceneGraphModel::setSceneGraph(const tesseract::scene_graph::SceneGraph& scene_graph)
 {
   clear();
 
@@ -98,9 +98,9 @@ void SceneGraphModel::setSceneGraph(const tesseract_scene_graph::SceneGraph& sce
 
 void SceneGraphModel::setName(const std::string& name) { data_->scene_graph_item->setName(name); }
 
-void SceneGraphModel::addLink(const tesseract_scene_graph::Link& link) { data_->scene_graph_item->addLink(link); }
+void SceneGraphModel::addLink(const tesseract::scene_graph::Link& link) { data_->scene_graph_item->addLink(link); }
 
-void SceneGraphModel::addJoint(const tesseract_scene_graph::Joint& joint) { data_->scene_graph_item->addJoint(joint); }
+void SceneGraphModel::addJoint(const tesseract::scene_graph::Joint& joint) { data_->scene_graph_item->addJoint(joint); }
 
 void SceneGraphModel::removeLink(const std::string& link_name) { data_->scene_graph_item->removeLink(link_name); }
 
@@ -285,8 +285,8 @@ bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
       auto env_wrapper = EnvironmentManager::get(data_->component_info);
       if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
       {
-        std::filesystem::path dot_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.dot");
-        std::filesystem::path image_path(tesseract_common::getTempPath() + "environment_widget_scene_graph.png");
+        std::filesystem::path dot_path(tesseract::common::getTempPath() + "environment_widget_scene_graph.dot");
+        std::filesystem::path image_path(tesseract::common::getTempPath() + "environment_widget_scene_graph.png");
 
         env_wrapper->getEnvironment()->getSceneGraph()->saveDOT(dot_path.c_str());
         saveDotImage(dot_path, image_path, "png");
@@ -302,4 +302,4 @@ bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

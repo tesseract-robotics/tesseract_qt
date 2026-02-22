@@ -29,7 +29,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct SceneGraphToolBar::Implementation
 {
@@ -132,4 +132,4 @@ void SceneGraphToolBar::setComponentInfo(std::shared_ptr<const ComponentInfo> co
 }
 std::shared_ptr<const ComponentInfo> SceneGraphToolBar::getComponentInfo() const { return data_->component_info; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

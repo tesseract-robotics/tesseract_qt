@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 NullInstructionStandardItem::NullInstructionStandardItem() : QStandardItem(icons::getUnknownIcon(), "Null Instruction")
 {
@@ -43,4 +43,4 @@ NullInstructionStandardItem::NullInstructionStandardItem(const QIcon& icon, cons
 
 int NullInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_NULL_INSTRUCTION); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

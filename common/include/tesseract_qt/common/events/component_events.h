@@ -31,12 +31,12 @@ namespace boost::uuids
 struct uuid;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 }
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 /** @brief Event called  */
 class ComponentEvent : public QEvent
@@ -108,5 +108,5 @@ public:
 private:
   bool visible_;
 };
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_GUI_COMMON_COMPONENT_EVENTS_H

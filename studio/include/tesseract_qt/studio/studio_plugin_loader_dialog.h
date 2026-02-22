@@ -33,7 +33,7 @@ namespace Ui
 class StudioPluginLoaderDialog;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StudioPluginFactory;
 class StudioPluginConfigWidget;
@@ -62,6 +62,6 @@ private:
   std::unique_ptr<Ui::StudioPluginLoaderDialog> ui;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_STUDIO_STUDIO_PLUGIN_LOADER_WIDGET_H

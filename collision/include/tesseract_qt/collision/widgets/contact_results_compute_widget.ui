@@ -170,7 +170,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tesseract_gui::ContactResultsWidget" name="contact_results_widget" native="true">
+    <widget class="tesseract::gui::ContactResultsWidget" name="contact_results_widget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -183,7 +183,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::ContactResultsWidget</class>
+   <class>tesseract::gui::ContactResultsWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/collision/widgets/contact_results_widget.h</header>
    <container>1</container>

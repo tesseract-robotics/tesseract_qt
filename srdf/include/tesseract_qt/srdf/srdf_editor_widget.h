@@ -36,7 +36,7 @@ namespace Ui
 class SRDFEditorWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class SRDFEditorWidget : public QWidget
@@ -44,9 +44,9 @@ class SRDFEditorWidget : public QWidget
   Q_OBJECT
 
 public:
-  explicit SRDFEditorWidget(std::shared_ptr<tesseract_common::ResourceLocator> locator, QWidget* parent = nullptr);
+  explicit SRDFEditorWidget(std::shared_ptr<tesseract::common::ResourceLocator> locator, QWidget* parent = nullptr);
   explicit SRDFEditorWidget(std::shared_ptr<const ComponentInfo> component_info,
-                            std::shared_ptr<tesseract_common::ResourceLocator> locator,
+                            std::shared_ptr<tesseract::common::ResourceLocator> locator,
                             QWidget* parent = nullptr);
   ~SRDFEditorWidget();
 
@@ -78,6 +78,6 @@ private:
 
   void enablePages(bool enable);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SRDF_EDITOR_WIDGET_H

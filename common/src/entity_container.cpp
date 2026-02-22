@@ -25,7 +25,7 @@
 
 #include <stdexcept>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 const std::string EntityContainer::VISUAL_NS = "visual";
 const std::string EntityContainer::SENSOR_NS = "sensor";
@@ -223,4 +223,4 @@ void EntityContainer::clear()
 EntityManager& EntityContainer::getEntityManager() { return *manager_; }
 const EntityManager& EntityContainer::getEntityManager() const { return *manager_; }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

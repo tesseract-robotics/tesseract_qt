@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QDateTime>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 StatusLogModel::StatusLogModel(QObject* parent) : QStandardItemModel(parent)
 {
@@ -103,4 +103,4 @@ bool StatusLogModel::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

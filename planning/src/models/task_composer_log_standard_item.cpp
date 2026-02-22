@@ -30,16 +30,16 @@
 
 #include <tesseract_task_composer/core/task_composer_log.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-TaskComposerLogStandardItem::TaskComposerLogStandardItem(const tesseract_planning::TaskComposerLog& data)
+TaskComposerLogStandardItem::TaskComposerLogStandardItem(const tesseract::task_composer::TaskComposerLog& data)
   : QStandardItem(icons::getLogIcon(), "Task Composer Log")
 {
   ctor(data);
 }
 
 TaskComposerLogStandardItem::TaskComposerLogStandardItem(const QString& text,
-                                                         const tesseract_planning::TaskComposerLog& data)
+                                                         const tesseract::task_composer::TaskComposerLog& data)
   : QStandardItem(icons::getLogIcon(), text)
 {
   ctor(data);
@@ -47,7 +47,7 @@ TaskComposerLogStandardItem::TaskComposerLogStandardItem(const QString& text,
 
 TaskComposerLogStandardItem::TaskComposerLogStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         const tesseract_planning::TaskComposerLog& data)
+                                                         const tesseract::task_composer::TaskComposerLog& data)
   : QStandardItem(icon, text)
 {
   ctor(data);
@@ -55,11 +55,11 @@ TaskComposerLogStandardItem::TaskComposerLogStandardItem(const QIcon& icon,
 
 int TaskComposerLogStandardItem::type() const { return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_LOG); }
 
-void TaskComposerLogStandardItem::ctor(const tesseract_planning::TaskComposerLog& data)
+void TaskComposerLogStandardItem::ctor(const tesseract::task_composer::TaskComposerLog& data)
 {
   appendRow(createStandardItemString("description", data.description));
   appendRow(new TaskComposerDataStorageStandardItem("initial_data", data.initial_data));  // NOLINT
   if (data.context != nullptr)
     appendRow(new TaskComposerContextStandardItem("context", *data.context));  // NOLINT
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

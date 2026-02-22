@@ -48,7 +48,7 @@
 const std::string USER_VISIBILITY = "user_visibility";
 const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct IgnSceneGraphRenderManager::Implementation
 {
@@ -284,4 +284,4 @@ void IgnSceneGraphRenderManager::render()
   events_.clear();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

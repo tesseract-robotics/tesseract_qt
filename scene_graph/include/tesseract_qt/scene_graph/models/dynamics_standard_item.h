@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class DynamicsStandardItem : public QStandardItem
 {
 public:
-  DynamicsStandardItem(std::shared_ptr<tesseract_scene_graph::JointDynamics> dynamics);
-  explicit DynamicsStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointDynamics> dynamics);
+  DynamicsStandardItem(std::shared_ptr<tesseract::scene_graph::JointDynamics> dynamics);
+  explicit DynamicsStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::JointDynamics> dynamics);
   DynamicsStandardItem(const QIcon& icon,
                        const QString& text,
-                       std::shared_ptr<tesseract_scene_graph::JointDynamics> dynamics);
+                       std::shared_ptr<tesseract::scene_graph::JointDynamics> dynamics);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::JointDynamics> dynamics;
+  std::shared_ptr<tesseract::scene_graph::JointDynamics> dynamics;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_DYNAMICS_STANDARD_ITEM_H

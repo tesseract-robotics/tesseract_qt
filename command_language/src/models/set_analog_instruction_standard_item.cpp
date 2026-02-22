@@ -29,24 +29,27 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-SetAnalogInstructionStandardItem::SetAnalogInstructionStandardItem(const tesseract_planning::SetAnalogInstruction& sai)
+SetAnalogInstructionStandardItem::SetAnalogInstructionStandardItem(
+    const tesseract::command_language::SetAnalogInstruction& sai)
   : QStandardItem(icons::getUnknownIcon(), "Set Analog Instruction")
 {
   ctor(sai);
 }
 
-SetAnalogInstructionStandardItem::SetAnalogInstructionStandardItem(const QString& text,
-                                                                   const tesseract_planning::SetAnalogInstruction& sai)
+SetAnalogInstructionStandardItem::SetAnalogInstructionStandardItem(
+    const QString& text,
+    const tesseract::command_language::SetAnalogInstruction& sai)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(sai);
 }
 
-SetAnalogInstructionStandardItem::SetAnalogInstructionStandardItem(const QIcon& icon,
-                                                                   const QString& text,
-                                                                   const tesseract_planning::SetAnalogInstruction& sai)
+SetAnalogInstructionStandardItem::SetAnalogInstructionStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const tesseract::command_language::SetAnalogInstruction& sai)
   : QStandardItem(icon, text)
 {
   ctor(sai);
@@ -57,7 +60,7 @@ int SetAnalogInstructionStandardItem::type() const
   return static_cast<int>(StandardItemType::CL_SET_ANALOG_INSTRUCTION);
 }
 
-void SetAnalogInstructionStandardItem::ctor(const tesseract_planning::SetAnalogInstruction& sai)
+void SetAnalogInstructionStandardItem::ctor(const tesseract::command_language::SetAnalogInstruction& sai)
 {
   appendRow(createStandardItemString("description", sai.getDescription()));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(sai.getUUID())));
@@ -66,4 +69,4 @@ void SetAnalogInstructionStandardItem::ctor(const tesseract_planning::SetAnalogI
   appendRow(createStandardItemInt("index", sai.getIndex()));
   appendRow(createStandardItemFloat("value", sai.getValue()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

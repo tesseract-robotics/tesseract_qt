@@ -26,23 +26,23 @@
 #include <QStandardItem>
 #include <tesseract_collision/core/types.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ContactRequestStandardItem : public QStandardItem
 {
 public:
-  ContactRequestStandardItem(const tesseract_collision::ContactRequest& contact_request);
-  explicit ContactRequestStandardItem(const QString& text, const tesseract_collision::ContactRequest& contact_request);
+  ContactRequestStandardItem(const tesseract::collision::ContactRequest& contact_request);
+  explicit ContactRequestStandardItem(const QString& text, const tesseract::collision::ContactRequest& contact_request);
   ContactRequestStandardItem(const QIcon& icon,
                              const QString& text,
-                             const tesseract_collision::ContactRequest& contact_request);
+                             const tesseract::collision::ContactRequest& contact_request);
   int type() const override;
 
-  tesseract_collision::ContactRequest contact_request;
+  tesseract::collision::ContactRequest contact_request;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COLLISION_CONTACT_REQUEST_STANDARD_ITEM_H

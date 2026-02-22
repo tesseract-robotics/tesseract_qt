@@ -32,12 +32,12 @@
 
 #include <QMessageBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct LoadEnvironmentDialog::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
-  tesseract_common::ResourceLocator::Ptr resource_locator;
+  tesseract::common::ResourceLocator::Ptr resource_locator;
 };
 
 LoadEnvironmentDialog::LoadEnvironmentDialog(QWidget* parent) : LoadEnvironmentDialog(nullptr, parent) {}
@@ -51,14 +51,14 @@ LoadEnvironmentDialog::LoadEnvironmentDialog(std::shared_ptr<const ComponentInfo
   setModal(true);
 
   data_->component_info = std::move(component_info);
-  data_->resource_locator = std::make_shared<tesseract_common::GeneralResourceLocator>();
+  data_->resource_locator = std::make_shared<tesseract::common::GeneralResourceLocator>();
 
   connect(ui_->button_box, SIGNAL(accepted()), this, SLOT(onAccepted()));
 }
 
 LoadEnvironmentDialog::~LoadEnvironmentDialog() = default;
 
-void LoadEnvironmentDialog::setResourceLocator(std::shared_ptr<tesseract_common::ResourceLocator> resource_locator)
+void LoadEnvironmentDialog::setResourceLocator(std::shared_ptr<tesseract::common::ResourceLocator> resource_locator)
 {
   data_->resource_locator = resource_locator;
 }
@@ -71,7 +71,7 @@ void LoadEnvironmentDialog::onAccepted()
   bool srdf_filepath_exists = std::filesystem::exists(srdf_filepath);
   if (urdf_filepath_exists && srdf_filepath_exists)
   {
-    auto env = std::make_shared<tesseract_environment::Environment>();
+    auto env = std::make_shared<tesseract::environment::Environment>();
     if (!env->init(urdf_filepath, srdf_filepath, data_->resource_locator) || !env->isInitialized())
     {
       QMessageBox messageBox;
@@ -86,7 +86,7 @@ void LoadEnvironmentDialog::onAccepted()
 
   if (urdf_filepath_exists && !srdf_filepath_exists)
   {
-    auto env = std::make_shared<tesseract_environment::Environment>();
+    auto env = std::make_shared<tesseract::environment::Environment>();
     if (!env->init(urdf_filepath, data_->resource_locator) || !env->isInitialized())
     {
       QMessageBox messageBox;
@@ -99,4 +99,4 @@ void LoadEnvironmentDialog::onAccepted()
     EnvironmentManager::set(env_wrapper);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

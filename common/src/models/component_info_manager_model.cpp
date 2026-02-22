@@ -31,7 +31,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ComponentInfoManagerModel::Implementation
 {
@@ -77,4 +77,4 @@ void ComponentInfoManagerModel::clear()
   data_->items.clear();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

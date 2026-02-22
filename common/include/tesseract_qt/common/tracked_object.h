@@ -27,7 +27,7 @@
 #include <boost/uuid/random_generator.hpp>
 #include <Eigen/Eigen>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 template <typename T>
 class TrackedObject
@@ -49,6 +49,6 @@ private:
   boost::uuids::uuid uuid_{};
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_TRACKED_OBJECT_H

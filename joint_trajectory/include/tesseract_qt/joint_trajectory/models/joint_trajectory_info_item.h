@@ -25,27 +25,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_common
+namespace tesseract::common
 {
 struct JointTrajectoryInfo;
 }
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointTrajectoryInfoItem : public QStandardItem
 {
 public:
-  JointTrajectoryInfoItem(tesseract_common::JointTrajectoryInfo& trajectory_info);
-  explicit JointTrajectoryInfoItem(const QString& text, tesseract_common::JointTrajectoryInfo& trajectory_info);
+  JointTrajectoryInfoItem(tesseract::common::JointTrajectoryInfo& trajectory_info);
+  explicit JointTrajectoryInfoItem(const QString& text, tesseract::common::JointTrajectoryInfo& trajectory_info);
   JointTrajectoryInfoItem(const QIcon& icon,
                           const QString& text,
-                          tesseract_common::JointTrajectoryInfo& trajectory_info);
+                          tesseract::common::JointTrajectoryInfo& trajectory_info);
   int type() const override;
 
-  tesseract_common::JointTrajectoryInfo& trajectory_info;
+  tesseract::common::JointTrajectoryInfo& trajectory_info;
 
 private:
   void ctor();
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_INFO_ITEM_H

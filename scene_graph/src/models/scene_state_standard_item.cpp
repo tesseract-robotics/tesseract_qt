@@ -28,16 +28,16 @@
 
 #include <tesseract_scene_graph/scene_state.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-SceneStateStandardItem::SceneStateStandardItem(const tesseract_scene_graph::SceneState& scene_state)
+SceneStateStandardItem::SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state)
   : QStandardItem(icons::getModelIcon(), "Scene State")
 {
   ctor(scene_state);
 }
 
 SceneStateStandardItem::SceneStateStandardItem(const QString& text,
-                                               const tesseract_scene_graph::SceneState& scene_state)
+                                               const tesseract::scene_graph::SceneState& scene_state)
   : QStandardItem(icons::getModelIcon(), text)
 {
   ctor(scene_state);
@@ -45,7 +45,7 @@ SceneStateStandardItem::SceneStateStandardItem(const QString& text,
 
 SceneStateStandardItem::SceneStateStandardItem(const QIcon& icon,
                                                const QString& text,
-                                               const tesseract_scene_graph::SceneState& scene_state)
+                                               const tesseract::scene_graph::SceneState& scene_state)
   : QStandardItem(icon, text)
 {
   ctor(scene_state);
@@ -53,7 +53,7 @@ SceneStateStandardItem::SceneStateStandardItem(const QIcon& icon,
 
 int SceneStateStandardItem::type() const { return static_cast<int>(StandardItemType::SG_SCENE_STATE); }
 
-void SceneStateStandardItem::ctor(const tesseract_scene_graph::SceneState& scene_state)
+void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scene_state)
 {
   auto* joint_values_item = new QStandardItem(icons::getJointVectorIcon(), "Joint Values");
   auto* floating_joint_values_item = new QStandardItem(icons::getOriginIcon(), "Floating Joint Values");
@@ -84,4 +84,4 @@ void SceneStateStandardItem::ctor(const tesseract_scene_graph::SceneState& scene
   appendRow(joints_item);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/modify_allowed_collisions_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::ModifyAllowedCollisionsCommand> command)
+    std::shared_ptr<const tesseract::environment::ModifyAllowedCollisionsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Modify Allowed Collisions"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStanda
 
 ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ModifyAllowedCollisionsCommand> command)
+    std::shared_ptr<const tesseract::environment::ModifyAllowedCollisionsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStanda
 ModifyAllowedCollisionsCommandStandardItem::ModifyAllowedCollisionsCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ModifyAllowedCollisionsCommand> command)
+    std::shared_ptr<const tesseract::environment::ModifyAllowedCollisionsCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -64,4 +64,4 @@ void ModifyAllowedCollisionsCommandStandardItem::ctor()
   //  appendRow(createStandardItemString("link_name2", command->getLinkName2()));
   //  appendRow(createStandardItemString("reason", command->getReason()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

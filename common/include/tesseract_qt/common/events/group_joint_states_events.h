@@ -28,7 +28,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class GroupJointStatesClear : public ComponentEvent
 {
@@ -41,13 +41,13 @@ class GroupJointStatesSet : public ComponentEvent
 {
 public:
   GroupJointStatesSet(std::shared_ptr<const ComponentInfo> component_info,
-                      const tesseract_srdf::GroupJointStates& group_joint_states);
+                      const tesseract::srdf::GroupJointStates& group_joint_states);
   ~GroupJointStatesSet() override;
 
-  const tesseract_srdf::GroupJointStates& getGroupJointStates() const;
+  const tesseract::srdf::GroupJointStates& getGroupJointStates() const;
 
 private:
-  tesseract_srdf::GroupJointStates group_joint_states_;
+  tesseract::srdf::GroupJointStates group_joint_states_;
 };
 
 class GroupJointStatesAdd : public ComponentEvent
@@ -56,17 +56,17 @@ public:
   GroupJointStatesAdd(std::shared_ptr<const ComponentInfo> component_info,
                       std::string group_name,
                       std::string state_name,
-                      tesseract_srdf::GroupsJointState state);
+                      tesseract::srdf::GroupsJointState state);
   ~GroupJointStatesAdd() override;
 
   const std::string& getGroupName() const;
   const std::string& getStateName() const;
-  const tesseract_srdf::GroupsJointState& getJointState() const;
+  const tesseract::srdf::GroupsJointState& getJointState() const;
 
 private:
   std::string group_name_;
   std::string state_name_;
-  tesseract_srdf::GroupsJointState state_;
+  tesseract::srdf::GroupsJointState state_;
 };
 
 class GroupJointStatesRemove : public ComponentEvent
@@ -101,18 +101,18 @@ public:
   GroupJointStatesShow(std::shared_ptr<const ComponentInfo> component_info,
                        std::string group_name,
                        std::string state_name,
-                       tesseract_srdf::GroupsJointState state);
+                       tesseract::srdf::GroupsJointState state);
 
   ~GroupJointStatesShow() override;
 
   const std::string& getGroupName() const;
   const std::string& getStateName() const;
-  const tesseract_srdf::GroupsJointState& getJointState() const;
+  const tesseract::srdf::GroupsJointState& getJointState() const;
 
 private:
   std::string group_name_;
   std::string state_name_;
-  tesseract_srdf::GroupsJointState state_;
+  tesseract::srdf::GroupsJointState state_;
 };
 
 class GroupJointStatesHide : public ComponentEvent
@@ -132,5 +132,5 @@ private:
   std::string state_name_;
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_GROUP_JOINT_STATES_EVENTS_H

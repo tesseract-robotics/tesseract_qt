@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ContactResultMapStandardItem::ContactResultMapStandardItem(const ContactResultMap& contact_results)
   : QStandardItem(icons::getCollisionIcon(), "Contact Result Map")
@@ -62,4 +62,4 @@ void ContactResultMapStandardItem::ctor(const ContactResultMap& contact_results)
     appendRow(link_pair_item);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
