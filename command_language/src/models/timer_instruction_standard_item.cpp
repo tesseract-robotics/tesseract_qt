@@ -29,16 +29,16 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-TimerInstructionStandardItem::TimerInstructionStandardItem(const tesseract_planning::TimerInstruction& ti)
+TimerInstructionStandardItem::TimerInstructionStandardItem(const tesseract::command_language::TimerInstruction& ti)
   : QStandardItem(icons::getUnknownIcon(), "Timer Instruction")
 {
   ctor(ti);
 }
 
 TimerInstructionStandardItem::TimerInstructionStandardItem(const QString& text,
-                                                           const tesseract_planning::TimerInstruction& ti)
+                                                           const tesseract::command_language::TimerInstruction& ti)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(ti);
@@ -46,7 +46,7 @@ TimerInstructionStandardItem::TimerInstructionStandardItem(const QString& text,
 
 TimerInstructionStandardItem::TimerInstructionStandardItem(const QIcon& icon,
                                                            const QString& text,
-                                                           const tesseract_planning::TimerInstruction& ti)
+                                                           const tesseract::command_language::TimerInstruction& ti)
   : QStandardItem(icon, text)
 {
   ctor(ti);
@@ -54,20 +54,20 @@ TimerInstructionStandardItem::TimerInstructionStandardItem(const QIcon& icon,
 
 int TimerInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_TIMER_INSTRUCTION); }
 
-std::string toString(tesseract_planning::TimerInstructionType t_type)
+std::string toString(tesseract::command_language::TimerInstructionType t_type)
 {
   switch (t_type)
   {
-    case tesseract_planning::TimerInstructionType::DIGITAL_OUTPUT_HIGH:
+    case tesseract::command_language::TimerInstructionType::DIGITAL_OUTPUT_HIGH:
       return "DIGITAL_OUTPUT_HIGH";
-    case tesseract_planning::TimerInstructionType::DIGITAL_OUTPUT_LOW:
+    case tesseract::command_language::TimerInstructionType::DIGITAL_OUTPUT_LOW:
       return "DIGITAL_OUTPUT_LOW";
     default:
-      throw std::runtime_error("Unhandled tesseract_planning::TimerInstructionType");
+      throw std::runtime_error("Unhandled tesseract::command_language::TimerInstructionType");
   }
 }
 
-void TimerInstructionStandardItem::ctor(const tesseract_planning::TimerInstruction& ti)
+void TimerInstructionStandardItem::ctor(const tesseract::command_language::TimerInstruction& ti)
 {
   appendRow(createStandardItemString("description", ti.getDescription()));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(ti.getUUID())));
@@ -76,4 +76,4 @@ void TimerInstructionStandardItem::ctor(const tesseract_planning::TimerInstructi
   appendRow(createStandardItemFloat("time (sec)", ti.getTimerTime()));
   appendRow(createStandardItemInt("I/O", ti.getTimerIO()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

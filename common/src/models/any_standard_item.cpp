@@ -27,23 +27,23 @@
 
 #include <tesseract_common/any_poly.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-AnyStandardItem::AnyStandardItem(const tesseract_common::AnyPoly& any)
+AnyStandardItem::AnyStandardItem(const tesseract::common::AnyPoly& any)
   : QStandardItem(icons::getUnknownIcon(), "Unknown Any")
 {
 }
 
-AnyStandardItem::AnyStandardItem(const QString& text, const tesseract_common::AnyPoly& any)
+AnyStandardItem::AnyStandardItem(const QString& text, const tesseract::common::AnyPoly& any)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
 }
 
-AnyStandardItem::AnyStandardItem(const QIcon& icon, const QString& text, const tesseract_common::AnyPoly& any)
+AnyStandardItem::AnyStandardItem(const QIcon& icon, const QString& text, const tesseract::common::AnyPoly& any)
   : QStandardItem(icon, text)
 {
 }
 
 int AnyStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_ANY); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -29,7 +29,7 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TaskComposerContextModel : public QStandardItemModel
 {
@@ -45,7 +45,7 @@ public:
    * @param ns The namespace to store the context under
    * @return The key associated with added context for removal
    */
-  QString add(std::shared_ptr<tesseract_planning::TaskComposerContext> context, std::string ns = "general");
+  QString add(std::shared_ptr<tesseract::task_composer::TaskComposerContext> context, std::string ns = "general");
 
   /**
    * @brief Remove the context
@@ -65,7 +65,7 @@ public:
    * @param row The row to get associated context
    * @return The context
    */
-  const tesseract_planning::TaskComposerContext& get(const QModelIndex& row) const;
+  const tesseract::task_composer::TaskComposerContext& get(const QModelIndex& row) const;
 
   /**
    * @brief Get the context namespace associated with the row
@@ -82,6 +82,6 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_CONTEXT_MODEL_H

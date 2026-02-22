@@ -25,7 +25,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TypeStandardItem : public QStandardItem
 {
@@ -38,5 +38,5 @@ public:
 private:
   int type_{ -1 };
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_COMMON_TYPE_STANDARD_ITEM_H

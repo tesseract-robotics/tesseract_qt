@@ -28,7 +28,7 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class GroupTCPsStandardItem;
@@ -45,7 +45,7 @@ public:
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
+  const tesseract::srdf::GroupTCPs& getGroupTCPs() const;
 
 private:
   std::shared_ptr<const ComponentInfo> component_info_;
@@ -53,7 +53,7 @@ private:
   GroupTCPsStandardItem* getRoot();
   const GroupTCPsStandardItem* getRoot() const;
 
-  void set(const tesseract_srdf::GroupTCPs& group_tcps);
+  void set(const tesseract::srdf::GroupTCPs& group_tcps);
   void add(const std::string& group_name, const std::string& tcp_name, const Eigen::Isometry3d& tcp);
   void remove(const std::string& group_name, const std::string& tcp_name);
   void remove(const std::string& group_name);
@@ -63,6 +63,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_GROUP_TCPS_MODEL_H

@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/change_joint_acceleration_limits_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ChangeJointAccelerationLimitsCommandStandardItem::ChangeJointAccelerationLimitsCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::ChangeJointAccelerationLimitsCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeJointAccelerationLimitsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Change Joint Acceleration Limits"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ ChangeJointAccelerationLimitsCommandStandardItem::ChangeJointAccelerationLimitsC
 
 ChangeJointAccelerationLimitsCommandStandardItem::ChangeJointAccelerationLimitsCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeJointAccelerationLimitsCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeJointAccelerationLimitsCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ ChangeJointAccelerationLimitsCommandStandardItem::ChangeJointAccelerationLimitsC
 ChangeJointAccelerationLimitsCommandStandardItem::ChangeJointAccelerationLimitsCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeJointAccelerationLimitsCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeJointAccelerationLimitsCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -65,4 +65,4 @@ void ChangeJointAccelerationLimitsCommandStandardItem::ctor()
 
   sortChildren(0);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

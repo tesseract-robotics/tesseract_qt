@@ -31,7 +31,7 @@
 
 #include <tesseract_qt/common/joint_trajectory_set.h>
 
-namespace tesseract_common
+namespace tesseract::common
 {
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
                                        std::string description)
@@ -55,14 +55,14 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
 }
 
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                                       std::vector<std::shared_ptr<const tesseract_environment::Command>> commands,
+                                       std::vector<std::shared_ptr<const tesseract::environment::Command>> commands,
                                        std::string description)
   : JointTrajectorySet(initial_state, description)
 {
   commands_ = std::move(commands);
 }
 
-JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract_environment::Environment> environment,
+JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::Environment> environment,
                                        std::string description)
   : JointTrajectorySet(environment->getState().joints, std::move(description))
 {
@@ -75,7 +75,7 @@ void JointTrajectorySet::setUUID(boost::uuids::uuid uuid) { uuid_ = uuid; }
 
 void JointTrajectorySet::regenerateUUID() { uuid_ = boost::uuids::random_generator()(); }
 
-void JointTrajectorySet::applyEnvironment(std::unique_ptr<tesseract_environment::Environment> env)
+void JointTrajectorySet::applyEnvironment(std::unique_ptr<tesseract::environment::Environment> env)
 {
   if (environment_ != nullptr)
     throw std::runtime_error("JointTrajectorySet: Cannot apply environment to trajectory set which already contains an "
@@ -88,9 +88,9 @@ void JointTrajectorySet::applyEnvironment(std::unique_ptr<tesseract_environment:
   commands_.clear();
 }
 
-std::shared_ptr<tesseract_environment::Environment> JointTrajectorySet::getEnvironment() const { return environment_; }
+std::shared_ptr<tesseract::environment::Environment> JointTrajectorySet::getEnvironment() const { return environment_; }
 
-const std::vector<std::shared_ptr<const tesseract_environment::Command>>&
+const std::vector<std::shared_ptr<const tesseract::environment::Command>>&
 JointTrajectorySet::getEnvironmentCommands() const
 {
   return commands_;
@@ -133,7 +133,7 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
   {
     prune_joint_names.insert(joint_state.joint_names.begin(), joint_state.joint_names.end());
 
-    tesseract_common::JointState adj_state(joint_state);
+    tesseract::common::JointState adj_state(joint_state);
     current_time = adj_state.time;
 
     // It is possible for sub composites to start back from zero, this accounts for it
@@ -243,4 +243,4 @@ std::vector<JointTrajectoryInfo>::const_reference JointTrajectorySet::operator[]
 
 const JointState& JointTrajectorySet::getInitialState() const { return initial_state_; }
 
-}  // namespace tesseract_common
+}  // namespace tesseract::common

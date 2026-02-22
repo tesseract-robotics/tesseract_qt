@@ -35,7 +35,7 @@ class MouseEvent;
 }  // namespace gz::common
 
 /** @brief Namespace for all events. Refer to the EventManager class for more information about events. */
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 /**
  * @brief The class for sending and receiving custom snap value events.
@@ -662,7 +662,7 @@ private:
 //    /// \param[in] _entity Entity added
 //    /// \param[in] _type Entity type
 //    /// \param[in] _parent Parent entity.
-//    public: explicit ModelEditorAddEntity(QString _entity, QString _type, tesseract_gui::Entity _parent);
+//    public: explicit ModelEditorAddEntity(QString _entity, QString _type, tesseract::gui::Entity _parent);
 
 //    /// \brief Get the entity to add
 //    public: QString Entity() const;
@@ -671,7 +671,7 @@ private:
 //    public: QString EntityType() const;
 
 //    /// \brief Get the parent entity to add the entity to
-//    public: tesseract_gui::Entity ParentEntity() const;
+//    public: tesseract::gui::Entity ParentEntity() const;
 
 //    /// \brief Get the data map.
 //    /// \return the QMap of string, string holding custom data.
@@ -685,5 +685,5 @@ private:
 //    std::unique_ptr<Implementation> data_;
 //  };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_RENDERING_RENDER_EVENTS_H

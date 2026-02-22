@@ -35,7 +35,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 SceneGraphRenderManager::SceneGraphRenderManager(std::shared_ptr<const ComponentInfo> component_info)
   : component_info_(std::move(component_info))
@@ -155,4 +155,4 @@ bool SceneGraphRenderManager::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

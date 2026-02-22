@@ -28,7 +28,7 @@
 #include <utility>
 #include <string>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 StatusLogInfo::StatusLogInfo(QString text) : QEvent(QEvent::Type(EventType::STATUS_LOG_INFO)), text_(std::move(text)) {}
 
@@ -70,4 +70,4 @@ StatusLogWarnToggleOff::StatusLogWarnToggleOff() : QEvent(QEvent::Type(EventType
 
 StatusLogErrorToggleOff::StatusLogErrorToggleOff() : QEvent(QEvent::Type(EventType::STATUS_LOG_ERROR_TOGGLE_OFF)) {}
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/set_active_continuous_contact_manager_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::SetActiveContinuousContactManagerCommand> command)
+    std::shared_ptr<const tesseract::environment::SetActiveContinuousContactManagerCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Set Active Continuous Contact Manager"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContact
 
 SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::SetActiveContinuousContactManagerCommand> command)
+    std::shared_ptr<const tesseract::environment::SetActiveContinuousContactManagerCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContact
 SetActiveContinuousContactManagerCommandStandardItem::SetActiveContinuousContactManagerCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::SetActiveContinuousContactManagerCommand> command)
+    std::shared_ptr<const tesseract::environment::SetActiveContinuousContactManagerCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -62,4 +62,4 @@ void SetActiveContinuousContactManagerCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString("contact manager", command->getName()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

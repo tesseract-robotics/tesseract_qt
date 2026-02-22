@@ -33,7 +33,7 @@ namespace Ui
 class AddAllowedCollisionEntryDialog;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class AddAllowedCollisionEntryDialog : public QDialog
@@ -56,6 +56,6 @@ private:
   std::unique_ptr<Ui::AddAllowedCollisionEntryDialog> ui_;
   std::shared_ptr<const ComponentInfo> component_info_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ACM_ADD_ALLOWED_COLLISION_ENTRY_DIALOG_H

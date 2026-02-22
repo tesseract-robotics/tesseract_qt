@@ -26,19 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TimerInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit TimerInstructionStandardItem(const tesseract_planning::TimerInstruction& ti);
-  TimerInstructionStandardItem(const QString& text, const tesseract_planning::TimerInstruction& ti);
-  TimerInstructionStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::TimerInstruction& ti);
+  explicit TimerInstructionStandardItem(const tesseract::command_language::TimerInstruction& ti);
+  TimerInstructionStandardItem(const QString& text, const tesseract::command_language::TimerInstruction& ti);
+  TimerInstructionStandardItem(const QIcon& icon,
+                               const QString& text,
+                               const tesseract::command_language::TimerInstruction& ti);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::TimerInstruction& ti);
+  void ctor(const tesseract::command_language::TimerInstruction& ti);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_TIMER_INSTRUCTION_STANDARD_ITEM_H

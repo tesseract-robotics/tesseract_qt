@@ -42,7 +42,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StudioRenderDockWidget::Implementation
 {
@@ -90,7 +90,7 @@ void StudioRenderDockWidget::loadConfig(const YAML::Node& config)
   if (const YAML::Node& n = config["central_widget"])  // NOLINT
     assign_as_central_widget_ = n.as<bool>();
 
-  data_->render_widget = new tesseract_gui::RenderWidget(data_->component_info->getSceneName(), engine_name);
+  data_->render_widget = new tesseract::gui::RenderWidget(data_->component_info->getSceneName(), engine_name);
 
   if (const YAML::Node& n = config["show_sky"])  // NOLINT
     data_->render_widget->setSkyEnabled(n.as<bool>());
@@ -138,7 +138,7 @@ void StudioRenderDockWidget::onInitialize()
     if (data_->component_info == nullptr)
       return;
 
-    data_->render_widget = new tesseract_gui::RenderWidget(data_->component_info->getSceneName());
+    data_->render_widget = new tesseract::gui::RenderWidget(data_->component_info->getSceneName());
     data_->render_widget->setSkyEnabled(dialog.skyEnabled());
     data_->render_widget->setGridEnabled(dialog.gridEnabled());
     data_->render_widget->setShadowsEnabled(dialog.shadowsEnabled());
@@ -152,4 +152,4 @@ void StudioRenderDockWidget::onInitialize()
     setFeature(ads::CDockWidget::DockWidgetFocusable, true);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

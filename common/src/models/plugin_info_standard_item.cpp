@@ -25,15 +25,15 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-PluginInfoStandardItem::PluginInfoStandardItem(tesseract_common::PluginInfo plugin_info)
+PluginInfoStandardItem::PluginInfoStandardItem(tesseract::common::PluginInfo plugin_info)
   : QStandardItem(icons::getPluginIcon(), "Plugin Info"), plugin_info(std::move(plugin_info))
 {
   ctor();
 }
 
-PluginInfoStandardItem::PluginInfoStandardItem(const QString& text, tesseract_common::PluginInfo plugin_info)
+PluginInfoStandardItem::PluginInfoStandardItem(const QString& text, tesseract::common::PluginInfo plugin_info)
   : QStandardItem(icons::getPluginIcon(), text), plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -41,7 +41,7 @@ PluginInfoStandardItem::PluginInfoStandardItem(const QString& text, tesseract_co
 
 PluginInfoStandardItem::PluginInfoStandardItem(const QIcon& icon,
                                                const QString& text,
-                                               tesseract_common::PluginInfo plugin_info)
+                                               tesseract::common::PluginInfo plugin_info)
   : QStandardItem(icon, text), plugin_info(std::move(plugin_info))
 {
   ctor();
@@ -54,4 +54,4 @@ void PluginInfoStandardItem::ctor()
   appendRow(createStandardItemString("link_name1", plugin_info.class_name));
   appendRow(createStandardItemString("config", plugin_info.getConfigString()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

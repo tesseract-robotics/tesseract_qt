@@ -50,67 +50,67 @@
 #include <tesseract_command_language/wait_instruction.h>
 #include <tesseract_command_language/instruction_type.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 void registerCommonAnyPolyTypes()
 {
-  {  // tesseract_environment::Environment
-    using Type = tesseract_environment::Environment;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::environment::Environment
+    using Type = tesseract::environment::Environment;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new EnvironmentStandardItem(data) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // std::shared_ptr<tesseract_environment::Environment>
-    using Type = std::shared_ptr<tesseract_environment::Environment>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // std::shared_ptr<tesseract::environment::Environment>
+    using Type = std::shared_ptr<tesseract::environment::Environment>;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new EnvironmentStandardItem(*data) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // std::shared_ptr<const tesseract_environment::Environment>
-    using Type = std::shared_ptr<const tesseract_environment::Environment>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // std::shared_ptr<const tesseract::environment::Environment>
+    using Type = std::shared_ptr<const tesseract::environment::Environment>;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new EnvironmentStandardItem(*data) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // std::shared_ptr<tesseract_planning::TaskComposerDataStorage>
-    using Type = std::shared_ptr<tesseract_planning::TaskComposerDataStorage>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // std::shared_ptr<tesseract::task_composer::TaskComposerDataStorage>
+    using Type = std::shared_ptr<tesseract::task_composer::TaskComposerDataStorage>;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new TaskComposerDataStorageStandardItem(*data) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_planning::CompositeInstruction
-    using Type = tesseract_planning::CompositeInstruction;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::CompositeInstruction
+    using Type = tesseract::command_language::CompositeInstruction;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new CompositeInstructionStandardItem(data) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_collision::ContactResultMap
-    using Type = tesseract_collision::ContactResultMap;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::collision::ContactResultMap
+    using Type = tesseract::collision::ContactResultMap;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new ContactResultMapStandardItem(convert(data)) };
     };
     AnyPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // std::vector<tesseract_collision::ContactResultMap>
-    using Type = std::vector<tesseract_collision::ContactResultMap>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // std::vector<tesseract::collision::ContactResultMap>
+    using Type = std::vector<tesseract::collision::ContactResultMap>;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new ContactResultMapVectorStandardItem(convert(data)) };
     };
@@ -119,67 +119,67 @@ void registerCommonAnyPolyTypes()
 }
 void registerCommonInstructionPolyTypes()
 {
-  {  // tesseract_planning::CompositeInstruction
-    using Type = tesseract_planning::CompositeInstruction;
-    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::CompositeInstruction
+    using Type = tesseract::command_language::CompositeInstruction;
+    auto fn = [](const tesseract::command_language::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new CompositeInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_planning::MoveInstructionPoly
-    using Type = tesseract_planning::MoveInstructionPoly;
-    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::MoveInstructionPoly
+    using Type = tesseract::command_language::MoveInstructionPoly;
+    auto fn = [](const tesseract::command_language::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new MoveInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_planning::SetAnalogInstruction
-    using Type = tesseract_planning::SetAnalogInstruction;
-    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::SetAnalogInstruction
+    using Type = tesseract::command_language::SetAnalogInstruction;
+    auto fn = [](const tesseract::command_language::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new SetAnalogInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_planning::SetDigitalInstruction
-    using Type = tesseract_planning::SetDigitalInstruction;
-    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::SetDigitalInstruction
+    using Type = tesseract::command_language::SetDigitalInstruction;
+    auto fn = [](const tesseract::command_language::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new SetDigitalInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_planning::SetToolInstruction
-    using Type = tesseract_planning::SetToolInstruction;
-    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::SetToolInstruction
+    using Type = tesseract::command_language::SetToolInstruction;
+    auto fn = [](const tesseract::command_language::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new SetToolInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_planning::TimerInstruction
-    using Type = tesseract_planning::TimerInstruction;
-    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::TimerInstruction
+    using Type = tesseract::command_language::TimerInstruction;
+    auto fn = [](const tesseract::command_language::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new TimerInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
 
-  {  // tesseract_planning::WaitInstruction
-    using Type = tesseract_planning::WaitInstruction;
-    auto fn = [](const tesseract_planning::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
+  {  // tesseract::task_composer::WaitInstruction
+    using Type = tesseract::command_language::WaitInstruction;
+    auto fn = [](const tesseract::command_language::InstructionPoly& instruction_poly) -> QList<QStandardItem*> {
       const auto& data = instruction_poly.as<Type>();
       return { new WaitInstructionStandardItem(data) };
     };
     InstructionPolyStandardItemManager::registerFactory<Type>(fn);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

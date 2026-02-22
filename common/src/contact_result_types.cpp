@@ -22,9 +22,9 @@
  */
 #include <tesseract_qt/common/contact_results_types.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_results)
+ContactResultMap convert(const tesseract::collision::ContactResultMap& contact_results)
 {
   // Convert to tracked objects
   ContactResultMap tracked_object;
@@ -32,14 +32,14 @@ ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_re
   {
     ContactResultVector crv;
     for (const auto& result : contact.second)
-      crv().emplace_back(tesseract_gui::ContactResult(result));
+      crv().emplace_back(tesseract::gui::ContactResult(result));
 
     tracked_object[contact.first] = crv;
   }
   return tracked_object;
 }
 
-std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::ContactResultMap>& contact_results)
+std::vector<ContactResultMap> convert(const std::vector<tesseract::collision::ContactResultMap>& contact_results)
 {
   std::vector<ContactResultMap> tracked_contact_results;
   tracked_contact_results.reserve(contact_results.size());
@@ -49,4 +49,4 @@ std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::Con
   return tracked_contact_results;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

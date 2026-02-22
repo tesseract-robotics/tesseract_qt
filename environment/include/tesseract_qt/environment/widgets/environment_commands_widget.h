@@ -30,7 +30,7 @@
 
 class QItemSelectionModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class EnvironmentCommandsModel;
@@ -60,5 +60,5 @@ private:
   void ctor(std::shared_ptr<const ComponentInfo> component_info);
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_WIDGET_H

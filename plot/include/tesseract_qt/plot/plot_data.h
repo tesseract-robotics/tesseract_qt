@@ -27,7 +27,7 @@
 #include <tesseract_qt/plot/timeseries.h>
 #include <tesseract_qt/plot/stringseries.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 using PlotDataXY = PlotDataBase<double, double>;
 using PlotData = TimeseriesBase<double>;
@@ -120,6 +120,6 @@ inline void AddPrefixToPlotData(const std::string& prefix, std::unordered_map<st
   }
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_PLOT_DATA_H

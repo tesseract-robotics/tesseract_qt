@@ -28,7 +28,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class GroupTCPsClear : public ComponentEvent
 {
@@ -40,13 +40,13 @@ public:
 class GroupTCPsSet : public ComponentEvent
 {
 public:
-  GroupTCPsSet(std::shared_ptr<const ComponentInfo> component_info, const tesseract_srdf::GroupTCPs& group_tcps);
+  GroupTCPsSet(std::shared_ptr<const ComponentInfo> component_info, const tesseract::srdf::GroupTCPs& group_tcps);
   ~GroupTCPsSet() override;
 
-  const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
+  const tesseract::srdf::GroupTCPs& getGroupTCPs() const;
 
 private:
-  tesseract_srdf::GroupTCPs group_tcps_;
+  tesseract::srdf::GroupTCPs group_tcps_;
 };
 
 class GroupTCPsAdd : public ComponentEvent
@@ -102,11 +102,11 @@ private:
 //{
 // public:
 //  GroupJointStatesShow(ComponentInfo component_info, QString group_name, QString state_name,
-//  tesseract_srdf::GroupsJointState state); ~GroupJointStatesShow() override;
+//  tesseract::srdf::GroupsJointState state); ~GroupJointStatesShow() override;
 
 //  const std::string& getGroupName() const;
 //  const std::string& getStateName() const;
-//  const tesseract_srdf::GroupsJointState& getJointState() const;
+//  const tesseract::srdf::GroupsJointState& getJointState() const;
 
 //  /** @brief Unique type for this event. */
 //  static const QEvent::Type kType = QEvent::Type(EventType::GROUP_JOINT_STATES_SHOW);
@@ -116,5 +116,5 @@ private:
 //  std::unique_ptr<Implementation> data_;
 //};
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_GROUP_TCPS_EVENTS_H

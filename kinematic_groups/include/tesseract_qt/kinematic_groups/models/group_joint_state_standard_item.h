@@ -25,7 +25,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class GroupJointStateStandardItem : public QStandardItem
 {
@@ -44,6 +44,6 @@ public:
 private:
   void ctor(const std::unordered_map<std::string, double>& state);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATE_STANDARD_ITEM_H

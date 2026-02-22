@@ -36,7 +36,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct SceneStateModel::Implementation
 {
@@ -103,7 +103,7 @@ SceneStateModel& SceneStateModel::operator=(const SceneStateModel& other) { retu
 
 std::shared_ptr<const ComponentInfo> SceneStateModel::getComponentInfo() const { return data_->component_info; }
 
-void SceneStateModel::setState(const tesseract_scene_graph::SceneState& scene_state)
+void SceneStateModel::setState(const tesseract::scene_graph::SceneState& scene_state)
 {
   bool sort_required{ false };
 
@@ -286,4 +286,4 @@ bool SceneStateModel::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -12,7 +12,7 @@
 #include <QStandardPaths>
 #include <QStringList>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ToolPathFileDialog::ToolPathFileDialog(QFileDialog::AcceptMode accept_mode, QWidget* parent)
   : ToolPathFileDialog(nullptr, accept_mode, parent)
@@ -138,4 +138,4 @@ void ToolPathFileDialog::onBrowseClicked()
   }
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

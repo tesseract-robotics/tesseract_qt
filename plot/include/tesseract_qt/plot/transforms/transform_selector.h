@@ -31,7 +31,7 @@ namespace Ui
 class transform_selector;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TransformSelector : public QDialog
 {
@@ -60,6 +60,6 @@ private:
 
   QString* _default_trans;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_TRANSFORMS_TRANSFORM_SELECTOR_H

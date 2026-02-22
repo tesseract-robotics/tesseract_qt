@@ -29,7 +29,7 @@
 #include <unordered_map>
 #include <memory>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct Entity
 {
@@ -43,6 +43,6 @@ using EntityVector = std::vector<Entity>;
 using UnmanagedObject = std::shared_ptr<void>;
 using UnmanagedObjectMap = std::unordered_map<std::string, UnmanagedObject>;
 using UnmanagedObjectVector = std::vector<UnmanagedObject>;
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_ENTITY_H

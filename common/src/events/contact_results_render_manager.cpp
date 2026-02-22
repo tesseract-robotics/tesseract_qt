@@ -33,7 +33,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ContactResultsRenderManager::ContactResultsRenderManager(std::shared_ptr<const ComponentInfo> component_info)
   : component_info_(std::move(component_info))
@@ -92,4 +92,4 @@ bool ContactResultsRenderManager::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

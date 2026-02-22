@@ -23,7 +23,7 @@
 #include <QObject>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /**  @brief The types of view controllers available  */
 enum class ViewControlType
@@ -80,6 +80,6 @@ private:
   /** @brief Pointer to private data. */
   std::unique_ptr<InteractiveViewControlPrivate> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_RENDERING_INTERACTIVE_VIEW_CONTROL_H

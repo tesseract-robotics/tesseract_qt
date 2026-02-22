@@ -29,10 +29,10 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 SetDigitalInstructionStandardItem::SetDigitalInstructionStandardItem(
-    const tesseract_planning::SetDigitalInstruction& sdi)
+    const tesseract::command_language::SetDigitalInstruction& sdi)
   : QStandardItem(icons::getUnknownIcon(), "Set Digital Instruction")
 {
   ctor(sdi);
@@ -40,7 +40,7 @@ SetDigitalInstructionStandardItem::SetDigitalInstructionStandardItem(
 
 SetDigitalInstructionStandardItem::SetDigitalInstructionStandardItem(
     const QString& text,
-    const tesseract_planning::SetDigitalInstruction& sdi)
+    const tesseract::command_language::SetDigitalInstruction& sdi)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(sdi);
@@ -49,7 +49,7 @@ SetDigitalInstructionStandardItem::SetDigitalInstructionStandardItem(
 SetDigitalInstructionStandardItem::SetDigitalInstructionStandardItem(
     const QIcon& icon,
     const QString& text,
-    const tesseract_planning::SetDigitalInstruction& sdi)
+    const tesseract::command_language::SetDigitalInstruction& sdi)
   : QStandardItem(icon, text)
 {
   ctor(sdi);
@@ -60,7 +60,7 @@ int SetDigitalInstructionStandardItem::type() const
   return static_cast<int>(StandardItemType::CL_SET_DIGITAL_INSTRUCTION);
 }
 
-void SetDigitalInstructionStandardItem::ctor(const tesseract_planning::SetDigitalInstruction& sdi)
+void SetDigitalInstructionStandardItem::ctor(const tesseract::command_language::SetDigitalInstruction& sdi)
 {
   appendRow(createStandardItemString("description", sdi.getDescription()));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(sdi.getUUID())));
@@ -69,4 +69,4 @@ void SetDigitalInstructionStandardItem::ctor(const tesseract_planning::SetDigita
   appendRow(createStandardItemInt("index", sdi.getIndex()));
   appendRow(createStandardItemBool("value", sdi.getValue()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

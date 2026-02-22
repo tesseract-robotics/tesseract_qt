@@ -38,7 +38,7 @@ namespace Ui
 class JointTrajectoryWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class JointTrajectoryModel;
@@ -88,6 +88,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_WIDGET_H

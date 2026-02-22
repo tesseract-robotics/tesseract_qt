@@ -31,7 +31,7 @@ class QStandardItem;
 class QDateTime;
 class QIcon;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class NamespaceStandardItem;
 
@@ -57,6 +57,6 @@ QList<QStandardItem*> createStandardItemDateTime(const QIcon& icon, const std::s
  * @return The NamespaceStandardItem
  */
 NamespaceStandardItem* createNamespaceItem(QStandardItem& root_item, const std::string& namespace_str);
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_STANDARD_ITEM_UTILS_H

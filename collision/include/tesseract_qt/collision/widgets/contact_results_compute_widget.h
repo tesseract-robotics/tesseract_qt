@@ -35,7 +35,7 @@ class ContactResultsComputeWidget;
 
 class QItemSelectionModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ContactResultsModel;
@@ -66,6 +66,6 @@ private:
 
   void ctor(std::shared_ptr<const ComponentInfo> component_info);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_COMPUTE_WIDGET_H

@@ -31,10 +31,10 @@
 #include <tesseract_scene_graph/link.h>
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 AddLinkCommandStandardItem::AddLinkCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::AddLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::AddLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Add Link"), command(std::move(command))
 {
   ctor();
@@ -42,7 +42,7 @@ AddLinkCommandStandardItem::AddLinkCommandStandardItem(
 
 AddLinkCommandStandardItem::AddLinkCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::AddLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -51,7 +51,7 @@ AddLinkCommandStandardItem::AddLinkCommandStandardItem(
 AddLinkCommandStandardItem::AddLinkCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::AddLinkCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -61,13 +61,13 @@ int AddLinkCommandStandardItem::type() const { return static_cast<int>(StandardI
 
 void AddLinkCommandStandardItem::ctor()
 {
-  appendRow(new LinkStandardItem(std::make_shared<tesseract_scene_graph::Link>(command->getLink()->clone()), false));
+  appendRow(new LinkStandardItem(std::make_shared<tesseract::scene_graph::Link>(command->getLink()->clone()), false));
 
   if (command->getJoint() != nullptr)
-    appendRow(new JointStandardItem(std::make_shared<tesseract_scene_graph::Joint>(command->getJoint()->clone())));
+    appendRow(new JointStandardItem(std::make_shared<tesseract::scene_graph::Joint>(command->getJoint()->clone())));
   else
     appendRow(createStandardItemString(icons::getJointIcon(), "Joint", "NULL"));
 
   appendRow(createStandardItemString("replace allowed", (command->replaceAllowed()) ? "True" : "False"));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

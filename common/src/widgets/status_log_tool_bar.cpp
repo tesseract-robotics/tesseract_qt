@@ -29,7 +29,7 @@
 #include <QEvent>
 #include <QMessageBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StatusLogToolBar::Implementation
 {
@@ -102,4 +102,4 @@ StatusLogToolBar::StatusLogToolBar(QWidget* parent) : QToolBar(parent), data_(st
 
 StatusLogToolBar::~StatusLogToolBar() = default;
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -87,7 +87,7 @@
     </widget>
    </item>
    <item>
-    <widget class="tesseract_gui::AllowedCollisionMatrixWidget" name="acm_widget" native="true">
+    <widget class="tesseract::gui::AllowedCollisionMatrixWidget" name="acm_widget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -176,7 +176,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::AllowedCollisionMatrixWidget</class>
+   <class>tesseract::gui::AllowedCollisionMatrixWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/acm/widgets/allowed_collision_matrix_widget.h</header>
    <container>1</container>

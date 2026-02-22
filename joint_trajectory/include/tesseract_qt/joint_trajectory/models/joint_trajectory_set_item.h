@@ -26,23 +26,23 @@
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointTrajectorySetItem : public QStandardItem
 {
 public:
-  JointTrajectorySetItem(const tesseract_common::JointTrajectorySet& trajectory_set);
-  explicit JointTrajectorySetItem(const QString& text, const tesseract_common::JointTrajectorySet& trajectory_set);
+  JointTrajectorySetItem(const tesseract::common::JointTrajectorySet& trajectory_set);
+  explicit JointTrajectorySetItem(const QString& text, const tesseract::common::JointTrajectorySet& trajectory_set);
   JointTrajectorySetItem(const QIcon& icon,
                          const QString& text,
-                         const tesseract_common::JointTrajectorySet& trajectory_set);
+                         const tesseract::common::JointTrajectorySet& trajectory_set);
   int type() const override;
 
-  tesseract_common::JointTrajectorySet trajectory_set;
+  tesseract::common::JointTrajectorySet trajectory_set;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_SET_ITEM_H

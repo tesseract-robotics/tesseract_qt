@@ -28,31 +28,31 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class LinkStandardItem : public QStandardItem
 {
 public:
-  LinkStandardItem(std::shared_ptr<tesseract_scene_graph::Link> link, bool checkable = true);
+  LinkStandardItem(std::shared_ptr<tesseract::scene_graph::Link> link, bool checkable = true);
   explicit LinkStandardItem(const QString& text,
-                            std::shared_ptr<tesseract_scene_graph::Link> link,
+                            std::shared_ptr<tesseract::scene_graph::Link> link,
                             bool checkable = true);
   LinkStandardItem(const QIcon& icon,
                    const QString& text,
-                   std::shared_ptr<tesseract_scene_graph::Link> link,
+                   std::shared_ptr<tesseract::scene_graph::Link> link,
                    bool checkable = true);
   int type() const override;
 
   QStandardItem* getCollisionsItem();
   QStandardItem* getVisualsItem();
 
-  std::shared_ptr<tesseract_scene_graph::Link> link;
+  std::shared_ptr<tesseract::scene_graph::Link> link;
 
 private:
   class Implementation;
   std::unique_ptr<Implementation> data_;
   void ctor(bool checkable);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_LINK_STANDARD_ITEM_H

@@ -28,7 +28,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class RenderEvent : public QEvent
 {
@@ -68,5 +68,5 @@ public:
   Render(std::string scene_name);
   ~Render() override;
 };
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_RENDER_EVENTS_H

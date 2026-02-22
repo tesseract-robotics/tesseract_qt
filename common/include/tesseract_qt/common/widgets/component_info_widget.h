@@ -38,7 +38,7 @@ namespace boost::uuids
 struct uuid;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ComponentInfoWidget : public QWidget
@@ -60,6 +60,6 @@ private:
   std::unique_ptr<Ui::ComponentInfoWidget> ui;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_WIDGET_H

@@ -28,7 +28,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class VectorStringStandardItem : public QStandardItem
 {
@@ -42,5 +42,5 @@ public:
 private:
   void ctor(const std::vector<std::string>& vector_string);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_COMMON_VECTOR_STRING_STANDARD_ITEM_H

@@ -37,7 +37,7 @@ namespace Ui
 class ManipulationWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ManipulationWidget : public QWidget
@@ -71,7 +71,7 @@ public:
    * @param state_name The state name to retrieve
    * @return The state
    */
-  tesseract_scene_graph::SceneState getState(const std::string& state_name) const;
+  tesseract::scene_graph::SceneState getState(const std::string& state_name) const;
 
   /**
    * @brief Check if widget is in a valid state
@@ -90,7 +90,7 @@ public:
    * @brief Get the kinematic group
    * @return The kinematic group
    */
-  const tesseract_kinematics::KinematicGroup& kinematicGroup() const;
+  const tesseract::kinematics::KinematicGroup& kinematicGroup() const;
 
   /**
    * @brief Get the current mode
@@ -141,7 +141,7 @@ public:
    * @brief Get active state
    * @return The active state
    */
-  tesseract_scene_graph::SceneState getActiveState() const;
+  tesseract::scene_graph::SceneState getActiveState() const;
 
   /**
    * @brief Set the active state
@@ -176,7 +176,7 @@ public:
   Eigen::VectorXd getActiveJointValues() const;
 
 Q_SIGNALS:
-  void manipulationStateChanged(const tesseract_scene_graph::SceneState& state, const std::string& state_index);
+  void manipulationStateChanged(const tesseract::scene_graph::SceneState& state, const std::string& state_index);
   void groupNameChanged(const QString& group_name);
   void modeChanged(int mode);
   void workingFrameChanged(const QString& working_frame_name);
@@ -199,11 +199,11 @@ private:
   std::unique_ptr<Ui::ManipulationWidget> ui;
   std::unique_ptr<Implementation> data_;
 
-  tesseract_scene_graph::SceneState getReducedSceneState(const tesseract_scene_graph::SceneState& scene_state);
+  tesseract::scene_graph::SceneState getReducedSceneState(const tesseract::scene_graph::SceneState& scene_state);
   void addStateHelper(const std::string& state_name);
   void removeStateHelper(const std::string& state_name);
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_MANIPULATION_MANIPULATION_WIDGET_H

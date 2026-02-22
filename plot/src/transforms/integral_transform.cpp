@@ -25,7 +25,7 @@
 #include <QDoubleValidator>
 #include "ui_integral_transform.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 IntegralTransform::IntegralTransform()
   : _widget(std::make_unique<QWidget>()), ui(std::make_unique<Ui::IntegralTransform>()), _dT(0.0)
@@ -142,4 +142,4 @@ void IntegralTransform::on_buttonCompute_clicked()
     emit parametersChanged();
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

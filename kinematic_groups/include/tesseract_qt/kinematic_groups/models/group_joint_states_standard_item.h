@@ -27,36 +27,36 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class GroupJointStatesStandardItem : public QStandardItem
 {
 public:
   GroupJointStatesStandardItem();
-  explicit GroupJointStatesStandardItem(const tesseract_srdf::GroupJointStates& group_joint_states);
+  explicit GroupJointStatesStandardItem(const tesseract::srdf::GroupJointStates& group_joint_states);
   explicit GroupJointStatesStandardItem(const QString& text,
-                                        const tesseract_srdf::GroupJointStates& group_joint_states);
+                                        const tesseract::srdf::GroupJointStates& group_joint_states);
   explicit GroupJointStatesStandardItem(const QIcon& icon,
                                         const QString& text,
-                                        const tesseract_srdf::GroupJointStates& group_joint_states);
+                                        const tesseract::srdf::GroupJointStates& group_joint_states);
   int type() const override;
 
   void addGroupJointState(const QString& group_name,
                           const QString& state_name,
-                          const tesseract_srdf::GroupsJointState& state);
+                          const tesseract::srdf::GroupsJointState& state);
   void removeGroupJointState(const QString& group_name, const QString& state_name);
   void removeGroup(const QString& group_name);
 
-  tesseract_srdf::GroupJointStates getGroupJointStates() const;
+  tesseract::srdf::GroupJointStates getGroupJointStates() const;
 
 private:
-  void ctor(const tesseract_srdf::GroupJointStates& group_joint_states);
+  void ctor(const tesseract::srdf::GroupJointStates& group_joint_states);
 
   std::unordered_map<std::string, QStandardItem*> group_items_;
 
   void addGroupJointStateItem(const QString& group_name,
                               const QString& tcp_name,
-                              const tesseract_srdf::GroupsJointState& state);
+                              const tesseract::srdf::GroupsJointState& state);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_GROUP_JOINT_STATES_STANDARD_ITEM_H

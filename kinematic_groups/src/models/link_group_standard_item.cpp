@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 LinkGroupStandardItem::LinkGroupStandardItem(std::vector<std::string> group)
   : QStandardItem(icons::getRobotArmIcon(), "Joint Group"), group(std::move(group))
@@ -52,4 +52,4 @@ void LinkGroupStandardItem::ctor()
   for (const auto& link : group)
     appendRow(createStandardItemString("link", link));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

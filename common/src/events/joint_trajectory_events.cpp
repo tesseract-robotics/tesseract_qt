@@ -28,19 +28,19 @@
 
 #include <QString>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class JointTrajectoryAdd::Implementation
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  tesseract_common::JointTrajectorySet joint_trajectory_set;
+  tesseract::common::JointTrajectorySet joint_trajectory_set;
   bool clear_namespace{ false };
 };
 
 JointTrajectoryAdd::JointTrajectoryAdd(std::shared_ptr<const ComponentInfo> component_info,
-                                       const tesseract_common::JointTrajectorySet& joint_trajectory_set,
+                                       const tesseract::common::JointTrajectorySet& joint_trajectory_set,
                                        bool clear_namespace)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::JOINT_TRAJECTORY_ADD))
   , data_(std::make_unique<Implementation>())
@@ -54,7 +54,7 @@ JointTrajectoryAdd::JointTrajectoryAdd(const JointTrajectoryAdd& other)
 }
 JointTrajectoryAdd::~JointTrajectoryAdd() = default;
 
-const tesseract_common::JointTrajectorySet& JointTrajectoryAdd::getJointTrajectory() const
+const tesseract::common::JointTrajectorySet& JointTrajectoryAdd::getJointTrajectory() const
 {
   return data_->joint_trajectory_set;
 }
@@ -161,4 +161,4 @@ JointTrajectoryToolbarState::JointTrajectoryToolbarState(const JointTrajectoryTo
 {
 }
 JointTrajectoryToolbarState::~JointTrajectoryToolbarState() = default;
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

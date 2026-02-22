@@ -29,16 +29,16 @@
 
 #include <tesseract_common/joint_state.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-JointTrajectoryStandardItem::JointTrajectoryStandardItem(const tesseract_common::JointTrajectory& joint_trajectory)
+JointTrajectoryStandardItem::JointTrajectoryStandardItem(const tesseract::common::JointTrajectory& joint_trajectory)
   : QStandardItem(icons::getTrajectoryIcon(), "Joint Trajectory")
 {
   ctor(joint_trajectory);
 }
 
 JointTrajectoryStandardItem::JointTrajectoryStandardItem(const QString& text,
-                                                         const tesseract_common::JointTrajectory& joint_trajectory)
+                                                         const tesseract::common::JointTrajectory& joint_trajectory)
   : QStandardItem(icons::getTrajectoryIcon(), text)
 {
   ctor(joint_trajectory);
@@ -46,7 +46,7 @@ JointTrajectoryStandardItem::JointTrajectoryStandardItem(const QString& text,
 
 JointTrajectoryStandardItem::JointTrajectoryStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         const tesseract_common::JointTrajectory& joint_trajectory)
+                                                         const tesseract::common::JointTrajectory& joint_trajectory)
   : QStandardItem(icon, text)
 {
   ctor(joint_trajectory);
@@ -54,9 +54,9 @@ JointTrajectoryStandardItem::JointTrajectoryStandardItem(const QIcon& icon,
 
 int JointTrajectoryStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_JOINT_TRAJECTORY); }
 
-void JointTrajectoryStandardItem::ctor(const tesseract_common::JointTrajectory& joint_trajectory)
+void JointTrajectoryStandardItem::ctor(const tesseract::common::JointTrajectory& joint_trajectory)
 {
   for (std::size_t j = 0; j < joint_trajectory.size(); ++j)
     appendRow(new JointStateStandardItem(QString("state[%1]").arg(j), joint_trajectory[j]));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

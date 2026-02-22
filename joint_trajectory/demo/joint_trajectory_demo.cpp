@@ -44,14 +44,14 @@ int main(int argc, char** argv)
     { "joint_1", 0 }, { "joint_2", 0 }, { "joint_3", 0 }, { "joint_4", 0 }, { "joint_5", 0 }
   };
 
-  tesseract_common::JointTrajectorySet trajectory_set(initial_state);
+  tesseract::common::JointTrajectorySet trajectory_set(initial_state);
   for (int i = 0; i < 5; ++i)
   {
-    tesseract_common::JointTrajectory trajectory("description");
+    tesseract::common::JointTrajectory trajectory("description");
 
     for (int j = 0; j < 5; ++j)
     {
-      tesseract_common::JointState state;
+      tesseract::common::JointState state;
       state.joint_names = { "joint_1", "joint_2", "joint_3", "joint_4", "joint_5" };
       state.position.resize(5);
       state.velocity.resize(5);
@@ -82,26 +82,26 @@ int main(int argc, char** argv)
   trajectory_set3.setDescription("Demo Tool Path 3");
   trajectory_set3.regenerateUUID();
 
-  auto component_info = tesseract_gui::ComponentInfoManager::create("scene_name");
+  auto component_info = tesseract::gui::ComponentInfoManager::create("scene_name");
 
   QMainWindow window;
-  window.addToolBar(new tesseract_gui::JointTrajectoryToolBar(component_info));
-  window.setCentralWidget(new tesseract_gui::JointTrajectoryWidget(component_info));
+  window.addToolBar(new tesseract::gui::JointTrajectoryToolBar(component_info));
+  window.setCentralWidget(new tesseract::gui::JointTrajectoryWidget(component_info));
   window.show();
 
-  tesseract_gui::events::JointTrajectoryAdd event(component_info, trajectory_set);
+  tesseract::gui::events::JointTrajectoryAdd event(component_info, trajectory_set);
   QApplication::sendEvent(qApp, &event);
 
-  tesseract_gui::events::JointTrajectoryAdd event1(component_info, trajectory_set1);
+  tesseract::gui::events::JointTrajectoryAdd event1(component_info, trajectory_set1);
   QApplication::sendEvent(qApp, &event1);
 
-  tesseract_gui::events::JointTrajectoryAdd event2(component_info, trajectory_set2);
+  tesseract::gui::events::JointTrajectoryAdd event2(component_info, trajectory_set2);
   QApplication::sendEvent(qApp, &event2);
 
-  tesseract_gui::events::JointTrajectoryAdd event3(component_info, trajectory_set3);
+  tesseract::gui::events::JointTrajectoryAdd event3(component_info, trajectory_set3);
   QApplication::sendEvent(qApp, &event3);
 
-  tesseract_gui::events::JointTrajectoryRemove event4(component_info, trajectory_set2.getUUID());
+  tesseract::gui::events::JointTrajectoryRemove event4(component_info, trajectory_set2.getUUID());
   QApplication::sendEvent(qApp, &event4);
 
   return QApplication::exec();

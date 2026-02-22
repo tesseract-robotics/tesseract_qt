@@ -33,7 +33,7 @@ namespace Ui
 class ComponentInfoManagerWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfoManagerWidget : public QWidget
 {
@@ -64,6 +64,6 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_COMPONENT_INFO_MANAGER_WIDGET_H

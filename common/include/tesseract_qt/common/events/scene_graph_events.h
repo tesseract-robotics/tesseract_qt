@@ -30,22 +30,23 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 enum class LinkVisibilityFlags;
 }
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 /** @brief Event called when scene state has changed */
 class SceneStateChanged : public ComponentEvent
 {
 public:
-  SceneStateChanged(std::shared_ptr<const ComponentInfo> component_info, tesseract_scene_graph::SceneState scene_state);
+  SceneStateChanged(std::shared_ptr<const ComponentInfo> component_info,
+                    tesseract::scene_graph::SceneState scene_state);
   SceneStateChanged(const SceneStateChanged& other);
   ~SceneStateChanged() override;
 
-  const tesseract_scene_graph::SceneState& getState() const;
+  const tesseract::scene_graph::SceneState& getState() const;
 
 private:
   /** @brief Private data pointer */
@@ -67,11 +68,11 @@ class SceneGraphSet : public ComponentEvent
 {
 public:
   SceneGraphSet(std::shared_ptr<const ComponentInfo> component_info,
-                std::shared_ptr<const tesseract_scene_graph::SceneGraph> scene_graph);
+                std::shared_ptr<const tesseract::scene_graph::SceneGraph> scene_graph);
   SceneGraphSet(const SceneGraphSet& other);
   ~SceneGraphSet() override;
 
-  std::shared_ptr<const tesseract_scene_graph::SceneGraph> getSceneGraph() const;
+  std::shared_ptr<const tesseract::scene_graph::SceneGraph> getSceneGraph() const;
 
 private:
   /** @brief Private data pointer */
@@ -84,11 +85,11 @@ class SceneGraphAddLink : public ComponentEvent
 {
 public:
   SceneGraphAddLink(std::shared_ptr<const ComponentInfo> component_info,
-                    std::shared_ptr<const tesseract_scene_graph::Link> link);
+                    std::shared_ptr<const tesseract::scene_graph::Link> link);
   SceneGraphAddLink(const SceneGraphAddLink& other);
   ~SceneGraphAddLink() override;
 
-  std::shared_ptr<const tesseract_scene_graph::Link> getLink() const;
+  std::shared_ptr<const tesseract::scene_graph::Link> getLink() const;
 
 private:
   /** @brief Private data pointer */
@@ -101,11 +102,11 @@ class SceneGraphAddJoint : public ComponentEvent
 {
 public:
   SceneGraphAddJoint(std::shared_ptr<const ComponentInfo> component_info,
-                     std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+                     std::shared_ptr<const tesseract::scene_graph::Joint> joint);
   SceneGraphAddJoint(const SceneGraphAddJoint& other);
   ~SceneGraphAddJoint() override;
 
-  std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
+  std::shared_ptr<const tesseract::scene_graph::Joint> getJoint() const;
 
 private:
   /** @brief Private data pointer */
@@ -118,11 +119,11 @@ class SceneGraphMoveLink : public ComponentEvent
 {
 public:
   SceneGraphMoveLink(std::shared_ptr<const ComponentInfo> component_info,
-                     std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+                     std::shared_ptr<const tesseract::scene_graph::Joint> joint);
   SceneGraphMoveLink(const SceneGraphMoveLink& other);
   ~SceneGraphMoveLink() override;
 
-  std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
+  std::shared_ptr<const tesseract::scene_graph::Joint> getJoint() const;
 
 private:
   /** @brief Private data pointer */
@@ -188,11 +189,11 @@ class SceneGraphReplaceJoint : public ComponentEvent
 {
 public:
   SceneGraphReplaceJoint(std::shared_ptr<const ComponentInfo> component_info,
-                         std::shared_ptr<const tesseract_scene_graph::Joint> joint);
+                         std::shared_ptr<const tesseract::scene_graph::Joint> joint);
   SceneGraphReplaceJoint(const SceneGraphReplaceJoint& other);
   ~SceneGraphReplaceJoint() override;
 
-  std::shared_ptr<const tesseract_scene_graph::Joint> getJoint() const;
+  std::shared_ptr<const tesseract::scene_graph::Joint> getJoint() const;
 
 private:
   /** @brief Private data pointer */
@@ -249,5 +250,5 @@ public:
   ~SceneGraphPlot() override;
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_SCENE_GRAPH_EVENTS_H

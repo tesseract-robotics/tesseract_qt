@@ -29,7 +29,7 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class EnvironmentCommandsStandardItem;
@@ -46,7 +46,7 @@ public:
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
+  const std::vector<std::shared_ptr<const tesseract::environment::Command>>& getCommands() const;
 
 private:
   std::shared_ptr<const ComponentInfo> component_info_;
@@ -54,14 +54,14 @@ private:
   EnvironmentCommandsStandardItem* getRoot();
   const EnvironmentCommandsStandardItem* getRoot() const;
 
-  void set(const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands);
-  void appendCommand(const std::shared_ptr<const tesseract_environment::Command>& command);
+  void set(const std::vector<std::shared_ptr<const tesseract::environment::Command>>& commands);
+  void appendCommand(const std::shared_ptr<const tesseract::environment::Command>& command);
   void clear();
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_COMMANDS_MODEL_H

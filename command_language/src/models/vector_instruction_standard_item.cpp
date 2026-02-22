@@ -30,24 +30,27 @@
 
 #include <tesseract_command_language/poly/instruction_poly.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-VectorInstructionStandardItem::VectorInstructionStandardItem(const std::vector<tesseract_planning::InstructionPoly>& vi)
+VectorInstructionStandardItem::VectorInstructionStandardItem(
+    const std::vector<tesseract::command_language::InstructionPoly>& vi)
   : QStandardItem(icons::getSetIcon(), "Instructions")
 {
   ctor(vi);
 }
 
-VectorInstructionStandardItem::VectorInstructionStandardItem(const QString& text,
-                                                             const std::vector<tesseract_planning::InstructionPoly>& vi)
+VectorInstructionStandardItem::VectorInstructionStandardItem(
+    const QString& text,
+    const std::vector<tesseract::command_language::InstructionPoly>& vi)
   : QStandardItem(icons::getSetIcon(), text)
 {
   ctor(vi);
 }
 
-VectorInstructionStandardItem::VectorInstructionStandardItem(const QIcon& icon,
-                                                             const QString& text,
-                                                             const std::vector<tesseract_planning::InstructionPoly>& vi)
+VectorInstructionStandardItem::VectorInstructionStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const std::vector<tesseract::command_language::InstructionPoly>& vi)
   : QStandardItem(icon, text)
 {
   ctor(vi);
@@ -55,7 +58,7 @@ VectorInstructionStandardItem::VectorInstructionStandardItem(const QIcon& icon,
 
 int VectorInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_VECTOR_INSTRUCTION); }
 
-void VectorInstructionStandardItem::ctor(const std::vector<tesseract_planning::InstructionPoly>& vi)
+void VectorInstructionStandardItem::ctor(const std::vector<tesseract::command_language::InstructionPoly>& vi)
 {
   for (const auto& instruction : vi)
   {
@@ -73,4 +76,4 @@ void VectorInstructionStandardItem::ctor(const std::vector<tesseract_planning::I
     }
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

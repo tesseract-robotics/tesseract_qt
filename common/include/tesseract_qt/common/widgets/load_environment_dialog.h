@@ -34,7 +34,7 @@ namespace Ui
 class LoadEnvironmentDialog;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class LoadEnvironmentDialog : public QDialog
@@ -46,7 +46,7 @@ public:
   explicit LoadEnvironmentDialog(std::shared_ptr<const ComponentInfo> component_info, QWidget* parent = nullptr);
   ~LoadEnvironmentDialog();
 
-  void setResourceLocator(std::shared_ptr<tesseract_common::ResourceLocator> resource_locator);
+  void setResourceLocator(std::shared_ptr<tesseract::common::ResourceLocator> resource_locator);
 
 public Q_SLOTS:
   void onAccepted();
@@ -56,6 +56,6 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_LOAD_ENVIRONMENT_DIALOG_H

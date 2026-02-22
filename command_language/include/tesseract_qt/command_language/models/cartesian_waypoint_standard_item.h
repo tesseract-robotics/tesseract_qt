@@ -26,21 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CartesianWaypointStandardItem : public QStandardItem
 {
 public:
-  explicit CartesianWaypointStandardItem(const tesseract_planning::CartesianWaypointPoly& cwp);
-  CartesianWaypointStandardItem(const QString& text, const tesseract_planning::CartesianWaypointPoly& cwp);
+  explicit CartesianWaypointStandardItem(const tesseract::command_language::CartesianWaypointPoly& cwp);
+  CartesianWaypointStandardItem(const QString& text, const tesseract::command_language::CartesianWaypointPoly& cwp);
   CartesianWaypointStandardItem(const QIcon& icon,
                                 const QString& text,
-                                const tesseract_planning::CartesianWaypointPoly& cwp);
+                                const tesseract::command_language::CartesianWaypointPoly& cwp);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::CartesianWaypointPoly& cwp);
+  void ctor(const tesseract::command_language::CartesianWaypointPoly& cwp);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_CARTESIAN_WAYPOINT_STANDARD_ITEM_H

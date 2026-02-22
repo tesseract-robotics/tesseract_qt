@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CapsuleStandardItem : public QStandardItem
 {
 public:
-  CapsuleStandardItem(std::shared_ptr<const tesseract_geometry::Capsule> capsule);
-  explicit CapsuleStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Capsule> capsule);
+  CapsuleStandardItem(std::shared_ptr<const tesseract::geometry::Capsule> capsule);
+  explicit CapsuleStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Capsule> capsule);
   CapsuleStandardItem(const QIcon& icon,
                       const QString& text,
-                      std::shared_ptr<const tesseract_geometry::Capsule> capsule);
+                      std::shared_ptr<const tesseract::geometry::Capsule> capsule);
   int type() const override;
 
-  std::shared_ptr<const tesseract_geometry::Capsule> capsule;
+  std::shared_ptr<const tesseract::geometry::Capsule> capsule;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_CAPSULE_STANDARD_ITEM_H

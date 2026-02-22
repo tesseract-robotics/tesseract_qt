@@ -12,7 +12,7 @@ namespace Ui
 class PlotWidgetEditor;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EditorRowWidget : public QWidget
 {
@@ -98,6 +98,6 @@ private:
 
   std::unordered_map<std::string, std::shared_ptr<TransformFunction>> _transforms;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_PLOT_WIDGET_EDITOR_H

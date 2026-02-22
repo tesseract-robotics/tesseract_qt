@@ -27,12 +27,12 @@
 
 class QPixmap;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 // Useful function to change the color of SVG icons programmatically.
 // Useful to switch between dark view and light view.
 // To work, the SVG file must use the color #ffffff and #000000 only.
 QPixmap LoadSvg(QString filename, QString style_name = "light");
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_SVG_UTIL_H

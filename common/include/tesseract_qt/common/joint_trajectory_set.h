@@ -33,7 +33,7 @@
 #include <tesseract_environment/fwd.h>
 #include <tesseract_common/joint_state.h>
 
-namespace tesseract_common
+namespace tesseract::common
 {
 struct JointTrajectoryInfo
 {
@@ -63,7 +63,7 @@ public:
    * @param initial_state The initial state of the environment
    * @param environment The environment to use for planning
    */
-  JointTrajectorySet(std::unique_ptr<tesseract_environment::Environment> environment, std::string description = "");
+  JointTrajectorySet(std::unique_ptr<tesseract::environment::Environment> environment, std::string description = "");
 
   /**
    * @brief Create a trajectory set with initial state and environment commands
@@ -71,7 +71,7 @@ public:
    * @param commands Additional Commands to be applied to environment prior to planning
    */
   JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
-                     std::vector<std::shared_ptr<const tesseract_environment::Command>> commands,
+                     std::vector<std::shared_ptr<const tesseract::environment::Command>> commands,
                      std::string description = "");
 
   /** @brief Get the uuid */
@@ -101,7 +101,7 @@ public:
    * @throws If unable to apply stored commands to provided environment
    * @param env The environment to apply internal command to
    */
-  void applyEnvironment(std::unique_ptr<tesseract_environment::Environment> env);
+  void applyEnvironment(std::unique_ptr<tesseract::environment::Environment> env);
 
   /**
    * @brief Get the environment for the joint trajectory set
@@ -109,13 +109,13 @@ public:
    * environment.
    * @return The environment
    */
-  std::shared_ptr<tesseract_environment::Environment> getEnvironment() const;
+  std::shared_ptr<tesseract::environment::Environment> getEnvironment() const;
 
   /**
    * @brief Get the environment commands that were applied to existing environment for the joint trajectory set
    * @return The environment commands
    */
-  const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getEnvironmentCommands() const;
+  const std::vector<std::shared_ptr<const tesseract::environment::Command>>& getEnvironmentCommands() const;
 
   /**
    * @brief Get the initial state
@@ -173,10 +173,10 @@ private:
   std::vector<JointTrajectoryInfo> joint_trajectory_;
 
   /** @brief (Optional) Override the existing Tesseract Environment */
-  std::shared_ptr<tesseract_environment::Environment> environment_{ nullptr };
+  std::shared_ptr<tesseract::environment::Environment> environment_{ nullptr };
 
   /** @brief (Optional) Additional Commands to be applied to environment prior to trajectory visualization */
-  std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
+  std::vector<std::shared_ptr<const tesseract::environment::Command>> commands_;
 
   /** @brief A description of the trajectory set */
   std::string description_;
@@ -197,7 +197,7 @@ private:
   JointState getNewTrajectoryInitialState() const;
 
   template <class Archive>
-  friend void ::tesseract_common::serialize(Archive& ar, JointTrajectorySet& obj);
+  friend void ::tesseract::common::serialize(Archive& ar, JointTrajectorySet& obj);
 };
-}  // namespace tesseract_common
+}  // namespace tesseract::common
 #endif  // TESSERACT_COMMON_JOINT_TRAJECTORY_SET_H

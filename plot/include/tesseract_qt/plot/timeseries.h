@@ -26,7 +26,7 @@
 #include <tesseract_qt/plot/plot_database.h>
 #include <algorithm>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 template <typename Value>
 class TimeseriesBase : public PlotDataBase<double, Value>
@@ -133,6 +133,6 @@ inline int TimeseriesBase<Value>::getIndexFromX(double x) const
   return index;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif

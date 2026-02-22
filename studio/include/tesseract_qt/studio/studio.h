@@ -35,7 +35,7 @@ namespace Ui
 class Studio;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StudioPluginFactory;
 class StudioDockWidget;
@@ -78,7 +78,7 @@ private:
    * @param name The name
    * @param plugin_info The plugin information to create task composer executor object
    */
-  StudioDockWidget* createDockWidget(const QString& name, const tesseract_common::PluginInfo& plugin_info);
+  StudioDockWidget* createDockWidget(const QString& name, const tesseract::common::PluginInfo& plugin_info);
 
   /**
    * @brief Add the dock widget to the manager
@@ -86,5 +86,5 @@ private:
    */
   void addDockWidget(StudioDockWidget* dock_widget);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_STUDIO_STUDIO_H

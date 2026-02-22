@@ -28,7 +28,7 @@
 #include <QStandardItem>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class KinematicGroupsModel : public QStandardItemModel
@@ -44,10 +44,10 @@ public:
 
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
-  const tesseract_srdf::GroupNames& getGroupNames() const;
-  const tesseract_srdf::ChainGroups& getChainGroups() const;
-  const tesseract_srdf::JointGroups& getJointGroups() const;
-  const tesseract_srdf::LinkGroups& getLinkGroups() const;
+  const tesseract::srdf::GroupNames& getGroupNames() const;
+  const tesseract::srdf::ChainGroups& getChainGroups() const;
+  const tesseract::srdf::JointGroups& getJointGroups() const;
+  const tesseract::srdf::LinkGroups& getLinkGroups() const;
 
 Q_SIGNALS:
   void groupRemoved(QString group_name);
@@ -58,12 +58,12 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
-  void set(const tesseract_srdf::ChainGroups& chain_groups,
-           const tesseract_srdf::JointGroups& joint_groups,
-           const tesseract_srdf::LinkGroups& link_groups);
-  void addChainGroup(const std::string& group_name, const tesseract_srdf::ChainGroup& group);
-  void addJointGroup(const std::string& group_name, const tesseract_srdf::JointGroup& group);
-  void addLinkGroup(const std::string& group_name, const tesseract_srdf::LinkGroup& group);
+  void set(const tesseract::srdf::ChainGroups& chain_groups,
+           const tesseract::srdf::JointGroups& joint_groups,
+           const tesseract::srdf::LinkGroups& link_groups);
+  void addChainGroup(const std::string& group_name, const tesseract::srdf::ChainGroup& group);
+  void addJointGroup(const std::string& group_name, const tesseract::srdf::JointGroup& group);
+  void addLinkGroup(const std::string& group_name, const tesseract::srdf::LinkGroup& group);
 
   void removeGroup(const std::string& group_name);
   void clear();
@@ -72,6 +72,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_MODEL_H

@@ -23,7 +23,7 @@
 #include <tesseract_qt/plot/transforms/moving_rms.h>
 #include "ui_moving_rms.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 MovingRMS::MovingRMS()
   : ui(std::make_unique<Ui::MovingRMS>())
@@ -76,4 +76,4 @@ std::optional<PlotData::Point> MovingRMS::calculateNextPoint(size_t index)
   PlotData::Point out = { time, sqrt(total_sqr / _ring_view.size()) };
   return out;
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

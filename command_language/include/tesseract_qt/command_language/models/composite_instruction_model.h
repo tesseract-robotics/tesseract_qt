@@ -29,7 +29,7 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class CompositeInstructionModel : public QStandardItemModel
@@ -44,12 +44,12 @@ public:
 
   bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-  tesseract_planning::CompositeInstruction getCompositeInstruction(const QModelIndex& row) const;
+  tesseract::command_language::CompositeInstruction getCompositeInstruction(const QModelIndex& row) const;
 
   void clear();
 
 protected:
-  void setCompositeInstruction(const std::string& ns, const tesseract_planning::CompositeInstruction& ci);
+  void setCompositeInstruction(const std::string& ns, const tesseract::command_language::CompositeInstruction& ci);
   void removeNamespace(const std::string& ns);
 
   // Documentation inherited
@@ -59,6 +59,6 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_MODEL_H

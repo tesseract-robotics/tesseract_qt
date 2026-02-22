@@ -24,7 +24,7 @@
 
 #include <tesseract_command_language/composite_instruction.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 CompositeInstructionClear::CompositeInstructionClear(std::shared_ptr<const ComponentInfo> component_info,
                                                      const std::string& ns)
@@ -41,12 +41,13 @@ const std::string& CompositeInstructionClear::getNamespace() const { return ns_;
 struct CompositeInstructionSet::Implementation
 {
   std::string ns;
-  tesseract_planning::CompositeInstruction composite_instruction;
+  tesseract::command_language::CompositeInstruction composite_instruction;
 };
 
-CompositeInstructionSet::CompositeInstructionSet(std::shared_ptr<const ComponentInfo> component_info,
-                                                 const tesseract_planning::CompositeInstruction& composite_instruction,
-                                                 const std::string& ns)
+CompositeInstructionSet::CompositeInstructionSet(
+    std::shared_ptr<const ComponentInfo> component_info,
+    const tesseract::command_language::CompositeInstruction& composite_instruction,
+    const std::string& ns)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::CL_COMPOSITE_INSTRUCTION_SET))
   , data_(std::make_unique<Implementation>())
 {
@@ -57,7 +58,7 @@ CompositeInstructionSet::CompositeInstructionSet(std::shared_ptr<const Component
 CompositeInstructionSet::~CompositeInstructionSet() = default;
 
 const std::string& CompositeInstructionSet::getNamespace() const { return data_->ns; }
-const tesseract_planning::CompositeInstruction& CompositeInstructionSet::getCompositeInstruction() const
+const command_language::CompositeInstruction& CompositeInstructionSet::getCompositeInstruction() const
 {
   return data_->composite_instruction;
 }
@@ -82,4 +83,4 @@ CompositeInstructionRemove::~CompositeInstructionRemove() = default;
 
 //////////////////////////////////////////
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

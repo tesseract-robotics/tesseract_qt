@@ -29,10 +29,10 @@
 #include <tesseract_environment/commands/replace_joint_command.h>
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::ReplaceJointCommand> command)
+    std::shared_ptr<const tesseract::environment::ReplaceJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Replace Joint"), command(std::move(command))
 {
   ctor();
@@ -40,7 +40,7 @@ ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
 
 ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ReplaceJointCommand> command)
+    std::shared_ptr<const tesseract::environment::ReplaceJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -49,7 +49,7 @@ ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
 ReplaceJointCommandStandardItem::ReplaceJointCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ReplaceJointCommand> command)
+    std::shared_ptr<const tesseract::environment::ReplaceJointCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -62,7 +62,7 @@ int ReplaceJointCommandStandardItem::type() const
 
 void ReplaceJointCommandStandardItem::ctor()
 {
-  auto* item = new JointStandardItem(std::make_shared<tesseract_scene_graph::Joint>(command->getJoint()->clone()));
+  auto* item = new JointStandardItem(std::make_shared<tesseract::scene_graph::Joint>(command->getJoint()->clone()));
   appendRow({ item, new QStandardItem() });
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

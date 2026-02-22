@@ -38,7 +38,7 @@ class KinematicGroupsEditorWidget;
 class QItemSelectionModel;
 class QStandardItemModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class KinematicGroupsModel;
@@ -81,5 +81,5 @@ private:
   bool validateJointChain(QStringList joints);
   bool validateLinkChain(QStringList links);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_EDITOR_WIDGET_H

@@ -34,7 +34,7 @@ namespace Ui
 class MovingAverageFilter;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class MovingAverageFilter : public TransformFunction_SISO
 {
@@ -57,5 +57,5 @@ private:
 
   std::optional<PlotData::Point> calculateNextPoint(size_t index) override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_TRANSFORMS_MOVING_AVERAGE_FILTER_H

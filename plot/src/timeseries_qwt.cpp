@@ -27,7 +27,7 @@
 #include <QPushButton>
 #include <QString>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 RangeOpt QwtTimeseries::getVisualizationRangeY(Range range_X)
 {
@@ -164,4 +164,4 @@ RangeOpt QwtSeriesWrapper::getVisualizationRangeX()
 }
 
 const PlotDataBase<double, double>* QwtSeriesWrapper::plotData() const { return _data; }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

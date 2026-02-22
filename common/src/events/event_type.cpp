@@ -2,7 +2,7 @@
 
 #include <qcoreevent.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 // Application Events
 const int EventType::APP_STATUS_MESSAGE_SHOW = QEvent::registerEventType();
@@ -146,4 +146,4 @@ const int EventType::STATUS_LOG_INFO_TOGGLE_OFF = QEvent::registerEventType();
 const int EventType::STATUS_LOG_WARN_TOGGLE_OFF = QEvent::registerEventType();
 const int EventType::STATUS_LOG_ERROR_TOGGLE_OFF = QEvent::registerEventType();
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

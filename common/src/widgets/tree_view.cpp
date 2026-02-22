@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/widgets/tree_view.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TreeView::TreeView(QWidget* parent) : QTreeView(parent)
 {
@@ -32,4 +32,4 @@ TreeView::TreeView(QWidget* parent) : QTreeView(parent)
 
 TreeView::~TreeView() = default;
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

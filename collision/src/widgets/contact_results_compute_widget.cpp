@@ -5,7 +5,7 @@
 
 #include <QTreeView>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ContactResultsComputeWidget::ContactResultsComputeWidget(QWidget* parent)
   : QWidget(parent), ui(std::make_unique<Ui::ContactResultsComputeWidget>())
@@ -56,12 +56,12 @@ const QItemSelectionModel& ContactResultsComputeWidget::getSelectionModel() cons
 
 void ContactResultsComputeWidget::onComputeClicked()
 {
-  tesseract_collision::ContactManagerConfig contact_manager_config(ui->contact_threshold->value());
-  tesseract_collision::CollisionCheckConfig collision_check_config;
+  tesseract::collision::ContactManagerConfig contact_manager_config(ui->contact_threshold->value());
+  tesseract::collision::CollisionCheckConfig collision_check_config;
   collision_check_config.contact_request.calculate_distance = ui->calculate_distance->isChecked();
   collision_check_config.contact_request.calculate_penetration = ui->calculate_penetration->isChecked();
   collision_check_config.contact_request.type =
-      static_cast<tesseract_collision::ContactTestType>(ui->contact_test_type->currentIndex());
+      static_cast<tesseract::collision::ContactTestType>(ui->contact_test_type->currentIndex());
 
   events::ContactResultsCompute event(getComponentInfo(),
                                       contact_manager_config,
@@ -80,4 +80,4 @@ void ContactResultsComputeWidget::ctor(std::shared_ptr<const ComponentInfo> comp
   connect(ui->compute_push_button, SIGNAL(clicked()), this, SLOT(onComputeClicked()));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

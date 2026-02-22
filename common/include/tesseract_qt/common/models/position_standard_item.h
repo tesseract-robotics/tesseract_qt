@@ -27,7 +27,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PositionStandardItem : public QStandardItem
 {
@@ -43,6 +43,6 @@ public:
 private:
   void ctor(const Eigen::Vector3d& position);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_POSITION_STANDARD_ITEM_H

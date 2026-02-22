@@ -30,24 +30,27 @@
 
 #include <tesseract_task_composer/core/task_composer_context.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-TaskComposerContextStandardItem::TaskComposerContextStandardItem(const tesseract_planning::TaskComposerContext& context)
+TaskComposerContextStandardItem::TaskComposerContextStandardItem(
+    const tesseract::task_composer::TaskComposerContext& context)
   : QStandardItem(icons::getUnknownIcon(), "Task Composer Context")
 {
   ctor(context);
 }
 
-TaskComposerContextStandardItem::TaskComposerContextStandardItem(const QString& text,
-                                                                 const tesseract_planning::TaskComposerContext& context)
+TaskComposerContextStandardItem::TaskComposerContextStandardItem(
+    const QString& text,
+    const tesseract::task_composer::TaskComposerContext& context)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(context);
 }
 
-TaskComposerContextStandardItem::TaskComposerContextStandardItem(const QIcon& icon,
-                                                                 const QString& text,
-                                                                 const tesseract_planning::TaskComposerContext& context)
+TaskComposerContextStandardItem::TaskComposerContextStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const tesseract::task_composer::TaskComposerContext& context)
   : QStandardItem(icon, text)
 {
   ctor(context);
@@ -58,7 +61,7 @@ int TaskComposerContextStandardItem::type() const
   return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_CONTEXT);
 }
 
-void TaskComposerContextStandardItem::ctor(const tesseract_planning::TaskComposerContext& input)
+void TaskComposerContextStandardItem::ctor(const tesseract::task_composer::TaskComposerContext& input)
 {
   appendRow(createStandardItemString("name", input.name));
   appendRow(createStandardItemBool("dotgraph", input.dotgraph));
@@ -68,4 +71,4 @@ void TaskComposerContextStandardItem::ctor(const tesseract_planning::TaskCompose
   appendRow(createStandardItemBool("aborted", input.isAborted()));
   appendRow(new TaskComposerNodeInfoMapStandardItem("node_infos", input.task_infos->getInfoMap()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

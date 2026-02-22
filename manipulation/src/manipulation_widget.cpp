@@ -20,7 +20,7 @@
 #include <QStringListModel>
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ManipulationWidget::Implementation
 {
@@ -29,9 +29,9 @@ struct ManipulationWidget::Implementation
   /** @brief If true adding and removing states is disabled */
   bool use_parent_component_info{ false };
 
-  tesseract_kinematics::KinematicGroup::ConstPtr kin_group;
+  tesseract::kinematics::KinematicGroup::ConstPtr kin_group;
   QStringList state_names;
-  tesseract_environment::Environment::Ptr environment;
+  tesseract::environment::Environment::Ptr environment;
   std::unordered_map<std::string, std::unordered_map<std::string, double>> states;
   std::unordered_map<std::string, std::shared_ptr<SceneStateModel>> state_models;
 
@@ -40,7 +40,7 @@ struct ManipulationWidget::Implementation
   QStringListModel tcp_names_model;
   QStringListModel tcp_offset_names_model;
   QStringListModel state_names_model;
-  tesseract_common::TransformMap tcp_offsets;
+  tesseract::common::TransformMap tcp_offsets;
 };
 
 ManipulationWidget::ManipulationWidget(QWidget* parent) : ManipulationWidget(nullptr, false, parent) {}
@@ -76,14 +76,14 @@ ManipulationWidget::ManipulationWidget(std::shared_ptr<const ComponentInfo> pare
   connect(ui->reload_push_button, SIGNAL(clicked()), this, SLOT(onReset()));
 
   connect(ui->joint_state_slider,
-          &tesseract_gui::JointStateSliderWidget::jointStateChanged,
+          &tesseract::gui::JointStateSliderWidget::jointStateChanged,
           this,
-          &tesseract_gui::ManipulationWidget::onJointStateSliderChanged);
+          &tesseract::gui::ManipulationWidget::onJointStateSliderChanged);
 
   connect(ui->cartesian_widget,
-          &tesseract_gui::CartesianEditorWidget::transformChanged,
+          &tesseract::gui::CartesianEditorWidget::transformChanged,
           this,
-          &tesseract_gui::ManipulationWidget::onCartesianTransformChanged);
+          &tesseract::gui::ManipulationWidget::onCartesianTransformChanged);
 
   ui->tabWidget->setCurrentIndex(0);
 
@@ -243,7 +243,7 @@ bool ManipulationWidget::isValid() const
 
 int ManipulationWidget::getStateCount() const { return data_->states.size(); }
 
-const tesseract_kinematics::KinematicGroup& ManipulationWidget::kinematicGroup() const { return *data_->kin_group; }
+const tesseract::kinematics::KinematicGroup& ManipulationWidget::kinematicGroup() const { return *data_->kin_group; }
 
 int ManipulationWidget::getMode() const { return ui->mode_combo_box->currentIndex(); }
 
@@ -266,7 +266,7 @@ Eigen::Isometry3d ManipulationWidget::getTCPOffset() const
 
 std::string ManipulationWidget::getActiveStateName() const { return ui->state_combo_box->currentText().toStdString(); }
 
-tesseract_scene_graph::SceneState ManipulationWidget::getActiveState() const { return getState(getActiveStateName()); }
+tesseract::scene_graph::SceneState ManipulationWidget::getActiveState() const { return getState(getActiveStateName()); }
 
 void ManipulationWidget::setActiveState(const std::unordered_map<std::string, double>& state)
 {
@@ -285,7 +285,7 @@ void ManipulationWidget::setActiveCartesianTransform(const Eigen::Isometry3d& tr
   }
 }
 
-tesseract_scene_graph::SceneState ManipulationWidget::getState(const std::string& state_name) const
+tesseract::scene_graph::SceneState ManipulationWidget::getState(const std::string& state_name) const
 {
   return data_->environment->getState(data_->states.at(state_name));
 }
@@ -304,7 +304,7 @@ void ManipulationWidget::onGroupNameChanged()
   if (env == nullptr || !env->isInitialized())
     return;
 
-  std::vector<tesseract_scene_graph::Joint::ConstPtr> joints;
+  std::vector<tesseract::scene_graph::Joint::ConstPtr> joints;
   {  // Scope for lock read
     std::shared_lock<std::shared_mutex> lock = env->lockRead();
     auto group_names = env->getGroupNames();
@@ -455,8 +455,8 @@ void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::strin
     const std::string state_name = ui->state_combo_box->currentText().toStdString();
     data_->states[state_name] = state;
     data_->environment->setState(state);
-    tesseract_scene_graph::SceneState scene_state = data_->environment->getState();
-    tesseract_scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
+    tesseract::scene_graph::SceneState scene_state = data_->environment->getState();
+    tesseract::scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
 
     // Update the cartesian transform details
     if (ui->mode_combo_box->currentIndex() == 0)
@@ -466,10 +466,10 @@ void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::strin
   }
 }
 
-tesseract_scene_graph::SceneState
-ManipulationWidget::getReducedSceneState(const tesseract_scene_graph::SceneState& scene_state)
+tesseract::scene_graph::SceneState
+ManipulationWidget::getReducedSceneState(const tesseract::scene_graph::SceneState& scene_state)
 {
-  tesseract_scene_graph::SceneState reduced_scene_state;
+  tesseract::scene_graph::SceneState reduced_scene_state;
   for (const auto& link_name : data_->kin_group->getActiveLinkNames())
     reduced_scene_state.link_transforms[link_name] = scene_state.link_transforms.at(link_name);
 
@@ -487,7 +487,7 @@ Eigen::Isometry3d ManipulationWidget::getActiveCartesianTransform(bool in_world)
   std::string tcp_name = getTCPName().toStdString();
   Eigen::Isometry3d tcp_offset = getTCPOffset();
   Eigen::VectorXd jv = getActiveJointValues();
-  tesseract_common::TransformMap tf = data_->kin_group->calcFwdKin(jv);
+  tesseract::common::TransformMap tf = data_->kin_group->calcFwdKin(jv);
   if (in_world)
     return tf.at(tcp_name) * tcp_offset;
 
@@ -527,9 +527,9 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
     auto it = std::find(tcp_names.begin(), tcp_names.end(), tcp_name);
     if (it != tcp_names.end())
     {
-      tesseract_kinematics::KinGroupIKInput inputs(target, working_frame, tcp_name);
+      tesseract::kinematics::KinGroupIKInput inputs(target, working_frame, tcp_name);
       Eigen::VectorXd seed = getActiveJointValues();
-      tesseract_kinematics::IKSolutions solutions = data_->kin_group->calcInvKin(inputs, seed);
+      tesseract::kinematics::IKSolutions solutions = data_->kin_group->calcInvKin(inputs, seed);
       if (!solutions.empty())
       {
         // get the closest solution to the seed
@@ -545,7 +545,7 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
           }
         }
 
-        if (!tesseract_common::satisfiesLimits<double>(temp_seed, data_->kin_group->getLimits().joint_limits))
+        if (!tesseract::common::satisfiesLimits<double>(temp_seed, data_->kin_group->getLimits().joint_limits))
           temp_seed = seed;
 
         std::unordered_map<std::string, double> state;
@@ -613,7 +613,7 @@ void ManipulationWidget::onReset()
 
     for (const auto& group_name : env->getGroupNames())
     {
-      tesseract_kinematics::KinematicGroup::ConstPtr kin_group;
+      tesseract::kinematics::KinematicGroup::ConstPtr kin_group;
       try
       {
         kin_group = env->getKinematicGroup(group_name);
@@ -651,4 +651,4 @@ void ManipulationWidget::onReset()
   QApplication::sendEvent(qApp, &event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

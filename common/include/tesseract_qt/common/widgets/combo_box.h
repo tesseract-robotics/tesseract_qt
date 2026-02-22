@@ -25,7 +25,7 @@
 
 #include <QComboBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComboBox : public QComboBox
 {
@@ -39,6 +39,6 @@ Q_SIGNALS:
 protected:
   void showPopup() override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_COMBO_BOX_H

@@ -28,7 +28,7 @@
 #include <QToolBar>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class JointTrajectoryToolBar : public QToolBar
@@ -49,5 +49,5 @@ private:
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_TOOL_BAR_H

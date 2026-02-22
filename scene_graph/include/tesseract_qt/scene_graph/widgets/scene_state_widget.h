@@ -30,7 +30,7 @@
 
 class QItemSelectionModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class SceneStateModel;
@@ -58,5 +58,5 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_WIDGET_H

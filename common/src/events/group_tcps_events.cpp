@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/events/group_tcps_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 GroupTCPsClear::GroupTCPsClear(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::GROUP_TCPS_CLEAR))
@@ -34,14 +34,14 @@ GroupTCPsClear::~GroupTCPsClear() = default;
 //////////////////////////////////////////
 
 GroupTCPsSet::GroupTCPsSet(std::shared_ptr<const ComponentInfo> component_info,
-                           const tesseract_srdf::GroupTCPs& group_tcps)
+                           const tesseract::srdf::GroupTCPs& group_tcps)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::GROUP_TCPS_SET)), group_tcps_(group_tcps)
 {
 }
 
 GroupTCPsSet::~GroupTCPsSet() = default;
 
-const tesseract_srdf::GroupTCPs& GroupTCPsSet::getGroupTCPs() const { return group_tcps_; }
+const tesseract::srdf::GroupTCPs& GroupTCPsSet::getGroupTCPs() const { return group_tcps_; }
 
 //////////////////////////////////////////
 
@@ -89,4 +89,4 @@ const std::vector<std::string>& GroupTCPsRemoveGroup::getGroupNames() const { re
 
 //////////////////////////////////////////
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

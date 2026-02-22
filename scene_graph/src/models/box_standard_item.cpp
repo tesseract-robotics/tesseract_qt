@@ -27,15 +27,15 @@
 
 #include <tesseract_geometry/impl/box.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-BoxStandardItem::BoxStandardItem(std::shared_ptr<const tesseract_geometry::Box> box)
+BoxStandardItem::BoxStandardItem(std::shared_ptr<const tesseract::geometry::Box> box)
   : QStandardItem(icons::getCubeIcon(), "Box"), box(std::move(box))
 {
   ctor();
 }
 
-BoxStandardItem::BoxStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Box> box)
+BoxStandardItem::BoxStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Box> box)
   : QStandardItem(icons::getCubeIcon(), text), box(std::move(box))
 {
   ctor();
@@ -43,7 +43,7 @@ BoxStandardItem::BoxStandardItem(const QString& text, std::shared_ptr<const tess
 
 BoxStandardItem::BoxStandardItem(const QIcon& icon,
                                  const QString& text,
-                                 std::shared_ptr<const tesseract_geometry::Box> box)
+                                 std::shared_ptr<const tesseract::geometry::Box> box)
   : QStandardItem(icon, text), box(std::move(box))
 {
   ctor();
@@ -57,4 +57,4 @@ void BoxStandardItem::ctor()
   appendRow(createStandardItemFloat("y", box->getY()));
   appendRow(createStandardItemFloat("z", box->getZ()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

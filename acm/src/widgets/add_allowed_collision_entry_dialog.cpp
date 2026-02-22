@@ -27,7 +27,7 @@
 #include "ui_add_allowed_collision_entry_dialog.h"
 #include <QRegExpValidator>
 #include <QApplication>
-namespace tesseract_gui
+namespace tesseract::gui
 {
 AddAllowedCollisionEntryDialog::AddAllowedCollisionEntryDialog(QWidget* parent)
   : AddAllowedCollisionEntryDialog(nullptr, parent)
@@ -68,4 +68,4 @@ void AddAllowedCollisionEntryDialog::accept()
   QApplication::sendEvent(qApp, &event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

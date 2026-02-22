@@ -33,7 +33,7 @@ namespace Ui
 class MovingRMS;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class MovingRMS : public TransformFunction_SISO
 {
@@ -57,6 +57,6 @@ private:
   std::optional<PlotData::Point> calculateNextPoint(size_t index) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_TRANSFORMS_MOVING_RMS_H

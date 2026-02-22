@@ -35,7 +35,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ComponentInfoWidget::Implementation
 {
@@ -108,4 +108,4 @@ void ComponentInfoWidget::onShowEditor()
       ui->combo_box->setCurrentText(current_text);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

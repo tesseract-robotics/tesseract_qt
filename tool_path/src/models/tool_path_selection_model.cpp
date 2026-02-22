@@ -31,7 +31,7 @@
 
 #include <QGuiApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ToolPathSelectionModel::ToolPathSelectionModel() : component_info_(nullptr)
 {
@@ -97,4 +97,4 @@ bool ToolPathSelectionModel::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -25,16 +25,16 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-CalibrationInfoStandardItem::CalibrationInfoStandardItem(tesseract_common::CalibrationInfo calibration_info)
+CalibrationInfoStandardItem::CalibrationInfoStandardItem(tesseract::common::CalibrationInfo calibration_info)
   : QStandardItem(icons::getCubeIcon(), "Calibration Info"), calibration_info(std::move(calibration_info))
 {
   ctor();
 }
 
 CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QString& text,
-                                                         tesseract_common::CalibrationInfo calibration_info)
+                                                         tesseract::common::CalibrationInfo calibration_info)
   : QStandardItem(icons::getCubeIcon(), text), calibration_info(std::move(calibration_info))
 {
   ctor();
@@ -42,7 +42,7 @@ CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QString& text,
 
 CalibrationInfoStandardItem::CalibrationInfoStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         tesseract_common::CalibrationInfo calibration_info)
+                                                         tesseract::common::CalibrationInfo calibration_info)
   : QStandardItem(icon, text), calibration_info(std::move(calibration_info))
 {
   ctor();
@@ -61,4 +61,4 @@ void CalibrationInfoStandardItem::ctor()
   joints_item->sortChildren(0);
   appendRow(joints_item);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

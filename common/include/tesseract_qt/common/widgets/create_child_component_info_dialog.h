@@ -33,7 +33,7 @@ namespace Ui
 class CreateChildComponentInfoDialog;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class CreateChildComponentInfoDialog : public QDialog
@@ -53,5 +53,5 @@ private:
   std::unique_ptr<Ui::CreateChildComponentInfoDialog> ui;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_GUI_COMMON_CREATE_CHILD_COMPONENT_INFO_DIALOG_H

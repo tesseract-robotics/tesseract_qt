@@ -70,7 +70,7 @@ static const std::string SEARCH_LIBRARIES_KEY{ "search_libraries" };
 static const std::string COMPONENT_INFOS_KEY{ "component_infos" };
 static const std::string DOCK_WIDGETS_KEY{ "dock_widgets" };
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct Studio::Implementation
 {
@@ -231,13 +231,13 @@ void Studio::Implementation::loadConfig()
 
       try
       {
-        tesseract_gui::ComponentInfoManager::loadConfig(component_infos);
+        tesseract::gui::ComponentInfoManager::loadConfig(component_infos);
       }
       catch (const std::exception& e)
       {
         throw std::runtime_error(
             "Studio::loadConfig: Constructor failed to cast '" + COMPONENT_INFOS_KEY +
-            "' to std::unordered_map<std::string, tesseract_gui::ComponentInfo>! Details: " + e.what());
+            "' to std::unordered_map<std::string, tesseract::gui::ComponentInfo>! Details: " + e.what());
       }
     }
 
@@ -254,7 +254,7 @@ void Studio::Implementation::loadConfig()
 
         try
         {
-          auto plugin_infos = plugins.as<tesseract_common::PluginInfoMap>();
+          auto plugin_infos = plugins.as<tesseract::common::PluginInfoMap>();
 
           // If central widget it must be added first
           if (!central_widget.empty())
@@ -301,7 +301,7 @@ void Studio::Implementation::loadConfig()
         catch (const std::exception& e)
         {
           throw std::runtime_error("Studio::loadConfig: Constructor failed to cast '" + DOCK_WIDGETS_KEY +
-                                   "::plugins' to tesseract_common::PluginInfoMap! Details: " + e.what());
+                                   "::plugins' to tesseract::common::PluginInfoMap! Details: " + e.what());
         }
       }
     }
@@ -351,16 +351,16 @@ void Studio::Implementation::saveConfig()
   if (!plugin_loader.search_libraries.empty())
     studio_plugins[SEARCH_LIBRARIES_KEY] = plugin_loader.search_libraries;
 
-  if (!tesseract_gui::ComponentInfoManager::empty())
-    studio_plugins[COMPONENT_INFOS_KEY] = tesseract_gui::ComponentInfoManager::getConfig();
+  if (!tesseract::gui::ComponentInfoManager::empty())
+    studio_plugins[COMPONENT_INFOS_KEY] = tesseract::gui::ComponentInfoManager::getConfig();
 
   if (!central_widget.empty())
     studio_plugins[DOCK_WIDGETS_KEY]["central_widget"] = central_widget;
 
-  tesseract_common::PluginInfoMap plugins;
+  tesseract::common::PluginInfoMap plugins;
   for (const auto& dock_widget : dock_widgets)
   {
-    tesseract_common::PluginInfo plugin_info;
+    tesseract::common::PluginInfo plugin_info;
     plugin_info.class_name = dock_widget->getFactoryClassName();
     plugin_info.config = dock_widget->getConfig();
     plugins[dock_widget->getName().toStdString()] = plugin_info;
@@ -586,7 +586,7 @@ void Studio::closeEvent(QCloseEvent* event)
 boost_plugin_loader::PluginLoader& Studio::getPluginLoader() { return data_->plugin_loader; }
 const boost_plugin_loader::PluginLoader& Studio::getPluginLoader() const { return data_->plugin_loader; }
 
-StudioDockWidget* Studio::createDockWidget(const QString& name, const tesseract_common::PluginInfo& plugin_info)
+StudioDockWidget* Studio::createDockWidget(const QString& name, const tesseract::common::PluginInfo& plugin_info)
 {
   try
   {
@@ -657,4 +657,4 @@ void Studio::addDockWidget(StudioDockWidget* dock_widget)
 
   data_->dock_widgets.push_back(dock_widget);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

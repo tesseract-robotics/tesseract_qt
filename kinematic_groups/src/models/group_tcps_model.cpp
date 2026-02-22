@@ -32,7 +32,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 GroupTCPsModel::GroupTCPsModel(QObject* parent) : GroupTCPsModel(nullptr, parent) {}
 
@@ -65,7 +65,7 @@ void GroupTCPsModel::clear()
   appendRow(new GroupTCPsStandardItem());
 }
 
-void GroupTCPsModel::set(const tesseract_srdf::GroupTCPs& group_tcps)
+void GroupTCPsModel::set(const tesseract::srdf::GroupTCPs& group_tcps)
 {
   QStandardItemModel::clear();
   setColumnCount(2);
@@ -88,7 +88,7 @@ void GroupTCPsModel::remove(const std::string& group_name)
   getRoot()->removeGroup(QString::fromStdString(group_name));
 }
 
-const tesseract_srdf::GroupTCPs& GroupTCPsModel::getGroupTCPs() const { return getRoot()->getGroupTCPs(); }
+const tesseract::srdf::GroupTCPs& GroupTCPsModel::getGroupTCPs() const { return getRoot()->getGroupTCPs(); }
 
 GroupTCPsStandardItem* GroupTCPsModel::getRoot() { return dynamic_cast<GroupTCPsStandardItem*>(item(0)); }
 
@@ -145,4 +145,4 @@ bool GroupTCPsModel::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -26,19 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointWaypointStandardItem : public QStandardItem
 {
 public:
-  explicit JointWaypointStandardItem(const tesseract_planning::JointWaypointPoly& jwp);
-  JointWaypointStandardItem(const QString& text, const tesseract_planning::JointWaypointPoly& jwp);
-  JointWaypointStandardItem(const QIcon& icon, const QString& text, const tesseract_planning::JointWaypointPoly& jwp);
+  explicit JointWaypointStandardItem(const command_language::JointWaypointPoly& jwp);
+  JointWaypointStandardItem(const QString& text, const tesseract::command_language::JointWaypointPoly& jwp);
+  JointWaypointStandardItem(const QIcon& icon,
+                            const QString& text,
+                            const tesseract::command_language::JointWaypointPoly& jwp);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::JointWaypointPoly& jwp);
+  void ctor(const command_language::JointWaypointPoly& jwp);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_JOINT_WAYPOINT_STANDARD_ITEM_H

@@ -29,7 +29,7 @@
 #include <QToolBar>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StatusLogToolBar : public QToolBar
 {
@@ -42,6 +42,6 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_STATUS_LOG_TOOL_BAR_H

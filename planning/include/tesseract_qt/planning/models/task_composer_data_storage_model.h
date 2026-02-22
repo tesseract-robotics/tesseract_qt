@@ -29,7 +29,7 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TaskComposerDataStorageModel : public QStandardItemModel
 {
@@ -45,7 +45,8 @@ public:
    * @param ns The namespace to store the data storage under
    * @return The key associated with added data storage for removal
    */
-  QString add(std::unique_ptr<tesseract_planning::TaskComposerDataStorage> data_storage, std::string ns = "general");
+  QString add(std::unique_ptr<tesseract::task_composer::TaskComposerDataStorage> data_storage,
+              std::string ns = "general");
 
   /**
    * @brief Remove the data storage
@@ -65,7 +66,7 @@ public:
    * @param row The row to get associated data storage
    * @return The data storage
    */
-  const tesseract_planning::TaskComposerDataStorage& get(const QModelIndex& row) const;
+  const tesseract::task_composer::TaskComposerDataStorage& get(const QModelIndex& row) const;
 
   /**
    * @brief Get the data storage namespace associated with the row
@@ -82,6 +83,6 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_PROBLEM_MODEL_H

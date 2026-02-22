@@ -29,7 +29,7 @@
 #include <qcoreevent.h>
 #include <qstring.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 /** @brief Event called to log information */
 class StatusLogInfo : public QEvent
@@ -119,6 +119,6 @@ public:
   StatusLogErrorToggleOff();
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 
 #endif  // TESSERACT_QT_COMMON_STATUS_LOG_EVENTS_H

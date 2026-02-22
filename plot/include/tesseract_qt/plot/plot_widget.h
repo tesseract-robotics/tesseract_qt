@@ -46,7 +46,7 @@
 //#include "transforms/transform_selector.h"
 //#include "transforms/custom_function.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PlotWidget : public PlotWidgetBase
 {
@@ -217,6 +217,6 @@ private:
   void rescaleEqualAxisScaling();
   void overrideCursonMove();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_PLOT_WIDGET_H

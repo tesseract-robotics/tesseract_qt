@@ -31,7 +31,7 @@
 
 class QModelIndex;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class SceneGraphModel : public QStandardItemModel
@@ -53,11 +53,11 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 
-  void setSceneGraph(const tesseract_scene_graph::SceneGraph& scene_graph);
+  void setSceneGraph(const tesseract::scene_graph::SceneGraph& scene_graph);
   void setName(const std::string& name);
   const std::string& getName() const;
-  void addLink(const tesseract_scene_graph::Link& link);
-  void addJoint(const tesseract_scene_graph::Joint& joint);
+  void addLink(const tesseract::scene_graph::Link& link);
+  void addJoint(const tesseract::scene_graph::Joint& joint);
   void removeLink(const std::string& link_name);
   void removeJoint(const std::string& joint_name);
   void clear();
@@ -66,6 +66,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_GRAPH_MODEL_H

@@ -27,15 +27,15 @@
 
 #include <tesseract_qt/common/tracked_object.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-using ContactResult = TrackedObject<tesseract_collision::ContactResult>;
-using ContactResultVector = TrackedObject<tesseract_common::AlignedVector<ContactResult>>;
-using ContactResultMap = tesseract_common::AlignedMap<std::pair<std::string, std::string>, ContactResultVector>;
+using ContactResult = TrackedObject<tesseract::collision::ContactResult>;
+using ContactResultVector = TrackedObject<tesseract::common::AlignedVector<ContactResult>>;
+using ContactResultMap = tesseract::common::AlignedMap<std::pair<std::string, std::string>, ContactResultVector>;
 
-ContactResultMap convert(const tesseract_collision::ContactResultMap& contact_results);
+ContactResultMap convert(const tesseract::collision::ContactResultMap& contact_results);
 
-std::vector<ContactResultMap> convert(const std::vector<tesseract_collision::ContactResultMap>& contact_results);
+std::vector<ContactResultMap> convert(const std::vector<tesseract::collision::ContactResultMap>& contact_results);
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_TYPES_H

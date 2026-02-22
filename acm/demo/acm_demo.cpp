@@ -34,12 +34,13 @@ int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
-  std::shared_ptr<const tesseract_gui::ComponentInfo> component_info = tesseract_gui::ComponentInfoManager::create("sce"
-                                                                                                                   "ne_"
-                                                                                                                   "nam"
-                                                                                                                   "e");
+  std::shared_ptr<const tesseract::gui::ComponentInfo> component_info =
+      tesseract::gui::ComponentInfoManager::create("sce"
+                                                   "ne_"
+                                                   "nam"
+                                                   "e");
 
-  tesseract_gui::AllowedCollisionMatrixEditorWidget widget(component_info);
+  tesseract::gui::AllowedCollisionMatrixEditorWidget widget(component_info);
   widget.show();
 
   std::vector<std::array<std::string, 3>> entries;
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
   entries.push_back({ "link_2", "link_3", "Adjacent" });
   entries.push_back({ "link_3", "link_4", "Adjacent" });
 
-  tesseract_gui::events::AllowedCollisionMatrixAdd event(component_info, entries);
+  tesseract::gui::events::AllowedCollisionMatrixAdd event(component_info, entries);
   QApplication::sendEvent(qApp, &event);
 
   return QApplication::exec();

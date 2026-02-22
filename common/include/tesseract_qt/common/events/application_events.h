@@ -28,7 +28,7 @@
 #include <QEvent>
 #include <QString>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class StatusMessageShow : public QEvent
 {
@@ -46,5 +46,5 @@ public:
   StatusMessageClear();
   ~StatusMessageClear() override;
 };
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_APPLICATION_EVENTS_H

@@ -25,7 +25,7 @@
 
 #include <tesseract_qt/plot/timeseries_qwt.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PointSeriesXY : public QwtSeriesWrapper
 {
@@ -56,6 +56,6 @@ protected:
   const PlotData* _y_axis;
   PlotDataXY _cached_curve;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLOT_POINT_SERIES_H

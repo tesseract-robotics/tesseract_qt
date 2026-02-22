@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 
   /** @todo Need to load environment */
 
-  tesseract_gui::KinematicGroupsEditorWidget widget;
+  tesseract::gui::KinematicGroupsEditorWidget widget;
   widget.show();
 
   return app.exec();

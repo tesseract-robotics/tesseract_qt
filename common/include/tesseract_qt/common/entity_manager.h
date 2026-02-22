@@ -30,7 +30,7 @@
 
 #include <tesseract_qt/common/entity.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EntityContainer;
 
@@ -78,5 +78,5 @@ private:
   std::unordered_map<std::string, std::shared_ptr<const EntityContainer>> containers_const_;
   static int entity_counter_; /**< Start entity counter to avoid clashing with gazebo */
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_GUI_COMMON_ENTITY_MANAGER_H

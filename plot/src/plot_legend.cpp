@@ -30,7 +30,7 @@
 #include <qwt/qwt_graphic.h>
 #include <qwt/qwt_text.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PlotLegend::PlotLegend(QwtPlot* parent) : _parent_plot(parent), _collapsed(false)
 {
@@ -186,4 +186,4 @@ const QwtPlotItem* PlotLegend::processMousePressEvent(QMouseEvent* mouse_event)
   }
   return nullptr;
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

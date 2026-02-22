@@ -11,7 +11,7 @@
 #include <QDebug>
 #include <qwt/qwt_text.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 DialogTransformEditor::DialogTransformEditor(PlotWidget* plotwidget)
   : QDialog(plotwidget->widget()), _plotwidget_origin(plotwidget)
@@ -251,4 +251,4 @@ void DialogTransformEditor::on_lineEditAlias_editingFinished()
 
   _plotwidget->replot();
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

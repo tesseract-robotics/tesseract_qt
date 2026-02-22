@@ -27,7 +27,7 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ComponentInfo::ComponentInfo() {}
 
@@ -74,7 +74,7 @@ void ComponentInfo::setDescription(const std::string& description) { description
 
 const boost::uuids::uuid& ComponentInfo::getNamespace() const { return ns_; }
 
-void getLineageRecursive(std::list<boost::uuids::uuid>& lineage, const tesseract_gui::ComponentInfo& component_info)
+void getLineageRecursive(std::list<boost::uuids::uuid>& lineage, const tesseract::gui::ComponentInfo& component_info)
 {
   lineage.push_back(component_info.getNamespace());
 
@@ -150,4 +150,4 @@ bool ComponentInfo::operator==(const ComponentInfo& rhs) const
 
 bool ComponentInfo::operator!=(const ComponentInfo& rhs) const { return !operator==(rhs); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

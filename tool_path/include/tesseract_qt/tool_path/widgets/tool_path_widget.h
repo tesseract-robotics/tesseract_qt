@@ -30,7 +30,7 @@
 
 class QItemSelectionModel;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ToolPathModel;
@@ -66,5 +66,5 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_WIDGET_H

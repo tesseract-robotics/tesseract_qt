@@ -28,16 +28,16 @@
 
 #include <tesseract_common/manipulator_info.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-ManipulatorInfoStandardItem::ManipulatorInfoStandardItem(const tesseract_common::ManipulatorInfo& manip_info)
+ManipulatorInfoStandardItem::ManipulatorInfoStandardItem(const tesseract::common::ManipulatorInfo& manip_info)
   : QStandardItem(icons::getRobotArmIcon(), "Manipulator Info")
 {
   ctor(manip_info);
 }
 
 ManipulatorInfoStandardItem::ManipulatorInfoStandardItem(const QString& text,
-                                                         const tesseract_common::ManipulatorInfo& manip_info)
+                                                         const tesseract::common::ManipulatorInfo& manip_info)
   : QStandardItem(icons::getRobotArmIcon(), text)
 {
   ctor(manip_info);
@@ -45,7 +45,7 @@ ManipulatorInfoStandardItem::ManipulatorInfoStandardItem(const QString& text,
 
 ManipulatorInfoStandardItem::ManipulatorInfoStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         const tesseract_common::ManipulatorInfo& manip_info)
+                                                         const tesseract::common::ManipulatorInfo& manip_info)
   : QStandardItem(icon, text)
 {
   ctor(manip_info);
@@ -53,7 +53,7 @@ ManipulatorInfoStandardItem::ManipulatorInfoStandardItem(const QIcon& icon,
 
 int ManipulatorInfoStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_MANIPULATOR_INFO); }
 
-void ManipulatorInfoStandardItem::ctor(const tesseract_common::ManipulatorInfo& manip_info)
+void ManipulatorInfoStandardItem::ctor(const tesseract::common::ManipulatorInfo& manip_info)
 {
   appendRow(createStandardItemString("manipulator", manip_info.manipulator));
   appendRow(createStandardItemString("working_frame", manip_info.working_frame));
@@ -66,4 +66,4 @@ void ManipulatorInfoStandardItem::ctor(const tesseract_common::ManipulatorInfo& 
 
   appendRow(createStandardItemString("manipulator_ik_solver", manip_info.manipulator_ik_solver));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

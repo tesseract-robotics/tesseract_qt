@@ -36,18 +36,18 @@ int main(int argc, char** argv)
   QApplication app(argc, argv);
 
   // Load Scene Graph
-  tesseract_common::GeneralResourceLocator locator;
+  tesseract::common::GeneralResourceLocator locator;
   std::string path = locator.locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath();
-  tesseract_scene_graph::SceneGraph::UPtr sg = tesseract_urdf::parseURDFFile(path, locator);
-  std::vector<tesseract_scene_graph::Joint::ConstPtr> joints;
+  tesseract::scene_graph::SceneGraph::UPtr sg = tesseract::urdf::parseURDFFile(path, locator);
+  std::vector<tesseract::scene_graph::Joint::ConstPtr> joints;
   for (const auto& joint : sg->getJoints())
   {
-    if (joint->type == tesseract_scene_graph::JointType::REVOLUTE ||
-        joint->type == tesseract_scene_graph::JointType::CONTINUOUS ||
-        joint->type == tesseract_scene_graph::JointType::PRISMATIC)
+    if (joint->type == tesseract::scene_graph::JointType::REVOLUTE ||
+        joint->type == tesseract::scene_graph::JointType::CONTINUOUS ||
+        joint->type == tesseract::scene_graph::JointType::PRISMATIC)
       joints.push_back(joint);
   }
-  tesseract_gui::JointStateSliderWidget widget;
+  tesseract::gui::JointStateSliderWidget widget;
   widget.setJoints(joints);
   widget.show();
 

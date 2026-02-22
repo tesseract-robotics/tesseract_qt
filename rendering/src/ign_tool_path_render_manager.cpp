@@ -49,7 +49,7 @@ const std::string USER_VISIBILITY = "user_visibility";
 const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
 const std::string USER_WORKING_FRAME = "user_working_frame";
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct IgnToolPathRenderManager::Implementation
 {
@@ -164,9 +164,9 @@ struct IgnToolPathRenderManager::Implementation
       if (!child_uuid.is_nil())
         visual_key = boost::uuids::to_string(child_uuid);
 
-      if (it->second->hasTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key))
+      if (it->second->hasTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, visual_key))
       {
-        auto entity = it->second->getTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, visual_key);
+        auto entity = it->second->getTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, visual_key);
         auto visual_node = scene.VisualById(entity.id);
         if (visual_node != nullptr)
         {
@@ -216,7 +216,7 @@ void IgnToolPathRenderManager::render()
 
       std::string tool_path_name = boost::uuids::to_string(e.getToolPath().getUUID());
       auto tool_path_entity =
-          tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, tool_path_name);
+          tool_path_container->addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, tool_path_name);
       gz::rendering::VisualPtr ign_tool_path = scene->CreateVisual(tool_path_entity.id, tool_path_entity.unique_name);
       ign_tool_path->SetUserData(USER_VISIBILITY, true);
       ign_tool_path->SetUserData(USER_PARENT_VISIBILITY, true);
@@ -228,7 +228,7 @@ void IgnToolPathRenderManager::render()
       {
         std::string segment_name = boost::uuids::to_string(segment.getUUID());
         auto segment_entity =
-            tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, segment_name);
+            tool_path_container->addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, segment_name);
         gz::rendering::VisualPtr ign_segment = scene->CreateVisual(segment_entity.id, segment_entity.unique_name);
         ign_segment->SetUserData(USER_VISIBILITY, true);
         ign_segment->SetUserData(USER_PARENT_VISIBILITY, true);
@@ -236,7 +236,7 @@ void IgnToolPathRenderManager::render()
         {
           std::string pose_name = boost::uuids::to_string(pose.getUUID());
           auto pose_entity =
-              tool_path_container->addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, pose_name);
+              tool_path_container->addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, pose_name);
           gz::rendering::AxisVisualPtr axis = scene->CreateAxisVisual(pose_entity.id, pose_entity.unique_name);
           axis->SetLocalPose(gz::math::eigen3::convert(pose.getTransform()));
           axis->SetInheritScale(false);
@@ -296,7 +296,7 @@ void IgnToolPathRenderManager::updateWorkingFrameTransforms()
     auto env_wrapper = EnvironmentManager::get(component_info_);
     if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
     {
-      tesseract_scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();
+      tesseract::scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();
       for (auto& working_frame : data_->working_frames)
       {
         auto it = state.link_transforms.find(working_frame.second.second);
@@ -306,4 +306,4 @@ void IgnToolPathRenderManager::updateWorkingFrameTransforms()
     }
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

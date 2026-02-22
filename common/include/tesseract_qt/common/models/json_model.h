@@ -34,7 +34,7 @@
 class QJsonModel;
 class QJsonItem;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 namespace QUtf8Functions
 {
@@ -291,6 +291,6 @@ private:
   QJsonTreeItem* mRootItem = nullptr;
   QStringList mHeaders;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_JSON_MODEL_H

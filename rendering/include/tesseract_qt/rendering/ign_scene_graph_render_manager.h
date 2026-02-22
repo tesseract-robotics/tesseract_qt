@@ -25,7 +25,7 @@
 
 #include <tesseract_qt/common/events/scene_graph_render_manager.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EntityManager;
 class ComponentInfo;
@@ -43,6 +43,6 @@ private:
 
   void render() override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_RENDERING_IGN_SCENE_GRAPH_RENDER_MANAGER_H

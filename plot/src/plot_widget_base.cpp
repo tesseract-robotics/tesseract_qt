@@ -54,7 +54,7 @@
 
 static int _global_color_index_ = 0;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class QwtPlotPimpl : public QwtPlot
 {
@@ -769,4 +769,4 @@ void PlotWidgetBase::updateMaximumZoomArea()
   _max_zoom_rect = max_rect;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -30,7 +30,7 @@
 #include <qwt/qwt_scale_map.h>
 #include <qwt/qwt_plot.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PlotZoomer::PlotZoomer(QWidget* canvas)
   : QwtPlotZoomer(canvas, false), _mouse_pressed(false), _zoom_enabled(false), _keep_aspect_ratio(false)
@@ -148,4 +148,4 @@ void PlotZoomer::zoom(const QRectF& zoomRect)
 }
 
 QSizeF PlotZoomer::minZoomSize() const { return QSizeF(scaleRect().width() * 0.02, scaleRect().height() * 0.02); }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

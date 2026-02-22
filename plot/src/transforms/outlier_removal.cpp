@@ -23,7 +23,7 @@
 #include <tesseract_qt/plot/transforms/outlier_removal.h>
 #include "ui_outlier_removal.h"
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 OutlierRemovalFilter::OutlierRemovalFilter()
   : ui(std::make_unique<Ui::OutlierRemovalFilter>())
@@ -67,4 +67,4 @@ std::optional<PlotData::Point> OutlierRemovalFilter::calculateNextPoint(size_t i
   }
   return dataSource()->at(index - 1);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

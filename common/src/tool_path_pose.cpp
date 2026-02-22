@@ -26,7 +26,7 @@
 
 #include <tesseract_qt/common/tool_path_pose.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ToolPathPose::ToolPathPose(std::string description)
   : uuid_(boost::uuids::random_generator()()), description_(std::move(description))
@@ -75,4 +75,4 @@ bool ToolPathPose::operator==(const ToolPathPose& rhs) const
 
 bool ToolPathPose::operator!=(const ToolPathPose& rhs) const { return !operator==(rhs); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

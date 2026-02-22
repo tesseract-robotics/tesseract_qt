@@ -48,7 +48,7 @@
 
 #include <tesseract_environment/commands.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem() : QStandardItem(icons::getCubeIcon(), "Commands")
 {
@@ -56,7 +56,7 @@ EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem() : QStandardIt
 }
 
 EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(
-    std::vector<std::shared_ptr<const tesseract_environment::Command>> commands)
+    std::vector<std::shared_ptr<const tesseract::environment::Command>> commands)
   : QStandardItem(icons::getCubeIcon(), "Commands"), commands_(std::move(commands))
 {
   ctor();
@@ -64,7 +64,7 @@ EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(
 
 EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(
     const QString& text,
-    std::vector<std::shared_ptr<const tesseract_environment::Command>> commands)
+    std::vector<std::shared_ptr<const tesseract::environment::Command>> commands)
   : QStandardItem(icons::getCubeIcon(), text), commands_(std::move(commands))
 {
   ctor();
@@ -73,7 +73,7 @@ EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(
 EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::vector<std::shared_ptr<const tesseract_environment::Command>> commands)
+    std::vector<std::shared_ptr<const tesseract::environment::Command>> commands)
   : QStandardItem(icon, text), commands_(std::move(commands))
 {
   ctor();
@@ -82,13 +82,13 @@ EnvironmentCommandsStandardItem::EnvironmentCommandsStandardItem(
 int EnvironmentCommandsStandardItem::type() const { return static_cast<int>(StandardItemType::ENV_COMMAND_COMMANDS); }
 
 void EnvironmentCommandsStandardItem::appendCommand(
-    const std::shared_ptr<const tesseract_environment::Command>& command)
+    const std::shared_ptr<const tesseract::environment::Command>& command)
 {
   addCommand(QString("[%1]").arg(commands_.size()), command);
   commands_.push_back(command);
 }
 
-const std::vector<std::shared_ptr<const tesseract_environment::Command>>&
+const std::vector<std::shared_ptr<const tesseract::environment::Command>>&
 EnvironmentCommandsStandardItem::getCommands() const
 {
   return commands_;
@@ -101,152 +101,153 @@ void EnvironmentCommandsStandardItem::ctor()
 }
 
 void EnvironmentCommandsStandardItem::addCommand(const QString& text,
-                                                 const std::shared_ptr<const tesseract_environment::Command>& command)
+                                                 const std::shared_ptr<const tesseract::environment::Command>& command)
 {
   switch (command->getType())
   {
-    case tesseract_environment::CommandType::ADD_LINK:
+    case tesseract::environment::CommandType::ADD_LINK:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::AddLinkCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::AddLinkCommand>(command);
       appendRow({ new AddLinkCommandStandardItem(text, cmd), new QStandardItem("Add Link") });
       break;
     }
-    case tesseract_environment::CommandType::MOVE_LINK:
+    case tesseract::environment::CommandType::MOVE_LINK:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::MoveLinkCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::MoveLinkCommand>(command);
       appendRow({ new MoveLinkCommandStandardItem(text, cmd), new QStandardItem("Move Link") });
       break;
     }
-    case tesseract_environment::CommandType::MOVE_JOINT:
+    case tesseract::environment::CommandType::MOVE_JOINT:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::MoveJointCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::MoveJointCommand>(command);
       appendRow({ new MoveJointCommandStandardItem(text, cmd), new QStandardItem("Move Joint") });
       break;
     }
-    case tesseract_environment::CommandType::REMOVE_LINK:
+    case tesseract::environment::CommandType::REMOVE_LINK:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::RemoveLinkCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::RemoveLinkCommand>(command);
       appendRow({ new RemoveLinkCommandStandardItem(text, cmd), new QStandardItem("Remove Link") });
       break;
     }
-    case tesseract_environment::CommandType::REMOVE_JOINT:
+    case tesseract::environment::CommandType::REMOVE_JOINT:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::RemoveJointCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::RemoveJointCommand>(command);
       appendRow({ new RemoveJointCommandStandardItem(text, cmd), new QStandardItem("Remove Joint") });
       break;
     }
-    case tesseract_environment::CommandType::REPLACE_JOINT:
+    case tesseract::environment::CommandType::REPLACE_JOINT:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ReplaceJointCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ReplaceJointCommand>(command);
       appendRow({ new ReplaceJointCommandStandardItem(text, cmd), new QStandardItem("Replace Joint") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_LINK_ORIGIN:
+    case tesseract::environment::CommandType::CHANGE_LINK_ORIGIN:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkOriginCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeLinkOriginCommand>(command);
       appendRow({ new ChangeLinkOriginCommandStandardItem(text, cmd), new QStandardItem("Change Link Origin") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_JOINT_ORIGIN:
+    case tesseract::environment::CommandType::CHANGE_JOINT_ORIGIN:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeJointOriginCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeJointOriginCommand>(command);
       appendRow({ new ChangeJointOriginCommandStandardItem(text, cmd), new QStandardItem("Change Joint Origin") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
+    case tesseract::environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkCollisionEnabledCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeLinkCollisionEnabledCommand>(command);
       appendRow({ new ChangeLinkCollisionEnabledCommandStandardItem(text, cmd),
                   new QStandardItem("Change Link Collision Enabled") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
+    case tesseract::environment::CommandType::CHANGE_LINK_VISIBILITY:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeLinkVisibilityCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeLinkVisibilityCommand>(command);
       appendRow(
           { new ChangeLinkVisibilityCommandStandardItem(text, cmd), new QStandardItem("Change Link Visibility") });
       break;
     }
-    case tesseract_environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
+    case tesseract::environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ModifyAllowedCollisionsCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ModifyAllowedCollisionsCommand>(command);
       appendRow({ new ModifyAllowedCollisionsCommandStandardItem(text, cmd),
                   new QStandardItem("Modify Allowed Collisions") });
       break;
     }
-    case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
+    case tesseract::environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::RemoveAllowedCollisionLinkCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::RemoveAllowedCollisionLinkCommand>(command);
       appendRow({ new RemoveAllowedCollisionLinkCommandStandardItem(text, cmd),
                   new QStandardItem("Remove Allowed Collision Link") });
       break;
     }
-    case tesseract_environment::CommandType::ADD_SCENE_GRAPH:
+    case tesseract::environment::CommandType::ADD_SCENE_GRAPH:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::AddSceneGraphCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::AddSceneGraphCommand>(command);
       appendRow({ new AddSceneGraphCommandStandardItem(text, cmd), new QStandardItem("Add Scene Graph") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
+    case tesseract::environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeJointPositionLimitsCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeJointPositionLimitsCommand>(command);
       appendRow({ new ChangeJointPositionLimitsCommandStandardItem(text, cmd),
                   new QStandardItem("Change Joint Position Limits") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:
+    case tesseract::environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeJointVelocityLimitsCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeJointVelocityLimitsCommand>(command);
       appendRow({ new ChangeJointVelocityLimitsCommandStandardItem(text, cmd),
                   new QStandardItem("Change Joint Velocity Limits") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_JOINT_ACCELERATION_LIMITS:
+    case tesseract::environment::CommandType::CHANGE_JOINT_ACCELERATION_LIMITS:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeJointAccelerationLimitsCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeJointAccelerationLimitsCommand>(command);
       appendRow({ new ChangeJointAccelerationLimitsCommandStandardItem(text, cmd),
                   new QStandardItem("Change Joint Acceleration Limits") });
       break;
     }
-    case tesseract_environment::CommandType::ADD_KINEMATICS_INFORMATION:
+    case tesseract::environment::CommandType::ADD_KINEMATICS_INFORMATION:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::AddKinematicsInformationCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::AddKinematicsInformationCommand>(command);
       appendRow({ new AddKinematicsInformationCommandStandardItem(text, cmd),
                   new QStandardItem("Add Kinematics Information") });
       break;
     }
-    case tesseract_environment::CommandType::CHANGE_COLLISION_MARGINS:
+    case tesseract::environment::CommandType::CHANGE_COLLISION_MARGINS:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::ChangeCollisionMarginsCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::ChangeCollisionMarginsCommand>(command);
       appendRow(
           { new ChangeCollisionMarginsCommandStandardItem(text, cmd), new QStandardItem("Change Collision Margins") });
       break;
     }
-    case tesseract_environment::CommandType::ADD_CONTACT_MANAGERS_PLUGIN_INFO:
+    case tesseract::environment::CommandType::ADD_CONTACT_MANAGERS_PLUGIN_INFO:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::AddContactManagersPluginInfoCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::AddContactManagersPluginInfoCommand>(command);
       appendRow({ new AddContactManagersPluginInfoCommandStandardItem(text, cmd),
                   new QStandardItem("Add Contact Manager Plugin Info") });
       break;
     }
-    case tesseract_environment::CommandType::SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER:
+    case tesseract::environment::CommandType::SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER:
     {
       auto cmd =
-          std::static_pointer_cast<const tesseract_environment::SetActiveContinuousContactManagerCommand>(command);
+          std::static_pointer_cast<const tesseract::environment::SetActiveContinuousContactManagerCommand>(command);
       appendRow({ new SetActiveContinuousContactManagerCommandStandardItem(text, cmd),
                   new QStandardItem("Set Active Continuous Contact Manager") });
       break;
     }
-    case tesseract_environment::CommandType::SET_ACTIVE_DISCRETE_CONTACT_MANAGER:
+    case tesseract::environment::CommandType::SET_ACTIVE_DISCRETE_CONTACT_MANAGER:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::SetActiveDiscreteContactManagerCommand>(command);
+      auto cmd =
+          std::static_pointer_cast<const tesseract::environment::SetActiveDiscreteContactManagerCommand>(command);
       appendRow({ new SetActiveDiscreteContactManagerCommandStandardItem(text, cmd),
                   new QStandardItem("Set Active Discrete Contact Manager") });
       break;
     }
-    case tesseract_environment::CommandType::ADD_TRAJECTORY_LINK:
+    case tesseract::environment::CommandType::ADD_TRAJECTORY_LINK:
     {
-      auto cmd = std::static_pointer_cast<const tesseract_environment::AddTrajectoryLinkCommand>(command);
+      auto cmd = std::static_pointer_cast<const tesseract::environment::AddTrajectoryLinkCommand>(command);
       appendRow({ new AddTrajectoryLinkCommandStandardItem(text, cmd), new QStandardItem("Add Trajectory Link") });
       break;
     }
@@ -254,4 +255,4 @@ void EnvironmentCommandsStandardItem::addCommand(const QString& text,
       throw std::runtime_error("Unsupported command type!");
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

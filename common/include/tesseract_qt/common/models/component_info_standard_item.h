@@ -27,7 +27,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ComponentInfoStandardItem : public QStandardItem
@@ -41,6 +41,6 @@ public:
 
   std::shared_ptr<ComponentInfo> component_info;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_COMPONENT_INFO_STANDARD_ITEM_H

@@ -200,7 +200,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::AllowedCollisionMatrixEditorWidget" name="acm_widget" native="true">
+        <widget class="tesseract::gui::AllowedCollisionMatrixEditorWidget" name="acm_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -243,7 +243,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::KinematicGroupsEditorWidget" name="groups_widget" native="true">
+        <widget class="tesseract::gui::KinematicGroupsEditorWidget" name="groups_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -286,7 +286,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::GroupJointStatesEditorWidget" name="group_states_widget" native="true">
+        <widget class="tesseract::gui::GroupJointStatesEditorWidget" name="group_states_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -389,19 +389,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::AllowedCollisionMatrixEditorWidget</class>
+   <class>tesseract::gui::AllowedCollisionMatrixEditorWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/acm/widgets/allowed_collision_matrix_editor_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::KinematicGroupsEditorWidget</class>
+   <class>tesseract::gui::KinematicGroupsEditorWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/kinematic_groups/widgets/kinematic_groups_editor_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::GroupJointStatesEditorWidget</class>
+   <class>tesseract::gui::GroupJointStatesEditorWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/kinematic_groups/widgets/group_joint_states_editor_widget.h</header>
    <container>1</container>

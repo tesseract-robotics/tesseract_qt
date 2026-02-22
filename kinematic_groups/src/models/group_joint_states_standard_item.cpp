@@ -26,21 +26,21 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 GroupJointStatesStandardItem::GroupJointStatesStandardItem() : QStandardItem("Group Joint States")
 {
-  ctor(tesseract_srdf::GroupJointStates{});
+  ctor(tesseract::srdf::GroupJointStates{});
 }
 
-GroupJointStatesStandardItem::GroupJointStatesStandardItem(const tesseract_srdf::GroupJointStates& group_joint_states)
+GroupJointStatesStandardItem::GroupJointStatesStandardItem(const tesseract::srdf::GroupJointStates& group_joint_states)
   : QStandardItem("Group Joint States")
 {
   ctor(group_joint_states);
 }
 
 GroupJointStatesStandardItem::GroupJointStatesStandardItem(const QString& text,
-                                                           const tesseract_srdf::GroupJointStates& group_joint_states)
+                                                           const tesseract::srdf::GroupJointStates& group_joint_states)
   : QStandardItem(text)
 {
   ctor(group_joint_states);
@@ -48,7 +48,7 @@ GroupJointStatesStandardItem::GroupJointStatesStandardItem(const QString& text,
 
 GroupJointStatesStandardItem::GroupJointStatesStandardItem(const QIcon& icon,
                                                            const QString& text,
-                                                           const tesseract_srdf::GroupJointStates& group_joint_states)
+                                                           const tesseract::srdf::GroupJointStates& group_joint_states)
   : QStandardItem(icon, text)
 {
   ctor(group_joint_states);
@@ -58,7 +58,7 @@ int GroupJointStatesStandardItem::type() const { return static_cast<int>(Standar
 
 void GroupJointStatesStandardItem::addGroupJointStateItem(const QString& group_name,
                                                           const QString& state_name,
-                                                          const tesseract_srdf::GroupsJointState& state)
+                                                          const tesseract::srdf::GroupsJointState& state)
 {
   QStandardItem* group_item{ nullptr };
   auto it = group_items_.find(group_name.toStdString());
@@ -80,7 +80,7 @@ void GroupJointStatesStandardItem::addGroupJointStateItem(const QString& group_n
 
 void GroupJointStatesStandardItem::addGroupJointState(const QString& group_name,
                                                       const QString& state_name,
-                                                      const tesseract_srdf::GroupsJointState& state)
+                                                      const tesseract::srdf::GroupsJointState& state)
 {
   removeGroupJointState(group_name, state_name);
   addGroupJointStateItem(group_name, state_name, state);
@@ -111,9 +111,9 @@ void GroupJointStatesStandardItem::removeGroup(const QString& group_name)
   removeRow(item->index().row());
 }
 
-tesseract_srdf::GroupJointStates GroupJointStatesStandardItem::getGroupJointStates() const
+tesseract::srdf::GroupJointStates GroupJointStatesStandardItem::getGroupJointStates() const
 {
-  tesseract_srdf::GroupJointStates group_joint_states;
+  tesseract::srdf::GroupJointStates group_joint_states;
   for (const auto& group_item : group_items_)
   {
     for (int i = 0; i < group_item.second->rowCount(); ++i)
@@ -130,7 +130,7 @@ tesseract_srdf::GroupJointStates GroupJointStatesStandardItem::getGroupJointStat
   return group_joint_states;
 }
 
-void GroupJointStatesStandardItem::ctor(const tesseract_srdf::GroupJointStates& group_joint_states)
+void GroupJointStatesStandardItem::ctor(const tesseract::srdf::GroupJointStates& group_joint_states)
 {
   for (const auto& group : group_joint_states)
   {
@@ -138,4 +138,4 @@ void GroupJointStatesStandardItem::ctor(const tesseract_srdf::GroupJointStates& 
       addGroupJointStateItem(QString::fromStdString(group.first), QString::fromStdString(state.first), state.second);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

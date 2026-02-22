@@ -29,24 +29,24 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class MoveJointCommandStandardItem : public QStandardItem
 {
 public:
-  explicit MoveJointCommandStandardItem(std::shared_ptr<const tesseract_environment::MoveJointCommand> command);
+  explicit MoveJointCommandStandardItem(std::shared_ptr<const tesseract::environment::MoveJointCommand> command);
   explicit MoveJointCommandStandardItem(const QString& text,
-                                        std::shared_ptr<const tesseract_environment::MoveJointCommand> command);
+                                        std::shared_ptr<const tesseract::environment::MoveJointCommand> command);
   explicit MoveJointCommandStandardItem(const QIcon& icon,
                                         const QString& text,
-                                        std::shared_ptr<const tesseract_environment::MoveJointCommand> command);
+                                        std::shared_ptr<const tesseract::environment::MoveJointCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::MoveJointCommand> command;
+  std::shared_ptr<const tesseract::environment::MoveJointCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_MOVE_JOINT_COMMAND_STANDARD_ITEM_H

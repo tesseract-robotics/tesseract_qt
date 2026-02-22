@@ -25,10 +25,10 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
-    tesseract_common::PairsCollisionMarginData pairs_margin_data)
+    tesseract::common::PairsCollisionMarginData pairs_margin_data)
   : QStandardItem(icons::getCubeIcon(), "Pairs Collision Margin Data"), pairs_margin_data(std::move(pairs_margin_data))
 {
   ctor();
@@ -36,7 +36,7 @@ PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
 
 PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
     const QString& text,
-    tesseract_common::PairsCollisionMarginData pairs_margin_data)
+    tesseract::common::PairsCollisionMarginData pairs_margin_data)
   : QStandardItem(icons::getCubeIcon(), text), pairs_margin_data(std::move(pairs_margin_data))
 {
   ctor();
@@ -45,7 +45,7 @@ PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
 PairsCollisionMarginDataStandardItem::PairsCollisionMarginDataStandardItem(
     const QIcon& icon,
     const QString& text,
-    tesseract_common::PairsCollisionMarginData pairs_margin_data)
+    tesseract::common::PairsCollisionMarginData pairs_margin_data)
   : QStandardItem(icon, text), pairs_margin_data(std::move(pairs_margin_data))
 {
   ctor();
@@ -64,7 +64,7 @@ void PairsCollisionMarginDataStandardItem::ctor()
   sortChildren(0);
 }
 
-void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesseract_common::LinkNamesPair& pair,
+void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesseract::common::LinkNamesPair& pair,
                                                                   double collision_margin)
 {
   QStandardItem* item;
@@ -82,4 +82,4 @@ void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesserac
 
   item->appendRow(createStandardItemFloat(pair.second, collision_margin));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

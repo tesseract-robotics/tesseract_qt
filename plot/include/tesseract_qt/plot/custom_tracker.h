@@ -31,7 +31,7 @@
 
 class QwtPlotCurve;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CurveTracker : public QObject
 {
@@ -77,5 +77,5 @@ private:
   Parameter _param;
   bool _visible;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_CUSTOM_TRACKER_H

@@ -28,7 +28,7 @@
 
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct AllowedCollisionMatrixWidget::Implementation
 {
@@ -94,4 +94,4 @@ const QItemSelectionModel& AllowedCollisionMatrixWidget::getSelectionModel() con
   return *data_->tree_view->selectionModel();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

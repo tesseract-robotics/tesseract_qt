@@ -33,7 +33,7 @@ int main(int argc, char** argv)
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
   std::string scene_name = "scene";
-  tesseract_gui::RenderWidget widget(scene_name);
+  tesseract::gui::RenderWidget widget(scene_name);
   widget.setSkyEnabled(true);
   widget.show();
 

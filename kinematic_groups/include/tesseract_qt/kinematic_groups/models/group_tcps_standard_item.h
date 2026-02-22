@@ -27,30 +27,30 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class GroupTCPsStandardItem : public QStandardItem
 {
 public:
   GroupTCPsStandardItem();
-  explicit GroupTCPsStandardItem(tesseract_srdf::GroupTCPs group_tcps);
-  explicit GroupTCPsStandardItem(const QString& text, tesseract_srdf::GroupTCPs group_tcps);
-  explicit GroupTCPsStandardItem(const QIcon& icon, const QString& text, tesseract_srdf::GroupTCPs group_tcps);
+  explicit GroupTCPsStandardItem(tesseract::srdf::GroupTCPs group_tcps);
+  explicit GroupTCPsStandardItem(const QString& text, tesseract::srdf::GroupTCPs group_tcps);
+  explicit GroupTCPsStandardItem(const QIcon& icon, const QString& text, tesseract::srdf::GroupTCPs group_tcps);
   int type() const override;
 
   void addGroupTCP(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp);
   void removeGroupTCP(const QString& group_name, const QString& tcp_name);
   void removeGroup(const QString& group_name);
 
-  const tesseract_srdf::GroupTCPs& getGroupTCPs() const;
+  const tesseract::srdf::GroupTCPs& getGroupTCPs() const;
 
 private:
   void ctor();
 
-  tesseract_srdf::GroupTCPs group_tcps_;
+  tesseract::srdf::GroupTCPs group_tcps_;
   std::unordered_map<std::string, QStandardItem*> group_items_;
 
   void addGroupTCPItem(const QString& group_name, const QString& tcp_name, const Eigen::Isometry3d& tcp);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_KINEMATIC_GROUP_GROUPS_TCPS_STANDARD_ITEM_H

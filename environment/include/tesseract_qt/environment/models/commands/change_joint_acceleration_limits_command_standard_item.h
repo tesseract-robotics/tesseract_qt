@@ -29,27 +29,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ChangeJointAccelerationLimitsCommandStandardItem : public QStandardItem
 {
 public:
   explicit ChangeJointAccelerationLimitsCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::ChangeJointAccelerationLimitsCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeJointAccelerationLimitsCommand> command);
   explicit ChangeJointAccelerationLimitsCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeJointAccelerationLimitsCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeJointAccelerationLimitsCommand> command);
   explicit ChangeJointAccelerationLimitsCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeJointAccelerationLimitsCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeJointAccelerationLimitsCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::ChangeJointAccelerationLimitsCommand> command;
+  std::shared_ptr<const tesseract::environment::ChangeJointAccelerationLimitsCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_CHANGE_JOINT_ACCELERATION_LIMITS_COMMAND_STANDARD_ITEM_H

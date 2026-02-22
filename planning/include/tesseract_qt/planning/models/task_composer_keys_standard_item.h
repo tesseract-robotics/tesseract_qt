@@ -27,21 +27,21 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TaskComposerKeysStandardItem : public QStandardItem
 {
 public:
-  explicit TaskComposerKeysStandardItem(const tesseract_planning::TaskComposerKeys& data);
-  TaskComposerKeysStandardItem(const QString& text, const tesseract_planning::TaskComposerKeys& data);
+  explicit TaskComposerKeysStandardItem(const tesseract::task_composer::TaskComposerKeys& data);
+  TaskComposerKeysStandardItem(const QString& text, const tesseract::task_composer::TaskComposerKeys& data);
   TaskComposerKeysStandardItem(const QIcon& icon,
                                const QString& text,
-                               const tesseract_planning::TaskComposerKeys& data);
+                               const tesseract::task_composer::TaskComposerKeys& data);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::TaskComposerKeys& data);
+  void ctor(const tesseract::task_composer::TaskComposerKeys& data);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_TASK_COMPOSER_KEYS_STANDARD_ITEM_H

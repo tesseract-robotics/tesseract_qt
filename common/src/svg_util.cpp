@@ -35,7 +35,7 @@
 #include <QPainter>
 #include <QDebug>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 QPixmap LoadSvg(QString filename, QString style_name)
 {
@@ -76,4 +76,4 @@ QPixmap LoadSvg(QString filename, QString style_name)
 
   return QPixmap::fromImage(image);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

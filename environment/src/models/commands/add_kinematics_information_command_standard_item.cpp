@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/add_kinematics_information_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command)
+    std::shared_ptr<const tesseract::environment::AddKinematicsInformationCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Add Kinematics Information"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStan
 
 AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command)
+    std::shared_ptr<const tesseract::environment::AddKinematicsInformationCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStan
 AddKinematicsInformationCommandStandardItem::AddKinematicsInformationCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddKinematicsInformationCommand> command)
+    std::shared_ptr<const tesseract::environment::AddKinematicsInformationCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -63,4 +63,4 @@ void AddKinematicsInformationCommandStandardItem::ctor()
   auto* kin_info = new KinematicsInfoStandardItem(command->getKinematicsInformation());
   appendRow(kin_info);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

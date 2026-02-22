@@ -30,11 +30,11 @@
 
 #include <tesseract_common/joint_state.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-JointStateStandardItem::JointStateStandardItem(const tesseract_common::JointState& state) { ctor(state); }
+JointStateStandardItem::JointStateStandardItem(const tesseract::common::JointState& state) { ctor(state); }
 
-JointStateStandardItem::JointStateStandardItem(const QString& text, const tesseract_common::JointState& state)
+JointStateStandardItem::JointStateStandardItem(const QString& text, const tesseract::common::JointState& state)
   : QStandardItem(icons::getRobotArmIcon(), text)
 {
   ctor(state);
@@ -42,7 +42,7 @@ JointStateStandardItem::JointStateStandardItem(const QString& text, const tesser
 
 JointStateStandardItem::JointStateStandardItem(const QIcon& icon,
                                                const QString& text,
-                                               const tesseract_common::JointState& state)
+                                               const tesseract::common::JointState& state)
   : QStandardItem(icon, text)
 {
   ctor(state);
@@ -50,7 +50,7 @@ JointStateStandardItem::JointStateStandardItem(const QIcon& icon,
 
 int JointStateStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_JOINT_STATE); }
 
-void JointStateStandardItem::ctor(const tesseract_common::JointState& state)
+void JointStateStandardItem::ctor(const tesseract::common::JointState& state)
 {
   // Add State Joint Names
   appendRow(new VectorStringStandardItem("joint_names", state.joint_names));
@@ -59,4 +59,4 @@ void JointStateStandardItem::ctor(const tesseract_common::JointState& state)
   appendRow(new VectorDoubleStandardItem("acceleration", state.acceleration));
   appendRow(createStandardItemFloat("time", state.time));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

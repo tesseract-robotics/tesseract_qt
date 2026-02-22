@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 GroupJointStateStandardItem::GroupJointStateStandardItem(const std::unordered_map<std::string, double>& state)
   : QStandardItem(icons::getCubeIcon(), "Joint State")
@@ -70,4 +70,4 @@ void GroupJointStateStandardItem::ctor(const std::unordered_map<std::string, dou
 
   sortChildren(0);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

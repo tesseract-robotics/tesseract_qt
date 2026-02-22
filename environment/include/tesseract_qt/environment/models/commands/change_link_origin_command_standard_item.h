@@ -28,27 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ChangeLinkOriginCommandStandardItem : public QStandardItem
 {
 public:
   explicit ChangeLinkOriginCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::ChangeLinkOriginCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkOriginCommand> command);
   explicit ChangeLinkOriginCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeLinkOriginCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkOriginCommand> command);
   explicit ChangeLinkOriginCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeLinkOriginCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkOriginCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::ChangeLinkOriginCommand> command;
+  std::shared_ptr<const tesseract::environment::ChangeLinkOriginCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_CHANGE_LINK_ORIGIN_COMMAND_STANDARD_ITEM_H

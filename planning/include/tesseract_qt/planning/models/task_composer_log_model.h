@@ -29,7 +29,7 @@
 #include <QStandardItemModel>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TaskComposerLogModel : public QStandardItemModel
 {
@@ -45,7 +45,7 @@ public:
    * @param ns The namespace to store the log under
    * @return The key associated with added log for removal
    */
-  QString add(tesseract_planning::TaskComposerLog log, std::string ns = "general");
+  QString add(tesseract::task_composer::TaskComposerLog log, std::string ns = "general");
 
   /**
    * @brief Remove the log
@@ -65,7 +65,7 @@ public:
    * @param row The row to get associated log
    * @return The log
    */
-  const tesseract_planning::TaskComposerLog& get(const QModelIndex& row) const;
+  const tesseract::task_composer::TaskComposerLog& get(const QModelIndex& row) const;
 
   /**
    * @brief Get the log namespace associated with the row
@@ -82,6 +82,6 @@ private:
   std::unique_ptr<Implementation> data_;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_LOG_MODEL_H

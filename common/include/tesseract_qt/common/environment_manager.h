@@ -29,7 +29,7 @@
 #include <map>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class EnvironmentWrapper;
@@ -115,6 +115,6 @@ private:
   std::shared_ptr<EnvironmentWrapper> getDefaultHelper() const;
   void removeHelper(const std::shared_ptr<const ComponentInfo>& component_info);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_GUI_COMMON_ENVIRONMENT_MANAGER_H

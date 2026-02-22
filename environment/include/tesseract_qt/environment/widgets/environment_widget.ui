@@ -64,7 +64,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::SceneGraphWidget" name="scene_widget" native="true">
+        <widget class="tesseract::gui::SceneGraphWidget" name="scene_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -99,7 +99,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::SceneStateWidget" name="scene_state_widget" native="true">
+        <widget class="tesseract::gui::SceneStateWidget" name="scene_state_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -134,7 +134,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::AllowedCollisionMatrixWidget" name="acm_widget" native="true">
+        <widget class="tesseract::gui::AllowedCollisionMatrixWidget" name="acm_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -169,7 +169,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::KinematicGroupsWidget" name="groups_widget" native="true">
+        <widget class="tesseract::gui::KinematicGroupsWidget" name="groups_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -204,7 +204,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::GroupJointStatesWidget" name="group_states_widget" native="true">
+        <widget class="tesseract::gui::GroupJointStatesWidget" name="group_states_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -239,7 +239,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::GroupTCPsWidget" name="group_tcps_widget" native="true">
+        <widget class="tesseract::gui::GroupTCPsWidget" name="group_tcps_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -274,7 +274,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::EnvironmentCommandsWidget" name="cmd_history_widget" native="true">
+        <widget class="tesseract::gui::EnvironmentCommandsWidget" name="cmd_history_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -309,7 +309,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::ContactResultsComputeWidget" name="contacts_widget" native="true">
+        <widget class="tesseract::gui::ContactResultsComputeWidget" name="contacts_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -326,49 +326,49 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::KinematicGroupsWidget</class>
+   <class>tesseract::gui::KinematicGroupsWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/kinematic_groups/widgets/kinematic_groups_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::AllowedCollisionMatrixWidget</class>
+   <class>tesseract::gui::AllowedCollisionMatrixWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/acm/widgets/allowed_collision_matrix_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::GroupJointStatesWidget</class>
+   <class>tesseract::gui::GroupJointStatesWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/kinematic_groups/widgets/group_joint_states_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::ContactResultsComputeWidget</class>
+   <class>tesseract::gui::ContactResultsComputeWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/collision/widgets/contact_results_compute_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::EnvironmentCommandsWidget</class>
+   <class>tesseract::gui::EnvironmentCommandsWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/environment/widgets/environment_commands_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::GroupTCPsWidget</class>
+   <class>tesseract::gui::GroupTCPsWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/kinematic_groups/widgets/group_tcps_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::SceneGraphWidget</class>
+   <class>tesseract::gui::SceneGraphWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/scene_graph/widgets/scene_graph_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::SceneStateWidget</class>
+   <class>tesseract::gui::SceneStateWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/scene_graph/widgets/scene_state_widget.h</header>
    <container>1</container>

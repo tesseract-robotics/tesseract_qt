@@ -15,7 +15,7 @@
   </property>
   <layout class="QFormLayout" name="formLayout">
    <item row="0" column="1">
-    <widget class="tesseract_gui::ComponentInfoWidget" name="component_info_widget" native="true"/>
+    <widget class="tesseract::gui::ComponentInfoWidget" name="component_info_widget" native="true"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="grid_label">
@@ -100,7 +100,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::ComponentInfoWidget</class>
+   <class>tesseract::gui::ComponentInfoWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/common/widgets/component_info_widget.h</header>
    <container>1</container>

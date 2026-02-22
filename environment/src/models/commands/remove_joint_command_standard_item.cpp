@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/remove_joint_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::RemoveJointCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Remove Joint"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
 
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::RemoveJointCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveJointCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
 RemoveJointCommandStandardItem::RemoveJointCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::RemoveJointCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveJointCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -62,4 +62,4 @@ void RemoveJointCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString("joint name", command->getJointName()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

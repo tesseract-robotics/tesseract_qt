@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ChainGroupStandardItem::ChainGroupStandardItem(std::vector<std::pair<std::string, std::string>> group)
   : QStandardItem(icons::getRobotArmIcon(), "Chain Group"), group(std::move(group))
@@ -55,4 +55,4 @@ void ChainGroupStandardItem::ctor()
   appendRow(createStandardItemString("base link", group.front().first));
   appendRow(createStandardItemString("tip link", group.front().second));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

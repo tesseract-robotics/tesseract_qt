@@ -26,7 +26,7 @@
 #include <QString>
 #include <QFile>
 
-namespace tesseract_gui::themes
+namespace tesseract::gui::themes
 {
 QString getTheme(const QString& resource)
 {
@@ -47,4 +47,4 @@ QString getLightTheme()
   static QString styleSheet = getTheme(":/qdarkstyle/light/qdarkstyle_light.qss");
   return styleSheet;
 }
-}  // namespace tesseract_gui::themes
+}  // namespace tesseract::gui::themes

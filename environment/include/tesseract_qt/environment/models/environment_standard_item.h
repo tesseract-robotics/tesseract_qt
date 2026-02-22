@@ -28,22 +28,22 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class EnvironmentStandardItem : public QStandardItem
 {
 public:
   EnvironmentStandardItem();
-  explicit EnvironmentStandardItem(const tesseract_environment::Environment& env);
-  explicit EnvironmentStandardItem(const QString& text, const tesseract_environment::Environment& env);
+  explicit EnvironmentStandardItem(const tesseract::environment::Environment& env);
+  explicit EnvironmentStandardItem(const QString& text, const tesseract::environment::Environment& env);
   explicit EnvironmentStandardItem(const QIcon& icon,
                                    const QString& text,
-                                   const tesseract_environment::Environment& env);
+                                   const tesseract::environment::Environment& env);
   int type() const override;
 
 private:
-  void ctor(const tesseract_environment::Environment& env);
+  void ctor(const tesseract::environment::Environment& env);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_STANDARD_ITEM_H

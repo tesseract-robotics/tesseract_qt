@@ -28,14 +28,14 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CommandStandardItem : public QStandardItem
 {
 public:
   using CommandStandardItem::CommandStandardItem;
-  virtual std::shared_ptr<const tesseract_environment::Command> getCommand() const = 0;
+  virtual std::shared_ptr<const tesseract::environment::Command> getCommand() const = 0;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_COMMAND_STANDARD_ITEM_H

@@ -50,7 +50,7 @@
 const std::string USER_VISIBILITY = "user_visibility";
 const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 //////////////////////////////////////////////////
 std::shared_ptr<gz::rendering::Scene> sceneFromFirstRenderEngine(const std::string& scene_name)
@@ -128,8 +128,8 @@ std::shared_ptr<gz::rendering::Scene> sceneFromRenderEngine(const std::string& s
 
 //////////////////////////////////////////////////
 void setSceneState(gz::rendering::Scene& scene,
-                   const tesseract_gui::EntityContainer& entity_container,
-                   const tesseract_common::TransformMap& link_transforms)
+                   const tesseract::gui::EntityContainer& entity_container,
+                   const tesseract::common::TransformMap& link_transforms)
 {
   for (const auto& pair : link_transforms)
   {
@@ -158,16 +158,16 @@ void clearScene(gz::rendering::Scene& scene, EntityContainer& entity_container)
 }
 
 //////////////////////////////////////////////////
-gz::common::SubMesh convert(const tesseract_geometry::PolygonMesh& mesh)
+gz::common::SubMesh convert(const tesseract::geometry::PolygonMesh& mesh)
 {
   gz::common::SubMesh gz_submesh;
-  const std::shared_ptr<const tesseract_common::VectorVector3d>& verticies = mesh.getVertices();
+  const std::shared_ptr<const tesseract::common::VectorVector3d>& verticies = mesh.getVertices();
   const std::shared_ptr<const Eigen::VectorXi>& faces = mesh.getFaces();
-  const std::shared_ptr<const tesseract_common::VectorVector3d>& normals = mesh.getNormals();
+  const std::shared_ptr<const tesseract::common::VectorVector3d>& normals = mesh.getNormals();
 
   if (normals == nullptr)
   {
-    tesseract_common::VectorVector3d computed_normals;
+    tesseract::common::VectorVector3d computed_normals;
     computed_normals.reserve(verticies->size());
     for (const Eigen::Vector3d& v : (*verticies))
     {
@@ -269,8 +269,8 @@ bool isMeshWithColor(const std::string& file_path)
 
 //////////////////////////////////////////////////
 std::vector<std::string> loadSceneGraph(gz::rendering::Scene& scene,
-                                        tesseract_gui::EntityContainer& entity_container,
-                                        const tesseract_scene_graph::SceneGraph& scene_graph,
+                                        tesseract::gui::EntityContainer& entity_container,
+                                        const tesseract::scene_graph::SceneGraph& scene_graph,
                                         const std::string& prefix)
 {
   std::vector<std::string> link_names;
@@ -296,10 +296,10 @@ std::vector<std::string> loadSceneGraph(gz::rendering::Scene& scene,
 }
 
 std::shared_ptr<gz::rendering::Visual> loadLink(gz::rendering::Scene& scene,
-                                                tesseract_gui::EntityContainer& entity_container,
-                                                const tesseract_scene_graph::Link& link)
+                                                tesseract::gui::EntityContainer& entity_container,
+                                                const tesseract::scene_graph::Link& link)
 {
-  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, link.getName());
+  auto entity = entity_container.addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, link.getName());
   std::shared_ptr<gz::rendering::Visual> ign_link = scene.CreateVisual(entity.id, entity.unique_name);
   ign_link->SetUserData(USER_VISIBILITY, true);
 
@@ -332,10 +332,10 @@ std::shared_ptr<gz::rendering::Visual> loadLink(gz::rendering::Scene& scene,
 //////////////////////////////////////////////////
 std::shared_ptr<gz::rendering::Visual> loadLinkVisuals(gz::rendering::Scene& scene,
                                                        EntityContainer& entity_container,
-                                                       const tesseract_scene_graph::Link& link)
+                                                       const tesseract::scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Visuals";
-  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
+  auto entity = entity_container.addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, name);
   std::shared_ptr<gz::rendering::Visual> ign_link_visuals = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& visual : link.visual)
@@ -348,10 +348,10 @@ std::shared_ptr<gz::rendering::Visual> loadLinkVisuals(gz::rendering::Scene& sce
 //////////////////////////////////////////////////
 std::shared_ptr<gz::rendering::Visual> loadLinkCollisions(gz::rendering::Scene& scene,
                                                           EntityContainer& entity_container,
-                                                          const tesseract_scene_graph::Link& link)
+                                                          const tesseract::scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Collisions";
-  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
+  auto entity = entity_container.addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, name);
   std::shared_ptr<gz::rendering::Visual> ign_link_collisions = scene.CreateVisual(entity.id, entity.unique_name);
 
   for (const auto& collision : link.collision)
@@ -365,11 +365,11 @@ std::shared_ptr<gz::rendering::Visual> loadLinkCollisions(gz::rendering::Scene& 
 //////////////////////////////////////////////////
 std::shared_ptr<gz::rendering::Visual> loadLinkWireBox(gz::rendering::Scene& scene,
                                                        EntityContainer& entity_container,
-                                                       const tesseract_scene_graph::Link& link,
+                                                       const tesseract::scene_graph::Link& link,
                                                        const gz::math::AxisAlignedBox& aabb)
 {
   std::string name = link.getName() + "::WireBox";
-  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
+  auto entity = entity_container.addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, name);
 
   auto white = scene.Material("highlight_material");
   if (!white)
@@ -397,10 +397,10 @@ std::shared_ptr<gz::rendering::Visual> loadLinkWireBox(gz::rendering::Scene& sce
 //////////////////////////////////////////////////
 std::shared_ptr<gz::rendering::Visual> loadLinkAxis(gz::rendering::Scene& scene,
                                                     EntityContainer& entity_container,
-                                                    const tesseract_scene_graph::Link& link)
+                                                    const tesseract::scene_graph::Link& link)
 {
   std::string name = link.getName() + "::Axis";
-  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
+  auto entity = entity_container.addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, name);
 
   gz::rendering::AxisVisualPtr axis = scene.CreateAxisVisual(entity.id, entity.unique_name);
   axis->SetInheritScale(false);
@@ -413,86 +413,86 @@ std::shared_ptr<gz::rendering::Visual> loadLinkAxis(gz::rendering::Scene& scene,
 //////////////////////////////////////////////////
 std::shared_ptr<gz::rendering::Visual>
 loadLinkGeometry(gz::rendering::Scene& scene,
-                 tesseract_gui::EntityContainer& entity_container,
-                 const tesseract_geometry::Geometry& geometry,
+                 tesseract::gui::EntityContainer& entity_container,
+                 const tesseract::geometry::Geometry& geometry,
                  const Eigen::Vector3d& scale,
                  const Eigen::Isometry3d& local_pose,
-                 const std::shared_ptr<const tesseract_scene_graph::Material>& material)
+                 const std::shared_ptr<const tesseract::scene_graph::Material>& material)
 {
   gz::rendering::MaterialPtr ign_material = loadMaterial(scene, material);
   switch (geometry.getType())
   {
-    case tesseract_geometry::GeometryType::BOX:
+    case tesseract::geometry::GeometryType::BOX:
     {
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> box = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       box->SetLocalPose(gz::math::eigen3::convert(local_pose));
       box->AddGeometry(scene.CreateBox());
 
-      const auto& shape = static_cast<const tesseract_geometry::Box&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::Box&>(geometry);
       box->Scale(shape.getX() * scale.x(), shape.getY() * scale.y(), shape.getZ() * scale.z());
       box->SetMaterial(ign_material);
       return box;
     }
-    case tesseract_geometry::GeometryType::SPHERE:
+    case tesseract::geometry::GeometryType::SPHERE:
     {
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> sphere = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       sphere->SetLocalPose(gz::math::eigen3::convert(local_pose));
       sphere->AddGeometry(scene.CreateSphere());
 
-      const auto& shape = static_cast<const tesseract_geometry::Sphere&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::Sphere&>(geometry);
       const double diameter = 2.0 * shape.getRadius();
       sphere->Scale(diameter * scale.x(), diameter * scale.y(), diameter * scale.z());
       sphere->SetMaterial(ign_material);
       return sphere;
     }
-    case tesseract_geometry::GeometryType::CYLINDER:
+    case tesseract::geometry::GeometryType::CYLINDER:
     {
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> cylinder = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       cylinder->SetLocalPose(gz::math::eigen3::convert(local_pose));
       cylinder->AddGeometry(scene.CreateCylinder());
 
-      const auto& shape = static_cast<const tesseract_geometry::Cylinder&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::Cylinder&>(geometry);
       const double diameter = 2.0 * shape.getRadius();
       cylinder->Scale(diameter * scale.x(), diameter * scale.y(), shape.getLength() * scale.z());
       cylinder->SetMaterial(ign_material);
       return cylinder;
     }
-    case tesseract_geometry::GeometryType::CONE:
+    case tesseract::geometry::GeometryType::CONE:
     {
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> cone = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       cone->SetLocalPose(gz::math::eigen3::convert(local_pose));
       cone->AddGeometry(scene.CreateCone());
 
-      const auto& shape = static_cast<const tesseract_geometry::Cone&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::Cone&>(geometry);
       const double diameter = 2.0 * shape.getRadius();
       cone->Scale(diameter * scale.x(), diameter * scale.y(), shape.getLength() * scale.z());
       cone->SetMaterial(ign_material);
       return cone;
     }
-    case tesseract_geometry::GeometryType::CAPSULE:
+    case tesseract::geometry::GeometryType::CAPSULE:
     {
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> capsule = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       capsule->SetLocalPose(gz::math::eigen3::convert(local_pose));
       // Capsule is a special shape and should not use scale to change the size of the shape
       gz::rendering::CapsulePtr geom = scene.CreateCapsule();
-      const auto& shape = static_cast<const tesseract_geometry::Capsule&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::Capsule&>(geometry);
       geom->SetRadius(shape.getRadius());
       geom->SetLength(shape.getLength());
       capsule->AddGeometry(geom);
       capsule->SetMaterial(ign_material);
       return capsule;
     }
-    case tesseract_geometry::GeometryType::MESH:
+    case tesseract::geometry::GeometryType::MESH:
     {
-      const auto& shape = static_cast<const tesseract_geometry::Mesh&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::Mesh&>(geometry);
       auto resource = shape.getResource();
 
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
       gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
@@ -509,7 +509,7 @@ loadLinkGeometry(gz::rendering::Scene& scene,
       }
       else
       {
-        std::string name = std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(&geometry));
+        std::string name = std::to_string(std::hash<const tesseract::geometry::Geometry*>{}(&geometry));
 
         const gz::common::Mesh* gz_mesh{ nullptr };
         if (!mesh_manager->HasMesh(name))
@@ -536,16 +536,16 @@ loadLinkGeometry(gz::rendering::Scene& scene,
       mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
       return mesh;
     }
-    case tesseract_geometry::GeometryType::CONVEX_MESH:
+    case tesseract::geometry::GeometryType::CONVEX_MESH:
     {
-      const auto& shape = static_cast<const tesseract_geometry::ConvexMesh&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::ConvexMesh&>(geometry);
       auto resource = shape.getResource();
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
       gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
       gz::rendering::MeshPtr mesh_geom;
-      if (resource && shape.getCreationMethod() != tesseract_geometry::ConvexMesh::CreationMethod::CONVERTED)
+      if (resource && shape.getCreationMethod() != tesseract::geometry::ConvexMesh::CreationMethod::CONVERTED)
       {
         gz::rendering::MeshDescriptor descriptor;
         descriptor.meshName = resource->getFilePath();
@@ -557,7 +557,7 @@ loadLinkGeometry(gz::rendering::Scene& scene,
       }
       else
       {
-        std::string name = std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(&geometry));
+        std::string name = std::to_string(std::hash<const tesseract::geometry::Geometry*>{}(&geometry));
         if (resource)
           name = resource->getFilePath() + "::CONVERTED_CONVEX_HULL";
 
@@ -586,29 +586,29 @@ loadLinkGeometry(gz::rendering::Scene& scene,
       mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
       return mesh;
     }
-    case tesseract_geometry::GeometryType::OCTREE:
+    case tesseract::geometry::GeometryType::OCTREE:
     {
-      const auto& shape = static_cast<const tesseract_geometry::Octree&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::Octree&>(geometry);
 
       // TODO: Need to implement
       assert(false);
       return nullptr;
     }
-    case tesseract_geometry::GeometryType::COMPOUND_MESH:
+    case tesseract::geometry::GeometryType::COMPOUND_MESH:
     {
-      const auto& shape = static_cast<const tesseract_geometry::CompoundMesh&>(geometry);
+      const auto& shape = static_cast<const tesseract::geometry::CompoundMesh&>(geometry);
       auto resource = shape.getResource();
 
-      auto gv_entity = entity_container.addUntrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS);
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
       gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
 
       const auto& sub_meshes = shape.getMeshes();
-      if (sub_meshes.front()->getType() == tesseract_geometry::GeometryType::CONVEX_MESH)
+      if (sub_meshes.front()->getType() == tesseract::geometry::GeometryType::CONVEX_MESH)
       {
-        if (resource && static_cast<const tesseract_geometry::ConvexMesh&>(*sub_meshes.front()).getCreationMethod() !=
-                            tesseract_geometry::ConvexMesh::CreationMethod::CONVERTED)
+        if (resource && static_cast<const tesseract::geometry::ConvexMesh&>(*sub_meshes.front()).getCreationMethod() !=
+                            tesseract::geometry::ConvexMesh::CreationMethod::CONVERTED)
         {
           gz::rendering::MeshDescriptor descriptor;
           descriptor.meshName = resource->getFilePath();
@@ -626,7 +626,7 @@ loadLinkGeometry(gz::rendering::Scene& scene,
         for (const auto& sub_mesh : sub_meshes)
         {
           const std::string geom_hash_str =
-              std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(sub_mesh.get()));
+              std::to_string(std::hash<const tesseract::geometry::Geometry*>{}(sub_mesh.get()));
           std::string name{ geom_hash_str };
           if (resource)
           {
@@ -662,7 +662,7 @@ loadLinkGeometry(gz::rendering::Scene& scene,
         return mesh;
       }
 
-      if (sub_meshes.front()->getType() == tesseract_geometry::GeometryType::MESH)
+      if (sub_meshes.front()->getType() == tesseract::geometry::GeometryType::MESH)
       {
         if (resource)
         {
@@ -681,7 +681,7 @@ loadLinkGeometry(gz::rendering::Scene& scene,
 
         for (const auto& sub_mesh : sub_meshes)
         {
-          std::string name = std::to_string(std::hash<const tesseract_geometry::Geometry*>{}(sub_mesh.get()));
+          std::string name = std::to_string(std::hash<const tesseract::geometry::Geometry*>{}(sub_mesh.get()));
 
           const gz::common::Mesh* gz_mesh{ nullptr };
           if (!mesh_manager->HasMesh(name))
@@ -708,7 +708,7 @@ loadLinkGeometry(gz::rendering::Scene& scene,
         return mesh;
       }
 
-      if (sub_meshes.front()->getType() == tesseract_geometry::GeometryType::SDF_MESH)
+      if (sub_meshes.front()->getType() == tesseract::geometry::GeometryType::SDF_MESH)
         throw std::runtime_error("SDF Mesh, currently not supported!");
     }
     default:
@@ -720,11 +720,11 @@ loadLinkGeometry(gz::rendering::Scene& scene,
 
 //////////////////////////////////////////////////
 std::shared_ptr<gz::rendering::Material>
-loadMaterial(gz::rendering::Scene& scene, const std::shared_ptr<const tesseract_scene_graph::Material>& material)
+loadMaterial(gz::rendering::Scene& scene, const std::shared_ptr<const tesseract::scene_graph::Material>& material)
 {
   if (material == nullptr)
   {
-    auto default_material = tesseract_scene_graph::Material::getDefaultMaterial();
+    auto default_material = tesseract::scene_graph::Material::getDefaultMaterial();
     const Eigen::Vector4d& rgba = default_material->color;
     auto ign_material = scene.Material(default_material->getName());
     if (ign_material == nullptr)
@@ -758,10 +758,10 @@ loadMaterial(gz::rendering::Scene& scene, const std::shared_ptr<const tesseract_
 std::shared_ptr<gz::rendering::Visual>
 loadContactResults(gz::rendering::Scene& scene,
                    EntityContainer& entity_container,
-                   const tesseract_collision::ContactResultVector& contact_results)
+                   const tesseract::collision::ContactResultVector& contact_results)
 {
   std::string name = "ContactResults";
-  auto entity = entity_container.addTrackedEntity(tesseract_gui::EntityContainer::VISUAL_NS, name);
+  auto entity = entity_container.addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, name);
   std::shared_ptr<gz::rendering::Visual> ign_visual = scene.CreateVisual(entity.id, entity.unique_name);
   for (const auto& cr : contact_results)
   {
@@ -827,8 +827,8 @@ loadContactResults(gz::rendering::Scene& scene,
   return ign_visual;
 }
 
-void tesseractEventFilter(const tesseract_environment::Event& event,
-                          const tesseract_environment::Environment& env,
+void tesseractEventFilter(const tesseract::environment::Event& event,
+                          const tesseract::environment::Environment& env,
                           int& current_revision,
                           gz::rendering::Scene& scene,
                           EntityContainer& entity_container)
@@ -838,10 +838,10 @@ void tesseractEventFilter(const tesseract_environment::Event& event,
 
   switch (event.type)
   {
-    case tesseract_environment::Events::COMMAND_APPLIED:
+    case tesseract::environment::Events::COMMAND_APPLIED:
     {
       bool reset{ false };
-      const auto& e = static_cast<const tesseract_environment::CommandAppliedEvent&>(event);
+      const auto& e = static_cast<const tesseract::environment::CommandAppliedEvent&>(event);
       if (current_revision == 0 || e.revision < current_revision)
       {
         reset = true;
@@ -857,32 +857,32 @@ void tesseractEventFilter(const tesseract_environment::Event& event,
           const auto& cmd = e.commands.at(i);
           switch (cmd->getType())
           {
-            case tesseract_environment::CommandType::ADD_SCENE_GRAPH:
-            case tesseract_environment::CommandType::ADD_LINK:
-            case tesseract_environment::CommandType::ADD_TRAJECTORY_LINK:
-            case tesseract_environment::CommandType::CHANGE_LINK_VISIBILITY:
-            case tesseract_environment::CommandType::REMOVE_LINK:
-            case tesseract_environment::CommandType::REMOVE_JOINT:
+            case tesseract::environment::CommandType::ADD_SCENE_GRAPH:
+            case tesseract::environment::CommandType::ADD_LINK:
+            case tesseract::environment::CommandType::ADD_TRAJECTORY_LINK:
+            case tesseract::environment::CommandType::CHANGE_LINK_VISIBILITY:
+            case tesseract::environment::CommandType::REMOVE_LINK:
+            case tesseract::environment::CommandType::REMOVE_JOINT:
             {
               reset = true;
               break;
             }
-            case tesseract_environment::CommandType::MOVE_LINK:
-            case tesseract_environment::CommandType::MOVE_JOINT:
-            case tesseract_environment::CommandType::REPLACE_JOINT:
-            case tesseract_environment::CommandType::CHANGE_JOINT_ORIGIN:
-            case tesseract_environment::CommandType::CHANGE_LINK_ORIGIN:
-            case tesseract_environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
-            case tesseract_environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
-            case tesseract_environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
-            case tesseract_environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
-            case tesseract_environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:
-            case tesseract_environment::CommandType::CHANGE_JOINT_ACCELERATION_LIMITS:
-            case tesseract_environment::CommandType::ADD_KINEMATICS_INFORMATION:
-            case tesseract_environment::CommandType::CHANGE_COLLISION_MARGINS:
-            case tesseract_environment::CommandType::ADD_CONTACT_MANAGERS_PLUGIN_INFO:
-            case tesseract_environment::CommandType::SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER:
-            case tesseract_environment::CommandType::SET_ACTIVE_DISCRETE_CONTACT_MANAGER:
+            case tesseract::environment::CommandType::MOVE_LINK:
+            case tesseract::environment::CommandType::MOVE_JOINT:
+            case tesseract::environment::CommandType::REPLACE_JOINT:
+            case tesseract::environment::CommandType::CHANGE_JOINT_ORIGIN:
+            case tesseract::environment::CommandType::CHANGE_LINK_ORIGIN:
+            case tesseract::environment::CommandType::CHANGE_LINK_COLLISION_ENABLED:
+            case tesseract::environment::CommandType::MODIFY_ALLOWED_COLLISIONS:
+            case tesseract::environment::CommandType::REMOVE_ALLOWED_COLLISION_LINK:
+            case tesseract::environment::CommandType::CHANGE_JOINT_POSITION_LIMITS:
+            case tesseract::environment::CommandType::CHANGE_JOINT_VELOCITY_LIMITS:
+            case tesseract::environment::CommandType::CHANGE_JOINT_ACCELERATION_LIMITS:
+            case tesseract::environment::CommandType::ADD_KINEMATICS_INFORMATION:
+            case tesseract::environment::CommandType::CHANGE_COLLISION_MARGINS:
+            case tesseract::environment::CommandType::ADD_CONTACT_MANAGERS_PLUGIN_INFO:
+            case tesseract::environment::CommandType::SET_ACTIVE_CONTINUOUS_CONTACT_MANAGER:
+            case tesseract::environment::CommandType::SET_ACTIVE_DISCRETE_CONTACT_MANAGER:
             {
               break;
             }
@@ -907,12 +907,12 @@ void tesseractEventFilter(const tesseract_environment::Event& event,
       current_revision = e.revision;
       break;
     }
-    case tesseract_environment::Events::SCENE_STATE_CHANGED:
+    case tesseract::environment::Events::SCENE_STATE_CHANGED:
     {
-      const auto& e = static_cast<const tesseract_environment::SceneStateChangedEvent&>(event);
+      const auto& e = static_cast<const tesseract::environment::SceneStateChangedEvent&>(event);
       setSceneState(scene, entity_container, e.state.link_transforms);
       break;
     }
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

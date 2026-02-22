@@ -28,24 +28,24 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ReplaceJointCommandStandardItem : public QStandardItem
 {
 public:
-  explicit ReplaceJointCommandStandardItem(std::shared_ptr<const tesseract_environment::ReplaceJointCommand> command);
+  explicit ReplaceJointCommandStandardItem(std::shared_ptr<const tesseract::environment::ReplaceJointCommand> command);
   explicit ReplaceJointCommandStandardItem(const QString& text,
-                                           std::shared_ptr<const tesseract_environment::ReplaceJointCommand> command);
+                                           std::shared_ptr<const tesseract::environment::ReplaceJointCommand> command);
   explicit ReplaceJointCommandStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           std::shared_ptr<const tesseract_environment::ReplaceJointCommand> command);
+                                           std::shared_ptr<const tesseract::environment::ReplaceJointCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::ReplaceJointCommand> command;
+  std::shared_ptr<const tesseract::environment::ReplaceJointCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_REPLACE_JOINT_COMMAND_STANDARD_ITEM_H

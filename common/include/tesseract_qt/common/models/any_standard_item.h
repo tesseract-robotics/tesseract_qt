@@ -27,16 +27,16 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class AnyStandardItem : public QStandardItem
 {
 public:
-  explicit AnyStandardItem(const tesseract_common::AnyPoly& any);
-  AnyStandardItem(const QString& text, const tesseract_common::AnyPoly& any);
-  AnyStandardItem(const QIcon& icon, const QString& text, const tesseract_common::AnyPoly& any);
+  explicit AnyStandardItem(const tesseract::common::AnyPoly& any);
+  AnyStandardItem(const QString& text, const tesseract::common::AnyPoly& any);
+  AnyStandardItem(const QIcon& icon, const QString& text, const tesseract::common::AnyPoly& any);
   int type() const override;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_ANY_STANDARD_ITEM_H

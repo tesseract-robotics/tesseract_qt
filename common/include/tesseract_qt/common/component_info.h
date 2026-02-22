@@ -30,7 +30,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_hash.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 template <class Archive>
@@ -146,17 +146,17 @@ private:
                          std::string description = "");
 
   template <class Archive>
-  friend void ::tesseract_gui::serialize(Archive& ar, ComponentInfo& obj);
+  friend void ::tesseract::gui::serialize(Archive& ar, ComponentInfo& obj);
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 namespace std
 {
 template <>
-struct hash<tesseract_gui::ComponentInfo>
+struct hash<tesseract::gui::ComponentInfo>
 {
-  auto operator()(const tesseract_gui::ComponentInfo& obj) const -> size_t
+  auto operator()(const tesseract::gui::ComponentInfo& obj) const -> size_t
   {
     return hash<std::string>{}(obj.getSceneName()) ^ hash<boost::uuids::uuid>{}(obj.getNamespace());
   }

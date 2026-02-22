@@ -28,21 +28,21 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ConeStandardItem : public QStandardItem
 {
 public:
-  ConeStandardItem(std::shared_ptr<const tesseract_geometry::Cone> cone);
-  explicit ConeStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Cone> cone);
-  ConeStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract_geometry::Cone> cone);
+  ConeStandardItem(std::shared_ptr<const tesseract::geometry::Cone> cone);
+  explicit ConeStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Cone> cone);
+  ConeStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract::geometry::Cone> cone);
   int type() const override;
 
-  std::shared_ptr<const tesseract_geometry::Cone> cone;
+  std::shared_ptr<const tesseract::geometry::Cone> cone;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_CONE_STANDARD_ITEM_H

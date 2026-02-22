@@ -26,7 +26,7 @@
 
 #include <QIcon>
 
-namespace tesseract_gui::icons
+namespace tesseract::gui::icons
 {
 QIcon getAnchorIcon()
 {
@@ -537,4 +537,4 @@ QIcon getErrorMsgIcon()
   return icon;
 }
 
-}  // namespace tesseract_gui::icons
+}  // namespace tesseract::gui::icons

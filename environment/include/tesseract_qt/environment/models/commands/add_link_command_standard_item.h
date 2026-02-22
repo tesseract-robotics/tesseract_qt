@@ -28,24 +28,24 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class AddLinkCommandStandardItem : public QStandardItem
 {
 public:
-  explicit AddLinkCommandStandardItem(std::shared_ptr<const tesseract_environment::AddLinkCommand> command);
+  explicit AddLinkCommandStandardItem(std::shared_ptr<const tesseract::environment::AddLinkCommand> command);
   explicit AddLinkCommandStandardItem(const QString& text,
-                                      std::shared_ptr<const tesseract_environment::AddLinkCommand> command);
+                                      std::shared_ptr<const tesseract::environment::AddLinkCommand> command);
   explicit AddLinkCommandStandardItem(const QIcon& icon,
                                       const QString& text,
-                                      std::shared_ptr<const tesseract_environment::AddLinkCommand> command);
+                                      std::shared_ptr<const tesseract::environment::AddLinkCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::AddLinkCommand> command;
+  std::shared_ptr<const tesseract::environment::AddLinkCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ADD_LINK_COMMAND_STANDARD_ITEM_H

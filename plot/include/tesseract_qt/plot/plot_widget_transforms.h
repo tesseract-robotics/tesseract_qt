@@ -9,7 +9,7 @@ namespace Ui
 class PlotWidgetTransforms;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class DialogTransformEditor : public QDialog
 {
@@ -54,5 +54,5 @@ private:
     QColor _color;
   };
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_PLOT_WIDGET_TRANSFORMS_H

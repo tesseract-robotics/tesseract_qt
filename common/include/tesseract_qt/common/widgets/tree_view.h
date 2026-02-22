@@ -25,7 +25,7 @@
 
 #include <QTreeView>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class TreeView : public QTreeView
 {
@@ -34,6 +34,6 @@ public:
   explicit TreeView(QWidget* parent = nullptr);
   ~TreeView();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_TREE_VIEW_H

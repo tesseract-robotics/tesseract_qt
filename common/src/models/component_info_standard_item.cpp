@@ -28,7 +28,7 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ComponentInfoStandardItem::ComponentInfoStandardItem(std::shared_ptr<ComponentInfo> component_info)
   : ComponentInfoStandardItem(icons::getConvexMeshIcon(), "Component Info", std::move(component_info))
@@ -62,4 +62,4 @@ ComponentInfoStandardItem::ComponentInfoStandardItem(const QIcon& icon,
 
 int ComponentInfoStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_COMPONENT_INFO); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

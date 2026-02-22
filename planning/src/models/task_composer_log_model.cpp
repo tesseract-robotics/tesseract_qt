@@ -32,12 +32,12 @@
 
 #include <QUuid>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct TaskComposerLogModel::Implementation
 {
   std::map<QString, QStandardItem*> items;
-  std::map<QStandardItem*, tesseract_planning::TaskComposerLog> logs;
+  std::map<QStandardItem*, tesseract::task_composer::TaskComposerLog> logs;
   std::map<QStandardItem*, QString> logs_ns;
   void clear()
   {
@@ -63,7 +63,7 @@ void TaskComposerLogModel::clear()
   data_->clear();
 }
 
-QString TaskComposerLogModel::add(tesseract_planning::TaskComposerLog log, std::string ns)
+QString TaskComposerLogModel::add(tesseract::task_composer::TaskComposerLog log, std::string ns)
 {
   QString key = QUuid::createUuid().toString();
   ns = (ns.empty()) ? "general" : ns;
@@ -103,7 +103,7 @@ TaskComposerLogStandardItem* findTaskComposerLogItem(QStandardItem* item)
   return findTaskComposerLogItem(item->parent());
 }
 
-const tesseract_planning::TaskComposerLog& TaskComposerLogModel::get(const QModelIndex& row) const
+const tesseract::task_composer::TaskComposerLog& TaskComposerLogModel::get(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
   return data_->logs.at(findTaskComposerLogItem(item));
@@ -115,4 +115,4 @@ const QString& TaskComposerLogModel::getNamespace(const QModelIndex& row) const
   return data_->logs_ns.at(findTaskComposerLogItem(item));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

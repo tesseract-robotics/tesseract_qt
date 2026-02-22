@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/change_link_visibility_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::ChangeLinkVisibilityCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeLinkVisibilityCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Change Link Visibility"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem
 
 ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeLinkVisibilityCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeLinkVisibilityCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem
 ChangeLinkVisibilityCommandStandardItem::ChangeLinkVisibilityCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::ChangeLinkVisibilityCommand> command)
+    std::shared_ptr<const tesseract::environment::ChangeLinkVisibilityCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -63,4 +63,4 @@ void ChangeLinkVisibilityCommandStandardItem::ctor()
   appendRow(createStandardItemString(
       icons::getLinkIcon(), command->getLinkName(), (command->getEnabled()) ? "True" : "False"));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

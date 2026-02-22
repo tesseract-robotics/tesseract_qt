@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/events/render_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 /////////////////////////////////////////////////
 RenderEvent::RenderEvent(std::string scene_name, QEvent::Type type) : QEvent(type), scene_name_(std::move(scene_name))
@@ -42,4 +42,4 @@ PreRender::PreRender(std::string scene_name) : RenderEvent(std::move(scene_name)
 {
 }
 PreRender::~PreRender() = default;
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

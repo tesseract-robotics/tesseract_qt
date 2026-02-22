@@ -64,7 +64,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::EnvironmentWidget" name="environment_widget" native="true">
+        <widget class="tesseract::gui::EnvironmentWidget" name="environment_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -99,7 +99,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::EnvironmentWidget" name="jt_environment_widget" native="true">
+        <widget class="tesseract::gui::EnvironmentWidget" name="jt_environment_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -116,7 +116,7 @@
         </widget>
        </item>
        <item>
-        <widget class="tesseract_gui::JointTrajectoryWidget" name="joint_trajectory_widget" native="true">
+        <widget class="tesseract::gui::JointTrajectoryWidget" name="joint_trajectory_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -151,7 +151,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::ManipulationWidget" name="manipulation_widget" native="true">
+        <widget class="tesseract::gui::ManipulationWidget" name="manipulation_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -186,7 +186,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::TaskComposerWidget" name="task_composer_widget" native="true">
+        <widget class="tesseract::gui::TaskComposerWidget" name="task_composer_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -203,25 +203,25 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::EnvironmentWidget</class>
+   <class>tesseract::gui::EnvironmentWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/environment/widgets/environment_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::JointTrajectoryWidget</class>
+   <class>tesseract::gui::JointTrajectoryWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/joint_trajectory/widgets/joint_trajectory_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::ManipulationWidget</class>
+   <class>tesseract::gui::ManipulationWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/manipulation/manipulation_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::TaskComposerWidget</class>
+   <class>tesseract::gui::TaskComposerWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/planning/widgets/task_composer_widget.h</header>
    <container>1</container>

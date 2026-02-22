@@ -28,7 +28,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class VectorDoubleStandardItem : public QStandardItem
 {
@@ -48,6 +48,6 @@ public:
 private:
   void ctor(const Eigen::Ref<const Eigen::VectorXd>& vector_double);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_VECTOR_DOUBLE_STANDARD_ITEM_H

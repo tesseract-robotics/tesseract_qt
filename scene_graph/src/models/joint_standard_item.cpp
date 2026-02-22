@@ -33,7 +33,7 @@
 
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointStandardItem::Implementation
 {
@@ -42,13 +42,13 @@ public:
   QList<QStandardItem*> parent_link_name;
 };
 
-JointStandardItem::JointStandardItem(std::shared_ptr<tesseract_scene_graph::Joint> joint)
+JointStandardItem::JointStandardItem(std::shared_ptr<tesseract::scene_graph::Joint> joint)
   : QStandardItem(icons::getJointIcon(), "Joint"), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
 }
 
-JointStandardItem::JointStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Joint> joint)
+JointStandardItem::JointStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::Joint> joint)
   : QStandardItem(icons::getJointIcon(), text), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
@@ -56,7 +56,7 @@ JointStandardItem::JointStandardItem(const QString& text, std::shared_ptr<tesser
 
 JointStandardItem::JointStandardItem(const QIcon& icon,
                                      const QString& text,
-                                     std::shared_ptr<tesseract_scene_graph::Joint> joint)
+                                     std::shared_ptr<tesseract::scene_graph::Joint> joint)
   : QStandardItem(icon, text), joint(std::move(joint)), data_(std::make_unique<Implementation>())
 {
   ctor();
@@ -77,22 +77,22 @@ void JointStandardItem::ctor()
 
   {
     QStandardItem* item;
-    if (joint->type == tesseract_scene_graph::JointType::FIXED)
+    if (joint->type == tesseract::scene_graph::JointType::FIXED)
     {
       item = new QStandardItem(icons::getAnchorIcon(), "type");
       setIcon(icons::getJointFixedIcon());
     }
-    else if (joint->type == tesseract_scene_graph::JointType::REVOLUTE)
+    else if (joint->type == tesseract::scene_graph::JointType::REVOLUTE)
     {
       item = new QStandardItem(icons::getRevoluteIcon(), "type");
       setIcon(icons::getJointRevoluteIcon());
     }
-    else if (joint->type == tesseract_scene_graph::JointType::CONTINUOUS)
+    else if (joint->type == tesseract::scene_graph::JointType::CONTINUOUS)
     {
       item = new QStandardItem(icons::getContinuousIcon(), "type");
       setIcon(icons::getJointContinuousIcon());
     }
-    else if (joint->type == tesseract_scene_graph::JointType::PRISMATIC)
+    else if (joint->type == tesseract::scene_graph::JointType::PRISMATIC)
     {
       item = new QStandardItem(icons::getPrismaticIcon(), "type");
       setIcon(icons::getJointPrismaticIcon());
@@ -109,9 +109,9 @@ void JointStandardItem::ctor()
     appendRow({ item, value });
   }
 
-  if (joint->type == tesseract_scene_graph::JointType::REVOLUTE ||
-      joint->type == tesseract_scene_graph::JointType::PRISMATIC ||
-      joint->type == tesseract_scene_graph::JointType::PLANAR)
+  if (joint->type == tesseract::scene_graph::JointType::REVOLUTE ||
+      joint->type == tesseract::scene_graph::JointType::PRISMATIC ||
+      joint->type == tesseract::scene_graph::JointType::PLANAR)
   {
     auto* item = new QStandardItem(icons::getAxisIcon(), "axis");
     item->setColumnCount(2);
@@ -146,4 +146,4 @@ void JointStandardItem::ctor()
   if (joint->mimic != nullptr)
     appendRow(new MimicStandardItem(joint->mimic));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

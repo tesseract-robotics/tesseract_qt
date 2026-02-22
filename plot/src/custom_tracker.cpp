@@ -37,7 +37,7 @@ struct compareX
   inline bool operator()(const double x, const QPointF& pos) const { return (x < pos.x()); }
 };
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 CurveTracker::CurveTracker(QwtPlot* plot) : QObject(plot), _plot(plot), _param(VALUE)
 {
@@ -251,4 +251,4 @@ QLineF CurveTracker::curveLineAt(const QwtPlotCurve* curve, double x) const
   }
   return line;
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

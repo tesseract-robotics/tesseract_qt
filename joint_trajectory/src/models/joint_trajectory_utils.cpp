@@ -41,17 +41,17 @@
 #include <QString>
 #include <QDir>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& component_info,
                             const QString& filename,
                             const QString& suffix)
 {
   QFileInfo file_info(filename);
-  tesseract_common::JointTrajectorySet joint_trajectory_set;
+  tesseract::common::JointTrajectorySet joint_trajectory_set;
   if (suffix == "jtsx" && file_info.suffix() == "jtsx")
   {
-    auto jts = tesseract_common::Serialization::fromArchiveFileXML<tesseract_common::JointTrajectorySet>(
+    auto jts = tesseract::common::Serialization::fromArchiveFileXML<tesseract::common::JointTrajectorySet>(
         filename.toStdString());
 
     events::JointTrajectoryAdd event(component_info, std::move(jts));
@@ -61,7 +61,7 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
 
   if (suffix == "jtsb" && file_info.suffix() == "jtsb")
   {
-    auto jts = tesseract_common::Serialization::fromArchiveFileBinary<tesseract_common::JointTrajectorySet>(
+    auto jts = tesseract::common::Serialization::fromArchiveFileBinary<tesseract::common::JointTrajectorySet>(
         filename.toStdString());
     events::JointTrajectoryAdd event(component_info, std::move(jts));
     QApplication::sendEvent(qApp, &event);
@@ -70,10 +70,10 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
 
   if (suffix == "cpix" && file_info.suffix() == "cpix")
   {
-    auto cpi =
-        tesseract_common::Serialization::fromArchiveFileXML<tesseract_planning::InstructionPoly>(filename.toStdString())
-            .as<tesseract_planning::CompositeInstruction>();
-    tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
+    auto cpi = tesseract::common::Serialization::fromArchiveFileXML<tesseract::command_language::InstructionPoly>(
+                   filename.toStdString())
+                   .as<tesseract::command_language::CompositeInstruction>();
+    tesseract::common::JointTrajectory jt = tesseract::command_language::toJointTrajectory(cpi);
     if (jt.empty())
       return false;
 
@@ -81,7 +81,7 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
     for (std::size_t i = 0; i < jt.states.front().joint_names.size(); ++i)
       initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
 
-    tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
+    tesseract::common::JointTrajectorySet jts(initial_state, jt.description);
     jts.appendJointTrajectory(jt);
 
     events::JointTrajectoryAdd event(component_info, std::move(jts));
@@ -91,10 +91,10 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
 
   if (suffix == "cpib" && file_info.suffix() == "cpib")
   {
-    auto cpi = tesseract_common::Serialization::fromArchiveFileBinary<tesseract_planning::InstructionPoly>(
+    auto cpi = tesseract::common::Serialization::fromArchiveFileBinary<tesseract::command_language::InstructionPoly>(
                    filename.toStdString())
-                   .as<tesseract_planning::CompositeInstruction>();
-    tesseract_common::JointTrajectory jt = tesseract_planning::toJointTrajectory(cpi);
+                   .as<tesseract::command_language::CompositeInstruction>();
+    tesseract::common::JointTrajectory jt = tesseract::command_language::toJointTrajectory(cpi);
     if (jt.empty())
       return false;
 
@@ -102,7 +102,7 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
     for (std::size_t i = 0; i < jt.states.front().joint_names.size(); ++i)
       initial_state[jt.states.front().joint_names[i]] = jt.states.front().position[i];
 
-    tesseract_common::JointTrajectorySet jts(initial_state, jt.description);
+    tesseract::common::JointTrajectorySet jts(initial_state, jt.description);
     events::JointTrajectoryAdd event(component_info, std::move(jts));
     QApplication::sendEvent(qApp, &event);
     return true;
@@ -111,7 +111,7 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
   return false;
 }
 
-bool saveJointTrajectorySet(const tesseract_common::JointTrajectorySet& jts, QString filename, const QString& suffix)
+bool saveJointTrajectorySet(const tesseract::common::JointTrajectorySet& jts, QString filename, const QString& suffix)
 {
   QFileInfo file_info(filename);
   if (suffix == "jtsx")
@@ -119,8 +119,8 @@ bool saveJointTrajectorySet(const tesseract_common::JointTrajectorySet& jts, QSt
     if (file_info.suffix() != "jtsx")
       filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".jtsx";
 
-    tesseract_common::Serialization::toArchiveFileXML<tesseract_common::JointTrajectorySet>(jts,
-                                                                                            filename.toStdString());
+    tesseract::common::Serialization::toArchiveFileXML<tesseract::common::JointTrajectorySet>(jts,
+                                                                                              filename.toStdString());
     return true;
   }
 
@@ -129,12 +129,12 @@ bool saveJointTrajectorySet(const tesseract_common::JointTrajectorySet& jts, QSt
     if (file_info.suffix() != "jtsb")
       filename = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".jtsb";
 
-    tesseract_common::Serialization::toArchiveFileBinary<tesseract_common::JointTrajectorySet>(jts,
-                                                                                               filename.toStdString());
+    tesseract::common::Serialization::toArchiveFileBinary<tesseract::common::JointTrajectorySet>(
+        jts, filename.toStdString());
     return true;
   }
 
   return false;
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

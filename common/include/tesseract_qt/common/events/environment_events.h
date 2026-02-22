@@ -30,7 +30,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class EnvironmentCommandsClear : public ComponentEvent
 {
@@ -43,43 +43,43 @@ class EnvironmentCommandsSet : public ComponentEvent
 {
 public:
   EnvironmentCommandsSet(std::shared_ptr<const ComponentInfo> component_info,
-                         const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands);
+                         const std::vector<std::shared_ptr<const tesseract::environment::Command>>& commands);
   ~EnvironmentCommandsSet() override;
 
-  const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
+  const std::vector<std::shared_ptr<const tesseract::environment::Command>>& getCommands() const;
 
 private:
-  std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
+  std::vector<std::shared_ptr<const tesseract::environment::Command>> commands_;
 };
 
 class EnvironmentCommandsAppend : public ComponentEvent
 {
 public:
   EnvironmentCommandsAppend(std::shared_ptr<const ComponentInfo> component_info,
-                            const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands);
+                            const std::vector<std::shared_ptr<const tesseract::environment::Command>>& commands);
   ~EnvironmentCommandsAppend() override;
 
-  const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
+  const std::vector<std::shared_ptr<const tesseract::environment::Command>>& getCommands() const;
 
 private:
-  std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
+  std::vector<std::shared_ptr<const tesseract::environment::Command>> commands_;
 };
 
 class EnvironmentApplyCommand : public ComponentEvent
 {
 public:
   EnvironmentApplyCommand(std::shared_ptr<const ComponentInfo> component_info,
-                          const std::vector<std::shared_ptr<const tesseract_environment::Command>>& commands,
+                          const std::vector<std::shared_ptr<const tesseract::environment::Command>>& commands,
                           bool reset = false);
   ~EnvironmentApplyCommand() override;
 
   bool isReset() const;
-  const std::vector<std::shared_ptr<const tesseract_environment::Command>>& getCommands() const;
+  const std::vector<std::shared_ptr<const tesseract::environment::Command>>& getCommands() const;
 
 private:
-  std::vector<std::shared_ptr<const tesseract_environment::Command>> commands_;
+  std::vector<std::shared_ptr<const tesseract::environment::Command>> commands_;
   bool reset_;
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_ENVIRONMENT_EVENTS_H

@@ -28,27 +28,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class SetActiveDiscreteContactManagerCommandStandardItem : public QStandardItem
 {
 public:
   explicit SetActiveDiscreteContactManagerCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::SetActiveDiscreteContactManagerCommand> command);
+      std::shared_ptr<const tesseract::environment::SetActiveDiscreteContactManagerCommand> command);
   explicit SetActiveDiscreteContactManagerCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::SetActiveDiscreteContactManagerCommand> command);
+      std::shared_ptr<const tesseract::environment::SetActiveDiscreteContactManagerCommand> command);
   explicit SetActiveDiscreteContactManagerCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::SetActiveDiscreteContactManagerCommand> command);
+      std::shared_ptr<const tesseract::environment::SetActiveDiscreteContactManagerCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::SetActiveDiscreteContactManagerCommand> command;
+  std::shared_ptr<const tesseract::environment::SetActiveDiscreteContactManagerCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_SET_ACTIVE_DISCRETE_CONTACT_MANAGER_COMMAND_STANDARD_ITEM_H

@@ -30,7 +30,7 @@
 
 #include <boost/uuid/uuid_generators.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TransformStandardItem::TransformStandardItem(const Eigen::Isometry3d& transform)
   : QStandardItem(icons::getOriginIcon(), "Transform"), uuid_(boost::uuids::random_generator()())
@@ -114,4 +114,4 @@ void TransformStandardItem::ctor(const Eigen::Isometry3d& transform)
   orientation_ = new QuaternionStandardItem(q);
   appendRow(orientation_);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

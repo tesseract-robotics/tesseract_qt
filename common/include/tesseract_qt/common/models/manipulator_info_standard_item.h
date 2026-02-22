@@ -27,22 +27,22 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ManipulatorInfoStandardItem : public QStandardItem
 {
 public:
-  explicit ManipulatorInfoStandardItem(const tesseract_common::ManipulatorInfo& manip_info);
-  ManipulatorInfoStandardItem(const QString& text, const tesseract_common::ManipulatorInfo& manip_info);
+  explicit ManipulatorInfoStandardItem(const tesseract::common::ManipulatorInfo& manip_info);
+  ManipulatorInfoStandardItem(const QString& text, const tesseract::common::ManipulatorInfo& manip_info);
   ManipulatorInfoStandardItem(const QIcon& icon,
                               const QString& text,
-                              const tesseract_common::ManipulatorInfo& manip_info);
+                              const tesseract::common::ManipulatorInfo& manip_info);
 
   int type() const override;
 
 private:
-  void ctor(const tesseract_common::ManipulatorInfo& manip_info);
+  void ctor(const tesseract::common::ManipulatorInfo& manip_info);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_MANIPULATOR_INFO_STANDARD_ITEM_H

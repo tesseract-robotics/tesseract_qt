@@ -27,20 +27,20 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointTrajectoryStandardItem : public QStandardItem
 {
 public:
-  explicit JointTrajectoryStandardItem(const tesseract_common::JointTrajectory& joint_trajectory);
-  JointTrajectoryStandardItem(const QString& text, const tesseract_common::JointTrajectory& joint_trajectory);
+  explicit JointTrajectoryStandardItem(const tesseract::common::JointTrajectory& joint_trajectory);
+  JointTrajectoryStandardItem(const QString& text, const tesseract::common::JointTrajectory& joint_trajectory);
   JointTrajectoryStandardItem(const QIcon& icon,
                               const QString& text,
-                              const tesseract_common::JointTrajectory& joint_trajectory);
+                              const tesseract::common::JointTrajectory& joint_trajectory);
   int type() const override;
 
 private:
-  void ctor(const tesseract_common::JointTrajectory& joint_trajectory);
+  void ctor(const tesseract::common::JointTrajectory& joint_trajectory);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_COMMON_JOINT_TRAJECTORY_STANDARD_ITEM_H

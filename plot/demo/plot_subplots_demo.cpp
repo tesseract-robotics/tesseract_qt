@@ -31,21 +31,21 @@ int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
 
-  tesseract_gui::PlotDataMapRef plot_data_map;
-  tesseract_gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
-  tesseract_gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
+  tesseract::gui::PlotDataMapRef plot_data_map;
+  tesseract::gui::PlotData& cosine_data = plot_data_map.getOrCreateNumeric("cosine");
+  tesseract::gui::PlotData& sine_data = plot_data_map.getOrCreateNumeric("sine");
   for (int i = 0; i < int((2 * M_PI) / 0.01); ++i)
   {
-    cosine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::cos(i * 0.01)));
-    sine_data.pushBack(tesseract_gui::PlotDataXY::Point(i * 0.01, std::sin(i * 0.01)));
+    cosine_data.pushBack(tesseract::gui::PlotDataXY::Point(i * 0.01, std::cos(i * 0.01)));
+    sine_data.pushBack(tesseract::gui::PlotDataXY::Point(i * 0.01, std::sin(i * 0.01)));
   }
 
-  tesseract_gui::PlotSubplots subplots(plot_data_map, 2, 1);
+  tesseract::gui::PlotSubplots subplots(plot_data_map, 2, 1);
   subplots.resize(320, 240);
   subplots.setWindowTitle(QApplication::translate("subplots", "Subplots"));
 
   {  // Subplot [0, 0]
-    tesseract_gui::PlotWidget* widget = subplots.getSubplot(0, 0);
+    tesseract::gui::PlotWidget* widget = subplots.getSubplot(0, 0);
     widget->addCurve("cosine");
     widget->setTitle("Cosine");
     widget->setXAxisTitle("Time (seconds)");
@@ -54,14 +54,14 @@ int main(int argc, char** argv)
     widget->zoomOut(true);
     widget->replot();
 
-    QObject::connect(widget, &tesseract_gui::PlotWidget::trackerMoved, [widget](QPointF pos) {
+    QObject::connect(widget, &tesseract::gui::PlotWidget::trackerMoved, [widget](QPointF pos) {
       widget->setTrackerPosition(pos.x());
       widget->replot();
     });
   }
 
   {  // Subplot [1, 0]
-    tesseract_gui::PlotWidget* widget = subplots.getSubplot(1, 0);
+    tesseract::gui::PlotWidget* widget = subplots.getSubplot(1, 0);
     widget->addCurve("sine");
     widget->setTitle("Sine");
     widget->setXAxisTitle("Time (seconds)");
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     widget->zoomOut(true);
     widget->replot();
 
-    QObject::connect(widget, &tesseract_gui::PlotWidget::trackerMoved, [widget](QPointF pos) {
+    QObject::connect(widget, &tesseract::gui::PlotWidget::trackerMoved, [widget](QPointF pos) {
       widget->setTrackerPosition(pos.x());
       widget->replot();
     });

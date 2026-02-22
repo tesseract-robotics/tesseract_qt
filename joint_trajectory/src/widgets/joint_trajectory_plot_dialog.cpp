@@ -27,9 +27,9 @@
 
 const double SLIDER_RESOLUTION = 0.001;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTrajectoryInfo current_trajectory,
+JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract::common::JointTrajectoryInfo current_trajectory,
                                                      QWidget* parent)
   : QDialog(parent), ui_(std::make_unique<Ui::JointTrajectoryPlotDialog>())
 {
@@ -45,22 +45,22 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
 
   for (std::size_t i = 0; i < joint_names.size(); ++i)
   {
-    tesseract_gui::PlotData& position = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::position");
-    tesseract_gui::PlotData& velocity = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::velocity");
-    tesseract_gui::PlotData& acceleration = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::acceleration");
+    tesseract::gui::PlotData& position = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::position");
+    tesseract::gui::PlotData& velocity = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::velocity");
+    tesseract::gui::PlotData& acceleration = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::acceleration");
     double ct{ 0 };
     for (const auto& state : current_trajectory.joint_trajectory)
     {
-      position.pushBack(tesseract_gui::PlotDataXY::Point(state.time, state.position(i)));
-      velocity.pushBack(tesseract_gui::PlotDataXY::Point(state.time, state.velocity(i)));
-      acceleration.pushBack(tesseract_gui::PlotDataXY::Point(state.time, state.acceleration(i)));
+      position.pushBack(tesseract::gui::PlotDataXY::Point(state.time, state.position(i)));
+      velocity.pushBack(tesseract::gui::PlotDataXY::Point(state.time, state.velocity(i)));
+      acceleration.pushBack(tesseract::gui::PlotDataXY::Point(state.time, state.acceleration(i)));
     }
   }
 
-  position_subplots_ = new tesseract_gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
+  position_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
   for (std::size_t i = 0; i < joint_names.size(); ++i)
   {
-    tesseract_gui::PlotWidget* widget = position_subplots_->getSubplot(i, 0);
+    tesseract::gui::PlotWidget* widget = position_subplots_->getSubplot(i, 0);
     widget->addCurve(joint_names[i] + "::position");
     if (i == joint_names.size() - 1)
       widget->setXAxisTitle("Time (seconds)");
@@ -69,7 +69,7 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
     widget->zoomOut(true);
     widget->replot();
 
-    QObject::connect(widget, &tesseract_gui::PlotWidget::trackerMoved, [this](QPointF pos) {
+    QObject::connect(widget, &tesseract::gui::PlotWidget::trackerMoved, [this](QPointF pos) {
       onSliderMoved(pos.x() / SLIDER_RESOLUTION);
       this->ui_->jtpHorizontalSlider->blockSignals(true);
       this->ui_->jtpHorizontalSlider->setValue(pos.x() / SLIDER_RESOLUTION);
@@ -81,10 +81,10 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
 
   connect(ui_->jtpTabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIndexChanged(int)));
 
-  velocity_subplots_ = new tesseract_gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
+  velocity_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
   for (std::size_t i = 0; i < joint_names.size(); ++i)
   {
-    tesseract_gui::PlotWidget* widget = velocity_subplots_->getSubplot(i, 0);
+    tesseract::gui::PlotWidget* widget = velocity_subplots_->getSubplot(i, 0);
     widget->addCurve(joint_names[i] + "::velocity");
     if (i == joint_names.size() - 1)
       widget->setXAxisTitle("Time (seconds)");
@@ -93,7 +93,7 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
     widget->zoomOut(true);
     widget->replot();
 
-    QObject::connect(widget, &tesseract_gui::PlotWidget::trackerMoved, [this](QPointF pos) {
+    QObject::connect(widget, &tesseract::gui::PlotWidget::trackerMoved, [this](QPointF pos) {
       onSliderMoved(pos.x() / SLIDER_RESOLUTION);
       this->ui_->jtpHorizontalSlider->blockSignals(true);
       this->ui_->jtpHorizontalSlider->setValue(pos.x() / SLIDER_RESOLUTION);
@@ -104,10 +104,10 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
   ui_->jtpTabWidget->addTab(velocity_subplots_, tr("Velocity"));
   connect(ui_->jtpTabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIndexChanged(int)));
 
-  acceleration_subplots_ = new tesseract_gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
+  acceleration_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
   for (std::size_t i = 0; i < joint_names.size(); ++i)
   {
-    tesseract_gui::PlotWidget* widget = acceleration_subplots_->getSubplot(i, 0);
+    tesseract::gui::PlotWidget* widget = acceleration_subplots_->getSubplot(i, 0);
     widget->addCurve(joint_names[i] + "::acceleration");
     if (i == joint_names.size() - 1)
       widget->setXAxisTitle("Time (seconds)");
@@ -116,7 +116,7 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract_common::JointTraj
     widget->zoomOut(true);
     widget->replot();
 
-    QObject::connect(widget, &tesseract_gui::PlotWidget::trackerMoved, [this](QPointF pos) {
+    QObject::connect(widget, &tesseract::gui::PlotWidget::trackerMoved, [this](QPointF pos) {
       onSliderMoved(pos.x() / SLIDER_RESOLUTION);
       this->ui_->jtpHorizontalSlider->blockSignals(true);
       this->ui_->jtpHorizontalSlider->setValue(pos.x() / SLIDER_RESOLUTION);
@@ -176,4 +176,4 @@ void JointTrajectoryPlotDialog::onTabIndexChanged(int value)
   else if (value == 2)
     acceleration_subplots_->replot();
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

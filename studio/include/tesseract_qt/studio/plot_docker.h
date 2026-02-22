@@ -50,7 +50,7 @@ namespace Ui
 class DraggableToolbar;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class DraggableToolbar : public QWidget
 {
@@ -157,5 +157,5 @@ Q_SIGNALS:
 
   void undoableChange();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_PLOT_DOCKER_H

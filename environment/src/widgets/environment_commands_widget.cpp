@@ -28,7 +28,7 @@
 
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct EnvironmentCommandsWidget::Implementation
 {
@@ -94,4 +94,4 @@ void EnvironmentCommandsWidget::ctor(std::shared_ptr<const ComponentInfo> compon
   // Set layout
   setLayout(data_->layout);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

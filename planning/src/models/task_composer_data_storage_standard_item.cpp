@@ -29,10 +29,10 @@
 
 #include <tesseract_task_composer/core/task_composer_data_storage.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TaskComposerDataStorageStandardItem::TaskComposerDataStorageStandardItem(
-    const tesseract_planning::TaskComposerDataStorage& data)
+    const tesseract::task_composer::TaskComposerDataStorage& data)
   : QStandardItem(icons::getDataIcon(), "Task Composer Data Storage")
 {
   ctor(data);
@@ -40,7 +40,7 @@ TaskComposerDataStorageStandardItem::TaskComposerDataStorageStandardItem(
 
 TaskComposerDataStorageStandardItem::TaskComposerDataStorageStandardItem(
     const QString& text,
-    const tesseract_planning::TaskComposerDataStorage& data)
+    const tesseract::task_composer::TaskComposerDataStorage& data)
   : QStandardItem(icons::getDataIcon(), text)
 {
   ctor(data);
@@ -49,7 +49,7 @@ TaskComposerDataStorageStandardItem::TaskComposerDataStorageStandardItem(
 TaskComposerDataStorageStandardItem::TaskComposerDataStorageStandardItem(
     const QIcon& icon,
     const QString& text,
-    const tesseract_planning::TaskComposerDataStorage& data)
+    const tesseract::task_composer::TaskComposerDataStorage& data)
   : QStandardItem(icon, text)
 {
   ctor(data);
@@ -60,7 +60,7 @@ int TaskComposerDataStorageStandardItem::type() const
   return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_DATA_STORAGE);
 }
 
-void TaskComposerDataStorageStandardItem::ctor(const tesseract_planning::TaskComposerDataStorage& data)
+void TaskComposerDataStorageStandardItem::ctor(const tesseract::task_composer::TaskComposerDataStorage& data)
 {
   auto copy = data.getData();
   for (const auto& entry : copy)
@@ -82,4 +82,4 @@ void TaskComposerDataStorageStandardItem::ctor(const tesseract_planning::TaskCom
     }
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

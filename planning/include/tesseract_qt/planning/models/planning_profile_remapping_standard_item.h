@@ -25,7 +25,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 using PlannerProfileRemapping = std::unordered_map<std::string, std::unordered_map<std::string, std::string>>;
 
@@ -40,5 +40,5 @@ public:
 private:
   void ctor(const PlannerProfileRemapping& remapping);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLANNING_PLANNING_PROFILE_REMAPPING_STANDARD_ITEM_H

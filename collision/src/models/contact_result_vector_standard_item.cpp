@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ContactResultVectorStandardItem::Implementation
 {
@@ -72,4 +72,4 @@ void ContactResultVectorStandardItem::ctor(const ContactResultVector& contact_re
     appendRow({ cr_item, cr_value_item });
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

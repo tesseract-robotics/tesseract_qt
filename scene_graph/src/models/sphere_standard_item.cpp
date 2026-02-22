@@ -27,15 +27,15 @@
 
 #include <tesseract_geometry/impl/sphere.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-SphereStandardItem::SphereStandardItem(std::shared_ptr<const tesseract_geometry::Sphere> sphere)
+SphereStandardItem::SphereStandardItem(std::shared_ptr<const tesseract::geometry::Sphere> sphere)
   : QStandardItem(icons::getSphereIcon(), "Sphere"), sphere(std::move(sphere))
 {
   ctor();
 }
 
-SphereStandardItem::SphereStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Sphere> sphere)
+SphereStandardItem::SphereStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Sphere> sphere)
   : QStandardItem(icons::getSphereIcon(), text), sphere(std::move(sphere))
 {
   ctor();
@@ -43,7 +43,7 @@ SphereStandardItem::SphereStandardItem(const QString& text, std::shared_ptr<cons
 
 SphereStandardItem::SphereStandardItem(const QIcon& icon,
                                        const QString& text,
-                                       std::shared_ptr<const tesseract_geometry::Sphere> sphere)
+                                       std::shared_ptr<const tesseract::geometry::Sphere> sphere)
   : QStandardItem(icon, text), sphere(std::move(sphere))
 {
   ctor();
@@ -52,4 +52,4 @@ SphereStandardItem::SphereStandardItem(const QIcon& icon,
 int SphereStandardItem::type() const { return static_cast<int>(StandardItemType::SG_SPHERE); }
 
 void SphereStandardItem::ctor() { appendRow(createStandardItemFloat("radius", sphere->getRadius())); }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

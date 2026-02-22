@@ -23,7 +23,7 @@
 #include <tesseract_qt/common/models/namespace_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 NamespaceStandardItem::NamespaceStandardItem() : QStandardItem("Namespace") {}
 
@@ -33,4 +33,4 @@ NamespaceStandardItem::NamespaceStandardItem(const QIcon& icon, const QString& t
 
 int NamespaceStandardItem::type() const { return static_cast<int>(StandardItemType::COMMON_NAMESPACE); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

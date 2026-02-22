@@ -32,7 +32,7 @@
 
 #include <QStringListModel>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ComponentInfoDialog::Implementation
 {
@@ -108,4 +108,4 @@ void ComponentInfoDialog::onRefreshed()
       ui->component_info_combo_box->setCurrentText(current_text);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

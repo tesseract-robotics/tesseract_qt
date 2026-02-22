@@ -26,21 +26,21 @@
 #include <QStandardItem>
 #include <tesseract_command_language/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class SetToolInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit SetToolInstructionStandardItem(const tesseract_planning::SetToolInstruction& sti);
-  SetToolInstructionStandardItem(const QString& text, const tesseract_planning::SetToolInstruction& sti);
+  explicit SetToolInstructionStandardItem(const tesseract::command_language::SetToolInstruction& sti);
+  SetToolInstructionStandardItem(const QString& text, const tesseract::command_language::SetToolInstruction& sti);
   SetToolInstructionStandardItem(const QIcon& icon,
                                  const QString& text,
-                                 const tesseract_planning::SetToolInstruction& sti);
+                                 const tesseract::command_language::SetToolInstruction& sti);
   int type() const override;
 
 private:
-  void ctor(const tesseract_planning::SetToolInstruction& sti);
+  void ctor(const tesseract::command_language::SetToolInstruction& sti);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_SET_TOOL_INSTRUCTION_STANDARD_ITEM_H

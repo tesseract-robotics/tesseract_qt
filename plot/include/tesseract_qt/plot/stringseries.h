@@ -28,7 +28,7 @@
 #include <algorithm>
 #include <unordered_set>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class StringSeries : public TimeseriesBase<StringRef>
 {
@@ -88,6 +88,6 @@ private:
   std::unordered_set<std::string> _storage;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif

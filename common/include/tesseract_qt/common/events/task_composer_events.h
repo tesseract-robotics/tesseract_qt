@@ -28,7 +28,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class TaskComposerLoadConfig : public ComponentEvent
 {
@@ -62,15 +62,15 @@ class TaskComposerAddLog : public ComponentEvent
 {
 public:
   TaskComposerAddLog(std::shared_ptr<const ComponentInfo> component_info,
-                     tesseract_planning::TaskComposerLog log,
+                     tesseract::task_composer::TaskComposerLog log,
                      std::string ns = "");
   ~TaskComposerAddLog() override;
 
-  const tesseract_planning::TaskComposerLog& getLog() const;
+  const tesseract::task_composer::TaskComposerLog& getLog() const;
   const std::string& getNamespace() const;
 
 private:
-  tesseract_planning::TaskComposerLog log_;
+  tesseract::task_composer::TaskComposerLog log_;
   std::string ns_;
 };
 
@@ -97,14 +97,14 @@ class TaskComposerSetProfiles : public ComponentEvent
 {
 public:
   TaskComposerSetProfiles(std::shared_ptr<const ComponentInfo> component_info,
-                          std::shared_ptr<tesseract_common::ProfileDictionary> profiles);
+                          std::shared_ptr<tesseract::common::ProfileDictionary> profiles);
   ~TaskComposerSetProfiles() override;
 
-  std::shared_ptr<tesseract_common::ProfileDictionary> getProfiles() const;
+  std::shared_ptr<tesseract::common::ProfileDictionary> getProfiles() const;
 
 private:
-  std::shared_ptr<tesseract_common::ProfileDictionary> profiles_;
+  std::shared_ptr<tesseract::common::ProfileDictionary> profiles_;
 };
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 
 #endif  // TESSERACT_QT_COMMON_TASK_COMPOSER_EVENTS_H

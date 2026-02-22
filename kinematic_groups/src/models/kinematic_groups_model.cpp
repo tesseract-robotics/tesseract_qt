@@ -38,15 +38,15 @@ static const QString CHAIN_GROUPS_KEY = "Chain Groups";
 static const QString JOINT_GROUPS_KEY = "Joint Groups";
 static const QString LINK_GROUPS_KEY = "Link Groups";
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct KinematicGroupsModel::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
-  tesseract_srdf::GroupNames group_names;
-  tesseract_srdf::ChainGroups chain_groups;
-  tesseract_srdf::JointGroups joint_groups;
-  tesseract_srdf::LinkGroups link_groups;
+  tesseract::srdf::GroupNames group_names;
+  tesseract::srdf::ChainGroups chain_groups;
+  tesseract::srdf::JointGroups joint_groups;
+  tesseract::srdf::LinkGroups link_groups;
 };
 
 KinematicGroupsModel::KinematicGroupsModel(QObject* parent) : KinematicGroupsModel(nullptr, parent) {}
@@ -97,9 +97,9 @@ void KinematicGroupsModel::clear()
   Q_EMIT cleared();
 }
 
-void KinematicGroupsModel::set(const tesseract_srdf::ChainGroups& chain_groups,
-                               const tesseract_srdf::JointGroups& joint_groups,
-                               const tesseract_srdf::LinkGroups& link_groups)
+void KinematicGroupsModel::set(const tesseract::srdf::ChainGroups& chain_groups,
+                               const tesseract::srdf::JointGroups& joint_groups,
+                               const tesseract::srdf::LinkGroups& link_groups)
 {
   clear();
   for (const auto& group : chain_groups)
@@ -112,7 +112,7 @@ void KinematicGroupsModel::set(const tesseract_srdf::ChainGroups& chain_groups,
     addLinkGroup(group.first, group.second);
 }
 
-void KinematicGroupsModel::addChainGroup(const std::string& group_name, const tesseract_srdf::ChainGroup& group)
+void KinematicGroupsModel::addChainGroup(const std::string& group_name, const tesseract::srdf::ChainGroup& group)
 {
   if (data_->group_names.find(group_name) != data_->group_names.end())
     removeGroup(group_name);
@@ -126,7 +126,7 @@ void KinematicGroupsModel::addChainGroup(const std::string& group_name, const te
   Q_EMIT groupAdded(group_name.c_str());
 }
 
-void KinematicGroupsModel::addJointGroup(const std::string& group_name, const tesseract_srdf::JointGroup& group)
+void KinematicGroupsModel::addJointGroup(const std::string& group_name, const tesseract::srdf::JointGroup& group)
 {
   if (data_->group_names.find(group_name) != data_->group_names.end())
     removeGroup(group_name);
@@ -140,7 +140,7 @@ void KinematicGroupsModel::addJointGroup(const std::string& group_name, const te
   Q_EMIT groupAdded(group_name.c_str());
 }
 
-void KinematicGroupsModel::addLinkGroup(const std::string& group_name, const tesseract_srdf::LinkGroup& group)
+void KinematicGroupsModel::addLinkGroup(const std::string& group_name, const tesseract::srdf::LinkGroup& group)
 {
   if (data_->group_names.find(group_name) != data_->group_names.end())
     removeGroup(group_name);
@@ -203,13 +203,13 @@ void KinematicGroupsModel::removeGroup(const std::string& group_name)
   Q_EMIT groupRemoved(group_name.c_str());
 }
 
-const tesseract_srdf::GroupNames& KinematicGroupsModel::getGroupNames() const { return data_->group_names; }
+const tesseract::srdf::GroupNames& KinematicGroupsModel::getGroupNames() const { return data_->group_names; }
 
-const tesseract_srdf::ChainGroups& KinematicGroupsModel::getChainGroups() const { return data_->chain_groups; }
+const tesseract::srdf::ChainGroups& KinematicGroupsModel::getChainGroups() const { return data_->chain_groups; }
 
-const tesseract_srdf::JointGroups& KinematicGroupsModel::getJointGroups() const { return data_->joint_groups; }
+const tesseract::srdf::JointGroups& KinematicGroupsModel::getJointGroups() const { return data_->joint_groups; }
 
-const tesseract_srdf::LinkGroups& KinematicGroupsModel::getLinkGroups() const { return data_->link_groups; }
+const tesseract::srdf::LinkGroups& KinematicGroupsModel::getLinkGroups() const { return data_->link_groups; }
 
 bool KinematicGroupsModel::eventFilter(QObject* obj, QEvent* event)
 {
@@ -263,4 +263,4 @@ bool KinematicGroupsModel::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

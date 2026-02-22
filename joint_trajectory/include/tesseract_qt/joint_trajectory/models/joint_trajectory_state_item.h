@@ -26,20 +26,20 @@
 #include <tesseract_common/fwd.h>
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class JointTrajectoryStateItem : public QStandardItem
 {
 public:
-  JointTrajectoryStateItem(tesseract_common::JointState& state);
-  explicit JointTrajectoryStateItem(const QString& text, tesseract_common::JointState& state);
-  JointTrajectoryStateItem(const QIcon& icon, const QString& text, tesseract_common::JointState& state);
+  JointTrajectoryStateItem(tesseract::common::JointState& state);
+  explicit JointTrajectoryStateItem(const QString& text, tesseract::common::JointState& state);
+  JointTrajectoryStateItem(const QIcon& icon, const QString& text, tesseract::common::JointState& state);
   int type() const override;
 
-  tesseract_common::JointState& state;
+  tesseract::common::JointState& state;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H

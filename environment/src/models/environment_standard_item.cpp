@@ -31,17 +31,17 @@
 #include <tesseract_environment/environment.h>
 #include <tesseract_scene_graph/scene_state.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 EnvironmentStandardItem::EnvironmentStandardItem() : QStandardItem(icons::getTesseractIcon(), "Environment") {}
 
-EnvironmentStandardItem::EnvironmentStandardItem(const tesseract_environment::Environment& env)
+EnvironmentStandardItem::EnvironmentStandardItem(const tesseract::environment::Environment& env)
   : QStandardItem(icons::getTesseractIcon(), "Environment")
 {
   ctor(env);
 }
 
-EnvironmentStandardItem::EnvironmentStandardItem(const QString& text, const tesseract_environment::Environment& env)
+EnvironmentStandardItem::EnvironmentStandardItem(const QString& text, const tesseract::environment::Environment& env)
   : QStandardItem(icons::getTesseractIcon(), text)
 {
   ctor(env);
@@ -49,7 +49,7 @@ EnvironmentStandardItem::EnvironmentStandardItem(const QString& text, const tess
 
 EnvironmentStandardItem::EnvironmentStandardItem(const QIcon& icon,
                                                  const QString& text,
-                                                 const tesseract_environment::Environment& env)
+                                                 const tesseract::environment::Environment& env)
   : QStandardItem(icon, text)
 {
   ctor(env);
@@ -57,7 +57,7 @@ EnvironmentStandardItem::EnvironmentStandardItem(const QIcon& icon,
 
 int EnvironmentStandardItem::type() const { return static_cast<int>(StandardItemType::ENVIRONMENT); }
 
-void EnvironmentStandardItem::ctor(const tesseract_environment::Environment& env)
+void EnvironmentStandardItem::ctor(const tesseract::environment::Environment& env)
 {
   appendRow(createStandardItemString("name", env.getName()));
   appendRow(createStandardItemInt("revision", env.getRevision()));
@@ -66,4 +66,4 @@ void EnvironmentStandardItem::ctor(const tesseract_environment::Environment& env
   appendRow(new SceneStateStandardItem(env.getState()));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

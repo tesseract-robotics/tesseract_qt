@@ -39,13 +39,13 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 {
-  {  // tesseract_planning::InstructionPoly
-    using Type = tesseract_planning::InstructionPoly;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::command_language::InstructionPoly
+    using Type = tesseract::command_language::InstructionPoly;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       QList<QStandardItem*> item = InstructionPolyStandardItemManager::create(data);
       if (item.empty())
@@ -58,7 +58,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // bool
     using Type = bool;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       return createStandardItemBool("bool", any_poly.as<Type>());
     };
     registerFactoryFnHelper<Type>(fn);
@@ -66,7 +66,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // int
     using Type = int;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       return createStandardItemInt("int", any_poly.as<Type>());
     };
     registerFactoryFnHelper<Type>(fn);
@@ -74,7 +74,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // unsigned
     using Type = unsigned;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       return createStandardItemInt("unsigned", any_poly.as<Type>());  // NOLINT
     };
     registerFactoryFnHelper<Type>(fn);
@@ -82,7 +82,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::size_t
     using Type = std::size_t;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       return createStandardItemInt("size_t", any_poly.as<Type>());  // NOLINT
     };
     registerFactoryFnHelper<Type>(fn);
@@ -90,7 +90,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // float
     using Type = float;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       return createStandardItemFloat("float", any_poly.as<Type>());
     };
     registerFactoryFnHelper<Type>(fn);
@@ -98,7 +98,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // double
     using Type = double;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       return createStandardItemFloat("double", any_poly.as<Type>());
     };
     registerFactoryFnHelper<Type>(fn);
@@ -106,7 +106,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::string
     using Type = std::string;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       return createStandardItemString("string", any_poly.as<Type>());
     };
     registerFactoryFnHelper<Type>(fn);
@@ -114,7 +114,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::unordered_map<std::string, bool>
     using Type = std::unordered_map<std::string, bool>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("unordered_map<std::string, bool>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -127,7 +127,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::unordered_map<std::string, int>
     using Type = std::unordered_map<std::string, int>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("unordered_map<std::string, int>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -140,7 +140,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::unordered_map<std::string, unsigned>
     using Type = std::unordered_map<std::string, unsigned>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("unordered_map<std::string, unsigned>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -153,7 +153,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::unordered_map<std::string, std::size_t>
     using Type = std::unordered_map<std::string, std::size_t>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("unordered_map<std::string, std::size_t>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -166,7 +166,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::unordered_map<std::string, float>
     using Type = std::unordered_map<std::string, float>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("unordered_map<std::string, float>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -179,7 +179,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::unordered_map<std::string, double>
     using Type = std::unordered_map<std::string, double>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("unordered_map<std::string, double>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -192,7 +192,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::unordered_map<std::string, std::string>
     using Type = std::unordered_map<std::string, std::string>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("unordered_map<std::string, std::string>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -205,7 +205,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::map<std::string, bool>
     using Type = std::map<std::string, bool>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("map<std::string, bool>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -218,7 +218,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::map<std::string, int>
     using Type = std::map<std::string, int>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("map<std::string, int>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -231,7 +231,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::map<std::string, unsigned>
     using Type = std::map<std::string, unsigned>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("map<std::string, unsigned>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -244,7 +244,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::map<std::string, std::size_t>
     using Type = std::map<std::string, float>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("map<std::string, std::size_t>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -257,7 +257,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::map<std::string, float>
     using Type = std::map<std::string, float>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("map<std::string, float>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -270,7 +270,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::map<std::string, double>
     using Type = std::map<std::string, double>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("map<std::string, double>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -283,7 +283,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::map<std::string, std::string>
     using Type = std::map<std::string, std::string>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("map<std::string, std::string>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -296,7 +296,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<bool>
     using Type = std::vector<bool>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("vector<bool>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -309,7 +309,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<int>
     using Type = std::vector<int>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("vector<int>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -322,7 +322,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<unsigned>
     using Type = std::vector<unsigned>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("vector<unsigned>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -335,7 +335,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<std::size_t>
     using Type = std::vector<std::size_t>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("vector<std::size_t>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -348,7 +348,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<float>
     using Type = std::vector<float>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("vector<float>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -361,7 +361,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<double>
     using Type = std::vector<double>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("vector<double>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -374,7 +374,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<std::string>
     using Type = std::vector<std::string>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("vector<std::string>");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -387,7 +387,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // std::vector<Eigen::Vector3d>
     using Type = std::vector<Eigen::Vector3d>;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem(icons::getArrayIcon(), "positons");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -400,7 +400,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // Eigen::Vector3d
     using Type = Eigen::Vector3d;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new PositionStandardItem(data) };
     };
@@ -409,7 +409,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // Eigen::VectorXd
     using Type = Eigen::VectorXd;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("Eigen::VectorXd");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -422,7 +422,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // Eigen::VectorXf
     using Type = Eigen::VectorXf;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("Eigen::VectorXf");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -435,7 +435,7 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // Eigen::VectorXi
     using Type = Eigen::VectorXi;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("Eigen::VectorXi");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -448,16 +448,16 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
 
   {  // Eigen::Isometry3d
     using Type = Eigen::Isometry3d;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new TransformStandardItem(data) };
     };
     registerFactoryFnHelper<Type>(fn);
   }
 
-  {  // tesseract_common::VectorVector3d
-    using Type = tesseract_common::VectorVector3d;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::common::VectorVector3d
+    using Type = tesseract::common::VectorVector3d;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem(icons::getArrayIcon(), "positons");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -468,9 +468,9 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
     registerFactoryFnHelper<Type>(fn);
   }
 
-  {  // tesseract_common::VectorIsometry3d
-    using Type = tesseract_common::VectorIsometry3d;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::common::VectorIsometry3d
+    using Type = tesseract::common::VectorIsometry3d;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem(icons::getArrayIcon(), "positons");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (std::size_t i = 0; i < data.size(); ++i)
@@ -481,9 +481,9 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
     registerFactoryFnHelper<Type>(fn);
   }
 
-  {  // tesseract_common::TransformMap
-    using Type = tesseract_common::TransformMap;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::common::TransformMap
+    using Type = tesseract::common::TransformMap;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       auto* value = new QStandardItem("TransformMap");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
@@ -494,18 +494,18 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
     registerFactoryFnHelper<Type>(fn);
   }
 
-  {  // tesseract_common::ManipulatorInfo
-    using Type = tesseract_common::ManipulatorInfo;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::common::ManipulatorInfo
+    using Type = tesseract::common::ManipulatorInfo;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new ManipulatorInfoStandardItem(data) };  // NOLINT
     };
     registerFactoryFnHelper<Type>(fn);
   }
 
-  {  // tesseract_common::Toolpath
-    using Type = tesseract_common::Toolpath;
-    auto fn = [](const tesseract_common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+  {  // tesseract::common::Toolpath
+    using Type = tesseract::common::Toolpath;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
       const auto& data = any_poly.as<Type>();
       return { new ToolPathStandardItem(data) };  // NOLINT
     };
@@ -522,12 +522,12 @@ std::shared_ptr<AnyPolyStandardItemManager> AnyPolyStandardItemManager::instance
   return singleton;
 }
 
-QList<QStandardItem*> AnyPolyStandardItemManager::create(const tesseract_common::AnyPoly& any_poly)
+QList<QStandardItem*> AnyPolyStandardItemManager::create(const tesseract::common::AnyPoly& any_poly)
 {
   return instance()->createHelper(any_poly);
 }
 
-QList<QStandardItem*> AnyPolyStandardItemManager::createHelper(const tesseract_common::AnyPoly& any_poly)
+QList<QStandardItem*> AnyPolyStandardItemManager::createHelper(const tesseract::common::AnyPoly& any_poly)
 {
   std::shared_lock lock(mutex_);
   auto it = factories_.find(any_poly.getType());
@@ -544,4 +544,4 @@ void AnyPolyStandardItemManager::registerFactoryHelper(const AnyPolyStandardItem
   factories_.insert(fm.begin(), fm.end());
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -39,7 +39,7 @@
 
 #include <cmath>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ImageViewerWidgetImpl
 {
@@ -297,4 +297,4 @@ void ImageViewerWidget::resizeEvent(QResizeEvent* e)
     fitInView(data_->pix, Qt::KeepAspectRatio);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

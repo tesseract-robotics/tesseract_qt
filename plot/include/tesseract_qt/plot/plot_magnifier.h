@@ -28,7 +28,7 @@
 #include <qwt/qwt_plot_magnifier.h>
 #include <qwt/qwt_plot.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PlotMagnifier : public QwtPlotMagnifier
 {
@@ -70,5 +70,5 @@ private:
   QTimer _future_emit;
   AxisMode _default_mode;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_PLOT_MAGNIFIER_H

@@ -30,7 +30,7 @@
 #include <qwt/qwt_plot.h>
 #include <qwt/qwt_scale_map.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PlotMagnifier::PlotMagnifier(QWidget* canvas) : QwtPlotMagnifier(canvas), _default_mode(BOTH_AXES)
 {
@@ -167,4 +167,4 @@ void PlotMagnifier::widgetMousePressEvent(QMouseEvent* event)
   _mouse_position = invTransform(event->pos());
   QwtPlotMagnifier::widgetMousePressEvent(event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

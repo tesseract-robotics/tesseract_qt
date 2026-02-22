@@ -29,10 +29,10 @@
 #include <tesseract_environment/commands/move_link_command.h>
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 MoveLinkCommandStandardItem::MoveLinkCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::MoveLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::MoveLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Move Link"), command(std::move(command))
 {
   ctor();
@@ -40,7 +40,7 @@ MoveLinkCommandStandardItem::MoveLinkCommandStandardItem(
 
 MoveLinkCommandStandardItem::MoveLinkCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::MoveLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::MoveLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -49,7 +49,7 @@ MoveLinkCommandStandardItem::MoveLinkCommandStandardItem(
 MoveLinkCommandStandardItem::MoveLinkCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::MoveLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::MoveLinkCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -59,7 +59,7 @@ int MoveLinkCommandStandardItem::type() const { return static_cast<int>(Standard
 
 void MoveLinkCommandStandardItem::ctor()
 {
-  auto* item = new JointStandardItem(std::make_shared<tesseract_scene_graph::Joint>(command->getJoint()->clone()));
+  auto* item = new JointStandardItem(std::make_shared<tesseract::scene_graph::Joint>(command->getJoint()->clone()));
   appendRow({ item, new QStandardItem() });
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

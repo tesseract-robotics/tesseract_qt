@@ -29,27 +29,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ChangeLinkVisibilityCommandStandardItem : public QStandardItem
 {
 public:
   explicit ChangeLinkVisibilityCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::ChangeLinkVisibilityCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkVisibilityCommand> command);
   explicit ChangeLinkVisibilityCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeLinkVisibilityCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkVisibilityCommand> command);
   explicit ChangeLinkVisibilityCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeLinkVisibilityCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkVisibilityCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::ChangeLinkVisibilityCommand> command;
+  std::shared_ptr<const tesseract::environment::ChangeLinkVisibilityCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_CHANGE_LINK_VISIBILITY_COMMAND_STANDARD_ITEM_H

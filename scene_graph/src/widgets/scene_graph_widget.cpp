@@ -28,7 +28,7 @@
 
 #include <QVBoxLayout>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct SceneGraphWidget::Implementation
 {
@@ -84,4 +84,4 @@ std::shared_ptr<const SceneGraphModel> SceneGraphWidget::getModel() const { retu
 QItemSelectionModel& SceneGraphWidget::getSelectionModel() { return *data_->tree_view->selectionModel(); }
 const QItemSelectionModel& SceneGraphWidget::getSelectionModel() const { return *data_->tree_view->selectionModel(); }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

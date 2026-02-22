@@ -33,12 +33,12 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct CompositeInstructionModel::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
-  std::unordered_map<std::string, std::pair<QStandardItem*, tesseract_planning::CompositeInstruction>>
+  std::unordered_map<std::string, std::pair<QStandardItem*, tesseract::command_language::CompositeInstruction>>
       composite_instructions;
 };
 
@@ -69,7 +69,7 @@ bool CompositeInstructionModel::setData(const QModelIndex& index, const QVariant
 }
 
 void CompositeInstructionModel::setCompositeInstruction(const std::string& ns,
-                                                        const tesseract_planning::CompositeInstruction& ci)
+                                                        const command_language::CompositeInstruction& ci)
 {
   removeNamespace(ns);
 
@@ -106,8 +106,7 @@ NamespaceStandardItem* findCompositeInstructionItem(QStandardItem* item)
   return findCompositeInstructionItem(item->parent());
 }
 
-tesseract_planning::CompositeInstruction
-CompositeInstructionModel::getCompositeInstruction(const QModelIndex& row) const
+command_language::CompositeInstruction CompositeInstructionModel::getCompositeInstruction(const QModelIndex& row) const
 {
   NamespaceStandardItem* ns_item = findCompositeInstructionItem(itemFromIndex(row));
   std::string key = ns_item->text().toStdString();
@@ -116,7 +115,7 @@ CompositeInstructionModel::getCompositeInstruction(const QModelIndex& row) const
   if (it != data_->composite_instructions.end())
     return it->second.second;
 
-  return tesseract_planning::CompositeInstruction();
+  return tesseract::command_language::CompositeInstruction();
 }
 
 bool CompositeInstructionModel::eventFilter(QObject* obj, QEvent* event)
@@ -156,4 +155,4 @@ bool CompositeInstructionModel::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/remove_allowed_collision_link_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveAllowedCollisionLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Remove Allowed Collision Link"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommand
 
 RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveAllowedCollisionLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommand
 RemoveAllowedCollisionLinkCommandStandardItem::RemoveAllowedCollisionLinkCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::RemoveAllowedCollisionLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveAllowedCollisionLinkCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -62,4 +62,4 @@ void RemoveAllowedCollisionLinkCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString("link name", command->getLinkName()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

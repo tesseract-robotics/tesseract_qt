@@ -31,7 +31,7 @@
 #include <tesseract_qt/common/events/component_events.h>
 #include <tesseract_qt/common/contact_results_types.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class ContactResultsClear : public ComponentEvent
 {
@@ -100,24 +100,24 @@ public:
   };
 
   ContactResultsCompute(std::shared_ptr<const ComponentInfo> component_info,
-                        tesseract_collision::ContactManagerConfig contact_manager_config,
-                        tesseract_collision::CollisionCheckConfig collision_check_config,
+                        tesseract::collision::ContactManagerConfig contact_manager_config,
+                        tesseract::collision::CollisionCheckConfig collision_check_config,
                         StateType state_type = CURRENT_STATE,
                         std::string ns = "");
   ~ContactResultsCompute() override;
 
   const std::string& getNamespace() const;
-  const tesseract_collision::ContactManagerConfig& getContactManagerConfig() const;
-  const tesseract_collision::CollisionCheckConfig& getCollisionCheckConfig() const;
+  const tesseract::collision::ContactManagerConfig& getContactManagerConfig() const;
+  const tesseract::collision::CollisionCheckConfig& getCollisionCheckConfig() const;
   StateType getStateType() const;
 
 private:
   std::string ns_;
-  tesseract_collision::ContactManagerConfig contact_manager_config_;
-  tesseract_collision::CollisionCheckConfig collision_check_config_;
+  tesseract::collision::ContactManagerConfig contact_manager_config_;
+  tesseract::collision::CollisionCheckConfig collision_check_config_;
   StateType state_type_;
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 
 #endif  // TESSERACT_QT_COMMON_CONTACT_RESULTS_EVENTS_H

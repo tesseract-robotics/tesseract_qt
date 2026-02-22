@@ -42,7 +42,7 @@
 #include <QMenu>
 #include <QAction>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StudioEnvironmentDockWidget::Implementation
 {
@@ -125,4 +125,4 @@ void StudioEnvironmentDockWidget::setup()
   toolBar()->setIconSize(QSize(25, 25));
   setFeature(ads::CDockWidget::DockWidgetFocusable, true);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

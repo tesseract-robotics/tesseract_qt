@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 VectorDoubleStandardItem::VectorDoubleStandardItem(const Eigen::Ref<const Eigen::VectorXd>& vector_double)
   : QStandardItem(icons::getSetIcon(), "VectorXd")
@@ -75,4 +75,4 @@ void VectorDoubleStandardItem::ctor(const Eigen::Ref<const Eigen::VectorXd>& vec
   for (Eigen::Index i = 0; i < vector_double.size(); ++i)
     appendRow(createStandardItemFloat(QString("[%1]").arg(i).toStdString(), vector_double[i]));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

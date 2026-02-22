@@ -28,7 +28,7 @@
 #include <QToolBar>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ToolPathToolBar : public QToolBar
@@ -46,5 +46,5 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_TOOL_PATH_TOOL_PATH_TOOL_BAR_H

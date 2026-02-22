@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 OPWParamsStandardItem::OPWParamsStandardItem(opw_kinematics::Parameters<double> params)
   : QStandardItem(icons::getCubeIcon(), "OPW"), params(params)
@@ -74,4 +74,4 @@ void OPWParamsStandardItem::ctor()
 
   appendRow(correction_item);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

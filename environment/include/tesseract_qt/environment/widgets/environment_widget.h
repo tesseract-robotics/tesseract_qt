@@ -35,7 +35,7 @@ class EnvironmentWidget;
 
 class QStandardItem;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 struct LinkVisibilityProperties;
@@ -59,6 +59,6 @@ private:
 
   //  void updateModels();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_ENVIRONMENT_WIDGET_H

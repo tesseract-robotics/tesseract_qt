@@ -24,7 +24,7 @@
 
 #include <tesseract_common/allowed_collision_matrix.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 AllowedCollisionMatrixClear::AllowedCollisionMatrixClear(std::shared_ptr<const ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_CLEAR))
@@ -37,11 +37,11 @@ AllowedCollisionMatrixClear::~AllowedCollisionMatrixClear() = default;
 
 struct AllowedCollisionMatrixSet::Implementation
 {
-  tesseract_common::AllowedCollisionMatrix acm;
+  tesseract::common::AllowedCollisionMatrix acm;
 };
 
 AllowedCollisionMatrixSet::AllowedCollisionMatrixSet(std::shared_ptr<const ComponentInfo> component_info,
-                                                     const tesseract_common::AllowedCollisionMatrix& acm)
+                                                     const tesseract::common::AllowedCollisionMatrix& acm)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::ACM_SET))
   , data_(std::make_unique<Implementation>())
 {
@@ -50,7 +50,7 @@ AllowedCollisionMatrixSet::AllowedCollisionMatrixSet(std::shared_ptr<const Compo
 
 AllowedCollisionMatrixSet::~AllowedCollisionMatrixSet() = default;
 
-const tesseract_common::AllowedCollisionMatrix& AllowedCollisionMatrixSet::getACM() const { return data_->acm; }
+const tesseract::common::AllowedCollisionMatrix& AllowedCollisionMatrixSet::getACM() const { return data_->acm; }
 
 //////////////////////////////////////////
 
@@ -99,4 +99,4 @@ AllowedCollisionMatrixGenerate::AllowedCollisionMatrixGenerate(std::shared_ptr<c
 AllowedCollisionMatrixGenerate::~AllowedCollisionMatrixGenerate() = default;
 
 long AllowedCollisionMatrixGenerate::getResolution() const { return resolution_; }
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

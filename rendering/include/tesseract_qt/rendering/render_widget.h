@@ -27,7 +27,7 @@ class Color;
 }
 }  // namespace gz::math
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 /**
  *  @brief Tesseract Simple renderer.
@@ -373,5 +373,5 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_RENDERING_SIMPLE_RENDER_WIDGET_H

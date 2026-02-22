@@ -28,7 +28,7 @@
 #include <QComboBox>
 #include <QDebug>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 TransformSelector::TransformSelector(QStringList builtin_transform,
                                      QStringList available_transforms,
@@ -105,4 +105,4 @@ void TransformSelector::on_transform_selector_accepted()
   }
   *_default_trans = ui->comboDefault->currentText();
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

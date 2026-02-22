@@ -29,7 +29,7 @@
 #include <tesseract_scene_graph/fwd.h>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class SceneStateModel : public QStandardItemModel
@@ -48,7 +48,7 @@ public:
   std::shared_ptr<const ComponentInfo> getComponentInfo() const;
 
   // Caution when using methods below. In most cases you should use application events.
-  void setState(const tesseract_scene_graph::SceneState& scene_state);
+  void setState(const tesseract::scene_graph::SceneState& scene_state);
   void clear();
 
 private:
@@ -59,6 +59,6 @@ private:
   bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_MODEL_H

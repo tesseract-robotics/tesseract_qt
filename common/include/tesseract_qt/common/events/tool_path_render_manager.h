@@ -29,12 +29,12 @@
 
 #include <QObject>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class ComponentEvent;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 
@@ -59,6 +59,6 @@ protected:
 
   virtual void render() = 0;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_RENDER_MANAGER_H

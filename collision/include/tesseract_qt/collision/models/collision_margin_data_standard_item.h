@@ -26,22 +26,22 @@
 #include <QStandardItem>
 #include <tesseract_common/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CollisionMarginDataStandardItem : public QStandardItem
 {
 public:
-  CollisionMarginDataStandardItem(const tesseract_common::CollisionMarginData& collision_margin_data);
+  CollisionMarginDataStandardItem(const tesseract::common::CollisionMarginData& collision_margin_data);
   explicit CollisionMarginDataStandardItem(const QString& text,
-                                           const tesseract_common::CollisionMarginData& collision_margin_data);
+                                           const tesseract::common::CollisionMarginData& collision_margin_data);
   CollisionMarginDataStandardItem(const QIcon& icon,
                                   const QString& text,
-                                  const tesseract_common::CollisionMarginData& collision_margin_data);
+                                  const tesseract::common::CollisionMarginData& collision_margin_data);
   int type() const override;
 
 private:
-  void ctor(const tesseract_common::CollisionMarginData& collision_margin_data);
+  void ctor(const tesseract::common::CollisionMarginData& collision_margin_data);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COLLISION_COLLISION_MARGIN_DATA_STANDARD_ITEM_H

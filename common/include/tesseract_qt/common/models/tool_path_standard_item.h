@@ -28,7 +28,7 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPath;
 class ToolPathStandardItem : public QStandardItem
@@ -43,7 +43,7 @@ public:
   const boost::uuids::uuid& getParentUUID() const;
   ToolPath getToolPath() const;
   const std::string& getWorkingFrame() const;
-  tesseract_common::Toolpath getCommonToolPath() const;
+  tesseract::common::Toolpath getCommonToolPath() const;
 
 private:
   void ctor(const ToolPath& tool_path);
@@ -52,6 +52,6 @@ private:
   std::string description_;
   std::string working_frame_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_STANDARD_ITEM_H

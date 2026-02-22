@@ -29,24 +29,27 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-SetToolInstructionStandardItem::SetToolInstructionStandardItem(const tesseract_planning::SetToolInstruction& sti)
+SetToolInstructionStandardItem::SetToolInstructionStandardItem(
+    const tesseract::command_language::SetToolInstruction& sti)
   : QStandardItem(icons::getUnknownIcon(), "Set Analog Instruction")
 {
   ctor(sti);
 }
 
-SetToolInstructionStandardItem::SetToolInstructionStandardItem(const QString& text,
-                                                               const tesseract_planning::SetToolInstruction& sti)
+SetToolInstructionStandardItem::SetToolInstructionStandardItem(
+    const QString& text,
+    const tesseract::command_language::SetToolInstruction& sti)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(sti);
 }
 
-SetToolInstructionStandardItem::SetToolInstructionStandardItem(const QIcon& icon,
-                                                               const QString& text,
-                                                               const tesseract_planning::SetToolInstruction& sti)
+SetToolInstructionStandardItem::SetToolInstructionStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const tesseract::command_language::SetToolInstruction& sti)
   : QStandardItem(icon, text)
 {
   ctor(sti);
@@ -54,11 +57,11 @@ SetToolInstructionStandardItem::SetToolInstructionStandardItem(const QIcon& icon
 
 int SetToolInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_SET_TOOL_INSTRUCTION); }
 
-void SetToolInstructionStandardItem::ctor(const tesseract_planning::SetToolInstruction& sti)
+void SetToolInstructionStandardItem::ctor(const tesseract::command_language::SetToolInstruction& sti)
 {
   appendRow(createStandardItemString("description", sti.getDescription()));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(sti.getUUID())));
   appendRow(createStandardItemString("parent uuid", boost::uuids::to_string(sti.getParentUUID())));
   appendRow(createStandardItemInt("tool", sti.getTool()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

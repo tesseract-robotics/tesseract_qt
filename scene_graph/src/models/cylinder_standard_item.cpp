@@ -27,16 +27,16 @@
 
 #include <tesseract_geometry/impl/cylinder.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-CylinderStandardItem::CylinderStandardItem(std::shared_ptr<const tesseract_geometry::Cylinder> cylinder)
+CylinderStandardItem::CylinderStandardItem(std::shared_ptr<const tesseract::geometry::Cylinder> cylinder)
   : QStandardItem(icons::getCylinderIcon(), "Cylinder"), cylinder(std::move(cylinder))
 {
   ctor();
 }
 
 CylinderStandardItem::CylinderStandardItem(const QString& text,
-                                           std::shared_ptr<const tesseract_geometry::Cylinder> cylinder)
+                                           std::shared_ptr<const tesseract::geometry::Cylinder> cylinder)
   : QStandardItem(icons::getCylinderIcon(), text), cylinder(std::move(cylinder))
 {
   ctor();
@@ -44,7 +44,7 @@ CylinderStandardItem::CylinderStandardItem(const QString& text,
 
 CylinderStandardItem::CylinderStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           std::shared_ptr<const tesseract_geometry::Cylinder> cylinder)
+                                           std::shared_ptr<const tesseract::geometry::Cylinder> cylinder)
   : QStandardItem(icon, text), cylinder(std::move(cylinder))
 {
   ctor();
@@ -57,4 +57,4 @@ void CylinderStandardItem::ctor()
   appendRow(createStandardItemFloat("radius", cylinder->getRadius()));
   appendRow(createStandardItemFloat("length", cylinder->getLength()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

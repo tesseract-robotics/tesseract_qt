@@ -27,7 +27,7 @@
 #include <tesseract_qt/common/tool_path_segment.h>
 #include <tesseract_qt/common/tool_path_pose.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ToolPathSegment::ToolPathSegment(std::string description)
   : uuid_(boost::uuids::random_generator()()), description_(std::move(description))
@@ -164,7 +164,7 @@ void ToolPathSegment::emplace_back(Args&&... args)
 #endif
 
 void ToolPathSegment::pop_back() { container_.pop_back(); }
-void ToolPathSegment::swap(tesseract_common::AlignedVector<ToolPathPose>& other) { container_.swap(other); }
+void ToolPathSegment::swap(tesseract::common::AlignedVector<ToolPathPose>& other) { container_.swap(other); }
 
 // LCOV_EXCL_STOP
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -27,9 +27,9 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-JointTrajectorySetItem::JointTrajectorySetItem(const tesseract_common::JointTrajectorySet& trajectory_set)
+JointTrajectorySetItem::JointTrajectorySetItem(const tesseract::common::JointTrajectorySet& trajectory_set)
   : QStandardItem(icons::getSetIcon(),
                   trajectory_set.getDescription().empty() ? "Trajectory Set" :
                                                             QString::fromStdString(trajectory_set.getDescription()))
@@ -39,14 +39,14 @@ JointTrajectorySetItem::JointTrajectorySetItem(const tesseract_common::JointTraj
 }
 
 JointTrajectorySetItem::JointTrajectorySetItem(const QString& text,
-                                               const tesseract_common::JointTrajectorySet& trajectory_set)
+                                               const tesseract::common::JointTrajectorySet& trajectory_set)
   : QStandardItem(icons::getSetIcon(), text), trajectory_set(trajectory_set)
 {
   ctor();
 }
 JointTrajectorySetItem::JointTrajectorySetItem(const QIcon& icon,
                                                const QString& text,
-                                               const tesseract_common::JointTrajectorySet& trajectory_set)
+                                               const tesseract::common::JointTrajectorySet& trajectory_set)
   : QStandardItem(icon, text), trajectory_set(trajectory_set)
 {
   ctor();
@@ -66,4 +66,4 @@ void JointTrajectorySetItem::ctor()
     appendRow(trajectory_item);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

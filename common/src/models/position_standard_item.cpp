@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PositionStandardItem::PositionStandardItem(const Eigen::Vector3d& position)
   : QStandardItem(icons::getPositionIcon(), "position")
@@ -69,4 +69,4 @@ void PositionStandardItem::ctor(const Eigen::Vector3d& position)
   appendRow(createStandardItemFloat("y", position.y()));
   appendRow(createStandardItemFloat("z", position.z()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

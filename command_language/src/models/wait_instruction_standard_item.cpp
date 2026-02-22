@@ -29,16 +29,16 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-WaitInstructionStandardItem::WaitInstructionStandardItem(const tesseract_planning::WaitInstruction& wi)
+WaitInstructionStandardItem::WaitInstructionStandardItem(const tesseract::command_language::WaitInstruction& wi)
   : QStandardItem(icons::getUnknownIcon(), "Wait Instruction")
 {
   ctor(wi);
 }
 
 WaitInstructionStandardItem::WaitInstructionStandardItem(const QString& text,
-                                                         const tesseract_planning::WaitInstruction& wi)
+                                                         const tesseract::command_language::WaitInstruction& wi)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(wi);
@@ -46,7 +46,7 @@ WaitInstructionStandardItem::WaitInstructionStandardItem(const QString& text,
 
 WaitInstructionStandardItem::WaitInstructionStandardItem(const QIcon& icon,
                                                          const QString& text,
-                                                         const tesseract_planning::WaitInstruction& wi)
+                                                         const tesseract::command_language::WaitInstruction& wi)
   : QStandardItem(icon, text)
 {
   ctor(wi);
@@ -54,26 +54,26 @@ WaitInstructionStandardItem::WaitInstructionStandardItem(const QIcon& icon,
 
 int WaitInstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_WAIT_INSTRUCTION); }
 
-std::string toString(tesseract_planning::WaitInstructionType w_type)
+std::string toString(tesseract::command_language::WaitInstructionType w_type)
 {
   switch (w_type)
   {
-    case tesseract_planning::WaitInstructionType::TIME:
+    case tesseract::command_language::WaitInstructionType::TIME:
       return "TIME";
-    case tesseract_planning::WaitInstructionType::DIGITAL_INPUT_HIGH:
+    case tesseract::command_language::WaitInstructionType::DIGITAL_INPUT_HIGH:
       return "DIGITAL_INPUT_HIGH";
-    case tesseract_planning::WaitInstructionType::DIGITAL_INPUT_LOW:
+    case tesseract::command_language::WaitInstructionType::DIGITAL_INPUT_LOW:
       return "DIGITAL_INPUT_LOW";
-    case tesseract_planning::WaitInstructionType::DIGITAL_OUTPUT_HIGH:
+    case tesseract::command_language::WaitInstructionType::DIGITAL_OUTPUT_HIGH:
       return "DIGITAL_OUTPUT_HIGH";
-    case tesseract_planning::WaitInstructionType::DIGITAL_OUTPUT_LOW:
+    case tesseract::command_language::WaitInstructionType::DIGITAL_OUTPUT_LOW:
       return "DIGITAL_OUTPUT_LOW";
     default:
-      throw std::runtime_error("Unhandled tesseract_planning::WaitInstructionType");
+      throw std::runtime_error("Unhandled tesseract::command_language::WaitInstructionType");
   }
 }
 
-void WaitInstructionStandardItem::ctor(const tesseract_planning::WaitInstruction& wi)
+void WaitInstructionStandardItem::ctor(const tesseract::command_language::WaitInstruction& wi)
 {
   appendRow(createStandardItemString("description", wi.getDescription()));
   appendRow(createStandardItemString("uuid", boost::uuids::to_string(wi.getUUID())));
@@ -82,4 +82,4 @@ void WaitInstructionStandardItem::ctor(const tesseract_planning::WaitInstruction
   appendRow(createStandardItemFloat("time (sec)", wi.getWaitTime()));
   appendRow(createStandardItemInt("I/O", wi.getWaitIO()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

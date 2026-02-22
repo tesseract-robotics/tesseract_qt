@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/remove_link_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Remove Link"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
 
 RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveLinkCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
 RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::RemoveLinkCommand> command)
+    std::shared_ptr<const tesseract::environment::RemoveLinkCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -56,4 +56,4 @@ RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
 int RemoveLinkCommandStandardItem::type() const { return static_cast<int>(StandardItemType::ENV_COMMAND_REMOVE_LINK); }
 
 void RemoveLinkCommandStandardItem::ctor() { appendRow(createStandardItemString("link name", command->getLinkName())); }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

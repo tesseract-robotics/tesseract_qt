@@ -27,7 +27,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 ContactResultStandardItem::ContactResultStandardItem(const ContactResult& contact_result)
   : QStandardItem(icons::getCollisionIcon(), "Contact Result"), contact_result(contact_result)
@@ -51,20 +51,20 @@ ContactResultStandardItem::ContactResultStandardItem(const QIcon& icon,
 
 int ContactResultStandardItem::type() const { return static_cast<int>(StandardItemType::COLLISION_CONTACT_RESULT); }
 
-std::string toString(tesseract_collision::ContinuousCollisionType cc_type)
+std::string toString(tesseract::collision::ContinuousCollisionType cc_type)
 {
   switch (cc_type)
   {
-    case tesseract_collision::ContinuousCollisionType::CCType_None:
+    case tesseract::collision::ContinuousCollisionType::CCType_None:
       return "CCType_None";
-    case tesseract_collision::ContinuousCollisionType::CCType_Time0:
+    case tesseract::collision::ContinuousCollisionType::CCType_Time0:
       return "CCType_Time0";
-    case tesseract_collision::ContinuousCollisionType::CCType_Time1:
+    case tesseract::collision::ContinuousCollisionType::CCType_Time1:
       return "CCType_Time1";
-    case tesseract_collision::ContinuousCollisionType::CCType_Between:
+    case tesseract::collision::ContinuousCollisionType::CCType_Between:
       return "CCType_Between";
     default:
-      throw std::runtime_error("Unhandled tesseract_collision::ContinuousCollisionType");
+      throw std::runtime_error("Unhandled tesseract::collision::ContinuousCollisionType");
   }
 }
 void ContactResultStandardItem::ctor()
@@ -145,4 +145,4 @@ void ContactResultStandardItem::ctor()
     appendRow(item);
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

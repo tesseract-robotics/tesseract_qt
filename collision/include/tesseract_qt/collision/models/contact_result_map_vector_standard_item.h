@@ -27,7 +27,7 @@
 #include <QStandardItem>
 #include <tesseract_qt/common/contact_results_types.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ContactResultMapVectorStandardItem : public QStandardItem
 {
@@ -43,6 +43,6 @@ public:
 private:
   void ctor(const std::vector<ContactResultMap>& contact_results);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_MAP_VECTOR_STANDARD_ITEM_H

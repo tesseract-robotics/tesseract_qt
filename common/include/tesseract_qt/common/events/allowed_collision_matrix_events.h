@@ -30,7 +30,7 @@
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class AllowedCollisionMatrixClear : public ComponentEvent
 {
@@ -43,10 +43,10 @@ class AllowedCollisionMatrixSet : public ComponentEvent
 {
 public:
   AllowedCollisionMatrixSet(std::shared_ptr<const ComponentInfo> component_info,
-                            const tesseract_common::AllowedCollisionMatrix& acm);
+                            const tesseract::common::AllowedCollisionMatrix& acm);
   ~AllowedCollisionMatrixSet() override;
 
-  const tesseract_common::AllowedCollisionMatrix& getACM() const;
+  const tesseract::common::AllowedCollisionMatrix& getACM() const;
 
 private:
   struct Implementation;
@@ -104,5 +104,5 @@ private:
   long resolution_;
 };
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events
 #endif  // TESSERACT_QT_COMMON_ALLOWED_COLLISION_MATRIX_EVENTS_H

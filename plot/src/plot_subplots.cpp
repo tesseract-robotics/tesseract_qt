@@ -25,7 +25,7 @@
 #include <QHBoxLayout>
 #include <QFrame>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PlotSubplots::PlotSubplots(PlotDataMapRef& datamap, int rows, int cols, QWidget* parent)
   : QWidget(parent), rows_(rows), cols_(cols)
@@ -75,4 +75,4 @@ void PlotSubplots::replot()
     }
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -35,7 +35,7 @@
 #include <tesseract_qt/rendering/interactive_view_control.h>
 
 /** @brief Private data class for InteractiveViewControl */
-class tesseract_gui::InteractiveViewControlPrivate
+class tesseract::gui::InteractiveViewControlPrivate
 {
 public:
   /** @brief Perform rendering calls in the rendering thread */
@@ -100,7 +100,7 @@ public:
   std::mutex mutex;
 };
 
-using namespace tesseract_gui;
+using namespace tesseract::gui;
 
 /////////////////////////////////////////////////
 void InteractiveViewControlPrivate::onRender()

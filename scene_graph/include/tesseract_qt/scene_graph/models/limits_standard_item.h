@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class LimitsStandardItem : public QStandardItem
 {
 public:
-  LimitsStandardItem(std::shared_ptr<tesseract_scene_graph::JointLimits> limits);
-  explicit LimitsStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::JointLimits> limits);
+  LimitsStandardItem(std::shared_ptr<tesseract::scene_graph::JointLimits> limits);
+  explicit LimitsStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::JointLimits> limits);
   LimitsStandardItem(const QIcon& icon,
                      const QString& text,
-                     std::shared_ptr<tesseract_scene_graph::JointLimits> limits);
+                     std::shared_ptr<tesseract::scene_graph::JointLimits> limits);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::JointLimits> limits;
+  std::shared_ptr<tesseract::scene_graph::JointLimits> limits;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_LIMITS_STANDARD_ITEM_H

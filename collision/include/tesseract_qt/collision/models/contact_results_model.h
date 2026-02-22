@@ -31,7 +31,7 @@
 #include <tesseract_qt/common/contact_results_types.h>
 #endif
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ComponentInfo;
 class ContactResultsModel : public QStandardItemModel
@@ -58,6 +58,6 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULTS_MODEL_H

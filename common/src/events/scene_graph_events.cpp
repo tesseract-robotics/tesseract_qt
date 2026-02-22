@@ -29,18 +29,18 @@
 #include <tesseract_scene_graph/scene_state.h>
 #include <string>
 
-namespace tesseract_gui::events
+namespace tesseract::gui::events
 {
 class SceneStateChanged::Implementation
 {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  tesseract_scene_graph::SceneState state;
+  tesseract::scene_graph::SceneState state;
 };
 
-SceneStateChanged::SceneStateChanged(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
-                                     tesseract_scene_graph::SceneState scene_state)
+SceneStateChanged::SceneStateChanged(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
+                                     tesseract::scene_graph::SceneState scene_state)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_STATE_CHANGED))
   , data_(std::make_unique<Implementation>())
 {
@@ -53,11 +53,11 @@ SceneStateChanged::SceneStateChanged(const SceneStateChanged& other)
 
 SceneStateChanged::~SceneStateChanged() = default;
 
-const tesseract_scene_graph::SceneState& SceneStateChanged::getState() const { return data_->state; }
+const tesseract::scene_graph::SceneState& SceneStateChanged::getState() const { return data_->state; }
 
 //////////////////////////////////////////
 
-SceneGraphClear::SceneGraphClear(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info)
+SceneGraphClear::SceneGraphClear(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_CLEAR))
 {
 }
@@ -71,11 +71,11 @@ class SceneGraphSet::Implementation
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  tesseract_scene_graph::SceneGraph::ConstPtr scene_graph;
+  tesseract::scene_graph::SceneGraph::ConstPtr scene_graph;
 };
 
-SceneGraphSet::SceneGraphSet(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
-                             tesseract_scene_graph::SceneGraph::ConstPtr scene_graph)
+SceneGraphSet::SceneGraphSet(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
+                             tesseract::scene_graph::SceneGraph::ConstPtr scene_graph)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_SET))
   , data_(std::make_unique<Implementation>())
 {
@@ -87,7 +87,7 @@ SceneGraphSet::SceneGraphSet(const SceneGraphSet& other)
 }
 SceneGraphSet::~SceneGraphSet() = default;
 
-tesseract_scene_graph::SceneGraph::ConstPtr SceneGraphSet::getSceneGraph() const { return data_->scene_graph; }
+tesseract::scene_graph::SceneGraph::ConstPtr SceneGraphSet::getSceneGraph() const { return data_->scene_graph; }
 
 //////////////////////////////////////////
 
@@ -96,11 +96,11 @@ class SceneGraphAddLink::Implementation
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  tesseract_scene_graph::Link::ConstPtr link;
+  tesseract::scene_graph::Link::ConstPtr link;
 };
 
-SceneGraphAddLink::SceneGraphAddLink(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
-                                     tesseract_scene_graph::Link::ConstPtr link)
+SceneGraphAddLink::SceneGraphAddLink(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
+                                     tesseract::scene_graph::Link::ConstPtr link)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_ADD_LINK))
   , data_(std::make_unique<Implementation>())
 {
@@ -112,18 +112,18 @@ SceneGraphAddLink::SceneGraphAddLink(const SceneGraphAddLink& other)
 }
 SceneGraphAddLink::~SceneGraphAddLink() = default;
 
-tesseract_scene_graph::Link::ConstPtr SceneGraphAddLink::getLink() const { return data_->link; }
+tesseract::scene_graph::Link::ConstPtr SceneGraphAddLink::getLink() const { return data_->link; }
 
 //////////////////////////////////////////
 
 class SceneGraphAddJoint::Implementation
 {
 public:
-  tesseract_scene_graph::Joint::ConstPtr joint;
+  tesseract::scene_graph::Joint::ConstPtr joint;
 };
 
-SceneGraphAddJoint::SceneGraphAddJoint(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
-                                       tesseract_scene_graph::Joint::ConstPtr joint)
+SceneGraphAddJoint::SceneGraphAddJoint(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
+                                       tesseract::scene_graph::Joint::ConstPtr joint)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_ADD_JOINT))
   , data_(std::make_unique<Implementation>())
 {
@@ -135,18 +135,18 @@ SceneGraphAddJoint::SceneGraphAddJoint(const SceneGraphAddJoint& other)
 }
 SceneGraphAddJoint::~SceneGraphAddJoint() = default;
 
-tesseract_scene_graph::Joint::ConstPtr SceneGraphAddJoint::getJoint() const { return data_->joint; }
+tesseract::scene_graph::Joint::ConstPtr SceneGraphAddJoint::getJoint() const { return data_->joint; }
 
 //////////////////////////////////////////
 
 class SceneGraphMoveLink::Implementation
 {
 public:
-  tesseract_scene_graph::Joint::ConstPtr joint;
+  tesseract::scene_graph::Joint::ConstPtr joint;
 };
 
-SceneGraphMoveLink::SceneGraphMoveLink(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
-                                       tesseract_scene_graph::Joint::ConstPtr joint)
+SceneGraphMoveLink::SceneGraphMoveLink(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
+                                       tesseract::scene_graph::Joint::ConstPtr joint)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_MOVE_LINK))
   , data_(std::make_unique<Implementation>())
 {
@@ -159,7 +159,7 @@ SceneGraphMoveLink::SceneGraphMoveLink(const SceneGraphMoveLink& other)
 
 SceneGraphMoveLink::~SceneGraphMoveLink() = default;
 
-tesseract_scene_graph::Joint::ConstPtr SceneGraphMoveLink::getJoint() const { return data_->joint; }
+tesseract::scene_graph::Joint::ConstPtr SceneGraphMoveLink::getJoint() const { return data_->joint; }
 
 //////////////////////////////////////////
 
@@ -170,7 +170,7 @@ public:
   std::string parent_link;
 };
 
-SceneGraphMoveJoint::SceneGraphMoveJoint(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
+SceneGraphMoveJoint::SceneGraphMoveJoint(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
                                          std::string joint_name,
                                          std::string parent_link)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_MOVE_JOINT))
@@ -198,7 +198,7 @@ public:
   bool recursive;
 };
 
-SceneGraphRemoveLink::SceneGraphRemoveLink(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
+SceneGraphRemoveLink::SceneGraphRemoveLink(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
                                            std::string link_name,
                                            bool recursive)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_REMOVE_LINK))
@@ -225,7 +225,7 @@ public:
   bool recursive;
 };
 
-SceneGraphRemoveJoint::SceneGraphRemoveJoint(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
+SceneGraphRemoveJoint::SceneGraphRemoveJoint(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
                                              std::string joint_name,
                                              bool recursive)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_REMOVE_JOINT))
@@ -248,11 +248,11 @@ bool SceneGraphRemoveJoint::isRecursive() const { return data_->recursive; }
 class SceneGraphReplaceJoint::Implementation
 {
 public:
-  tesseract_scene_graph::Joint::ConstPtr joint;
+  tesseract::scene_graph::Joint::ConstPtr joint;
 };
 
-SceneGraphReplaceJoint::SceneGraphReplaceJoint(std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
-                                               tesseract_scene_graph::Joint::ConstPtr joint)
+SceneGraphReplaceJoint::SceneGraphReplaceJoint(std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
+                                               tesseract::scene_graph::Joint::ConstPtr joint)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_REPLACE_JOINT))
   , data_(std::make_unique<Implementation>())
 {
@@ -265,7 +265,7 @@ SceneGraphReplaceJoint::SceneGraphReplaceJoint(const SceneGraphReplaceJoint& oth
 
 SceneGraphReplaceJoint::~SceneGraphReplaceJoint() = default;
 
-tesseract_scene_graph::Joint::ConstPtr SceneGraphReplaceJoint::getJoint() const { return data_->joint; }
+tesseract::scene_graph::Joint::ConstPtr SceneGraphReplaceJoint::getJoint() const { return data_->joint; }
 
 //////////////////////////////////////////
 
@@ -278,7 +278,7 @@ public:
 };
 
 SceneGraphModifyLinkVisibility::SceneGraphModifyLinkVisibility(
-    std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
+    std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
     std::vector<std::string> link_names,
     LinkVisibilityFlags flags,
     bool visible)
@@ -312,7 +312,7 @@ public:
 };
 
 SceneGraphModifyLinkVisibilityALL::SceneGraphModifyLinkVisibilityALL(
-    std::shared_ptr<const tesseract_gui::ComponentInfo> component_info,
+    std::shared_ptr<const tesseract::gui::ComponentInfo> component_info,
     LinkVisibilityFlags flags,
     bool visible)
   : ComponentEvent(std::move(component_info), QEvent::Type(EventType::SCENE_GRAPH_MODIFY_LINK_VISIBILITY_ALL))
@@ -339,4 +339,4 @@ SceneGraphPlot::SceneGraphPlot(std::shared_ptr<const ComponentInfo> component_in
 SceneGraphPlot::SceneGraphPlot(const SceneGraphPlot& other) : SceneGraphPlot(other.getComponentInfo()) {}
 SceneGraphPlot::~SceneGraphPlot() = default;
 
-}  // namespace tesseract_gui::events
+}  // namespace tesseract::gui::events

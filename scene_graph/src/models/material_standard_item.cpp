@@ -28,16 +28,16 @@
 
 #include <tesseract_scene_graph/link.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-MaterialStandardItem::MaterialStandardItem(std::shared_ptr<tesseract_scene_graph::Material> material)
+MaterialStandardItem::MaterialStandardItem(std::shared_ptr<tesseract::scene_graph::Material> material)
   : QStandardItem(icons::getColorIcon(), "Material"), material(std::move(material))
 {
   ctor();
 }
 
 MaterialStandardItem::MaterialStandardItem(const QString& text,
-                                           std::shared_ptr<tesseract_scene_graph::Material> material)
+                                           std::shared_ptr<tesseract::scene_graph::Material> material)
   : QStandardItem(icons::getColorIcon(), text), material(std::move(material))
 {
   ctor();
@@ -45,7 +45,7 @@ MaterialStandardItem::MaterialStandardItem(const QString& text,
 
 MaterialStandardItem::MaterialStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           std::shared_ptr<tesseract_scene_graph::Material> material)
+                                           std::shared_ptr<tesseract::scene_graph::Material> material)
   : QStandardItem(icon, text), material(std::move(material))
 {
   ctor();
@@ -59,4 +59,4 @@ void MaterialStandardItem::ctor()
   appendRow(createStandardItemURL("texture", material->texture_filename));
   appendRow(new RGBAStandardItem(material->color));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -26,7 +26,7 @@
 #include <QStandardItem>
 #include <tesseract_qt/common/contact_results_types.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ContactResultStandardItem : public QStandardItem
 {
@@ -41,6 +41,6 @@ public:
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_STANDARD_ITEM_H

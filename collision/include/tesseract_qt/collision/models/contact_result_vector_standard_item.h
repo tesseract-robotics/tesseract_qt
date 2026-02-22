@@ -32,7 +32,7 @@ namespace boost::uuids
 struct uuid;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ContactResultVectorStandardItem : public QStandardItem
 {
@@ -50,6 +50,6 @@ private:
 
   void ctor(const ContactResultVector& contact_results);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COLLISION_CONTACT_RESULT_VECTOR_STANDARD_ITEM_H

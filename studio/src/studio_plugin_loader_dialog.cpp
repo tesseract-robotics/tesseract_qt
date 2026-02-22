@@ -45,7 +45,7 @@
 #include <QMenu>
 #include <QStringListModel>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct StudioPluginLoaderDialog::Implementation
 {
@@ -173,7 +173,7 @@ void StudioPluginLoaderDialog::showSearchLibraryContextMenu(const QPoint& pos)
 void StudioPluginLoaderDialog::addPluginWidget()
 {
   QString name = ui->plugin_name_line_edit->text();
-  tesseract_common::PluginInfo plugin_info;
+  tesseract::common::PluginInfo plugin_info;
   plugin_info.class_name = ui->plugin_combo_box->currentText().toStdString();
 
   StudioDockWidget* dock_widget = data_->app->createDockWidget(name, plugin_info);
@@ -217,4 +217,4 @@ void StudioPluginLoaderDialog::generateUniqueName()
   ui->plugin_name_line_edit->setText(QString::fromStdString(name));
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

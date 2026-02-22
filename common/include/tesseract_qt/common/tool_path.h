@@ -31,7 +31,7 @@
 #include <tesseract_qt/common/tool_path_segment.h>
 #include <tesseract_qt/common/tool_path_pose.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPath;
 template <class Archive>
@@ -46,7 +46,7 @@ public:
 
   ToolPath(std::string description = "");
   ToolPath(boost::uuids::uuid uuid, std::string description = "");
-  ToolPath(const tesseract_common::Toolpath& tool_path, std::string working_frame = "", std::string description = "");
+  ToolPath(const tesseract::common::Toolpath& tool_path, std::string working_frame = "", std::string description = "");
   virtual ~ToolPath() = default;
 
   /** @brief Get the uuid */
@@ -109,25 +109,25 @@ public:
   // C++ container support //
   ///////////////////////////
   /** pointer */
-  using pointer = typename tesseract_common::AlignedVector<ToolPathSegment>::pointer;
+  using pointer = typename tesseract::common::AlignedVector<ToolPathSegment>::pointer;
   /** const_pointer */
-  using const_pointer = typename tesseract_common::AlignedVector<ToolPathSegment>::const_pointer;
+  using const_pointer = typename tesseract::common::AlignedVector<ToolPathSegment>::const_pointer;
   /** reference */
-  using reference = typename tesseract_common::AlignedVector<ToolPathSegment>::reference;
+  using reference = typename tesseract::common::AlignedVector<ToolPathSegment>::reference;
   /** const_reference */
-  using const_reference = typename tesseract_common::AlignedVector<ToolPathSegment>::const_reference;
+  using const_reference = typename tesseract::common::AlignedVector<ToolPathSegment>::const_reference;
   /** size_type */
-  using size_type = typename tesseract_common::AlignedVector<ToolPathSegment>::size_type;
+  using size_type = typename tesseract::common::AlignedVector<ToolPathSegment>::size_type;
   /** difference_type */
-  using difference_type = typename tesseract_common::AlignedVector<ToolPathSegment>::difference_type;
+  using difference_type = typename tesseract::common::AlignedVector<ToolPathSegment>::difference_type;
   /** iterator */
-  using iterator = typename tesseract_common::AlignedVector<ToolPathSegment>::iterator;
+  using iterator = typename tesseract::common::AlignedVector<ToolPathSegment>::iterator;
   /** const_iterator */
-  using const_iterator = typename tesseract_common::AlignedVector<ToolPathSegment>::const_iterator;
+  using const_iterator = typename tesseract::common::AlignedVector<ToolPathSegment>::const_iterator;
   /** reverse_iterator */
-  using reverse_iterator = typename tesseract_common::AlignedVector<ToolPathSegment>::reverse_iterator;
+  using reverse_iterator = typename tesseract::common::AlignedVector<ToolPathSegment>::reverse_iterator;
   /** const_reverse_iterator */
-  using const_reverse_iterator = typename tesseract_common::AlignedVector<ToolPathSegment>::const_reverse_iterator;
+  using const_reverse_iterator = typename tesseract::common::AlignedVector<ToolPathSegment>::const_reverse_iterator;
 
   template <class InputIt>
   ToolPath(InputIt first, InputIt last) : container_(first, last)
@@ -248,7 +248,7 @@ public:
   void pop_back();
 
   /** @brief swaps the contents  */
-  void swap(tesseract_common::AlignedVector<ToolPathSegment>& other);
+  void swap(tesseract::common::AlignedVector<ToolPathSegment>& other);
   // LCOV_EXCL_STOP
 
 protected:
@@ -262,7 +262,7 @@ protected:
   std::string description_;
 
   /** @brief The container */
-  tesseract_common::AlignedVector<ToolPathSegment> container_;
+  tesseract::common::AlignedVector<ToolPathSegment> container_;
 
   /** @brief The frame the tool path is associated with */
   std::string working_frame_;
@@ -271,9 +271,9 @@ protected:
   std::string ns_{ "general" };
 
   template <class Archive>
-  friend void ::tesseract_gui::serialize(Archive& ar, ToolPath& obj);
+  friend void ::tesseract::gui::serialize(Archive& ar, ToolPath& obj);
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_H

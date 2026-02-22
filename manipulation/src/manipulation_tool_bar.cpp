@@ -34,7 +34,7 @@
 #include <QStringListModel>
 #include <QMessageBox>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct ManipulationToolBar::Implementation
 {
@@ -218,4 +218,4 @@ bool ManipulationToolBar::eventFilter(QObject* obj, QEvent* event)
   // Standard event processing
   return QObject::eventFilter(obj, event);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

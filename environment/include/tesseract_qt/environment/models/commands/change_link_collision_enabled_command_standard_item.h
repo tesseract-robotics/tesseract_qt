@@ -29,27 +29,27 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ChangeLinkCollisionEnabledCommandStandardItem : public QStandardItem
 {
 public:
   explicit ChangeLinkCollisionEnabledCommandStandardItem(
-      std::shared_ptr<const tesseract_environment::ChangeLinkCollisionEnabledCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkCollisionEnabledCommand> command);
   explicit ChangeLinkCollisionEnabledCommandStandardItem(
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeLinkCollisionEnabledCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkCollisionEnabledCommand> command);
   explicit ChangeLinkCollisionEnabledCommandStandardItem(
       const QIcon& icon,
       const QString& text,
-      std::shared_ptr<const tesseract_environment::ChangeLinkCollisionEnabledCommand> command);
+      std::shared_ptr<const tesseract::environment::ChangeLinkCollisionEnabledCommand> command);
   int type() const override;
 
-  std::shared_ptr<const tesseract_environment::ChangeLinkCollisionEnabledCommand> command;
+  std::shared_ptr<const tesseract::environment::ChangeLinkCollisionEnabledCommand> command;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_ENVIRONMENT_CHANGE_LINK_COLLISION_ENABLED_COMMAND_STANDARD_ITEM_H

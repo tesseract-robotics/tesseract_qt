@@ -15,7 +15,7 @@
 
 const double MAX_DOUBLE = std::numeric_limits<double>::max() / 2;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 PlotWidgetEditor::PlotWidgetEditor(PlotWidget* plotwidget, QWidget* parent)
   : QDialog(parent), _plotwidget_origin(plotwidget)
@@ -401,4 +401,4 @@ void PlotWidgetEditor::on_listWidget_itemSelectionChanged()
     ui->editColorText->setText(row_widget->color().name());
   }
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

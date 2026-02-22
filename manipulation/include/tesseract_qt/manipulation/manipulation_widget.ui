@@ -180,7 +180,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::JointStateSliderWidget" name="joint_state_slider" native="true">
+        <widget class="tesseract::gui::JointStateSliderWidget" name="joint_state_slider" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -228,7 +228,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::CartesianEditorWidget" name="cartesian_widget" native="true">
+        <widget class="tesseract::gui::CartesianEditorWidget" name="cartesian_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -276,7 +276,7 @@
         <number>3</number>
        </property>
        <item>
-        <widget class="tesseract_gui::SceneStateWidget" name="state_widget" native="true">
+        <widget class="tesseract::gui::SceneStateWidget" name="state_widget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -293,19 +293,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>tesseract_gui::SceneStateWidget</class>
+   <class>tesseract::gui::SceneStateWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/scene_graph/widgets/scene_state_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::JointStateSliderWidget</class>
+   <class>tesseract::gui::JointStateSliderWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/joint_state_slider/joint_state_slider_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tesseract_gui::CartesianEditorWidget</class>
+   <class>tesseract::gui::CartesianEditorWidget</class>
    <extends>QWidget</extends>
    <header>tesseract_qt/common/widgets/cartesian_editor_widget.h</header>
    <container>1</container>

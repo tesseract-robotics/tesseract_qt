@@ -26,24 +26,24 @@
 #include <QStandardItem>
 #include <tesseract_command_language/composite_instruction.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CompositeInstructionStandardItem : public QStandardItem
 {
 public:
-  explicit CompositeInstructionStandardItem(const tesseract_planning::CompositeInstruction& ci);
-  CompositeInstructionStandardItem(const QString& text, const tesseract_planning::CompositeInstruction& ci);
+  explicit CompositeInstructionStandardItem(const tesseract::command_language::CompositeInstruction& ci);
+  CompositeInstructionStandardItem(const QString& text, const tesseract::command_language::CompositeInstruction& ci);
   CompositeInstructionStandardItem(const QIcon& icon,
                                    const QString& text,
-                                   const tesseract_planning::CompositeInstruction& ci);
+                                   const tesseract::command_language::CompositeInstruction& ci);
   int type() const override;
 
-  const tesseract_planning::CompositeInstruction& getCompositeInstruction() const;
+  const tesseract::command_language::CompositeInstruction& getCompositeInstruction() const;
 
 private:
-  tesseract_planning::CompositeInstruction ci_;
-  void ctor(const tesseract_planning::CompositeInstruction& ci);
+  tesseract::command_language::CompositeInstruction ci_;
+  void ctor(const tesseract::command_language::CompositeInstruction& ci);
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_STANDARD_ITEM_H

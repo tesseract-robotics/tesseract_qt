@@ -35,12 +35,12 @@ int main(int argc, char** argv)
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
   // Load Scene Graph
-  tesseract_common::GeneralResourceLocator locator;
+  tesseract::common::GeneralResourceLocator locator;
   std::string path = locator.locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath();
 
   /** @todo need to load environment */
 
-  tesseract_gui::GroupJointStatesEditorWidget widget;
+  tesseract::gui::GroupJointStatesEditorWidget widget;
   widget.show();
 
   return app.exec();

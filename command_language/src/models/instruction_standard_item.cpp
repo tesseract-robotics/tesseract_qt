@@ -27,16 +27,16 @@
 
 #include <tesseract_command_language/poly/instruction_poly.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-InstructionStandardItem::InstructionStandardItem(const tesseract_planning::InstructionPoly& instruction)
+InstructionStandardItem::InstructionStandardItem(const tesseract::command_language::InstructionPoly& instruction)
   : QStandardItem(icons::getUnknownIcon(), "Unknown Instruction")
 {
   ctor(instruction);
 }
 
 InstructionStandardItem::InstructionStandardItem(const QString& text,
-                                                 const tesseract_planning::InstructionPoly& instruction)
+                                                 const tesseract::command_language::InstructionPoly& instruction)
   : QStandardItem(icons::getUnknownIcon(), text)
 {
   ctor(instruction);
@@ -44,7 +44,7 @@ InstructionStandardItem::InstructionStandardItem(const QString& text,
 
 InstructionStandardItem::InstructionStandardItem(const QIcon& icon,
                                                  const QString& text,
-                                                 const tesseract_planning::InstructionPoly& instruction)
+                                                 const tesseract::command_language::InstructionPoly& instruction)
   : QStandardItem(icon, text)
 {
   ctor(instruction);
@@ -52,8 +52,8 @@ InstructionStandardItem::InstructionStandardItem(const QIcon& icon,
 
 int InstructionStandardItem::type() const { return static_cast<int>(StandardItemType::CL_INSTRUCTION); }
 
-void InstructionStandardItem::ctor(const tesseract_planning::InstructionPoly& instruction)
+void InstructionStandardItem::ctor(const tesseract::command_language::InstructionPoly& instruction)
 {
   appendRow(createStandardItemString("description", instruction.getDescription()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

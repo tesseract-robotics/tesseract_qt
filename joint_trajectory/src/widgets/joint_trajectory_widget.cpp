@@ -55,12 +55,12 @@
 
 const double SLIDER_RESOLUTION = 0.001;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct JointTrajectoryWidget::Implementation
 {
   std::shared_ptr<JointTrajectoryModel> model;
-  std::unique_ptr<tesseract_visualization::TrajectoryPlayer> player;
+  std::unique_ptr<tesseract::visualization::TrajectoryPlayer> player;
   std::unique_ptr<QTimer> player_timer;
   std::unique_ptr<JointTrajectoryPlotDialog> plot_dialog;
 
@@ -74,8 +74,8 @@ struct JointTrajectoryWidget::Implementation
   QStringList save_dialog_filters;
 
   double current_duration{ 0 };
-  tesseract_common::JointTrajectoryInfo current_trajectory;
-  tesseract_environment::Environment::Ptr current_environment;
+  tesseract::common::JointTrajectoryInfo current_trajectory;
+  tesseract::environment::Environment::Ptr current_environment;
 
   // Store the selected item
   QStandardItem* selected_item{ nullptr };
@@ -97,7 +97,7 @@ JointTrajectoryWidget::JointTrajectoryWidget(std::shared_ptr<const ComponentInfo
       ms.value("default_directory", QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]).toString();
   ms.endGroup();
 
-  data_->player = std::make_unique<tesseract_visualization::TrajectoryPlayer>();
+  data_->player = std::make_unique<tesseract::visualization::TrajectoryPlayer>();
   data_->player_timer = std::make_unique<QTimer>(this);
   data_->player_timer->start(10);
 
@@ -204,7 +204,7 @@ void JointTrajectoryWidget::onSaveFinished(int results)
 {
   if (results == 1)
   {
-    tesseract_common::JointTrajectorySet jts =
+    tesseract::common::JointTrajectorySet jts =
         dynamic_cast<JointTrajectorySetItem*>(data_->selected_item)->trajectory_set;
     data_->default_directory = QFileInfo(data_->save_dialog->selectedFiles()[0]).absoluteDir().path();
     saveJointTrajectorySet(jts,
@@ -333,7 +333,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         }
       }
 
-      data_->current_trajectory = tesseract_common::JointTrajectoryInfo();
+      data_->current_trajectory = tesseract::common::JointTrajectoryInfo();
       data_->current_trajectory.joint_state = jts.getInitialState();
       for (const auto& t : jts.getJointTrajectories())
         data_->current_trajectory.joint_trajectory.insert(
@@ -356,7 +356,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         event.plot_enabled = false;
         QApplication::sendEvent(qApp, &event);
 
-        const tesseract_common::JointState& state = data_->model->getJointState(current_index);
+        const tesseract::common::JointState& state = data_->model->getJointState(current_index);
         auto jts = data_->model->getJointTrajectorySet(current_index);
 
         if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
@@ -426,7 +426,7 @@ void JointTrajectoryWidget::onPlayerTimerTimeout()
 void JointTrajectoryWidget::onSliderValueChanged(int value)
 {
   data_->current_duration = value * SLIDER_RESOLUTION;
-  tesseract_common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
+  tesseract::common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
   data_->current_environment->setState(state.joint_names, state.position);
 }
@@ -495,4 +495,4 @@ bool JointTrajectoryWidget::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

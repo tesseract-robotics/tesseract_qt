@@ -27,7 +27,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 LoadEnvironmentWidget::LoadEnvironmentWidget(QWidget* parent)
   : QWidget(parent), ui_(std::make_unique<Ui::LoadEnvironmentWidget>())
@@ -93,4 +93,4 @@ void LoadEnvironmentWidget::onBrowseSRDFClicked()
   }
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

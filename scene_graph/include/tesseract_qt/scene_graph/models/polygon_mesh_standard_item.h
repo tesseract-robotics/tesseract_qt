@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PolygonMeshStandardItem : public QStandardItem
 {
 public:
-  PolygonMeshStandardItem(std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh);
-  explicit PolygonMeshStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh);
+  PolygonMeshStandardItem(std::shared_ptr<const tesseract::geometry::PolygonMesh> mesh);
+  explicit PolygonMeshStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::PolygonMesh> mesh);
   PolygonMeshStandardItem(const QIcon& icon,
                           const QString& text,
-                          std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh);
+                          std::shared_ptr<const tesseract::geometry::PolygonMesh> mesh);
   int type() const override;
 
-  std::shared_ptr<const tesseract_geometry::PolygonMesh> mesh;
+  std::shared_ptr<const tesseract::geometry::PolygonMesh> mesh;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_POLYGON_MESH_STANDARD_ITEM_H

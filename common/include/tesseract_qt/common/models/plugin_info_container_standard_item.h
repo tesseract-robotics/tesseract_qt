@@ -28,24 +28,24 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PluginInfoContainerStandardItem : public QStandardItem
 {
 public:
-  PluginInfoContainerStandardItem(tesseract_common::PluginInfoContainer plugin_info_container);
+  PluginInfoContainerStandardItem(tesseract::common::PluginInfoContainer plugin_info_container);
   explicit PluginInfoContainerStandardItem(const QString& text,
-                                           tesseract_common::PluginInfoContainer plugin_info_container);
+                                           tesseract::common::PluginInfoContainer plugin_info_container);
   PluginInfoContainerStandardItem(const QIcon& icon,
                                   const QString& text,
-                                  tesseract_common::PluginInfoContainer plugin_info_container);
+                                  tesseract::common::PluginInfoContainer plugin_info_container);
   int type() const override;
 
-  tesseract_common::PluginInfoContainer plugin_info_container;
+  tesseract::common::PluginInfoContainer plugin_info_container;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_PLUGIN_INFO_CONTAINER_STANDARD_ITEM_H

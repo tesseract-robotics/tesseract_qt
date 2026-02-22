@@ -27,23 +27,23 @@
 
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
-DynamicsStandardItem::DynamicsStandardItem(std::shared_ptr<tesseract_scene_graph::JointDynamics> dynamics)
+DynamicsStandardItem::DynamicsStandardItem(std::shared_ptr<tesseract::scene_graph::JointDynamics> dynamics)
   : QStandardItem(icons::getDynamicsIcon(), "Dynamics"), dynamics(std::move(dynamics))
 {
   ctor();
 }
 
 DynamicsStandardItem::DynamicsStandardItem(const QString& text,
-                                           std::shared_ptr<tesseract_scene_graph::JointDynamics> dynamics)
+                                           std::shared_ptr<tesseract::scene_graph::JointDynamics> dynamics)
   : QStandardItem(icons::getDynamicsIcon(), text), dynamics(std::move(dynamics))
 {
   ctor();
 }
 DynamicsStandardItem::DynamicsStandardItem(const QIcon& icon,
                                            const QString& text,
-                                           std::shared_ptr<tesseract_scene_graph::JointDynamics> dynamics)
+                                           std::shared_ptr<tesseract::scene_graph::JointDynamics> dynamics)
   : QStandardItem(icon, text), dynamics(std::move(dynamics))
 {
   ctor();
@@ -56,4 +56,4 @@ void DynamicsStandardItem::ctor()
   appendRow(createStandardItemFloat("damping", dynamics->damping));
   appendRow(createStandardItemFloat("friction", dynamics->friction));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

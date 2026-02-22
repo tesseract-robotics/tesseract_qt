@@ -27,10 +27,10 @@
 
 #include <tesseract_environment/commands/add_contact_managers_plugin_info_command.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::AddContactManagersPluginInfoCommand> command)
+    std::shared_ptr<const tesseract::environment::AddContactManagersPluginInfoCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Add Contact Managers Plugin Info"), command(std::move(command))
 {
   ctor();
@@ -38,7 +38,7 @@ AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCom
 
 AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddContactManagersPluginInfoCommand> command)
+    std::shared_ptr<const tesseract::environment::AddContactManagersPluginInfoCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -47,7 +47,7 @@ AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCom
 AddContactManagersPluginInfoCommandStandardItem::AddContactManagersPluginInfoCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddContactManagersPluginInfoCommand> command)
+    std::shared_ptr<const tesseract::environment::AddContactManagersPluginInfoCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -62,4 +62,4 @@ void AddContactManagersPluginInfoCommandStandardItem::ctor()
 {
   appendRow(new ContactManagersPluginInfoStandardItem(command->getContactManagersPluginInfo()));
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

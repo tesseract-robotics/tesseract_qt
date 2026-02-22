@@ -30,10 +30,10 @@
 #include <tesseract_environment/commands/add_scene_graph_command.h>
 #include <tesseract_scene_graph/joint.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
-    std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command)
+    std::shared_ptr<const tesseract::environment::AddSceneGraphCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), "Add Scene Graph"), command(std::move(command))
 {
   ctor();
@@ -41,7 +41,7 @@ AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
 
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command)
+    std::shared_ptr<const tesseract::environment::AddSceneGraphCommand> command)
   : QStandardItem(icons::getCommandEntryIcon(), text), command(std::move(command))
 {
   ctor();
@@ -50,7 +50,7 @@ AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
 AddSceneGraphCommandStandardItem::AddSceneGraphCommandStandardItem(
     const QIcon& icon,
     const QString& text,
-    std::shared_ptr<const tesseract_environment::AddSceneGraphCommand> command)
+    std::shared_ptr<const tesseract::environment::AddSceneGraphCommand> command)
   : QStandardItem(icon, text), command(std::move(command))
 {
   ctor();
@@ -66,7 +66,7 @@ void AddSceneGraphCommandStandardItem::ctor()
   appendRow(createStandardItemString("prefix", command->getPrefix()));
 
   if (command->getJoint() != nullptr)
-    appendRow(new JointStandardItem(std::make_shared<tesseract_scene_graph::Joint>(command->getJoint()->clone())));
+    appendRow(new JointStandardItem(std::make_shared<tesseract::scene_graph::Joint>(command->getJoint()->clone())));
   else
     appendRow(createStandardItemString(icons::getJointIcon(), "Joint", "NULL"));
 
@@ -74,4 +74,4 @@ void AddSceneGraphCommandStandardItem::ctor()
   sg->setSceneGraph(*command->getSceneGraph());
   appendRow(sg);
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

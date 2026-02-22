@@ -25,10 +25,10 @@
 
 class QString;
 
-namespace tesseract_gui::themes
+namespace tesseract::gui::themes
 {
 QString getDarkTheme();
 QString getLightTheme();
-}  // namespace tesseract_gui::themes
+}  // namespace tesseract::gui::themes
 
 #endif  // TESSERACT_QT_COMMON_THEME_UTILS_H

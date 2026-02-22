@@ -34,7 +34,7 @@ namespace Ui
 class JointStateSliderWidget;
 }
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct JointStateSliderWidgetPrivate;
 class JointStateSliderWidget : public QWidget
@@ -45,7 +45,7 @@ public:
   explicit JointStateSliderWidget(QWidget* parent = nullptr);
   ~JointStateSliderWidget();
 
-  void setJoints(const std::vector<std::shared_ptr<const tesseract_scene_graph::Joint>>& joints);
+  void setJoints(const std::vector<std::shared_ptr<const tesseract::scene_graph::Joint>>& joints);
   std::unordered_map<std::string, double> getJointState() const;
 
 Q_SIGNALS:
@@ -59,6 +59,6 @@ private:
   std::unique_ptr<Ui::JointStateSliderWidget> ui_;
   std::unique_ptr<JointStateSliderWidgetPrivate> data_;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_JOINT_STATE_SLIDER_WIDGET_H

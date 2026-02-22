@@ -33,7 +33,7 @@
 
 const double SLIDER_RESOLUTION = 0.001;
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct JointStateSliderWidgetPrivate
 {
@@ -56,7 +56,7 @@ JointStateSliderWidget::JointStateSliderWidget(QWidget* parent)
 
 JointStateSliderWidget::~JointStateSliderWidget() = default;
 
-void JointStateSliderWidget::setJoints(const std::vector<std::shared_ptr<const tesseract_scene_graph::Joint>>& joints)
+void JointStateSliderWidget::setJoints(const std::vector<std::shared_ptr<const tesseract::scene_graph::Joint>>& joints)
 {
   data_->state.clear();
   data_->sliders.clear();
@@ -155,4 +155,4 @@ void JointStateSliderWidget::setJointState(const std::unordered_map<std::string,
   }
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

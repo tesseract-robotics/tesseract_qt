@@ -28,23 +28,23 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class CollisionStandardItem : public QStandardItem
 {
 public:
-  CollisionStandardItem(std::shared_ptr<tesseract_scene_graph::Collision> collision);
-  explicit CollisionStandardItem(const QString& text, std::shared_ptr<tesseract_scene_graph::Collision> collision);
+  CollisionStandardItem(std::shared_ptr<tesseract::scene_graph::Collision> collision);
+  explicit CollisionStandardItem(const QString& text, std::shared_ptr<tesseract::scene_graph::Collision> collision);
   CollisionStandardItem(const QIcon& icon,
                         const QString& text,
-                        std::shared_ptr<tesseract_scene_graph::Collision> collision);
+                        std::shared_ptr<tesseract::scene_graph::Collision> collision);
   int type() const override;
 
-  std::shared_ptr<tesseract_scene_graph::Collision> collision;
+  std::shared_ptr<tesseract::scene_graph::Collision> collision;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_COLLISION_STANDARD_ITEM_H

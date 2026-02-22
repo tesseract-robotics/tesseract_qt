@@ -30,7 +30,7 @@
 
 #include <tesseract_common/fwd.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class ToolPathPose;
 template <class Archive>
@@ -97,9 +97,9 @@ protected:
   Eigen::Isometry3d transform_{ Eigen::Isometry3d::Identity() };
 
   template <class Archive>
-  friend void ::tesseract_gui::serialize(Archive& ar, ToolPathPose& obj);
+  friend void ::tesseract::gui::serialize(Archive& ar, ToolPathPose& obj);
 };
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_COMMON_TOOL_PATH_POSE_H

@@ -27,7 +27,7 @@
 #include <qwt/qwt_plot_legenditem.h>
 #include <qwt/qwt_plot.h>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class PlotLegend : public QObject, public QwtPlotLegendItem
 {
@@ -50,5 +50,5 @@ private:
   QwtPlot* _parent_plot;
   bool _collapsed;
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 #endif  // TESSERACT_QT_PLOT_PLOT_LEGEND_H

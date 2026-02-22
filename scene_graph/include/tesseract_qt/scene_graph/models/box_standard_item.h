@@ -28,21 +28,21 @@
 
 #include <QStandardItem>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 class BoxStandardItem : public QStandardItem
 {
 public:
-  BoxStandardItem(std::shared_ptr<const tesseract_geometry::Box> box);
-  explicit BoxStandardItem(const QString& text, std::shared_ptr<const tesseract_geometry::Box> box);
-  BoxStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract_geometry::Box> box);
+  BoxStandardItem(std::shared_ptr<const tesseract::geometry::Box> box);
+  explicit BoxStandardItem(const QString& text, std::shared_ptr<const tesseract::geometry::Box> box);
+  BoxStandardItem(const QIcon& icon, const QString& text, std::shared_ptr<const tesseract::geometry::Box> box);
   int type() const override;
 
-  std::shared_ptr<const tesseract_geometry::Box> box;
+  std::shared_ptr<const tesseract::geometry::Box> box;
 
 private:
   void ctor();
 };
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_SCENE_GRAPH_BOX_STANDARD_ITEM_H

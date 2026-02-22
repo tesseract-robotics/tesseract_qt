@@ -31,7 +31,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 CreateComponentInfoDialog::CreateComponentInfoDialog(QWidget* parent)
   : QDialog(parent), ui(std::make_unique<Ui::CreateComponentInfoDialog>())
@@ -72,4 +72,4 @@ void CreateComponentInfoDialog::reset()
   ui->scene_name_combo_box->setCurrentText("tesseract_default");
   ui->description_line_edit->setText("");
 }
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

@@ -44,7 +44,7 @@
 
 const std::string USER_VISIBILITY = "user_visibility";
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct IgnContactResultsRenderManager::Implementation
 {
@@ -116,7 +116,7 @@ struct IgnContactResultsRenderManager::Implementation
     return ign_material;
   }
 
-  gz::rendering::VisualPtr createArrow(const tesseract_collision::ContactResult& cr,
+  gz::rendering::VisualPtr createArrow(const tesseract::collision::ContactResult& cr,
                                        gz::rendering::Scene& scene,
                                        Entity arrow_entity)
   {
@@ -365,4 +365,4 @@ void IgnContactResultsRenderManager::render()
   events_.clear();
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui

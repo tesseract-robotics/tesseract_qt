@@ -44,7 +44,7 @@
 
 #include <QApplication>
 
-namespace tesseract_gui
+namespace tesseract::gui
 {
 struct JointTrajectoryModel::Implementation
 {
@@ -96,7 +96,7 @@ void JointTrajectoryModel::clearNamespace(const std::string& ns)
   }
 }
 
-void JointTrajectoryModel::addJointTrajectorySet(tesseract_common::JointTrajectorySet trajectory_set)
+void JointTrajectoryModel::addJointTrajectorySet(tesseract::common::JointTrajectorySet trajectory_set)
 {
   if (trajectory_set.getEnvironment() == nullptr)
   {
@@ -160,7 +160,7 @@ JointTrajectoryStateItem* findJointStateItem(QStandardItem* item)
   return findJointStateItem(item->parent());
 }
 
-tesseract_common::JointState JointTrajectoryModel::getJointState(const QModelIndex& row) const
+tesseract::common::JointState JointTrajectoryModel::getJointState(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
 
@@ -184,7 +184,7 @@ JointTrajectoryInfoItem* findJointTrajectoryInfoItem(QStandardItem* item)
   return findJointTrajectoryInfoItem(item->parent());
 }
 
-tesseract_common::JointTrajectoryInfo JointTrajectoryModel::getJointTrajectory(const QModelIndex& row) const
+tesseract::common::JointTrajectoryInfo JointTrajectoryModel::getJointTrajectory(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
 
@@ -202,7 +202,7 @@ JointTrajectorySetItem* findJointTrajectorySetItem(QStandardItem* item)
   return findJointTrajectorySetItem(item->parent());
 }
 
-tesseract_common::JointTrajectorySet JointTrajectoryModel::getJointTrajectorySet(const QModelIndex& row) const
+tesseract::common::JointTrajectorySet JointTrajectoryModel::getJointTrajectorySet(const QModelIndex& row) const
 {
   QStandardItem* item = itemFromIndex(row);
   return findJointTrajectorySetItem(item)->trajectory_set;
@@ -257,4 +257,4 @@ bool JointTrajectoryModel::eventFilter(QObject* obj, QEvent* event)
   return QObject::eventFilter(obj, event);
 }
 
-}  // namespace tesseract_gui
+}  // namespace tesseract::gui
