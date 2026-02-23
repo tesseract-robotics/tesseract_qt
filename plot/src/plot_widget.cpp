@@ -59,9 +59,9 @@
 #include <tesseract_qt/plot/plot_widget.h>
 #include <tesseract_qt/plot/plot_widget_editor.h>
 #include <tesseract_qt/plot/plot_widget_transforms.h>
-//#include "suggest_dialog.h"
-//#include "transforms/custom_function.h"
-//#include "transforms/custom_timeseries.h"
+// #include "suggest_dialog.h"
+// #include "transforms/custom_function.h"
+// #include "transforms/custom_timeseries.h"
 
 #include <tesseract_qt/plot/plot_zoomer.h>
 #include <tesseract_qt/plot/plot_magnifier.h>
@@ -1078,9 +1078,7 @@ void PlotWidget::on_savePlotToFile()
   saveDialog.setAcceptMode(QFileDialog::AcceptSave);
 
   QStringList filters;
-  filters << "png (*.png)"
-          << "jpg (*.jpg *.jpeg)"
-          << "svg (*.svg)";
+  filters << "png (*.png)" << "jpg (*.jpg *.jpeg)" << "svg (*.svg)";
 
   saveDialog.setNameFilters(filters);
   saveDialog.exec();

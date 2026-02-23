@@ -64,15 +64,15 @@
 
 #define nsrs_HAVE_STD_RING_SPAN 0
 
-//#if nsrs_CPP17_OR_GREATER && defined(__has_include )
-//# if __has_include( <any> )
-//#  define nsrs_HAVE_STD_RING_SPAN  1
-//# else
-//#  define nsrs_HAVE_STD_RING_SPAN  0
-//# endif
-//#else
-//# define  nsrs_HAVE_STD_RING_SPAN  0
-//#endif
+// #if nsrs_CPP17_OR_GREATER && defined(__has_include )
+// # if __has_include( <any> )
+// #  define nsrs_HAVE_STD_RING_SPAN  1
+// # else
+// #  define nsrs_HAVE_STD_RING_SPAN  0
+// # endif
+// #else
+// # define  nsrs_HAVE_STD_RING_SPAN  0
+// #endif
 
 #define nsrs_USES_STD_RING_SPAN                                                                                        \
   ((nsrs_CONFIG_SELECT_RING_SPAN == nsrs_RING_SPAN_STD) ||                                                             \
@@ -118,7 +118,7 @@
 #endif
 
 // half-open range [lo..hi):
-//#define nsrs_BETWEEN( v, lo, hi ) ( (lo) <= (v) && (v) < (hi) )
+// #define nsrs_BETWEEN( v, lo, hi ) ( (lo) <= (v) && (v) < (hi) )
 
 // Presence of language and library features:
 
@@ -576,8 +576,8 @@ public:
 
   template <
       typename... Args nsrs_REQUIRES_T(std::is_constructible<T, Args&&...>::value&& std::is_move_assignable<T>::value)>
-  void emplace_back(Args&&... args) noexcept(
-      std::is_nothrow_constructible<T, Args...>::value&& std::is_nothrow_move_assignable<T>::value)
+  void emplace_back(Args&&... args) noexcept(std::is_nothrow_constructible<T, Args...>::value &&
+                                             std::is_nothrow_move_assignable<T>::value)
   {
     if (full())
       increment_front_and_back_();
@@ -619,8 +619,8 @@ public:
 
   template <
       typename... Args nsrs_REQUIRES_T(std::is_constructible<T, Args&&...>::value&& std::is_move_assignable<T>::value)>
-  void emplace_front(Args&&... args) noexcept(
-      std::is_nothrow_constructible<T, Args...>::value&& std::is_nothrow_move_assignable<T>::value)
+  void emplace_front(Args&&... args) noexcept(std::is_nothrow_constructible<T, Args...>::value &&
+                                              std::is_nothrow_move_assignable<T>::value)
   {
     if (full())
       decrement_front_and_back_();

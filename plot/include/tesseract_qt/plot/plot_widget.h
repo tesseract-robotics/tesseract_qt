@@ -43,8 +43,8 @@
 #include <tesseract_qt/plot/plot_widget_base.h>
 #include <tesseract_qt/plot/custom_tracker.h>
 
-//#include "transforms/transform_selector.h"
-//#include "transforms/custom_function.h"
+// #include "transforms/transform_selector.h"
+// #include "transforms/custom_function.h"
 
 namespace tesseract::gui
 {
