@@ -1,5 +1,4 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_collision REQUIRED COMPONENTS core)
+find_package(tesseract REQUIRED COMPONENTS common collision)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -20,8 +19,8 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_collision_models
-  PUBLIC tesseract::tesseract_collision_core
-         tesseract::tesseract_common
+  PUBLIC tesseract::collision
+         tesseract::common
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)
@@ -43,8 +42,8 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_collision_widgets
-  PUBLIC tesseract::tesseract_collision_core
-         tesseract::tesseract_common
+  PUBLIC tesseract::collision
+         tesseract::common
          Qt5::Core
          Qt5::Widgets
          Qt5::Gui

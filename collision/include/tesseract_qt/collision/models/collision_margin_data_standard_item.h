@@ -24,7 +24,7 @@
 #define TESSERACT_QT_COLLISION_COLLISION_MARGIN_DATA_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 
 namespace tesseract::gui
 {

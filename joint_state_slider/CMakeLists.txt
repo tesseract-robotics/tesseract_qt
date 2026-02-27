@@ -1,5 +1,4 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_scene_graph REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common scene_graph)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -16,8 +15,8 @@ target_link_libraries(
   PUBLIC Qt5::Core
          Qt5::Gui
          Qt5::Widgets
-         tesseract::tesseract_scene_graph
-         tesseract::tesseract_common)
+         tesseract::scene_graph
+         tesseract::common)
 target_include_directories(
   ${PROJECT_NAME}_joint_state_slider
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

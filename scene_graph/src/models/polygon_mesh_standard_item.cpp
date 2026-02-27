@@ -23,11 +23,11 @@
 #include <tesseract_qt/scene_graph/models/polygon_mesh_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
-#include <tesseract_geometry/impl/convex_mesh.h>
+#include <tesseract/geometry/impl/convex_mesh.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_geometry/impl/polygon_mesh.h>
-#include <tesseract_common/resource_locator.h>
+#include <tesseract/geometry/impl/polygon_mesh.h>
+#include <tesseract/common/resource_locator.h>
 
 namespace tesseract::gui
 {

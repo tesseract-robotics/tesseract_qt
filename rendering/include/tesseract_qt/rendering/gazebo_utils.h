@@ -18,12 +18,12 @@
 #define TESSERACT_QT_RENDERING_GAZEBO_UTILS_H
 
 #include <memory>
-#include <tesseract_common/eigen_types.h>
-#include <tesseract_geometry/fwd.h>
-#include <tesseract_scene_graph/fwd.h>
-#include <tesseract_collision/core/fwd.h>
-#include <tesseract_collision/core/types.h>
-#include <tesseract_environment/fwd.h>
+#include <tesseract/common/eigen_types.h>
+#include <tesseract/geometry/fwd.h>
+#include <tesseract/scene_graph/fwd.h>
+#include <tesseract/collision/fwd.h>
+#include <tesseract/collision/types.h>
+#include <tesseract/environment/fwd.h>
 
 #include <gz/rendering/config.hh>
 #include <gz/math/config.hh>

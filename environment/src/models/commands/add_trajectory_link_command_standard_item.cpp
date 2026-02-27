@@ -26,7 +26,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_environment/commands/add_trajectory_link_command.h>
+#include <tesseract/environment/commands/add_trajectory_link_command.h>
 
 namespace tesseract::gui
 {

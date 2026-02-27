@@ -24,7 +24,7 @@
 #define TESSERACT_QT_JOINT_STATE_SLIDER_WIDGET_H
 
 #ifndef Q_MOC_RUN
-#include <tesseract_scene_graph/fwd.h>
+#include <tesseract/scene_graph/fwd.h>
 #include <memory>
 #include <QWidget>
 #endif

@@ -30,8 +30,8 @@
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 
-#include <tesseract_common/joint_state.h>
-#include <tesseract_environment/environment.h>
+#include <tesseract/common/joint_state.h>
+#include <tesseract/environment/environment.h>
 
 #include <QApplication>
 

@@ -24,7 +24,7 @@
 #define TESSERACT_QT_COMMON_TOOL_PATH_STANDARD_ITEM_H
 
 #include <boost/uuid/uuid.hpp>
-#include <tesseract_common/eigen_types.h>
+#include <tesseract/common/eigen_types.h>
 
 #include <QStandardItem>
 

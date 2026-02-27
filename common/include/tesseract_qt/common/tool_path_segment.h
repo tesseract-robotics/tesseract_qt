@@ -26,8 +26,8 @@
 
 #include <string>
 #include <boost/uuid/uuid.hpp>
-#include <tesseract_common/eigen_types.h>
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/eigen_types.h>
+#include <tesseract/common/fwd.h>
 
 namespace tesseract::gui
 {

@@ -1,4 +1,4 @@
-find_package(tesseract_common REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common)
 find_package(tesseract_task_composer REQUIRED COMPONENTS core planning)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
@@ -32,7 +32,7 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_planning
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          tesseract::tesseract_motion_planners_core
          tesseract::tesseract_task_composer
          tesseract::tesseract_task_composer_nodes
@@ -56,8 +56,8 @@ add_library(${PROJECT_NAME}_planning_widgets SHARED ${PLANNING_WIDGET_headers_MO
                                                     src/widgets/task_composer_tool_bar.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_planning_widgets
-  PUBLIC tesseract::tesseract_environment
-         tesseract::tesseract_common
+  PUBLIC tesseract::environment
+         tesseract::common
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets

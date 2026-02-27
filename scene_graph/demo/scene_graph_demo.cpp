@@ -33,9 +33,9 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
 
-#include <tesseract_urdf/urdf_parser.h>
-#include <tesseract_scene_graph/graph.h>
-#include <tesseract_common/resource_locator.h>
+#include <tesseract/urdf/urdf_parser.h>
+#include <tesseract/scene_graph/graph.h>
+#include <tesseract/common/resource_locator.h>
 
 int main(int argc, char** argv)
 {
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
   tesseract::common::GeneralResourceLocator locator;
-  std::string path = locator.locateResource("package://tesseract_support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath();
+  std::string path = locator.locateResource("package://tesseract/support/urdf/lbr_iiwa_14_r820.urdf")->getFilePath();
 
   auto scene_graph = tesseract::urdf::parseURDFFile(path, locator);
 

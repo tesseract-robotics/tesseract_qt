@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/events/contact_results_events.h>
 
-#include <tesseract_scene_graph/scene_state.h>
+#include <tesseract/scene_graph/scene_state.h>
 
 namespace tesseract::gui::events
 {

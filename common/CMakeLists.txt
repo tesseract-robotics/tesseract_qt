@@ -1,5 +1,4 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_environment REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common environment)
 find_package(tesseract_command_language REQUIRED)
 find_package(tesseract_task_composer REQUIRED COMPONENTS core)
 find_package(Graphviz REQUIRED)
@@ -133,8 +132,8 @@ add_library(
   src/utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common
-  PUBLIC tesseract::tesseract_common
-         tesseract::tesseract_environment
+  PUBLIC tesseract::common
+         tesseract::environment
          tesseract::tesseract_command_language
          tesseract::tesseract_task_composer
          PkgConfig::graphviz_gvc

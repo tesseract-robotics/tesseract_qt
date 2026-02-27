@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_geometry/impl/plane.h>
+#include <tesseract/geometry/impl/plane.h>
 
 namespace tesseract::gui
 {

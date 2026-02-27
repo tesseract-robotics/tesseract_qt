@@ -1,6 +1,4 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_scene_graph REQUIRED)
-find_package(tesseract_environment REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common scene_graph environment)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -17,8 +15,8 @@ add_library(${PROJECT_NAME}_acm_models SHARED ${ACM_MODEL_headers_MOC} src/model
 
 target_link_libraries(
   ${PROJECT_NAME}_acm_models
-  PUBLIC tesseract::tesseract_scene_graph
-         tesseract::tesseract_common
+  PUBLIC tesseract::scene_graph
+         tesseract::common
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)
@@ -40,9 +38,9 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_acm_widgets
-  PUBLIC tesseract::tesseract_scene_graph
-         tesseract::tesseract_common
-         tesseract::tesseract_environment
+  PUBLIC tesseract::scene_graph
+         tesseract::common
+         tesseract::environment
          Qt5::Core
          Qt5::Widgets
          Qt5::Gui

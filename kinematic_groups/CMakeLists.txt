@@ -1,6 +1,9 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_kinematics REQUIRED COMPONENTS core opw)
-find_package(tesseract_srdf REQUIRED)
+find_package(
+  tesseract REQUIRED
+  COMPONENTS common
+             kinematics
+             kinematics_opw
+             srdf)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -28,9 +31,9 @@ add_library(
   src/models/group_tcps_model.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_kinematic_groups_models
-  PUBLIC tesseract::tesseract_common
-         tesseract::tesseract_kinematics_opw
-         tesseract::tesseract_srdf
+  PUBLIC tesseract::common
+         tesseract::kinematics_opw
+         tesseract::srdf
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)

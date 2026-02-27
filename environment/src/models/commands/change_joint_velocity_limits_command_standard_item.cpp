@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_environment/commands/change_joint_velocity_limits_command.h>
+#include <tesseract/environment/commands/change_joint_velocity_limits_command.h>
 
 namespace tesseract::gui
 {

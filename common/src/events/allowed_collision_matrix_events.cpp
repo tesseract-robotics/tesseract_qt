@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/events/allowed_collision_matrix_events.h>
 
-#include <tesseract_common/allowed_collision_matrix.h>
+#include <tesseract/common/allowed_collision_matrix.h>
 
 namespace tesseract::gui::events
 {

@@ -26,9 +26,9 @@
 #ifndef Q_MOC_RUN
 #include <memory>
 #include <Eigen/Geometry>
-#include <tesseract_kinematics/core/fwd.h>
-#include <tesseract_scene_graph/fwd.h>
-#include <tesseract_environment/fwd.h>
+#include <tesseract/kinematics/fwd.h>
+#include <tesseract/scene_graph/fwd.h>
+#include <tesseract/environment/fwd.h>
 #include <QWidget>
 #endif
 

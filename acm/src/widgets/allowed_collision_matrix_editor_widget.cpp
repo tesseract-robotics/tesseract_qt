@@ -29,8 +29,8 @@
 
 #include "ui_allowed_collision_matrix_editor_widget.h"
 
-#include <tesseract_common/allowed_collision_matrix.h>
-#include <tesseract_environment/commands/modify_allowed_collisions_command.h>
+#include <tesseract/common/allowed_collision_matrix.h>
+#include <tesseract/environment/commands/modify_allowed_collisions_command.h>
 
 #include <QDialog>
 #include <QApplication>

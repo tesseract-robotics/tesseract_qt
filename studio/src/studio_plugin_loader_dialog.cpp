@@ -36,8 +36,8 @@
 
 #include <boost_plugin_loader/plugin_loader.hpp>
 
-#include <tesseract_common/plugin_info.h>
-#include <tesseract_common/types.h>
+#include <tesseract/common/plugin_info.h>
+#include <tesseract/common/types.h>
 
 #include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid_hash.hpp>

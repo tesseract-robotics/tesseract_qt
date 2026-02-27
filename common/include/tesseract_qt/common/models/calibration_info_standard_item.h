@@ -24,7 +24,7 @@
 #ifndef TESSERACT_QT_COMMON_CALIBRATION_INFO_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_CALIBRATION_INFO_STANDARD_ITEM_H
 
-#include <tesseract_common/calibration_info.h>
+#include <tesseract/common/calibration_info.h>
 
 #include <QStandardItem>
 

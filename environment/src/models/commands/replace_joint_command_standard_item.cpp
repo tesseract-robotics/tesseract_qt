@@ -26,8 +26,8 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_environment/commands/replace_joint_command.h>
-#include <tesseract_scene_graph/joint.h>
+#include <tesseract/environment/commands/replace_joint_command.h>
+#include <tesseract/scene_graph/joint.h>
 
 namespace tesseract::gui
 {

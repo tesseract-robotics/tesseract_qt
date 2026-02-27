@@ -41,7 +41,7 @@
 #include <gz/rendering/Scene.hh>
 #include <gz/rendering/Material.hh>
 
-#include <tesseract_scene_graph/scene_state.h>
+#include <tesseract/scene_graph/scene_state.h>
 
 #include <boost/uuid/uuid_io.hpp>
 

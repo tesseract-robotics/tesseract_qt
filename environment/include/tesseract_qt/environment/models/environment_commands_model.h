@@ -25,7 +25,7 @@
 
 #ifndef Q_MOC_RUN
 #include <memory>
-#include <tesseract_environment/fwd.h>
+#include <tesseract/environment/fwd.h>
 #include <QStandardItemModel>
 #endif
 

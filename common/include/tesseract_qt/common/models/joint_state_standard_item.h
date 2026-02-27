@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_COMMON_JOINT_STATE_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_JOINT_STATE_STANDARD_ITEM_H
 
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 
 #include <QStandardItem>
 

@@ -1,5 +1,4 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_environment REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common environment)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -42,8 +41,8 @@ add_library(
   src/models/commands/set_active_discrete_contact_manager_command_standard_item.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_environment_models
-  PUBLIC tesseract::tesseract_environment
-         tesseract::tesseract_common
+  PUBLIC tesseract::environment
+         tesseract::common
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common
@@ -64,8 +63,8 @@ add_library(
                                              src/widgets/environment_commands_widget.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_environment_widgets
-  PUBLIC tesseract::tesseract_environment
-         tesseract::tesseract_common
+  PUBLIC tesseract::environment
+         tesseract::common
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets

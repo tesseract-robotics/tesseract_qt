@@ -38,7 +38,7 @@
 #include <tesseract_qt/command_language/models/composite_instruction_standard_item.h>
 #include <tesseract_qt/command_language/models/move_instruction_standard_item.h>
 
-#include <tesseract_environment/environment.h>
+#include <tesseract/environment/environment.h>
 
 #include <tesseract_command_language/poly/instruction_poly.h>
 #include <tesseract_command_language/poly/move_instruction_poly.h>

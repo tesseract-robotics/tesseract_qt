@@ -1,4 +1,4 @@
-find_package(tesseract_common REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -13,7 +13,7 @@ add_library(${PROJECT_NAME}_srdf SHARED ${SRDF_EDITOR_WIDGET_headers_MOC} ${SRDF
                                         src/srdf_editor_widget.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_srdf
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets
@@ -30,7 +30,7 @@ if(${BUILD_RENDERING})
     PRIVATE ${PROJECT_NAME}_srdf
             ${PROJECT_NAME}_render_widgets
             ${PROJECT_NAME}_environment_widgets
-            tesseract::tesseract_common)
+            tesseract::common)
 
   list(APPEND SRDF_TARGETS ${PROJECT_NAME}_srdf_app)
 endif()

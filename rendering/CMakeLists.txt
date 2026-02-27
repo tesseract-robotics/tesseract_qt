@@ -1,4 +1,4 @@
-find_package(tesseract_common REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common)
 find_package(
   Qt5
   COMPONENTS Core
@@ -35,7 +35,7 @@ tesseract_variables()
 add_library(${PROJECT_NAME}_gazebo_utils SHARED src/gazebo_utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_gazebo_utils
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          gz-common5::gz-common5-profiler
          gz-common5::gz-common5-events
          gz-common5::gz-common5-av
@@ -65,7 +65,7 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_render_widgets
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          gz-common5::gz-common5-profiler
          gz-common5::gz-common5-events
          gz-common5::gz-common5-av

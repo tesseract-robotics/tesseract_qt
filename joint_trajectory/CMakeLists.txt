@@ -1,5 +1,4 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_visualization REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common visualization)
 find_package(tesseract_command_language REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
@@ -23,7 +22,7 @@ add_library(
   src/models/joint_trajectory_utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_joint_trajectory_models
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)
@@ -45,8 +44,8 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_joint_trajectory_widgets
-  PUBLIC tesseract::tesseract_common
-         tesseract::tesseract_visualization
+  PUBLIC tesseract::common
+         tesseract::visualization
          tesseract::tesseract_command_language
          Qt5::Core
          Qt5::Gui

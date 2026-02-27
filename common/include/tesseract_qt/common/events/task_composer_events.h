@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_COMMON_TASK_COMPOSER_EVENTS_H
 #define TESSERACT_QT_COMMON_TASK_COMPOSER_EVENTS_H
 
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 #include <tesseract_task_composer/core/task_composer_log.h>
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>

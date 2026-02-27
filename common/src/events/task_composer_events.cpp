@@ -22,7 +22,7 @@
  */
 
 #include <tesseract_qt/common/events/task_composer_events.h>
-#include <tesseract_common/profile_dictionary.h>
+#include <tesseract/common/profile_dictionary.h>
 
 namespace tesseract::gui::events
 {

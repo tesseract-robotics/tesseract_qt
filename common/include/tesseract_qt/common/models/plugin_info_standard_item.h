@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_COMMON_PLUGIN_INFO_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_PLUGIN_INFO_STANDARD_ITEM_H
 
-#include <tesseract_common/plugin_info.h>
+#include <tesseract/common/plugin_info.h>
 
 #include <QStandardItem>
 

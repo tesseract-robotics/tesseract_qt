@@ -1,4 +1,4 @@
-find_package(tesseract_common REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -15,7 +15,7 @@ add_library(
   src/models/tool_path_utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_tool_path_models
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)
@@ -42,7 +42,7 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_tool_path_widgets
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets

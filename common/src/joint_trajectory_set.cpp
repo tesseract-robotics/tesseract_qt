@@ -24,10 +24,10 @@
 
 #include <boost/uuid/random_generator.hpp>
 
-#include <tesseract_common/utils.h>
-#include <tesseract_environment/environment.h>
-#include <tesseract_scene_graph/scene_state.h>
-#include <tesseract_environment/commands.h>
+#include <tesseract/common/utils.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/scene_graph/scene_state.h>
+#include <tesseract/environment/commands.h>
 
 #include <tesseract_qt/common/joint_trajectory_set.h>
 

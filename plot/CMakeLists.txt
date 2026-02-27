@@ -1,4 +1,4 @@
-find_package(tesseract_common REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common)
 find_package(
   Qt5
   COMPONENTS Core
@@ -62,7 +62,7 @@ target_link_libraries(
          Qt5::OpenGL
          Qt5::Xml
          Qwt::Qwt
-         tesseract::tesseract_common
+         tesseract::common
          ${PROJECT_NAME}_common)
 target_include_directories(
   ${PROJECT_NAME}_plot PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

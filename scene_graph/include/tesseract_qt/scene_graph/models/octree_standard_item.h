@@ -24,7 +24,7 @@
 #define TESSERACT_QT_SCENE_GRAPH_OCTREE_STANDARD_ITEM_H
 
 #include <memory>
-#include <tesseract_geometry/fwd.h>
+#include <tesseract/geometry/fwd.h>
 
 #include <QStandardItem>
 

@@ -26,7 +26,7 @@
 #ifndef Q_MOC_RUN
 #include <memory>
 #include <QStandardItemModel>
-#include <tesseract_scene_graph/fwd.h>
+#include <tesseract/scene_graph/fwd.h>
 #endif
 
 class QModelIndex;

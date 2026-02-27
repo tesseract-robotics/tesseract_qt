@@ -31,11 +31,11 @@
 
 #include "ui_group_joint_states_editor_widget.h"
 
-#include <tesseract_kinematics/core/joint_group.h>
-#include <tesseract_scene_graph/joint.h>
-#include <tesseract_scene_graph/graph.h>
-#include <tesseract_environment/environment.h>
-#include <tesseract_environment/commands/add_kinematics_information_command.h>
+#include <tesseract/kinematics/joint_group.h>
+#include <tesseract/scene_graph/joint.h>
+#include <tesseract/scene_graph/graph.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/environment/commands/add_kinematics_information_command.h>
 
 #include <QStringListModel>
 #include <QItemSelectionModel>

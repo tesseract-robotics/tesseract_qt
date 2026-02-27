@@ -31,9 +31,9 @@
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_common/any_poly.h>
-#include <tesseract_common/eigen_types.h>
-#include <tesseract_common/manipulator_info.h>
+#include <tesseract/common/any_poly.h>
+#include <tesseract/common/eigen_types.h>
+#include <tesseract/common/manipulator_info.h>
 #include <tesseract_command_language/poly/instruction_poly.h>
 
 #include <Eigen/Core>

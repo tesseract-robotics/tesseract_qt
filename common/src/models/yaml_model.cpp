@@ -26,7 +26,7 @@
 #include <tesseract_qt/common/models/yaml_model.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_common/utils.h>
+#include <tesseract/common/utils.h>
 
 #include <QDebug>
 #include <QFile>

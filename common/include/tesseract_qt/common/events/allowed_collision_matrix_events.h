@@ -25,7 +25,7 @@
 
 #include <memory>
 #include <vector>
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>

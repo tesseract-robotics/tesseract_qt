@@ -24,7 +24,7 @@
 #define TESSERACT_QT_KINEMATIC_GROUP_MODEL_H
 
 #ifndef Q_MOC_RUN
-#include <tesseract_srdf/kinematics_information.h>
+#include <tesseract/srdf/kinematics_information.h>
 #include <QStandardItem>
 #endif
 

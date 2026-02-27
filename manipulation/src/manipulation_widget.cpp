@@ -11,10 +11,10 @@
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/component_info.h>
 
-#include <tesseract_scene_graph/joint.h>
-#include <tesseract_srdf/kinematics_information.h>
-#include <tesseract_environment/environment.h>
-#include <tesseract_kinematics/core/kinematic_group.h>
+#include <tesseract/scene_graph/joint.h>
+#include <tesseract/srdf/kinematics_information.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/kinematics/kinematic_group.h>
 
 #include <QStringList>
 #include <QStringListModel>
