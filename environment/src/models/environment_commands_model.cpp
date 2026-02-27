@@ -28,8 +28,8 @@
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 
-#include <tesseract_environment/environment.h>
-#include <tesseract_environment/command.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/environment/command.h>
 
 #include <QApplication>
 

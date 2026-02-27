@@ -29,7 +29,7 @@
 #include <QFrame>
 #include <QDoubleSpinBox>
 
-#include <tesseract_scene_graph/joint.h>
+#include <tesseract/scene_graph/joint.h>
 
 const double SLIDER_RESOLUTION = 0.001;
 

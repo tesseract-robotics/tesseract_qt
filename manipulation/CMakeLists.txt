@@ -1,6 +1,4 @@
-find_package(tesseract_common REQUIRED)
-find_package(tesseract_scene_graph REQUIRED)
-find_package(tesseract_environment REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common scene_graph environment)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -19,9 +17,9 @@ add_library(${PROJECT_NAME}_manipulation_widgets SHARED ${MANIPULATION_WIDGET_he
 
 target_link_libraries(
   ${PROJECT_NAME}_manipulation_widgets
-  PUBLIC tesseract::tesseract_environment
-         tesseract::tesseract_scene_graph
-         tesseract::tesseract_common
+  PUBLIC tesseract::environment
+         tesseract::scene_graph
+         tesseract::common
          Qt5::Core
          Qt5::Widgets
          Qt5::Gui

@@ -32,10 +32,10 @@
 #include <tesseract_command_language/composite_instruction.h>
 #include <tesseract_command_language/utils.h>
 
-#include <tesseract_environment/cereal_serialization.h>
+#include <tesseract/environment/cereal_serialization.h>
 #include <tesseract_command_language/cereal_serialization.h>
 
-#include <tesseract_common/serialization.h>
+#include <tesseract/common/serialization.h>
 
 #include <QApplication>
 #include <QString>

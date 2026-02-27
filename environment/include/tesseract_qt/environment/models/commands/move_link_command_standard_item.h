@@ -24,7 +24,7 @@
 #define TESSERACT_QT_ENVIRONMENT_MOVE_LINK_COMMAND_STANDARD_ITEM_H
 
 #include <memory>
-#include <tesseract_environment/fwd.h>
+#include <tesseract/environment/fwd.h>
 
 #include <QStandardItem>
 

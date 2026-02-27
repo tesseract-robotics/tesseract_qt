@@ -30,9 +30,9 @@
 #include <tesseract_qt/common/tool_path.h>
 #include <tesseract_qt/common/cereal_serialization.h>
 
-#include <tesseract_common/yaml_utils.h>
-#include <tesseract_common/yaml_extensions.h>
-#include <tesseract_common/serialization.h>
+#include <tesseract/common/yaml_utils.h>
+#include <tesseract/common/yaml_extensions.h>
+#include <tesseract/common/serialization.h>
 
 #include <QStandardItem>
 #include <QApplication>

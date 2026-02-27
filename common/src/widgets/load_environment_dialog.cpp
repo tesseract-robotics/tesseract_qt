@@ -27,8 +27,8 @@
 #include <tesseract_qt/common/environment_manager.h>
 #include <tesseract_qt/common/environment_wrapper.h>
 
-#include <tesseract_common/resource_locator.h>
-#include <tesseract_environment/environment.h>
+#include <tesseract/common/resource_locator.h>
+#include <tesseract/environment/environment.h>
 
 #include <QMessageBox>
 

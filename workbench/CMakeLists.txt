@@ -1,4 +1,4 @@
-find_package(tesseract_common REQUIRED)
+find_package(tesseract REQUIRED COMPONENTS common)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -11,7 +11,7 @@ add_library(${PROJECT_NAME}_workbench_widgets SHARED ${WORKBENCH_WIDGET_headers_
                                                      src/workbench_widget.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_workbench_widgets
-  PUBLIC tesseract::tesseract_common
+  PUBLIC tesseract::common
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets

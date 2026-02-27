@@ -1,7 +1,7 @@
 #ifndef TESSERACT_QT_COMMON_ANY_POLY_STANDARD_ITEM_FACTORY_H
 #define TESSERACT_QT_COMMON_ANY_POLY_STANDARD_ITEM_FACTORY_H
 
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 
 #include <memory>
 #include <vector>

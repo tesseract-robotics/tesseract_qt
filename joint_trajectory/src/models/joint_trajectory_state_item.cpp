@@ -26,7 +26,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_common/joint_state.h>
+#include <tesseract/common/joint_state.h>
 
 namespace tesseract::gui
 {

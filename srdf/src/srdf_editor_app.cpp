@@ -43,7 +43,7 @@
 #include <tesseract_qt/common/environment_wrapper.h>
 
 #include <memory>
-#include <tesseract_common/resource_locator.h>
+#include <tesseract/common/resource_locator.h>
 
 int main(int argc, char** argv)
 {

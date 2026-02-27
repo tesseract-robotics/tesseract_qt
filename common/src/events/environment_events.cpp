@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/events/environment_events.h>
 
-#include <tesseract_environment/command.h>
+#include <tesseract/environment/command.h>
 
 namespace tesseract::gui::events
 {

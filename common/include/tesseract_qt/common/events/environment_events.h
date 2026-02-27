@@ -25,7 +25,7 @@
 
 #include <vector>
 #include <unordered_map>
-#include <tesseract_environment/environment.h>
+#include <tesseract/environment/environment.h>
 
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>

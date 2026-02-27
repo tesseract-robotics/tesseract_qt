@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_common/collision_margin_data.h>
+#include <tesseract/common/collision_margin_data.h>
 
 namespace tesseract::gui
 {

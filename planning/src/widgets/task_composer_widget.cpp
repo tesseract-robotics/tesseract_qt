@@ -24,11 +24,11 @@
 #include <tesseract_qt/planning/widgets/task_composer_widget.h>
 #include "ui_task_composer_widget.h"
 
-#include <tesseract_common/profile_dictionary.h>
-#include <tesseract_common/resource_locator.h>
-#include <tesseract_common/stopwatch.h>
-#include <tesseract_common/utils.h>
-#include <tesseract_environment/environment.h>
+#include <tesseract/common/profile_dictionary.h>
+#include <tesseract/common/resource_locator.h>
+#include <tesseract/common/stopwatch.h>
+#include <tesseract/common/utils.h>
+#include <tesseract/environment/environment.h>
 #include <tesseract_motion_planners/core/utils.h>
 #include <tesseract_task_composer/core/task_composer_log.h>
 #include <tesseract_task_composer/core/task_composer_server.h>
@@ -41,12 +41,12 @@
 #include <tesseract_task_composer/core/task_composer_graph.h>
 #include <tesseract_command_language/utils.h>
 
-#include <tesseract_common/cereal_serialization.h>
-#include <tesseract_scene_graph/cereal_serialization.h>
-#include <tesseract_environment/cereal_serialization.h>
+#include <tesseract/common/cereal_serialization.h>
+#include <tesseract/scene_graph/cereal_serialization.h>
+#include <tesseract/environment/cereal_serialization.h>
 #include <tesseract_command_language/cereal_serialization.h>
 #include <tesseract_task_composer/core/cereal_serialization.h>
-#include <tesseract_common/serialization.h>
+#include <tesseract/common/serialization.h>
 
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/widgets/component_info_dialog.h>

@@ -26,7 +26,7 @@
 #ifndef Q_MOC_RUN
 #include <memory>
 #include <QStandardItemModel>
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 #endif
 
 namespace tesseract::gui

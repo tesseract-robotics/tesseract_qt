@@ -24,7 +24,7 @@
 #define TESSERACT_QT_SCENE_GRAPH_SCENE_STATE_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <tesseract_scene_graph/fwd.h>
+#include <tesseract/scene_graph/fwd.h>
 
 namespace tesseract::gui
 {

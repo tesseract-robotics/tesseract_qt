@@ -25,7 +25,7 @@
 
 #ifndef Q_MOC_RUN
 #include <memory>
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 #include <boost_plugin_loader/fwd.h>
 #include <QMainWindow>
 #endif

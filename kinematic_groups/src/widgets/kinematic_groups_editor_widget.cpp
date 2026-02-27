@@ -31,8 +31,8 @@
 
 #include "ui_kinematic_groups_editor_widget.h"
 
-#include <tesseract_environment/environment.h>
-#include <tesseract_environment/commands/add_kinematics_information_command.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/environment/commands/add_kinematics_information_command.h>
 
 #include <QStringListModel>
 #include <QApplication>

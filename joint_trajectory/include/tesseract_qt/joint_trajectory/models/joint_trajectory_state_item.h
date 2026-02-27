@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H
 #define TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_STATE_ITEM_H
 
-#include <tesseract_common/fwd.h>
+#include <tesseract/common/fwd.h>
 #include <QStandardItem>
 
 namespace tesseract::gui

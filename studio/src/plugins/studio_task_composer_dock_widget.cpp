@@ -39,13 +39,13 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <tesseract_common/resource_locator.h>
-#include <tesseract_environment/environment.h>
+#include <tesseract/common/resource_locator.h>
+#include <tesseract/environment/environment.h>
 
-#include <tesseract_common/cereal_serialization.h>
-#include <tesseract_geometry/cereal_serialization.h>
-#include <tesseract_srdf/cereal_serialization.h>
-#include <tesseract_environment/cereal_serialization.h>
+#include <tesseract/common/cereal_serialization.h>
+#include <tesseract/geometry/cereal_serialization.h>
+#include <tesseract/srdf/cereal_serialization.h>
+#include <tesseract/environment/cereal_serialization.h>
 
 namespace tesseract::gui
 {

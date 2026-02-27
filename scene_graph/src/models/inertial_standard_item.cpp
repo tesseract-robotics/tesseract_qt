@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 
-#include <tesseract_scene_graph/link.h>
+#include <tesseract/scene_graph/link.h>
 
 namespace tesseract::gui
 {

@@ -29,9 +29,9 @@
 #include <string>
 #include <unordered_map>
 #include <boost/uuid/uuid.hpp>
-#include <tesseract_common/fwd.h>
-#include <tesseract_environment/fwd.h>
-#include <tesseract_common/joint_state.h>
+#include <tesseract/common/fwd.h>
+#include <tesseract/environment/fwd.h>
+#include <tesseract/common/joint_state.h>
 
 namespace tesseract::common
 {

@@ -36,9 +36,9 @@
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_scene_graph/link.h>
-#include <tesseract_geometry/geometry.h>
-#include <tesseract_geometry/geometries.h>
+#include <tesseract/scene_graph/link.h>
+#include <tesseract/geometry/geometry.h>
+#include <tesseract/geometry/geometries.h>
 
 namespace tesseract::gui
 {

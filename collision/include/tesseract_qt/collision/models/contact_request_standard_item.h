@@ -24,7 +24,7 @@
 #define TESSERACT_QT_COLLISION_CONTACT_REQUEST_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <tesseract_collision/core/types.h>
+#include <tesseract/collision/types.h>
 
 namespace tesseract::gui
 {

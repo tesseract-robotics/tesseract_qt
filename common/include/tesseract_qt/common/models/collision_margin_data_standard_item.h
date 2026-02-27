@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_COMMON_COLLISION_MARGIN_DATA_STANDARD_ITEM_H
 #define TESSERACT_QT_COMMON_COLLISION_MARGIN_DATA_STANDARD_ITEM_H
 
-#include <tesseract_common/collision_margin_data.h>
+#include <tesseract/common/collision_margin_data.h>
 
 #include <QStandardItem>
 

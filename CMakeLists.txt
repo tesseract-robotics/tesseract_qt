@@ -43,16 +43,9 @@ set(DEPS
     "Qt5 COMPONENTS Core Gui Widgets Svg OpenGL Xml"
     "Boost COMPONENTS program_options"
     "boost_plugin_loader"
-    "tesseract_collision REQUIRED COMPONENTS core"
-    "tesseract_kinematics REQUIRED COMPONENTS core opw"
-    "tesseract_task_composer REQUIRED COMPONENTS core planning"
-    tesseract_environment
-    tesseract_scene_graph
-    tesseract_common
-    tesseract_urdf
-    tesseract_srdf
-    tesseract_visualization
-    tesseract_command_language)
+    "tesseract_task_composer COMPONENTS core planning"
+    "tesseract COMPONENTS common scene_graph environment collision kinematics_opw  urdf srdf visualization"
+    "tesseract_command_language")
 
 set(LINUX_DEPENDS
     "libboost-program-options-dev"

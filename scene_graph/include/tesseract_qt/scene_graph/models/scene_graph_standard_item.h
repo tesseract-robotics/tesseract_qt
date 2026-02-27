@@ -25,7 +25,7 @@
 
 #include <memory>
 #include <QStandardItem>
-#include <tesseract_scene_graph/fwd.h>
+#include <tesseract/scene_graph/fwd.h>
 
 namespace tesseract::gui
 {

@@ -28,8 +28,8 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_environment/environment.h>
-#include <tesseract_scene_graph/scene_state.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/scene_graph/scene_state.h>
 
 namespace tesseract::gui
 {

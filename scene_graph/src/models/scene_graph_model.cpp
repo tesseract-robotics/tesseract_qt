@@ -35,12 +35,12 @@
 #include <tesseract_qt/common/utils.h>
 #include <tesseract_qt/common/widgets/image_viewer_widget.h>
 
-#include <tesseract_common/utils.h>
-#include <tesseract_scene_graph/graph.h>
-#include <tesseract_scene_graph/link.h>
-#include <tesseract_scene_graph/joint.h>
+#include <tesseract/common/utils.h>
+#include <tesseract/scene_graph/graph.h>
+#include <tesseract/scene_graph/link.h>
+#include <tesseract/scene_graph/joint.h>
 
-#include <tesseract_environment/environment.h>
+#include <tesseract/environment/environment.h>
 
 #include <QApplication>
 

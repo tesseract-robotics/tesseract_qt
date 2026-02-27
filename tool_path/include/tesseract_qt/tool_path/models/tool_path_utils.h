@@ -24,7 +24,7 @@
 #define TOOL_PATH_TOOL_PATH_UTILS_H
 
 #include <memory>
-#include <tesseract_common/eigen_types.h>
+#include <tesseract/common/eigen_types.h>
 
 #include <Qt>
 

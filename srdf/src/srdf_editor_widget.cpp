@@ -23,12 +23,12 @@
 #include <tesseract_qt/srdf/srdf_editor_widget.h>
 #include "ui_srdf_editor_widget.h"
 
-#include <tesseract_common/resource_locator.h>
-#include <tesseract_srdf/srdf_model.h>
-#include <tesseract_environment/environment.h>
-#include <tesseract_collision/core/types.h>
-#include <tesseract_collision/core/common.h>
-#include <tesseract_scene_graph/joint.h>
+#include <tesseract/common/resource_locator.h>
+#include <tesseract/srdf/srdf_model.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/collision/types.h>
+#include <tesseract/collision/common.h>
+#include <tesseract/scene_graph/joint.h>
 
 #include <QStringListModel>
 #include <QFileDialog>

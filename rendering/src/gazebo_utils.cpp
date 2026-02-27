@@ -18,16 +18,16 @@
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/events/status_log_events.h>
 
-#include <tesseract_common/resource_locator.h>
-#include <tesseract_geometry/geometries.h>
-#include <tesseract_scene_graph/graph.h>
-#include <tesseract_scene_graph/link.h>
-#include <tesseract_scene_graph/scene_state.h>
-#include <tesseract_geometry/geometry.h>
-#include <tesseract_geometry/impl/polygon_mesh.h>
-#include <tesseract_environment/environment.h>
-#include <tesseract_environment/commands.h>
-#include <tesseract_environment/events.h>
+#include <tesseract/common/resource_locator.h>
+#include <tesseract/geometry/geometries.h>
+#include <tesseract/scene_graph/graph.h>
+#include <tesseract/scene_graph/link.h>
+#include <tesseract/scene_graph/scene_state.h>
+#include <tesseract/geometry/geometry.h>
+#include <tesseract/geometry/impl/polygon_mesh.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/environment/commands.h>
+#include <tesseract/environment/events.h>
 
 #include <gz/rendering/Scene.hh>
 #include <gz/rendering/Visual.hh>

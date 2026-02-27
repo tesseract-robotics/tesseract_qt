@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_KINEMATICS_GROUP_KINEMATICS_INFO_STANDARD_ITEM_H
 #define TESSERACT_QT_KINEMATICS_GROUP_KINEMATICS_INFO_STANDARD_ITEM_H
 
-#include <tesseract_srdf/kinematics_information.h>
+#include <tesseract/srdf/kinematics_information.h>
 
 #include <QStandardItem>
 

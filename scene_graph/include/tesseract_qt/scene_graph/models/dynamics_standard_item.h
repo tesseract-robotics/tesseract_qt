@@ -24,7 +24,7 @@
 #define TESSERACT_QT_SCENE_GRAPH_DYNAMICS_STANDARD_ITEM_H
 
 #include <memory>
-#include <tesseract_scene_graph/fwd.h>
+#include <tesseract/scene_graph/fwd.h>
 
 #include <QStandardItem>
 

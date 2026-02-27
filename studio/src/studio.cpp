@@ -23,8 +23,8 @@
 #include <tesseract_qt/studio/studio.h>
 #include "ui_studio.h"
 
-#include <tesseract_common/yaml_utils.h>
-#include <tesseract_common/yaml_extensions.h>
+#include <tesseract/common/yaml_utils.h>
+#include <tesseract/common/yaml_extensions.h>
 #include <boost_plugin_loader/plugin_loader.hpp>
 
 #include <filesystem>

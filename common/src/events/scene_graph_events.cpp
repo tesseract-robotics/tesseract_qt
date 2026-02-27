@@ -23,10 +23,10 @@
 #include <tesseract_qt/common/events/scene_graph_events.h>
 #include <tesseract_qt/common/link_visibility.h>
 
-#include <tesseract_scene_graph/graph.h>
-#include <tesseract_scene_graph/link.h>
-#include <tesseract_scene_graph/joint.h>
-#include <tesseract_scene_graph/scene_state.h>
+#include <tesseract/scene_graph/graph.h>
+#include <tesseract/scene_graph/link.h>
+#include <tesseract/scene_graph/joint.h>
+#include <tesseract/scene_graph/scene_state.h>
 #include <string>
 
 namespace tesseract::gui::events

@@ -44,9 +44,9 @@
 #include <tesseract_qt/common/icon_utils.h>
 #include <tesseract_qt/common/joint_trajectory_set.h>
 
-#include <tesseract_common/joint_state.h>
-#include <tesseract_environment/environment.h>
-#include <tesseract_visualization/trajectory_player.h>
+#include <tesseract/common/joint_state.h>
+#include <tesseract/environment/environment.h>
+#include <tesseract/visualization/trajectory_player.h>
 #include <set>
 
 #include <QTimer>
