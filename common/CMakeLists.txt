@@ -1,6 +1,5 @@
 find_package(tesseract REQUIRED COMPONENTS common environment)
-find_package(tesseract_command_language REQUIRED)
-find_package(tesseract_task_composer REQUIRED COMPONENTS core)
+find_package(tesseract_planning REQUIRED COMPONENTS command_language task_composer)
 find_package(Graphviz REQUIRED)
 find_package(Boost REQUIRED)
 find_package(
@@ -134,8 +133,8 @@ target_link_libraries(
   ${PROJECT_NAME}_common
   PUBLIC tesseract::common
          tesseract::environment
-         tesseract::tesseract_command_language
-         tesseract::tesseract_task_composer
+         tesseract::command_language
+         tesseract::task_composer
          PkgConfig::graphviz_gvc
          Boost::boost
          Qt5::Core

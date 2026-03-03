@@ -34,7 +34,7 @@
 #include <tesseract/common/any_poly.h>
 #include <tesseract/common/eigen_types.h>
 #include <tesseract/common/manipulator_info.h>
-#include <tesseract_command_language/poly/instruction_poly.h>
+#include <tesseract/command_language/poly/instruction_poly.h>
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>

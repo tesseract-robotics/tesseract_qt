@@ -1,5 +1,5 @@
 find_package(tesseract REQUIRED COMPONENTS common)
-find_package(tesseract_command_language REQUIRED)
+find_package(tesseract_planning REQUIRED COMPONENTS command_language)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -29,7 +29,7 @@ add_library(
 
 target_link_libraries(
   ${PROJECT_NAME}_command_language_models
-  PUBLIC tesseract::tesseract_command_language
+  PUBLIC tesseract::command_language
          tesseract::common
          Qt5::Core
          Qt5::Gui
@@ -47,7 +47,7 @@ add_library(${PROJECT_NAME}_command_language_widgets SHARED ${COMMAND_LANGUAGE_W
 
 target_link_libraries(
   ${PROJECT_NAME}_command_language_widgets
-  PUBLIC tesseract::tesseract_command_language
+  PUBLIC tesseract::command_language
          tesseract::common
          Qt5::Core
          Qt5::Widgets

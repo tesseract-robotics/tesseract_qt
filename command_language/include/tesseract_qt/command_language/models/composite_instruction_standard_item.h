@@ -24,7 +24,7 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_COMPOSITE_INSTRUCTION_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <tesseract_command_language/composite_instruction.h>
+#include <tesseract/command_language/composite_instruction.h>
 
 namespace tesseract::gui
 {

@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_DATA_STORAGE_STANDARD_ITEM_H
 #define TESSERACT_QT_PLANNING_TASK_COMPOSER_DATA_STORAGE_STANDARD_ITEM_H
 
-#include <tesseract_task_composer/core/fwd.h>
+#include <tesseract/task_composer/fwd.h>
 
 #include <QStandardItem>
 

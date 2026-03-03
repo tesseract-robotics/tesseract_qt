@@ -24,7 +24,7 @@
 #define TESSERACT_QT_COMMAND_LANGUAGE_JOINT_WAYPOINT_STANDARD_ITEM_H
 
 #include <QStandardItem>
-#include <tesseract_command_language/fwd.h>
+#include <tesseract/command_language/fwd.h>
 
 namespace tesseract::gui
 {

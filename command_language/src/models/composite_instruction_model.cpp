@@ -29,7 +29,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/component_info.h>
 
-#include <tesseract_command_language/composite_instruction.h>
+#include <tesseract/command_language/composite_instruction.h>
 
 #include <QApplication>
 

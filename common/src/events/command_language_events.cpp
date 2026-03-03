@@ -22,7 +22,7 @@
  */
 #include <tesseract_qt/common/events/command_language_events.h>
 
-#include <tesseract_command_language/composite_instruction.h>
+#include <tesseract/command_language/composite_instruction.h>
 
 namespace tesseract::gui::events
 {
