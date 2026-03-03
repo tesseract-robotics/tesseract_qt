@@ -43,9 +43,8 @@ set(DEPS
     "Qt5 COMPONENTS Core Gui Widgets Svg OpenGL Xml"
     "Boost COMPONENTS program_options"
     "boost_plugin_loader"
-    "tesseract_task_composer COMPONENTS core planning"
-    "tesseract COMPONENTS common scene_graph environment collision kinematics_opw  urdf srdf visualization"
-    "tesseract_command_language")
+    "tesseract_planning COMPONENTS command_language motion_planners task_composer task_composer_planning"
+    "tesseract COMPONENTS common scene_graph environment collision kinematics_opw  urdf srdf visualization")
 
 set(LINUX_DEPENDS
     "libboost-program-options-dev"
@@ -63,12 +62,13 @@ set(LINUX_DEPENDS
     "${TESSERACT_PACKAGE_PREFIX}tesseract-urdf"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-srdf"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-visualization"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-command-language"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-command-language"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-motion-planners"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-task-composer"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-task-composer-planning"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-collision-core"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-core"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-opw"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-core"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-planning")
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-opw")
 
 set(WINDOWS_DEPENDS
     "libboost-program-options-dev"
@@ -86,12 +86,13 @@ set(WINDOWS_DEPENDS
     "${TESSERACT_PACKAGE_PREFIX}tesseract-urdf"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-srdf"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-visualization"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-command-language"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-command-language"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-motion-planners"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-task-composer"
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-planning-task-composer-planning"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-collision-core"
     "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-core"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-opw"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-core"
-    "${TESSERACT_PACKAGE_PREFIX}tesseract-task-composer-planning")
+    "${TESSERACT_PACKAGE_PREFIX}tesseract-kinematics-opw")
 
 if(${BUILD_RENDERING})
   message("Building rendering module")

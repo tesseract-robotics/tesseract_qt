@@ -1,5 +1,5 @@
 find_package(tesseract REQUIRED COMPONENTS common visualization)
-find_package(tesseract_command_language REQUIRED)
+find_package(tesseract_planning REQUIRED COMPONENTS command_language)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Load variable for clang tidy args, compiler options and cxx version
@@ -46,7 +46,7 @@ target_link_libraries(
   ${PROJECT_NAME}_joint_trajectory_widgets
   PUBLIC tesseract::common
          tesseract::visualization
-         tesseract::tesseract_command_language
+         tesseract::command_language
          Qt5::Core
          Qt5::Gui
          Qt5::Widgets

@@ -28,12 +28,12 @@
 #include <tesseract_qt/common/joint_trajectory_set.h>
 #include <tesseract_qt/common/cereal_serialization.h>
 
-#include <tesseract_command_language/poly/instruction_poly.h>
-#include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/utils.h>
+#include <tesseract/command_language/poly/instruction_poly.h>
+#include <tesseract/command_language/composite_instruction.h>
+#include <tesseract/command_language/utils.h>
 
 #include <tesseract/environment/cereal_serialization.h>
-#include <tesseract_command_language/cereal_serialization.h>
+#include <tesseract/command_language/cereal_serialization.h>
 
 #include <tesseract/common/serialization.h>
 

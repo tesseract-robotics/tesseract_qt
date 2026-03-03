@@ -25,7 +25,7 @@
 
 #include <vector>
 #include <QStandardItem>
-#include <tesseract_command_language/fwd.h>
+#include <tesseract/command_language/fwd.h>
 
 namespace tesseract::gui
 {

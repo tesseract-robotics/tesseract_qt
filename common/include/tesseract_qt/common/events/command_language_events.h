@@ -24,7 +24,7 @@
 #define TESSERACT_QT_COMMON_COMMAND_LANGUAGE_EVENTS_H
 
 #include <memory>
-#include <tesseract_command_language/fwd.h>
+#include <tesseract/command_language/fwd.h>
 
 #include <tesseract_qt/common/events/event_type.h>
 #include <tesseract_qt/common/events/component_events.h>

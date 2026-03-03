@@ -23,7 +23,7 @@
 #ifndef TESSERACT_QT_COMMON_INSTRUCTION_POLY_STANDARD_ITEM_FACTORY_H
 #define TESSERACT_QT_COMMON_INSTRUCTION_POLY_STANDARD_ITEM_FACTORY_H
 
-#include <tesseract_command_language/fwd.h>
+#include <tesseract/command_language/fwd.h>
 
 #include <memory>
 #include <vector>

@@ -29,23 +29,23 @@
 #include <tesseract/common/stopwatch.h>
 #include <tesseract/common/utils.h>
 #include <tesseract/environment/environment.h>
-#include <tesseract_motion_planners/core/utils.h>
-#include <tesseract_task_composer/core/task_composer_log.h>
-#include <tesseract_task_composer/core/task_composer_server.h>
-#include <tesseract_task_composer/core/task_composer_future.h>
-#include <tesseract_task_composer/core/task_composer_context.h>
-#include <tesseract_task_composer/core/task_composer_node.h>
-#include <tesseract_task_composer/core/task_composer_node_info.h>
-#include <tesseract_task_composer/core/task_composer_data_storage.h>
-#include <tesseract_task_composer/core/task_composer_log.h>
-#include <tesseract_task_composer/core/task_composer_graph.h>
-#include <tesseract_command_language/utils.h>
+#include <tesseract/motion_planners/utils.h>
+#include <tesseract/task_composer/task_composer_log.h>
+#include <tesseract/task_composer/task_composer_server.h>
+#include <tesseract/task_composer/task_composer_future.h>
+#include <tesseract/task_composer/task_composer_context.h>
+#include <tesseract/task_composer/task_composer_node.h>
+#include <tesseract/task_composer/task_composer_node_info.h>
+#include <tesseract/task_composer/task_composer_data_storage.h>
+#include <tesseract/task_composer/task_composer_log.h>
+#include <tesseract/task_composer/task_composer_graph.h>
+#include <tesseract/command_language/utils.h>
 
 #include <tesseract/common/cereal_serialization.h>
 #include <tesseract/scene_graph/cereal_serialization.h>
 #include <tesseract/environment/cereal_serialization.h>
-#include <tesseract_command_language/cereal_serialization.h>
-#include <tesseract_task_composer/core/cereal_serialization.h>
+#include <tesseract/command_language/cereal_serialization.h>
+#include <tesseract/task_composer/cereal_serialization.h>
 #include <tesseract/common/serialization.h>
 
 #include <tesseract_qt/common/models/standard_item_type.h>

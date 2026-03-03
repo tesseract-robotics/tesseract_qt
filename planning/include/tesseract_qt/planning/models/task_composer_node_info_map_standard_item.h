@@ -25,7 +25,7 @@
 
 #include <memory>
 #include <map>
-#include <tesseract_task_composer/core/fwd.h>
+#include <tesseract/task_composer/fwd.h>
 
 #include <QStandardItem>
 

@@ -40,15 +40,15 @@
 
 #include <tesseract/environment/environment.h>
 
-#include <tesseract_command_language/poly/instruction_poly.h>
-#include <tesseract_command_language/poly/move_instruction_poly.h>
-#include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/set_analog_instruction.h>
-#include <tesseract_command_language/set_digital_instruction.h>
-#include <tesseract_command_language/set_tool_instruction.h>
-#include <tesseract_command_language/timer_instruction.h>
-#include <tesseract_command_language/wait_instruction.h>
-#include <tesseract_command_language/instruction_type.h>
+#include <tesseract/command_language/poly/instruction_poly.h>
+#include <tesseract/command_language/poly/move_instruction_poly.h>
+#include <tesseract/command_language/composite_instruction.h>
+#include <tesseract/command_language/set_analog_instruction.h>
+#include <tesseract/command_language/set_digital_instruction.h>
+#include <tesseract/command_language/set_tool_instruction.h>
+#include <tesseract/command_language/timer_instruction.h>
+#include <tesseract/command_language/wait_instruction.h>
+#include <tesseract/command_language/instruction_type.h>
 
 namespace tesseract::gui
 {

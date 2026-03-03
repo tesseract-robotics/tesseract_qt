@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/timer_instruction.h>
+#include <tesseract/command_language/timer_instruction.h>
 
 #include <boost/uuid/uuid_io.hpp>
 

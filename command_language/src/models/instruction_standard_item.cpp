@@ -25,7 +25,7 @@
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_command_language/poly/instruction_poly.h>
+#include <tesseract/command_language/poly/instruction_poly.h>
 
 namespace tesseract::gui
 {

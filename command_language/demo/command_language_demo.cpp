@@ -32,10 +32,10 @@
 #include <tesseract_qt/common/component_info.h>
 #include <tesseract_qt/common/component_info_manager.h>
 
-#include <tesseract_command_language/composite_instruction.h>
-#include <tesseract_command_language/cartesian_waypoint.h>
-#include <tesseract_command_language/move_instruction.h>
-#include <tesseract_command_language/state_waypoint.h>
+#include <tesseract/command_language/composite_instruction.h>
+#include <tesseract/command_language/cartesian_waypoint.h>
+#include <tesseract/command_language/move_instruction.h>
+#include <tesseract/command_language/state_waypoint.h>
 
 using namespace tesseract::command_language;
 using tesseract::common::ManipulatorInfo;

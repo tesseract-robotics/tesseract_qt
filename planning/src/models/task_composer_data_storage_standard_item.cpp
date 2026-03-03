@@ -27,7 +27,7 @@
 #include <tesseract_qt/common/factories/any_poly_standard_item_factory.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract_task_composer/core/task_composer_data_storage.h>
+#include <tesseract/task_composer/task_composer_data_storage.h>
 
 namespace tesseract::gui
 {
