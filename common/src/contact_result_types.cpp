@@ -30,11 +30,14 @@ ContactResultMap convert(const tesseract::collision::ContactResultMap& contact_r
   ContactResultMap tracked_object;
   for (const auto& contact : contact_results)
   {
+    if (contact.second.empty())
+      continue;
     ContactResultVector crv;
     for (const auto& result : contact.second)
       crv().emplace_back(tesseract::gui::ContactResult(result));
 
-    tracked_object[contact.first] = crv;
+    const auto& names = contact.second.front().link_names;
+    tracked_object[{ names[0], names[1] }] = crv;
   }
   return tracked_object;
 }
