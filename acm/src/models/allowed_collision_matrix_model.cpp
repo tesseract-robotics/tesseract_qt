@@ -95,7 +95,7 @@ void AllowedCollisionMatrixModel::set(const tesseract::common::AllowedCollisionM
   clear();
 
   for (const auto& ac : acm.getAllAllowedCollisions())
-    add(ac.first.first, ac.first.second, ac.second);
+    add(ac.second.name1, ac.second.name2, ac.second.reason);
 
   sort(0);
 }

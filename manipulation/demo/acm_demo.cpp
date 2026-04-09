@@ -33,7 +33,7 @@ void onEntrySelected(const tesseract::common::AllowedCollisionEntries& selection
   std::stringstream ss;
   ss << "Selected Rows:" << std::endl;
   for (const auto& s : selection)
-    ss << "     (" << s.first.first << ", " << s.first.second << ", " << s.second << ")" << std::endl;
+    ss << "     (" << s.second.name1 << ", " << s.second.name2 << ", " << s.second.reason << ")" << std::endl;
 
   qDebug() << QString::fromStdString(ss.str());
 }
