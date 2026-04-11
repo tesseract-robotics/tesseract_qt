@@ -63,7 +63,7 @@ void EnvironmentStandardItem::ctor(const tesseract::environment::Environment& en
   appendRow(createStandardItemInt("revision", env.getRevision()));
   appendRow(createStandardItemString("root_link", env.getRootLinkName()));
   appendRow(new EnvironmentCommandsStandardItem(env.getCommandHistory()));
-  appendRow(new SceneStateStandardItem(env.getState()));
+  appendRow(new SceneStateStandardItem(env.getState(), env));
 }
 
 }  // namespace tesseract::gui

@@ -64,7 +64,18 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
 
 JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::Environment> environment,
                                        std::string description)
-  : JointTrajectorySet(environment->getState().joints, std::move(description))
+  : JointTrajectorySet([&]() {
+      std::unordered_map<std::string, double> result;
+      const auto& state = environment->getState();
+      for (const auto& name : environment->getJointNames())
+      {
+        auto it = state.joints.find(tesseract::common::JointId::fromName(name));
+        if (it != state.joints.end())
+          result[name] = it->second;
+      }
+      return result;
+    }(),
+    std::move(description))
 {
   environment_ = std::move(environment);
 }
