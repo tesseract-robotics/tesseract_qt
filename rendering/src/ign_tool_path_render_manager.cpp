@@ -299,7 +299,7 @@ void IgnToolPathRenderManager::updateWorkingFrameTransforms()
       tesseract::scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();
       for (auto& working_frame : data_->working_frames)
       {
-        auto it = state.link_transforms.find(working_frame.second.second);
+        auto it = state.link_transforms.find(tesseract::common::LinkId::fromName(working_frame.second.second));
         if (it != state.link_transforms.end())
           working_frame.second.first->SetLocalPose(gz::math::eigen3::convert(it->second));
       }

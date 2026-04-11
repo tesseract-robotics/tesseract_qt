@@ -235,8 +235,8 @@ void eventFilterHelper(QObject* /*obj*/,
       for (const auto& result : contact.second)
         crv().emplace_back(tesseract::gui::ContactResult(result));
 
-      const auto& names = contact.second.front().link_names;
-      tracked_object[{ names[0], names[1] }] = crv;
+      const auto& ids = contact.second.front().link_ids;
+      tracked_object[{ ids[0].name(), ids[1].name() }] = crv;
     }
 
     tesseract::gui::events::ContactResultsSet event(component_info, tracked_object, e->getNamespace());
@@ -279,8 +279,8 @@ void eventFilterHelper(QObject* /*obj*/,
       double percent = double(pair.second.size()) / double(e->getResolution());
       if (percent > 0.95)
       {
-        const auto& name1 = pair.second.front().link_names[0];
-        const auto& name2 = pair.second.front().link_names[1];
+        const auto& name1 = pair.second.front().link_ids[0].name();
+        const auto& name2 = pair.second.front().link_ids[1].name();
         std::vector<std::string> adj_first = env.getSceneGraph()->getAdjacentLinkNames(name1);
         std::vector<std::string> adj_second = env.getSceneGraph()->getAdjacentLinkNames(name2);
         if (std::find(adj_first.begin(), adj_first.end(), name2) != adj_first.end())

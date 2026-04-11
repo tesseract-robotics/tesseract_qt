@@ -84,8 +84,8 @@ void ContactResultStandardItem::ctor()
 
   {
     auto* item = new QStandardItem(icons::getTextIcon(), "link_names");
-    item->appendRow(createStandardItemString("[0]", contact_result().link_names[0]));
-    item->appendRow(createStandardItemString("[1]", contact_result().link_names[1]));
+    item->appendRow(createStandardItemString("[0]", contact_result().link_ids[0].name()));
+    item->appendRow(createStandardItemString("[1]", contact_result().link_ids[1].name()));
     appendRow(item);
   }
 
