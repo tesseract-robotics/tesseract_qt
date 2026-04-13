@@ -150,7 +150,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
 
     tesseract::srdf::JointGroup group;
     for (auto& joint : joints)
-      group.push_back(joint.toStdString());
+      group.push_back(tesseract::common::JointId::fromName(joint.toStdString()));
 
     events::KinematicGroupsAddJoint event(getComponentInfo(), group_name, group);
     QApplication::sendEvent(qApp, &event);
@@ -170,7 +170,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
 
     tesseract::srdf::LinkGroup group;
     for (auto& link : links)
-      group.push_back(link.toStdString());
+      group.push_back(tesseract::common::LinkId::fromName(link.toStdString()));
 
     events::KinematicGroupsAddLink event(getComponentInfo(), group_name, group);
     QApplication::sendEvent(qApp, &event);

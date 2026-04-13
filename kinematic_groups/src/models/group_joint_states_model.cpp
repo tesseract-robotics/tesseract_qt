@@ -79,10 +79,15 @@ bool GroupJointStatesModel::setData(const QModelIndex& index, const QVariant& va
 
       if (value.value<Qt::CheckState>() == Qt::Checked)
       {
+        const auto str_state = derived_item->getState();
+        tesseract::srdf::GroupsJointState id_state;
+        id_state.reserve(str_state.size());
+        for (const auto& [name, val] : str_state)
+          id_state[tesseract::common::JointId::fromName(name)] = val;
         events::GroupJointStatesShow event(component_info_,
                                            parent_item->text().toStdString(),
                                            derived_item->getName().toStdString(),
-                                           derived_item->getState());
+                                           id_state);
         QApplication::sendEvent(qApp, &event);
       }
       else

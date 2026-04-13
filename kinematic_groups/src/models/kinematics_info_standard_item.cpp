@@ -73,13 +73,25 @@ void KinematicsInfoStandardItem::ctor()
 
   auto* joint_groups = new QStandardItem("Joint Groups");
   for (const auto& joint_group : kinematics_info.joint_groups)
-    joint_groups->appendRow(new JointGroupStandardItem(joint_group.first.c_str(), joint_group.second));
+  {
+    std::vector<std::string> joint_names;
+    joint_names.reserve(joint_group.second.size());
+    for (const auto& id : joint_group.second)
+      joint_names.push_back(id.name());
+    joint_groups->appendRow(new JointGroupStandardItem(joint_group.first.c_str(), std::move(joint_names)));
+  }
 
   appendRow({ joint_groups, new QStandardItem() });
 
   auto* link_groups = new QStandardItem("Link Groups");
   for (const auto& link_group : kinematics_info.link_groups)
-    link_groups->appendRow(new LinkGroupStandardItem(link_group.first.c_str(), link_group.second));
+  {
+    std::vector<std::string> link_names;
+    link_names.reserve(link_group.second.size());
+    for (const auto& id : link_group.second)
+      link_names.push_back(id.name());
+    link_groups->appendRow(new LinkGroupStandardItem(link_group.first.c_str(), std::move(link_names)));
+  }
 
   appendRow({ link_groups, new QStandardItem() });
 

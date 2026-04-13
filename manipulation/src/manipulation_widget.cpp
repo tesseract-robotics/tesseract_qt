@@ -357,9 +357,11 @@ void ManipulationWidget::onGroupNameChanged()
       auto it = group_tcp_offsets.find(group_name);
       if (it != group_tcp_offsets.end())
       {
-        data_->tcp_offsets = it->second;
-        for (const auto& tcp_offset : data_->tcp_offsets)
-          tcp_offset_sl.append(tcp_offset.first.c_str());
+        for (const auto& [link_id, tf] : it->second)
+        {
+          data_->tcp_offsets[link_id.name()] = tf;
+          tcp_offset_sl.append(link_id.name().c_str());
+        }
       }
       data_->tcp_offset_names_model.setStringList(tcp_offset_sl);
       ui->tcp_offset_combo_box->setCurrentIndex(0);

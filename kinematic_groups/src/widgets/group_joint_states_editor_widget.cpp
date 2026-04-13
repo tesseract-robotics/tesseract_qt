@@ -137,8 +137,13 @@ void GroupJointStatesEditorWidget::onAddJointState()
   if (state_name.empty())
     return;
 
+  const auto slider_state = ui_->jointSliderWidget->getJointState();
+  tesseract::srdf::GroupsJointState id_state;
+  id_state.reserve(slider_state.size());
+  for (const auto& [name, val] : slider_state)
+    id_state[tesseract::common::JointId::fromName(name)] = val;
   tesseract::gui::events::GroupJointStatesAdd event(
-      ui_->groupJointStatesWidget->getComponentInfo(), group_name, state_name, ui_->jointSliderWidget->getJointState());
+      ui_->groupJointStatesWidget->getComponentInfo(), group_name, state_name, id_state);
   QApplication::sendEvent(qApp, &event);
 
   ui_->jointStateNameLineEdit->clear();

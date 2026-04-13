@@ -93,7 +93,7 @@ class KinematicGroupsAddLink : public ComponentEvent
 public:
   KinematicGroupsAddLink(std::shared_ptr<const ComponentInfo> component_info,
                          std::string group_name,
-                         tesseract::srdf::JointGroup group);
+                         tesseract::srdf::LinkGroup group);
   ~KinematicGroupsAddLink() override;
 
   const std::string& getGroupName() const;
