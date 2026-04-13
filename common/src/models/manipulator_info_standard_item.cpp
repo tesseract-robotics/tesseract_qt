@@ -60,7 +60,7 @@ void ManipulatorInfoStandardItem::ctor(const tesseract::common::ManipulatorInfo&
   appendRow(createStandardItemString("tcp_frame", manip_info.tcp_frame.name()));
 
   if (manip_info.tcp_offset.index() == 0)
-    appendRow(createStandardItemString("tcp_offset", std::get<std::string>(manip_info.tcp_offset)));
+    appendRow(createStandardItemString("tcp_offset", std::get<common::LinkId>(manip_info.tcp_offset).name()));
   else
     appendRow(new TransformStandardItem("tcp_offset", std::get<Eigen::Isometry3d>(manip_info.tcp_offset)));
 
