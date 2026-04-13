@@ -56,8 +56,8 @@ int ManipulatorInfoStandardItem::type() const { return static_cast<int>(Standard
 void ManipulatorInfoStandardItem::ctor(const tesseract::common::ManipulatorInfo& manip_info)
 {
   appendRow(createStandardItemString("manipulator", manip_info.manipulator));
-  appendRow(createStandardItemString("working_frame", manip_info.working_frame));
-  appendRow(createStandardItemString("tcp_frame", manip_info.tcp_frame));
+  appendRow(createStandardItemString("working_frame", manip_info.working_frame.name()));
+  appendRow(createStandardItemString("tcp_frame", manip_info.tcp_frame.name()));
 
   if (manip_info.tcp_offset.index() == 0)
     appendRow(createStandardItemString("tcp_offset", std::get<std::string>(manip_info.tcp_offset)));
