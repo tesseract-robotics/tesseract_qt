@@ -23,6 +23,7 @@
  */
 
 #include <boost/uuid/random_generator.hpp>
+#include <utility>
 
 #include <tesseract/common/utils.h>
 #include <tesseract/environment/environment.h>
@@ -57,14 +58,16 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
                                        std::vector<std::shared_ptr<const tesseract::environment::Command>> commands,
                                        std::string description)
-  : JointTrajectorySet(initial_state, description)
+  : JointTrajectorySet(initial_state, std::move(description))
 {
   commands_ = std::move(commands);
 }
 
 JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::Environment> environment,
                                        std::string description)
-  : description_(std::move(description)), uuid_(boost::uuids::random_generator()())
+  : environment_(std::move(environment))
+  , description_(std::move(description))
+  , uuid_(boost::uuids::random_generator()())
 {
   const auto& state = environment->getState();
   const auto joint_names = environment->getJointNames();
@@ -85,7 +88,6 @@ JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::E
     initial_state_.effort(r) = 0;
     ++r;
   }
-  environment_ = std::move(environment);
 }
 
 boost::uuids::uuid JointTrajectorySet::getUUID() const { return uuid_; }

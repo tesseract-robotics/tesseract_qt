@@ -74,7 +74,11 @@ void GroupJointStatesStandardItem::addGroupJointStateItem(const QString& group_n
                                                      // columns
   }
 
-  group_item->appendRow(new GroupJointStateStandardItem(state_name, state));
+  std::unordered_map<std::string, double> string_state;
+  string_state.reserve(state.size());
+  for (const auto& [id, val] : state)
+    string_state[id.name()] = val;
+  group_item->appendRow(new GroupJointStateStandardItem(state_name, string_state));
   sortChildren(0);
 }
 
@@ -122,8 +126,13 @@ tesseract::srdf::GroupJointStates GroupJointStatesStandardItem::getGroupJointSta
       if (child->type() == static_cast<int>(StandardItemType::SRDF_GROUP_JOINT_STATE))
       {
         const auto* group_state_item = static_cast<const GroupJointStateStandardItem*>(child);
+        const auto str_state = group_state_item->getState();
+        tesseract::srdf::GroupsJointState id_state;
+        id_state.reserve(str_state.size());
+        for (const auto& [name, val] : str_state)
+          id_state[tesseract::common::JointId::fromName(name)] = val;
         group_joint_states[group_item.second->text().toStdString()][group_state_item->getName().toStdString()] =
-            group_state_item->getState();
+            id_state;
       }
     }
   }
