@@ -532,7 +532,8 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
     auto it = std::find(tcp_names.begin(), tcp_names.end(), tcp_name);
     if (it != tcp_names.end())
     {
-      tesseract::kinematics::KinGroupIKInput inputs(target, working_frame, tcp_name);
+      tesseract::kinematics::KinGroupIKInput inputs(target, tesseract::common::LinkId::fromName(working_frame),
+                                                        tesseract::common::LinkId::fromName(tcp_name));
       Eigen::VectorXd seed = getActiveJointValues();
       tesseract::kinematics::IKSolutions solutions = data_->kin_group->calcInvKin(inputs, seed);
       if (!solutions.empty())
