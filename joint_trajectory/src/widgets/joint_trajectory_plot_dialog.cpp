@@ -41,7 +41,7 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract::common::JointTra
 
   plot_data_map_.clear();
 
-  const std::vector<std::string> joint_names = current_trajectory.joint_trajectory[0].joint_names;
+  const std::vector<std::string> joint_names = current_trajectory.joint_trajectory[0].getJointNames();
 
   for (std::size_t i = 0; i < joint_names.size(); ++i)
   {

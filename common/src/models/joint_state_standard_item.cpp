@@ -53,7 +53,7 @@ int JointStateStandardItem::type() const { return static_cast<int>(StandardItemT
 void JointStateStandardItem::ctor(const tesseract::common::JointState& state)
 {
   // Add State Joint Names
-  appendRow(new VectorStringStandardItem("joint_names", state.joint_names));
+  appendRow(new VectorStringStandardItem("joint_names", state.getJointNames()));
   appendRow(new VectorDoubleStandardItem("position", state.position));
   appendRow(new VectorDoubleStandardItem("velocity", state.velocity));
   appendRow(new VectorDoubleStandardItem("acceleration", state.acceleration));

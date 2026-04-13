@@ -380,7 +380,7 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
           QTimer::singleShot(kDelayTimeMs, this, [this, env, state]() {
             if (data_->current_environment == env && data_->current_environment != nullptr)
             {
-              data_->current_environment->setState(state.joint_names, state.position);
+              data_->current_environment->setState(state.getJointNames(), state.position);
             }
           });
         }
@@ -428,7 +428,7 @@ void JointTrajectoryWidget::onSliderValueChanged(int value)
   data_->current_duration = value * SLIDER_RESOLUTION;
   tesseract::common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
-  data_->current_environment->setState(state.joint_names, state.position);
+  data_->current_environment->setState(state.getJointNames(), state.position);
 }
 
 void JointTrajectoryWidget::onEnablePlayer()
