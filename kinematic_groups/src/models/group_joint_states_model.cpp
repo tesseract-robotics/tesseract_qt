@@ -83,7 +83,7 @@ bool GroupJointStatesModel::setData(const QModelIndex& index, const QVariant& va
         tesseract::srdf::GroupsJointState id_state;
         id_state.reserve(str_state.size());
         for (const auto& [name, val] : str_state)
-          id_state[tesseract::common::JointId::fromName(name)] = val;
+          id_state[tesseract::common::JointId(name)] = val;
         events::GroupJointStatesShow event(component_info_,
                                            parent_item->text().toStdString(),
                                            derived_item->getName().toStdString(),

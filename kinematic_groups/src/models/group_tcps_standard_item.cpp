@@ -79,7 +79,7 @@ void GroupTCPsStandardItem::addGroupTCP(const QString& group_name,
   removeGroupTCP(group_name, tcp_name);
   addGroupTCPItem(group_name, tcp_name, tcp);
 
-  group_tcps_[group_name.toStdString()][tesseract::common::LinkId::fromName(tcp_name.toStdString())] = tcp;
+  group_tcps_[group_name.toStdString()][tesseract::common::LinkId(tcp_name.toStdString())] = tcp;
 }
 
 void GroupTCPsStandardItem::removeGroupTCP(const QString& group_name, const QString& tcp_name)
@@ -95,7 +95,7 @@ void GroupTCPsStandardItem::removeGroupTCP(const QString& group_name, const QStr
         item->removeRow(i - 1);
     }
 
-    auto state_it = group_it->second.find(tesseract::common::LinkId::fromName(tcp_name.toStdString()));
+    auto state_it = group_it->second.find(tesseract::common::LinkId(tcp_name.toStdString()));
     if (state_it != group_it->second.end())
       group_it->second.erase(state_it);
 

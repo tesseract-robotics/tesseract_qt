@@ -130,7 +130,7 @@ tesseract::srdf::GroupJointStates GroupJointStatesStandardItem::getGroupJointSta
         tesseract::srdf::GroupsJointState id_state;
         id_state.reserve(str_state.size());
         for (const auto& [name, val] : str_state)
-          id_state[tesseract::common::JointId::fromName(name)] = val;
+          id_state[tesseract::common::JointId(name)] = val;
         group_joint_states[group_item.second->text().toStdString()][group_state_item->getName().toStdString()] =
             id_state;
       }
