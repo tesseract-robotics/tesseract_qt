@@ -233,7 +233,7 @@ void eventFilterHelper(QObject* /*obj*/,
         continue;
       tesseract::gui::ContactResultVector crv;
       for (const auto& result : contact.second)
-        crv().emplace_back(tesseract::gui::ContactResult(result));
+        crv().emplace_back(result);
 
       const auto& ids = contact.second.front().link_ids;
       tracked_object[{ ids[0].name(), ids[1].name() }] = crv;
@@ -305,9 +305,8 @@ void eventFilterHelper(QObject* /*obj*/,
         if (link2->collision.empty())
           continue;
 
-        if (results.find(tesseract::common::LinkIdPair::make(tesseract::common::LinkId::fromName(link_names[i]),
-                                                            tesseract::common::LinkId::fromName(link_names[j]))) ==
-            results.end())
+        if (results.find(tesseract::common::LinkIdPair(tesseract::common::LinkId(link_names[i]),
+                                                       tesseract::common::LinkId(link_names[j]))) == results.end())
           acm.addAllowedCollision(link_names[i], link_names[j], "Never");
       }
     }

@@ -134,7 +134,7 @@ void setSceneState(gz::rendering::Scene& scene,
   auto tracked = entity_container.getTrackedEntities(EntityContainer::VISUAL_NS);
   for (const auto& pair : tracked)
   {
-    auto lid = tesseract::common::LinkId::fromName(pair.first);
+    auto lid = tesseract::common::LinkId(pair.first);
     auto it = link_transforms.find(lid);
     if (it != link_transforms.end())
       scene.VisualById(pair.second.id)->SetWorldPose(gz::math::eigen3::convert(it->second));

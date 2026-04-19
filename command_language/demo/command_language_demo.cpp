@@ -47,8 +47,8 @@ int main(int argc, char** argv)
   // Create Program
   CompositeInstruction program(
       "cartesian_program",
-      ManipulatorInfo("manipulator", tesseract::common::LinkId::fromName("base_link"),
-                      tesseract::common::LinkId::fromName("tool0")));
+      ManipulatorInfo("manipulator", tesseract::common::LinkId("base_link"),
+                      tesseract::common::LinkId("tool0")));
 
   // Set the robot initial state
   std::vector<std::string> joint_names;

@@ -52,11 +52,11 @@ int main(int argc, char** argv)
     for (int j = 0; j < 5; ++j)
     {
       tesseract::common::JointState state;
-      state.joint_ids = { tesseract::common::JointId::fromName("joint_1"),
-                          tesseract::common::JointId::fromName("joint_2"),
-                          tesseract::common::JointId::fromName("joint_3"),
-                          tesseract::common::JointId::fromName("joint_4"),
-                          tesseract::common::JointId::fromName("joint_5") };
+      state.joint_ids = { tesseract::common::JointId("joint_1"),
+                          tesseract::common::JointId("joint_2"),
+                          tesseract::common::JointId("joint_3"),
+                          tesseract::common::JointId("joint_4"),
+                          tesseract::common::JointId("joint_5") };
       state.position.resize(5);
       state.velocity.resize(5);
       state.acceleration.resize(5);

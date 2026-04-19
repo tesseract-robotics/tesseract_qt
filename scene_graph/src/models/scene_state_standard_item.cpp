@@ -67,7 +67,7 @@ void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scen
 
   for (const auto& name : env.getJointNames())
   {
-    auto jid = tesseract::common::JointId::fromName(name);
+    auto jid = tesseract::common::JointId(name);
     auto it = scene_state.joints.find(jid);
     if (it != scene_state.joints.end())
       joint_values_item->appendRow(createStandardItemFloat(name, it->second));
@@ -83,7 +83,7 @@ void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scen
 
   for (const auto& name : env.getLinkNames())
   {
-    auto lid = tesseract::common::LinkId::fromName(name);
+    auto lid = tesseract::common::LinkId(name);
     auto it = scene_state.link_transforms.find(lid);
     if (it != scene_state.link_transforms.end())
       links_item->appendRow(new TransformStandardItem(QString::fromStdString(name), it->second));
