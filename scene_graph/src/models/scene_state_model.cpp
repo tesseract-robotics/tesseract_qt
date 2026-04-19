@@ -111,92 +111,89 @@ void SceneStateModel::setState(const tesseract::scene_graph::SceneState& scene_s
     return;
 
   const auto& env = *env_wrapper->getEnvironment();
-  const auto all_joint_names = env.getJointNames();
-  const auto all_link_names = env.getLinkNames();
+  const auto all_joint_ids = env.getJointIds();
+  const auto all_link_ids = env.getLinkIds();
 
   bool sort_required{ false };
 
   std::vector<std::string> joint_names_value;
   joint_names_value.reserve(scene_state.joints.size());
-  for (const auto& name : all_joint_names)
+  for (const auto& jid : all_joint_ids)
   {
-    auto jid = tesseract::common::JointId::fromName(name);
     auto jit = scene_state.joints.find(jid);
     if (jit == scene_state.joints.end())
       continue;
 
-    auto it = data_->values.find(name);
+    auto it = data_->values.find(jid.name());
     if (it != data_->values.end())
     {
       it->second->setData(jit->second, Qt::DisplayRole);
     }
     else
     {
-      auto row = createStandardItemFloat(name, jit->second);
-      data_->values[name] = row[1];
+      auto row = createStandardItemFloat(jid.name(), jit->second);
+      data_->values[jid.name()] = row[1];
       data_->values_item->appendRow(row);
-      data_->joint_names_value.push_back(name);
+      data_->joint_names_value.push_back(jid.name());
       sort_required = true;
     }
-    joint_names_value.push_back(name);
+    joint_names_value.push_back(jid.name());
   }
 
   std::vector<std::string> link_names;
   link_names.reserve(scene_state.link_transforms.size());
-  for (const auto& name : all_link_names)
+  for (const auto& lid : all_link_ids)
   {
-    auto lid = tesseract::common::LinkId::fromName(name);
     auto lit = scene_state.link_transforms.find(lid);
     if (lit == scene_state.link_transforms.end())
       continue;
 
-    auto it = data_->links.find(name);
+    auto it = data_->links.find(lid.name());
     if (it != data_->links.end())
     {
       it->second->setTransform(lit->second);
     }
     else
     {
-      auto* item = new TransformStandardItem(QString::fromStdString(name), lit->second);
+      auto* item = new TransformStandardItem(QString::fromStdString(lid.name()), lit->second);
       item->setCheckable(true);
       item->setCheckState(Qt::CheckState::Unchecked);
       data_->links_item->appendRow(item);
-      data_->links[name] = item;
-      data_->link_names.push_back(name);
+      data_->links[lid.name()] = item;
+      data_->link_names.push_back(lid.name());
 
       sort_required = true;
     }
-    link_names.push_back(name);
+    link_names.push_back(lid.name());
   }
 
   std::vector<std::string> joint_names_tf;
   joint_names_tf.reserve(scene_state.joint_transforms.size());
-  for (const auto& name : all_joint_names)
+  for (const auto& jid : all_joint_ids)
   {
-    auto jid = tesseract::common::JointId::fromName(name);
     auto jit = scene_state.joint_transforms.find(jid);
     if (jit == scene_state.joint_transforms.end())
       continue;
 
-    auto it = data_->joints.find(name);
+    auto it = data_->joints.find(jid.name());
     if (it != data_->joints.end())
     {
       it->second->setTransform(jit->second);
     }
     else
     {
-      auto* item = new TransformStandardItem(QString::fromStdString(name), jit->second);
+      auto* item = new TransformStandardItem(QString::fromStdString(jid.name()), jit->second);
       data_->joints_item->appendRow(item);
-      data_->joints[name] = item;
-      data_->joint_names_tf.push_back(name);
+      data_->joints[jid.name()] = item;
+      data_->joint_names_tf.push_back(jid.name());
       sort_required = true;
     }
-    joint_names_tf.push_back(name);
+    joint_names_tf.push_back(jid.name());
   }
 
   for (const auto& link_name : data_->link_names)
   {
-    auto lid = tesseract::common::LinkId::fromName(link_name);
+    auto lid = tesseract::common::LinkId(link_name);
     auto it = scene_state.link_transforms.find(lid);
     if (it == scene_state.link_transforms.end())
     {
@@ -214,7 +211,7 @@ void SceneStateModel::setState(const tesseract::scene_graph::SceneState& scene_s
 
   for (const auto& joint_name : data_->joint_names_tf)
   {
-    auto jid = tesseract::common::JointId::fromName(joint_name);
+    auto jid = tesseract::common::JointId(joint_name);
     auto jt_it = scene_state.joint_transforms.find(jid);
     if (jt_it == scene_state.joint_transforms.end())
     {
@@ -232,7 +229,7 @@ void SceneStateModel::setState(const tesseract::scene_graph::SceneState& scene_s
 
   for (const auto& joint_name : data_->joint_names_value)
   {
-    auto jid = tesseract::common::JointId::fromName(joint_name);
+    auto jid = tesseract::common::JointId(joint_name);
     auto jt_it = scene_state.joints.find(jid);
     if (jt_it == scene_state.joints.end())
     {

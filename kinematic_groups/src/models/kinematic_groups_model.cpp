@@ -132,10 +132,7 @@ void KinematicGroupsModel::addJointGroup(const std::string& group_name, const te
     removeGroup(group_name);
 
   QStandardItem* item = findItems(JOINT_GROUPS_KEY).at(0);
-  std::vector<std::string> joint_names;
-  joint_names.reserve(group.size());
-  for (const auto& id : group)
-    joint_names.push_back(id.name());
+  auto joint_names = tesseract::common::toNames(group);
   item->appendRow(new JointGroupStandardItem(group_name.c_str(), std::move(joint_names)));
 
   data_->joint_groups[group_name] = group;
@@ -150,10 +147,7 @@ void KinematicGroupsModel::addLinkGroup(const std::string& group_name, const tes
     removeGroup(group_name);
 
   QStandardItem* item = findItems(LINK_GROUPS_KEY).at(0);
-  std::vector<std::string> link_names;
-  link_names.reserve(group.size());
-  for (const auto& id : group)
-    link_names.push_back(id.name());
+  auto link_names = tesseract::common::toNames(group);
   item->appendRow(new LinkGroupStandardItem(group_name.c_str(), std::move(link_names)));
 
   data_->link_groups[group_name] = group;
