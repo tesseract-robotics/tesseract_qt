@@ -288,7 +288,7 @@ void eventFilterHelper(QObject* /*obj*/,
         else if (std::find(adj_second.begin(), adj_second.end(), name1) != adj_second.end())
           acm.addAllowedCollision(name2, name1, "Adjacent");
         else
-          acm.addAllowedCollision(name2, name1, "Allways");
+          acm.addAllowedCollision(name2, name1, "Always");
       }
     }
 
