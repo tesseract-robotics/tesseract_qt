@@ -177,10 +177,11 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
   prune_names.reserve(prune_joint_names.size());
   for (const auto& joint_name : prune_joint_names)
   {
-    prune_names.push_back(joint_name);
-
     auto target_id = JointId(joint_name);
     auto it = std::find(traj_info.joint_state.joint_ids.begin(), traj_info.joint_state.joint_ids.end(), target_id);
+    if (it == traj_info.joint_state.joint_ids.end())
+      continue;
+    prune_names.push_back(joint_name);
     prune_indices.push_back(std::distance(traj_info.joint_state.joint_ids.begin(), it));
   }
 
