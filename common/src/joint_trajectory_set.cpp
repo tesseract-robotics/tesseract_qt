@@ -69,8 +69,8 @@ JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::E
   , description_(std::move(description))
   , uuid_(boost::uuids::random_generator()())
 {
-  const auto& state = environment->getState();
-  const auto joint_names = environment->getJointNames();
+  const auto& state = environment_->getState();
+  const auto joint_names = environment_->getJointNames();
   initial_state_.joint_ids.reserve(joint_names.size());
   initial_state_.position.resize(static_cast<Eigen::Index>(joint_names.size()));
   initial_state_.velocity.resize(static_cast<Eigen::Index>(joint_names.size()));
