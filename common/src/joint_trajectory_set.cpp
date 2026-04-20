@@ -129,6 +129,8 @@ JointState JointTrajectorySet::getNewTrajectoryInitialState() const
     for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(last_state.joint_ids.size()); ++i)
     {
       auto it = std::find(prev_state.joint_ids.begin(), prev_state.joint_ids.end(), last_state.joint_ids[i]);
+      if (it == prev_state.joint_ids.end())
+        continue;
       Eigen::Index idx = std::distance(prev_state.joint_ids.begin(), it);
       prev_state.position(idx) = last_state.position(i);
       prev_state.velocity(idx) = last_state.velocity(i);
@@ -222,6 +224,8 @@ void JointTrajectorySet::appendJointState(JointTrajectoryInfo& traj_info, const 
   for (std::size_t i = 0; i < joint_state.joint_ids.size(); ++i)
   {
     auto it = std::find(initial_state_.joint_ids.begin(), initial_state_.joint_ids.end(), joint_state.joint_ids[i]);
+    if (it == initial_state_.joint_ids.end())
+      continue;
     long index = std::distance(initial_state_.joint_ids.begin(), it);
 
     // update position
