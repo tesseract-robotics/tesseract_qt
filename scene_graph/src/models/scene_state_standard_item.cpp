@@ -65,20 +65,19 @@ void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scen
   auto* links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
   auto* joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
 
-  for (const auto& name : env.getJointNames())
+  for (const auto& jid : env.getJointIds())
   {
-    auto jid = tesseract::common::JointId(name);
     auto it = scene_state.joints.find(jid);
     if (it != scene_state.joints.end())
-      joint_values_item->appendRow(createStandardItemFloat(name, it->second));
+      joint_values_item->appendRow(createStandardItemFloat(jid.name(), it->second));
 
     auto fit = scene_state.floating_joints.find(jid);
     if (fit != scene_state.floating_joints.end())
-      floating_joint_values_item->appendRow(new TransformStandardItem(QString::fromStdString(name), fit->second));
+      floating_joint_values_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), fit->second));
 
     auto jtit = scene_state.joint_transforms.find(jid);
     if (jtit != scene_state.joint_transforms.end())
-      joints_item->appendRow(new TransformStandardItem(QString::fromStdString(name), jtit->second));
+      joints_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), jtit->second));
   }
 
   for (const auto& name : env.getLinkNames())
