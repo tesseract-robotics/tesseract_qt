@@ -281,8 +281,8 @@ void eventFilterHelper(QObject* /*obj*/,
       {
         const auto& name1 = pair.second.front().link_ids[0].name();
         const auto& name2 = pair.second.front().link_ids[1].name();
-        std::vector<std::string> adj_first = env.getSceneGraph()->getAdjacentLinkNames(name1);
-        std::vector<std::string> adj_second = env.getSceneGraph()->getAdjacentLinkNames(name2);
+        std::vector<tesseract::common::LinkId> adj_first = env.getSceneGraph()->getAdjacentLinkIds(name1);
+        std::vector<tesseract::common::LinkId> adj_second = env.getSceneGraph()->getAdjacentLinkIds(name2);
         if (std::find(adj_first.begin(), adj_first.end(), name2) != adj_first.end())
           acm.addAllowedCollision(name1, name2, "Adjacent");
         else if (std::find(adj_second.begin(), adj_second.end(), name1) != adj_second.end())
@@ -292,22 +292,21 @@ void eventFilterHelper(QObject* /*obj*/,
       }
     }
 
-    std::vector<std::string> link_names = env.getLinkNames();
-    for (std::size_t i = 0; i < link_names.size() - 1; ++i)
+    std::vector<tesseract::common::LinkId> link_ids = env.getLinkIds();
+    for (std::size_t i = 0; i < link_ids.size() - 1; ++i)
     {
-      const auto& link1 = env.getLink(link_names[i]);
+      const auto& link1 = env.getLink(link_ids[i]);
       if (link1->collision.empty())
         continue;
 
-      for (std::size_t j = i + 1; j < link_names.size(); ++j)
+      for (std::size_t j = i + 1; j < link_ids.size(); ++j)
       {
-        const auto& link2 = env.getLink(link_names[j]);
+        const auto& link2 = env.getLink(link_ids[j]);
         if (link2->collision.empty())
           continue;
 
-        if (results.find(tesseract::common::LinkIdPair(tesseract::common::LinkId(link_names[i]),
-                                                       tesseract::common::LinkId(link_names[j]))) == results.end())
-          acm.addAllowedCollision(link_names[i], link_names[j], "Never");
+        if (results.find(tesseract::common::LinkIdPair(link_ids[i], link_ids[j])) == results.end())
+          acm.addAllowedCollision(link_ids[i], link_ids[j], "Never");
       }
     }
 
