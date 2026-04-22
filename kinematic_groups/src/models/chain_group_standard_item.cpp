@@ -39,7 +39,9 @@ ChainGroupStandardItem::ChainGroupStandardItem(const QString& text, tesseract::s
   ctor();
 }
 
-ChainGroupStandardItem::ChainGroupStandardItem(const QIcon& icon, const QString& text, tesseract::srdf::ChainGroup group)
+ChainGroupStandardItem::ChainGroupStandardItem(const QIcon& icon,
+                                               const QString& text,
+                                               tesseract::srdf::ChainGroup group)
   : QStandardItem(icon, text), group(std::move(group))
 {
   ctor();

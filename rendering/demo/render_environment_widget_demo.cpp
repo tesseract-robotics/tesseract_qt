@@ -94,12 +94,9 @@ tesseract::common::JointTrajectorySet getJointTrajectorySet()
     for (int j = 0; j < 5; ++j)
     {
       tesseract::common::JointState state;
-      state.joint_ids = { tesseract::common::JointId("joint_a1"),
-                          tesseract::common::JointId("joint_a2"),
-                          tesseract::common::JointId("joint_a3"),
-                          tesseract::common::JointId("joint_a4"),
-                          tesseract::common::JointId("joint_a5"),
-                          tesseract::common::JointId("joint_a6"),
+      state.joint_ids = { tesseract::common::JointId("joint_a1"), tesseract::common::JointId("joint_a2"),
+                          tesseract::common::JointId("joint_a3"), tesseract::common::JointId("joint_a4"),
+                          tesseract::common::JointId("joint_a5"), tesseract::common::JointId("joint_a6"),
                           tesseract::common::JointId("joint_a7") };
       state.position.resize(7);
       state.velocity.resize(7);
