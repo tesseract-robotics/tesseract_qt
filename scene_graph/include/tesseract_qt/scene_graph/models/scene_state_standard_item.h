@@ -45,8 +45,7 @@ public:
   int type() const override;
 
 protected:
-  void ctor(const tesseract::scene_graph::SceneState& scene_state,
-            const tesseract::environment::Environment& env);
+  void ctor(const tesseract::scene_graph::SceneState& scene_state, const tesseract::environment::Environment& env);
 };
 }  // namespace tesseract::gui
 
