@@ -52,7 +52,7 @@ int main(int argc, char** argv)
     for (int j = 0; j < 5; ++j)
     {
       tesseract::common::JointState state;
-      state.joint_names = { "joint_1", "joint_2", "joint_3", "joint_4", "joint_5" };
+      state.joint_ids = { "joint_1", "joint_2", "joint_3", "joint_4", "joint_5" };
       state.position.resize(5);
       state.velocity.resize(5);
       state.acceleration.resize(5);

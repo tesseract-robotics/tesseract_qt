@@ -50,6 +50,8 @@ target_link_libraries(
          ${PROJECT_NAME}_kinematic_groups_models
          ${PROJECT_NAME}_acm_models
          ${PROJECT_NAME}_collision_models)
+target_compile_definitions(${PROJECT_NAME}_environment_models PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_environment_models PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_environment_models
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/environment>"
@@ -74,6 +76,8 @@ target_link_libraries(
          ${PROJECT_NAME}_kinematic_groups_widgets
          ${PROJECT_NAME}_acm_widgets
          ${PROJECT_NAME}_collision_widgets)
+target_compile_definitions(${PROJECT_NAME}_environment_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_environment_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_environment_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/environment>"

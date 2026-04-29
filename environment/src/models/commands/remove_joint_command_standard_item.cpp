@@ -60,6 +60,6 @@ int RemoveJointCommandStandardItem::type() const
 
 void RemoveJointCommandStandardItem::ctor()
 {
-  appendRow(createStandardItemString("joint name", command->getJointName()));
+  appendRow(createStandardItemString("joint name", command->getJointId().name()));
 }
 }  // namespace tesseract::gui

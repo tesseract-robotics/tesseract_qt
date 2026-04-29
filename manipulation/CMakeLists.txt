@@ -26,6 +26,8 @@ target_link_libraries(
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_scene_graph_widgets
          ${PROJECT_NAME}_joint_state_slider)
+target_compile_definitions(${PROJECT_NAME}_manipulation_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_manipulation_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_manipulation_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/manipulation>"

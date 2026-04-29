@@ -481,13 +481,26 @@ AnyPolyStandardItemManager::AnyPolyStandardItemManager()
     registerFactoryFnHelper<Type>(fn);
   }
 
-  {  // tesseract::common::TransformMap
-    using Type = tesseract::common::TransformMap;
+  {  // tesseract::common::LinkIdTransformMap
+    using Type = tesseract::common::LinkIdTransformMap;
     auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
-      auto* value = new QStandardItem("TransformMap");  // NOLINT
+      auto* value = new QStandardItem("LinkIdTransformMap");  // NOLINT
       const auto& data = any_poly.as<Type>();
       for (const auto& pair : data)
-        value->appendRow(new TransformStandardItem(QString::fromStdString(pair.first), pair.second));  // NOLINT
+        value->appendRow(new TransformStandardItem(QString::fromStdString(pair.first.name()), pair.second));  // NOLINT
+
+      return { value };
+    };
+    registerFactoryFnHelper<Type>(fn);
+  }
+
+  {  // tesseract::common::JointIdTransformMap
+    using Type = tesseract::common::JointIdTransformMap;
+    auto fn = [](const tesseract::common::AnyPoly& any_poly) -> QList<QStandardItem*> {
+      auto* value = new QStandardItem("JointIdTransformMap");  // NOLINT
+      const auto& data = any_poly.as<Type>();
+      for (const auto& pair : data)
+        value->appendRow(new TransformStandardItem(QString::fromStdString(pair.first.name()), pair.second));  // NOLINT
 
       return { value };
     };

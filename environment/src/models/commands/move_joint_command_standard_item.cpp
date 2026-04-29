@@ -57,7 +57,7 @@ int MoveJointCommandStandardItem::type() const { return static_cast<int>(Standar
 
 void MoveJointCommandStandardItem::ctor()
 {
-  appendRow(createStandardItemString("joint name", command->getJointName()));
-  appendRow(createStandardItemString("parent link", command->getParentLink()));
+  appendRow(createStandardItemString("joint name", command->getJointId().name()));
+  appendRow(createStandardItemString("parent link", command->getParentLink().name()));
 }
 }  // namespace tesseract::gui

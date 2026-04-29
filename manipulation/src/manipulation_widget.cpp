@@ -40,7 +40,7 @@ struct ManipulationWidget::Implementation
   QStringListModel tcp_names_model;
   QStringListModel tcp_offset_names_model;
   QStringListModel state_names_model;
-  tesseract::common::TransformMap tcp_offsets;
+  tesseract::common::LinkIdTransformMap tcp_offsets;
 };
 
 ManipulationWidget::ManipulationWidget(QWidget* parent) : ManipulationWidget(nullptr, false, parent) {}
@@ -257,7 +257,7 @@ QString ManipulationWidget::getTCPOffsetName() const { return ui->tcp_offset_com
 
 Eigen::Isometry3d ManipulationWidget::getTCPOffset() const
 {
-  auto it = data_->tcp_offsets.find(getTCPOffsetName().toStdString());
+  auto it = data_->tcp_offsets.find(tesseract::common::LinkId(getTCPOffsetName().toStdString()));
   if (it == data_->tcp_offsets.end())
     return Eigen::Isometry3d::Identity();
 
@@ -328,10 +328,10 @@ void ManipulationWidget::onGroupNameChanged()
       }
 
       // Update working frames
-      std::vector<std::string> working_frames = data_->kin_group->getAllValidWorkingFrames();
+      std::vector<tesseract::common::LinkId> working_frames = data_->kin_group->getAllValidWorkingFrames();
       QStringList wf_sl;
       for (const auto& working_frame : working_frames)
-        wf_sl.append(working_frame.c_str());
+        wf_sl.append(working_frame.name().c_str());
       wf_sl.sort();
       data_->working_frames_model.setStringList(wf_sl);
 
@@ -339,14 +339,14 @@ void ManipulationWidget::onGroupNameChanged()
         ui->working_frame_combo_box->setCurrentIndex(0);
 
       // Update TCP Names
-      std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
+      std::vector<tesseract::common::LinkId> tcp_ids = data_->kin_group->getAllPossibleTipLinkIds();
       QStringList tcp_sl;
-      for (const auto& tcp_name : tcp_names)
-        tcp_sl.append(tcp_name.c_str());
+      for (const auto& tcp_id : tcp_ids)
+        tcp_sl.append(tcp_id.name().c_str());
       tcp_sl.sort();
       data_->tcp_names_model.setStringList(tcp_sl);
 
-      if (!tcp_names.empty())
+      if (!tcp_ids.empty())
         ui->tcp_combo_box->setCurrentIndex(0);
 
       // Update TCP Offset Names
@@ -357,19 +357,21 @@ void ManipulationWidget::onGroupNameChanged()
       auto it = group_tcp_offsets.find(group_name);
       if (it != group_tcp_offsets.end())
       {
-        data_->tcp_offsets = it->second;
-        for (const auto& tcp_offset : data_->tcp_offsets)
-          tcp_offset_sl.append(tcp_offset.first.c_str());
+        for (const auto& [link_id, tf] : it->second)
+        {
+          data_->tcp_offsets[link_id] = tf;
+          tcp_offset_sl.append(link_id.name().c_str());
+        }
       }
       data_->tcp_offset_names_model.setStringList(tcp_offset_sl);
       ui->tcp_offset_combo_box->setCurrentIndex(0);
 
       // Update joint sliders
-      std::vector<std::string> joint_names = data_->kin_group->getJointNames();
+      const std::vector<tesseract::common::JointId>& joint_ids = data_->kin_group->getJointIds();
 
-      joints.reserve(joint_names.size());
-      for (const auto& joint_name : joint_names)
-        joints.push_back(env->getJoint(joint_name));
+      joints.reserve(joint_ids.size());
+      for (const auto& joint_id : joint_ids)
+        joints.push_back(env->getJoint(joint_id));
 
       ui->group_combo_box->blockSignals(false);
       ui->working_frame_combo_box->blockSignals(false);
@@ -470,28 +472,30 @@ tesseract::scene_graph::SceneState
 ManipulationWidget::getReducedSceneState(const tesseract::scene_graph::SceneState& scene_state)
 {
   tesseract::scene_graph::SceneState reduced_scene_state;
-  for (const auto& link_name : data_->kin_group->getActiveLinkNames())
-    reduced_scene_state.link_transforms[link_name] = scene_state.link_transforms.at(link_name);
-
-  for (const auto& joint_name : data_->kin_group->getJointNames())
+  for (const auto& lid : data_->kin_group->getActiveLinkIds())
   {
-    reduced_scene_state.joints[joint_name] = scene_state.joints.at(joint_name);
-    reduced_scene_state.joint_transforms[joint_name] = scene_state.joint_transforms.at(joint_name);
+    reduced_scene_state.link_transforms[lid] = scene_state.link_transforms.at(lid);
+  }
+
+  for (const auto& joint_id : data_->kin_group->getJointIds())
+  {
+    reduced_scene_state.joints[joint_id] = scene_state.joints.at(joint_id);
+    reduced_scene_state.joint_transforms[joint_id] = scene_state.joint_transforms.at(joint_id);
   }
   return reduced_scene_state;
 }
 
 Eigen::Isometry3d ManipulationWidget::getActiveCartesianTransform(bool in_world) const
 {
-  std::string working_frame = getWorkingFrame().toStdString();
-  std::string tcp_name = getTCPName().toStdString();
+  auto working_frame = tesseract::common::LinkId(getWorkingFrame().toStdString());
+  auto tcp_id = tesseract::common::LinkId(getTCPName().toStdString());
   Eigen::Isometry3d tcp_offset = getTCPOffset();
   Eigen::VectorXd jv = getActiveJointValues();
-  tesseract::common::TransformMap tf = data_->kin_group->calcFwdKin(jv);
+  tesseract::common::LinkIdTransformMap tf = data_->kin_group->calcFwdKin(jv);
   if (in_world)
-    return tf.at(tcp_name) * tcp_offset;
+    return tf.at(tcp_id) * tcp_offset;
 
-  return tf.at(working_frame).inverse() * tf.at(tcp_name) * tcp_offset;
+  return tf.at(working_frame).inverse() * tf.at(tcp_id) * tcp_offset;
 }
 
 std::vector<std::string> ManipulationWidget::getActiveJointNames() const { return data_->kin_group->getJointNames(); }
@@ -517,17 +521,16 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
 {
   if (data_->kin_group != nullptr && ui->mode_combo_box->currentIndex() == 1)
   {
-    std::string working_frame = getWorkingFrame().toStdString();
-    std::string tcp_name = getTCPName().toStdString();
+    auto working_frame = tesseract::common::LinkId(getWorkingFrame().toStdString());
+    auto tcp_id = tesseract::common::LinkId(getTCPName().toStdString());
     Eigen::Isometry3d tcp_offset = getTCPOffset();
     Eigen::Isometry3d target = transform * tcp_offset.inverse();
     std::vector<std::string> joint_names = data_->kin_group->getJointNames();
 
-    std::vector<std::string> tcp_names = data_->kin_group->getAllPossibleTipLinkNames();
-    auto it = std::find(tcp_names.begin(), tcp_names.end(), tcp_name);
-    if (it != tcp_names.end())
+    std::vector<tesseract::common::LinkId> tcp_ids = data_->kin_group->getAllPossibleTipLinkIds();
+    if (std::find(tcp_ids.begin(), tcp_ids.end(), tcp_id) != tcp_ids.end())
     {
-      tesseract::kinematics::KinGroupIKInput inputs(target, working_frame, tcp_name);
+      tesseract::kinematics::KinGroupIKInput inputs(target, working_frame, tcp_id);
       Eigen::VectorXd seed = getActiveJointValues();
       tesseract::kinematics::IKSolutions solutions = data_->kin_group->calcInvKin(inputs, seed);
       if (!solutions.empty())

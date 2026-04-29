@@ -131,7 +131,8 @@ void KinematicGroupsEditorWidget::onAddGroup()
     if (!validateChainGroup(base_link, tip_link))
       return;
 
-    tesseract::srdf::ChainGroup group{ { base_link.toStdString(), tip_link.toStdString() } };
+    tesseract::srdf::ChainGroup group{ { tesseract::common::LinkId(base_link.toStdString()),
+                                         tesseract::common::LinkId(tip_link.toStdString()) } };
 
     events::KinematicGroupsAddChain event(getComponentInfo(), group_name, group);
     QApplication::sendEvent(qApp, &event);
@@ -150,7 +151,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
 
     tesseract::srdf::JointGroup group;
     for (auto& joint : joints)
-      group.push_back(joint.toStdString());
+      group.emplace_back(joint.toStdString());
 
     events::KinematicGroupsAddJoint event(getComponentInfo(), group_name, group);
     QApplication::sendEvent(qApp, &event);
@@ -170,7 +171,7 @@ void KinematicGroupsEditorWidget::onAddGroup()
 
     tesseract::srdf::LinkGroup group;
     for (auto& link : links)
-      group.push_back(link.toStdString());
+      group.emplace_back(link.toStdString());
 
     events::KinematicGroupsAddLink event(getComponentInfo(), group_name, group);
     QApplication::sendEvent(qApp, &event);

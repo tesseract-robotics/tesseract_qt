@@ -129,15 +129,15 @@ std::shared_ptr<gz::rendering::Scene> sceneFromRenderEngine(const std::string& s
 //////////////////////////////////////////////////
 void setSceneState(gz::rendering::Scene& scene,
                    const tesseract::gui::EntityContainer& entity_container,
-                   const tesseract::common::TransformMap& link_transforms)
+                   const tesseract::common::LinkIdTransformMap& link_transforms)
 {
-  for (const auto& pair : link_transforms)
+  auto tracked = entity_container.getTrackedEntities(EntityContainer::VISUAL_NS);
+  for (const auto& pair : tracked)
   {
-    if (entity_container.hasTrackedEntity(EntityContainer::VISUAL_NS, pair.first))
-    {
-      Entity entity = entity_container.getTrackedEntity(EntityContainer::VISUAL_NS, pair.first);
-      scene.VisualById(entity.id)->SetWorldPose(gz::math::eigen3::convert(pair.second));
-    }
+    auto lid = tesseract::common::LinkId(pair.first);
+    auto it = link_transforms.find(lid);
+    if (it != link_transforms.end())
+      scene.VisualById(pair.second.id)->SetWorldPose(gz::math::eigen3::convert(it->second));
   }
 }
 

@@ -55,7 +55,7 @@ void CalibrationInfoStandardItem::ctor()
   auto* joints_item = new QStandardItem(icons::getJointIcon(), "Joints");
   for (auto& joint : calibration_info.joints)
   {
-    auto* item = new TransformStandardItem(QString::fromStdString(joint.first), joint.second);
+    auto* item = new TransformStandardItem(QString::fromStdString(joint.first.name()), joint.second);
     joints_item->appendRow(item);
   }
   joints_item->sortChildren(0);

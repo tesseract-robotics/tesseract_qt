@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QTreeView>
 #include <QDebug>
-#include <sstream>
 
 #include <tesseract_qt/command_language/widgets/composite_instruction_widget.h>
 #include <tesseract_qt/common/events/command_language_events.h>

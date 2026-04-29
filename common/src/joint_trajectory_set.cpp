@@ -23,6 +23,7 @@
  */
 
 #include <boost/uuid/random_generator.hpp>
+#include <utility>
 
 #include <tesseract/common/utils.h>
 #include <tesseract/environment/environment.h>
@@ -37,16 +38,16 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
                                        std::string description)
   : description_(std::move(description)), uuid_(boost::uuids::random_generator()())
 {
-  initial_state_.joint_names.reserve(initial_state.size());
+  initial_state_.joint_ids.reserve(initial_state.size());
   initial_state_.position.resize(static_cast<Eigen::Index>(initial_state.size()));
   initial_state_.velocity.resize(static_cast<Eigen::Index>(initial_state.size()));
   initial_state_.acceleration.resize(static_cast<Eigen::Index>(initial_state.size()));
   initial_state_.effort.resize(static_cast<Eigen::Index>(initial_state.size()));
   for (const auto& joint : initial_state)
   {
-    initial_state_.joint_names.push_back(joint.first);
+    initial_state_.joint_ids.push_back(JointId(joint.first));
 
-    Eigen::Index r = static_cast<Eigen::Index>(initial_state_.joint_names.size()) - 1;
+    Eigen::Index r = static_cast<Eigen::Index>(initial_state_.joint_ids.size()) - 1;
     initial_state_.position(r) = joint.second;
     initial_state_.velocity(r) = 0;
     initial_state_.acceleration(r) = 0;
@@ -57,16 +58,36 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
 JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
                                        std::vector<std::shared_ptr<const tesseract::environment::Command>> commands,
                                        std::string description)
-  : JointTrajectorySet(initial_state, description)
+  : JointTrajectorySet(initial_state, std::move(description))
 {
   commands_ = std::move(commands);
 }
 
 JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::Environment> environment,
                                        std::string description)
-  : JointTrajectorySet(environment->getState().joints, std::move(description))
+  : environment_(std::move(environment))
+  , description_(std::move(description))
+  , uuid_(boost::uuids::random_generator()())
 {
-  environment_ = std::move(environment);
+  const auto& state = environment_->getState();
+  const auto joint_names = environment_->getJointNames();
+  initial_state_.joint_ids.reserve(joint_names.size());
+  initial_state_.position.resize(static_cast<Eigen::Index>(joint_names.size()));
+  initial_state_.velocity.resize(static_cast<Eigen::Index>(joint_names.size()));
+  initial_state_.acceleration.resize(static_cast<Eigen::Index>(joint_names.size()));
+  initial_state_.effort.resize(static_cast<Eigen::Index>(joint_names.size()));
+  Eigen::Index r = 0;
+  for (const auto& name : joint_names)
+  {
+    auto jid = JointId(name);
+    auto it = state.joints.find(jid);
+    initial_state_.joint_ids.push_back(jid);
+    initial_state_.position(r) = (it != state.joints.end()) ? it->second : 0.0;
+    initial_state_.velocity(r) = 0;
+    initial_state_.acceleration(r) = 0;
+    initial_state_.effort(r) = 0;
+    ++r;
+  }
 }
 
 boost::uuids::uuid JointTrajectorySet::getUUID() const { return uuid_; }
@@ -105,10 +126,12 @@ JointState JointTrajectorySet::getNewTrajectoryInitialState() const
     const JointState& last_state = info.joint_trajectory.back();
     prev_state = info.joint_state;
     prev_state.time = last_state.time;
-    for (Eigen::Index i = 0; i < last_state.joint_names.size(); ++i)
+    for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(last_state.joint_ids.size()); ++i)
     {
-      auto it = std::find(prev_state.joint_names.begin(), prev_state.joint_names.end(), last_state.joint_names[i]);
-      Eigen::Index idx = std::distance(prev_state.joint_names.begin(), it);
+      auto it = std::find(prev_state.joint_ids.begin(), prev_state.joint_ids.end(), last_state.joint_ids[i]);
+      if (it == prev_state.joint_ids.end())
+        continue;
+      Eigen::Index idx = std::distance(prev_state.joint_ids.begin(), it);
       prev_state.position(idx) = last_state.position(i);
       prev_state.velocity(idx) = last_state.velocity(i);
       prev_state.acceleration(idx) = last_state.acceleration(i);
@@ -131,7 +154,8 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
   double current_time = 0;
   for (const auto& joint_state : joint_trajectory)
   {
-    prune_joint_names.insert(joint_state.joint_names.begin(), joint_state.joint_names.end());
+    for (const auto& id : joint_state.joint_ids)
+      prune_joint_names.insert(id.name());
 
     tesseract::common::JointState adj_state(joint_state);
     current_time = adj_state.time;
@@ -153,16 +177,20 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
   prune_names.reserve(prune_joint_names.size());
   for (const auto& joint_name : prune_joint_names)
   {
+    auto target_id = JointId(joint_name);
+    auto it = std::find(traj_info.joint_state.joint_ids.begin(), traj_info.joint_state.joint_ids.end(), target_id);
+    if (it == traj_info.joint_state.joint_ids.end())
+      continue;
     prune_names.push_back(joint_name);
-
-    auto it = std::find(traj_info.joint_state.joint_names.begin(), traj_info.joint_state.joint_names.end(), joint_name);
-    prune_indices.push_back(std::distance(traj_info.joint_state.joint_names.begin(), it));
+    prune_indices.push_back(std::distance(traj_info.joint_state.joint_ids.begin(), it));
   }
 
   for (JointState& js : traj_info.joint_trajectory)
   {
     JointState pruned_state;
-    pruned_state.joint_names = prune_names;
+    pruned_state.joint_ids.reserve(prune_names.size());
+    for (const auto& name : prune_names)
+      pruned_state.joint_ids.push_back(JointId(name));
     pruned_state.position = Eigen::VectorXd::Zero(static_cast<Eigen::Index>(prune_names.size()));
     pruned_state.velocity = Eigen::VectorXd::Zero(static_cast<Eigen::Index>(prune_names.size()));
     pruned_state.acceleration = Eigen::VectorXd::Zero(static_cast<Eigen::Index>(prune_names.size()));
@@ -194,11 +222,12 @@ void JointTrajectorySet::appendJointState(JointTrajectoryInfo& traj_info, const 
   full_state.acceleration = Eigen::VectorXd::Zero(full_state.position.rows());
   full_state.effort = Eigen::VectorXd::Zero(full_state.position.rows());
 
-  for (std::size_t i = 0; i < joint_state.joint_names.size(); ++i)
+  for (std::size_t i = 0; i < joint_state.joint_ids.size(); ++i)
   {
-    auto it =
-        std::find(initial_state_.joint_names.begin(), initial_state_.joint_names.end(), joint_state.joint_names[i]);
-    long index = std::distance(initial_state_.joint_names.begin(), it);
+    auto it = std::find(initial_state_.joint_ids.begin(), initial_state_.joint_ids.end(), joint_state.joint_ids[i]);
+    if (it == initial_state_.joint_ids.end())
+      continue;
+    long index = std::distance(initial_state_.joint_ids.begin(), it);
 
     // update position
     full_state.position(index) = joint_state.position(static_cast<Eigen::Index>(i));
