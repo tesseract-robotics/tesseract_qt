@@ -61,8 +61,8 @@ int AddTrajectoryLinkCommandStandardItem::type() const
 
 void AddTrajectoryLinkCommandStandardItem::ctor()
 {
-  appendRow(createStandardItemString(icons::getTextIcon(), "link_name", command->getLinkName()));
-  appendRow(createStandardItemString(icons::getTextIcon(), "parent_link_name", command->getParentLinkName()));
+  appendRow(createStandardItemString(icons::getTextIcon(), "link_name", command->getLinkId().name()));
+  appendRow(createStandardItemString(icons::getTextIcon(), "parent_link_name", command->getParentLinkId().name()));
   appendRow(createStandardItemString("replace allowed", (command->replaceAllowed()) ? "True" : "False"));
   appendRow(new JointTrajectoryStandardItem("trajectory", command->getTrajectory()));
 }

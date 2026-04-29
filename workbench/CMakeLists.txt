@@ -19,6 +19,8 @@ target_link_libraries(
          ${PROJECT_NAME}_joint_trajectory_widgets
          ${PROJECT_NAME}_manipulation_widgets
          ${PROJECT_NAME}_planning_widgets)
+target_compile_definitions(${PROJECT_NAME}_workbench_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_workbench_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_workbench_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/workbench>"

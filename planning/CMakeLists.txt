@@ -45,6 +45,8 @@ target_link_libraries(
          ${PROJECT_NAME}_scene_graph_models
          ${PROJECT_NAME}_environment_models
          ${PROJECT_NAME}_command_language_models)
+target_compile_definitions(${PROJECT_NAME}_planning PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_planning PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_planning PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                   "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/planning>" "$<INSTALL_INTERFACE:include>")
@@ -63,6 +65,8 @@ target_link_libraries(
          Qt5::Widgets
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_planning)
+target_compile_definitions(${PROJECT_NAME}_planning_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_planning_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_planning_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/planning>"

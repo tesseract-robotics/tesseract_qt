@@ -55,5 +55,8 @@ RemoveLinkCommandStandardItem::RemoveLinkCommandStandardItem(
 
 int RemoveLinkCommandStandardItem::type() const { return static_cast<int>(StandardItemType::ENV_COMMAND_REMOVE_LINK); }
 
-void RemoveLinkCommandStandardItem::ctor() { appendRow(createStandardItemString("link name", command->getLinkName())); }
+void RemoveLinkCommandStandardItem::ctor()
+{
+  appendRow(createStandardItemString("link name", command->getLinkId().name()));
+}
 }  // namespace tesseract::gui

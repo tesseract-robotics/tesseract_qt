@@ -257,7 +257,7 @@ QString ManipulationWidget::getTCPOffsetName() const { return ui->tcp_offset_com
 
 Eigen::Isometry3d ManipulationWidget::getTCPOffset() const
 {
-  auto it = data_->tcp_offsets.find(getTCPOffsetName().toStdString());
+  auto it = data_->tcp_offsets.find(tesseract::common::LinkId(getTCPOffsetName().toStdString()));
   if (it == data_->tcp_offsets.end())
     return Eigen::Isometry3d::Identity();
 
@@ -367,11 +367,11 @@ void ManipulationWidget::onGroupNameChanged()
       ui->tcp_offset_combo_box->setCurrentIndex(0);
 
       // Update joint sliders
-      std::vector<std::string> joint_names = data_->kin_group->getJointNames();
+      const std::vector<tesseract::common::JointId>& joint_ids = data_->kin_group->getJointIds();
 
-      joints.reserve(joint_names.size());
-      for (const auto& joint_name : joint_names)
-        joints.push_back(env->getJoint(joint_name));
+      joints.reserve(joint_ids.size());
+      for (const auto& joint_id : joint_ids)
+        joints.push_back(env->getJoint(joint_id));
 
       ui->group_combo_box->blockSignals(false);
       ui->working_frame_combo_box->blockSignals(false);
@@ -487,7 +487,7 @@ ManipulationWidget::getReducedSceneState(const tesseract::scene_graph::SceneStat
 
 Eigen::Isometry3d ManipulationWidget::getActiveCartesianTransform(bool in_world) const
 {
-  std::string working_frame = getWorkingFrame().toStdString();
+  auto working_frame = tesseract::common::LinkId(getWorkingFrame().toStdString());
   auto tcp_id = tesseract::common::LinkId(getTCPName().toStdString());
   Eigen::Isometry3d tcp_offset = getTCPOffset();
   Eigen::VectorXd jv = getActiveJointValues();
@@ -521,7 +521,7 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
 {
   if (data_->kin_group != nullptr && ui->mode_combo_box->currentIndex() == 1)
   {
-    std::string working_frame = getWorkingFrame().toStdString();
+    auto working_frame = tesseract::common::LinkId(getWorkingFrame().toStdString());
     auto tcp_id = tesseract::common::LinkId(getTCPName().toStdString());
     Eigen::Isometry3d tcp_offset = getTCPOffset();
     Eigen::Isometry3d target = transform * tcp_offset.inverse();

@@ -60,7 +60,8 @@ int ChangeJointOriginCommandStandardItem::type() const
 
 void ChangeJointOriginCommandStandardItem::ctor()
 {
-  auto* item = new TransformStandardItem(icons::getJointIcon(), command->getJointName().c_str(), command->getOrigin());
+  auto* item =
+      new TransformStandardItem(icons::getJointIcon(), command->getJointId().name().c_str(), command->getOrigin());
   appendRow({ item, new QStandardItem() });
 }
 }  // namespace tesseract::gui

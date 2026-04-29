@@ -26,6 +26,8 @@ target_link_libraries(
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_joint_trajectory_models PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_joint_trajectory_models PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_joint_trajectory_models PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                                  "$<INSTALL_INTERFACE:include>")
@@ -53,6 +55,8 @@ target_link_libraries(
          ${PROJECT_NAME}_plot
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_joint_trajectory_models)
+target_compile_definitions(${PROJECT_NAME}_joint_trajectory_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_joint_trajectory_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_joint_trajectory_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

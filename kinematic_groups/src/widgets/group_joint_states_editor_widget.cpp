@@ -124,8 +124,8 @@ void GroupJointStatesEditorWidget::onGroupNameChanged()
 
   std::vector<tesseract::scene_graph::Joint::ConstPtr> joints;
   auto jg = env->getJointGroup(ui_->groupNamesComboBox->currentText().toStdString());
-  for (const auto& joint_name : jg->getJointNames())
-    joints.push_back(env->getSceneGraph()->getJoint(joint_name));
+  for (const auto& joint_id : jg->getJointIds())
+    joints.push_back(env->getSceneGraph()->getJoint(joint_id));
 
   ui_->jointSliderWidget->setJoints(joints);
 }

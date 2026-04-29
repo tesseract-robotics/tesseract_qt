@@ -52,6 +52,8 @@ target_link_libraries(
          ${ADS_TARGET}
          ${PROJECT_NAME}_common
          ${PROJECT_NAME}_plot)
+target_compile_definitions(${PROJECT_NAME}_studio_plugin_factory PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_studio_plugin_factory PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_studio_plugin_factory
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>"
@@ -103,6 +105,8 @@ target_link_libraries(
          ${PROJECT_NAME}_manipulation_widgets
          ${PROJECT_NAME}_planning_widgets
          ${PROJECT_NAME}_tool_path_widgets)
+target_compile_definitions(${PROJECT_NAME}_studio_plugins PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_studio_plugins PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_studio_plugins PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                         "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
@@ -140,6 +144,8 @@ target_link_libraries(
          Boost::program_options
          ${PROJECT_NAME}_studio_plugin_factory
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_studio_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_studio_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_studio_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                         "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")
@@ -156,6 +162,8 @@ target_link_libraries(
           Qt5::Widgets
           ${PROJECT_NAME}_studio_widgets
           ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_studio PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_studio PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_studio PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                  "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/studio>" "$<INSTALL_INTERFACE:include>")

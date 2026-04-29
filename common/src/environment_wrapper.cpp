@@ -279,16 +279,16 @@ void eventFilterHelper(QObject* /*obj*/,
       double percent = double(pair.second.size()) / double(e->getResolution());
       if (percent > 0.95)
       {
-        const auto& name1 = pair.second.front().link_ids[0].name();
-        const auto& name2 = pair.second.front().link_ids[1].name();
-        std::vector<tesseract::common::LinkId> adj_first = env.getSceneGraph()->getAdjacentLinkIds(name1);
-        std::vector<tesseract::common::LinkId> adj_second = env.getSceneGraph()->getAdjacentLinkIds(name2);
-        if (std::find(adj_first.begin(), adj_first.end(), name2) != adj_first.end())
-          acm.addAllowedCollision(name1, name2, "Adjacent");
-        else if (std::find(adj_second.begin(), adj_second.end(), name1) != adj_second.end())
-          acm.addAllowedCollision(name2, name1, "Adjacent");
+        const auto& id1 = pair.second.front().link_ids[0];
+        const auto& id2 = pair.second.front().link_ids[1];
+        std::vector<tesseract::common::LinkId> adj_first = env.getSceneGraph()->getAdjacentLinkIds(id1);
+        std::vector<tesseract::common::LinkId> adj_second = env.getSceneGraph()->getAdjacentLinkIds(id2);
+        if (std::find(adj_first.begin(), adj_first.end(), id2) != adj_first.end())
+          acm.addAllowedCollision(id1, id2, "Adjacent");
+        else if (std::find(adj_second.begin(), adj_second.end(), id1) != adj_second.end())
+          acm.addAllowedCollision(id2, id1, "Adjacent");
         else
-          acm.addAllowedCollision(name2, name1, "Always");
+          acm.addAllowedCollision(id2, id1, "Always");
       }
     }
 

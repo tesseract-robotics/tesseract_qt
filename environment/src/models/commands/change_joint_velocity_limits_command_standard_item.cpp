@@ -61,7 +61,7 @@ int ChangeJointVelocityLimitsCommandStandardItem::type() const
 void ChangeJointVelocityLimitsCommandStandardItem::ctor()
 {
   for (const auto& joint : command->getLimits())
-    appendRow(createStandardItemFloat(icons::getJointIcon(), joint.first, joint.second));
+    appendRow(createStandardItemFloat(icons::getJointIcon(), joint.first.name(), joint.second));
 
   sortChildren(0);
 }
