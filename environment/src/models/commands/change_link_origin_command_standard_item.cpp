@@ -61,7 +61,8 @@ int ChangeLinkOriginCommandStandardItem::type() const
 
 void ChangeLinkOriginCommandStandardItem::ctor()
 {
-  auto* item = new TransformStandardItem(icons::getLinkIcon(), command->getLinkName().c_str(), command->getOrigin());
+  auto* item =
+      new TransformStandardItem(icons::getLinkIcon(), command->getLinkId().name().c_str(), command->getOrigin());
   appendRow({ item, new QStandardItem() });
 }
 }  // namespace tesseract::gui

@@ -224,7 +224,9 @@ tesseract::common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowe
     {
       QStandardItem* child = parent->child(child_row);
       QStandardItem* reason = parent->child(child_row, 1);
-      acm.addAllowedCollision(parent->text().toStdString(), child->text().toStdString(), reason->text().toStdString());
+      acm.addAllowedCollision(tesseract::common::LinkId(parent->text().toStdString()),
+                              tesseract::common::LinkId(child->text().toStdString()),
+                              reason->text().toStdString());
     }
   }
 

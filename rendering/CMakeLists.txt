@@ -43,6 +43,8 @@ target_link_libraries(
          gz-math7::gz-math7
          gz-math7::gz-math7-eigen3
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_gazebo_utils PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_gazebo_utils PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(${PROJECT_NAME}_gazebo_utils PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                                                "$<INSTALL_INTERFACE:include>")
 
@@ -77,6 +79,8 @@ target_link_libraries(
          Qt5::OpenGL
          ${PROJECT_NAME}_gazebo_utils
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_render_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_render_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_render_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                         "$<INSTALL_INTERFACE:include>")

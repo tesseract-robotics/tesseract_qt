@@ -62,7 +62,7 @@ void ChangeJointPositionLimitsCommandStandardItem::ctor()
 {
   for (const auto& joint : command->getLimits())
   {
-    auto* item = new QStandardItem(icons::getJointIcon(), joint.first.c_str());
+    auto* item = new QStandardItem(icons::getJointIcon(), joint.first.name().c_str());
 
     item->appendRow(createStandardItemFloat("lower", joint.second.first));
     item->appendRow(createStandardItemFloat("upper", joint.second.second));

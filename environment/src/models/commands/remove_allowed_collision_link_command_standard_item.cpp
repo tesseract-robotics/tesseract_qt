@@ -60,6 +60,6 @@ int RemoveAllowedCollisionLinkCommandStandardItem::type() const
 
 void RemoveAllowedCollisionLinkCommandStandardItem::ctor()
 {
-  appendRow(createStandardItemString("link name", command->getLinkName()));
+  appendRow(createStandardItemString("link name", command->getLinkId().name()));
 }
 }  // namespace tesseract::gui

@@ -17,6 +17,8 @@ target_link_libraries(
          Qt5::Widgets
          tesseract::scene_graph
          tesseract::common)
+target_compile_definitions(${PROJECT_NAME}_joint_state_slider PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_joint_state_slider PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_joint_state_slider
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
