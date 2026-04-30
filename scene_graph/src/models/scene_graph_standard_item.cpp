@@ -82,6 +82,9 @@ void SceneGraphStandardItem::setName(const std::string& name)
 
 void SceneGraphStandardItem::addLink(const tesseract::scene_graph::Link& link)
 {
+  if (data_->links.find(link.getName()) != data_->links.end())
+    removeLink(link.getName());
+
   auto* item = new LinkStandardItem(
       QString::fromStdString(link.getName()), std::make_shared<tesseract::scene_graph::Link>(link.clone()), true);
 
@@ -162,10 +165,10 @@ void SceneGraphStandardItem::clear()
 {
   data_->name_item[1]->setData("Empty", Qt::DisplayRole);
 
-  for (int i = data_->links_item->rowCount(); i > 0; --i)
+  for (int i = data_->links_item->rowCount() - 1; i >= 0; --i)
     data_->links_item->removeRow(i);
 
-  for (int i = data_->joints_item->rowCount(); i > 0; --i)
+  for (int i = data_->joints_item->rowCount() - 1; i >= 0; --i)
     data_->joints_item->removeRow(i);
 
   data_->links.clear();
