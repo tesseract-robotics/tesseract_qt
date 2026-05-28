@@ -2,8 +2,8 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.35.0 (2026-05-28)
+-------------------
 * scene_graph: fix off-by-one in SceneGraphStandardItem::clear and dedup addLink
   clear() iterated from rowCount() down to 1 and called removeRow(i),
   but removeRow uses 0-based indices, so removeRow(rowCount()) was a
