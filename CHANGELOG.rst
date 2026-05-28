@@ -2,6 +2,70 @@
 Changelog for package tesseract_qt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* scene_graph: fix off-by-one in SceneGraphStandardItem::clear and dedup addLink
+  clear() iterated from rowCount() down to 1 and called removeRow(i),
+  but removeRow uses 0-based indices, so removeRow(rowCount()) was a
+  no-op and row 0 was never removed. The same bug exists in the joints
+  loop. data\_->links.clear() then drops the map entry for the orphan,
+  so callers see one stale untracked tree row per clear(). Iterate from
+  rowCount()-1 down to 0.
+  addLink unconditionally appended a new row, orphaning the previous
+  QStandardItem when a SceneGraphAddLink event fires for a name that
+  already exists (data\_->links overwrites the map entry but links_item
+  keeps the old row). Guard with a removeLink call when the name is
+  already present, mirroring the setSceneGraph -> clear() pattern.
+* Bump docker/build-push-action from 6 to 7
+  Bumps [docker/build-push-action](https://github.com/docker/build-push-action) from 6 to 7.
+  - [Release notes](https://github.com/docker/build-push-action/releases)
+  - [Commits](https://github.com/docker/build-push-action/compare/v6...v7)
+  ---
+  updated-dependencies:
+  - dependency-name: docker/build-push-action
+  dependency-version: '7'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Bump docker/metadata-action from 5 to 6
+  Bumps [docker/metadata-action](https://github.com/docker/metadata-action) from 5 to 6.
+  - [Release notes](https://github.com/docker/metadata-action/releases)
+  - [Commits](https://github.com/docker/metadata-action/compare/v5...v6)
+  ---
+  updated-dependencies:
+  - dependency-name: docker/metadata-action
+  dependency-version: '6'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Bump docker/login-action from 3 to 4
+  Bumps [docker/login-action](https://github.com/docker/login-action) from 3 to 4.
+  - [Release notes](https://github.com/docker/login-action/releases)
+  - [Commits](https://github.com/docker/login-action/compare/v3...v4)
+  ---
+  updated-dependencies:
+  - dependency-name: docker/login-action
+  dependency-version: '4'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Update to leverage tesseract_planning single cmake project
+* Bump actions/upload-artifact from 6 to 7
+  Bumps [actions/upload-artifact](https://github.com/actions/upload-artifact) from 6 to 7.
+  - [Release notes](https://github.com/actions/upload-artifact/releases)
+  - [Commits](https://github.com/actions/upload-artifact/compare/v6...v7)
+  ---
+  updated-dependencies:
+  - dependency-name: actions/upload-artifact
+  dependency-version: '7'
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  ...
+* Tesseract single cmake project consolidation
+* Update to clang-format-18
+* Update to leverage nested namespaces
+* Contributors: Levi Armstrong, Simon White, dependabot[bot]
+
 0.34.0 (2026-02-19)
 -------------------
 * Update README.md (`#201 <https://github.com/tesseract-robotics/tesseract_qt/issues/201>`_)
