@@ -301,7 +301,7 @@ std::shared_ptr<gz::rendering::Visual> loadLink(gz::rendering::Scene& scene,
 {
   auto entity = entity_container.addTrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS, link.getName());
   std::shared_ptr<gz::rendering::Visual> ign_link = scene.CreateVisual(entity.id, entity.unique_name);
-  ign_link->SetUserData(USER_VISIBILITY, true);
+  ign_link->SetUserData(USER_VISIBILITY, link.visible);
 
   std::shared_ptr<gz::rendering::Visual> ign_link_visuals = loadLinkVisuals(scene, entity_container, link);
   ign_link_visuals->SetUserData(USER_VISIBILITY, true);
@@ -323,7 +323,9 @@ std::shared_ptr<gz::rendering::Visual> loadLink(gz::rendering::Scene& scene,
     ign_link->AddChild(ign_link_wirebox);
   }
 
-  // Cannot set visibilty to false in loadLinkCollisions because LocalBoundingBox only calculates for visible objects
+  // Cannot set visibilty to false in loadLinkVisuals/loadLinkCollisions before LocalBoundingBox is computed above,
+  // because it only calculates for visible objects
+  ign_link_visuals->SetVisible(link.visible);
   ign_link_collisions->SetVisible(false);
 
   return ign_link;

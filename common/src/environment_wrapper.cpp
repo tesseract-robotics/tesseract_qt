@@ -171,7 +171,9 @@ void tesseractEventFilterHelper(const tesseract::environment::Event& event,
           }
         }
         if (broadcast)
+        {
           env_wrapper.broadcast();
+        }
       }
       current_revision = e.revision;
       break;

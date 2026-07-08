@@ -85,14 +85,10 @@ void SceneGraphStandardItem::addLink(const tesseract::scene_graph::Link& link)
   if (data_->links.find(link.getName()) != data_->links.end())
     removeLink(link.getName());
 
-  auto* item = new LinkStandardItem(
-      QString::fromStdString(link.getName()), std::make_shared<tesseract::scene_graph::Link>(link.clone()), true);
+  auto* item = new LinkStandardItem(QString::fromStdString(link.getName()),
+                                    std::make_shared<tesseract::scene_graph::Link>(link.clone()),
+                                    data_->checkable);
 
-  if (data_->checkable)
-  {
-    item->setCheckable(true);
-    item->setCheckState(Qt::CheckState::Checked);
-  }
   data_->links_item->appendRow(item);
   data_->links_item->sortChildren(0);
   data_->links[link.getName()] = item;

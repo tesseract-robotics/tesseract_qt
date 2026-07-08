@@ -74,7 +74,7 @@ void LinkStandardItem::ctor(bool checkable)
   if (checkable)
   {
     setCheckable(true);
-    setCheckState(Qt::CheckState::Checked);
+    setCheckState(link->visible ? Qt::CheckState::Checked : Qt::CheckState::Unchecked);
   }
 
   appendRow(createStandardItemString("name", link->getName()));
