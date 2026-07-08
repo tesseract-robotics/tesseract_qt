@@ -198,6 +198,7 @@ void AllowedCollisionMatrixModel::remove(const std::string& link_name)
   if (it1 != data_->items.end())
   {
     std::vector<std::array<std::string, 2>> link_pairs;
+    link_pairs.reserve(it1->second->rowCount());
     for (int row = 0; row < it1->second->rowCount(); ++row)
       link_pairs.push_back({ link_name, it1->second->child(row)->text().toStdString() });
 
