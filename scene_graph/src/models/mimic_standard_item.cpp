@@ -54,6 +54,6 @@ void MimicStandardItem::ctor()
 {
   appendRow(createStandardItemFloat("offset", mimic->offset));
   appendRow(createStandardItemFloat("multiplier", mimic->multiplier));
-  appendRow(createStandardItemString("joint_name", mimic->joint_name));
+  appendRow(createStandardItemString("joint_name", mimic->joint_id.name()));
 }
 }  // namespace tesseract::gui
