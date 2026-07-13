@@ -29,6 +29,7 @@
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract/common/joint_state.h>
+#include <tesseract/common/types.h>
 
 namespace tesseract::gui
 {
@@ -53,7 +54,7 @@ int JointStateStandardItem::type() const { return static_cast<int>(StandardItemT
 void JointStateStandardItem::ctor(const tesseract::common::JointState& state)
 {
   // Add State Joint Names
-  appendRow(new VectorStringStandardItem("joint_names", state.getJointNames()));
+  appendRow(new VectorStringStandardItem("joint_names", tesseract::common::toNames(state.getJointIds())));
   appendRow(new VectorDoubleStandardItem("position", state.position));
   appendRow(new VectorDoubleStandardItem("velocity", state.velocity));
   appendRow(new VectorDoubleStandardItem("acceleration", state.acceleration));

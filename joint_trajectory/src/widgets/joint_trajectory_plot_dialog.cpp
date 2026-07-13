@@ -41,13 +41,14 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract::common::JointTra
 
   plot_data_map_.clear();
 
-  const std::vector<std::string> joint_names = current_trajectory.joint_trajectory[0].getJointNames();
+  const std::vector<tesseract::common::JointId>& joint_ids = current_trajectory.joint_trajectory[0].getJointIds();
 
-  for (std::size_t i = 0; i < joint_names.size(); ++i)
+  for (std::size_t i = 0; i < joint_ids.size(); ++i)
   {
-    tesseract::gui::PlotData& position = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::position");
-    tesseract::gui::PlotData& velocity = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::velocity");
-    tesseract::gui::PlotData& acceleration = plot_data_map_.getOrCreateNumeric(joint_names[i] + "::acceleration");
+    const std::string& joint_name = joint_ids[i].name();
+    tesseract::gui::PlotData& position = plot_data_map_.getOrCreateNumeric(joint_name + "::position");
+    tesseract::gui::PlotData& velocity = plot_data_map_.getOrCreateNumeric(joint_name + "::velocity");
+    tesseract::gui::PlotData& acceleration = plot_data_map_.getOrCreateNumeric(joint_name + "::acceleration");
     double ct{ 0 };
     for (const auto& state : current_trajectory.joint_trajectory)
     {
@@ -57,12 +58,12 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract::common::JointTra
     }
   }
 
-  position_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
-  for (std::size_t i = 0; i < joint_names.size(); ++i)
+  position_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_ids.size(), 1);
+  for (std::size_t i = 0; i < joint_ids.size(); ++i)
   {
     tesseract::gui::PlotWidget* widget = position_subplots_->getSubplot(i, 0);
-    widget->addCurve(joint_names[i] + "::position");
-    if (i == joint_names.size() - 1)
+    widget->addCurve(joint_ids[i].name() + "::position");
+    if (i == joint_ids.size() - 1)
       widget->setXAxisTitle("Time (seconds)");
     widget->setYAxisTitle("Units (rad)");
     widget->enableTracker(true);
@@ -81,12 +82,12 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract::common::JointTra
 
   connect(ui_->jtpTabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIndexChanged(int)));
 
-  velocity_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
-  for (std::size_t i = 0; i < joint_names.size(); ++i)
+  velocity_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_ids.size(), 1);
+  for (std::size_t i = 0; i < joint_ids.size(); ++i)
   {
     tesseract::gui::PlotWidget* widget = velocity_subplots_->getSubplot(i, 0);
-    widget->addCurve(joint_names[i] + "::velocity");
-    if (i == joint_names.size() - 1)
+    widget->addCurve(joint_ids[i].name() + "::velocity");
+    if (i == joint_ids.size() - 1)
       widget->setXAxisTitle("Time (seconds)");
     widget->setYAxisTitle("Units (rad/sec)");
     widget->enableTracker(true);
@@ -104,12 +105,12 @@ JointTrajectoryPlotDialog::JointTrajectoryPlotDialog(tesseract::common::JointTra
   ui_->jtpTabWidget->addTab(velocity_subplots_, tr("Velocity"));
   connect(ui_->jtpTabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabIndexChanged(int)));
 
-  acceleration_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_names.size(), 1);
-  for (std::size_t i = 0; i < joint_names.size(); ++i)
+  acceleration_subplots_ = new tesseract::gui::PlotSubplots(plot_data_map_, joint_ids.size(), 1);
+  for (std::size_t i = 0; i < joint_ids.size(); ++i)
   {
     tesseract::gui::PlotWidget* widget = acceleration_subplots_->getSubplot(i, 0);
-    widget->addCurve(joint_names[i] + "::acceleration");
-    if (i == joint_names.size() - 1)
+    widget->addCurve(joint_ids[i].name() + "::acceleration");
+    if (i == joint_ids.size() - 1)
       widget->setXAxisTitle("Time (seconds)");
     widget->setYAxisTitle("Units (rad/sec^2)");
     widget->enableTracker(true);

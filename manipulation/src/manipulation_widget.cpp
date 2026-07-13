@@ -498,17 +498,14 @@ Eigen::Isometry3d ManipulationWidget::getActiveCartesianTransform(bool in_world)
   return tf.at(working_frame).inverse() * tf.at(tcp_id) * tcp_offset;
 }
 
-std::vector<std::string> ManipulationWidget::getActiveJointNames() const { return data_->kin_group->getJointNames(); }
-
 Eigen::VectorXd ManipulationWidget::getActiveJointValues() const
 {
   Eigen::VectorXd jv{ Eigen::VectorXd::Zero(data_->kin_group->numJoints()) };
-  std::vector<std::string> joint_names = data_->kin_group->getJointNames();
   Eigen::Index idx{ 0 };
   const std::string active_state_name = getActiveStateName();
-  for (const auto& jn : joint_names)
+  for (const auto& joint_id : data_->kin_group->getJointIds())
   {
-    auto j_it = data_->states[active_state_name].find(jn);
+    auto j_it = data_->states[active_state_name].find(joint_id.name());
     if (j_it != data_->states[active_state_name].end())
       jv(idx) = j_it->second;
 
@@ -525,7 +522,7 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
     auto tcp_id = tesseract::common::LinkId(getTCPName().toStdString());
     Eigen::Isometry3d tcp_offset = getTCPOffset();
     Eigen::Isometry3d target = transform * tcp_offset.inverse();
-    std::vector<std::string> joint_names = data_->kin_group->getJointNames();
+    const std::vector<tesseract::common::JointId>& joint_ids = data_->kin_group->getJointIds();
 
     std::vector<tesseract::common::LinkId> tcp_ids = data_->kin_group->getAllPossibleTipLinkIds();
     if (std::find(tcp_ids.begin(), tcp_ids.end(), tcp_id) != tcp_ids.end())
@@ -552,8 +549,8 @@ void ManipulationWidget::onCartesianTransformChanged(const Eigen::Isometry3d& tr
           temp_seed = seed;
 
         std::unordered_map<std::string, double> state;
-        for (int i = 0; i < joint_names.size(); ++i)
-          state[joint_names[i]] = temp_seed[i];
+        for (std::size_t i = 0; i < joint_ids.size(); ++i)
+          state[joint_ids[i].name()] = temp_seed[static_cast<Eigen::Index>(i)];
 
         ui->joint_state_slider->setJointState(state);
       }

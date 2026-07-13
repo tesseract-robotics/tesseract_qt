@@ -164,14 +164,8 @@ public:
   Eigen::Isometry3d getActiveCartesianTransform(bool in_world = false) const;
 
   /**
-   * @brief Get the joint names of the active state
-   * @return The joint names
-   */
-  std::vector<std::string> getActiveJointNames() const;
-
-  /**
    * @brief Get the joint values of the active state
-   * @return The joint values in the order of what getActiveJointNames() returns
+   * @return The joint values in the order of the kinematic group's joint ids
    */
   Eigen::VectorXd getActiveJointValues() const;
 
