@@ -498,6 +498,11 @@ Eigen::Isometry3d ManipulationWidget::getActiveCartesianTransform(bool in_world)
   return tf.at(working_frame).inverse() * tf.at(tcp_id) * tcp_offset;
 }
 
+std::vector<tesseract::common::JointId> ManipulationWidget::getActiveJointIds() const
+{
+  return data_->kin_group->getJointIds();
+}
+
 Eigen::VectorXd ManipulationWidget::getActiveJointValues() const
 {
   Eigen::VectorXd jv{ Eigen::VectorXd::Zero(data_->kin_group->numJoints()) };
