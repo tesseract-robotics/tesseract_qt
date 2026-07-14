@@ -29,6 +29,7 @@ add_library(
   src/models/sphere_standard_item.cpp
   src/models/polygon_mesh_standard_item.cpp
   src/models/octree_standard_item.cpp
+  src/models/signed_distance_field_standard_item.cpp
   src/models/scene_graph_standard_item.cpp
   src/models/scene_state_standard_item.cpp
   src/models/scene_state_model.cpp

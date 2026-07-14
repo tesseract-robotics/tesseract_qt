@@ -30,6 +30,7 @@
 #include <tesseract_qt/scene_graph/models/sphere_standard_item.h>
 #include <tesseract_qt/scene_graph/models/polygon_mesh_standard_item.h>
 #include <tesseract_qt/scene_graph/models/octree_standard_item.h>
+#include <tesseract_qt/scene_graph/models/signed_distance_field_standard_item.h>
 #include <tesseract_qt/common/models/transform_standard_item.h>
 #include <tesseract_qt/common/models/type_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
@@ -104,10 +105,15 @@ inline QStandardItem* getGeometryItem(const std::shared_ptr<const tesseract::geo
       geometry_item = new OctreeStandardItem(std::static_pointer_cast<const tesseract::geometry::Octree>(geometry));
       break;
     }
+    case tesseract::geometry::GeometryType::SIGNED_DISTANCE_FIELD:
+    {
+      geometry_item = new SignedDistanceFieldStandardItem(
+          std::static_pointer_cast<const tesseract::geometry::SignedDistanceField>(geometry));
+      break;
+    }
     case tesseract::geometry::GeometryType::CONVEX_MESH:
     case tesseract::geometry::GeometryType::MESH:
     case tesseract::geometry::GeometryType::POLYGON_MESH:
-    case tesseract::geometry::GeometryType::SDF_MESH:
     {
       geometry_item =
           new PolygonMeshStandardItem(std::static_pointer_cast<const tesseract::geometry::PolygonMesh>(geometry));
@@ -121,8 +127,7 @@ inline QStandardItem* getGeometryItem(const std::shared_ptr<const tesseract::geo
       for (const auto& mesh : meshes)
         geometry_item->appendRow(getGeometryItem(mesh));
 
-      if (meshes.front()->getType() == tesseract::geometry::GeometryType::MESH ||
-          meshes.front()->getType() == tesseract::geometry::GeometryType::SDF_MESH)
+      if (meshes.front()->getType() == tesseract::geometry::GeometryType::MESH)
         geometry_item->setIcon(icons::getMeshIcon());
       else if (meshes.front()->getType() == tesseract::geometry::GeometryType::CONVEX_MESH)
         geometry_item->setIcon(icons::getConvexMeshIcon());

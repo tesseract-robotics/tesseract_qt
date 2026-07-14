@@ -596,6 +596,14 @@ loadLinkGeometry(gz::rendering::Scene& scene,
       assert(false);
       return nullptr;
     }
+    case tesseract::geometry::GeometryType::SIGNED_DISTANCE_FIELD:
+    {
+      // Volumetric signed distance fields are not yet visualized in the gz/studio renderer
+      // (like the OCTREE case above). The geometry remains valid for collision checking.
+      // TODO: render the field as a voxel box cloud.
+      assert(false);
+      return nullptr;
+    }
     case tesseract::geometry::GeometryType::COMPOUND_MESH:
     {
       const auto& shape = static_cast<const tesseract::geometry::CompoundMesh&>(geometry);
@@ -709,9 +717,6 @@ loadLinkGeometry(gz::rendering::Scene& scene,
         mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
         return mesh;
       }
-
-      if (sub_meshes.front()->getType() == tesseract::geometry::GeometryType::SDF_MESH)
-        throw std::runtime_error("SDF Mesh, currently not supported!");
     }
     default:
     {
