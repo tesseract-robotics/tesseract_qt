@@ -295,6 +295,8 @@ void eventFilterHelper(QObject* /*obj*/,
     }
 
     std::vector<tesseract::common::LinkId> link_ids = env.getLinkIds();
+    tesseract::common::LinkIdPair link_pair;
+
     for (std::size_t i = 0; i + 1 < link_ids.size(); ++i)
     {
       const auto& link1 = env.getLink(link_ids[i]);
@@ -307,7 +309,8 @@ void eventFilterHelper(QObject* /*obj*/,
         if (link2->collision.empty())
           continue;
 
-        if (results.find(tesseract::common::LinkIdPair(link_ids[i], link_ids[j])) == results.end())
+        link_pair.assign(link_ids[i], link_ids[j]);
+        if (results.find(link_pair) == results.end())
           acm.addAllowedCollision(link_ids[i], link_ids[j], "Never");
       }
     }
