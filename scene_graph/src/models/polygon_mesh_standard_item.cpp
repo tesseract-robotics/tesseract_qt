@@ -80,11 +80,6 @@ void PolygonMeshStandardItem::ctor()
     setIcon(icons::getMeshIcon());
     setText("Polygon Mesh");
   }
-  else if (mesh->getType() == tesseract::geometry::GeometryType::SDF_MESH)
-  {
-    setIcon(icons::getMeshIcon());
-    setText("SDF Mesh");
-  }
 
   std::string url;
   if (mesh->getResource() != nullptr)
