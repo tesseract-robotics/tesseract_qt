@@ -45,7 +45,7 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
   initial_state_.effort.resize(static_cast<Eigen::Index>(initial_state.size()));
   for (const auto& joint : initial_state)
   {
-    initial_state_.joint_ids.push_back(JointId(joint.first));
+    initial_state_.joint_ids.emplace_back(joint.first);
 
     Eigen::Index r = static_cast<Eigen::Index>(initial_state_.joint_ids.size()) - 1;
     initial_state_.position(r) = joint.second;
@@ -70,23 +70,17 @@ JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::E
   , uuid_(boost::uuids::random_generator()())
 {
   const auto& state = environment_->getState();
-  const auto joint_names = environment_->getJointNames();
-  initial_state_.joint_ids.reserve(joint_names.size());
-  initial_state_.position.resize(static_cast<Eigen::Index>(joint_names.size()));
-  initial_state_.velocity.resize(static_cast<Eigen::Index>(joint_names.size()));
-  initial_state_.acceleration.resize(static_cast<Eigen::Index>(joint_names.size()));
-  initial_state_.effort.resize(static_cast<Eigen::Index>(joint_names.size()));
-  Eigen::Index r = 0;
-  for (const auto& name : joint_names)
+  initial_state_.joint_ids = environment_->getJointIds();
+
+  const auto joint_count = static_cast<Eigen::Index>(initial_state_.joint_ids.size());
+  initial_state_.position.resize(joint_count);
+  initial_state_.velocity = Eigen::VectorXd::Zero(joint_count);
+  initial_state_.acceleration = Eigen::VectorXd::Zero(joint_count);
+  initial_state_.effort = Eigen::VectorXd::Zero(joint_count);
+  for (Eigen::Index r = 0; r < joint_count; ++r)
   {
-    auto jid = JointId(name);
-    auto it = state.joints.find(jid);
-    initial_state_.joint_ids.push_back(jid);
+    auto it = state.joints.find(initial_state_.joint_ids[static_cast<std::size_t>(r)]);
     initial_state_.position(r) = (it != state.joints.end()) ? it->second : 0.0;
-    initial_state_.velocity(r) = 0;
-    initial_state_.acceleration(r) = 0;
-    initial_state_.effort(r) = 0;
-    ++r;
   }
 }
 
@@ -203,7 +197,7 @@ void JointTrajectorySet::appendJointTrajectory(const JointTrajectory& joint_traj
     JointState pruned_state;
     pruned_state.joint_ids.reserve(prune_names.size());
     for (const auto& name : prune_names)
-      pruned_state.joint_ids.push_back(JointId(name));
+      pruned_state.joint_ids.emplace_back(name);
     pruned_state.position = Eigen::VectorXd::Zero(static_cast<Eigen::Index>(prune_names.size()));
     pruned_state.velocity = Eigen::VectorXd::Zero(static_cast<Eigen::Index>(prune_names.size()));
     pruned_state.acceleration = Eigen::VectorXd::Zero(static_cast<Eigen::Index>(prune_names.size()));

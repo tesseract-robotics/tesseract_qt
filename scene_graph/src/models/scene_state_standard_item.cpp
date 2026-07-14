@@ -80,12 +80,11 @@ void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scen
       joints_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), jtit->second));
   }
 
-  for (const auto& name : env.getLinkNames())
+  for (const auto& lid : env.getLinkIds())
   {
-    auto lid = tesseract::common::LinkId(name);
     auto it = scene_state.link_transforms.find(lid);
     if (it != scene_state.link_transforms.end())
-      links_item->appendRow(new TransformStandardItem(QString::fromStdString(name), it->second));
+      links_item->appendRow(new TransformStandardItem(QString::fromStdString(lid.name()), it->second));
   }
 
   joint_values_item->sortChildren(0);
