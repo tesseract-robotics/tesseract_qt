@@ -58,7 +58,7 @@ void StateWaypointStandardItem::ctor(const tesseract::command_language::StateWay
 {
   // Add State Joint Names
   appendRow(createStandardItemString("name", swp.getName()));
-  appendRow(new VectorStringStandardItem("joint_names", swp.getNames()));
+  appendRow(new VectorStringStandardItem("joint_names", tesseract::common::toNames(swp.getJointIds())));
   appendRow(new VectorDoubleStandardItem("position", swp.getPosition()));
   appendRow(new VectorDoubleStandardItem("velocity", swp.getVelocity()));
   appendRow(new VectorDoubleStandardItem("acceleration", swp.getAcceleration()));
