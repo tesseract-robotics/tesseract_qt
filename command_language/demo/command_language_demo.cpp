@@ -47,14 +47,14 @@ int main(int argc, char** argv)
   CompositeInstruction program("cartesian_program", ManipulatorInfo("manipulator", "base_link", "tool0"));
 
   // Set the robot initial state
-  std::vector<std::string> joint_names;
-  joint_names.emplace_back("joint_a1");
-  joint_names.emplace_back("joint_a2");
-  joint_names.emplace_back("joint_a3");
-  joint_names.emplace_back("joint_a4");
-  joint_names.emplace_back("joint_a5");
-  joint_names.emplace_back("joint_a6");
-  joint_names.emplace_back("joint_a7");
+  std::vector<tesseract::common::JointId> joint_ids;
+  joint_ids.emplace_back("joint_a1");
+  joint_ids.emplace_back("joint_a2");
+  joint_ids.emplace_back("joint_a3");
+  joint_ids.emplace_back("joint_a4");
+  joint_ids.emplace_back("joint_a5");
+  joint_ids.emplace_back("joint_a6");
+  joint_ids.emplace_back("joint_a7");
 
   Eigen::VectorXd joint_pos(7);
   joint_pos(0) = -0.4;
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
   joint_pos(6) = 0.0;
 
   // Start Joint Position for the program
-  StateWaypointPoly wp0{ StateWaypoint(joint_names, joint_pos) };
+  StateWaypointPoly wp0{ StateWaypoint(joint_ids, joint_pos) };
   MoveInstruction start_instruction(wp0, MoveInstructionType::FREESPACE);
   program.push_back(start_instruction);
 
