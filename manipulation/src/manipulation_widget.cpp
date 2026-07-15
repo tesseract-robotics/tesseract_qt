@@ -22,6 +22,19 @@
 
 namespace tesseract::gui
 {
+namespace
+{
+tesseract::scene_graph::SceneState::JointValues toJointValues(const std::unordered_map<std::string, double>& joints)
+{
+  tesseract::scene_graph::SceneState::JointValues joint_values;
+  joint_values.reserve(joints.size());
+  for (const auto& [name, value] : joints)
+    joint_values.emplace(tesseract::common::JointId(name), value);
+
+  return joint_values;
+}
+}  // namespace
+
 struct ManipulationWidget::Implementation
 {
   std::shared_ptr<const ComponentInfo> parent_component_info;
@@ -287,7 +300,7 @@ void ManipulationWidget::setActiveCartesianTransform(const Eigen::Isometry3d& tr
 
 tesseract::scene_graph::SceneState ManipulationWidget::getState(const std::string& state_name) const
 {
-  return data_->environment->getState(data_->states.at(state_name));
+  return data_->environment->getState(toJointValues(data_->states.at(state_name)));
 }
 
 void ManipulationWidget::onGroupNameChanged()
@@ -456,7 +469,7 @@ void ManipulationWidget::onJointStateSliderChanged(std::unordered_map<std::strin
   {
     const std::string state_name = ui->state_combo_box->currentText().toStdString();
     data_->states[state_name] = state;
-    data_->environment->setState(state);
+    data_->environment->setState(toJointValues(state));
     tesseract::scene_graph::SceneState scene_state = data_->environment->getState();
     tesseract::scene_graph::SceneState reduced_scene_state = getReducedSceneState(scene_state);
 

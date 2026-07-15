@@ -254,8 +254,8 @@ void KinematicGroupsEditorWidget::onUpdateLinkNamesModel()
   if (env == nullptr || !env->isInitialized())
     return;
 
-  for (const auto& link_name : env->getLinkNames())
-    list.append(QString::fromStdString(link_name));
+  for (const auto& link_id : env->getLinkIds())
+    list.append(QString::fromStdString(link_id.name()));
 
   data_->link_names_model.setStringList(list);
 }
@@ -273,8 +273,8 @@ void KinematicGroupsEditorWidget::onUpdateJointNamesModel()
   if (env == nullptr || !env->isInitialized())
     return;
 
-  for (const auto& link_name : env->getActiveJointNames())
-    list.append(QString::fromStdString(link_name));
+  for (const auto& joint_id : env->getActiveJointIds())
+    list.append(QString::fromStdString(joint_id.name()));
 
   data_->joint_names_model.setStringList(list);
 }

@@ -61,7 +61,7 @@ void EnvironmentStandardItem::ctor(const tesseract::environment::Environment& en
 {
   appendRow(createStandardItemString("name", env.getName()));
   appendRow(createStandardItemInt("revision", env.getRevision()));
-  appendRow(createStandardItemString("root_link", env.getRootLinkName()));
+  appendRow(createStandardItemString("root_link", env.getRootLinkId().name()));
   appendRow(new EnvironmentCommandsStandardItem(env.getCommandHistory()));
   appendRow(new SceneStateStandardItem(env.getState(), env));
 }
