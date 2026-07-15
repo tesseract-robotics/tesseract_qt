@@ -77,9 +77,9 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
     if (jt.empty())
       return false;
 
-    std::unordered_map<std::string, double> initial_state;
+    tesseract::scene_graph::SceneState::JointValues initial_state;
     for (std::size_t i = 0; i < jt.states.front().joint_ids.size(); ++i)
-      initial_state[jt.states.front().joint_ids[i].name()] = jt.states.front().position[i];
+      initial_state[jt.states.front().joint_ids[i]] = jt.states.front().position[i];
 
     tesseract::common::JointTrajectorySet jts(initial_state, jt.description);
     jts.appendJointTrajectory(jt);
@@ -98,9 +98,9 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
     if (jt.empty())
       return false;
 
-    std::unordered_map<std::string, double> initial_state;
+    tesseract::scene_graph::SceneState::JointValues initial_state;
     for (std::size_t i = 0; i < jt.states.front().joint_ids.size(); ++i)
-      initial_state[jt.states.front().joint_ids[i].name()] = jt.states.front().position[i];
+      initial_state[jt.states.front().joint_ids[i]] = jt.states.front().position[i];
 
     tesseract::common::JointTrajectorySet jts(initial_state, jt.description);
     events::JointTrajectoryAdd event(component_info, std::move(jts));

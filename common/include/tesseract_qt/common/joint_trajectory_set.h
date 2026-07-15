@@ -27,11 +27,11 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include <unordered_map>
 #include <boost/uuid/uuid.hpp>
 #include <tesseract/common/fwd.h>
 #include <tesseract/environment/fwd.h>
 #include <tesseract/common/joint_state.h>
+#include <tesseract/scene_graph/scene_state.h>
 
 namespace tesseract::common
 {
@@ -56,7 +56,8 @@ public:
    * @param initial_state The initial state of the environment
    * @param description (Optional) A description of the trajectory set
    */
-  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state, std::string description = "");
+  JointTrajectorySet(const tesseract::scene_graph::SceneState::JointValues& initial_state,
+                     std::string description = "");
 
   /**
    * @brief Create a trajectory set with initial state
@@ -70,7 +71,7 @@ public:
    * @param initial_state The initial state of the environment
    * @param commands Additional Commands to be applied to environment prior to planning
    */
-  JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+  JointTrajectorySet(const tesseract::scene_graph::SceneState::JointValues& initial_state,
                      std::vector<std::shared_ptr<const tesseract::environment::Command>> commands,
                      std::string description = "");
 

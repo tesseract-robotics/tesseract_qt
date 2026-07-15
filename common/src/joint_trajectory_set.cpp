@@ -34,7 +34,7 @@
 
 namespace tesseract::common
 {
-JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+JointTrajectorySet::JointTrajectorySet(const tesseract::scene_graph::SceneState::JointValues& initial_state,
                                        std::string description)
   : description_(std::move(description)), uuid_(boost::uuids::random_generator()())
 {
@@ -55,7 +55,7 @@ JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, dou
   }
 }
 
-JointTrajectorySet::JointTrajectorySet(const std::unordered_map<std::string, double>& initial_state,
+JointTrajectorySet::JointTrajectorySet(const tesseract::scene_graph::SceneState::JointValues& initial_state,
                                        std::vector<std::shared_ptr<const tesseract::environment::Command>> commands,
                                        std::string description)
   : JointTrajectorySet(initial_state, std::move(description))

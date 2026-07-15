@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
   Q_INIT_RESOURCE(tesseract_qt_resources);
 
-  std::unordered_map<std::string, double> initial_state{
+  std::unordered_map<tesseract::common::JointId, double> initial_state{
     { "joint_1", 0 }, { "joint_2", 0 }, { "joint_3", 0 }, { "joint_4", 0 }, { "joint_5", 0 }
   };
 
