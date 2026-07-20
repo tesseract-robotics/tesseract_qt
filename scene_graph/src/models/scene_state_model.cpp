@@ -105,33 +105,20 @@ std::shared_ptr<const ComponentInfo> SceneStateModel::getComponentInfo() const {
 
 void SceneStateModel::setState(const tesseract::scene_graph::SceneState& scene_state)
 {
-  // Resolve names from the environment (ID-keyed maps cannot be reversed)
-  auto env_wrapper = EnvironmentManager::get(data_->component_info);
-  if (env_wrapper == nullptr || !env_wrapper->getEnvironment()->isInitialized())
-    return;
-
-  const auto& env = *env_wrapper->getEnvironment();
-  const auto all_joint_ids = env.getJointIds();
-  const auto all_link_ids = env.getLinkIds();
-
   bool sort_required{ false };
 
   std::vector<std::string> joint_names_value;
   joint_names_value.reserve(scene_state.joints.size());
-  for (const auto& jid : all_joint_ids)
+  for (const auto& [jid, value] : scene_state.joints)
   {
-    auto jit = scene_state.joints.find(jid);
-    if (jit == scene_state.joints.end())
-      continue;
-
     auto it = data_->values.find(jid.name());
     if (it != data_->values.end())
     {
-      it->second->setData(jit->second, Qt::DisplayRole);
+      it->second->setData(value, Qt::DisplayRole);
     }
     else
     {
-      auto row = createStandardItemFloat(jid.name(), jit->second);
+      auto row = createStandardItemFloat(jid.name(), value);
       data_->values[jid.name()] = row[1];
       data_->values_item->appendRow(row);
       data_->joint_names_value.push_back(jid.name());
@@ -142,20 +129,16 @@ void SceneStateModel::setState(const tesseract::scene_graph::SceneState& scene_s
 
   std::vector<std::string> link_names;
   link_names.reserve(scene_state.link_transforms.size());
-  for (const auto& lid : all_link_ids)
+  for (const auto& [lid, tf] : scene_state.link_transforms)
   {
-    auto lit = scene_state.link_transforms.find(lid);
-    if (lit == scene_state.link_transforms.end())
-      continue;
-
     auto it = data_->links.find(lid.name());
     if (it != data_->links.end())
     {
-      it->second->setTransform(lit->second);
+      it->second->setTransform(tf);
     }
     else
     {
-      auto* item = new TransformStandardItem(QString::fromStdString(lid.name()), lit->second);
+      auto* item = new TransformStandardItem(QString::fromStdString(lid.name()), tf);
       item->setCheckable(true);
       item->setCheckState(Qt::CheckState::Unchecked);
       data_->links_item->appendRow(item);
@@ -169,20 +152,16 @@ void SceneStateModel::setState(const tesseract::scene_graph::SceneState& scene_s
 
   std::vector<std::string> joint_names_tf;
   joint_names_tf.reserve(scene_state.joint_transforms.size());
-  for (const auto& jid : all_joint_ids)
+  for (const auto& [jid, tf] : scene_state.joint_transforms)
   {
-    auto jit = scene_state.joint_transforms.find(jid);
-    if (jit == scene_state.joint_transforms.end())
-      continue;
-
     auto it = data_->joints.find(jid.name());
     if (it != data_->joints.end())
     {
-      it->second->setTransform(jit->second);
+      it->second->setTransform(tf);
     }
     else
     {
-      auto* item = new TransformStandardItem(QString::fromStdString(jid.name()), jit->second);
+      auto* item = new TransformStandardItem(QString::fromStdString(jid.name()), tf);
       data_->joints_item->appendRow(item);
       data_->joints[jid.name()] = item;
       data_->joint_names_tf.push_back(jid.name());

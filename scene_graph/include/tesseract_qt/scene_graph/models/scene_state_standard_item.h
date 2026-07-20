@@ -25,27 +25,22 @@
 
 #include <QStandardItem>
 #include <tesseract/scene_graph/fwd.h>
-#include <tesseract/environment/fwd.h>
 
 namespace tesseract::gui
 {
 class SceneStateStandardItem : public QStandardItem
 {
 public:
-  SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state,
-                         const tesseract::environment::Environment& env);
-  SceneStateStandardItem(const QString& text,
-                         const tesseract::scene_graph::SceneState& scene_state,
-                         const tesseract::environment::Environment& env);
+  SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state);
+  SceneStateStandardItem(const QString& text, const tesseract::scene_graph::SceneState& scene_state);
   SceneStateStandardItem(const QIcon& icon,
                          const QString& text,
-                         const tesseract::scene_graph::SceneState& scene_state,
-                         const tesseract::environment::Environment& env);
+                         const tesseract::scene_graph::SceneState& scene_state);
 
   int type() const override;
 
 protected:
-  void ctor(const tesseract::scene_graph::SceneState& scene_state, const tesseract::environment::Environment& env);
+  void ctor(const tesseract::scene_graph::SceneState& scene_state);
 };
 }  // namespace tesseract::gui
 

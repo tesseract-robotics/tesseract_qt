@@ -27,65 +27,50 @@
 #include <tesseract_qt/common/icon_utils.h>
 
 #include <tesseract/scene_graph/scene_state.h>
-#include <tesseract/environment/environment.h>
 
 namespace tesseract::gui
 {
-SceneStateStandardItem::SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state,
-                                               const tesseract::environment::Environment& env)
+SceneStateStandardItem::SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state)
   : QStandardItem(icons::getModelIcon(), "Scene State")
 {
-  ctor(scene_state, env);
+  ctor(scene_state);
 }
 
 SceneStateStandardItem::SceneStateStandardItem(const QString& text,
-                                               const tesseract::scene_graph::SceneState& scene_state,
-                                               const tesseract::environment::Environment& env)
+                                               const tesseract::scene_graph::SceneState& scene_state)
   : QStandardItem(icons::getModelIcon(), text)
 {
-  ctor(scene_state, env);
+  ctor(scene_state);
 }
 
 SceneStateStandardItem::SceneStateStandardItem(const QIcon& icon,
                                                const QString& text,
-                                               const tesseract::scene_graph::SceneState& scene_state,
-                                               const tesseract::environment::Environment& env)
+                                               const tesseract::scene_graph::SceneState& scene_state)
   : QStandardItem(icon, text)
 {
-  ctor(scene_state, env);
+  ctor(scene_state);
 }
 
 int SceneStateStandardItem::type() const { return static_cast<int>(StandardItemType::SG_SCENE_STATE); }
 
-void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scene_state,
-                                  const tesseract::environment::Environment& env)
+void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scene_state)
 {
   auto* joint_values_item = new QStandardItem(icons::getJointVectorIcon(), "Joint Values");
   auto* floating_joint_values_item = new QStandardItem(icons::getOriginIcon(), "Floating Joint Values");
   auto* links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
   auto* joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
 
-  for (const auto& jid : env.getJointIds())
-  {
-    auto it = scene_state.joints.find(jid);
-    if (it != scene_state.joints.end())
-      joint_values_item->appendRow(createStandardItemFloat(jid.name(), it->second));
+  for (const auto& [jid, value] : scene_state.joints)
+    joint_values_item->appendRow(createStandardItemFloat(jid.name(), value));
 
-    auto fit = scene_state.floating_joints.find(jid);
-    if (fit != scene_state.floating_joints.end())
-      floating_joint_values_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), fit->second));
+  for (const auto& [jid, tf] : scene_state.floating_joints)
+    floating_joint_values_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), tf));
 
-    auto jtit = scene_state.joint_transforms.find(jid);
-    if (jtit != scene_state.joint_transforms.end())
-      joints_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), jtit->second));
-  }
+  for (const auto& [jid, tf] : scene_state.joint_transforms)
+    joints_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), tf));
 
-  for (const auto& lid : env.getLinkIds())
-  {
-    auto it = scene_state.link_transforms.find(lid);
-    if (it != scene_state.link_transforms.end())
-      links_item->appendRow(new TransformStandardItem(QString::fromStdString(lid.name()), it->second));
-  }
+  for (const auto& [lid, tf] : scene_state.link_transforms)
+    links_item->appendRow(new TransformStandardItem(QString::fromStdString(lid.name()), tf));
 
   joint_values_item->sortChildren(0);
   floating_joint_values_item->sortChildren(0);
