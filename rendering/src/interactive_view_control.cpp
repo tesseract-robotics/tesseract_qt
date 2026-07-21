@@ -209,7 +209,7 @@ void InteractiveViewControlPrivate::onRender()
   }
   else if (mouse_event.Type() == gz::common::MouseEvent::PRESS)
   {
-    // Do not updated reference target on middle button because it is annoying when trying to orbit around an object
+    // Do not update reference target on middle button because it is annoying when trying to orbit around an object
     if (mouse_event.Button() != gz::common::MouseEvent::MIDDLE)
     {
       target = gz::rendering::screenToScene(mouse_event.PressPos(), camera, ray_query);

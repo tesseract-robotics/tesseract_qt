@@ -33,9 +33,7 @@ class SceneStateStandardItem : public QStandardItem
 public:
   SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state);
   SceneStateStandardItem(const QString& text, const tesseract::scene_graph::SceneState& scene_state);
-  SceneStateStandardItem(const QIcon& icon,
-                         const QString& text,
-                         const tesseract::scene_graph::SceneState& scene_state);
+  SceneStateStandardItem(const QIcon& icon, const QString& text, const tesseract::scene_graph::SceneState& scene_state);
 
   int type() const override;
 
