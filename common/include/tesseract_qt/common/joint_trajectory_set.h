@@ -104,6 +104,18 @@ public:
   void applyEnvironment(std::unique_ptr<tesseract::environment::Environment> env);
 
   /**
+   * @brief Share an existing environment with this trajectory set (no ownership transfer)
+   * @details For trajectory sets with NO stored commands only: sharing means the environment
+   * may be referenced by other trajectory sets, so per-set commands must not be applied to it.
+   * Used by JointTrajectoryModel to attach one clone of the monitored environment per
+   * environment revision across all trajectory sets, instead of one clone per set.
+   * @throws If the trajectory set already contains an environment
+   * @throws If the trajectory set contains commands (use the unique_ptr overload instead)
+   * @param env The shared environment
+   */
+  void applyEnvironment(std::shared_ptr<tesseract::environment::Environment> env);
+
+  /**
    * @brief Get the environment for the joint trajectory set
    * @details This can be a nullptr. If nullptr then check for commands which should be applied to the existing
    * environment.

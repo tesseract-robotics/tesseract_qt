@@ -88,6 +88,19 @@ void JointTrajectorySet::applyEnvironment(std::unique_ptr<tesseract::environment
   commands_.clear();
 }
 
+void JointTrajectorySet::applyEnvironment(std::shared_ptr<tesseract::environment::Environment> env)
+{
+  if (environment_ != nullptr)
+    throw std::runtime_error("JointTrajectorySet: Cannot apply environment to trajectory set which already contains an "
+                             "environment");
+
+  if (!commands_.empty())
+    throw std::runtime_error("JointTrajectorySet: Cannot share an environment with a trajectory set that has stored "
+                             "commands; use the unique_ptr overload so the commands apply to a private clone");
+
+  environment_ = std::move(env);
+}
+
 std::shared_ptr<tesseract::environment::Environment> JointTrajectorySet::getEnvironment() const { return environment_; }
 
 const std::vector<std::shared_ptr<const tesseract::environment::Command>>&
