@@ -50,6 +50,43 @@ struct JointTrajectoryModel::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
   std::map<boost::uuids::uuid, QStandardItem*> trajectory_sets;
+
+  /**
+   * One environment clone per (source environment, revision), shared by every
+   * trajectory set added while the monitored environment sits at that revision.
+   * Without this cache every received trajectory set attached its OWN
+   * Environment::clone(): selecting any set then always failed the widget's
+   * pointer-identity check and triggered a full EnvironmentManager::set() (scene
+   * teardown + rebuild), and the per-set clones accumulated for the model's
+   * lifetime. weak_ptr so clearing/removing the owning sets frees the clone.
+   */
+  std::map<std::pair<const tesseract::environment::Environment*, int>,
+           std::weak_ptr<tesseract::environment::Environment>>
+      env_clone_cache;
+
+  /** Shared clone of env at its current revision (created on first use). */
+  std::shared_ptr<tesseract::environment::Environment>
+  getSharedClone(const std::shared_ptr<const tesseract::environment::Environment>& env)
+  {
+    // Prune entries whose trajectory sets are all gone.
+    for (auto it = env_clone_cache.begin(); it != env_clone_cache.end();)
+      it = (it->second.expired()) ? env_clone_cache.erase(it) : std::next(it);
+
+    // NOTE: getRevision() then clone() is not atomic; if the monitored
+    // environment advances in between, the cached clone is simply newer than
+    // its key -- visualization-only impact, corrected at the next revision.
+    const std::pair<const tesseract::environment::Environment*, int> key(env.get(), env->getRevision());
+    auto it = env_clone_cache.find(key);
+    if (it != env_clone_cache.end())
+    {
+      if (auto existing = it->second.lock())
+        return existing;
+    }
+
+    std::shared_ptr<tesseract::environment::Environment> clone = env->clone();
+    env_clone_cache[key] = clone;
+    return clone;
+  }
 };
 
 JointTrajectoryModel::JointTrajectoryModel(QObject* parent) : JointTrajectoryModel(nullptr, parent) {}
@@ -101,20 +138,21 @@ void JointTrajectoryModel::addJointTrajectorySet(tesseract::common::JointTraject
   if (trajectory_set.getEnvironment() == nullptr)
   {
     auto env_wrapper = EnvironmentManager::find(data_->component_info);
+    if (env_wrapper == nullptr)
+      env_wrapper = EnvironmentManager::getDefault();
+
     if (env_wrapper != nullptr)
     {
       auto env = env_wrapper->getEnvironment();
       if (env != nullptr && env->isInitialized())
-        trajectory_set.applyEnvironment(env->clone());
-    }
-    else
-    {
-      auto env_wrapper = EnvironmentManager::getDefault();
-      if (env_wrapper != nullptr)
       {
-        auto env = env_wrapper->getEnvironment();
-        if (env != nullptr && env->isInitialized())
+        // Sets carrying their own commands (e.g. per-trajectory contact markers)
+        // must keep a private clone -- the commands mutate it. Everything else
+        // shares one clone per environment revision (see Implementation).
+        if (!trajectory_set.getEnvironmentCommands().empty())
           trajectory_set.applyEnvironment(env->clone());
+        else
+          trajectory_set.applyEnvironment(data_->getSharedClone(env));
       }
     }
   }
