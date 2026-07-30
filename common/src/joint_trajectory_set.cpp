@@ -65,23 +65,9 @@ JointTrajectorySet::JointTrajectorySet(const tesseract::scene_graph::SceneState:
 
 JointTrajectorySet::JointTrajectorySet(std::unique_ptr<tesseract::environment::Environment> environment,
                                        std::string description)
-  : environment_(std::move(environment))
-  , description_(std::move(description))
-  , uuid_(boost::uuids::random_generator()())
+  : JointTrajectorySet(environment->getState().joints, std::move(description))
 {
-  const auto& state = environment_->getState();
-  initial_state_.joint_ids = environment_->getJointIds();
-
-  const auto joint_count = static_cast<Eigen::Index>(initial_state_.joint_ids.size());
-  initial_state_.position.resize(joint_count);
-  initial_state_.velocity = Eigen::VectorXd::Zero(joint_count);
-  initial_state_.acceleration = Eigen::VectorXd::Zero(joint_count);
-  initial_state_.effort = Eigen::VectorXd::Zero(joint_count);
-  for (Eigen::Index r = 0; r < joint_count; ++r)
-  {
-    auto it = state.joints.find(initial_state_.joint_ids[static_cast<std::size_t>(r)]);
-    initial_state_.position(r) = (it != state.joints.end()) ? it->second : 0.0;
-  }
+  environment_ = std::move(environment);
 }
 
 boost::uuids::uuid JointTrajectorySet::getUUID() const { return uuid_; }
