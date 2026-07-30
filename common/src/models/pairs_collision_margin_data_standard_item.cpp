@@ -58,8 +58,8 @@ int PairsCollisionMarginDataStandardItem::type() const
 
 void PairsCollisionMarginDataStandardItem::ctor()
 {
-  for (const auto& [key, entry] : pairs_margin_data)
-    addPairCollisionMargin(key.first().name(), key.second().name(), entry.margin);
+  for (const auto& [key, margin] : pairs_margin_data)
+    addPairCollisionMargin(key.first().name(), key.second().name(), margin);
 
   sortChildren(0);
 }
