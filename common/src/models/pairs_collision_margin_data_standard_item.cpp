@@ -58,8 +58,13 @@ int PairsCollisionMarginDataStandardItem::type() const
 
 void PairsCollisionMarginDataStandardItem::ctor()
 {
+  // The first name becomes the top level row and the second a child under it, so it must not be
+  // taken from first()/second(), whose order is decided by hash value.
   for (const auto& [key, margin] : pairs_margin_data)
-    addPairCollisionMargin(key.first().name(), key.second().name(), margin);
+  {
+    const auto [link1, link2] = key.orderedNameView();
+    addPairCollisionMargin(link1, link2, margin);
+  }
 
   sortChildren(0);
 }

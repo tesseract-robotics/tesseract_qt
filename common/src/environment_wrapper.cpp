@@ -281,8 +281,8 @@ void eventFilterHelper(QObject* /*obj*/,
       double percent = double(pair.second.size()) / double(e->getResolution());
       if (percent > 0.95)
       {
-        const auto& id1 = pair.second.front().link_ids[0];
-        const auto& id2 = pair.second.front().link_ids[1];
+        const auto& id1 = pair.first.first();
+        const auto& id2 = pair.first.second();
         std::vector<tesseract::common::LinkId> adj_first = env.getSceneGraph()->getAdjacentLinkIds(id1);
         std::vector<tesseract::common::LinkId> adj_second = env.getSceneGraph()->getAdjacentLinkIds(id2);
         if (std::find(adj_first.begin(), adj_first.end(), id2) != adj_first.end())

@@ -64,7 +64,10 @@ void CollisionMarginDataStandardItem::ctor(const tesseract::common::CollisionMar
   appendRow(createStandardItemFloat("max margin", collision_margin_data.getMaxCollisionMargin()));
   auto* pair_margins = new QStandardItem("pair margins");
   for (const auto& [key, margin] : collision_margin_data.getCollisionMarginPairData().getCollisionMargins())
-    pair_margins->appendRow(createStandardItemFloat(key.first().name() + "::" + key.second().name(), margin));
+  {
+    const auto [link1, link2] = key.orderedNameView();
+    pair_margins->appendRow(createStandardItemFloat(link1 + "::" + link2, margin));
+  }
 
   appendRow(pair_margins);
 }
