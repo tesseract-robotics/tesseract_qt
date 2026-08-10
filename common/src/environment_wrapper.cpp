@@ -288,7 +288,7 @@ void eventFilterHelper(QObject* /*obj*/,
     }
 
     std::vector<std::string> link_names = env.getLinkNames();
-    for (std::size_t i = 0; i < link_names.size() - 1; ++i)
+    for (std::size_t i = 0; i + 1 < link_names.size(); ++i)
     {
       const auto& link1 = env.getLink(link_names[i]);
       if (link1->collision.empty())
