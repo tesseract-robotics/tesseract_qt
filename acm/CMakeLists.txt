@@ -20,6 +20,8 @@ target_link_libraries(
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_acm_models PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_acm_models PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_acm_models PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                     "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/acm>" "$<INSTALL_INTERFACE:include>")
@@ -46,6 +48,8 @@ target_link_libraries(
          Qt5::Gui
          ${PROJECT_NAME}_acm_models
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_acm_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_acm_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_acm_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                      "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/acm>" "$<INSTALL_INTERFACE:include>")

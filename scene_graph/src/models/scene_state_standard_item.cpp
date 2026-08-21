@@ -60,18 +60,17 @@ void SceneStateStandardItem::ctor(const tesseract::scene_graph::SceneState& scen
   auto* links_item = new QStandardItem(icons::getLinkVectorIcon(), "Links");
   auto* joints_item = new QStandardItem(icons::getJointVectorIcon(), "Joints");
 
-  for (const auto& joint : scene_state.joints)
-    joint_values_item->appendRow(createStandardItemFloat(joint.first, joint.second));
+  for (const auto& [jid, value] : scene_state.joints)
+    joint_values_item->appendRow(createStandardItemFloat(jid.name(), value));
 
-  for (const auto& floating_joint : scene_state.floating_joints)
-    floating_joint_values_item->appendRow(
-        new TransformStandardItem(QString::fromStdString(floating_joint.first), floating_joint.second));
+  for (const auto& [jid, tf] : scene_state.floating_joints)
+    floating_joint_values_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), tf));
 
-  for (const auto& link : scene_state.link_transforms)
-    links_item->appendRow(new TransformStandardItem(QString::fromStdString(link.first), link.second));
+  for (const auto& [jid, tf] : scene_state.joint_transforms)
+    joints_item->appendRow(new TransformStandardItem(QString::fromStdString(jid.name()), tf));
 
-  for (const auto& joint : scene_state.joint_transforms)
-    joints_item->appendRow(new TransformStandardItem(QString::fromStdString(joint.first), joint.second));
+  for (const auto& [lid, tf] : scene_state.link_transforms)
+    links_item->appendRow(new TransformStandardItem(QString::fromStdString(lid.name()), tf));
 
   joint_values_item->sortChildren(0);
   floating_joint_values_item->sortChildren(0);

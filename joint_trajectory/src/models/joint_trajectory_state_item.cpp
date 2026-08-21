@@ -53,8 +53,9 @@ void JointTrajectoryStateItem::ctor()
   // Add State Joint Names
   auto* state_joint_names = new QStandardItem("joint_names");
   state_joint_names->setColumnCount(2);
-  for (std::size_t k = 0; k < state.joint_names.size(); ++k)
-    state_joint_names->appendRow(createStandardItemString(QString("[%1]").arg(k).toStdString(), state.joint_names[k]));
+  for (std::size_t k = 0; k < state.joint_ids.size(); ++k)
+    state_joint_names->appendRow(
+        createStandardItemString(QString("[%1]").arg(k).toStdString(), state.joint_ids[k].name()));
 
   appendRow(state_joint_names);
 

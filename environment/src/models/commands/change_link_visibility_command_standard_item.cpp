@@ -61,6 +61,6 @@ int ChangeLinkVisibilityCommandStandardItem::type() const
 void ChangeLinkVisibilityCommandStandardItem::ctor()
 {
   appendRow(createStandardItemString(
-      icons::getLinkIcon(), command->getLinkName(), (command->getEnabled()) ? "True" : "False"));
+      icons::getLinkIcon(), command->getLinkId().name(), (command->getEnabled()) ? "True" : "False"));
 }
 }  // namespace tesseract::gui

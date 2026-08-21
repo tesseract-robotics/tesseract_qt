@@ -31,7 +31,7 @@ namespace tesseract::gui
 class SceneStateStandardItem : public QStandardItem
 {
 public:
-  explicit SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state);
+  SceneStateStandardItem(const tesseract::scene_graph::SceneState& scene_state);
   SceneStateStandardItem(const QString& text, const tesseract::scene_graph::SceneState& scene_state);
   SceneStateStandardItem(const QIcon& icon, const QString& text, const tesseract::scene_graph::SceneState& scene_state);
 

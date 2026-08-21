@@ -183,8 +183,8 @@ void ToolPathWidget::onSaveFinished(int results)
       if (env_wrapper != nullptr && env_wrapper->getEnvironment()->isInitialized())
       {
         tesseract::scene_graph::SceneState state = env_wrapper->getEnvironment()->getState();
-        auto it1 = state.link_transforms.find(working_frame);
-        auto it2 = state.link_transforms.find(link_name);
+        auto it1 = state.link_transforms.find(tesseract::common::LinkId(working_frame));
+        auto it2 = state.link_transforms.find(tesseract::common::LinkId(link_name));
         if (it1 != state.link_transforms.end() && it2 != state.link_transforms.end())
         {
           Eigen::Isometry3d tf = it2->second.inverse() * it1->second;

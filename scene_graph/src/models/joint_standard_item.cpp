@@ -123,10 +123,10 @@ void JointStandardItem::ctor()
     appendRow(item);
   }
 
-  data_->child_link_name = createStandardItemString("child_link_name", joint->child_link_name);
+  data_->child_link_name = createStandardItemString("child_link_name", joint->child_link_id.name());
   appendRow(data_->child_link_name);
 
-  data_->parent_link_name = createStandardItemString("parent_link_name", joint->parent_link_name);
+  data_->parent_link_name = createStandardItemString("parent_link_name", joint->parent_link_id.name());
   appendRow(data_->parent_link_name);
 
   appendRow(new TransformStandardItem(joint->parent_to_joint_origin_transform));

@@ -233,9 +233,10 @@ void eventFilterHelper(QObject* /*obj*/,
     {
       tesseract::gui::ContactResultVector crv;
       for (const auto& result : contact.second)
-        crv().emplace_back(tesseract::gui::ContactResult(result));
+        crv().emplace_back(result);
 
-      tracked_object[contact.first] = crv;
+      const auto [link1, link2] = contact.first.orderedNameView();
+      tracked_object[{ link1, link2 }] = crv;
     }
 
     tesseract::gui::events::ContactResultsSet event(component_info, tracked_object, e->getNamespace());
@@ -276,32 +277,37 @@ void eventFilterHelper(QObject* /*obj*/,
       double percent = double(pair.second.size()) / double(e->getResolution());
       if (percent > 0.95)
       {
-        std::vector<std::string> adj_first = env.getSceneGraph()->getAdjacentLinkNames(pair.first.first);
-        std::vector<std::string> adj_second = env.getSceneGraph()->getAdjacentLinkNames(pair.first.second);
-        if (std::find(adj_first.begin(), adj_first.end(), pair.first.second) != adj_first.end())
-          acm.addAllowedCollision(pair.first.first, pair.first.second, "Adjacent");
-        else if (std::find(adj_second.begin(), adj_second.end(), pair.first.first) != adj_second.end())
-          acm.addAllowedCollision(pair.first.second, pair.first.first, "Adjacent");
+        const auto& id1 = pair.first.first();
+        const auto& id2 = pair.first.second();
+        std::vector<tesseract::common::LinkId> adj_first = env.getSceneGraph()->getAdjacentLinkIds(id1);
+        std::vector<tesseract::common::LinkId> adj_second = env.getSceneGraph()->getAdjacentLinkIds(id2);
+        if (std::find(adj_first.begin(), adj_first.end(), id2) != adj_first.end())
+          acm.addAllowedCollision(id1, id2, "Adjacent");
+        else if (std::find(adj_second.begin(), adj_second.end(), id1) != adj_second.end())
+          acm.addAllowedCollision(id2, id1, "Adjacent");
         else
-          acm.addAllowedCollision(pair.first.second, pair.first.first, "Allways");
+          acm.addAllowedCollision(id2, id1, "Always");
       }
     }
 
-    std::vector<std::string> link_names = env.getLinkNames();
-    for (std::size_t i = 0; i + 1 < link_names.size(); ++i)
+    std::vector<tesseract::common::LinkId> link_ids = env.getLinkIds();
+    tesseract::common::LinkIdPair link_pair;
+
+    for (std::size_t i = 0; i + 1 < link_ids.size(); ++i)
     {
-      const auto& link1 = env.getLink(link_names[i]);
+      const auto& link1 = env.getLink(link_ids[i]);
       if (link1->collision.empty())
         continue;
 
-      for (std::size_t j = i + 1; j < link_names.size(); ++j)
+      for (std::size_t j = i + 1; j < link_ids.size(); ++j)
       {
-        const auto& link2 = env.getLink(link_names[j]);
+        const auto& link2 = env.getLink(link_ids[j]);
         if (link2->collision.empty())
           continue;
 
-        if (results.find(tesseract::common::makeOrderedLinkPair(link_names[i], link_names[j])) == results.end())
-          acm.addAllowedCollision(link_names[i], link_names[j], "Never");
+        link_pair.assign(link_ids[i], link_ids[j]);
+        if (results.find(link_pair) == results.end())
+          acm.addAllowedCollision(link_ids[i], link_ids[j], "Never");
       }
     }
 

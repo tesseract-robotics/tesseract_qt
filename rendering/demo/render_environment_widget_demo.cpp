@@ -82,9 +82,10 @@ tesseract::gui::ToolPath getToolPath()
 
 tesseract::common::JointTrajectorySet getJointTrajectorySet()
 {
-  std::unordered_map<std::string, double> initial_state{ { "joint_a1", 0 }, { "joint_a2", 0 }, { "joint_a3", 0 },
-                                                         { "joint_a4", 0 }, { "joint_a5", 0 }, { "joint_a6", 0 },
-                                                         { "joint_a7", 0 } };
+  std::unordered_map<tesseract::common::JointId, double> initial_state{ { "joint_a1", 0 }, { "joint_a2", 0 },
+                                                                        { "joint_a3", 0 }, { "joint_a4", 0 },
+                                                                        { "joint_a5", 0 }, { "joint_a6", 0 },
+                                                                        { "joint_a7", 0 } };
 
   tesseract::common::JointTrajectorySet trajectory_set(initial_state);
   for (int i = 0; i < 5; ++i)
@@ -94,7 +95,7 @@ tesseract::common::JointTrajectorySet getJointTrajectorySet()
     for (int j = 0; j < 5; ++j)
     {
       tesseract::common::JointState state;
-      state.joint_names = { "joint_a1", "joint_a2", "joint_a3", "joint_a4", "joint_a5", "joint_a6", "joint_a7" };
+      state.joint_ids = { "joint_a1", "joint_a2", "joint_a3", "joint_a4", "joint_a5", "joint_a6", "joint_a7" };
       state.position.resize(7);
       state.velocity.resize(7);
       state.acceleration.resize(7);

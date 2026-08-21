@@ -43,6 +43,8 @@ target_link_libraries(
          Qt5::Gui
          Qt5::Widgets
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_scene_graph_models PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_scene_graph_models PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_scene_graph_models PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                             "$<INSTALL_INTERFACE:include>")
@@ -69,6 +71,8 @@ target_link_libraries(
          Qt5::Widgets
          ${PROJECT_NAME}_scene_graph_models
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_scene_graph_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_scene_graph_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_scene_graph_widgets PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                                              "$<INSTALL_INTERFACE:include>")

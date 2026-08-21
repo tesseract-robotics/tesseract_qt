@@ -95,7 +95,7 @@ void AllowedCollisionMatrixModel::set(const tesseract::common::AllowedCollisionM
   clear();
 
   for (const auto& ac : acm.getAllAllowedCollisions())
-    add(ac.first.first, ac.first.second, ac.second);
+    add(ac.first.first().name(), ac.first.second().name(), ac.second);
 
   sort(0);
 }
@@ -198,6 +198,7 @@ void AllowedCollisionMatrixModel::remove(const std::string& link_name)
   if (it1 != data_->items.end())
   {
     std::vector<std::array<std::string, 2>> link_pairs;
+    link_pairs.reserve(it1->second->rowCount());
     for (int row = 0; row < it1->second->rowCount(); ++row)
       link_pairs.push_back({ link_name, it1->second->child(row)->text().toStdString() });
 
@@ -224,7 +225,9 @@ tesseract::common::AllowedCollisionMatrix AllowedCollisionMatrixModel::getAllowe
     {
       QStandardItem* child = parent->child(child_row);
       QStandardItem* reason = parent->child(child_row, 1);
-      acm.addAllowedCollision(parent->text().toStdString(), child->text().toStdString(), reason->text().toStdString());
+      acm.addAllowedCollision(tesseract::common::LinkId(parent->text().toStdString()),
+                              tesseract::common::LinkId(child->text().toStdString()),
+                              reason->text().toStdString());
     }
   }
 

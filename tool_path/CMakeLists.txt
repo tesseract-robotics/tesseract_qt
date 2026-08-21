@@ -19,6 +19,8 @@ target_link_libraries(
          Qt5::Core
          Qt5::Gui
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_tool_path_models PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_tool_path_models PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_tool_path_models
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/tool_path>"
@@ -47,6 +49,8 @@ target_link_libraries(
          Qt5::Gui
          Qt5::Widgets
          ${PROJECT_NAME}_tool_path_models)
+target_compile_definitions(${PROJECT_NAME}_tool_path_widgets PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_tool_path_widgets PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_tool_path_widgets
   PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/tool_path>"

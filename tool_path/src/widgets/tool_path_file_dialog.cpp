@@ -64,9 +64,9 @@ void ToolPathFileDialog::showEvent(QShowEvent* e)
   {
     QStringList list;
     list.append("__NULL__");
-    std::vector<std::string> link_names = env_wrapper->getEnvironment()->getLinkNames();
-    for (const auto& link_name : link_names)
-      list.append(QString::fromStdString(link_name));
+    std::vector<tesseract::common::LinkId> link_ids = env_wrapper->getEnvironment()->getLinkIds();
+    for (const auto& link_id : link_ids)
+      list.append(QString::fromStdString(link_id.name()));
 
     list.sort();
     ui_->frame_combo_box->clear();

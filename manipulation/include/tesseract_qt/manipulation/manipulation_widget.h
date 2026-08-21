@@ -26,6 +26,7 @@
 #ifndef Q_MOC_RUN
 #include <memory>
 #include <Eigen/Geometry>
+#include <tesseract/common/types.h>
 #include <tesseract/kinematics/fwd.h>
 #include <tesseract/scene_graph/fwd.h>
 #include <tesseract/environment/fwd.h>
@@ -164,14 +165,14 @@ public:
   Eigen::Isometry3d getActiveCartesianTransform(bool in_world = false) const;
 
   /**
-   * @brief Get the joint names of the active state
-   * @return The joint names
+   * @brief Get the joint ids of the active state
+   * @return The joint ids
    */
-  std::vector<std::string> getActiveJointNames() const;
+  std::vector<tesseract::common::JointId> getActiveJointIds() const;
 
   /**
    * @brief Get the joint values of the active state
-   * @return The joint values in the order of what getActiveJointNames() returns
+   * @return The joint values in the order of what getActiveJointIds() returns
    */
   Eigen::VectorXd getActiveJointValues() const;
 

@@ -185,10 +185,10 @@ bool SceneGraphModel::eventFilter(QObject* obj, QEvent* event)
     if (e->getComponentInfo() == data_->component_info)
     {
       auto joint = e->getJoint();
-      std::string child_link_name = joint->child_link_name;
+      std::string child_link_name = joint->child_link_id.name();
       for (const auto& joint : data_->scene_graph_item->getJoints())
       {
-        if (joint.second->joint->child_link_name == child_link_name)
+        if (joint.second->joint->child_link_id.name() == child_link_name)
         {
           removeJoint(joint.first);
           break;

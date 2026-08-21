@@ -24,20 +24,20 @@
 #define TESSERACT_QT_KINEMATICS_GROUP_CHAIN_GROUP_STANDARD_ITEM_H
 
 #include <QStandardItem>
+#include <tesseract/common/fwd.h>
+#include <tesseract/srdf/kinematics_information.h>
 
 namespace tesseract::gui
 {
 class ChainGroupStandardItem : public QStandardItem
 {
 public:
-  ChainGroupStandardItem(std::vector<std::pair<std::string, std::string>> group);
-  explicit ChainGroupStandardItem(const QString& text, std::vector<std::pair<std::string, std::string>> group);
-  ChainGroupStandardItem(const QIcon& icon,
-                         const QString& text,
-                         std::vector<std::pair<std::string, std::string>> group);
+  ChainGroupStandardItem(tesseract::srdf::ChainGroup group);
+  explicit ChainGroupStandardItem(const QString& text, tesseract::srdf::ChainGroup group);
+  ChainGroupStandardItem(const QIcon& icon, const QString& text, tesseract::srdf::ChainGroup group);
   int type() const override;
 
-  std::vector<std::pair<std::string, std::string>> group;
+  tesseract::srdf::ChainGroup group;
 
 private:
   void ctor();

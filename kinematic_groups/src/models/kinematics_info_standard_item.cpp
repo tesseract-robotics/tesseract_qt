@@ -73,13 +73,19 @@ void KinematicsInfoStandardItem::ctor()
 
   auto* joint_groups = new QStandardItem("Joint Groups");
   for (const auto& joint_group : kinematics_info.joint_groups)
-    joint_groups->appendRow(new JointGroupStandardItem(joint_group.first.c_str(), joint_group.second));
+  {
+    auto joint_names = tesseract::common::toNames(joint_group.second);
+    joint_groups->appendRow(new JointGroupStandardItem(joint_group.first.c_str(), std::move(joint_names)));
+  }
 
   appendRow({ joint_groups, new QStandardItem() });
 
   auto* link_groups = new QStandardItem("Link Groups");
   for (const auto& link_group : kinematics_info.link_groups)
-    link_groups->appendRow(new LinkGroupStandardItem(link_group.first.c_str(), link_group.second));
+  {
+    auto link_names = tesseract::common::toNames(link_group.second);
+    link_groups->appendRow(new LinkGroupStandardItem(link_group.first.c_str(), std::move(link_names)));
+  }
 
   appendRow({ link_groups, new QStandardItem() });
 

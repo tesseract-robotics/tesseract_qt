@@ -46,7 +46,7 @@ public:
 private:
   void ctor();
 
-  void addPairCollisionMargin(const tesseract::common::LinkNamesPair& pair, double collision_margin);
+  void addPairCollisionMargin(const std::string& link1, const std::string& link2, double collision_margin);
 
   std::unordered_map<std::string, QStandardItem*> items_;
 };

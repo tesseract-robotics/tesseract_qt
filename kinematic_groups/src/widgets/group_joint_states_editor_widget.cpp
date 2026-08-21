@@ -124,8 +124,8 @@ void GroupJointStatesEditorWidget::onGroupNameChanged()
 
   std::vector<tesseract::scene_graph::Joint::ConstPtr> joints;
   auto jg = env->getJointGroup(ui_->groupNamesComboBox->currentText().toStdString());
-  for (const auto& joint_name : jg->getJointNames())
-    joints.push_back(env->getSceneGraph()->getJoint(joint_name));
+  for (const auto& joint_id : jg->getJointIds())
+    joints.push_back(env->getSceneGraph()->getJoint(joint_id));
 
   ui_->jointSliderWidget->setJoints(joints);
 }
@@ -137,8 +137,13 @@ void GroupJointStatesEditorWidget::onAddJointState()
   if (state_name.empty())
     return;
 
+  const auto slider_state = ui_->jointSliderWidget->getJointState();
+  tesseract::srdf::GroupsJointState id_state;
+  id_state.reserve(slider_state.size());
+  for (const auto& [name, val] : slider_state)
+    id_state[tesseract::common::JointId(name)] = val;
   tesseract::gui::events::GroupJointStatesAdd event(
-      ui_->groupJointStatesWidget->getComponentInfo(), group_name, state_name, ui_->jointSliderWidget->getJointState());
+      ui_->groupJointStatesWidget->getComponentInfo(), group_name, state_name, id_state);
   QApplication::sendEvent(qApp, &event);
 
   ui_->jointStateNameLineEdit->clear();

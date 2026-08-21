@@ -81,7 +81,7 @@ sceneFromRenderEngine(const std::string& scene_name,
  */
 void setSceneState(gz::rendering::Scene& scene,
                    const EntityContainer& entity_container,
-                   const tesseract::common::TransformMap& link_transforms);
+                   const tesseract::common::LinkIdTransformMap& link_transforms);
 
 /**
  * @brief Clear all items associated with the provided entity container from the scene

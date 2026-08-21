@@ -5,10 +5,6 @@ on:
     branches:
       - master
   pull_request:
-    paths:
-      - 'tesseract**'
-      - '.github/workflows/clang_format.yml'
-      - '**clang-format'
 
   # allow manually starting this workflow
   workflow_dispatch:
@@ -27,4 +23,5 @@ jobs:
           ./.run-clang-format
           if [ $? -ge 1 ]; then return 1; fi
           output=$(git diff)
+          echo "$output"
           if [ -n "$output" ]; then exit 1; else exit 0; fi

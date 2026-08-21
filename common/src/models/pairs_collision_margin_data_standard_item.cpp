@@ -58,28 +58,34 @@ int PairsCollisionMarginDataStandardItem::type() const
 
 void PairsCollisionMarginDataStandardItem::ctor()
 {
-  for (const auto& pair : pairs_margin_data)
-    addPairCollisionMargin(pair.first, pair.second);
+  // The first name becomes the top level row and the second a child under it, so it must not be
+  // taken from first()/second(), whose order is decided by hash value.
+  for (const auto& [key, margin] : pairs_margin_data)
+  {
+    const auto [link1, link2] = key.orderedNameView();
+    addPairCollisionMargin(link1, link2, margin);
+  }
 
   sortChildren(0);
 }
 
-void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const tesseract::common::LinkNamesPair& pair,
+void PairsCollisionMarginDataStandardItem::addPairCollisionMargin(const std::string& link1,
+                                                                  const std::string& link2,
                                                                   double collision_margin)
 {
   QStandardItem* item;
-  auto it = items_.find(pair.first);
+  auto it = items_.find(link1);
   if (it == items_.end())
   {
-    item = new QStandardItem(pair.first.c_str());
+    item = new QStandardItem(link1.c_str());
     appendRow({ item, new QStandardItem() });
-    items_[pair.first] = item;
+    items_[link1] = item;
   }
   else
   {
     item = it->second;
   }
 
-  item->appendRow(createStandardItemFloat(pair.second, collision_margin));
+  item->appendRow(createStandardItemFloat(link2, collision_margin));
 }
 }  // namespace tesseract::gui

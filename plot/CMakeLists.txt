@@ -64,6 +64,8 @@ target_link_libraries(
          Qwt::Qwt
          tesseract::common
          ${PROJECT_NAME}_common)
+target_compile_definitions(${PROJECT_NAME}_plot PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_plot PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_plot PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                               "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/plot>" "$<INSTALL_INTERFACE:include>")

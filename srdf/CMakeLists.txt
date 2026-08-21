@@ -19,6 +19,8 @@ target_link_libraries(
          Qt5::Widgets
          ${PROJECT_NAME}_acm_widgets
          ${PROJECT_NAME}_kinematic_groups_widgets)
+target_compile_definitions(${PROJECT_NAME}_srdf PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+target_compile_definitions(${PROJECT_NAME}_srdf PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
   ${PROJECT_NAME}_srdf PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
                               "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/srdf>" "$<INSTALL_INTERFACE:include>")
@@ -31,6 +33,8 @@ if(${BUILD_RENDERING})
             ${PROJECT_NAME}_render_widgets
             ${PROJECT_NAME}_environment_widgets
             tesseract::common)
+  target_compile_definitions(${PROJECT_NAME}_srdf_app PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
+  target_compile_definitions(${PROJECT_NAME}_srdf_app PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 
   list(APPEND SRDF_TARGETS ${PROJECT_NAME}_srdf_app)
 endif()
