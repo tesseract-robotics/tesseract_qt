@@ -231,14 +231,12 @@ void eventFilterHelper(QObject* /*obj*/,
     tesseract::gui::ContactResultMap tracked_object;
     for (const auto& contact : contacts)
     {
-      if (contact.second.empty())
-        continue;
       tesseract::gui::ContactResultVector crv;
       for (const auto& result : contact.second)
         crv().emplace_back(result);
 
-      const auto& ids = contact.second.front().link_ids;
-      tracked_object[{ ids[0].name(), ids[1].name() }] = crv;
+      const auto [link1, link2] = contact.first.orderedNameView();
+      tracked_object[{ link1, link2 }] = crv;
     }
 
     tesseract::gui::events::ContactResultsSet event(component_info, tracked_object, e->getNamespace());
@@ -276,8 +274,6 @@ void eventFilterHelper(QObject* /*obj*/,
     tesseract::common::AllowedCollisionMatrix acm;
     for (const auto& pair : results)
     {
-      if (pair.second.empty())
-        continue;
       double percent = double(pair.second.size()) / double(e->getResolution());
       if (percent > 0.95)
       {
