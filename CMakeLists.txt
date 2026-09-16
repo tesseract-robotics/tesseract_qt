@@ -23,6 +23,10 @@ option(BUILD_STUDIO "Build the studio module" ON)
 
 set(PROJECT_TARGETS)
 
+if(TESSERACT_ENABLE_TESTING)
+  enable_testing()
+endif()
+
 add_subdirectory(common)
 add_subdirectory(acm)
 add_subdirectory(collision)

@@ -24,6 +24,7 @@
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_set_item.h>
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_info_item.h>
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_state_item.h>
+#include <tesseract_qt/joint_trajectory/models/joint_trajectory_utils.h>
 
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
 #include <tesseract_qt/common/events/status_log_events.h>
@@ -49,6 +50,31 @@ namespace tesseract::gui
 {
 namespace
 {
+/**
+ * Environment that trajectory sets arriving without one are cloned from.
+ *
+ * A component for which registersSelectionEnvironment() holds carries a selected trajectory's environment, never a
+ * source: resolve from its parent, and refuse a default that is that component. Cloning a selection would carry one
+ * trajectory's commands into the next.
+ */
+std::shared_ptr<EnvironmentWrapper> findSourceEnvironment(const std::shared_ptr<const ComponentInfo>& component_info)
+{
+  const bool holds_selection = registersSelectionEnvironment(component_info);
+
+  auto env_wrapper =
+      EnvironmentManager::find(holds_selection ? component_info->getParentComponentInfo() : component_info);
+  if (env_wrapper == nullptr)
+  {
+    // The default is whichever environment registered first, which can be this or another trajectory widget's
+    // selection -- including a widget on a sibling component. Cloning one carries its trajectory's commands here.
+    env_wrapper = EnvironmentManager::getDefault();
+    if (env_wrapper != nullptr && registersSelectionEnvironment(env_wrapper->getComponentInfo()))
+      return nullptr;
+  }
+
+  return env_wrapper;
+}
+
 /** Report message to the status log. Reporting must not itself throw out of an event filter. */
 void reportError(const std::string& message)
 {
@@ -76,10 +102,24 @@ struct JointTrajectoryModel::Implementation
    * pointer-identity check and triggered a full EnvironmentManager::set() (scene
    * teardown + rebuild), and the per-set clones accumulated for the model's
    * lifetime. weak_ptr so clearing/removing the owning sets frees the clone.
+   *
+   * The key holds the source by weak_ptr, not by address: a later environment can occupy a freed one's address at
+   * the same revision, and must not match its clone.
    */
-  std::map<std::pair<const tesseract::environment::Environment*, int>,
-           std::weak_ptr<tesseract::environment::Environment>>
-      env_clone_cache;
+  using CloneKey = std::pair<std::weak_ptr<const tesseract::environment::Environment>, int>;
+  struct CloneKeyLess
+  {
+    bool operator()(const CloneKey& lhs, const CloneKey& rhs) const
+    {
+      const std::owner_less<std::weak_ptr<const tesseract::environment::Environment>> source_less;
+      if (source_less(lhs.first, rhs.first))
+        return true;
+      if (source_less(rhs.first, lhs.first))
+        return false;
+      return lhs.second < rhs.second;
+    }
+  };
+  std::map<CloneKey, std::weak_ptr<tesseract::environment::Environment>, CloneKeyLess> env_clone_cache;
 
   /** Shared clone of env at its current revision (created on first use). */
   std::shared_ptr<tesseract::environment::Environment>
@@ -92,7 +132,7 @@ struct JointTrajectoryModel::Implementation
     // NOTE: getRevision() then clone() is not atomic; if the monitored
     // environment advances in between, the cached clone is simply newer than
     // its key -- visualization-only impact, corrected at the next revision.
-    const std::pair<const tesseract::environment::Environment*, int> key(env.get(), env->getRevision());
+    const CloneKey key(env, env->getRevision());
     auto it = env_clone_cache.find(key);
     if (it != env_clone_cache.end())
     {
@@ -100,8 +140,9 @@ struct JointTrajectoryModel::Implementation
         return existing;
     }
 
+    // The prune above erased every expired entry, so a key found here always locked and returned.
     std::shared_ptr<tesseract::environment::Environment> clone = env->clone();
-    env_clone_cache[key] = clone;
+    env_clone_cache.emplace(key, clone);
     return clone;
   }
 };
@@ -124,6 +165,9 @@ std::shared_ptr<const ComponentInfo> JointTrajectoryModel::getComponentInfo() co
 
 void JointTrajectoryModel::clear()
 {
+  // Drop the uuid index first: QStandardItemModel::clear() deletes every item and only then emits modelReset, so
+  // a directly connected slot re-entering the model must not find the index pointing at freed items.
+  data_->trajectory_sets.clear();
   QStandardItemModel::clear();
   setColumnCount(2);
   setHorizontalHeaderLabels({ "Name", "Values" });
@@ -154,10 +198,7 @@ void JointTrajectoryModel::addJointTrajectorySet(tesseract::common::JointTraject
 {
   if (trajectory_set.getEnvironment() == nullptr)
   {
-    auto env_wrapper = EnvironmentManager::find(data_->component_info);
-    if (env_wrapper == nullptr)
-      env_wrapper = EnvironmentManager::getDefault();
-
+    auto env_wrapper = findSourceEnvironment(data_->component_info);
     if (env_wrapper != nullptr)
     {
       auto env = env_wrapper->getEnvironment();

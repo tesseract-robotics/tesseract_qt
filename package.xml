@@ -33,6 +33,8 @@
   <build_export_depend>libboost-program-options-dev</build_export_depend>
   <exec_depend>libboost-program-options</exec_depend>
 
+  <test_depend>gtest</test_depend>
+
   <export>
     <build_type>cmake</build_type>
   </export>
