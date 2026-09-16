@@ -26,6 +26,7 @@
 #include <tesseract_qt/joint_trajectory/models/joint_trajectory_state_item.h>
 
 #include <tesseract_qt/common/events/joint_trajectory_events.h>
+#include <tesseract_qt/common/events/status_log_events.h>
 #include <tesseract_qt/common/models/namespace_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
@@ -46,6 +47,22 @@
 
 namespace tesseract::gui
 {
+namespace
+{
+/** Report message to the status log. Reporting must not itself throw out of an event filter. */
+void reportError(const std::string& message)
+{
+  try
+  {
+    events::StatusLogError event(message);
+    QApplication::sendEvent(qApp, &event);
+  }
+  catch (...)
+  {
+  }
+}
+}  // namespace
+
 struct JointTrajectoryModel::Implementation
 {
   std::shared_ptr<const ComponentInfo> component_info;
@@ -248,47 +265,59 @@ tesseract::common::JointTrajectorySet JointTrajectoryModel::getJointTrajectorySe
 
 bool JointTrajectoryModel::eventFilter(QObject* obj, QEvent* event)
 {
-  if (event->type() == events::EventType::JOINT_TRAJECTORY_ADD)
+  // Report failures to the status log: an exception must not unwind through Qt's event dispatch.
+  try
   {
-    assert(dynamic_cast<events::JointTrajectoryAdd*>(event) != nullptr);
-    auto* e = static_cast<events::JointTrajectoryAdd*>(event);
-    if (e->getComponentInfo() == data_->component_info)
+    if (event->type() == events::EventType::JOINT_TRAJECTORY_ADD)
     {
-      if (e->clearNamespace())
-        clearNamespace(e->getJointTrajectory().getNamespace());
-
-      // If a trajectory already exist with the same UUID then remove it first.
-      auto it = data_->trajectory_sets.find(e->getJointTrajectory().getUUID());
-      if (it != data_->trajectory_sets.end())
+      assert(dynamic_cast<events::JointTrajectoryAdd*>(event) != nullptr);
+      auto* e = static_cast<events::JointTrajectoryAdd*>(event);
+      if (e->getComponentInfo() == data_->component_info)
       {
-        const QModelIndex idx = indexFromItem(it->second);
-        data_->trajectory_sets.erase(it);
-        removeRow(idx.row(), idx.parent());
-      }
+        if (e->clearNamespace())
+          clearNamespace(e->getJointTrajectory().getNamespace());
 
-      addJointTrajectorySet(e->getJointTrajectory());
+        // If a trajectory already exist with the same UUID then remove it first.
+        auto it = data_->trajectory_sets.find(e->getJointTrajectory().getUUID());
+        if (it != data_->trajectory_sets.end())
+        {
+          const QModelIndex idx = indexFromItem(it->second);
+          data_->trajectory_sets.erase(it);
+          removeRow(idx.row(), idx.parent());
+        }
+
+        addJointTrajectorySet(e->getJointTrajectory());
+      }
+    }
+    else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE)
+    {
+      assert(dynamic_cast<events::JointTrajectoryRemove*>(event) != nullptr);
+      auto* e = static_cast<events::JointTrajectoryRemove*>(event);
+      if (e->getComponentInfo() == data_->component_info)
+        removeJointTrajectorySet(e->getUUID());
+    }
+    else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE_NAMESPACE)
+    {
+      assert(dynamic_cast<events::JointTrajectoryRemoveNamespace*>(event) != nullptr);
+      auto* e = static_cast<events::JointTrajectoryRemoveNamespace*>(event);
+      if (e->getComponentInfo() == data_->component_info)
+        clearNamespace(e->getNamespace());
+    }
+    else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE_ALL)
+    {
+      assert(dynamic_cast<events::JointTrajectoryRemoveAll*>(event) != nullptr);
+      auto* e = static_cast<events::JointTrajectoryRemoveAll*>(event);
+      if (e->getComponentInfo() == data_->component_info)
+        clear();
     }
   }
-  else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE)
+  catch (const std::exception& ex)
   {
-    assert(dynamic_cast<events::JointTrajectoryRemove*>(event) != nullptr);
-    auto* e = static_cast<events::JointTrajectoryRemove*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      removeJointTrajectorySet(e->getUUID());
+    reportError(std::string("JointTrajectoryModel: ") + ex.what());
   }
-  else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE_NAMESPACE)
+  catch (...)
   {
-    assert(dynamic_cast<events::JointTrajectoryRemoveNamespace*>(event) != nullptr);
-    auto* e = static_cast<events::JointTrajectoryRemoveNamespace*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      clearNamespace(e->getNamespace());
-  }
-  else if (event->type() == events::EventType::JOINT_TRAJECTORY_REMOVE_ALL)
-  {
-    assert(dynamic_cast<events::JointTrajectoryRemoveAll*>(event) != nullptr);
-    auto* e = static_cast<events::JointTrajectoryRemoveAll*>(event);
-    if (e->getComponentInfo() == data_->component_info)
-      clear();
+    reportError("JointTrajectoryModel: unknown error");
   }
 
   // Standard event processing
