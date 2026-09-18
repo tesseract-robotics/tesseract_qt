@@ -348,6 +348,17 @@ TEST_F(JointTrajectoryModelUnit, RemoveEventForUnknownSetReportsError)  // NOLIN
   EXPECT_NE(findSet(model, set.getUUID()), nullptr);
 }
 
+TEST_F(JointTrajectoryModelUnit, NullComponentInfoIsRejectedNotDereferenced)  // NOLINT
+{
+  auto component = ComponentInfoManager::create(SCENE_NAME);
+  EnvironmentManager::set(std::make_shared<DefaultEnvironmentWrapper>(component, makeEnvironment()));
+
+  // Both must refuse a null component rather than dereference it. find() is reached with one in production:
+  // ManipulationWidget's convenience constructor passes null.
+  EXPECT_EQ(EnvironmentManager::find(nullptr), nullptr);
+  EXPECT_FALSE(component->isChild(nullptr));
+}
+
 int main(int argc, char** argv)
 {
   testing::InitGoogleTest(&argc, argv);
