@@ -23,7 +23,7 @@ add_library(
   src/models/task_composer_context_model.cpp
   src/models/task_composer_data_storage_model.cpp
   src/models/task_composer_data_storage_standard_item.cpp
-  src/models/task_composer_keys_standard_item.cpp
+  src/models/task_composer_port_map_standard_item.cpp
   src/models/task_composer_log_model.cpp
   src/models/task_composer_log_standard_item.cpp
   src/models/task_composer_node_info_map_standard_item.cpp

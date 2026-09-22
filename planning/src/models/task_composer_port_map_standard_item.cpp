@@ -21,43 +21,49 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <tesseract_qt/planning/models/task_composer_keys_standard_item.h>
+#include <tesseract_qt/planning/models/task_composer_port_map_standard_item.h>
 #include <tesseract_qt/common/models/standard_item_type.h>
 #include <tesseract_qt/common/models/standard_item_utils.h>
 #include <tesseract_qt/common/icon_utils.h>
 
-#include <tesseract/task_composer/task_composer_keys.h>
+#include <tesseract/task_composer/task_composer_port_map.h>
 
 namespace tesseract::gui
 {
-TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const tesseract::task_composer::TaskComposerKeys& data)
-  : QStandardItem(icons::getDataIcon(), "Task Composer Keys")
+TaskComposerPortMapStandardItem::TaskComposerPortMapStandardItem(
+    const tesseract::task_composer::TaskComposerPortMap& data)
+  : QStandardItem(icons::getDataIcon(), "Task Composer Port Map")
 {
   ctor(data);
 }
 
-TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const QString& text,
-                                                           const tesseract::task_composer::TaskComposerKeys& data)
+TaskComposerPortMapStandardItem::TaskComposerPortMapStandardItem(
+    const QString& text,
+    const tesseract::task_composer::TaskComposerPortMap& data)
   : QStandardItem(icons::getDataIcon(), text)
 {
   ctor(data);
 }
 
-TaskComposerKeysStandardItem::TaskComposerKeysStandardItem(const QIcon& icon,
-                                                           const QString& text,
-                                                           const tesseract::task_composer::TaskComposerKeys& data)
+TaskComposerPortMapStandardItem::TaskComposerPortMapStandardItem(
+    const QIcon& icon,
+    const QString& text,
+    const tesseract::task_composer::TaskComposerPortMap& data)
   : QStandardItem(icon, text)
 {
   ctor(data);
 }
 
-int TaskComposerKeysStandardItem::type() const { return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_KEYS); }
+int TaskComposerPortMapStandardItem::type() const
+{
+  return static_cast<int>(StandardItemType::MP_TASK_COMPOSER_PORT_MAP);
+}
 
-void TaskComposerKeysStandardItem::ctor(const tesseract::task_composer::TaskComposerKeys& data)
+void TaskComposerPortMapStandardItem::ctor(const tesseract::task_composer::TaskComposerPortMap& data)
 {
   for (const auto& pair : data.data())
   {
-    if (pair.second.index() == 0)
+    if (std::holds_alternative<std::string>(pair.second))
     {
       appendRow(createStandardItemString(pair.first, std::get<std::string>(pair.second)));
     }

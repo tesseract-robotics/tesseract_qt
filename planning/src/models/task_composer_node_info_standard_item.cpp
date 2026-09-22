@@ -21,7 +21,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include <tesseract_qt/planning/models/task_composer_node_info_standard_item.h>
-#include <tesseract_qt/planning/models/task_composer_keys_standard_item.h>
+#include <tesseract_qt/planning/models/task_composer_port_map_standard_item.h>
 #include <tesseract_qt/planning/models/task_composer_data_storage_standard_item.h>
 
 #include <tesseract_qt/common/models/standard_item_type.h>
@@ -125,15 +125,15 @@ void TaskComposerNodeInfoStandardItem::ctor(const tesseract::task_composer::Task
     appendRow(terminals);
   }
 
-  if (info.input_keys.empty())
-    appendRow(createStandardItemString("input_keys", "Empty"));
+  if (info.input_port_mappings.empty())
+    appendRow(createStandardItemString("input_port_mappings", "Empty"));
   else
-    appendRow(new TaskComposerKeysStandardItem("input_keys", info.input_keys));  // NOLINT
+    appendRow(new TaskComposerPortMapStandardItem("input_port_mappings", info.input_port_mappings));  // NOLINT
 
-  if (info.output_keys.empty())
-    appendRow(createStandardItemString("output_keys", "Empty"));
+  if (info.output_port_mappings.empty())
+    appendRow(createStandardItemString("output_port_mappings", "Empty"));
   else
-    appendRow(new TaskComposerKeysStandardItem("output_keys", info.output_keys));  // NOLINT
+    appendRow(new TaskComposerPortMapStandardItem("output_port_mappings", info.output_port_mappings));  // NOLINT
 
   appendRow(new TaskComposerDataStorageStandardItem("data_storage", info.data_storage));  // NOLINT
 }

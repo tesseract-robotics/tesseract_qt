@@ -15,6 +15,12 @@ Below are screenshots to highlight some of the applications within this reposito
 ### Tesseract Studio
 ![Tesseract Studio](docs/images/tesseract_qt_studio_application.png)
 
+### Tesseract Configuration Editor
+
+`tesseract_config_editor` provides a standalone schema-driven editor for Tesseract YAML configurations. Its built-in
+definitions support kinematics, collision, and task-composer plugin configurations, and additional schema-defined
+configuration formats can be added without changing the editor.
+
 ## Widget Screenshots
 
 Below are screenshots to highlight some of the widgets within this repository and does not incude everything.
