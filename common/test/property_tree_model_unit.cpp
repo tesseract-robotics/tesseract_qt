@@ -21,6 +21,7 @@
 #include <tesseract/common/schema_registry.h>
 #include <tesseract/task_composer/yaml_extensions.h>
 #include <QApplication>
+#include <QByteArray>
 #include <QBrush>
 #include <QColor>
 #include <QIcon>
@@ -452,6 +453,7 @@ TEST(PropertyTreeModelUnit, SelectsPluginCatalogByPropertyPath)  // NOLINT
 
 int main(int argc, char** argv)
 {
+  qputenv("QT_QPA_PLATFORM", QByteArray("offscreen"));
   QApplication application(argc, argv);
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
