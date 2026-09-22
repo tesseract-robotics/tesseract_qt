@@ -43,7 +43,7 @@ target_compile_definitions(
   PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC}
           TESSERACT_PLUGIN_LIBRARY_DIR="${TESSERACT_PLUGIN_LIBRARY_DIR}"
           TESSERACT_PLANNING_PLUGIN_LIBRARY_DIR="${TESSERACT_PLANNING_PLUGIN_LIBRARY_DIR}"
-          TESSERACT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../../tesseract-1")
+          TESSERACT_QT_TEST_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures")
 target_clang_tidy(${PROJECT_NAME}_plugin_schema_resolver_unit ENABLE ${TESSERACT_ENABLE_CLANG_TIDY})
 target_cxx_version(${PROJECT_NAME}_plugin_schema_resolver_unit PRIVATE VERSION ${TESSERACT_CXX_VERSION})
 target_code_coverage(
@@ -60,8 +60,7 @@ target_compile_options(${PROJECT_NAME}_config_editor_widget_unit PRIVATE ${TESSE
                                                                          ${TESSERACT_COMPILE_OPTIONS_PUBLIC})
 target_compile_definitions(
   ${PROJECT_NAME}_config_editor_widget_unit
-  PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC}
-          TESSERACT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../../tesseract-1")
+  PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC} TESSERACT_QT_TEST_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures")
 target_clang_tidy(${PROJECT_NAME}_config_editor_widget_unit ENABLE ${TESSERACT_ENABLE_CLANG_TIDY})
 target_cxx_version(${PROJECT_NAME}_config_editor_widget_unit PRIVATE VERSION ${TESSERACT_CXX_VERSION})
 target_code_coverage(

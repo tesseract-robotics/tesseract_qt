@@ -155,7 +155,7 @@ TEST(ConfigEditorWidgetUnit, LoadsRealKinematicsFixtureWithBuiltInDefaults)
 {
   ConfigEditorWidget widget;
   const auto& definition = configDefinition("kinematics");
-  const auto document = YAML::LoadFile(TESSERACT_SOURCE_DIR "/kinematics/test/kinematic_plugins.yaml");
+  const auto document = YAML::LoadFile(TESSERACT_QT_TEST_FIXTURE_DIR "/kinematic_plugins.yaml");
 
   ASSERT_NO_THROW(widget.loadConfiguration(definition, document));
   EXPECT_EQ(widget.pluginSchemaState(), PropertyTreeEditorWidget::PluginSchemaState::Current);

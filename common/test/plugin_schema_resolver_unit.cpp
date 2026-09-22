@@ -283,7 +283,7 @@ TEST(PluginSchemaResolverUnit, DiscoveredKinematicsSchemasPassEditorValidation)
 
   const auto& definition = configDefinition("kinematics");
   const auto& schema = definition.schema;
-  const auto document = YAML::LoadFile(TESSERACT_SOURCE_DIR "/kinematics/test/kinematic_plugins.yaml");
+  const auto document = YAML::LoadFile(TESSERACT_QT_TEST_FIXTURE_DIR "/kinematic_plugins.yaml");
 
   PluginSchemaResolver resolver;
   resolver.setSearchPaths(definition.default_search_paths);
