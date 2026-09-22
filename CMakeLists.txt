@@ -21,9 +21,15 @@ endif()
 option(BUILD_RENDERING "Build the rendering module" ON)
 option(BUILD_STUDIO "Build the studio module" ON)
 
+if(TESSERACT_ENABLE_TESTING)
+  find_gtest()
+  enable_testing()
+endif()
+
 set(PROJECT_TARGETS)
 
 add_subdirectory(common)
+add_subdirectory(config_editor)
 add_subdirectory(acm)
 add_subdirectory(collision)
 add_subdirectory(command_language)

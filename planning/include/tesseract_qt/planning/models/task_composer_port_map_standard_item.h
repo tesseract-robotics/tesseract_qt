@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_TASK_COMPOSER_KEYS_STANDARD_ITEM_H
-#define TESSERACT_QT_PLANNING_TASK_COMPOSER_TASK_COMPOSER_KEYS_STANDARD_ITEM_H
+#ifndef TESSERACT_QT_PLANNING_TASK_COMPOSER_PORT_MAP_STANDARD_ITEM_H
+#define TESSERACT_QT_PLANNING_TASK_COMPOSER_PORT_MAP_STANDARD_ITEM_H
 
 #include <tesseract/task_composer/fwd.h>
 
@@ -29,19 +29,19 @@
 
 namespace tesseract::gui
 {
-class TaskComposerKeysStandardItem : public QStandardItem
+class TaskComposerPortMapStandardItem : public QStandardItem
 {
 public:
-  explicit TaskComposerKeysStandardItem(const tesseract::task_composer::TaskComposerKeys& data);
-  TaskComposerKeysStandardItem(const QString& text, const tesseract::task_composer::TaskComposerKeys& data);
-  TaskComposerKeysStandardItem(const QIcon& icon,
-                               const QString& text,
-                               const tesseract::task_composer::TaskComposerKeys& data);
+  explicit TaskComposerPortMapStandardItem(const tesseract::task_composer::TaskComposerPortMap& data);
+  TaskComposerPortMapStandardItem(const QString& text, const tesseract::task_composer::TaskComposerPortMap& data);
+  TaskComposerPortMapStandardItem(const QIcon& icon,
+                                  const QString& text,
+                                  const tesseract::task_composer::TaskComposerPortMap& data);
   int type() const override;
 
 private:
-  void ctor(const tesseract::task_composer::TaskComposerKeys& data);
+  void ctor(const tesseract::task_composer::TaskComposerPortMap& data);
 };
 }  // namespace tesseract::gui
 
-#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_TASK_COMPOSER_KEYS_STANDARD_ITEM_H
+#endif  // TESSERACT_QT_PLANNING_TASK_COMPOSER_PORT_MAP_STANDARD_ITEM_H

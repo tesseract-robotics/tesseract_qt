@@ -23,6 +23,7 @@ set(COMMON_WIDGETS_headers_MOC
     include/tesseract_qt/common/environment_manager.h
     include/tesseract_qt/common/environment_wrapper.h
     include/tesseract_qt/common/models/json_model.h
+    include/tesseract_qt/common/models/property_tree_model.h
     include/tesseract_qt/common/models/status_log_model.h
     include/tesseract_qt/common/models/yaml_model.h
     include/tesseract_qt/common/models/component_info_manager_model.h
@@ -38,6 +39,8 @@ set(COMMON_WIDGETS_headers_MOC
     include/tesseract_qt/common/widgets/create_component_info_dialog.h
     include/tesseract_qt/common/widgets/load_environment_widget.h
     include/tesseract_qt/common/widgets/load_environment_dialog.h
+    include/tesseract_qt/common/widgets/config_editor_widget.h
+    include/tesseract_qt/common/widgets/property_tree_editor_widget.h
     include/tesseract_qt/common/widgets/status_log_tool_bar.h
     include/tesseract_qt/common/widgets/status_log_widget.h)
 
@@ -84,6 +87,7 @@ add_library(
   src/models/pairs_collision_margin_data_standard_item.cpp
   src/models/plugin_info_standard_item.cpp
   src/models/plugin_info_container_standard_item.cpp
+  src/models/property_tree_model.cpp
   src/models/position_standard_item.cpp
   src/models/quaternion_standard_item.cpp
   src/models/rgba_standard_item.cpp
@@ -107,6 +111,9 @@ add_library(
   src/widgets/create_component_info_dialog.cpp
   src/widgets/load_environment_widget.cpp
   src/widgets/load_environment_dialog.cpp
+  src/widgets/config_editor_widget.cpp
+  src/widgets/property_tree_editor_widget.cpp
+  src/widgets/property_tree_item_delegate.cpp
   src/widgets/cartesian_editor_widget.cpp
   src/widgets/collapsible_group_box.cpp
   src/widgets/combo_box.cpp
@@ -128,6 +135,8 @@ add_library(
   src/tool_path_pose.cpp
   src/tool_path_segment.cpp
   src/icon_utils.cpp
+  src/config_definition.cpp
+  src/plugin_schema_resolver.cpp
   src/utils.cpp)
 target_link_libraries(
   ${PROJECT_NAME}_common
@@ -141,6 +150,7 @@ target_link_libraries(
          Qt5::Gui
          Qt5::Widgets
          Qt5::Svg)
+target_link_libraries(${PROJECT_NAME}_common PRIVATE tesseract::collision tesseract::kinematics)
 target_compile_definitions(${PROJECT_NAME}_common PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PRIVATE})
 target_compile_definitions(${PROJECT_NAME}_common PUBLIC ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})
 target_include_directories(
@@ -148,6 +158,10 @@ target_include_directories(
                                 "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/common>" "$<INSTALL_INTERFACE:include>")
 
 add_subdirectory(demo)
+
+if(TESSERACT_ENABLE_TESTING)
+  add_subdirectory(test)
+endif()
 
 # Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME} DESTINATION include)
