@@ -41,6 +41,17 @@ bool openJointTrajectorySet(const std::shared_ptr<const ComponentInfo>& componen
                             const QString& filename,
                             const QString& suffix);
 bool saveJointTrajectorySet(const tesseract::common::JointTrajectorySet& jts, QString filename, const QString& suffix);
+
+/**
+ * @brief Check whether a selected trajectory set's environment is registered under a component
+ * @details It is for every component with a parent. Two things then follow from that one rule: JointTrajectoryWidget
+ * registers the selected set's environment under such a component, and JointTrajectoryModel must resolve an
+ * incoming set's source environment from the component's PARENT rather than the component itself, since the
+ * component's own EnvironmentManager entry holds a trajectory's environment, not a source.
+ * @param component_info The component to check; nullptr yields false
+ * @return True if selections replace the component's registered environment, otherwise false
+ */
+bool registersSelectionEnvironment(const std::shared_ptr<const ComponentInfo>& component_info);
 }  // namespace tesseract::gui
 
 #endif  // TESSERACT_QT_JOINT_TRAJECTORY_JOINT_TRAJECTORY_UTILS_H

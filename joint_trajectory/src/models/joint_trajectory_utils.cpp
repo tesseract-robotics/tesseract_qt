@@ -137,4 +137,9 @@ bool saveJointTrajectorySet(const tesseract::common::JointTrajectorySet& jts, QS
   return false;
 }
 
+bool registersSelectionEnvironment(const std::shared_ptr<const ComponentInfo>& component_info)
+{
+  return (component_info != nullptr && component_info->hasParent());
+}
+
 }  // namespace tesseract::gui

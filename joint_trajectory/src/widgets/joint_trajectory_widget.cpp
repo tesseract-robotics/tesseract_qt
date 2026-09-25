@@ -47,6 +47,7 @@
 #include <tesseract/common/joint_state.h>
 #include <tesseract/environment/environment.h>
 #include <tesseract/visualization/trajectory_player.h>
+#include <map>
 #include <set>
 
 #include <QTimer>
@@ -75,11 +76,75 @@ struct JointTrajectoryWidget::Implementation
 
   double current_duration{ 0 };
   tesseract::common::JointTrajectoryInfo current_trajectory;
+  /** Environment the player drives: the selected set's, or nullptr when that set has none. */
   tesseract::environment::Environment::Ptr current_environment;
+  /**
+   * Environment the most recent selection that had one made current, or nullptr if no selection has had one. Unlike
+   * current_environment an environment-less selection leaves it alone, so returning to the set it came from shows
+   * that set without rebuilding the scene.
+   */
+  tesseract::environment::Environment::Ptr shown_environment;
+  /** Most recently selected trajectory set. */
+  boost::uuids::uuid current_set_uuid{};
+  /** Joint values of each environment when it was first selected. */
+  std::map<std::weak_ptr<const tesseract::environment::Environment>,
+           tesseract::scene_graph::SceneState::JointValues,
+           std::owner_less<std::weak_ptr<const tesseract::environment::Environment>>>
+      first_selected_states;
 
   // Store the selected item
   QStandardItem* selected_item{ nullptr };
+
+  /**
+   * Make the environment of jts current_environment, and return true if it is an initialized environment other than
+   * the one already shown -- so the caller need not re-register an environment the component still holds. Several
+   * sets can share one environment: when the selection moves to a different set,
+   * restore the environment's first-selected joint values, so no set is shown with joint values another set left
+   * behind. A selection with no initialized environment reports a warning once, not on every row change within the
+   * same set.
+   */
+  bool selectEnvironment(const tesseract::common::JointTrajectorySet& jts);
 };
+
+bool JointTrajectoryWidget::Implementation::selectEnvironment(const tesseract::common::JointTrajectorySet& jts)
+{
+  tesseract::environment::Environment::Ptr env = jts.getEnvironment();
+  if (env != nullptr && !env->isInitialized())
+    env = nullptr;
+
+  if (env == nullptr && jts.getUUID() != current_set_uuid)
+  {
+    events::StatusLogWarn event("Selected joint trajectory set has no environment; the displayed scene will not be "
+                                "updated for this selection.");
+    QApplication::sendEvent(qApp, &event);
+  }
+
+  if (env != nullptr)
+  {
+    const std::weak_ptr<const tesseract::environment::Environment> key(env);
+    auto it = first_selected_states.find(key);
+    if (it == first_selected_states.end())
+    {
+      // Only an insertion grows the map, so prune here rather than on every selection: getState() copies the whole
+      // scene state, which is wasted on the common path where the environment is already known.
+      for (auto stale = first_selected_states.begin(); stale != first_selected_states.end();)
+        stale = (stale->first.expired()) ? first_selected_states.erase(stale) : std::next(stale);
+
+      first_selected_states.emplace(key, env->getState().joints);
+    }
+    else if (jts.getUUID() != current_set_uuid)
+    {
+      env->setState(it->second);
+    }
+  }
+
+  const bool changed = (env != nullptr && env != shown_environment);
+  if (changed)
+    shown_environment = env;
+  current_set_uuid = jts.getUUID();
+  current_environment = std::move(env);
+  return changed;
+}
 
 JointTrajectoryWidget::JointTrajectoryWidget(QWidget* parent) : JointTrajectoryWidget(nullptr, parent) {}
 
@@ -280,13 +345,10 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
 
-      if (jts.getEnvironment() != nullptr && data_->current_environment != jts.getEnvironment() &&
-          jts.getEnvironment()->isInitialized())
+      if (data_->selectEnvironment(jts))
       {
-        data_->current_environment = jts.getEnvironment();
-
         // If no parent then it using the top most so no need to overwrite existing environment
-        if (data_->model->getComponentInfo()->hasParent())
+        if (registersSelectionEnvironment(data_->model->getComponentInfo()))
         {
           // Defer the EnvironmentManager::set() call to avoid blocking the UI
           // Use a longer delay (100ms) to allow the UI to process other events first
@@ -315,13 +377,10 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
 
       auto jts = data_->model->getJointTrajectorySet(current_index);
 
-      if (jts.getEnvironment() != nullptr && data_->current_environment != jts.getEnvironment() &&
-          jts.getEnvironment()->isInitialized())
+      if (data_->selectEnvironment(jts))
       {
-        data_->current_environment = jts.getEnvironment();
-
         // If no parent then it using the top most so no need to overwrite existing environment
-        if (data_->model->getComponentInfo()->hasParent())
+        if (registersSelectionEnvironment(data_->model->getComponentInfo()))
         {
           // Defer the EnvironmentManager::set() call to avoid blocking the UI
           // Use a longer delay (100ms) to allow the UI to process other events first
@@ -359,10 +418,11 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
         const tesseract::common::JointState& state = data_->model->getJointState(current_index);
         auto jts = data_->model->getJointTrajectorySet(current_index);
 
-        if (jts.getEnvironment() != nullptr && jts.getEnvironment()->isInitialized())
+        const bool environment_changed = data_->selectEnvironment(jts);
+        if (data_->current_environment != nullptr)
         {
-          auto env = jts.getEnvironment();
-          if (data_->model->getComponentInfo()->hasParent() && data_->current_environment != env)
+          auto env = data_->current_environment;
+          if (registersSelectionEnvironment(data_->model->getComponentInfo()) && environment_changed)
           {
             // Defer the EnvironmentManager::set() call
             // Use a longer delay (100ms) to allow the UI to process other events first
@@ -373,12 +433,14 @@ void JointTrajectoryWidget::onCurrentRowChanged(const QModelIndex& current, cons
             });
           }
 
-          data_->current_environment = env;
           // Defer setState() as well since it triggers currentStateChanged() which broadcasts events
           // Capture state by value to avoid issues with local variable lifetime
           constexpr int kDelayTimeMs = 100;
-          QTimer::singleShot(kDelayTimeMs, this, [this, env, state]() {
-            if (data_->current_environment == env && data_->current_environment != nullptr)
+          // Sets sharing one environment clone all match env, so the selected set is checked too: a state scheduled
+          // under the previously selected set must not overwrite the joint values restored for this one.
+          QTimer::singleShot(kDelayTimeMs, this, [this, env, state, set_uuid = data_->current_set_uuid]() {
+            if (data_->current_environment == env && data_->current_environment != nullptr &&
+                data_->current_set_uuid == set_uuid)
             {
               data_->current_environment->setState(state.joint_ids, state.position);
             }
@@ -428,7 +490,8 @@ void JointTrajectoryWidget::onSliderValueChanged(int value)
   data_->current_duration = value * SLIDER_RESOLUTION;
   tesseract::common::JointState state = data_->player->setCurrentDuration(data_->current_duration);
   ui_->trajectoryCurrentDurationLabel->setText(QString().sprintf("%0.3f", data_->current_duration));
-  data_->current_environment->setState(state.joint_ids, state.position);
+  if (data_->current_environment != nullptr)
+    data_->current_environment->setState(state.joint_ids, state.position);
 }
 
 void JointTrajectoryWidget::onEnablePlayer()

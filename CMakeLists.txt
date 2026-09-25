@@ -28,6 +28,10 @@ endif()
 
 set(PROJECT_TARGETS)
 
+if(TESSERACT_ENABLE_TESTING)
+  enable_testing()
+endif()
+
 add_subdirectory(common)
 add_subdirectory(config_editor)
 add_subdirectory(acm)

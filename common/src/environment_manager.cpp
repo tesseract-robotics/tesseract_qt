@@ -144,7 +144,7 @@ EnvironmentManager::findHelper(const std::shared_ptr<const ComponentInfo>& compo
   if (env_wrapper != nullptr)
     return env_wrapper;
 
-  if (component_info->hasParent())
+  if (component_info != nullptr && component_info->hasParent())
     return findHelper(component_info->getParentComponentInfo());
 
   return nullptr;

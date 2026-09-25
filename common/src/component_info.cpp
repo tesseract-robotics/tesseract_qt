@@ -125,7 +125,7 @@ bool ComponentInfo::isParent(const std::shared_ptr<const ComponentInfo>& other) 
 
 bool ComponentInfo::isChild(const std::shared_ptr<const ComponentInfo>& other) const
 {
-  if (!other->hasParent() || other == nullptr)
+  if (other == nullptr || !other->hasParent())
     return false;
 
   return isParentRecursive(other.get(), this);
