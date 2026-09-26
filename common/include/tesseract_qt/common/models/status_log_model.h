@@ -29,6 +29,8 @@
 #include <Eigen/Eigen>
 #endif
 
+#include <cstdint>
+
 namespace tesseract::gui
 {
 class StatusLogModel : public QStandardItemModel
@@ -37,12 +39,15 @@ class StatusLogModel : public QStandardItemModel
 
 public:
   explicit StatusLogModel(QObject* parent = nullptr);
+  ~StatusLogModel() override;
 
 private:
   void clear();
 
   // Documentation inherited
   bool eventFilter(QObject* obj, QEvent* event) override;
+
+  std::uint64_t log_record_handler_id_{ 0 };
 };
 
 }  // namespace tesseract::gui
