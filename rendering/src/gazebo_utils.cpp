@@ -712,6 +712,8 @@ loadLinkGeometry(gz::rendering::Scene& scene,
       auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
       std::shared_ptr<gz::rendering::Visual> mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
       mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
+      // The boxes are in the field's local (unscaled) frame, as a mesh's vertices are.
+      mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
 
       gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
       const std::string name = boost::uuids::to_string(shape.getUUID()) + "::SIGNED_DISTANCE_FIELD";
