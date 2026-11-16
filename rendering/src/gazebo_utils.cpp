@@ -20,6 +20,9 @@
 
 #include <tesseract/common/resource_locator.h>
 #include <tesseract/geometry/geometries.h>
+#include <boost/uuid/uuid_io.hpp>
+#include <array>
+#include <cmath>
 #include <tesseract/scene_graph/graph.h>
 #include <tesseract/scene_graph/link.h>
 #include <tesseract/scene_graph/scene_state.h>
@@ -155,6 +158,111 @@ void clearScene(gz::rendering::Scene& scene, EntityContainer& entity_container)
     for (const auto& entity : ns.second)
       scene.DestroyNodeById(entity.id);
   }
+}
+
+//////////////////////////////////////////////////
+std::vector<SignedDistanceFieldShellBox> signedDistanceFieldShell(const tesseract::geometry::SignedDistanceField& sdf,
+                                                                  std::size_t max_boxes)
+{
+  // shortcut: samples every lattice point of each grid's bounding box with getDistance, as
+  // tesseract_rosutils::sdfSurfaceShellPoints does; walk a sparse grid's active voxels instead (one shared
+  // helper in tesseract) if large fields draw too slowly.
+  std::vector<const tesseract::geometry::SignedDistanceField*> grids;
+  for (const auto& level : sdf.getLevels())
+    grids.push_back(level.get());
+  if (grids.empty())
+    grids.push_back(&sdf);
+
+  const auto spacing = [](const tesseract::geometry::SignedDistanceField& grid) {
+    const Eigen::Vector3d sizes = grid.getDomain().sizes();
+    const Eigen::Vector3i& dims = grid.getDimensions();
+    return Eigen::Vector3d(sizes.x() / std::max(dims.x() - 1, 1),
+                           sizes.y() / std::max(dims.y() - 1, 1),
+                           sizes.z() / std::max(dims.z() - 1, 1));
+  };
+
+  // Start from a sampling budget, then stride further until the boxes fit (a surface's box count falls
+  // with the square of the stride).
+  constexpr double max_samples = 2e7;
+  double samples{ 0 };
+  for (const auto* grid : grids)
+    samples += grid->getDimensions().cast<double>().prod();
+  int stride = std::max(1, static_cast<int>(std::ceil(std::cbrt(samples / max_samples))));
+  int widest{ 1 };
+  for (const auto* grid : grids)
+    widest = std::max(widest, grid->getDimensions().maxCoeff());
+
+  std::vector<SignedDistanceFieldShellBox> boxes;
+  for (;;)
+  {
+    boxes.clear();
+    for (std::size_t l = 0; l < grids.size(); ++l)
+    {
+      const tesseract::geometry::SignedDistanceField& grid = *grids[l];
+      const Eigen::Vector3d lattice = spacing(grid);
+      const Eigen::Vector3d step = lattice * stride;
+      const double band = step.maxCoeff();
+      const Eigen::Vector3d& min = grid.getDomain().min();
+      const Eigen::Vector3i& dims = grid.getDimensions();
+      for (int k = 0; k < dims.z(); k += stride)
+        for (int j = 0; j < dims.y(); j += stride)
+          for (int i = 0; i < dims.x(); i += stride)
+          {
+            const Eigen::Vector3d p = min + Eigen::Vector3d(i, j, k).cwiseProduct(lattice);
+            if (!(std::abs(grid.getDistance(p)) <= band))
+              continue;
+            bool finer{ false };
+            for (std::size_t f = 0; f < l && !finer; ++f)
+              finer = std::isfinite(grids[f]->getDistance(p));
+            if (!finer)
+              boxes.push_back({ p, step });
+          }
+    }
+    if (boxes.size() <= max_boxes || stride >= widest)
+      return boxes;
+    stride = static_cast<int>(
+        std::ceil(stride * std::sqrt(static_cast<double>(boxes.size()) / static_cast<double>(max_boxes))));
+  }
+}
+
+//////////////////////////////////////////////////
+gz::common::SubMesh convert(const std::vector<SignedDistanceFieldShellBox>& boxes)
+{
+  // Each face: its outward normal and two axes spanning it, wound counter-clockwise seen from outside.
+  static const std::array<std::array<Eigen::Vector3d, 3>, 6> faces{ {
+      { Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY(), Eigen::Vector3d::UnitZ() },
+      { -Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitZ(), Eigen::Vector3d::UnitY() },
+      { Eigen::Vector3d::UnitY(), Eigen::Vector3d::UnitZ(), Eigen::Vector3d::UnitX() },
+      { -Eigen::Vector3d::UnitY(), Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitZ() },
+      { Eigen::Vector3d::UnitZ(), Eigen::Vector3d::UnitX(), Eigen::Vector3d::UnitY() },
+      { -Eigen::Vector3d::UnitZ(), Eigen::Vector3d::UnitY(), Eigen::Vector3d::UnitX() },
+  } };
+
+  gz::common::SubMesh gz_submesh;
+  gz_submesh.SetPrimitiveType(gz::common::SubMesh::TRIANGLES);
+  unsigned int index{ 0 };
+  for (const SignedDistanceFieldShellBox& box : boxes)
+  {
+    const Eigen::Vector3d half = box.size / 2;
+    for (const auto& [normal, u, v] : faces)
+    {
+      const Eigen::Vector3d centre = box.center + normal.cwiseProduct(half);
+      const Eigen::Vector3d du = u.cwiseProduct(half);
+      const Eigen::Vector3d dv = v.cwiseProduct(half);
+      const std::array<Eigen::Vector3d, 4> corners{
+        centre - du - dv, centre + du - dv, centre + du + dv, centre - du + dv
+      };
+      for (const Eigen::Vector3d& corner : corners)
+      {
+        gz_submesh.AddVertex(corner.x(), corner.y(), corner.z());
+        gz_submesh.AddNormal(normal.x(), normal.y(), normal.z());
+      }
+      for (const unsigned int corner : { 0U, 1U, 2U, 0U, 2U, 3U })
+        gz_submesh.AddIndex(index + corner);
+      index += 4;
+    }
+  }
+  return gz_submesh;
 }
 
 //////////////////////////////////////////////////
@@ -598,11 +706,37 @@ loadLinkGeometry(gz::rendering::Scene& scene,
     }
     case tesseract::geometry::GeometryType::SIGNED_DISTANCE_FIELD:
     {
-      // Volumetric signed distance fields are not yet visualized in the gz/studio renderer
-      // (like the OCTREE case above). The geometry remains valid for collision checking.
-      // TODO: render the field as a voxel box cloud.
-      assert(false);
-      return nullptr;
+      // Drawn as boxes along the field's surface, one per lattice sample near it.
+      const auto& shape = static_cast<const tesseract::geometry::SignedDistanceField&>(geometry);
+
+      auto gv_entity = entity_container.addUntrackedEntity(tesseract::gui::EntityContainer::VISUAL_NS);
+      std::shared_ptr<gz::rendering::Visual> mesh = scene.CreateVisual(gv_entity.id, gv_entity.unique_name);
+      mesh->SetLocalPose(gz::math::eigen3::convert(local_pose));
+
+      gz::common::MeshManager* mesh_manager = gz::common::MeshManager::Instance();
+      const std::string name = boost::uuids::to_string(shape.getUUID()) + "::SIGNED_DISTANCE_FIELD";
+      const gz::common::Mesh* gz_mesh{ nullptr };
+      if (!mesh_manager->HasMesh(name))
+      {
+        auto* nm = new gz::common::Mesh();
+        nm->SetName(name);
+        nm->AddSubMesh(convert(signedDistanceFieldShell(shape)));
+        mesh_manager->AddMesh(nm);
+        gz_mesh = nm;
+      }
+      else
+      {
+        gz_mesh = mesh_manager->MeshByName(name);
+      }
+
+      gz::rendering::MeshDescriptor descriptor;
+      descriptor.meshName = name;
+      descriptor.mesh = gz_mesh;
+      gz::rendering::MeshPtr mesh_geom = scene.CreateMesh(descriptor);
+      mesh_geom->SetMaterial(ign_material);
+      mesh->AddGeometry(mesh_geom);
+      mesh->SetLocalScale(shape.getScale().x(), shape.getScale().y(), shape.getScale().z());
+      return mesh;
     }
     case tesseract::geometry::GeometryType::COMPOUND_MESH:
     {

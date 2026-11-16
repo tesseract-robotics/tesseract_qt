@@ -18,6 +18,7 @@
 #define TESSERACT_QT_RENDERING_GAZEBO_UTILS_H
 
 #include <memory>
+#include <vector>
 #include <tesseract/common/eigen_types.h>
 #include <tesseract/geometry/fwd.h>
 #include <tesseract/scene_graph/fwd.h>
@@ -96,6 +97,33 @@ void clearScene(gz::rendering::Scene& scene, EntityContainer& entity_container);
  * @return A Ignition SubMesh
  */
 gz::common::SubMesh convert(const tesseract::geometry::PolygonMesh& mesh);
+
+/** @brief An axis-aligned box covering part of a signed distance field's surface (field's local frame) */
+struct SignedDistanceFieldShellBox
+{
+  Eigen::Vector3d center;
+  Eigen::Vector3d size;
+};
+
+/**
+ * @brief Boxes covering the surface of a signed distance field, one per lattice sample within a sample
+ * spacing of the surface.
+ * @details Dense, function-backed and sparse fields are sampled with getDistance on their lattice (a sparse
+ * field answers +inf where it holds no data). Each level of a multi-level field is drawn on its own lattice,
+ * where no finer level holds data. Past @p max_boxes the lattice is strided and the boxes grow to match.
+ * @param sdf The field
+ * @param max_boxes The most boxes to return, roughly
+ * @return The boxes
+ */
+std::vector<SignedDistanceFieldShellBox> signedDistanceFieldShell(const tesseract::geometry::SignedDistanceField& sdf,
+                                                                  std::size_t max_boxes = 100000);
+
+/**
+ * @brief Convert boxes to an ignition SubMesh, each face with its own vertices so it shades flat
+ * @param boxes The boxes to convert
+ * @return A Ignition SubMesh
+ */
+gz::common::SubMesh convert(const std::vector<SignedDistanceFieldShellBox>& boxes);
 
 /**
  * @brief Check if mesh has color
