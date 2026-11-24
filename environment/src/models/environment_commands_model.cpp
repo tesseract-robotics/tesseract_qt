@@ -33,6 +33,8 @@
 
 #include <QApplication>
 
+#include <algorithm>
+
 namespace tesseract::gui
 {
 EnvironmentCommandsModel::EnvironmentCommandsModel(QObject* parent) : EnvironmentCommandsModel(nullptr, parent) {}
@@ -75,6 +77,19 @@ void EnvironmentCommandsModel::clear()
 
 void EnvironmentCommandsModel::set(const std::vector<std::shared_ptr<const tesseract::environment::Command>>& commands)
 {
+  // Command history only grows between resets, so append the new commands instead of rebuilding every item
+  auto* root = getRoot();
+  if (root != nullptr)
+  {
+    const auto& current = root->getCommands();
+    if (current.size() <= commands.size() && std::equal(current.begin(), current.end(), commands.begin()))
+    {
+      for (std::size_t i = current.size(); i < commands.size(); ++i)
+        root->appendCommand(commands[i]);
+      return;
+    }
+  }
+
   QStandardItemModel::clear();
   setColumnCount(2);
   setHorizontalHeaderLabels({ "Name", "Values" });

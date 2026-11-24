@@ -11,6 +11,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_PUSH
 TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract/environment/environment.h>
+#include <tesseract/environment/commands/add_kinematics_information_command.h>
 #include <tesseract/environment/commands/add_link_command.h>
 #include <tesseract/environment/commands/change_joint_origin_command.h>
 #include <tesseract/environment/commands/change_link_collision_enabled_command.h>
@@ -24,6 +25,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 #include <tesseract_qt/common/environment_wrapper.h>
 #include <tesseract_qt/common/events/environment_events.h>
 #include <tesseract_qt/common/events/scene_graph_events.h>
+#include <tesseract_qt/environment/models/environment_commands_model.h>
 
 namespace
 {
@@ -182,7 +184,38 @@ TEST_F(EnvironmentWrapperUnit, AddLinkSendsIncrementalEvents)  // NOLINT
   EXPECT_EQ(recorder.commands_set_count, 1);
   EXPECT_EQ(recorder.commands_set_size, env->getCommandHistory().size());
   EXPECT_EQ(recorder.commands_appended, 0);
+  // Unchanged kinematics information is not re-sent
+  EXPECT_EQ(recorder.kinematic_groups_set_count, 0);
+}
+
+TEST_F(EnvironmentWrapperUnit, KinematicsInformationAddedInTopologyBatchIsSent)  // NOLINT
+{
+  tesseract::srdf::KinematicsInformation kin_info;
+  kin_info.link_groups["tool_group"] = { "tool_link" };
+  ASSERT_TRUE(
+      env->applyCommands({ makeAddLinkCommand("tool_link", "tool_joint", "base_link"),
+                           std::make_shared<tesseract::environment::AddKinematicsInformationCommand>(kin_info) }));
+  processPendingEvents();
+
+  EXPECT_EQ(recorder.added_links, std::vector<std::string>{ "tool_link" });
   EXPECT_EQ(recorder.kinematic_groups_set_count, 1);
+}
+
+TEST_F(EnvironmentWrapperUnit, CommandsModelAppendsNewCommandsWithoutRebuilding)  // NOLINT
+{
+  tesseract::gui::EnvironmentCommandsModel model(component_info);
+  auto* root = model.item(0);
+  ASSERT_NE(root, nullptr);
+  ASSERT_EQ(root->rowCount(), static_cast<int>(env->getCommandHistory().size()));
+  auto* first_command = root->child(0);
+
+  ASSERT_TRUE(env->applyCommand(makeAddLinkCommand("tool_link", "tool_joint", "base_link")));
+  processPendingEvents();
+
+  ASSERT_EQ(model.item(0), root);
+  EXPECT_EQ(root->child(0), first_command);
+  EXPECT_EQ(root->rowCount(), static_cast<int>(env->getCommandHistory().size()));
+  EXPECT_EQ(model.getCommands().size(), env->getCommandHistory().size());
 }
 
 TEST_F(EnvironmentWrapperUnit, NonTopologyCommandSendsNoSceneGraphOrCommandEvents)  // NOLINT

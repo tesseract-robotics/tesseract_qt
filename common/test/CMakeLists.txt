@@ -117,7 +117,8 @@ target_code_coverage(
 add_gtest_discover_tests(${PROJECT_NAME}_environment_manager_unit DISCOVERY_MODE PRE_TEST)
 
 add_executable(${PROJECT_NAME}_environment_wrapper_unit environment_wrapper_unit.cpp)
-target_link_libraries(${PROJECT_NAME}_environment_wrapper_unit PRIVATE GTest::GTest ${PROJECT_NAME}_common)
+target_link_libraries(${PROJECT_NAME}_environment_wrapper_unit PRIVATE GTest::GTest ${PROJECT_NAME}_common
+                                                                        ${PROJECT_NAME}_environment_models)
 target_compile_options(${PROJECT_NAME}_environment_wrapper_unit PRIVATE ${TESSERACT_COMPILE_OPTIONS_PRIVATE}
                                                                         ${TESSERACT_COMPILE_OPTIONS_PUBLIC})
 target_compile_definitions(${PROJECT_NAME}_environment_wrapper_unit PRIVATE ${TESSERACT_COMPILE_DEFINITIONS_PUBLIC})

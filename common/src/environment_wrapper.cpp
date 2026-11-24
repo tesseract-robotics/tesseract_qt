@@ -55,6 +55,7 @@
 #include <deque>
 #include <functional>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -151,9 +152,17 @@ struct EnvironmentEventDispatcher : public std::enable_shared_from_this<Environm
   std::unordered_map<std::string, LinkSnapshot> links;
   std::unordered_map<std::string, std::shared_ptr<const tesseract::scene_graph::Joint>> joints;
 
+  /** @brief The ACM and kinematics information last sent, so unchanged data is not re-sent with each update */
+  tesseract::common::AllowedCollisionMatrix acm;
+  tesseract::srdf::KinematicsInformation kin_info;
+
   /** @brief The caller must hold the mutex */
-  void setSnapshot(const tesseract::scene_graph::SceneGraph& scene_graph)
+  void setSnapshot(const tesseract::environment::Environment& env)
   {
+    const auto& scene_graph = *env.getSceneGraph();
+    acm = *env.getAllowedCollisionMatrix();
+    kin_info = env.getKinematicsInformation();
+
     links.clear();
     for (const auto& link : scene_graph.getLinks())
       links.emplace(link->getName(), LinkSnapshot(link));
@@ -296,17 +305,33 @@ void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::Comp
         dispatcher.links.erase(name);
     }
 
-    // Send the same non scene graph data the full broadcast sent. Removing links prunes the ACM and adding a scene
-    // graph can extend it. The command history is sent as a set so models created after these commands were applied
-    // do not list them twice.
+    // Removing links prunes the ACM and adding a scene graph can extend it or add kinematics information, whose models
+    // do not consume scene graph or command events. Only send them when changed because their models are rebuilt.
+    std::optional<tesseract::common::AllowedCollisionMatrix> acm;
+    if (!(*env.getAllowedCollisionMatrix() == dispatcher.acm))
+    {
+      dispatcher.acm = *env.getAllowedCollisionMatrix();
+      acm = dispatcher.acm;
+    }
+
+    std::optional<tesseract::srdf::KinematicsInformation> kin_info;
+    auto current_kin_info = env.getKinematicsInformation();
+    if (!(current_kin_info == dispatcher.kin_info))
+    {
+      dispatcher.kin_info = current_kin_info;
+      kin_info = std::move(current_kin_info);
+    }
+
+    // The command history is sent as a set so models created after these commands were applied do not list them
+    // twice. The model appends only the commands it does not already have.
     dispatcher.enqueue([component_info,
                         removed_joints = std::move(removed_joints),
                         removed_links = std::move(removed_links),
                         added_links = std::move(added_links),
                         added_joints = std::move(added_joints),
-                        acm = *env.getAllowedCollisionMatrix(),
+                        acm = std::move(acm),
                         command_history = env.getCommandHistory(),
-                        kin_info = env.getKinematicsInformation()]() {
+                        kin_info = std::move(kin_info)]() {
       for (const auto& name : removed_joints)
       {
         tesseract::gui::events::SceneGraphRemoveJoint event(component_info, name, false);
@@ -331,23 +356,28 @@ void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::Comp
         QApplication::sendEvent(qApp, &event);
       }
 
-      tesseract::gui::events::AllowedCollisionMatrixSet set_acm_event(component_info, acm);
-      QApplication::sendEvent(qApp, &set_acm_event);
+      if (acm)
+      {
+        tesseract::gui::events::AllowedCollisionMatrixSet set_acm_event(component_info, *acm);
+        QApplication::sendEvent(qApp, &set_acm_event);
+      }
 
       tesseract::gui::events::EnvironmentCommandsSet set_environment_commands_event(component_info, command_history);
       QApplication::sendEvent(qApp, &set_environment_commands_event);
 
-      // Kinematics information may be added in the same command batch (e.g. ADD_SCENE_GRAPH with
-      // ADD_KINEMATICS_INFORMATION) and its models do not consume scene graph or command events
-      tesseract::gui::events::KinematicGroupsSet set_kin_groups_event(
-          component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
-      QApplication::sendEvent(qApp, &set_kin_groups_event);
+      if (kin_info)
+      {
+        tesseract::gui::events::KinematicGroupsSet set_kin_groups_event(
+            component_info, kin_info->chain_groups, kin_info->joint_groups, kin_info->link_groups);
+        QApplication::sendEvent(qApp, &set_kin_groups_event);
 
-      tesseract::gui::events::GroupJointStatesSet set_group_joint_states_event(component_info, kin_info.group_states);
-      QApplication::sendEvent(qApp, &set_group_joint_states_event);
+        tesseract::gui::events::GroupJointStatesSet set_group_joint_states_event(component_info,
+                                                                                 kin_info->group_states);
+        QApplication::sendEvent(qApp, &set_group_joint_states_event);
 
-      tesseract::gui::events::GroupTCPsSet set_group_tcps_event(component_info, kin_info.group_tcps);
-      QApplication::sendEvent(qApp, &set_group_tcps_event);
+        tesseract::gui::events::GroupTCPsSet set_group_tcps_event(component_info, kin_info->group_tcps);
+        QApplication::sendEvent(qApp, &set_group_tcps_event);
+      }
     });
   }
   dispatcher.flush();
@@ -606,7 +636,7 @@ void broadcastHelper(const std::shared_ptr<const tesseract::gui::ComponentInfo>&
   // Advance the snapshot and enqueue while holding the environment lock so no incremental update can be ordered
   // ahead of this full update. Deliver after unlocking because event handlers may modify the environment.
   std::unique_lock dispatcher_lock(dispatcher.mutex);
-  dispatcher.setSnapshot(*env.getSceneGraph());
+  dispatcher.setSnapshot(env);
   dispatcher.enqueue([component_info, scene_graph_shared, scene_state, command_history, acm, kin_info]() {
     // Broadcast environment data
     tesseract::gui::events::SceneGraphSet set_scene_graph_event(component_info, scene_graph_shared);
