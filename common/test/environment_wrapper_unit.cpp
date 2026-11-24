@@ -12,6 +12,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract/environment/environment.h>
 #include <tesseract/environment/commands/add_link_command.h>
+#include <tesseract/environment/commands/change_joint_origin_command.h>
 #include <tesseract/environment/commands/change_link_collision_enabled_command.h>
 #include <tesseract/environment/commands/remove_link_command.h>
 #include <tesseract/scene_graph/graph.h>
@@ -66,6 +67,7 @@ public:
     event_order.clear();
     added_links.clear();
     added_joints.clear();
+    added_joint_objects.clear();
     removed_links.clear();
     removed_joints.clear();
   }
@@ -78,6 +80,7 @@ public:
   std::vector<int> event_order;
   std::vector<std::string> added_links;
   std::vector<std::string> added_joints;
+  std::vector<std::shared_ptr<const tesseract::scene_graph::Joint>> added_joint_objects;
   std::vector<std::string> removed_links;
   std::vector<std::string> removed_joints;
   Qt::HANDLE last_thread{ nullptr };
@@ -92,7 +95,11 @@ protected:
     else if (type == EventType::SCENE_GRAPH_ADD_LINK)
       added_links.push_back(static_cast<tesseract::gui::events::SceneGraphAddLink*>(event)->getLink()->getName());
     else if (type == EventType::SCENE_GRAPH_ADD_JOINT)
-      added_joints.push_back(static_cast<tesseract::gui::events::SceneGraphAddJoint*>(event)->getJoint()->getName());
+    {
+      const auto& joint = static_cast<tesseract::gui::events::SceneGraphAddJoint*>(event)->getJoint();
+      added_joints.push_back(joint->getName());
+      added_joint_objects.push_back(joint);
+    }
     else if (type == EventType::SCENE_GRAPH_REMOVE_LINK)
       removed_links.push_back(static_cast<tesseract::gui::events::SceneGraphRemoveLink*>(event)->getLinkName());
     else if (type == EventType::SCENE_GRAPH_REMOVE_JOINT)
@@ -248,6 +255,46 @@ TEST_F(EnvironmentWrapperUnit, RemoveLinkRemovesChildrenIncrementally)  // NOLIN
   EXPECT_EQ(sorted(recorder.removed_links), (std::vector<std::string>{ "tip_link", "tool_link" }));
   EXPECT_EQ(sorted(recorder.removed_joints), (std::vector<std::string>{ "tip_joint", "tool_joint" }));
   EXPECT_TRUE(recorder.added_links.empty());
+}
+
+TEST_F(EnvironmentWrapperUnit, JointModifiedInPlaceInTopologyBatchIsResent)  // NOLINT
+{
+  ASSERT_TRUE(env->applyCommand(makeAddLinkCommand("tool_link", "tool_joint", "base_link")));
+  processPendingEvents();
+  recorder.reset();
+
+  Eigen::Isometry3d origin = Eigen::Isometry3d::Identity();
+  origin.translation() = Eigen::Vector3d(0.1, 0.2, 0.3);
+  ASSERT_TRUE(
+      env->applyCommands({ makeAddLinkCommand("tip_link", "tip_joint", "tool_link"),
+                           std::make_shared<tesseract::environment::ChangeJointOriginCommand>("tool_joint", origin) }));
+  processPendingEvents();
+
+  EXPECT_EQ(recorder.scene_graph_set_count, 0);
+  EXPECT_EQ(recorder.removed_joints, std::vector<std::string>{ "tool_joint" });
+  EXPECT_TRUE(recorder.removed_links.empty());
+  EXPECT_EQ(recorder.added_links, std::vector<std::string>{ "tip_link" });
+  ASSERT_EQ(sorted(recorder.added_joints), (std::vector<std::string>{ "tip_joint", "tool_joint" }));
+  for (const auto& joint : recorder.added_joint_objects)
+  {
+    if (joint->getName() == "tool_joint")
+    {
+      EXPECT_TRUE(joint->parent_to_joint_origin_transform.isApprox(origin));
+    }
+  }
+}
+
+TEST_F(EnvironmentWrapperUnit, LinkModifiedInPlaceInTopologyBatchIsResent)  // NOLINT
+{
+  ASSERT_TRUE(env->applyCommands(
+      { makeAddLinkCommand("tool_link", "tool_joint", "base_link"),
+        std::make_shared<tesseract::environment::ChangeLinkCollisionEnabledCommand>("base_link", false) }));
+  processPendingEvents();
+
+  EXPECT_EQ(recorder.scene_graph_set_count, 0);
+  EXPECT_EQ(recorder.removed_links, std::vector<std::string>{ "base_link" });
+  EXPECT_EQ(sorted(recorder.added_links), (std::vector<std::string>{ "base_link", "tool_link" }));
+  EXPECT_TRUE(recorder.removed_joints.empty());
 }
 
 TEST_F(EnvironmentWrapperUnit, IncrementalEventsAreDeliveredOnGuiThread)  // NOLINT

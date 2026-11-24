@@ -123,8 +123,32 @@ struct EnvironmentEventDispatcher : public std::enable_shared_from_this<Environm
 {
   std::mutex mutex;
 
-  /** @brief The links and joints last sent to the widgets */
-  std::unordered_map<std::string, std::shared_ptr<const tesseract::scene_graph::Link>> links;
+  /**
+   * @brief The state of a link last sent to the widgets
+   * @details The scene graph mutates the visibility and collision enabled flags in place, so they are stored by value
+   */
+  struct LinkSnapshot
+  {
+    std::shared_ptr<const tesseract::scene_graph::Link> link;
+    bool visible{ true };
+    bool collision_enabled{ true };
+
+    explicit LinkSnapshot(const std::shared_ptr<const tesseract::scene_graph::Link>& link)
+      : link(link), visible(link->visible), collision_enabled(link->collision_enabled)
+    {
+    }
+
+    bool matches(const std::shared_ptr<const tesseract::scene_graph::Link>& other) const
+    {
+      return link == other && visible == other->visible && collision_enabled == other->collision_enabled;
+    }
+  };
+
+  /**
+   * @brief The links and joints last sent to the widgets
+   * @details Joints are stored as copies because the scene graph mutates them in place (origin, limits, parent link)
+   */
+  std::unordered_map<std::string, LinkSnapshot> links;
   std::unordered_map<std::string, std::shared_ptr<const tesseract::scene_graph::Joint>> joints;
 
   /** @brief The caller must hold the mutex */
@@ -132,11 +156,11 @@ struct EnvironmentEventDispatcher : public std::enable_shared_from_this<Environm
   {
     links.clear();
     for (const auto& link : scene_graph.getLinks())
-      links[link->getName()] = link;
+      links.emplace(link->getName(), LinkSnapshot(link));
 
     joints.clear();
     for (const auto& joint : scene_graph.getJoints())
-      joints[joint->getName()] = joint;
+      joints[joint->getName()] = std::make_shared<const tesseract::scene_graph::Joint>(joint->clone());
   }
 
   /** @brief The caller must hold the mutex and call flush() after releasing it */
@@ -200,7 +224,8 @@ private:
 
 /**
  * @brief Send only the scene graph changes since the last snapshot instead of reloading the full scene graph
- * @details Links/joints are compared by name and pointer so replaced links (replace_allowed) are removed and re-added.
+ * @details Links are compared by name, pointer and flags and joints by name and content, so replaced or modified
+ * links and joints are removed and re-added.
  * The caller must hold the environment read lock (environment callbacks are invoked with it held).
  */
 void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::ComponentInfo>& component_info,
@@ -223,7 +248,7 @@ void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::Comp
     for (const auto& [name, joint] : dispatcher.joints)
     {
       auto it = current_joints.find(name);
-      if (it == current_joints.end() || it->second != joint)
+      if (it == current_joints.end() || !(*it->second == *joint))
         removed_joints.push_back(name);
     }
 
@@ -231,7 +256,7 @@ void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::Comp
     for (const auto& [name, link] : dispatcher.links)
     {
       auto it = current_links.find(name);
-      if (it == current_links.end() || it->second != link)
+      if (it == current_links.end() || !link.matches(it->second))
         removed_links.push_back(name);
     }
 
@@ -239,20 +264,37 @@ void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::Comp
     for (const auto& [name, link] : current_links)
     {
       auto it = dispatcher.links.find(name);
-      if (it == dispatcher.links.end() || it->second != link)
+      if (it == dispatcher.links.end() || !it->second.matches(link))
+      {
         added_links.push_back(std::make_shared<const tesseract::scene_graph::Link>(link->clone()));
+        dispatcher.links.insert_or_assign(name, tesseract::gui::EnvironmentEventDispatcher::LinkSnapshot(link));
+      }
     }
 
     std::vector<std::shared_ptr<const tesseract::scene_graph::Joint>> added_joints;
     for (const auto& [name, joint] : current_joints)
     {
       auto it = dispatcher.joints.find(name);
-      if (it == dispatcher.joints.end() || it->second != joint)
-        added_joints.push_back(std::make_shared<const tesseract::scene_graph::Joint>(joint->clone()));
+      if (it == dispatcher.joints.end() || !(*joint == *it->second))
+      {
+        // The snapshot copy is never modified so it is shared with the widgets
+        auto copy = std::make_shared<const tesseract::scene_graph::Joint>(joint->clone());
+        added_joints.push_back(copy);
+        dispatcher.joints[name] = std::move(copy);
+      }
     }
 
-    dispatcher.links = std::move(current_links);
-    dispatcher.joints = std::move(current_joints);
+    for (const auto& name : removed_joints)
+    {
+      if (current_joints.find(name) == current_joints.end())
+        dispatcher.joints.erase(name);
+    }
+
+    for (const auto& name : removed_links)
+    {
+      if (current_links.find(name) == current_links.end())
+        dispatcher.links.erase(name);
+    }
 
     // Send the same non scene graph data the full broadcast sent. Removing links prunes the ACM and adding a scene
     // graph can extend it. The command history is sent as a set so models created after these commands were applied

@@ -97,20 +97,27 @@ void collectNodeIds(const gz::rendering::NodePtr& node, std::unordered_set<int>&
     collectNodeIds(node->ChildByIndex(i), ids);
 }
 
-/** @brief Destroy a link loaded by loadLink, including its child visuals, and remove all of their entities */
-void removeLink(gz::rendering::Scene& scene, EntityContainer& entity_container, const std::string& link_name)
+/**
+ * @brief Destroy a link loaded by loadLink, including its child visuals
+ * @details The ids of the destroyed entities are added to removed_ids so the entity container can be cleaned once for
+ * a batch of removed links instead of scanning it for every link.
+ */
+void removeLink(gz::rendering::Scene& scene,
+                const EntityContainer& entity_container,
+                const std::string& link_name,
+                std::unordered_set<int>& removed_ids)
 {
   if (!entity_container.hasTrackedEntity(EntityContainer::VISUAL_NS, link_name))
     return;
 
   auto entity = entity_container.getTrackedEntity(EntityContainer::VISUAL_NS, link_name);
-  std::unordered_set<int> ids{ entity.id };
+  removed_ids.insert(entity.id);
   gz::rendering::NodePtr node = scene.NodeById(static_cast<unsigned int>(entity.id));
-  if (node != nullptr)
-    collectNodeIds(node, ids);
+  if (node == nullptr)
+    return;
 
+  collectNodeIds(node, removed_ids);
   scene.DestroyNode(node, true);
-  entity_container.removeEntities(EntityContainer::VISUAL_NS, ids);
 }
 }  // namespace
 
@@ -142,8 +149,22 @@ void IgnSceneGraphRenderManager::render()
     return entity_container;
   };
 
+  // Entities of consecutively removed links are removed from their container in one pass
+  EntityContainer::Ptr removal_container;
+  std::unordered_set<int> removed_ids;
+  auto flushRemovedEntities = [&removal_container, &removed_ids]() {
+    if (removal_container != nullptr && !removed_ids.empty())
+      removal_container->removeEntities(EntityContainer::VISUAL_NS, removed_ids);
+
+    removal_container = nullptr;
+    removed_ids.clear();
+  };
+
   for (const auto& event : events_)
   {
+    if (event->type() != events::EventType::SCENE_GRAPH_REMOVE_LINK)
+      flushRemovedEntities();
+
     if (event->type() == events::EventType::SCENE_GRAPH_CLEAR)
     {
       auto& e = static_cast<events::SceneGraphClear&>(*event);
@@ -161,14 +182,20 @@ void IgnSceneGraphRenderManager::render()
       auto& e = static_cast<events::SceneGraphAddLink&>(*event);
       EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
       // The link may already be loaded if this manager was initialized after the link was added
-      removeLink(*scene, *entity_container, e.getLink()->getName());
+      removeLink(*scene, *entity_container, e.getLink()->getName(), removed_ids);
+      removal_container = entity_container;
+      flushRemovedEntities();
       scene->RootVisual()->AddChild(loadLink(*scene, *entity_container, *e.getLink()));
     }
     else if (event->type() == events::EventType::SCENE_GRAPH_REMOVE_LINK)
     {
       auto& e = static_cast<events::SceneGraphRemoveLink&>(*event);
       EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
-      removeLink(*scene, *entity_container, e.getLinkName());
+      if (entity_container != removal_container)
+        flushRemovedEntities();
+
+      removal_container = entity_container;
+      removeLink(*scene, *entity_container, e.getLinkName(), removed_ids);
     }
     else if (event->type() == events::EventType::SCENE_GRAPH_MODIFY_LINK_VISIBILITY)
     {
@@ -307,6 +334,7 @@ void IgnSceneGraphRenderManager::render()
       setSceneState(*scene, *entity_container, e.getState().link_transforms);
     }
   }
+  flushRemovedEntities();
 
   events_.clear();
 }
