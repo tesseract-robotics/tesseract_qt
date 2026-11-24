@@ -53,6 +53,7 @@
 #include <tesseract/common/yaml_extensions.h>
 
 #include <utility>
+#include <vector>
 
 #include <QApplication>
 #include <QMetaObject>
@@ -105,9 +106,107 @@ void applyDefaultContactManager(tesseract::environment::Environment& env)
 
 ///////////////////////////////////////
 
+tesseract::gui::EnvironmentWrapper::SceneGraphSnapshot
+takeSceneGraphSnapshot(const tesseract::scene_graph::SceneGraph& scene_graph)
+{
+  tesseract::gui::EnvironmentWrapper::SceneGraphSnapshot snapshot;
+  for (const auto& link : scene_graph.getLinks())
+    snapshot.links[link->getName()] = link;
+
+  for (const auto& joint : scene_graph.getJoints())
+    snapshot.joints[joint->getName()] = joint;
+
+  return snapshot;
+}
+
+/**
+ * @brief Send only the scene graph changes since the last snapshot instead of reloading the full scene graph
+ * @details Links/joints are compared by name and pointer so replaced links (replace_allowed) are removed and re-added.
+ * The caller must hold the environment read lock (environment callbacks are invoked with it held).
+ */
+void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::ComponentInfo>& component_info,
+                                const tesseract::environment::Environment& env,
+                                tesseract::gui::EnvironmentWrapper::SceneGraphSnapshot& snapshot)
+{
+  auto current = takeSceneGraphSnapshot(*env.getSceneGraph());
+
+  std::vector<std::string> removed_joints;
+  for (const auto& [name, joint] : snapshot.joints)
+  {
+    auto it = current.joints.find(name);
+    if (it == current.joints.end() || it->second != joint)
+      removed_joints.push_back(name);
+  }
+
+  std::vector<std::string> removed_links;
+  for (const auto& [name, link] : snapshot.links)
+  {
+    auto it = current.links.find(name);
+    if (it == current.links.end() || it->second != link)
+      removed_links.push_back(name);
+  }
+
+  std::vector<std::shared_ptr<const tesseract::scene_graph::Link>> added_links;
+  for (const auto& [name, link] : current.links)
+  {
+    auto it = snapshot.links.find(name);
+    if (it == snapshot.links.end() || it->second != link)
+      added_links.push_back(std::make_shared<const tesseract::scene_graph::Link>(link->clone()));
+  }
+
+  std::vector<std::shared_ptr<const tesseract::scene_graph::Joint>> added_joints;
+  for (const auto& [name, joint] : current.joints)
+  {
+    auto it = snapshot.joints.find(name);
+    if (it == snapshot.joints.end() || it->second != joint)
+      added_joints.push_back(std::make_shared<const tesseract::scene_graph::Joint>(joint->clone()));
+  }
+
+  // Removing links prunes the ACM and adding a scene graph can extend it
+  auto acm = *env.getAllowedCollisionMatrix();
+
+  snapshot = std::move(current);
+
+  invokeOnAppThread([component_info,
+                     removed_joints = std::move(removed_joints),
+                     removed_links = std::move(removed_links),
+                     added_links = std::move(added_links),
+                     added_joints = std::move(added_joints),
+                     acm = std::move(acm)]() {
+    for (const auto& name : removed_joints)
+    {
+      tesseract::gui::events::SceneGraphRemoveJoint event(component_info, name, false);
+      QApplication::sendEvent(qApp, &event);
+    }
+
+    for (const auto& name : removed_links)
+    {
+      tesseract::gui::events::SceneGraphRemoveLink event(component_info, name, false);
+      QApplication::sendEvent(qApp, &event);
+    }
+
+    for (const auto& link : added_links)
+    {
+      tesseract::gui::events::SceneGraphAddLink event(component_info, link);
+      QApplication::sendEvent(qApp, &event);
+    }
+
+    for (const auto& joint : added_joints)
+    {
+      tesseract::gui::events::SceneGraphAddJoint event(component_info, joint);
+      QApplication::sendEvent(qApp, &event);
+    }
+
+    tesseract::gui::events::AllowedCollisionMatrixSet set_acm_event(component_info, acm);
+    QApplication::sendEvent(qApp, &set_acm_event);
+  });
+}
+
 void tesseractEventFilterHelper(const tesseract::environment::Event& event,
                                 tesseract::gui::EnvironmentWrapper& env_wrapper,
-                                int& current_revision)
+                                int& current_revision,
+                                tesseract::gui::EnvironmentWrapper::SceneGraphSnapshot& snapshot,
+                                std::mutex& snapshot_mutex)
 {
   if (!env_wrapper.getEnvironment()->isInitialized())
     return;
@@ -125,6 +224,7 @@ void tesseractEventFilterHelper(const tesseract::environment::Event& event,
       {
         /** @todo update to handle explicit commands */
         bool broadcast{ false };
+        bool scene_graph_changed{ false };
         for (std::size_t i = current_revision; i < e.revision; ++i)
         {
           const auto& cmd = e.commands.at(i);
@@ -133,9 +233,13 @@ void tesseractEventFilterHelper(const tesseract::environment::Event& event,
             case tesseract::environment::CommandType::ADD_SCENE_GRAPH:
             case tesseract::environment::CommandType::ADD_LINK:
             case tesseract::environment::CommandType::ADD_TRAJECTORY_LINK:
-            case tesseract::environment::CommandType::CHANGE_LINK_VISIBILITY:
             case tesseract::environment::CommandType::REMOVE_LINK:
             case tesseract::environment::CommandType::REMOVE_JOINT:
+            {
+              scene_graph_changed = true;
+              break;
+            }
+            case tesseract::environment::CommandType::CHANGE_LINK_VISIBILITY:
             {
               broadcast = true;
               break;
@@ -173,6 +277,25 @@ void tesseractEventFilterHelper(const tesseract::environment::Event& event,
         if (broadcast)
         {
           env_wrapper.broadcast();
+        }
+        else
+        {
+          if (scene_graph_changed)
+          {
+            std::scoped_lock lock(snapshot_mutex);
+            broadcastSceneGraphChanges(env_wrapper.getComponentInfo(), *env_wrapper.getEnvironment(), snapshot);
+          }
+
+          if (e.revision > current_revision)
+          {
+            std::vector<std::shared_ptr<const tesseract::environment::Command>> new_commands(
+                e.commands.begin() + current_revision, e.commands.begin() + e.revision);
+            invokeOnAppThread(
+                [component_info = env_wrapper.getComponentInfo(), new_commands = std::move(new_commands)]() {
+                  tesseract::gui::events::EnvironmentCommandsAppend event(component_info, new_commands);
+                  QApplication::sendEvent(qApp, &event);
+                });
+          }
         }
       }
       current_revision = e.revision;
@@ -326,12 +449,19 @@ void eventFilterHelper(QObject* /*obj*/,
 }
 
 void broadcastHelper(const std::shared_ptr<const tesseract::gui::ComponentInfo>& component_info,
-                     const tesseract::environment::Environment& env)
+                     const tesseract::environment::Environment& env,
+                     tesseract::gui::EnvironmentWrapper::SceneGraphSnapshot& snapshot,
+                     std::mutex& snapshot_mutex)
 {
   auto lock = env.lockRead();
 
   if (!env.isInitialized())
     return;
+
+  {
+    std::scoped_lock snapshot_lock(snapshot_mutex);
+    snapshot = takeSceneGraphSnapshot(*env.getSceneGraph());
+  }
 
   auto scene_graph_clone = env.getSceneGraph()->clone();
   std::shared_ptr<tesseract::scene_graph::SceneGraph> scene_graph_shared(std::move(scene_graph_clone));
@@ -399,7 +529,10 @@ EnvironmentWrapper::~EnvironmentWrapper()
 
 std::shared_ptr<const ComponentInfo> EnvironmentWrapper::getComponentInfo() const { return component_info_; }
 
-void EnvironmentWrapper::broadcast() const { broadcastHelper(getComponentInfo(), *getEnvironment()); }
+void EnvironmentWrapper::broadcast() const
+{
+  broadcastHelper(getComponentInfo(), *getEnvironment(), snapshot_, snapshot_mutex_);
+}
 
 void EnvironmentWrapper::init()
 {
@@ -412,7 +545,7 @@ void EnvironmentWrapper::init()
   // Add environment event callback
   std::size_t uuid = std::hash<EnvironmentWrapper*>()(this);
   environment().addEventCallback(uuid, [this](const tesseract::environment::Event& event) {
-    tesseractEventFilterHelper(event, *this, revision_);
+    tesseractEventFilterHelper(event, *this, revision_, snapshot_, snapshot_mutex_);
   });
 
   // Broadcast data to initialize available widgets
