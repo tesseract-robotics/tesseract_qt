@@ -32,6 +32,8 @@
 namespace tesseract::gui
 {
 class ComponentInfo;
+struct EnvironmentEventDispatcher;
+
 class EnvironmentWrapper : public QObject
 {
   Q_OBJECT
@@ -56,6 +58,9 @@ protected:
   std::shared_ptr<const ComponentInfo> component_info_;
   bool initialized_{ false };
   int revision_{ 0 };
+
+  /** @brief Delivers environment events to the GUI thread in order and tracks the scene graph sent to the widgets */
+  std::shared_ptr<EnvironmentEventDispatcher> dispatcher_;
 
   /** @brief This function is called when added to the environment manager */
   void init();
