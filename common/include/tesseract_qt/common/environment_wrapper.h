@@ -25,17 +25,15 @@
 
 #ifndef Q_MOC_RUN
 #include <memory>
-#include <mutex>
-#include <string>
-#include <unordered_map>
 #include <tesseract/environment/fwd.h>
-#include <tesseract/scene_graph/fwd.h>
 #include <QObject>
 #endif
 
 namespace tesseract::gui
 {
 class ComponentInfo;
+struct EnvironmentEventDispatcher;
+
 class EnvironmentWrapper : public QObject
 {
   Q_OBJECT
@@ -54,24 +52,15 @@ public:
   /** @brief This broadcast events with associated data for models */
   void broadcast() const;
 
-  /**
-   * @brief Snapshot of the scene graph links/joints last sent to the widgets.
-   * @details Used to send incremental add/remove events instead of reloading the full scene graph.
-   */
-  struct SceneGraphSnapshot
-  {
-    std::unordered_map<std::string, std::shared_ptr<const tesseract::scene_graph::Link>> links;
-    std::unordered_map<std::string, std::shared_ptr<const tesseract::scene_graph::Joint>> joints;
-  };
-
 protected:
   friend class EnvironmentManager;
 
   std::shared_ptr<const ComponentInfo> component_info_;
   bool initialized_{ false };
   int revision_{ 0 };
-  mutable std::mutex snapshot_mutex_;
-  mutable SceneGraphSnapshot snapshot_;
+
+  /** @brief Delivers environment events to the GUI thread in order and tracks the scene graph sent to the widgets */
+  std::shared_ptr<EnvironmentEventDispatcher> dispatcher_;
 
   /** @brief This function is called when added to the environment manager */
   void init();

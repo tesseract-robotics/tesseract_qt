@@ -70,6 +70,16 @@ bool EntityContainer::hasTrackedEntity(const std::string& ns, const std::string&
   return (ns_it->second.find(name) != ns_it->second.end());
 }
 
+void EntityContainer::removeTrackedEntity(const std::string& ns, const std::string& name)
+{
+  std::unique_lock<std::shared_mutex> lock(mutex_);
+  auto ns_it = tracked_entity_map_.find(ns);
+  if (ns_it == tracked_entity_map_.end())
+    return;
+
+  ns_it->second.erase(name);
+}
+
 EntityMap EntityContainer::getTrackedEntities(const std::string& ns) const
 {
   std::shared_lock<std::shared_mutex> lock(mutex_);

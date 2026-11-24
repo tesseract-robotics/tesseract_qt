@@ -79,6 +79,13 @@ public:
   bool hasTrackedEntity(const std::string& ns, const std::string& name) const;
 
   /**
+   * @brief Stop tracking an entity, does nothing if it is not tracked
+   * @param ns The namespace to search under
+   * @param name The name to remove
+   */
+  void removeTrackedEntity(const std::string& ns, const std::string& name);
+
+  /**
    * @brief Get the tracked entities under the provided namespace
    * @param ns The namespace to return
    * @return Tracked entities for the provided namespace

@@ -41,6 +41,7 @@
 #include <gz/rendering/Scene.hh>
 #include <gz/rendering/Material.hh>
 
+#include <tesseract/scene_graph/link.h>
 #include <tesseract/scene_graph/scene_state.h>
 
 #include <boost/uuid/uuid_io.hpp>
@@ -84,6 +85,26 @@ struct IgnSceneGraphRenderManager::Implementation
     }
   }
 };
+
+namespace
+{
+/** @brief Destroy a link loaded by loadLink, including its child visuals, and stop tracking it */
+void removeLink(gz::rendering::Scene& scene, EntityContainer& entity_container, const std::string& link_name)
+{
+  if (!entity_container.hasTrackedEntity(EntityContainer::VISUAL_NS, link_name))
+    return;
+
+  auto entity = entity_container.getTrackedEntity(EntityContainer::VISUAL_NS, link_name);
+  scene.DestroyNode(scene.NodeById(entity.id), true);
+
+  for (const auto& key : { link_name,
+                           link_name + "::Visuals",
+                           link_name + "::Collisions",
+                           link_name + "::WireBox",
+                           link_name + "::Axis" })
+    entity_container.removeTrackedEntity(EntityContainer::VISUAL_NS, key);
+}
+}  // namespace
 
 IgnSceneGraphRenderManager::IgnSceneGraphRenderManager(std::shared_ptr<const ComponentInfo> component_info,
                                                        std::shared_ptr<EntityManager> entity_manager)
@@ -131,17 +152,15 @@ void IgnSceneGraphRenderManager::render()
     {
       auto& e = static_cast<events::SceneGraphAddLink&>(*event);
       EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
+      // The link may already be loaded if this manager was initialized after the link was added
+      removeLink(*scene, *entity_container, e.getLink()->getName());
       scene->RootVisual()->AddChild(loadLink(*scene, *entity_container, *e.getLink()));
     }
     else if (event->type() == events::EventType::SCENE_GRAPH_REMOVE_LINK)
     {
       auto& e = static_cast<events::SceneGraphRemoveLink&>(*event);
       EntityContainer::Ptr entity_container = getEntityContainer(e.getComponentInfo());
-      if (entity_container->hasTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName()))
-      {
-        auto entity = entity_container->getTrackedEntity(EntityContainer::VISUAL_NS, e.getLinkName());
-        scene->DestroyNodeById(entity.id);
-      }
+      removeLink(*scene, *entity_container, e.getLinkName());
     }
     else if (event->type() == events::EventType::SCENE_GRAPH_MODIFY_LINK_VISIBILITY)
     {

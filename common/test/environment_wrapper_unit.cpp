@@ -12,6 +12,7 @@ TESSERACT_COMMON_IGNORE_WARNINGS_POP
 
 #include <tesseract/environment/environment.h>
 #include <tesseract/environment/commands/add_link_command.h>
+#include <tesseract/environment/commands/change_link_collision_enabled_command.h>
 #include <tesseract/environment/commands/remove_link_command.h>
 #include <tesseract/scene_graph/graph.h>
 #include <tesseract/scene_graph/joint.h>
@@ -58,7 +59,10 @@ public:
   void reset()
   {
     scene_graph_set_count = 0;
+    commands_set_count = 0;
+    commands_set_size = 0;
     commands_appended = 0;
+    event_order.clear();
     added_links.clear();
     added_joints.clear();
     removed_links.clear();
@@ -66,7 +70,10 @@ public:
   }
 
   int scene_graph_set_count{ 0 };
+  int commands_set_count{ 0 };
+  std::size_t commands_set_size{ 0 };
   std::size_t commands_appended{ 0 };
+  std::vector<int> event_order;
   std::vector<std::string> added_links;
   std::vector<std::string> added_joints;
   std::vector<std::string> removed_links;
@@ -88,11 +95,17 @@ protected:
       removed_links.push_back(static_cast<tesseract::gui::events::SceneGraphRemoveLink*>(event)->getLinkName());
     else if (type == EventType::SCENE_GRAPH_REMOVE_JOINT)
       removed_joints.push_back(static_cast<tesseract::gui::events::SceneGraphRemoveJoint*>(event)->getJointName());
+    else if (type == EventType::ENVIRONMENT_COMMANDS_SET)
+    {
+      ++commands_set_count;
+      commands_set_size = static_cast<tesseract::gui::events::EnvironmentCommandsSet*>(event)->getCommands().size();
+    }
     else if (type == EventType::ENVIRONMENT_COMMANDS_APPEND)
       commands_appended += static_cast<tesseract::gui::events::EnvironmentCommandsAppend*>(event)->getCommands().size();
     else
       return QObject::eventFilter(watched, event);
 
+    event_order.push_back(type);
     last_thread = QThread::currentThreadId();
     return QObject::eventFilter(watched, event);
   }
@@ -155,7 +168,51 @@ TEST_F(EnvironmentWrapperUnit, AddLinkSendsIncrementalEvents)  // NOLINT
   EXPECT_EQ(recorder.added_joints, std::vector<std::string>{ "tool_joint" });
   EXPECT_TRUE(recorder.removed_links.empty());
   EXPECT_TRUE(recorder.removed_joints.empty());
-  EXPECT_EQ(recorder.commands_appended, 1);
+  EXPECT_EQ(recorder.commands_set_count, 1);
+  EXPECT_EQ(recorder.commands_set_size, env->getCommandHistory().size());
+  EXPECT_EQ(recorder.commands_appended, 0);
+}
+
+TEST_F(EnvironmentWrapperUnit, NonTopologyCommandSendsNoSceneGraphOrCommandEvents)  // NOLINT
+{
+  ASSERT_TRUE(env->applyCommand(
+      std::make_shared<tesseract::environment::ChangeLinkCollisionEnabledCommand>("base_link", false)));
+  processPendingEvents();
+
+  EXPECT_EQ(recorder.scene_graph_set_count, 0);
+  EXPECT_TRUE(recorder.added_links.empty());
+  EXPECT_TRUE(recorder.removed_links.empty());
+  EXPECT_EQ(recorder.commands_set_count, 0);
+  EXPECT_EQ(recorder.commands_appended, 0);
+}
+
+TEST_F(EnvironmentWrapperUnit, QueuedFullUpdateIsDeliveredBeforeLaterIncrementalUpdate)  // NOLINT
+{
+  // Queue a full update from a worker thread, then add a link on the GUI thread before the queue is processed
+  std::thread worker([this]() { wrapper->broadcast(); });
+  worker.join();
+
+  ASSERT_TRUE(env->applyCommand(makeAddLinkCommand("tool_link", "tool_joint", "base_link")));
+  processPendingEvents();
+
+  using tesseract::gui::events::EventType;
+  auto set_it = std::find(recorder.event_order.begin(), recorder.event_order.end(), EventType::SCENE_GRAPH_SET);
+  auto add_it = std::find(recorder.event_order.begin(), recorder.event_order.end(), EventType::SCENE_GRAPH_ADD_LINK);
+  ASSERT_NE(set_it, recorder.event_order.end());
+  ASSERT_NE(add_it, recorder.event_order.end());
+  EXPECT_LT(set_it, add_it);
+}
+
+TEST_F(EnvironmentWrapperUnit, QueuedUpdatesAreDroppedWhenWrapperIsDestroyed)  // NOLINT
+{
+  std::thread worker([this]() { env->applyCommand(makeAddLinkCommand("tool_link", "tool_joint", "base_link")); });
+  worker.join();
+
+  tesseract::gui::EnvironmentManager::remove(component_info);
+  wrapper.reset();
+  processPendingEvents();
+
+  EXPECT_TRUE(recorder.added_links.empty());
 }
 
 TEST_F(EnvironmentWrapperUnit, ReplaceLinkRemovesThenAddsLink)  // NOLINT
