@@ -254,15 +254,17 @@ void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::Comp
     dispatcher.links = std::move(current_links);
     dispatcher.joints = std::move(current_joints);
 
-    // Removing links prunes the ACM and adding a scene graph can extend it. The command history is sent as a set
-    // (as the full broadcast did) so models created after these commands were applied do not list them twice.
+    // Send the same non scene graph data the full broadcast sent. Removing links prunes the ACM and adding a scene
+    // graph can extend it. The command history is sent as a set so models created after these commands were applied
+    // do not list them twice.
     dispatcher.enqueue([component_info,
                         removed_joints = std::move(removed_joints),
                         removed_links = std::move(removed_links),
                         added_links = std::move(added_links),
                         added_joints = std::move(added_joints),
                         acm = *env.getAllowedCollisionMatrix(),
-                        command_history = env.getCommandHistory()]() {
+                        command_history = env.getCommandHistory(),
+                        kin_info = env.getKinematicsInformation()]() {
       for (const auto& name : removed_joints)
       {
         tesseract::gui::events::SceneGraphRemoveJoint event(component_info, name, false);
@@ -292,6 +294,18 @@ void broadcastSceneGraphChanges(const std::shared_ptr<const tesseract::gui::Comp
 
       tesseract::gui::events::EnvironmentCommandsSet set_environment_commands_event(component_info, command_history);
       QApplication::sendEvent(qApp, &set_environment_commands_event);
+
+      // Kinematics information may be added in the same command batch (e.g. ADD_SCENE_GRAPH with
+      // ADD_KINEMATICS_INFORMATION) and its models do not consume scene graph or command events
+      tesseract::gui::events::KinematicGroupsSet set_kin_groups_event(
+          component_info, kin_info.chain_groups, kin_info.joint_groups, kin_info.link_groups);
+      QApplication::sendEvent(qApp, &set_kin_groups_event);
+
+      tesseract::gui::events::GroupJointStatesSet set_group_joint_states_event(component_info, kin_info.group_states);
+      QApplication::sendEvent(qApp, &set_group_joint_states_event);
+
+      tesseract::gui::events::GroupTCPsSet set_group_tcps_event(component_info, kin_info.group_tcps);
+      QApplication::sendEvent(qApp, &set_group_tcps_event);
     });
   }
   dispatcher.flush();

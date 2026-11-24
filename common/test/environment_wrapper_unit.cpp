@@ -61,6 +61,7 @@ public:
     scene_graph_set_count = 0;
     commands_set_count = 0;
     commands_set_size = 0;
+    kinematic_groups_set_count = 0;
     commands_appended = 0;
     event_order.clear();
     added_links.clear();
@@ -71,6 +72,7 @@ public:
 
   int scene_graph_set_count{ 0 };
   int commands_set_count{ 0 };
+  int kinematic_groups_set_count{ 0 };
   std::size_t commands_set_size{ 0 };
   std::size_t commands_appended{ 0 };
   std::vector<int> event_order;
@@ -95,6 +97,8 @@ protected:
       removed_links.push_back(static_cast<tesseract::gui::events::SceneGraphRemoveLink*>(event)->getLinkName());
     else if (type == EventType::SCENE_GRAPH_REMOVE_JOINT)
       removed_joints.push_back(static_cast<tesseract::gui::events::SceneGraphRemoveJoint*>(event)->getJointName());
+    else if (type == EventType::KINEMATIC_GROUPS_SET)
+      ++kinematic_groups_set_count;
     else if (type == EventType::ENVIRONMENT_COMMANDS_SET)
     {
       ++commands_set_count;
@@ -171,6 +175,7 @@ TEST_F(EnvironmentWrapperUnit, AddLinkSendsIncrementalEvents)  // NOLINT
   EXPECT_EQ(recorder.commands_set_count, 1);
   EXPECT_EQ(recorder.commands_set_size, env->getCommandHistory().size());
   EXPECT_EQ(recorder.commands_appended, 0);
+  EXPECT_EQ(recorder.kinematic_groups_set_count, 1);
 }
 
 TEST_F(EnvironmentWrapperUnit, NonTopologyCommandSendsNoSceneGraphOrCommandEvents)  // NOLINT

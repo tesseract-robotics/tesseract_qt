@@ -23,6 +23,8 @@
 #include <tesseract_qt/common/entity_container.h>
 #include <tesseract_qt/common/entity_manager.h>
 
+#include <algorithm>
+#include <iterator>
 #include <stdexcept>
 
 namespace tesseract::gui
@@ -70,14 +72,25 @@ bool EntityContainer::hasTrackedEntity(const std::string& ns, const std::string&
   return (ns_it->second.find(name) != ns_it->second.end());
 }
 
-void EntityContainer::removeTrackedEntity(const std::string& ns, const std::string& name)
+void EntityContainer::removeEntities(const std::string& ns, const std::unordered_set<int>& ids)
 {
   std::unique_lock<std::shared_mutex> lock(mutex_);
-  auto ns_it = tracked_entity_map_.find(ns);
-  if (ns_it == tracked_entity_map_.end())
-    return;
+  auto tracked_it = tracked_entity_map_.find(ns);
+  if (tracked_it != tracked_entity_map_.end())
+  {
+    for (auto it = tracked_it->second.begin(); it != tracked_it->second.end();)
+      it = (ids.count(it->second.id) > 0) ? tracked_it->second.erase(it) : std::next(it);
+  }
 
-  ns_it->second.erase(name);
+  auto untracked_it = untracked_entity_map_.find(ns);
+  if (untracked_it != untracked_entity_map_.end())
+  {
+    auto& entities = untracked_it->second;
+    entities.erase(std::remove_if(entities.begin(),
+                                  entities.end(),
+                                  [&ids](const Entity& entity) { return ids.count(entity.id) > 0; }),
+                   entities.end());
+  }
 }
 
 EntityMap EntityContainer::getTrackedEntities(const std::string& ns) const

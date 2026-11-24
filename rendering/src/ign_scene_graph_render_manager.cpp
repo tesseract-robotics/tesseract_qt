@@ -46,6 +46,8 @@
 
 #include <boost/uuid/uuid_io.hpp>
 
+#include <unordered_set>
+
 const std::string USER_VISIBILITY = "user_visibility";
 const std::string USER_PARENT_VISIBILITY = "user_parent_visibility";
 
@@ -88,21 +90,27 @@ struct IgnSceneGraphRenderManager::Implementation
 
 namespace
 {
-/** @brief Destroy a link loaded by loadLink, including its child visuals, and stop tracking it */
+void collectNodeIds(const gz::rendering::NodePtr& node, std::unordered_set<int>& ids)
+{
+  ids.insert(static_cast<int>(node->Id()));
+  for (unsigned int i = 0; i < node->ChildCount(); ++i)
+    collectNodeIds(node->ChildByIndex(i), ids);
+}
+
+/** @brief Destroy a link loaded by loadLink, including its child visuals, and remove all of their entities */
 void removeLink(gz::rendering::Scene& scene, EntityContainer& entity_container, const std::string& link_name)
 {
   if (!entity_container.hasTrackedEntity(EntityContainer::VISUAL_NS, link_name))
     return;
 
   auto entity = entity_container.getTrackedEntity(EntityContainer::VISUAL_NS, link_name);
-  scene.DestroyNode(scene.NodeById(entity.id), true);
+  std::unordered_set<int> ids{ entity.id };
+  gz::rendering::NodePtr node = scene.NodeById(static_cast<unsigned int>(entity.id));
+  if (node != nullptr)
+    collectNodeIds(node, ids);
 
-  for (const auto& key : { link_name,
-                           link_name + "::Visuals",
-                           link_name + "::Collisions",
-                           link_name + "::WireBox",
-                           link_name + "::Axis" })
-    entity_container.removeTrackedEntity(EntityContainer::VISUAL_NS, key);
+  scene.DestroyNode(node, true);
+  entity_container.removeEntities(EntityContainer::VISUAL_NS, ids);
 }
 }  // namespace
 

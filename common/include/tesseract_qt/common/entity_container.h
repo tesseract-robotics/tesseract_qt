@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 #include <shared_mutex>
+#include <unordered_set>
 
 #include <tesseract_qt/common/entity.h>
 
@@ -79,11 +80,11 @@ public:
   bool hasTrackedEntity(const std::string& ns, const std::string& name) const;
 
   /**
-   * @brief Stop tracking an entity, does nothing if it is not tracked
+   * @brief Remove the tracked and untracked entities with the provided ids
    * @param ns The namespace to search under
-   * @param name The name to remove
+   * @param ids The ids of the entities to remove, ids that do not exist are ignored
    */
-  void removeTrackedEntity(const std::string& ns, const std::string& name);
+  void removeEntities(const std::string& ns, const std::unordered_set<int>& ids);
 
   /**
    * @brief Get the tracked entities under the provided namespace
